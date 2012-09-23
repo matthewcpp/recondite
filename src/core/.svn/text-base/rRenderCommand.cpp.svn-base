@@ -1,0 +1,131 @@
+#include"rRenderCommand.hpp"
+
+rRenderCommand::rRenderCommand(rRenderMode mode , const rColor& color){
+	m_renderMode = mode;
+	m_color = color;
+}
+
+rRectangle2RenderCommand::rRectangle2RenderCommand(rRenderMode mode , const rColor& color, const rRectangle2& rectangle)
+	:rRenderCommand(mode , color)
+{
+	m_rect = rectangle;
+}
+
+void rRectangle2RenderCommand::Render(rGraphicsDevice* graphicsDevice){
+	if (m_renderMode == rRENDER_WIRE)
+		graphicsDevice->DrawWireRectangle(m_rect , m_color);
+	else if (m_renderMode == rRENDER_SHADED)
+		graphicsDevice->DrawShadedRectangle(m_rect , m_color);
+}
+
+rCircle2RenderCommand::rCircle2RenderCommand(rRenderMode mode , const rColor& color, const rCircle2& circle)
+	:rRenderCommand(mode , color)
+{
+	m_circle = circle;
+}
+
+void rCircle2RenderCommand::Render(rGraphicsDevice* graphicsDevice){
+	if (m_renderMode == rRENDER_WIRE)
+		graphicsDevice->DrawWireCircle(m_circle , m_color);
+	else if (m_renderMode == rRENDER_SHADED)
+		graphicsDevice->DrawShadedCircle(m_circle , m_color);
+}
+
+rVector2PointRenderCommand::rVector2PointRenderCommand(rRenderMode mode , const rColor& color, const rVector2& point)
+:rRenderCommand(mode , color)
+{
+	m_point = point;
+}
+
+void rVector2PointRenderCommand::Render(rGraphicsDevice* graphicsDevice){
+	rCircle2 c(m_point , 2.0);
+	graphicsDevice->DrawShadedCircle(c , m_color);
+}
+
+rLineRenderCommand::rLineRenderCommand(const rFloatArray& lines , const rColor& color)
+	:rRenderCommand(rRENDER_WIRE , color)
+{
+	m_lines.resize(lines.size());
+	for (size_t i = 0 ; i < lines.size(); i++)
+		m_lines[i] = lines[i];
+}
+
+void rLineRenderCommand::Render(rGraphicsDevice* graphicsDevice){
+	graphicsDevice->DrawLines(m_lines , m_color);
+}
+
+rTriangleRenderCommand::rTriangleRenderCommand(rRenderMode mode , const rColor& color, const rTriangle2& triangle)
+	:rRenderCommand(mode , color)
+{
+	m_triangle = triangle;
+}
+
+void rTriangleRenderCommand::Render(rGraphicsDevice* graphicsDevice){
+	if (m_renderMode == rRENDER_WIRE)
+		graphicsDevice->DrawWireTriangle(m_triangle , m_color);
+	else if (m_renderMode == rRENDER_SHADED)
+		graphicsDevice->DrawShadedTriangle(m_triangle , m_color);
+}
+
+rAlignedBox3RenderCommand::rAlignedBox3RenderCommand(rRenderMode mode , const rColor& color, const rAlignedBox3& box)
+:rRenderCommand(mode , color)
+{
+	m_box = box;
+}
+
+void rAlignedBox3RenderCommand::Render(rGraphicsDevice* graphicsDevice){
+	graphicsDevice->DrawWireBox(m_box, m_color);
+}
+
+rPoint3RenderCommand::rPoint3RenderCommand(const rColor& color , const rVector3& point)
+	:rRenderCommand(rRENDER_SHADED , color)
+{
+	m_point = point;
+}
+
+void rPoint3RenderCommand::Render(rGraphicsDevice* graphicsDevice){
+	graphicsDevice->DrawPoint3(m_point, m_color);
+}
+
+rSphere3RenderCommand::rSphere3RenderCommand(rRenderMode mode , const rColor& color, const rSphere3& sphere)
+:rRenderCommand(rRENDER_SHADED , color)
+{
+	m_sphere = sphere;
+}
+
+void rSphere3RenderCommand::Render(rGraphicsDevice* graphicsDevice){
+	graphicsDevice->DrawWireSphere3(m_sphere , m_color);
+}
+
+rLines3RenderCommand::rLines3RenderCommand(const rColor& color , const rVector3Array& lines)
+	:rRenderCommand(rRENDER_WIRE , color)
+{
+	m_lines.resize(lines.size());
+	for (size_t i = 0 ; i < lines.size(); i++)
+		m_lines[i] = lines[i];
+}
+
+void rLines3RenderCommand::Render(rGraphicsDevice* graphicsDevice){
+	graphicsDevice->DrawLines3(m_lines , m_color);
+}
+
+rCone3RenderCommand::rCone3RenderCommand(rRenderMode mode , const rColor& color , const rCone3& cone)
+:rRenderCommand(mode , color)
+{
+    m_cone = cone;
+}
+
+void rCone3RenderCommand::Render(rGraphicsDevice* graphicsDevice){
+    graphicsDevice->DrawWireCone3(m_cone , m_color);
+}
+
+rLineSegment3RenderCommand::rLineSegment3RenderCommand(const rColor& color , const rLineSegment3& segment)
+    :rRenderCommand(rRENDER_WIRE , color)
+{
+    m_segments.push_back(segment.p0);
+    m_segments.push_back(segment.p1);
+}
+
+void rLineSegment3RenderCommand::Render(rGraphicsDevice* graphicsDevice){
+    graphicsDevice->DrawLines3(m_segments , m_color);
+}

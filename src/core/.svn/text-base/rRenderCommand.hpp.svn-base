@@ -1,0 +1,98 @@
+#ifndef R_RENDER_COMMAND_HPP
+#define R_RENDER_COMMAND_HPP
+
+#include "rTypes.hpp"
+#include "rGraphicsDevice.hpp"
+#include "rRendererI.hpp"
+
+#include "math/rMath2.hpp"
+#include "math/rMath3.hpp"
+
+
+
+struct rRenderCommand{
+	rRenderMode m_renderMode;
+	rColor m_color;
+
+	rRenderCommand(rRenderMode mode , const rColor& color);
+
+	virtual void Render(rGraphicsDevice* graphicsDevice) = 0;
+};
+
+struct rRectangle2RenderCommand : public rRenderCommand{
+	rRectangle2 m_rect;
+
+	rRectangle2RenderCommand(rRenderMode mode , const rColor& color, const rRectangle2& rectangle);
+	virtual void Render(rGraphicsDevice* graphicsDevice);
+};
+
+struct rCircle2RenderCommand : public rRenderCommand{
+	rCircle2 m_circle;
+
+	rCircle2RenderCommand(rRenderMode mode , const rColor& color, const rCircle2& circle);
+	virtual void Render(rGraphicsDevice* graphicsDevice);
+};
+
+struct rVector2PointRenderCommand : public rRenderCommand{
+	rVector2 m_point;
+
+	rVector2PointRenderCommand(rRenderMode mode , const rColor& color, const rVector2& point);
+	virtual void Render(rGraphicsDevice* graphicsDevice);
+};
+
+struct rLineRenderCommand : public rRenderCommand{
+	rFloatArray m_lines;
+
+	rLineRenderCommand(const rFloatArray& lines , const rColor& color);
+	virtual void Render(rGraphicsDevice* graphicsDevice);
+};
+
+struct rTriangleRenderCommand : public rRenderCommand{
+	rTriangle2 m_triangle;
+
+	rTriangleRenderCommand(rRenderMode mode , const rColor& color, const rTriangle2& triangle);
+	virtual void Render(rGraphicsDevice* graphicsDevice);
+};
+
+struct rAlignedBox3RenderCommand : public rRenderCommand{
+	rAlignedBox3 m_box;
+
+	rAlignedBox3RenderCommand(rRenderMode mode , const rColor& color, const rAlignedBox3& box);
+	virtual void Render(rGraphicsDevice* graphicsDevice);
+};
+
+struct rPoint3RenderCommand : public rRenderCommand{
+	rVector3 m_point;
+
+	rPoint3RenderCommand(const rColor& color , const rVector3& point);
+	virtual void Render(rGraphicsDevice* graphicsDevice);
+};
+
+struct rSphere3RenderCommand : public rRenderCommand{
+	rSphere3 m_sphere;
+
+	rSphere3RenderCommand(rRenderMode mode , const rColor& color, const rSphere3& sphere);
+	virtual void Render(rGraphicsDevice* graphicsDevice);
+};
+
+struct rLines3RenderCommand : public rRenderCommand{
+	rVector3Array m_lines;
+
+	rLines3RenderCommand(const rColor& color , const rVector3Array& lines);
+	virtual void Render(rGraphicsDevice* graphicsDevice);
+
+};
+
+struct rCone3RenderCommand : public rRenderCommand{
+    rCone3 m_cone;
+    rCone3RenderCommand(rRenderMode mode , const rColor& color , const rCone3& cone);
+    virtual void Render(rGraphicsDevice* graphicsDevice);
+};
+
+struct rLineSegment3RenderCommand : public rRenderCommand{
+    rVector3Array m_segments;
+    rLineSegment3RenderCommand(const rColor& color , const rLineSegment3& segment);
+    virtual void Render(rGraphicsDevice* graphicsDevice);
+};
+
+#endif

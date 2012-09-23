@@ -1,0 +1,18 @@
+#ifndef R_MATH3_HPP
+#define R_MATH3_HPP
+
+#include "rVector3.hpp"
+#include "rMatrix4.hpp"
+#include "rAlignedBox3.hpp"
+#include "rSphere3.hpp"
+#include "rLine3.hpp"
+#include "rQuaternion.hpp"
+#include "rCone.hpp"
+
+#include "rCollisions3.hpp"
+#include "rMathUtil.hpp"
+
+#include <vector>
+typedef std::vector<rVector3> rVector3Array;
+
+#endif

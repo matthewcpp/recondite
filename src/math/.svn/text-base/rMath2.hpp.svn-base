@@ -1,0 +1,16 @@
+#ifndef R_MATH2_HPP
+#define R_MATH2_HPP
+
+#include "rRectangle2.hpp"
+#include "rCircle2.hpp"
+#include "rVector2.hpp"
+#include "rMatrix3.hpp"
+#include "rLine2.hpp"
+#include "rTriangle2.hpp"
+#include "rMathUtil.hpp"
+#include "rCollisions2.hpp"
+
+#include <vector>
+typedef std::vector<rVector2> rVector2Array;
+
+#endif

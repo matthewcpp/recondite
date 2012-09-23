@@ -1,0 +1,16 @@
+#ifndef R_DRAWABLE_HPP
+#define R_DRAWABLE_HPP
+
+#include "rTypes.hpp"
+
+#include "math/rMath2.hpp"
+#include "math/rMath3.hpp"
+
+#include "rRendererI.hpp"
+
+class rDrawable{
+public:
+	virtual void Draw(rRendererI* renderer) const= 0;
+};
+
+#endif

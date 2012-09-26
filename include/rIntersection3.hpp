@@ -19,8 +19,6 @@ namespace rIntersection3{
 	bool RayIntersectsAlignedBox(const rRay3& ray,const rAlignedBox3& box );
 	bool RayIntersectsPlane(const rRay3& ray , const rPlane3& plane, rVector3* point = 0);
 	bool RayIntersectsSphere(const rRay3& ray , const rSphere3& sphere);
-
-	int RayIntersectsCone(const rRay3& ray , const rCone3& cone);
 }
 
 #endif

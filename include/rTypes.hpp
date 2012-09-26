@@ -4,9 +4,7 @@
 #include <vector>
 
 #ifdef _RECONDITE_WX_
-	#pragma clang diagnostic push "-Wconstant-conversion"
 	#include <wx/wx.h>
-	#pragma clang diagnostic pop
 
 	typedef wxString rString;
 	typedef wxColor rColor;

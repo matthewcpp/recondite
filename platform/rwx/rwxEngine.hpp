@@ -5,16 +5,13 @@
 #include "rDefs.hpp"
 
 #include "rEngine.hpp"
-#include "rOpenGLGraphicsDevice.hpp"
+#include "rgl/rOpenGLGraphicsDevice.hpp"
 #include "rwxContentManager.hpp"
 
 class rwxEngine : public rEngine{
 public:
 	rwxEngine();
 	~rwxEngine();
-	
-	virtual bool AddAssetResource(rAssetResource* resource);
-	virtual bool RemoveAssetResource(rAssetResource* resource);
 	
 	virtual rGraphicsDevice* GraphicsDevice();
 	virtual rContentManager* ContentManager();

@@ -9,7 +9,7 @@
 
 class rMaterial : public rAsset{
 public:
-	rMaterial(int assetId , const rString& name);
+	rMaterial(const rString& name);
 	
 	rColor Color() const;
 	void SetColor(const rColor& color);

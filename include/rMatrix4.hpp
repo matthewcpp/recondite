@@ -12,7 +12,7 @@ Matrix4 Layout
 #include <cstring>
 
 #include "rVector3.hpp"
-
+#include "rMathUtil.hpp"
 
 struct rMatrix4{
 
@@ -26,8 +26,6 @@ struct rMatrix4{
 	rVector3 GetTranslate() const;
 	void SetTranslate (float tx, float ty , float tz);
 	void SetTranslate (const rVector3& t);
-
-  void SetRotationBetweenVectors(const rVector3& vA, const rVector3& vB);
 
 	void Invert();
 	rMatrix4 GetInvertedMatrix() const;

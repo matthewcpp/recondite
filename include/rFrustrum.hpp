@@ -9,7 +9,12 @@ struct rFrustrum{
 
 	bool PointInFrustrum(const rVector3& p);
 
-	rPlane3 near , far, top , bottom, left , right;
+	rPlane3 nearPlane;
+	rPlane3 farPlane; 
+	rPlane3 topPlane; 
+	rPlane3 bottomPlane;
+	rPlane3 leftPlane;
+	rPlane3 rightPlane;
 };
 
 #endif

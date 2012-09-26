@@ -9,7 +9,7 @@
 class rTexture2D : public rAsset{
 public:
 	
-	rTexture2D(int assetId , const rString& name, int width, int height , unsigned int graphicsDeviceId);
+	rTexture2D(const rString& name, int width, int height , unsigned int graphicsDeviceId);
 	
 	int Width() const;
 	int Height() const;

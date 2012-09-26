@@ -23,11 +23,3 @@ rGraphicsDevice* rwxEngine::GraphicsDevice(){
 rContentManager* rwxEngine::ContentManager(){
 	return m_contentManager;
 }
-
-bool rwxEngine::AddAssetResource(rAssetResource* resource){
-	return m_contentManager->AddAssetResource(resource);
-}
-
-bool rwxEngine::RemoveAssetResource(rAssetResource* resource){
-	return m_contentManager->AddAssetResource(resource);
-}

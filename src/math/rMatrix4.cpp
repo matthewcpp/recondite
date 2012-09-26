@@ -1,5 +1,4 @@
 #include "rMatrix4.hpp"
-#include "rMathUtil.hpp"
 
 const rMatrix4 rMatrix4::IdentityMatrix = rMatrix4();
 
@@ -125,10 +124,10 @@ rMatrix4 rMatrix4::operator *(float k){
 	r.m[2] = m[2] * k;	r.m[6] = m[6] * k;	r.m[10] = m[10] * k;	r.m[14] = m[14] * k;  
 	r.m[3] = m[3] * k;	r.m[7] = m[7] * k;	r.m[11] = m[11] * k;	r.m[15] = m[15] * k;  
 	
-	return r  
+	return r;
 }
                   
-rMatrix4& operator +=(const rMatrix4& b){
+rMatrix4& rMatrix4::operator +=(const rMatrix4& b){
 	m[0] += b.m[0];	m[4] += b.m[4];	m[8]  += b.m[8] ;	m[12] += b.m[12];
 	m[1] += b.m[1];	m[5] += b.m[5];	m[9]  += b.m[9] ;	m[13] += b.m[13];
 	m[2] += b.m[2];	m[6] += b.m[6];	m[10] += b.m[10];	m[14] += b.m[14];
@@ -137,7 +136,7 @@ rMatrix4& operator +=(const rMatrix4& b){
 	return *this;
 }   
 
-rMatrix4& operator -=(const rMatrix4& b){
+rMatrix4& rMatrix4::operator -=(const rMatrix4& b){
 	m[0] -= b.m[0];	m[4] -= b.m[4];	m[8]  -= b.m[8] ;	m[12] -= b.m[12];
 	m[1] -= b.m[1];	m[5] -= b.m[5];	m[9]  -= b.m[9] ;	m[13] -= b.m[13];
 	m[2] -= b.m[2];	m[6] -= b.m[6];	m[10] -= b.m[10];	m[14] -= b.m[14];
@@ -145,23 +144,3 @@ rMatrix4& operator -=(const rMatrix4& b){
 	
 	return *this;
 }   
-
-void rMatrix4::SetRotationBetweenVectors(const rVector3& vA, const rVector3& vB){
-    float cos_angle = vA.Dot(vB);
-    float sin_angle = std::sqrt (1.0f - cos_angle * cos_angle);
-    float one_minus_cos = 1.0f - cos_angle;
-
-    rVector3 axis = vA.Cross(vB);
-
-    m[0] = 1.0f + one_minus_cos * (axis.x * axis.x - 1.0f);
-    m[1] = axis.z * sin_angle + one_minus_cos * axis.x * axis.y;
-    m[2] = -axis.y * sin_angle + one_minus_cos * axis.x * axis.z;
-
-    m[4] = -axis.z * sin_angle + one_minus_cos * axis.x * axis.y;
-    m[5] = 1.0f + one_minus_cos * (axis.y * axis.y - 1.0f);
-    m[6] = axis.x * sin_angle + one_minus_cos * axis.y * axis.z;
-
-    m[8] = axis.y * sin_angle + one_minus_cos * axis.x * axis.z;
-    m[9] = -axis.x * sin_angle + one_minus_cos * axis.y * axis.z;
-    m[10] = 1.0f + one_minus_cos * (axis.z * axis.z - 1.0f);
-}

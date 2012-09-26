@@ -1,7 +1,7 @@
 #include "rTexture2D.hpp"
 
-rTexture2D::rTexture2D(int assetId , const rString& name , int width, int height , unsigned int graphicsDeviceId)
-:rAsset(assetId , name)
+rTexture2D::rTexture2D(const rString& name , int width, int height , unsigned int graphicsDeviceId)
+	:rAsset(name)
 {
 	m_width = width;
 	m_height = height;

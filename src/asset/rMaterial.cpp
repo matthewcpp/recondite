@@ -1,7 +1,7 @@
 #include "rMaterial.hpp"
 
-rMaterial::rMaterial(int assetId , const rString& name)
-:rAsset(assetId, name)
+rMaterial::rMaterial(const rString& name)
+	:rAsset(name)
 {
 	m_color.Set(255,255,255,255);
 	m_diffuse = NULL;

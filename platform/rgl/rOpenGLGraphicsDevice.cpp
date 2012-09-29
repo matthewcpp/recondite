@@ -123,17 +123,21 @@ void rOpenGLGraphicsDevice::DrawMesh(rVertex3Array& verticies, rVector2Array& te
 }
 
 void rOpenGLGraphicsDevice::DrawLines3(const rVertex3Array& lines , const rColor& color){
-	DisableTextures();
-	glColor4ub(color.Red() , color.Green() , color.Blue() , color.Alpha());
-	glVertexPointer(3, GL_FLOAT , 0, &lines[0]);
-	glDrawArrays(GL_LINES, 0 , lines.size());
+	if (lines.size() > 0){
+		DisableTextures();
+		glColor4ub(color.Red() , color.Green() , color.Blue() , color.Alpha());
+		glVertexPointer(3, GL_FLOAT , 0, &lines[0]);
+		glDrawArrays(GL_LINES, 0 , lines.size());
+	}
 }
 
 void rOpenGLGraphicsDevice::DrawPoints3(const rVertex3Array& points , const rColor& color){
-	DisableTextures();
-	glColor4ub(color.Red() , color.Green() , color.Blue() , color.Alpha());
-	glVertexPointer(3, GL_FLOAT , 0, &points[0]);
-	glDrawArrays(GL_POINTS, 0 , points.size());
+	if (points.size() > 0){
+		DisableTextures();
+		glColor4ub(color.Red() , color.Green() , color.Blue() , color.Alpha());
+		glVertexPointer(3, GL_FLOAT , 0, &points[0]);
+		glDrawArrays(GL_POINTS, 0 , points.size());
+	}
 }
 
 int rOpenGLGraphicsDevice::Unproject(const rVector3& v, rVector3& world){

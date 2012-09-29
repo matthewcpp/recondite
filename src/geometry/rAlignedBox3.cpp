@@ -1,5 +1,9 @@
 #include "rAlignedBox3.hpp"
 
+rAlignedBox3::rAlignedBox3(){
+	Empty();
+}
+
 rAlignedBox3::rAlignedBox3(const rVector3& mmax , const rVector3& mmin){
 	Set(mmax , mmin);
 }
@@ -106,22 +110,22 @@ void rAlignedBox3::GetCorners(rVector3 corners[]) const{
 
 void rAlignedBox3::AddBox(const rAlignedBox3& box){
 	if (box.min.x < min.x) min.x = box.min.x;
-	if (box.min.y < min.y) min.x = box.min.y;
-	if (box.min.z < min.z) min.x = box.min.z;
+	if (box.min.y < min.y) min.y = box.min.y;
+	if (box.min.z < min.z) min.z = box.min.z;
 	
 	if (box.max.x > max.x) max.x = box.max.x;
-	if (box.max.y > max.y) max.x = box.max.y;
-	if (box.max.z > max.z) max.x = box.max.z;
+	if (box.max.y > max.y) max.y = box.max.y;
+	if (box.max.z > max.z) max.z = box.max.z;
 }
 
 void rAlignedBox3::AddPoint(const rVector3& pt){
 	if (pt.x < min.x) min.x = pt.x;
-	if (pt.y < min.y) min.x = pt.y;
-	if (pt.z < min.z) min.x = pt.z;
+	if (pt.y < min.y) min.y = pt.y;
+	if (pt.z < min.z) min.z = pt.z;
 	
 	if (pt.x > max.x) max.x = pt.x;
-	if (pt.y > max.y) max.x = pt.y;
-	if (pt.z > max.z) max.x = pt.z;
+	if (pt.y > max.y) max.y = pt.y;
+	if (pt.z > max.z) max.z = pt.z;
 }
 
 void rAlignedBox3::Empty(){

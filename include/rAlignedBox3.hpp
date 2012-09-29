@@ -8,7 +8,7 @@
 
 struct rAlignedBox3{
 
-	rAlignedBox3(){}
+	rAlignedBox3();
 	rAlignedBox3(const rVector3& mmax , const rVector3& mmin);
 	rAlignedBox3(float maxX , float maxY , float maxZ , float minX , float minY , float minZ);
 	rAlignedBox3(const rVector3& center , float width , float height , float depth);

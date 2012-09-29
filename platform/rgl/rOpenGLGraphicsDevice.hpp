@@ -59,11 +59,14 @@ public:
 	virtual int Unproject(const rVector3& v, rVector3& world);
 
 	virtual void DrawLines3(const rVertex3Array& lines , const rColor& color);
+	virtual void DrawPoints3(const rVertex3Array& points , const rColor& color);
 
 	virtual void DrawWireBox(const rAlignedBox3& b, const rColor& color);
 	virtual void DrawMesh(rVertex3Array& verticies, rVector2Array& texCoords, rIndexArray& indicies, rMaterial* material);
 
 protected:
+
+	void DisableTextures();
 
 	void Set2DView(rViewport& viewport);
 	void SetPerspView(rViewport& viewport);

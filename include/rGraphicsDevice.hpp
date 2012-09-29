@@ -52,6 +52,7 @@ public:
 	virtual int Unproject(const rVector3& v, rVector3& world) = 0;
 
 	virtual void DrawLines3(const rVertex3Array& lines , const rColor& color) = 0;
+	virtual void DrawPoints3(const rVertex3Array& points , const rColor& color) = 0;
 
 	virtual void DrawWireBox(const rAlignedBox3& b, const rColor& color) = 0;
 	

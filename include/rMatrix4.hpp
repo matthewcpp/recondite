@@ -17,6 +17,8 @@ Matrix4 Layout
 struct rMatrix4{
 
 	rMatrix4();
+	rMatrix4(const rMatrix4& matrix);
+	rMatrix4(float* data);
 
 	void LoadIdentity();
 
@@ -27,8 +29,8 @@ struct rMatrix4{
 	void SetTranslate (float tx, float ty , float tz);
 	void SetTranslate (const rVector3& t);
 
-	void Invert();
-	rMatrix4 GetInvertedMatrix() const;
+	bool Invert();
+	bool GetInvertedMatrix(rMatrix4& m) const;
 
 	rVector3 GetTransformedVector3(const rVector3& v) const;
 	void TransformVector3(rVector3& v) const;
@@ -36,8 +38,13 @@ struct rMatrix4{
 	rMatrix4& operator *=(float k);
 	rMatrix4 operator *(float k);
 	
-	rMatrix4& operator +=(const rMatrix4& other);
-	rMatrix4& operator -=(const rMatrix4& other);
+	rMatrix4& operator +=(const rMatrix4& b);
+	rMatrix4 operator +(const rMatrix4& b) const;
+	rMatrix4& operator -=(const rMatrix4& b);
+	rMatrix4 operator -(const rMatrix4& b) const;
+
+	rMatrix4 operator *(const rMatrix4& b) const;
+	rMatrix4& operator *=(const rMatrix4& b);
 
 	float m[16];
 

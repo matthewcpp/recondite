@@ -6,12 +6,18 @@ rMatrix4::rMatrix4(){
 	LoadIdentity();
 }
 
+rMatrix4::rMatrix4(const rMatrix4& matrix){
+	memcpy(m, matrix.m, sizeof(float) * 16);
+}
+
+rMatrix4::rMatrix4(float* data){
+	memcpy(m, data, sizeof(float) * 16);
+}
 
 void rMatrix4::LoadIdentity(){
 	memset(this , 0 , sizeof(rMatrix4) );
-	SetUniformScale(1);
+	SetUniformScale(1.0f);
 }
-
 
 void rMatrix4::SetUniformScale(float k){
 	m[0] = k;
@@ -20,11 +26,9 @@ void rMatrix4::SetUniformScale(float k){
 	m[15] = k;
 }
 
-
 rVector3 rMatrix4::GetTranslate() const{
 	return rVector3(m[12] , m[13] , m[14]);
 }
-
 
 void rMatrix4::SetTranslate (float tx, float ty , float tz){
 	m[12] = tx;
@@ -32,20 +36,17 @@ void rMatrix4::SetTranslate (float tx, float ty , float tz){
 	m[14] = tz;
 }
 
-
 void rMatrix4::SetTranslate (const rVector3& t){
 	m[12] = t.x;
 	m[13] = t.y;
 	m[14] = t.z;
 }
 
-
 rVector3 rMatrix4::GetTransformedVector3(const rVector3& v) const{
 	rVector3 r = v;
 	TransformVector3(r);
 	return r;
 }
-
 
 void rMatrix4::TransformVector3(rVector3& v)const{
 	rVector3 r;
@@ -54,7 +55,6 @@ void rMatrix4::TransformVector3(rVector3& v)const{
 	r.z = m[2] * v.x + m[6] * v.y + m[10] * v.z + m[14];
 	v = r;
 }
-
 
 float rMatrix4::Determinant() const{
 return      m[12] * m[9] * m[6] * m[3]-m[8] * m[13] * m[6] * m[3]-m[12] * m[5] * m[10] * m[3]+m[4] * m[13] * m[10] * m[3]+
@@ -65,11 +65,10 @@ return      m[12] * m[9] * m[6] * m[3]-m[8] * m[13] * m[6] * m[3]-m[12] * m[5] *
       m[8] * m[1] * m[6] * m[15]-m[0] * m[9] * m[6] * m[15]-m[4] * m[1] * m[10] * m[15]+m[0] * m[5] * m[10] * m[15];
 }
 
-
-void rMatrix4::Invert(){
+bool rMatrix4::Invert(){
 	float det = Determinant();
 	if (det == 0.0)
-		return;
+		return false;
 
 	rMatrix4 result;
 
@@ -97,50 +96,89 @@ void rMatrix4::Invert(){
 	result *= (1.0f / det);
 
 	*this = result;
+	return true;
 }
 
-
-rMatrix4 rMatrix4::GetInvertedMatrix()const{
-	rMatrix4 r = *this;
-	r.Invert();
-	return r;
+bool rMatrix4::GetInvertedMatrix(rMatrix4& m) const{
+	m = *this;
+	return m.Invert();
 }
-
 
 rMatrix4& rMatrix4::operator *=(float k){
-	m[0] *= k;	m[4] *= k;	m[8] *= k;	m[12] *= k;
-	m[1] *= k;	m[5] *= k;	m[9] *= k;	m[13] *= k;
-	m[2] *= k;	m[6] *= k;	m[10] *= k;	m[14] *= k;  
-	m[3] *= k;	m[7] *= k;	m[11] *= k;	m[15] *= k;        
+	for (size_t i = 0; i < 16; i++)
+		m[i] *= k;     
 
 	return *this;                                          
 }     
 
 rMatrix4 rMatrix4::operator *(float k){
 	rMatrix4 r;
-	
-	r.m[0] = m[0] * k;	r.m[4] = m[4] * k;	r.m[8]  = m[8]  * k;	r.m[12] = m[12] * k;
-	r.m[1] = m[1] * k;	r.m[5] = m[5] * k;	r.m[9]  = m[9]  * k;	r.m[13] = m[13] * k;
-	r.m[2] = m[2] * k;	r.m[6] = m[6] * k;	r.m[10] = m[10] * k;	r.m[14] = m[14] * k;  
-	r.m[3] = m[3] * k;	r.m[7] = m[7] * k;	r.m[11] = m[11] * k;	r.m[15] = m[15] * k;  
-	
+
+	for (size_t i = 0; i < 16; i++)
+		r.m[i] = m[i] * k;
+
 	return r;
 }
                   
 rMatrix4& rMatrix4::operator +=(const rMatrix4& b){
-	m[0] += b.m[0];	m[4] += b.m[4];	m[8]  += b.m[8] ;	m[12] += b.m[12];
-	m[1] += b.m[1];	m[5] += b.m[5];	m[9]  += b.m[9] ;	m[13] += b.m[13];
-	m[2] += b.m[2];	m[6] += b.m[6];	m[10] += b.m[10];	m[14] += b.m[14];
-	m[3] += b.m[3];	m[7] += b.m[7];	m[11] += b.m[11];	m[15] += b.m[15];  
+	for (size_t i = 0; i < 16; i++)
+		m[i] += b.m[i];
 	
 	return *this;
+}
+
+rMatrix4 rMatrix4::operator +(const rMatrix4& b) const{
+	rMatrix4 result;
+
+	for (size_t i = 0; i < 16; i++)
+		result.m[i] = m[i] + b.m[i];
+
+	return result;
 }   
 
 rMatrix4& rMatrix4::operator -=(const rMatrix4& b){
-	m[0] -= b.m[0];	m[4] -= b.m[4];	m[8]  -= b.m[8] ;	m[12] -= b.m[12];
-	m[1] -= b.m[1];	m[5] -= b.m[5];	m[9]  -= b.m[9] ;	m[13] -= b.m[13];
-	m[2] -= b.m[2];	m[6] -= b.m[6];	m[10] -= b.m[10];	m[14] -= b.m[14];
-	m[3] -= b.m[3];	m[7] -= b.m[7];	m[11] -= b.m[11];	m[15] -= b.m[15];  
-	
+	for (size_t i = 0; i < 16; i++)
+		m[i] -= b.m[i];
+
 	return *this;
+}
+
+rMatrix4 rMatrix4::operator -(const rMatrix4& b) const{
+	rMatrix4 result;
+
+	for (size_t i = 0; i < 16; i++)
+		result.m[i] = m[i] - b.m[i];
+
+	return result;
 }   
+
+rMatrix4 rMatrix4::operator *(const rMatrix4& b) const{
+	rMatrix4 r;
+
+	r.m[ 0] = m[0] * b.m[0] + m[4] * b.m[1] + m[8] * b.m[2] + m[12] * b.m[3];
+	r.m[ 1] = m[1] * b.m[0] + m[5] * b.m[1] + m[9] * b.m[2] + m[13] * b.m[3];
+	r.m[ 2] = m[2] * b.m[0] + m[6] * b.m[1] + m[10] * b.m[2] + m[14] * b.m[3];
+	r.m[ 3] = m[3] * b.m[0] + m[7] * b.m[1] + m[11] * b.m[2] + m[15] * b.m[3];
+
+	r.m[ 4] = m[0] * b.m[4] + m[4] * b.m[5] + m[8] * b.m[6] + m[12] * b.m[7];
+	r.m[ 5] = m[1] * b.m[4] + m[5] * b.m[5] + m[9] * b.m[6] + m[13] * b.m[7];
+	r.m[ 6] = m[2] * b.m[4] + m[6] * b.m[5] + m[10] * b.m[6] + m[14] * b.m[7];
+	r.m[ 7] = m[3] * b.m[4] + m[7] * b.m[5] + m[11] * b.m[6] + m[15] * b.m[7];
+
+	r.m[ 8] = m[0] * b.m[8] + m[4] * b.m[9] + m[8] * b.m[10] + m[12] * b.m[11];
+	r.m[ 9] = m[1] * b.m[8] + m[5] * b.m[9] + m[9] * b.m[10] + m[13] * b.m[11];
+	r.m[10] = m[2] * b.m[8] + m[6] * b.m[9] + m[10] * b.m[10] + m[14] * b.m[11];
+	r.m[11] = m[3] * b.m[8] + m[7] * b.m[9] + m[11] * b.m[10] + m[15] * b.m[11];
+
+	r.m[12] = m[0] * b.m[12] + m[4] * b.m[13] + m[8] * b.m[14] + m[12] * b.m[15];
+	r.m[13] = m[1] * b.m[12] + m[5] * b.m[13] + m[9] * b.m[14] + m[13] * b.m[15];
+	r.m[14] = m[2] * b.m[12] + m[6] * b.m[13] + m[10] * b.m[14] + m[14] * b.m[15];
+	r.m[15] = m[3] * b.m[12] + m[7] * b.m[13] + m[11] * b.m[14] + m[15] * b.m[15];
+
+	return r;
+}
+
+rMatrix4& rMatrix4::operator *=(const rMatrix4& b){
+	*this = *this * b;
+	return *this;
+}

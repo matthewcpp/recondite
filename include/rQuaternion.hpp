@@ -4,7 +4,7 @@
 #include <cmath>
 
 #include "rVector3.hpp"
-#include "rMathUtil.hpp"
+#include "rMath.hpp"
 
 struct rQuaternion{
 	rQuaternion(){};
@@ -17,6 +17,13 @@ struct rQuaternion{
 
 	void TransformVector3(rVector3& v) const;
 	rVector3 GetTransformedVector3(const rVector3& v) const;
+
+	float Length() const;
+	float LengthSquared() const;
+
+	void Normalize();
+
+	static rQuaternion Slerp(const rQuaternion& q1 , const rQuaternion& q2, float t);
 
 	float x , y ,z , w;
 };

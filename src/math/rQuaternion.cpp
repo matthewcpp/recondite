@@ -51,3 +51,54 @@ rVector3 rQuaternion::GetTransformedVector3(const rVector3& v) const{
 	TransformVector3(returnVec);
 	return returnVec;
 }
+
+float rQuaternion::Length() const{
+	return std::sqrt(x*x + y*y + z*z + w*w);
+}
+
+float rQuaternion::LengthSquared() const{
+	return x*x + y*y + z*z + w*w;
+}
+
+void rQuaternion::Normalize(){
+	float l = Length();
+	x /= l;
+	y /= l;
+	z /= l;
+	w /= l;
+}
+
+//based on code from euclideanspace.com
+
+rQuaternion rQuaternion::Slerp(const rQuaternion& q1 , const rQuaternion& q2, float t){
+	rQuaternion qr;
+	// Calculate angle between them.
+	float cosHalfTheta = q1.w * q2.w + q1.x * q2.x + q1.y * q2.y + q1.z * q2.z;
+	// if q1=q2 or q1=-q2 then theta = 0 and we can return q1
+	if (std::abs(cosHalfTheta) >= 1.0f){
+		qr = q1;
+		return qr;
+	}
+
+	float halfTheta = acos(cosHalfTheta);
+	float sinHalfTheta = sqrt(1.0f - cosHalfTheta*cosHalfTheta);
+
+	// if theta = 180 degrees then result is not fully defined
+	// we could rotate around any axis normal to q1 or q2
+	if (std::fabs(sinHalfTheta) < 0.001f){ 
+		qr.w = q1.w * 0.5f + q2.w * 0.5f;
+		qr.x = q1.x * 0.5f + q2.x * 0.5f;
+		qr.y = q1.y * 0.5f + q2.y * 0.5f;
+		qr.z = q1.z * 0.5f + q2.z * 0.5f;
+		return qr;
+	}
+
+	float ratioA = sin((1.0f - t) * halfTheta) / sinHalfTheta;
+	float ratioB = sin(t * halfTheta) / sinHalfTheta; 
+
+	qr.w = q1.w * ratioA + q2.w * ratioB;
+	qr.x = q1.x * ratioA + q2.x * ratioB;
+	qr.y = q1.y * ratioA + q2.y * ratioB;
+	qr.z = q1.z * ratioA + q2.z * ratioB;
+	return qr;
+}

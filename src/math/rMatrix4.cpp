@@ -26,6 +26,13 @@ void rMatrix4::SetUniformScale(float k){
 	m[15] = k;
 }
 
+void rMatrix4::SetScale(const rVector3& s){
+	m[0] = s.x;
+	m[5] = s.y;
+	m[10] = s.z;
+	m[15] = 1.0f;
+}
+
 rVector3 rMatrix4::GetTranslate() const{
 	return rVector3(m[12] , m[13] , m[14]);
 }

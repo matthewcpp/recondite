@@ -13,10 +13,6 @@ void rMath::Matrix3TransformCircle(const rMatrix3& m , rCircle2& c){
 	c.radius *= 1.0f + (1.0f - m.m[0]);
 }
 
-float rMath::DegreeToRad(float deg){
-	return deg * float(M_PI / 180.0f);
-}
-
 float rMath::Max3(float n1 , float n2, float n3){
 	if (n1 > n2){
 		if (n1 > n3)
@@ -51,6 +47,22 @@ rVector2 rMath::ClosestPointOnSegment(const rLineSegment2& ls , const rCircle2& 
 	return ls.s1 + projV;
 }
 
+void rMath::QuaterionToMatrix(const rQuaternion& q, rMatrix4& m){
+	m.LoadIdentity();
+	
+	m[0] = 1.0f - 2.0f * (q.y * q.y) - 2.0f * (q.z * q.z);
+	m[1] = 2.0f * (q.x * q.y) + 2.0f * (q.z * q.w);
+	m[2] = 2.0f * (q.x * q.z) - 2.0f * (q.y * q.w);
+
+	m[4] = 2.0f * (q.x * q.y) - 2.0f * (q.z * q.w);
+	m[5] = 1.0f - 2 * (q.x * q.x) - 2 * (q.z * q.z);
+	m[6] = 2.0f * (q.y * q.z) + 2 * (q.x * q.w);
+
+	m[8] = 2.0f * (q.x * q.z) + 2.0f * (q.y * q.w);
+	m[9] = 2.0f * (q.y * q.z) - 2.0f * (q.x * q.w);
+	m[10] = 1.0f - 2.0f * (q.x * q.x) - 2.0f * (q.y * q.y);
+}
+
 bool rMath::PointInBoundedXYPlane(const rVector3& corner1 , const rVector3& corner2 , const rVector3& point){
 	float minX = std::min(corner1.x , corner2.x);
 	float minY = std::min(corner1.y , corner2.y);
@@ -80,4 +92,13 @@ bool rMath::PointInBoundedYZPlane(const rVector3& corner1 , const rVector3& corn
 
 	return	point.y >= minY && point.y <= maxY &&
 			point.z >= minZ && point.z <= maxZ;
+}
+
+void rMath::SetTransformMatrix(const rVector3& translation, const rQuaternion& rotation, const rVector3& scale, rMatrix4& result){
+	rMatrix4 t, r, s;
+	t.SetTranslate(translation);
+	rMath::QuaterionToMatrix(rotation, r);
+	s.SetScale(scale);
+
+	result = (r * t) * s;
 }

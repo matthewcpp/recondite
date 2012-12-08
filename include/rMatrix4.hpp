@@ -12,6 +12,7 @@ Matrix4 Layout
 #include <cstring>
 
 #include "rVector3.hpp"
+#include "rVector4.hpp"
 #include "rMath.hpp"
 
 struct rMatrix4{
@@ -24,7 +25,6 @@ struct rMatrix4{
 
 	void SetUniformScale(float k);
 	void SetScale(const rVector3& s);
-	float Determinant() const;
 
 	rVector3 GetTranslate() const;
 	void SetTranslate (float tx, float ty , float tz);
@@ -35,6 +35,9 @@ struct rMatrix4{
 
 	rVector3 GetTransformedVector3(const rVector3& v) const;
 	void TransformVector3(rVector3& v) const;
+	
+	rVector4 GetTransformedVector4(const rVector4& v) const;
+	void TransformVector4(rVector4& v) const;
 
 	rMatrix4& operator *=(float k);
 	rMatrix4 operator *(float k);

@@ -22,10 +22,15 @@ struct rVector3{
 
 	rVector3 operator +(const rVector3& v) const;
 	rVector3& operator +=(const rVector3& v);
+	
 	rVector3 operator -(const rVector3& v) const;
 	rVector3& operator -=(const rVector3& v);
+	
 	rVector3 operator *(float k) const;
 	rVector3& operator *=(float k);
+	
+	rVector3 operator /(float k) const;
+	rVector3& operator /=(float k);
 
 	rVector3 operator-() const;
 

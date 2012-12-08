@@ -76,3 +76,33 @@ void rMatrixUtil::Ortho(float left, float right, float bottom, float top, float 
 	matrix.m[11] = 0.0f;
 	matrix.m[15] = 1.0f;
 }
+
+bool rMatrixUtil::Unproject(const rVector3& point, const rMatrix4& modelMatrix, const rMatrix4& projectionMatrix, const rRect& viewport, rVector3& out){
+	rMatrix4 finalMatrix = modelMatrix * projectionMatrix;
+	
+	if (!finalMatrix.Invert())
+		return false;
+	
+	rVector4 in (point.x,point.y,point.z, 1.0f);
+
+	/* Map x and y from window coordinates */
+	in.x = (in.x - viewport.x) / viewport.width;
+	in.y = (in.y - viewport.y) / viewport.height;
+	
+	/* Map to range -1 to 1 */
+	in.x = in.x * 2.0f - 1.0f;
+	in.y = in.y * 2.0f - 1.0f;
+	in.z = in.z * 2.0f - 1.0f;
+	
+	rVector4 ret = finalMatrix.GetTransformedVector4(in);
+	
+	if (ret.w == 0.0f)
+		return false;
+	
+	ret /= ret.w;
+	out.x = ret.x;
+	out.y = ret.y;
+	out.z = ret.z;
+	
+	return true;
+}

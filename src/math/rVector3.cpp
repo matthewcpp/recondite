@@ -42,6 +42,18 @@ rVector3& rVector3::operator *=(float k){
 	return *this;
 }
 
+rVector3 rVector3::operator /(float k) const{
+	return rVector3(x / k , y / k , z / k);
+}
+
+rVector3& rVector3::operator /=(float k){
+	x /= k;
+	y /= k;
+	z /= k;
+
+	return *this;
+}
+
 bool rVector3::operator==(const rVector3& v)const{
 	return x == v.x && y == v.y && z == v.z;
 }

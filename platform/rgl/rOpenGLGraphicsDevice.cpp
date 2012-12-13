@@ -3,9 +3,10 @@
 rOpenGLGraphicsDevice::rOpenGLGraphicsDevice()
 {
 	m_isInit = false;
+	m_calledInit = false;
 }
 
-bool rOpenGLGraphicsDevice::IsInit(){
+bool rOpenGLGraphicsDevice::IsInit() const {
 	return m_isInit;
 }
 
@@ -15,8 +16,8 @@ void rOpenGLGraphicsDevice::Clear(){
 	glLoadIdentity();
 }
 
-void rOpenGLGraphicsDevice::Init(){
-	GLenum err = glewInit();
+bool rOpenGLGraphicsDevice::Init(){
+    GLenum err = glewInit();
 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
@@ -24,12 +25,113 @@ void rOpenGLGraphicsDevice::Init(){
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
     glEnable(GL_PERSPECTIVE_CORRECTION_HINT);
 
-	glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_VERTEX_ARRAY);
 
-	glColor4ub(255,255,255,255);
+    glColor4ub(255,255,255,255);
 
-	glPointSize(4.0f);
-	m_isInit = true;
+    glPointSize(4.0f);
+    m_isInit = InitDefaultShader();
+    m_calledInit = true;
+    return m_isInit;
+}
+
+bool rOpenGLGraphicsDevice::HasCalledInit() const{
+    return m_calledInit;
+}
+
+unsigned int rOpenGLGraphicsDevice::InitDefaultShader(){
+	std::string vertexShader = "varying mediump vec2 v_texcoord;uniform sampler2D texture;void main(){gl_FragColor = texture2D(texture, v_texcoord);}";
+	std::string fragmentShader = "attribute vec4 position;attribute vec2 texcoord;uniform mat4 mvp;varying mediump vec2 v_texcoord;void main(){gl_Position = mvp * position;v_texcoord=texcoord;}";
+	
+	return CreateShaderProgram(vertexShader, fragmentShader);
+}
+
+unsigned int rOpenGLGraphicsDevice::CreateShaderProgram(const rString& vertex, const rString& fragment){
+    GLuint vertexShader;
+    GLuint fragmentShader;
+    GLuint programObject;
+    GLint linked;
+
+
+    CreateShader(GL_VERTEX_SHADER, vertex.c_str());
+
+    if (!vertexShader)
+	    return 0;
+
+    fragmentShader = CreateShader(GL_FRAGMENT_SHADER, fragment.c_str());
+
+    if (!fragmentShader){
+	    glDeleteShader(vertexShader);
+	    return 0;
+    }
+
+    programObject = glCreateProgram();
+
+    if (!programObject)
+	    return 0;
+
+    glAttachShader(programObject, vertexShader);
+    glAttachShader(programObject, fragmentShader);
+
+    glLinkProgram(programObject);
+    glGetProgramiv(programObject, GL_LINK_STATUS, &linked);
+
+    if (!linked){
+	GLint infoLen = 0;
+	glGetProgramiv(programObject, GL_INFO_LOG_LENGTH, &infoLen);
+
+	if (infoLen > 1){
+	     char* infoLog = new char[infoLen];
+
+	     glGetProgramInfoLog(programObject, infoLen, NULL, infoLog);
+	     m_lastError.assign(infoLog, infoLen);         
+
+	     delete [] infoLog;
+	}
+
+	glDeleteProgram(programObject);
+	return 0;
+    }
+
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
+
+    m_lastError.clear();
+    return programObject;
+}
+
+GLuint rOpenGLGraphicsDevice::CreateShader(GLenum type, const char* program){
+    GLuint shader;
+    GLint compiled;
+
+    shader = glCreateShader(type);
+
+    if (!shader)
+	    return 0;
+
+    glShaderSource(shader, 1, &program, NULL);
+    glCompileShader(shader);
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
+	
+    if (!compiled){
+      GLint infoLen = 0;
+      glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLen);
+
+      if (infoLen > 1){
+	 char* infoLog = new char[infoLen];
+
+	 glGetShaderInfoLog(shader, infoLen, NULL, infoLog);
+	 m_lastError.assign(infoLog, infoLen);
+
+	 delete [] infoLog;
+      }
+
+      glDeleteShader(shader);
+      return 0;
+    }
+
+    m_lastError.clear();
+    return shader;
 }
 
 void rOpenGLGraphicsDevice::Uninit(){
@@ -57,11 +159,12 @@ void rOpenGLGraphicsDevice::CameraLookAt(rCamera* camera){
 }
 
 void rOpenGLGraphicsDevice::SetPerspView(rViewport& viewport){
-	glViewport(	viewport.m_windowPos.x,viewport.m_windowPos.y,
-				viewport.m_windowSize.width, viewport.m_windowSize.height);
+    rRect rect = viewport.GetScreenRect();
+	
+    glViewport(rect.x, rect.y, rect.width, rect.height);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(rOGL_FOV_ANGLE, (GLfloat)viewport.m_windowSize.width / (GLfloat)viewport.m_windowSize.height, rOGL_Z_NEAR, rOGL_Z_FAR);
+    gluPerspective(rOGL_FOV_ANGLE, (GLfloat)rect.width / (GLfloat)rect.height, rOGL_Z_NEAR, rOGL_Z_FAR);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
@@ -72,15 +175,13 @@ void rOpenGLGraphicsDevice::SetPerspView(rViewport& viewport){
 }
 
 void rOpenGLGraphicsDevice::Set2DView(rViewport& viewport){
-	glViewport(	viewport.m_windowPos.x,viewport.m_windowPos.y,
-				viewport.m_windowSize.width, viewport.m_windowSize.height);
+    rRect rect = viewport.GetScreenRect();
+    glViewport(rect.x, rect.y, rect.width, rect.height);
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 
-	rRectangle2 r = viewport.Get2DScreenRect();
-
-	gluOrtho2D(r.Left(), r.Right() ,r.Bottom() ,r.Top());
+	gluOrtho2D(rect.Left(), rect.Right() , rect.Bottom() , rect.Top());
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 

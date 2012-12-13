@@ -29,9 +29,6 @@ void rGraphicsDevice::InitRectangle(){
 	rectanglePoints.resize(4);
 }
 
-
-
-
 void rGraphicsDevice::SetBoxDrawPoints(const rAlignedBox3& b){
 	boxPoints[0].Set(b.min.x , b.max.y , b.max.z);
 	boxPoints[1] = b.max;
@@ -42,4 +39,8 @@ void rGraphicsDevice::SetBoxDrawPoints(const rAlignedBox3& b){
 	boxPoints[5].Set(b.max.x , b.max.y , b.min .z);
 	boxPoints[6].Set(b.max.x , b.min.y , b.min.z);
 	boxPoints[7] = b.min;
+}
+
+rString rGraphicsDevice::GetLastErrorMessage() const{
+    return m_lastError;
 }

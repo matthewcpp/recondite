@@ -1,6 +1,9 @@
 #ifndef R_OPENGLGRAPHICSDEVICE_HPP
 #define R_OPENGLGRAPHICSDEVICE_HPP
 
+#include <istream>
+#include <sstream>
+
 #include <GL/glew.h>
 
 #ifdef WIN32
@@ -45,8 +48,9 @@ class rOpenGLGraphicsDevice : public rGraphicsDevice{
 public:
 	rOpenGLGraphicsDevice();
 	
-	virtual void Init();
-	virtual bool IsInit();
+	virtual bool Init();
+	virtual bool IsInit() const;
+        virtual bool HasCalledInit() const;
 	virtual void Uninit();
 	virtual void Clear();
 	
@@ -64,7 +68,11 @@ public:
 	virtual void DrawWireBox(const rAlignedBox3& b, const rColor& color);
 	virtual void DrawMesh(rVertex3Array& verticies, rVector2Array& texCoords, rIndexArray& indicies, rMaterial* material);
 
+	virtual unsigned int CreateShaderProgram(const rString& vertex, const rString& fragment);
+	
 protected:
+	
+	GLuint CreateShader(GLenum type, const char* program);
 
 	void DisableTextures();
 
@@ -73,8 +81,12 @@ protected:
 	void CameraLookAt(rCamera* camera);
 	
 	void SetActiveMaterial(rMaterial* material);
+	
+	unsigned int InitDefaultShader();
 
 	bool m_isInit;
+        bool m_calledInit;
+	unsigned int m_defaultShader;
 };
 
 #endif

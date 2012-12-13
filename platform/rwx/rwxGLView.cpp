@@ -4,9 +4,8 @@ rwxGLView::rwxGLView(rEngine* engine, wxWindow* parent, wxWindowID id, const int
 :wxGLCanvas(parent, id, attribList, pos, size, style, name, palette)
 {
 	m_engine = engine;
-	m_viewport.graphicsDevice = m_engine->GraphicsDevice();
 	
-	InitSharedContextIfNecessary(this);
+	//InitSharedContextIfNecessary(this);
 	
 	m_camera = new rViewCamera("camera", rVector3::ZeroVector);
 	m_viewport.SetCamera(m_camera);
@@ -18,6 +17,7 @@ rwxGLView::~rwxGLView(){
 }
 
 void rwxGLView::PrepareToDraw(){
+	InitSharedContextIfNecessary(this);
 	SetCurrent(*sharedContext);
 	InitGraphicsDeviceIfNecessary();
 	SetViewportSize();
@@ -33,15 +33,19 @@ void rwxGLView::SetCamera(rCamera* camera){
 void rwxGLView::SetViewportSize(){
 	int width,height;
 	GetSize(&width,&height);
-	m_viewport.SetWindowSize(width,height);	
+	m_viewport.SetSize(width,height);
 }
 
 bool rwxGLView::InitGraphicsDeviceIfNecessary(){
-	if (m_engine->GraphicsDevice() == NULL || m_engine->GraphicsDevice()->IsInit())
+	if (!m_engine->GraphicsDevice() || m_engine->GraphicsDevice()->IsInit() || m_engine->GraphicsDevice()->HasCalledInit())
 		return false;
 	
-	m_engine->GraphicsDevice()->Init();
-	return true;
+	bool result = m_engine->GraphicsDevice()->Init();
+	
+	if (!result)
+	    wxMessageBox("Error Initializing Graphics Device: " + m_engine->GraphicsDevice()->GetLastErrorMessage());
+	
+	return result;
 }
 
 wxGLContext* rwxGLView::sharedContext = NULL;

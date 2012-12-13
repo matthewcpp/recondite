@@ -4,8 +4,8 @@
 #include "rTypes.hpp"
 
 //common classes
-#include "rPoint2.hpp"
-#include "rSize2.hpp"
+#include "rPoint.hpp"
+#include "rSize.hpp"
 
 //mathematical classes
 #include "rVector2.hpp"

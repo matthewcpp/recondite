@@ -3,14 +3,15 @@
 
 #include "rTypes.hpp"
 
-#include "rPoint2.hpp"
-#include "rSize2.hpp"
+#include "rPoint.hpp"
+#include "rSize.hpp"
 
 #include "rMatrix4.hpp"
+#include "rMatrixUtil.hpp"
+
 #include "rLine3.hpp"
 
 #include "rCamera.hpp"
-#include "rGraphicsDevice.hpp"
 
 enum rViewportType{
 	rVIEWPORT_PERSP,
@@ -21,35 +22,36 @@ enum rViewportType{
 class rViewport{
 public:
 	rViewport(rViewportType type = rVIEWPORT_PERSP);
-	
+
+	int GetSelectionRay(const rPoint& pos , rRay3& selectionRay) const;
+
+	rCamera* Camera() const;
 	void SetCamera(rCamera* camera);
-
-	int GetSelectionRay(const rPoint2& pos , rRay3& selectionRay) const;
-
-	rRectangle2 Get2DScreenRect();
-
-	rViewportType m_type;
-
-	rPoint2 m_windowPos;
-	rSize2 m_windowSize;
-
-	inline rCamera* Camera() const;
+	
 	void SetViewportType(rViewportType type);
-	inline rViewportType ViewportType() const;
+	rViewportType ViewportType() const;
 
-	void SetWindowSize(int wwidth , int hheight);
+	void SetSize(int width , int height);
+	void SetSize(const rSize& size);
+	
+	void SetPosition(int x, int y);
+	void SetPosition(const rPoint& point);
 
+	rRect GetScreenRect() const;
+	void SetScreenRect(const rRect& rect);
+	void SetScreenRect(int x, int y, int width, int height);
+	
+	void GetProjectionMatrix(rMatrix4& matrix) const;
+	void GetModelViewMatrix(rMatrix4& matrix) const;
+	void GetModelViewProjectionMatrix(rMatrix4& matrix) const;
+	
+private:
+	rViewportType m_type;
+	rRect m_rect;
 	rCamera* m_camera;
-	rGraphicsDevice* graphicsDevice;
-
+	
+	float m_nearClip;
+	float m_farClip;
 };
-
- rCamera* rViewport::Camera() const{
-	 return m_camera;
- }
-
- rViewportType rViewport::ViewportType() const{
-	 return m_type;
- }
 
 #endif

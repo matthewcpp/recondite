@@ -38,8 +38,9 @@ public:
 	rGraphicsDevice();
 	virtual ~rGraphicsDevice();
 
-	virtual void Init() = 0;
-	virtual bool IsInit() = 0;
+	virtual bool Init() = 0;
+	virtual bool IsInit() const = 0;
+        virtual bool HasCalledInit() const = 0;
 	virtual void Uninit()  = 0;
 	virtual void Clear()  = 0;
 	
@@ -57,8 +58,10 @@ public:
 	virtual void DrawWireBox(const rAlignedBox3& b, const rColor& color) = 0;
 	
 	virtual void DrawMesh(rVertex3Array& verticies, rVector2Array& texCoords, rIndexArray& indicies, rMaterial* material) = 0;
+	virtual unsigned int CreateShaderProgram(const rString& vertex, const rString& fragment) = 0;
 
-
+        rString GetLastErrorMessage() const;
+        
 protected:
 	void InitRectangle();
 	void InitBox();
@@ -74,6 +77,7 @@ protected:
 
 	rVertex3Array boxPoints;
 	rIndexArray wireBoxIndicies;
+        rString m_lastError;
 };
 
 #endif

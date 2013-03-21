@@ -6,22 +6,25 @@
 
 #include "rAsset.hpp"
 #include "rTexture2D.hpp"
+#include "rColor.hpp"
 
 class rMaterial : public rAsset{
 public:
 	rMaterial(const rString& name);
 	
-	rColor Color() const;
-	void SetColor(const rColor& color);
+	rTexture2D* GetTexture(const rString& name) const;
+	void SetTexture(const rString& name, rTexture2D* texture);
+	size_t NumTextures() const;
 	
-	rTexture2D* DiffuseTex() const;
-	void SetDiffuseTex(rTexture2D* diffuse);
+	bool GetColor(const rString& name, rColor& color) const;
+	void SetColor(const rString& name, const rColor& color);
+	size_t NumColors() const;
 	
 	virtual rAssetType Type() const;
 	
 private:
-	rColor m_color;
-	rTexture2D* m_diffuse;
+	rColorMap m_colors;
+	rTextureMap m_textures;
 };
 
 #endif

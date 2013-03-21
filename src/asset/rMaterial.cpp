@@ -3,24 +3,44 @@
 rMaterial::rMaterial(const rString& name)
 	:rAsset(name)
 {
-	m_color.Set(255,255,255,255);
-	m_diffuse = NULL;
+
 }
 
-rColor rMaterial::Color() const{
-	return m_color;
+rTexture2D* rMaterial::GetTexture(const rString& name) const{
+	rTextureConstItr result = m_textures.find(name);
+	
+	if (result == m_textures.end())
+		return NULL;
+	else
+		return result->second;
 }
 
-void rMaterial::SetColor(const rColor& color){
-	m_color = color;
+void rMaterial::SetTexture(const rString& name, rTexture2D* texture){
+	m_textures[name] = texture;
 }
 
-rTexture2D* rMaterial::DiffuseTex() const{
-	return m_diffuse;
+size_t rMaterial::NumTextures() const{
+	return m_textures.size();
 }
 
-void rMaterial::SetDiffuseTex(rTexture2D* diffuse){
-	m_diffuse = diffuse;
+bool rMaterial::GetColor(const rString& name, rColor& color) const{
+	rColorConstItr result = m_colors.find(name);
+	
+	if (result == m_colors.end()){
+		return false;
+	}
+	else{
+		color = result->second;
+		return true;
+	}
+}
+
+void rMaterial::SetColor(const rString& name, const rColor& color){
+	m_colors[name] = color;
+}
+
+size_t rMaterial::NumColors() const{
+	return m_colors.size();
 }
 
 rAssetType rMaterial::Type() const{

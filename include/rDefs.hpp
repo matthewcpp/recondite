@@ -6,11 +6,18 @@
 #include "rVector2.hpp"
 #include "rVector3.hpp"
 
+#include "rColor.hpp"
+
 typedef std::vector<unsigned char> rUnsigedByteArray;
 typedef std::vector<unsigned short> rUnsignedShortArray;
 
 typedef std::vector<rVector2> rVector2Array;
 typedef std::vector<rVector3> rVector3Array;
+
+typedef std::map<rString, rColor> rColorMap;
+typedef rColorMap::iterator rColorItr;
+typedef rColorMap::const_iterator rColorConstItr;
+typedef std::pair<rString, rColor> rColorMapEntry;
 
 enum rContentError{
 	rCONTENT_ERROR_NONE = 0,
@@ -24,6 +31,7 @@ enum rContentError{
 
 enum rAssetType{
 	rASSET_TEXTURE2D = 0,
+	rASSET_SHADER,
 	rASSET_MATERIAL,
 	rASSET_MODEL,
 	rASSET_SOUND

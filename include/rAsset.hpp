@@ -12,15 +12,12 @@ public:
 	int AssetId() const;
 	rString Name() const;
 	
-	rAssetSource Source() const;
 	rString Path() const;
 	
 	virtual rAssetType Type() const = 0;
 	
 protected:
 	rString m_name;
-	
-	rAssetSource m_source;
 	rString m_path;
 };
 

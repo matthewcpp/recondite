@@ -12,11 +12,6 @@
 #include "rTexture2D.hpp"
 #include "data/rTexture2DData.hpp"
 
-typedef std::map<rString, rTexture2D*> rTextureMap;
-typedef rTextureMap::iterator rTextureItr;
-typedef rTextureMap::const_iterator rTextureConstItr;
-typedef std::pair<rString, rTexture2D*> rTextureMapEntry;;
-
 class rContentManager{
 public:
 	rContentManager(rGraphicsDevice* graphicsDevice);

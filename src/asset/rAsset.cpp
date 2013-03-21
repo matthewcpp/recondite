@@ -8,10 +8,6 @@ rString rAsset::Name() const{
 	return m_name;
 }
 
-rAssetSource rAsset::Source() const{
-	return m_source;
-}
-
 rString rAsset::Path() const{
 	return m_path;
 }

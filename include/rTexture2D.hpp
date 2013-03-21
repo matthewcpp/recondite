@@ -1,6 +1,8 @@
 #ifndef R_TEXTURE2D_HPP
 #define R_TEXTURE2D_HPP
 
+#include <map>
+
 #include "rTypes.hpp"
 #include "rDefs.hpp"
 
@@ -22,5 +24,10 @@ private:
 	int m_width , m_height;
 	unsigned int m_graphicsDeviceId;
 };
+
+typedef std::map<rString, rTexture2D*> rTextureMap;
+typedef rTextureMap::iterator rTextureItr;
+typedef rTextureMap::const_iterator rTextureConstItr;
+typedef std::pair<rString, rTexture2D*> rTextureMapEntry;
 
 #endif

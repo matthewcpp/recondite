@@ -62,6 +62,8 @@ rContentError rTexture2DData::ReadFileHeader(std::istream& stream){
     stream.read((char*)&m_size, 8);
     stream.read((char*)&m_bpp, 4);
     stream.read((char*)&m_compressionType, 4);
+    
+    return rCONTENT_ERROR_NONE;
 }
 
 rContentError rTexture2DData::ReadNonCompressedData(std::istream& stream){
@@ -108,6 +110,8 @@ rContentError rTexture2DData::WriteFileHeader(std::ostream& stream){
 
 rContentError rTexture2DData::WriteNonCompressedData(std::ostream& stream){
     stream.write((char*)&m_data[0], m_data.size());
+    
+    return rCONTENT_ERROR_NONE;
 }
 
 rContentError rTexture2DData::SetImageData(int width, int height, int bpp, const unsigned char* data){
@@ -157,6 +161,6 @@ int rTexture2DData::GetBPP() const{
     return m_bpp;
 }
 
-unsigned char* rTexture2DData::GetData() const{
+const unsigned char* rTexture2DData::GetData() const{
     return &m_data[0];
 }

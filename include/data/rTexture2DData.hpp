@@ -1,6 +1,7 @@
 #ifndef R_TEXTURE2DDATA_HPP
 #define R_TEXTURE2DDATA_HPP
 
+#include <string.h>
 #include <fstream>
 
 #include "rTypes.hpp"
@@ -44,7 +45,7 @@ public:
     int GetHeight() const;
     
     int GetBPP() const;
-    unsigned char* GetData() const;
+    const unsigned char* GetData() const;
     
 private:
     

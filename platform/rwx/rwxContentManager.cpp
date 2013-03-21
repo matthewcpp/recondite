@@ -54,20 +54,17 @@ rTexture2D* rwxContentManager::LoadWxImageToGraphicsDevice(wxImage& texture, con
 	wxSize size = texture.GetSize();
 	int bpp = texture.HasAlpha() ? 4 : 3;
 	
+	rTexture2DData textureData;
+	
 	if (bpp == 4){
 		rUnsigedByteArray data;
 		rwxUtils::FormatWxImageDataForOpenGL(texture, data);
-		textureId = m_graphicsDevice->CreateTexture(size.x, size.y, bpp, &data[0]);
+		textureData.SetImageData(size.x, size.y, bpp, &data[0]);
 	}
 	else
-		textureId = m_graphicsDevice->CreateTexture(size.x, size.y, bpp, texture.GetData());
+		textureData.SetImageData(size.x, size.y, bpp, texture.GetData());
 	
-	rTexture2D* tex = new rTexture2D(name, size.x, size.y, textureId);
-	
-	rTextureMapEntry entry(name, tex);
-	m_textures.insert(entry);
-	
-	return tex;
+	return LoadTexture(textureData, name.c_str());
 }
 
 rTexture2D* rwxContentManager::ImportTextureAssetFromFile(const rString& path , const rString& name){

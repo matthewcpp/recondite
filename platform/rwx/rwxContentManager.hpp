@@ -10,11 +10,12 @@
 #include "rContentManager.hpp"
 #include "rOpenGLGraphicsDevice.hpp"
 
-#include "wx/wx.h"
-#include "wx/filefn.h"
-#include "wx/mstream.h"
+#include <wx/wx.h>
+#include <wx/filefn.h>
+#include <wx/mstream.h>
 
 #include "rwxUtils.hpp"
+#include "data/rTexture2DData.hpp"
 
 typedef std::map<rString, rTexture2D*> rTextureMap;
 typedef rTextureMap::iterator rTextureItr;

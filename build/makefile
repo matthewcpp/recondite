@@ -31,9 +31,17 @@ SRC_FILES = 	../src/math/rMath.cpp \
 		../src/core/rViewport.cpp \
 		../src/core/rAsset.cpp \
 		../src/core/rMaterial.cpp \
-		../src/core/rTexture2D.cpp
+		../src/core/rTexture2D.cpp \
+		../src/xml/rXMLDocument.cpp\
+		../src/xml/rXMLWriter.cpp\
+		../src/xml/rXMLElement.cpp\
+		../src/xml/rXMLAttributeList.cpp\
+		../src/asset/rAsset.cpp \
+		../src/asset/rMaterial.cpp \
+		../src/asset/rTexture2D.cpp \
+		../src/data/rTexture2DData.cpp
 
-VPATH = ../src/math ../src/geometry ../src/core ../src/asset
+VPATH = ../src/math ../src/geometry ../src/core ../src/asset ../src/data ../src/xml ../src/asset
 
 STATIC_LIB = recondite.a
 

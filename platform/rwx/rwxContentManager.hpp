@@ -8,7 +8,7 @@
 #include "rDefs.hpp"
 
 #include "rContentManager.hpp"
-#include "rgl/rOpenGLGraphicsDevice.hpp"
+#include "rOpenGLGraphicsDevice.hpp"
 
 #include "wx/wx.h"
 #include "wx/filefn.h"

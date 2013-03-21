@@ -5,7 +5,7 @@
 #include "rDefs.hpp"
 
 #include "rEngine.hpp"
-#include "rgl/rOpenGLGraphicsDevice.hpp"
+#include "rOpenGLGraphicsDevice.hpp"
 #include "rwxContentManager.hpp"
 
 class rwxEngine : public rEngine{

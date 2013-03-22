@@ -28,6 +28,8 @@ rXMLElement* rXMLDocument::CreateRoot(const rString& name){
 }
 
 rXMLReaderError rXMLDocument::LoadFromFile(const rString& path){
+	Clear();
+	
 	std::ifstream stream(path.c_str());
 	
 	rXMLReaderError error = rXML_READER_NO_ERROR;
@@ -42,6 +44,8 @@ rXMLReaderError rXMLDocument::LoadFromFile(const rString& path){
 }
 
 rXMLReaderError rXMLDocument::LoadFromStream(std::istream& stream){
+	Clear();
+	
 	rXMLReaderError error = rXML_READER_NO_ERROR;
 	rXMLDocumentLoader loader;
 	rXMLReader reader(&loader);

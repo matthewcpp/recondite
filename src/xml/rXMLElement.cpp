@@ -14,6 +14,9 @@ void rXMLElement::Init(rXMLElement* parent, const rString& name, const rString& 
 	
 	mName = name;
 	mText = text;
+	
+	if (parent)
+		parent->AddChild(this);
 }
 
 rXMLElement::~rXMLElement(){
@@ -71,6 +74,16 @@ rXMLElement* rXMLElement::CreateChild(const rString& name, const rString& text){
 rXMLElement* rXMLElement::CreateChild(const rString& name, const rString& text, const rXMLAttributeList& attributes){
 	mChildren.push_back(new rXMLElement(this, name, text, attributes));
 	return mChildren.back();
+}
+
+void rXMLElement::AddChild(rXMLElement* child){
+	rXMLElement* currentParent = child->Parent();
+	
+	if (currentParent != this)
+		currentParent->RemoveChild(child);
+	
+	mChildren.push_back(child);
+	
 }
 
 void rXMLElement::FindElements(const rString& search, rXMLElementArray& result) const{

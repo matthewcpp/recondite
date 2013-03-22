@@ -27,6 +27,7 @@ public:
 	
 	rXMLElement* CreateChild(const rString& name, const rString& text = "");
 	rXMLElement* CreateChild(const rString& name, const rString& text, const rXMLAttributeList& attributes);
+	void AddChild(rXMLElement* child);
 	
 	void SetName(const rString& name);
 	void SetText(const rString& text);

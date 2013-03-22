@@ -17,12 +17,13 @@ rXMLElement* rXMLDocumentLoader::DetachRoot(){
 }
 
 void rXMLDocumentLoader::OnStartElement(const rString& elementName, const rXMLAttributeList& attributes){
-	rXMLElement* parent = m_stack.size() ? m_stack.top() : 0;
+	rXMLElement* parent = m_stack.size() > 0 ? m_stack.top() : 0;
 	
 	rXMLElement* element = new rXMLElement(parent, elementName);
 	
-	if (m_stack.size() == 0)
+	if (m_stack.size() == 0){
 		m_root = element;
+	}
 	
 	element->AddAttributes(attributes);
 	

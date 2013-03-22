@@ -27,6 +27,33 @@ rXMLElement* rXMLDocument::CreateRoot(const rString& name){
 	return m_root;
 }
 
+rXMLReaderError rXMLDocument::LoadFromFile(const rString& path){
+	std::ifstream stream(path.c_str());
+	
+	rXMLReaderError error = rXML_READER_NO_ERROR;
+	
+	if (stream)
+		error = LoadFromStream(stream);
+	else
+		error = rXML_READER_FILE_NOT_FOUND;
+	
+	stream.close();
+	return error;
+}
+
+rXMLReaderError rXMLDocument::LoadFromStream(std::istream& stream){
+	rXMLReaderError error = rXML_READER_NO_ERROR;
+	rXMLDocumentLoader loader;
+	rXMLReader reader(&loader);
+	
+	error = reader.ParseStream(&stream);
+	
+	if (!error)
+		m_root = loader.DetachRoot();
+	
+	return error;
+}
+
 int rXMLDocument::WriteToFile(const rString& path) const{
 	std::ofstream file(path.c_str());
 	

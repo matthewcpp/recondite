@@ -34,7 +34,9 @@ SRC_FILES = 	../src/math/rMath.cpp \
 		../src/asset/rMaterial.cpp \
 		../src/asset/rTexture2D.cpp \
 		../src/xml/rXMLDocument.cpp\
+		../src/xml/rXMLDocumentLoader.cpp\
 		../src/xml/rXMLWriter.cpp\
+		../src/xml/rXMLReader.cpp\
 		../src/xml/rXMLElement.cpp\
 		../src/xml/rXMLAttributeList.cpp\
 		../src/data/rTexture2DData.cpp

@@ -91,6 +91,19 @@ void rXMLElement::FindElementsRec(const rString& search, rXMLElementArray& resul
 	}
 }
 
+void rXMLElement::AddAttributes(const rXMLAttributeList& attributes){
+	rArrayString attributeNames;
+	rString name, value;
+	
+	attributes.AttributeNames(attributeNames);
+	
+	for (size_t i = 0; i < attributeNames.size(); i++){
+		name = attributeNames[i];
+		attributes.GetAttributeAs<rString>(name, value);
+		mAttributes.SetAttribute(name, value);
+	}
+}
+
 void rXMLElement::SetText(const rString& text){
 	mText = text;
 }

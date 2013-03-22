@@ -25,5 +25,6 @@ typedef std::vector<float> rFloatArray;
 typedef std::map<rString,rString> rStringStringMap;
 typedef rStringStringMap::iterator rStringStringMapItr;
 typedef rStringStringMap::const_iterator rStringStringMapConstItr;
+typedef std::pair<rString,rString> rStringStringMapEntry;
 
 #endif

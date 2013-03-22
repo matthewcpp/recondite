@@ -18,6 +18,8 @@ public:
 	template<typename T>
 	void AddAttribute(const rString& name, const T& value);
 	
+	void AddAttributes(const rXMLAttributeList& attributes);
+	
 	template<typename T>
 	bool GetAttribute(const rString& name, const T& value) const;
 	

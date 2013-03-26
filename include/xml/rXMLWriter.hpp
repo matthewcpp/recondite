@@ -184,11 +184,16 @@ void rXMLWriter::WriteElementWithAttributesAndValue(const rString& name , const 
 	
 	Indent();
 	
-	m_stream << '<'<<name<<' ';
-	WriteAttributeList(attributes);
-	m_stream << " >"<<str.str();
+	m_stream << '<' << name;
+	
+	if (attributes.NumAttributes() > 0){
+		m_stream << ' ';
+		WriteAttributeList(attributes);
+	}
+	
+	m_stream << ">"<< str.str();
+	
 	WriteEndElementTag(name);
-	m_stream << std::endl;
 }
 
 template <typename T>
@@ -198,9 +203,14 @@ void rXMLWriter::WriteOpenElementWithAttributesAndValue(const rString& name , co
 	
 	Indent();
 	
-	m_stream << '<'<<name<<' ';
-	WriteAttributeList(attributes);
-	m_stream << " >"<<str.str()<<std::endl;
+	m_stream << '<' << name;
+	
+	if (attributes.NumAttributes() > 0){
+		m_stream << ' ';
+		WriteAttributeList(attributes);
+	}
+	
+	m_stream << ">"<<str.str()<<std::endl;
 	
 	m_stack.push(name);
 }

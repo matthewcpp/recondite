@@ -19,6 +19,8 @@ public:
 	rXMLElement* GetRoot() const;
 	rXMLElement* CreateRoot(const rString& name);
 	
+	void FindElements(const rString& search, rXMLElementArray& result) const;
+	
 	int WriteToFile(const rString& path) const;
 	int WriteToStream(std::ostream& stream) const;
 	

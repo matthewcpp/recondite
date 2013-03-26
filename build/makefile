@@ -39,7 +39,8 @@ SRC_FILES = 	../src/math/rMath.cpp \
 		../src/xml/rXMLReader.cpp\
 		../src/xml/rXMLElement.cpp\
 		../src/xml/rXMLAttributeList.cpp\
-		../src/data/rTexture2DData.cpp
+		../src/data/rTexture2DData.cpp \
+		../src/data/rMaterialData.cpp
 
 VPATH = ../src/math ../src/geometry ../src/core ../src/asset ../src/data ../src/xml
 

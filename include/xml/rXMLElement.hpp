@@ -21,7 +21,7 @@ public:
 	void AddAttributes(const rXMLAttributeList& attributes);
 	
 	template<typename T>
-	bool GetAttribute(const rString& name, const T& value) const;
+	bool GetAttribute(const rString& name, T& value) const;
 	
 	bool RemoveAttribute(const rString& name);
 	
@@ -45,6 +45,7 @@ public:
 	size_t NumAttributes() const;
 	
 	rXMLElement* GetChild(size_t index) const;
+	rXMLElement* GetFirstChildNamed(const rString& name) const;
 	
 	void DestroyChildren();
 	
@@ -75,7 +76,7 @@ void rXMLElement::AddAttribute(const rString& name, const T& value){
 }
 
 template<typename T>
-bool rXMLElement::GetAttribute(const rString& name, const T& value) const{
+bool rXMLElement::GetAttribute(const rString& name, T& value) const{
 	return mAttributes.GetAttributeAs<T>(name, value);
 }
 

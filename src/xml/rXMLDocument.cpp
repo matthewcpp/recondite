@@ -93,3 +93,8 @@ void rXMLDocument::WriteXMLElement(const rXMLElement* element, rXMLWriter& write
 		writer.WriteElementWithAttributesAndValue<rString>(element->Name(), element->Attributes(), element->Text());
 	}
 }
+
+void rXMLDocument::FindElements(const rString& search, rXMLElementArray& result) const{
+	if (m_root)
+		m_root->FindElements(search, result);
+}

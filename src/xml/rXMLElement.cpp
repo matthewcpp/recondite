@@ -65,6 +65,17 @@ rXMLElement* rXMLElement::GetChild(size_t index) const{
 	return mChildren[index];
 }
 
+rXMLElement* rXMLElement::GetFirstChildNamed(const rString& name) const{
+	for (size_t i= 0; i < mChildren.size(); i++){
+		if (mChildren[i]->mName == name){
+			return mChildren[i];
+		}
+			
+	}
+	
+	return NULL;
+}
+
 rXMLElement* rXMLElement::CreateChild(const rString& name, const rString& text){
 	mChildren.push_back(new rXMLElement(this, name, text));
 	return mChildren.back();

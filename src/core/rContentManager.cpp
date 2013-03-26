@@ -2,6 +2,7 @@
 
 rContentManager::rContentManager(rGraphicsDevice* graphicsDevice){
 	m_graphicsDevice = graphicsDevice;
+	m_nextAssetId = 0;
 	
 	m_error = rCONTENT_ERROR_NONE;
 }
@@ -54,7 +55,8 @@ rTexture2D* rContentManager::LoadTexture(const rTexture2DData& textureData, cons
 	
 	if (!m_error){
 		unsigned int textureId = m_graphicsDevice->CreateTexture(textureData.GetWidth(), textureData.GetHeight(), textureData.GetBPP(), textureData.GetData());
-		rTexture2D* tex = new rTexture2D(name, textureData.GetWidth(), textureData.GetHeight(), textureId);
+		rTexture2D* tex = new rTexture2D(textureData.GetWidth(), textureData.GetHeight(), textureId,
+						GetNextAssetId(), name, textureData.GetPath());
 	
 		rTextureMapEntry entry(name, tex);
 		m_textures.insert(entry);
@@ -72,6 +74,12 @@ rTexture2D* rContentManager::GetTextureAsset(const rString& name) const{
 		return result->second;
 }
 
+
+rMaterial* rContentManager::CreateMaterialInstance(const rString& name){
+	return NULL;
+}
+
+
 rContentError rContentManager::GetLastError() const{	
 	return m_error;
 }
@@ -79,3 +87,9 @@ rContentError rContentManager::GetLastError() const{
 size_t rContentManager::NumTextures() const{
 	return m_textures.size();
 }
+
+int rContentManager::GetNextAssetId(){
+	return ++m_nextAssetId; 
+}
+void rContentManager::Init() {}
+void rContentManager::Uninit() {}

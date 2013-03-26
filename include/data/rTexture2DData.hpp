@@ -33,6 +33,9 @@ public:
     
     void Clear();
     
+    rString GetPath() const;
+    void SetPath(const rString& path);
+    
 public:
     rTexture2DCompressionType GetCompressionType() const;
     void SetCompressionType(rTexture2DCompressionType type);
@@ -65,6 +68,8 @@ private:
     rContentError m_error;
     rSize m_size;
     int m_bpp;
+    
+    rString m_path;
 };
 
 #endif

@@ -12,6 +12,8 @@
 #include "rTexture2D.hpp"
 #include "data/rTexture2DData.hpp"
 
+#include "rMaterial.hpp"
+
 class rContentManager{
 public:
 	rContentManager(rGraphicsDevice* graphicsDevice);
@@ -22,19 +24,31 @@ public:
 	virtual rContentError RemoveTextureAsset(const rString& name);
 	virtual size_t NumTextures() const;
 	
+public:
+	rMaterial* CreateMaterialInstance(const rString& name);
+	
+public:
+	
 	virtual void UnloadAssets();
 
 	virtual rContentError GetLastError() const;
 	
 protected:
 	
+	virtual void Init();
+	virtual void Uninit();
+	
 	rGraphicsDevice* m_graphicsDevice;
 	rContentError m_error;
 	
 	rTextureMap m_textures;
 	
+	int GetNextAssetId();
+	
 private:
 	void UnloadTextures();
+	
+	int m_nextAssetId;
 };
 
 #endif

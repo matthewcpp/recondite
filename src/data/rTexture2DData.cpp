@@ -40,6 +40,8 @@ rContentError rTexture2DData::LoadFromPath(const rString& path){
 	m_error = rCONTENT_ERROR_FILE_NOT_FOUND;
     else
 	m_error = LoadFromStream(stream);
+
+    SetPath(path);
     
     stream.close();
     
@@ -163,4 +165,12 @@ int rTexture2DData::GetBPP() const{
 
 const unsigned char* rTexture2DData::GetData() const{
     return &m_data[0];
+}
+
+rString rTexture2DData::GetPath() const{
+	return m_path;
+}
+
+void rTexture2DData::SetPath(const rString& path){
+	m_path = path;
 }

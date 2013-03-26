@@ -30,6 +30,8 @@ public:
 	
 	rContentError GetError() const;
 	
+	rString GetPath() const;
+	void SetPath(const rString& path);
 private:
 	//todo move to utils
 	static void ReadStreamToString(std::istream& stream, std::string& str);
@@ -38,6 +40,7 @@ private:
 	rString m_vertexProgram;
 	rString m_fragmentProgram;
 	rContentError m_error;
+	rString m_path;
 };
 
 #endif

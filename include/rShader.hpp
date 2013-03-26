@@ -1,6 +1,8 @@
 #ifndef R_SHADER_HPP
 #define R_SHADER_HPP
 
+#include <map>
+
 #include "rTypes.hpp"
 #include "rAsset.hpp"
 
@@ -15,5 +17,10 @@ public:
 private:
 	unsigned int m_programId;
 };
+
+typedef std::map<rString, rShader*> rShaderMap;
+typedef rShaderMap::iterator rShaderItr;
+typedef rShaderMap::const_iterator rShaderConstItr;
+typedef std::pair<rString, rShader*> rShadermapEntry;
 
 #endif

@@ -74,9 +74,67 @@ rTexture2D* rContentManager::GetTextureAsset(const rString& name) const{
 		return result->second;
 }
 
+rShader* rContentManager::GetShaderAsset(const rString& name) const{
+	rShaderConstitr result = m_shaders.find(name);
+	
+	if (result == m_shaders.end())
+		return NULL;
+	else
+		return result->second;
+}
 
-rMaterial* rContentManager::CreateMaterialInstance(const rString& name){
-	return NULL;
+rShader* rContentManager::LoadShader(const rShaderData& shaderData, const rString& name){
+	rShader* shader = NULL;
+	
+	if (m_shaders.count(name))
+		m_error = rCONTENT_ERROR_ASSET_NAME_ALREADY_PRESENT;
+	else
+		m_error = shaderData.GetError();
+	
+	if (!m_error){
+		unsigned int shaderId = m_graphicsDevice->CreateShaderProgram(shaderData->GetVertexProgram(), shaderData->GetFragmentProgram());
+	
+		if (shaderId != 0){
+			shader = new rShader(shaderId, name, shaderData.GetPath());
+			rShadermapEntry entry(name, shader);
+			m_shaders.insert(entry);
+		}
+	}
+	
+	return shader;
+}
+
+rContentError rContentManager::RemoveShaderAsset(const rString& name){
+	rShaderItr result = m_shaders.find(name);
+	
+	if (result == m_shaders.end()){
+		m_error = rCONTENT_ERROR_ASSET_NOT_PRESENT;
+	}
+	else{
+		rShader* shader = result->second;
+		m_graphicsDevice->DeleteShaderProgram(shader->ProgramId());
+		m_shaders.erase(result);
+		delete shader;
+		m_error = rCONTENT_ERROR_NONE;
+	}
+	
+	return m_error;
+}
+
+size_t rContentManager::NumShaders() const{
+	return m_shaders.size();
+}
+
+void rContentManager::UnloadShaders(){
+	rShader* shader;
+	
+	for (rShaderItr it = m_shaders.begin(); it != m_shaders.end(); ++it){
+		shader = it->second;
+		m_graphicsDevice->DeleteShaderProgram(shader->ProgramId());
+		delete shader;
+	}
+	
+	m_shaders.clear();
 }
 
 

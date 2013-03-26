@@ -14,6 +14,9 @@
 
 #include "rMaterial.hpp"
 
+#include "rShader.hpp"
+#include "data/rShaderData.hpp"
+
 class rContentManager{
 public:
 	rContentManager(rGraphicsDevice* graphicsDevice);
@@ -25,7 +28,10 @@ public:
 	virtual size_t NumTextures() const;
 	
 public:
-	rMaterial* CreateMaterialInstance(const rString& name);
+	virtual rShader* GetShaderAsset(const rString& name) const;
+	virtual rShader* LoadShader(const rShaderData& shaderData, const rString& name);
+	virtual rContentError RemoveShaderAsset(const rString& name);
+	virtual size_t NumShaders() const;
 	
 public:
 	
@@ -42,11 +48,13 @@ protected:
 	rContentError m_error;
 	
 	rTextureMap m_textures;
+	rShaderMap m_shaders;
 	
 	int GetNextAssetId();
 	
 private:
 	void UnloadTextures();
+	void UnloadShaders();
 	
 	int m_nextAssetId;
 };

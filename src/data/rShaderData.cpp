@@ -31,6 +31,8 @@ rContentError rShaderData::LoadFromPath(const rString& path){
 	rString vertexPath = path + ".vertex";
 	rString fragmentPath = path + "fragment";
 	
+	SetPath(path);
+	
 	return LoadFromPaths(vertexPath, fragmentPath);
 }
 
@@ -104,4 +106,12 @@ rString rShaderData::GetFragmentProgram() const{
 
 rContentError rShaderData::GetError() const{
 	return m_error;
+}
+
+rString rShaderData::GetPath() const{
+	return m_path;
+}
+
+void rShaderData::SetPath(const rString& path){
+	m_path = path;
 }

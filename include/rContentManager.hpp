@@ -25,12 +25,14 @@ public:
 	
 	virtual rTexture2D* GetTextureAsset(const rString& name) const;
 	virtual rTexture2D* LoadTexture(const rTexture2DData& textureData, const rString& name);
+	rTexture2D* GetOrLoadTexture(const rString& textureName, const rString& texturePath);
 	virtual rContentError RemoveTextureAsset(const rString& name);
 	virtual size_t NumTextures() const;
 	
 public:
 	virtual rShader* GetShaderAsset(const rString& name) const;
 	virtual rShader* LoadShader(const rShaderData& shaderData, const rString& name);
+	rShader* GetOrLoadShader(const rString& shaderName, const rString& shaderPath);
 	virtual rContentError RemoveShaderAsset(const rString& name);
 	virtual size_t NumShaders() const;
 	
@@ -48,6 +50,8 @@ public:
 	
 protected:
 	
+	void ReleaseAsset(rAsset* asset);
+	
 	virtual void Init();
 	virtual void Uninit();
 	
@@ -64,6 +68,8 @@ private:
 	void UnloadTextures();
 	void UnloadShaders();
 	void UnloadMaterials();
+	
+	bool LoadTexturesForMaterial(const rMaterialData& materialData, rMaterial* material);
 	
 	int m_nextAssetId;
 };

@@ -12,7 +12,10 @@ rContentManager::~rContentManager(){
 }
 
 void rContentManager::UnloadAssets(){
+	void UnloadMaterials();
+	void UnloadShaders();
 	void UnloadTextures();
+	
 }
 
 void rContentManager::UnloadTextures(){
@@ -33,13 +36,19 @@ rContentError rContentManager::RemoveTextureAsset(const rString& name){
 	if (result == m_textures.end()){
 		m_error = rCONTENT_ERROR_ASSET_NOT_PRESENT;
 	}
-	else{
+
+	rTexture2D* texture = result->second;
+	
+	if (texture->RetainCount() == 0){
 		rTexture2D* texture = result->second;
 		m_textures.erase(result);
 		
 		m_graphicsDevice->UnregisterTexture(texture->GraphicsDeviceID());
 		delete texture;
 		m_error = rCONTENT_ERROR_NONE;
+	}
+	else{
+		m_error = rCONTENT_ERROR_ASSET_IN_USE;
 	}
 	
 	return m_error;
@@ -109,13 +118,19 @@ rContentError rContentManager::RemoveShaderAsset(const rString& name){
 	
 	if (result == m_shaders.end()){
 		m_error = rCONTENT_ERROR_ASSET_NOT_PRESENT;
+		return m_error;
 	}
-	else{
-		rShader* shader = result->second;
+	
+	rShader* shader = result->second;
+	
+	if (shader->RetainCount() == 0){
 		m_graphicsDevice->DeleteShaderProgram(shader->ProgramId());
 		m_shaders.erase(result);
 		delete shader;
 		m_error = rCONTENT_ERROR_NONE;
+	}
+	else{
+		m_error = rCONTENT_ERROR_ASSET_IN_USE;
 	}
 	
 	return m_error;
@@ -146,6 +161,55 @@ rMaterial* rContentManager::GetMaterialAsset(const rString& name) const{
 		return result->second;
 }
 
+rShader* rContentManager::GetOrLoadShader(const rString& shaderName, const rString& shaderPath){
+	rShader* shader = GetShaderAsset(shaderName);
+	
+	if (!shader){
+		rShaderData shaderData(shaderPath);
+		shader = LoadShader(shaderData, shaderName);
+	}
+	
+	return shader;
+}
+
+rTexture2D* rContentManager::GetOrLoadTexture(const rString& textureName, const rString& texturePath){
+	rTexture2D* texture = GetTextureAsset(textureName);
+	
+	if (!texture){
+		rTexture2DData textureData(texturePath);
+		texture = LoadTexture(textureData, textureName);
+	}
+	
+	return texture;
+}
+
+bool rContentManager::LoadTexturesForMaterial(const rMaterialData& materialData, rMaterial* material){
+	rArrayString texParams;
+	rMaterialParameterData paramData;
+	
+	materialData.GetParameterNamesForType(texParams, rMATERIAL_PARAMETER_TEXTURE2D);
+	
+	for (size_t i = 0; i < texParams.size(); i++){
+		materialData.GetParameterData(texParams[i], paramData);
+		
+		rTexture2D* texture = GetOrLoadTexture(texParams[i], paramData.value);
+		if (texture){
+			texture->Retain();
+			material->SetTexture(texParams[i], texture);
+		}
+		else{ //missing texture, cannot create material, release previous textures and abort loading process
+			for (size_t j = i-1; j >= 0; j--){
+				rTexture2D* texture = GetTextureAsset(texParams[j]);
+				if (texture) ReleaseAsset(texture);
+			}
+			
+			return false;
+		}
+	}
+	
+	return true;
+}
+
 rMaterial* rContentManager::LoadMaterial(const rMaterialData& materialData, const rString& name){
 	rMaterial* material = NULL;
 	
@@ -155,6 +219,26 @@ rMaterial* rContentManager::LoadMaterial(const rMaterialData& materialData, cons
 		m_error = materialData.GetError();
 	
 	if (!m_error){
+		rShader* shader = GetOrLoadShader(materialData.GetShaderName(), materialData.GetShaderPath());
+		
+		if (!shader){
+			m_error = rCONTENT_ERROR_UNABLE_TO_LOAD_DEPENDENCY;
+			return NULL;
+		}
+		
+		shader->Retain();
+		material = new rMaterial(shader, GetNextAssetId(), name, materialData.GetPath());
+		
+		if (LoadTexturesForMaterial(materialData, material)){
+			rMaterialMapEntry entry(name, material);
+			m_materials.insert(entry);
+		}
+		else{
+			ReleaseAsset(shader);
+			delete material;
+			material = NULL;
+			m_error = rCONTENT_ERROR_UNABLE_TO_LOAD_DEPENDENCY;
+		}
 	}
 	
 	return material;
@@ -166,14 +250,40 @@ rContentError rContentManager::RemoveMaterialAsset(const rString& name){
 	if (result == m_materials.end()){
 		m_error = rCONTENT_ERROR_ASSET_NOT_PRESENT;
 	}
-	else{
-		rMaterial* material = result->second;
-		//todo cleanup/ release textures
+	
+	rMaterial* material = result->second;
+	if (material->RetainCount() == 0){
+		rArrayString textures;
+		material->GetParameterNamesForType(textures, rMATERIAL_PARAMETER_TEXTURE2D);
+		
+		for (size_t i = 0; i < textures.size(); i++)
+			ReleaseAsset(material->GetTexture(textures[i]));
+			
 		delete material;
 		m_error = rCONTENT_ERROR_NONE;
 	}
 	
 	return m_error;
+}
+
+void rContentManager::ReleaseAsset(rAsset* asset){
+	int retainCount = asset->Release();
+	
+	if (retainCount == 0){
+		switch (asset->Type()){
+			case rASSET_TEXTURE2D:
+				RemoveTextureAsset(asset->Name());
+				break;
+			case rASSET_SHADER:
+				RemoveShaderAsset(asset->Name());
+				break;
+			case rASSET_MATERIAL:
+				RemoveMaterialAsset(asset->Name());
+				break;
+			default:
+				break;
+		};
+	}
 }
 
 size_t rContentManager::NumMaterials() const{

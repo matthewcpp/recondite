@@ -5,7 +5,7 @@ rAsset::rAsset(int assetid, const rString& name, const rString& path){
 	m_assetId = assetid;
 	m_path = path;
 	
-	m_retainCount = 1;
+	m_retainCount = 0;
 }
 
 rString rAsset::Name() const{

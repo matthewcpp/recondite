@@ -45,6 +45,7 @@ public:
 	size_t GetParameterCount() const;
 	bool GetParameterData(const rString& name, rMaterialParameterData& data) const;
 	void GetParameterNames(rArrayString& names) const;
+	void GetParameterNamesForType(rArrayString& names, rMaterialParameterType type) const;
 	
 	rContentError GetError() const;
 	

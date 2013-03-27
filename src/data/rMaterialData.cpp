@@ -216,6 +216,15 @@ void rMaterialData::GetParameterNames(rArrayString& names) const{
 		names.push_back(it->first);
 }
 
+void rMaterialData::GetParameterNamesForType(rArrayString& names, rMaterialParameterType type) const{
+	names.clear();
+	
+	for (rMaterialParameterDataConstItr it = m_parameters.begin(); it != m_parameters.end(); ++it){
+		if (it->second.type == type)
+			names.push_back(it->first);
+	}
+}
+
 
 rContentError rMaterialData::GetError() const{
 	return m_error;

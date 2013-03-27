@@ -1,9 +1,9 @@
 #include "rMaterial.hpp"
 
-rMaterial::rMaterial(unsigned int shaderProgramId, int assetid, const rString& name, const rString& path)
+rMaterial::rMaterial(rShader* shader, int assetid, const rString& name, const rString& path)
 	:rAsset(assetid, name, path)
 {
-	m_shaderProgramId = shaderProgramId;
+	m_shader = shader;
 }
 
 rTexture2D* rMaterial::GetTexture(const rString& name) const{
@@ -25,8 +25,8 @@ void rMaterial::SetTexture(const rString& name, rTexture2D* texture){
 	m_parameters[name] = parameter;
 }
 
-unsigned int rMaterial::ShaderProgramId(){
-	return m_shaderProgramId;
+rShader* rMaterial::Shader() const{
+	return m_shader;
 }
 
 rAssetType rMaterial::Type() const{
@@ -48,4 +48,13 @@ void rMaterial::GetParameterNames(rArrayString& names) const{
 	
 	for (rMaterialParameterConstItr it = m_parameters.begin(); it != m_parameters.end(); ++it)
 		names.push_back(it->first);
+}
+
+void rMaterial::GetParameterNamesForType(rArrayString& names, rMaterialParameterType type){
+	names.clear();
+	
+	for (rMaterialParameterConstItr it = m_parameters.begin(); it != m_parameters.end(); ++it){
+		if (it->second.m_type == type)
+			names.push_back(it->first);
+	}
 }

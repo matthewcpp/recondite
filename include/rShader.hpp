@@ -4,6 +4,8 @@
 #include <map>
 
 #include "rTypes.hpp"
+#include "rDefs.hpp"
+
 #include "rAsset.hpp"
 
 class rShader : public rAsset{

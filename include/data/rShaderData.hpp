@@ -10,18 +10,16 @@ class rShaderData{
 public:
 	rShaderData();
 	rShaderData(const rString& path);
-	rShaderData(const rString& vertexPath, const rString& fragmentPath);
-	rShaderData(std::istream vertexStream, std::istream fragmentStream);
-	rShaderData(const rString& vertexProgram, const rString& fragmentProgram);
+	rShaderData(std::istream& vertexStream, std::istream& fragmentStream);
 	
 	void Clear();
 	
 	rContentError LoadFromPath(const rString& path);
 	rContentError LoadFromPaths(const rString& vertexPath, const rString& fragmentPath);
-	rContentError LoadFromStreams(std::istream vertexStream, std::istream fragmentStream);
+	rContentError LoadFromStreams(std::istream& vertexStream, std::istream& fragmentStream);
 	rContentError SetShaderData(const rString& vertexProgram, const rString& fragmentProgram);
 	
-	rContentError WriteToFile(const rString& path) const;
+	rContentError WriteToPath(const rString& path) const;
 	rContentError WriteToPaths(const rString& vertexPath, const rString& fragmentPath) const;
 	rContentError WriteToStreams(std::ostream& vertexStream, std::ostream& fragmentStream) const;
 public:

@@ -66,25 +66,19 @@ rTexture2D* rContentManager::LoadTexture(const rTexture2DData& textureData, cons
 }
 
 rTexture2D* rContentManager::GetTextureAsset(const rString& name) const{
-	m_error = rCONTENT_ERROR_NONE;
 	rTextureConstItr result = m_textures.find(name);
 	
-	if (result == m_textures.end()){
-		m_error = rCONTENT_ERROR_ASSET_NOT_PRESENT;
+	if (result == m_textures.end())
 		return NULL;
-	}
 	else
 		return result->second;
 }
 
 rShader* rContentManager::GetShaderAsset(const rString& name) const{
-	m_error = rCONTENT_ERROR_NONE;
 	rShaderConstItr result = m_shaders.find(name);
 	
-	if (result == m_shaders.end()){
-		m_error = rCONTENT_ERROR_ASSET_NOT_PRESENT;
+	if (result == m_shaders.end())
 		return NULL;
-	}
 	else
 		return result->second;
 }
@@ -98,10 +92,10 @@ rShader* rContentManager::LoadShader(const rShaderData& shaderData, const rStrin
 		m_error = shaderData.GetError();
 	
 	if (!m_error){
-		unsigned int shaderId = m_graphicsDevice->CreateShaderProgram(shaderData->GetVertexProgram(), shaderData->GetFragmentProgram());
+		unsigned int shaderId = m_graphicsDevice->CreateShaderProgram(shaderData.GetVertexProgram(), shaderData.GetFragmentProgram());
 	
 		if (shaderId != 0){
-			shader = new rShader(shaderId, name, shaderData.GetPath());
+			shader = new rShader(shaderId, GetNextAssetId(), name, shaderData.GetPath());
 			rShadermapEntry entry(name, shader);
 			m_shaders.insert(entry);
 		}
@@ -144,13 +138,10 @@ void rContentManager::UnloadShaders(){
 }
 
 rMaterial* rContentManager::GetMaterialAsset(const rString& name) const{
-	m_error = rCONTENT_ERROR_NONE;
 	rMaterialConstItr result = m_materials.find(name);
 	
-	if (result == m_shaders.end()){
-		m_error = rCONTENT_ERROR_ASSET_NOT_PRESENT;
+	if (result == m_materials.end())
 		return NULL;
-	}
 	else
 		return result->second;
 }
@@ -172,7 +163,7 @@ rMaterial* rContentManager::LoadMaterial(const rMaterialData& materialData, cons
 rContentError rContentManager::RemoveMaterialAsset(const rString& name){
 	rMaterialItr result = m_materials.find(name);
 	
-	if (result == m_shaders.end()){
+	if (result == m_materials.end()){
 		m_error = rCONTENT_ERROR_ASSET_NOT_PRESENT;
 	}
 	else{

@@ -1,6 +1,8 @@
 #ifndef R_MATERIAL_HPP
 #define R_MATERIAL_HPP
 
+#include <map>
+
 #include "rTypes.hpp"
 #include "rDefs.hpp"
 
@@ -10,10 +12,6 @@
 #include "rMatrix4.hpp"
 
 union rMaterialParameterValue{
-	int m_int;
-	float m_float;
-	float m_vec3[3];
-	float m_matrix4[16];
 	rTexture2D* m_texture2d;
 };
 
@@ -46,5 +44,10 @@ private:
 	
 	unsigned int m_shaderProgramId;
 };
+
+typedef std::map<rString, rMaterial*> rMaterialMap;
+typedef rMaterialMap::iterator rMaterialItr;
+typedef rMaterialMap::const_iterator rMaterialConstItr;
+typedef std::pair<rString, rMaterial*> rMaterialMapEntry;
 
 #endif

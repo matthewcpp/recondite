@@ -66,19 +66,25 @@ rTexture2D* rContentManager::LoadTexture(const rTexture2DData& textureData, cons
 }
 
 rTexture2D* rContentManager::GetTextureAsset(const rString& name) const{
+	m_error = rCONTENT_ERROR_NONE;
 	rTextureConstItr result = m_textures.find(name);
 	
-	if (result == m_textures.end())
+	if (result == m_textures.end()){
+		m_error = rCONTENT_ERROR_ASSET_NOT_PRESENT;
 		return NULL;
+	}
 	else
 		return result->second;
 }
 
 rShader* rContentManager::GetShaderAsset(const rString& name) const{
-	rShaderConstitr result = m_shaders.find(name);
+	m_error = rCONTENT_ERROR_NONE;
+	rShaderConstItr result = m_shaders.find(name);
 	
-	if (result == m_shaders.end())
+	if (result == m_shaders.end()){
+		m_error = rCONTENT_ERROR_ASSET_NOT_PRESENT;
 		return NULL;
+	}
 	else
 		return result->second;
 }
@@ -135,6 +141,52 @@ void rContentManager::UnloadShaders(){
 	}
 	
 	m_shaders.clear();
+}
+
+rMaterial* rContentManager::GetMaterialAsset(const rString& name) const{
+	m_error = rCONTENT_ERROR_NONE;
+	rMaterialConstItr result = m_materials.find(name);
+	
+	if (result == m_shaders.end()){
+		m_error = rCONTENT_ERROR_ASSET_NOT_PRESENT;
+		return NULL;
+	}
+	else
+		return result->second;
+}
+
+rMaterial* rContentManager::LoadMaterial(const rMaterialData& materialData, const rString& name){
+	rMaterial* material = NULL;
+	
+	if (m_materials.count(name))
+		m_error = rCONTENT_ERROR_ASSET_NAME_ALREADY_PRESENT;
+	else
+		m_error = materialData.GetError();
+	
+	if (!m_error){
+	}
+	
+	return material;
+}
+
+rContentError rContentManager::RemoveMaterialAsset(const rString& name){
+	rMaterialItr result = m_materials.find(name);
+	
+	if (result == m_shaders.end()){
+		m_error = rCONTENT_ERROR_ASSET_NOT_PRESENT;
+	}
+	else{
+		rMaterial* material = result->second;
+		//todo cleanup/ release textures
+		delete material;
+		m_error = rCONTENT_ERROR_NONE;
+	}
+	
+	return m_error;
+}
+
+size_t rContentManager::NumMaterials() const{
+	return m_materials.size();
 }
 
 

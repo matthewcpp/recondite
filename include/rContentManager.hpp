@@ -13,6 +13,7 @@
 #include "data/rTexture2DData.hpp"
 
 #include "rMaterial.hpp"
+#include "data/rMaterialData.hpp"
 
 #include "rShader.hpp"
 #include "data/rShaderData.hpp"
@@ -34,6 +35,12 @@ public:
 	virtual size_t NumShaders() const;
 	
 public:
+	virtual rMaterial* GetMaterialAsset(const rString& name) const;
+	virtual rMaterial* LoadMaterial(const rMaterialData& materialData, const rString& name);
+	virtual rContentError RemoveMaterialAsset(const rString& name);
+	virtual size_t NumMaterials() const;
+	
+public:
 	
 	virtual void UnloadAssets();
 
@@ -49,12 +56,14 @@ protected:
 	
 	rTextureMap m_textures;
 	rShaderMap m_shaders;
+	rMaterialMap m_materials;
 	
 	int GetNextAssetId();
 	
 private:
 	void UnloadTextures();
 	void UnloadShaders();
+	void UnloadMaterials();
 	
 	int m_nextAssetId;
 };

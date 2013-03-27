@@ -69,6 +69,7 @@ public:
 	virtual void DrawMesh(rVertex3Array& verticies, rVector2Array& texCoords, rIndexArray& indicies, rMaterial* material);
 
 	virtual unsigned int CreateShaderProgram(const rString& vertex, const rString& fragment);
+	virtual void DeleteShaderProgram(unsigned int shaderId);
 	
 protected:
 	

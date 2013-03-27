@@ -46,6 +46,10 @@ unsigned int rOpenGLGraphicsDevice::InitDefaultShader(){
 	return CreateShaderProgram(vertexShader, fragmentShader);
 }
 
+void rOpenGLGraphicsDevice::DeleteShaderProgram(unsigned int shaderId){
+	glDeleteProgram(shaderId);
+}
+
 unsigned int rOpenGLGraphicsDevice::CreateShaderProgram(const rString& vertex, const rString& fragment){
     GLuint vertexShader;
     GLuint fragmentShader;

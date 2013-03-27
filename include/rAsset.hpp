@@ -15,11 +15,18 @@ public:
 	
 	virtual rAssetType Type() const = 0;
 	
+	int Retain();
+	int Release();
+	int RetainCount() const;
+	
 protected:
 	rString m_name;
 	rString m_path;
 	
 	int m_assetId;
+	
+private:
+	int m_retainCount;
 };
 
 

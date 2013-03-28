@@ -1,44 +1,8 @@
 #include "rwxContentManager.hpp"
 
-rwxContentManager::rwxContentManager(rOpenGLGraphicsDevice* graphicsDevice){
-	m_error = rCONTENT_ERROR_NONE;
-	m_graphicsDevice = graphicsDevice;
-}
-
-rwxContentManager::~rwxContentManager(){
-	UnloadAssets();
-}
-
-rTexture2D* rwxContentManager::GetTextureAsset(const rString& name){
-	rTextureItr result = m_textures.find(name);
-	
-	if (result == m_textures.end()){
-		m_error = rCONTENT_ERROR_FILE_NOT_FOUND;
-		return NULL;
-	}
-
-	m_error = rCONTENT_ERROR_NONE;
-	return result->second;
-}
-
-bool rwxContentManager::RemoveTextureAsset(const rString& name){
-	rTextureItr result = m_textures.find(name);
-	
-	if (result == m_textures.end()){
-		m_error = rCONTENT_ERROR_FILE_NOT_FOUND;
-		return false;
-	}
-
-	rTexture2D* texture = result->second;
-	
-	wxLogMessage("unload texture Asset: %i", result->second->GraphicsDeviceID());	
-	
-	m_graphicsDevice->UnregisterTexture(texture->GraphicsDeviceID());
-	m_textures.erase(texture->Name());
-	
-	m_error = rCONTENT_ERROR_NONE;
-	return true;
-}
+rwxContentManager::rwxContentManager(rOpenGLGraphicsDevice* graphicsDevice)
+:rContentManager(graphicsDevice)
+{}
 
 rTexture2D* rwxContentManager::LoadWxImageToGraphicsDevice(wxImage& texture, const wxString& name){
 	if (!texture.IsOk()){
@@ -50,7 +14,6 @@ rTexture2D* rwxContentManager::LoadWxImageToGraphicsDevice(wxImage& texture, con
 	texture = texture.Mirror(false);
 	rwxUtils::MirrorWxImageInPlace(texture);
 	
-	unsigned int textureId;
 	wxSize size = texture.GetSize();
 	int bpp = texture.HasAlpha() ? 4 : 3;
 	
@@ -64,10 +27,11 @@ rTexture2D* rwxContentManager::LoadWxImageToGraphicsDevice(wxImage& texture, con
 	else
 		textureData.SetImageData(size.x, size.y, bpp, texture.GetData());
 	
-	return LoadTexture(textureData, name.c_str());
+	rString texName(name.c_str());
+	return LoadTexture(textureData, texName);
 }
 
-rTexture2D* rwxContentManager::ImportTextureAssetFromFile(const rString& path , const rString& name){
+rTexture2D* rwxContentManager::ImportTextureAssetFromFile(const wxString& path , const wxString& name){
 	
 	if (!wxFileExists(path)){
 		m_error = rCONTENT_ERROR_FILE_NOT_FOUND;
@@ -81,19 +45,4 @@ rTexture2D* rwxContentManager::ImportTextureAssetFromFile(const rString& path , 
 	rTexture2D* tex = LoadWxImageToGraphicsDevice(texture, name);
 	
 	return tex;
-}
-
-rContentError rwxContentManager::GetError() const{
-	return m_error;
-}
-
-void rwxContentManager::UnloadTextures(){
-	for (rTextureItr it = m_textures.begin(); it != m_textures.end(); ++it)
-		m_graphicsDevice->UnregisterTexture(it->second->GraphicsDeviceID());
-	
-	m_textures.clear();
-}
-
-void rwxContentManager::UnloadAssets(){
-	UnloadTextures();
 }

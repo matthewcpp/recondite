@@ -208,23 +208,7 @@ void rOpenGLGraphicsDevice::DrawWireBox(const rAlignedBox3& b, const rColor& col
 }
 
 void rOpenGLGraphicsDevice::DrawMesh(rVertex3Array& verticies, rVector2Array& texCoords, rIndexArray& indicies, rMaterial* material){
-	rColor color = material->Color();
-	glColor4ub(color.Red() , color.Green() , color.Blue() , color.Alpha());
-	
-	rTexture2D* texture = material->DiffuseTex();
-	if (texture){
-		glEnable(GL_TEXTURE_2D);
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-		glBindTexture(GL_TEXTURE_2D, texture->GraphicsDeviceID());
-		glTexCoordPointer(2, GL_FLOAT, 0, &texCoords[0]);
-	}
-	else{
-		DisableTextures();
-	}
-	
-	SetActiveMaterial(material);
-	glVertexPointer(3, GL_FLOAT , 0, &verticies[0]);
-	glDrawElements(GL_TRIANGLES, indicies.size() , GL_UNSIGNED_SHORT , &indicies[0]);
+
 }
 
 void rOpenGLGraphicsDevice::DrawLines3(const rVertex3Array& lines , const rColor& color){

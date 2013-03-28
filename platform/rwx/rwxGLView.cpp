@@ -1,4 +1,4 @@
-#include "rwxGlView.hpp"
+#include "rwxGLView.hpp"
 
 rwxGLView::rwxGLView(rEngine* engine, wxWindow* parent, wxWindowID id, const int* attribList, const wxPoint& pos, const wxSize& size, long style, const wxString& name, const wxPalette& palette)
 :wxGLCanvas(parent, id, attribList, pos, size, style, name, palette)

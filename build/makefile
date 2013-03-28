@@ -46,20 +46,22 @@ SRC_FILES = 	../src/math/rMath.cpp \
 
 VPATH = ../src/math ../src/geometry ../src/core ../src/asset ../src/data ../src/xml
 
-STATIC_LIB = recondite.a
+LIB_DIR = ../lib
+DYNAMIC_LIB = librecondite
 
-OUT = ../lib/$(STATIC_LIB)
+OUT = $(LIB_DIR)/$(DYNAMIC_LIB).so
 BUILD_DIR = ../build/
 COMPILER = gcc
 INCLUDES = -I../include
-CPPFLAGS = -Wall
+CPPFLAGS = -Wall -g -fPIC
 LDFLAGS =
 OBJECTS = $(addprefix $(BUILD_DIR),$(notdir $(SRC_FILES:.cpp=.o)))
 
 all:recondite
 
 recondite: $(OBJECTS)
-	ar rcs $(OUT) $(OBJECTS)
+	gcc -shared -Wl,-soname,$(DYNAMIC_LIB) -o $(OUT) $(OBJECTS)
+	
 
 -include $(OBJECTS:.o=.d)
 
@@ -73,4 +75,4 @@ $(BUILD_DIR)%.o: %.cpp
 clean:
 	rm -f *.o
 	rm -f *.d
-	rm ../lib/$(STATIC_LIB)
+	rm $(OUT)

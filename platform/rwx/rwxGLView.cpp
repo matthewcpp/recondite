@@ -48,6 +48,14 @@ bool rwxGLView::InitGraphicsDeviceIfNecessary(){
 	return result;
 }
 
+void rwxGLView::DrawReconditeScene(){
+    	PrepareToDraw();
+        
+        DrawScene();
+        
+        SwapBuffers();
+}
+
 wxGLContext* rwxGLView::sharedContext = NULL;
 
 bool rwxGLView::InitSharedContextIfNecessary(wxGLCanvas* glCanvas){

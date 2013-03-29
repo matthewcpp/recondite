@@ -15,7 +15,8 @@ public:
 	~rwxGLView();
 	void SetCamera(rCamera* camera);
         
-        virtual void DrawScene() = 0;
+        virtual void DrawScene() =0;
+        virtual void DrawReconditeScene();
     
 protected:
 	bool InitGraphicsDeviceIfNecessary();

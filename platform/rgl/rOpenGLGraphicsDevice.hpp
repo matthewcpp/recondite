@@ -73,7 +73,7 @@ public:
 	
 protected:
 	
-	GLuint CreateShader(GLenum type, const char* program);
+	GLuint CompileShader(GLenum type, const char* program);
 
 	void DisableTextures();
 

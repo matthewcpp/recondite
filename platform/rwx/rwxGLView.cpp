@@ -1,5 +1,9 @@
 #include "rwxGLView.hpp"
 
+BEGIN_EVENT_TABLE(rwxGLView, wxGLCanvas)
+        EVT_PAINT(rwxGLView::OnPaint)
+END_EVENT_TABLE()
+
 rwxGLView::rwxGLView(rEngine* engine, wxWindow* parent, wxWindowID id, const int* attribList, const wxPoint& pos, const wxSize& size, long style, const wxString& name, const wxPalette& palette)
 :wxGLCanvas(parent, id, attribList, pos, size, style, name, palette)
 {
@@ -14,6 +18,12 @@ rwxGLView::rwxGLView(rEngine* engine, wxWindow* parent, wxWindowID id, const int
 
 rwxGLView::~rwxGLView(){
 	delete m_camera;
+}
+
+void rwxGLView::OnPaint(wxPaintEvent& event){
+    wxPaintDC dc(this);
+    
+    DrawReconditeScene();
 }
 
 void rwxGLView::PrepareToDraw(){

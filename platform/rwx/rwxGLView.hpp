@@ -27,10 +27,14 @@ protected:
 	rEngine* m_engine;
 	
 	rViewCamera* m_camera;
+        
+        void OnPaint(wxPaintEvent& event);
 	
 protected:
 	static bool InitSharedContextIfNecessary(wxGLCanvas* glCanvas);
 	static wxGLContext* sharedContext;
+        
+        DECLARE_EVENT_TABLE();
 };
 
 #endif

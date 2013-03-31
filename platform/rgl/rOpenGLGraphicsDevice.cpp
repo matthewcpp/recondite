@@ -18,6 +18,9 @@ void rOpenGLGraphicsDevice::Clear(){
 
 bool rOpenGLGraphicsDevice::Init(){
     GLenum err = glewInit();
+    
+    if (err != GLEW_OK)
+        return false;
 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
@@ -57,12 +60,12 @@ unsigned int rOpenGLGraphicsDevice::CreateShaderProgram(const rString& vertex, c
     GLint linked;
 
 
-    CreateShader(GL_VERTEX_SHADER, vertex.c_str());
+    vertexShader = CompileShader(GL_VERTEX_SHADER, vertex.c_str());
 
     if (!vertexShader)
 	    return 0;
 
-    fragmentShader = CreateShader(GL_FRAGMENT_SHADER, fragment.c_str());
+    fragmentShader = CompileShader(GL_FRAGMENT_SHADER, fragment.c_str());
 
     if (!fragmentShader){
 	    glDeleteShader(vertexShader);
@@ -104,7 +107,7 @@ unsigned int rOpenGLGraphicsDevice::CreateShaderProgram(const rString& vertex, c
     return programObject;
 }
 
-GLuint rOpenGLGraphicsDevice::CreateShader(GLenum type, const char* program){
+GLuint rOpenGLGraphicsDevice::CompileShader(GLenum type, const char* program){
     GLuint shader;
     GLint compiled;
 

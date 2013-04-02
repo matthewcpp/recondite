@@ -45,6 +45,7 @@ public:
 public:
 	
 	virtual void UnloadAssets();
+        virtual void InitDefaultAssets();
 
 	virtual rContentError GetLastError() const;
 	

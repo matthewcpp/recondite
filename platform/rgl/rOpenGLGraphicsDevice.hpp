@@ -50,7 +50,6 @@ public:
 	
 	virtual bool Init();
 	virtual bool IsInit() const;
-        virtual bool HasCalledInit() const;
 	virtual void Uninit();
 	virtual void Clear();
 	
@@ -82,12 +81,8 @@ protected:
 	void CameraLookAt(rCamera* camera);
 	
 	void SetActiveMaterial(rMaterial* material);
-	
-	unsigned int InitDefaultShader();
 
 	bool m_isInit;
-        bool m_calledInit;
-	unsigned int m_defaultShader;
 };
 
 #endif

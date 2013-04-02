@@ -40,7 +40,6 @@ public:
 
 	virtual bool Init() = 0;
 	virtual bool IsInit() const = 0;
-        virtual bool HasCalledInit() const = 0;
 	virtual void Uninit()  = 0;
 	virtual void Clear()  = 0;
 	

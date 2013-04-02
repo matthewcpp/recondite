@@ -9,8 +9,6 @@ rwxGLView::rwxGLView(rEngine* engine, wxWindow* parent, wxWindowID id, const int
 {
 	m_engine = engine;
 	
-	//InitSharedContextIfNecessary(this);
-	
 	m_camera = new rViewCamera("camera", rVector3::ZeroVector);
 	m_viewport.SetCamera(m_camera);
 	m_camera->SetPosition(rVector3(0.0f, 0.0f, 5.0f));
@@ -27,52 +25,55 @@ void rwxGLView::OnPaint(wxPaintEvent& event){
 }
 
 void rwxGLView::PrepareToDraw(){
-	InitSharedContextIfNecessary(this);
-	SetCurrent(*sharedContext);
-	InitGraphicsDeviceIfNecessary();
-	SetViewportSize();
-	
-	m_engine->GraphicsDevice()->Clear();
-	m_engine->GraphicsDevice()->SetActiveViewport(m_viewport);
+    InitSharedContextIfNecessary(this);
+    SetCurrent(*sharedContext);
+    InitGraphicsDeviceIfNecessary();
+    SetViewportSize();
+
+    m_engine->GraphicsDevice()->Clear();
+    m_engine->GraphicsDevice()->SetActiveViewport(m_viewport);
 }
 
 void rwxGLView::SetCamera(rCamera* camera){
-	m_viewport.SetCamera(camera);
+    m_viewport.SetCamera(camera);
 }
 
 void rwxGLView::SetViewportSize(){
-	int width,height;
-	GetSize(&width,&height);
-	m_viewport.SetSize(width,height);
+    int width,height;
+    GetSize(&width,&height);
+    m_viewport.SetSize(width,height);
 }
 
 bool rwxGLView::InitGraphicsDeviceIfNecessary(){
-	if (!m_engine->GraphicsDevice() || m_engine->GraphicsDevice()->IsInit() || m_engine->GraphicsDevice()->HasCalledInit())
-		return false;
-	
-	bool result = m_engine->GraphicsDevice()->Init();
-	
-	if (!result)
-	    wxMessageBox("Error Initializing Graphics Device: " + m_engine->GraphicsDevice()->GetLastErrorMessage());
-	
-	return result;
+    rGraphicsDevice* graphicsDevice = m_engine->GraphicsDevice();
+    if (!graphicsDevice ||graphicsDevice->IsInit())
+	    return false;
+
+    bool result = graphicsDevice->Init();
+    m_engine->ContentManager()->InitDefaultAssets();
+
+
+    if (!result)
+	wxMessageBox("Error Initializing Graphics Device: " + m_engine->GraphicsDevice()->GetLastErrorMessage());
+
+    return result;
 }
 
 void rwxGLView::DrawReconditeScene(){
-    	PrepareToDraw();
-        
-        DrawScene();
-        
-        SwapBuffers();
+    PrepareToDraw();
+
+    DrawScene();
+
+    SwapBuffers();
 }
 
 wxGLContext* rwxGLView::sharedContext = NULL;
 
 bool rwxGLView::InitSharedContextIfNecessary(wxGLCanvas* glCanvas){
-	if (sharedContext)
-		return false;
-    
-	sharedContext = new wxGLContext(glCanvas);
-	sharedContext->SetCurrent(*glCanvas);
-	return true;
+    if (sharedContext)
+	    return false;
+
+    sharedContext = new wxGLContext(glCanvas);
+    sharedContext->SetCurrent(*glCanvas);
+    return true;
 }

@@ -304,3 +304,4 @@ int rContentManager::GetNextAssetId(){
 }
 void rContentManager::Init() {}
 void rContentManager::Uninit() {}
+void rContentManager::InitDefaultAssets() {}

@@ -4,6 +4,15 @@ rwxContentManager::rwxContentManager(rOpenGLGraphicsDevice* graphicsDevice)
 :rContentManager(graphicsDevice)
 {}
 
+void rwxContentManager::InitDefaultAssets(){
+    
+    rContentManager::InitDefaultAssets();
+	#include "rOpenGLDefaultShaders.inl"
+    rShaderData data;
+    data.SetShaderData(texturedVertexShader, texturedFragmentShader);
+    LoadShader(data, "default_textured");
+}
+
 rTexture2D* rwxContentManager::LoadWxImageToGraphicsDevice(wxImage& texture, const wxString& name){
 	if (!texture.IsOk()){
 		m_error = rCONTENT_ERROR_FILE_NOT_READABLE;

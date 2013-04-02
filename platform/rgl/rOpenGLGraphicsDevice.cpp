@@ -3,7 +3,6 @@
 rOpenGLGraphicsDevice::rOpenGLGraphicsDevice()
 {
 	m_isInit = false;
-	m_calledInit = false;
 }
 
 bool rOpenGLGraphicsDevice::IsInit() const {
@@ -19,34 +18,22 @@ void rOpenGLGraphicsDevice::Clear(){
 bool rOpenGLGraphicsDevice::Init(){
     GLenum err = glewInit();
     
-    if (err != GLEW_OK)
-        return false;
+    if (err == GLEW_OK){
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LEQUAL);
 
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LEQUAL);
-	
-    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-    glEnable(GL_PERSPECTIVE_CORRECTION_HINT);
+	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+	glEnable(GL_PERSPECTIVE_CORRECTION_HINT);
 
-    glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_VERTEX_ARRAY);
 
-    glColor4ub(255,255,255,255);
+	glColor4ub(255,255,255,255);
 
-    glPointSize(4.0f);
-    m_isInit = InitDefaultShader();
-    m_calledInit = true;
+	glPointSize(4.0f);
+	m_isInit = true;
+    }
+    
     return m_isInit;
-}
-
-bool rOpenGLGraphicsDevice::HasCalledInit() const{
-    return m_calledInit;
-}
-
-unsigned int rOpenGLGraphicsDevice::InitDefaultShader(){
-	std::string vertexShader = "varying mediump vec2 v_texcoord;uniform sampler2D texture;void main(){gl_FragColor = texture2D(texture, v_texcoord);}";
-	std::string fragmentShader = "attribute vec4 position;attribute vec2 texcoord;uniform mat4 mvp;varying mediump vec2 v_texcoord;void main(){gl_Position = mvp * position;v_texcoord=texcoord;}";
-	
-	return CreateShaderProgram(vertexShader, fragmentShader);
 }
 
 void rOpenGLGraphicsDevice::DeleteShaderProgram(unsigned int shaderId){

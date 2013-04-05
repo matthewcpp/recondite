@@ -9,6 +9,10 @@ void rwxContentManager::InitDefaultAssets(){
     rContentManager::InitDefaultAssets();
 	#include "rOpenGLDefaultShaders.inl"
     rShaderData data;
+    
+    data.SetShaderData(coloredVertexShader, coloredFragmentShader);
+    LoadShader(data, "default_colored");
+    
     data.SetShaderData(texturedVertexShader, texturedFragmentShader);
     LoadShader(data, "default_textured");
 }

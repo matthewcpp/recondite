@@ -23,31 +23,34 @@ public:
 	rContentManager(rGraphicsDevice* graphicsDevice);
 	virtual ~rContentManager();
 	
-	virtual rTexture2D* GetTextureAsset(const rString& name) const;
-	virtual rTexture2D* LoadTexture(const rTexture2DData& textureData, const rString& name);
+	rTexture2D* GetTextureAsset(const rString& name) const;
+	rTexture2D* LoadTexture(const rTexture2DData& textureData, const rString& name);
+	virtual rTexture2D* LoadTextureFromPath(const rString& path, const rString& name);
 	rTexture2D* GetOrLoadTexture(const rString& textureName, const rString& texturePath);
-	virtual rContentError RemoveTextureAsset(const rString& name);
-	virtual size_t NumTextures() const;
+	rContentError RemoveTextureAsset(const rString& name);
+	size_t NumTextures() const;
 	
 public:
-	virtual rShader* GetShaderAsset(const rString& name) const;
-	virtual rShader* LoadShader(const rShaderData& shaderData, const rString& name);
+	rShader* GetShaderAsset(const rString& name) const;
+	rShader* LoadShader(const rShaderData& shaderData, const rString& name);
+	virtual rShader* LoadShaderFromPath(const rString& path, const rString& name);
 	rShader* GetOrLoadShader(const rString& shaderName, const rString& shaderPath);
-	virtual rContentError RemoveShaderAsset(const rString& name);
-	virtual size_t NumShaders() const;
+	rContentError RemoveShaderAsset(const rString& name);
+	size_t NumShaders() const;
 	
 public:
-	virtual rMaterial* GetMaterialAsset(const rString& name) const;
-	virtual rMaterial* LoadMaterial(const rMaterialData& materialData, const rString& name);
-	virtual rContentError RemoveMaterialAsset(const rString& name);
-	virtual size_t NumMaterials() const;
+	rMaterial* GetMaterialAsset(const rString& name) const;
+	rMaterial* LoadMaterial(const rMaterialData& materialData, const rString& name);
+	virtual rMaterial* LoadMaterialFromPath(const rString& path, const rString& name);
+	rContentError RemoveMaterialAsset(const rString& name);
+	size_t NumMaterials() const;
 	
 public:
 	
-	virtual void UnloadAssets();
-        virtual void InitDefaultAssets();
+	void UnloadAssets();
+    virtual void InitDefaultAssets();
 
-	virtual rContentError GetLastError() const;
+	rContentError GetLastError() const;
 	
 protected:
 	

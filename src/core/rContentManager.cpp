@@ -74,6 +74,11 @@ rTexture2D* rContentManager::LoadTexture(const rTexture2DData& textureData, cons
 	return texture;
 }
 
+rTexture2D* rContentManager::LoadTextureFromPath(const rString& path, const rString& name){
+	rTexture2DData textureData(path);
+	return LoadTexture(textureData, name);
+}
+
 rTexture2D* rContentManager::GetTextureAsset(const rString& name) const{
 	rTextureConstItr result = m_textures.find(name);
 	
@@ -90,6 +95,11 @@ rShader* rContentManager::GetShaderAsset(const rString& name) const{
 		return NULL;
 	else
 		return result->second;
+}
+
+rShader* rContentManager::LoadShaderFromPath(const rString& path, const rString& name){
+	rShaderData shaderData(path);
+	return LoadShader(shaderData, name);
 }
 
 rShader* rContentManager::LoadShader(const rShaderData& shaderData, const rString& name){
@@ -175,10 +185,8 @@ rShader* rContentManager::GetOrLoadShader(const rString& shaderName, const rStri
 rTexture2D* rContentManager::GetOrLoadTexture(const rString& textureName, const rString& texturePath){
 	rTexture2D* texture = GetTextureAsset(textureName);
 	
-	if (!texture){
-		rTexture2DData textureData(texturePath);
-		texture = LoadTexture(textureData, textureName);
-	}
+	if (!texture)
+		texture = LoadTextureFromPath(texturePath, textureName);
 	
 	return texture;
 }
@@ -192,7 +200,7 @@ bool rContentManager::LoadTexturesForMaterial(const rMaterialData& materialData,
 	for (size_t i = 0; i < texParams.size(); i++){
 		materialData.GetParameterData(texParams[i], paramData);
 		
-		rTexture2D* texture = GetOrLoadTexture(texParams[i], paramData.value);
+		rTexture2D* texture = GetOrLoadTexture(paramData.value, paramData.path);
 		if (texture){
 			texture->Retain();
 			material->SetTexture(texParams[i], texture);
@@ -208,6 +216,11 @@ bool rContentManager::LoadTexturesForMaterial(const rMaterialData& materialData,
 	}
 	
 	return true;
+}
+
+rMaterial* rContentManager::LoadMaterialFromPath(const rString& path, const rString& name){
+	rMaterialData materialData(path);
+	return LoadMaterial(materialData, name);
 }
 
 rMaterial* rContentManager::LoadMaterial(const rMaterialData& materialData, const rString& name){

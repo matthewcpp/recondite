@@ -19,8 +19,12 @@ include $(CLEAR_VARS)
 LOCAL_MODULE    := recondite-android
 
 LOCAL_C_INCLUDES += ../../../include
+LOCAL_C_INCLUDES += ../../../platform/rgl
 
-LOCAL_SRC_FILES := main.c
+LOCAL_SRC_FILES := main.cpp
+LOCAL_SRC_FILES += rAndroidContentManager.cpp
+
+LOCAL_SRC_FILES += ../../../../platform/rgl/rOpenGLGraphicsDevice.cpp
 
 LOCAL_SRC_FILES += ../../../../src/math/rMath.cpp
 LOCAL_SRC_FILES += ../../../../src/math/rMathUtil.cpp
@@ -48,7 +52,6 @@ LOCAL_SRC_FILES += ../../../../src/core/rActor3.cpp
 LOCAL_SRC_FILES += ../../../../src/core/rCamera.cpp
 LOCAL_SRC_FILES += ../../../../src/core/rColor.cpp
 LOCAL_SRC_FILES += ../../../../src/core/rGameTime.cpp
-LOCAL_SRC_FILES += ../../../../src/core/rGraphicsDevice.cpp
 LOCAL_SRC_FILES += ../../../../src/core/rPoint.cpp
 LOCAL_SRC_FILES += ../../../../src/core/rRect.cpp
 LOCAL_SRC_FILES += ../../../../src/core/rSize.cpp

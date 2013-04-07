@@ -20,11 +20,15 @@
 #include <errno.h>
 
 #include <EGL/egl.h>
-#include <GLES/gl.h>
+#include <GLES2/gl2.h>
+#include <GLES2/gl2ext.h>
 
 #include <android/sensor.h>
 #include <android/log.h>
 #include <android_native_app_glue.h>
+
+#include "rAndroidContentManager.hpp"
+#include "rOpenGLGraphicsDevice.hpp"
 
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "native-activity", __VA_ARGS__))
 #define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, "native-activity", __VA_ARGS__))
@@ -55,12 +59,16 @@ struct engine {
     int32_t width;
     int32_t height;
     struct saved_state state;
+
+    rOpenGLGraphicsDevice* graphicsDevice;
+    rAndroidContentManager* contentManager;
+    int frame;
 };
 
 /**
  * Initialize an EGL context for the current display.
  */
-static int engine_init_display(struct engine* engine) {
+static int engine_init_display(struct engine* engine, struct android_app* state) {
     // initialize OpenGL ES and EGL
 
     /*
@@ -117,10 +125,16 @@ static int engine_init_display(struct engine* engine) {
     engine->state.angle = 0;
 
     // Initialize GL state.
-    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
+    //glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
     glEnable(GL_CULL_FACE);
     //glShadeModel(GL_SMOOTH);
     glDisable(GL_DEPTH_TEST);
+
+    AAssetManager* assetManager = state->activity->assetManager;
+    engine->graphicsDevice = new rOpenGLGraphicsDevice();
+    engine->contentManager = new rAndroidContentManager(assetManager, engine->graphicsDevice);
+    engine->contentManager->InitDefaultAssets();
+    engine->frame = 0;
 
     return 0;
 }
@@ -129,15 +143,20 @@ static int engine_init_display(struct engine* engine) {
  * Just the current frame in the display.
  */
 static void engine_draw_frame(struct engine* engine) {
+
+	engine->frame++;
     if (engine->display == NULL) {
         // No display.
         return;
     }
 
     // Just fill the screen with a color.
-    glClearColor(((float)engine->state.x)/engine->width, engine->state.angle,
-            ((float)engine->state.y)/engine->height, 1);
-    glClear(GL_COLOR_BUFFER_BIT);
+    engine->graphicsDevice->SetClearColor(
+    		((float)engine->state.x)/engine->width,
+    		engine->state.angle,
+    		((float)engine->state.y)/engine->height,
+    		1.0f);
+    engine->graphicsDevice->Clear();
 
     eglSwapBuffers(engine->display, engine->surface);
 }
@@ -146,6 +165,8 @@ static void engine_draw_frame(struct engine* engine) {
  * Tear down the EGL context currently associated with the display.
  */
 static void engine_term_display(struct engine* engine) {
+	delete engine->contentManager;
+
     if (engine->display != EGL_NO_DISPLAY) {
         eglMakeCurrent(engine->display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
         if (engine->context != EGL_NO_CONTEXT) {
@@ -191,7 +212,7 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
         case APP_CMD_INIT_WINDOW:
             // The window is being shown, get it ready.
             if (engine->app->window != NULL) {
-                engine_init_display(engine);
+                engine_init_display(engine, app);
                 engine_draw_frame(engine);
             }
             break;

@@ -142,14 +142,9 @@ void rOpenGLGraphicsDevice::DrawPoints3(const rVertex3Array& points , const rCol
 
 }
 
-unsigned int  rOpenGLGraphicsDevice::GenerateTextureID(){
+unsigned int rOpenGLGraphicsDevice::CreateTexture(int width, int height, int bpp , const unsigned char* data){
 	GLuint textureID;
 	glGenTextures(1, &textureID);
-	return textureID;
-}
-
-unsigned int rOpenGLGraphicsDevice::CreateTexture(int width, int height, int bpp , const unsigned char* data){
-	GLuint textureID = GenerateTextureID();
 	
 	glBindTexture(GL_TEXTURE_2D, textureID);
 	

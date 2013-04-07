@@ -39,7 +39,6 @@ public:
 	virtual void Uninit();
 	virtual void Clear();
 	
-	virtual unsigned int GenerateTextureID();
 	virtual unsigned int CreateTexture(int width, int height, int bpp , const unsigned char* data);
 	virtual void UnregisterTexture(int textureID);
 	

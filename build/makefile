@@ -24,7 +24,6 @@ SRC_FILES = 	../src/math/rMath.cpp \
 		../src/core/rCamera.cpp \
 		../src/core/rColor.cpp \
 		../src/core/rGameTime.cpp \
-		../src/core/rGraphicsDevice.cpp \
 		../src/core/rPoint.cpp \
 		../src/core/rRect.cpp \
 		../src/core/rSize.cpp \

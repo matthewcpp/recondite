@@ -14,6 +14,10 @@ typedef std::vector<unsigned short> rUnsignedShortArray;
 typedef std::vector<rVector2> rVector2Array;
 typedef std::vector<rVector3> rVector3Array;
 
+typedef rVector2Array rVertex2Array;
+typedef rVector3Array  rVertex3Array;
+typedef std::vector<unsigned short> rIndexArray;
+
 typedef std::map<rString, rColor> rColorMap;
 typedef rColorMap::iterator rColorItr;
 typedef rColorMap::const_iterator rColorConstItr;

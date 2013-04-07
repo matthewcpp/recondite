@@ -79,7 +79,7 @@ rContentError rMaterialData::LoadParameters(const rXMLDocument& xml){
 	
 	rString paramName, type;
 	rMaterialParameterData parameter;
-	rXMLElement* value, *name;
+	rXMLElement* value, *name, *path;
 	
 	for (size_t i = 0; i < elements.size(); i++){
 		if (elements[i]->GetAttribute<rString>("type", type))
@@ -100,6 +100,13 @@ rContentError rMaterialData::LoadParameters(const rXMLDocument& xml){
 			return rCONTENT_ERROR_PARSE_ERROR;
 		
 		parameter.value = value->Text();
+		
+		path = elements[i]->GetFirstChildNamed("path");
+		
+		if (!path)
+			return rCONTENT_ERROR_PARSE_ERROR;
+			
+		parameter.path = path->Text();
 		
 		m_parameters[paramName] = parameter;
 	}
@@ -156,6 +163,7 @@ rContentError rMaterialData::WriteToStream(std::ostream& stream){
 		paramNode->AddAttribute("type", GetParamterTypeName(it->second.type));
 		paramNode->CreateChild("name", it->first);
 		paramNode->CreateChild("value", it->second.value);
+		paramNode->CreateChild("path", it->second.path);
 	}
 	
 	return error;
@@ -202,7 +210,10 @@ bool rMaterialData::GetParameterData(const rString& name, rMaterialParameterData
 	rMaterialParameterDataConstItr result = m_parameters.find(name);
 	
 	if (result != m_parameters.end()){
-		data = result->second;
+		data.name = result->second.name;
+		data.value = result->second.value;
+		data.path  = result->second.path;
+		data.name = result->second.name;
 		return true;
 	}
 	else

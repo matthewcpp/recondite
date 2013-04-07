@@ -11,7 +11,9 @@
 
 struct rMaterialParameterData{
 	rMaterialParameterType type;
+	rString name;
 	rString value;
+	rString path;
 };
 
 typedef std::map<rString, rMaterialParameterData> rMaterialParameterDataMap;

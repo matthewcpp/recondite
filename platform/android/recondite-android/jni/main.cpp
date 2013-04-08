@@ -150,6 +150,10 @@ static void engine_draw_frame(struct engine* engine) {
         return;
     }
 
+    if (engine->frame == 50){
+    	engine->contentManager->LoadMaterialFromAsset("box.rmat", "box");
+    }
+
     // Just fill the screen with a color.
     engine->graphicsDevice->SetClearColor(
     		((float)engine->state.x)/engine->width,

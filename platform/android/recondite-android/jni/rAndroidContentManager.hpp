@@ -18,7 +18,7 @@ struct rAndroidAsset{
 
 	char* rawAssetData;
 	int assetDataSize;
-	std::strstream* assetData;
+	std::istrstream* assetData;
 };
 
 class rAndroidContentManager : public rContentManager{
@@ -26,6 +26,9 @@ public:
 	rAndroidContentManager(AAssetManager* androidAssets, rGraphicsDevice* graphicsDevice);
 	virtual rTexture2D* LoadTextureFromPath(const rString& path, const rString& name);
 	rTexture2D* LoadTextureFromAsset(const rString& path, const rString& name);
+
+	virtual rMaterial* LoadMaterialFromPath(const rString& path, const rString& name);
+	rMaterial* LoadMaterialFromAsset(const rString& path, const rString& name);
 
 	void InitDefaultAssets();
 private:

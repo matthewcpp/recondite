@@ -21,20 +21,37 @@ rAndroidContentManager::rAndroidContentManager(AAssetManager* androidAssets, rGr
 }
 
 rTexture2D* rAndroidContentManager::LoadTextureFromPath(const rString& path, const rString& name){
-	LoadTextureFromAsset(path, name);
+	return LoadTextureFromAsset(path, name);
 }
 
 rTexture2D* rAndroidContentManager::LoadTextureFromAsset(const rString& path, const rString& name){
 	rAndroidAsset asset;
-	rTexture2D* texture;
+	rTexture2D* texture = NULL;
 	m_error = OpenAsset(path, asset);
 
 	if (!m_error){
-		rTexture2DData textureData(*asset.assetData);
+		rTexture2DData textureData(*(asset.assetData));
 		texture = LoadTexture(textureData, name);
 	}
 
 	return texture;
+}
+
+rMaterial* rAndroidContentManager::LoadMaterialFromPath(const rString& path, const rString& name){
+	LoadMaterialFromAsset(path, name);
+}
+
+rMaterial* rAndroidContentManager::LoadMaterialFromAsset(const rString& path, const rString& name){
+	rAndroidAsset asset;
+	rMaterial* material;
+	m_error = OpenAsset(path, asset);
+
+	if (!m_error){
+		rMaterialData materialData(*(asset.assetData));
+		material = LoadMaterial(materialData, name);
+	}
+
+	return material;
 }
 
 rContentError rAndroidContentManager::OpenAsset(const rString& path, rAndroidAsset& androidAsset){
@@ -51,7 +68,7 @@ rContentError rAndroidContentManager::OpenAsset(const rString& path, rAndroidAss
 			totalRead += result;
 		}
 
-		androidAsset.assetData = new std::strstream(androidAsset.rawAssetData, androidAsset.assetDataSize);
+		androidAsset.assetData = new std::istrstream(androidAsset.rawAssetData, androidAsset.assetDataSize);
 		return rCONTENT_ERROR_NONE;
 	}
 	else

@@ -64,10 +64,10 @@ rTexture2D* rContentManager::LoadTexture(const rTexture2DData& textureData, cons
 	
 	if (!m_error){
 		unsigned int textureId = m_graphicsDevice->CreateTexture(textureData.GetWidth(), textureData.GetHeight(), textureData.GetBPP(), textureData.GetData());
-		rTexture2D* tex = new rTexture2D(textureData.GetWidth(), textureData.GetHeight(), textureId,
+		texture = new rTexture2D(textureData.GetWidth(), textureData.GetHeight(), textureId,
 						GetNextAssetId(), name, textureData.GetPath());
 	
-		rTextureMapEntry entry(name, tex);
+		rTextureMapEntry entry(name, texture);
 		m_textures.insert(entry);
 	}
 

@@ -118,6 +118,11 @@ rContentError rMaterialData::LoadParameters(const rXMLDocument& xml){
 rContentError rMaterialData::LoadFromStream(std::istream& stream){
 	Clear();
 	
+	if (!stream){
+		m_error = rCONTENT_ERROR_FILE_NOT_READABLE;
+		return m_error;
+	}
+
 	rXMLDocument document;
 	rXMLReaderError xmlError = document.LoadFromStream(stream);
 	

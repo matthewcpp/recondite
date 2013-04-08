@@ -8,6 +8,11 @@ rXMLReader::rXMLReader(rXMLReaderDelegate* _delegate)
 
 void rXMLReader::Parse(std::istream* stream){
 
+	if (!stream){
+		SetError(rXML_READER_ERROR_CANNOT_READ_STREAM);
+		return;
+	}
+
     if (delegate)
         delegate->OnBeginParseDocument();
 

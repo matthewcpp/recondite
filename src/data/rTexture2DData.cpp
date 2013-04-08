@@ -51,8 +51,12 @@ rContentError rTexture2DData::LoadFromPath(const rString& path){
 rContentError rTexture2DData::LoadFromStream(std::istream& stream){
     Clear();
     
-    m_error = ReadFileHeader(stream);
-    m_error = ReadNonCompressedData(stream);
+    if (stream){
+		m_error = ReadFileHeader(stream);
+		m_error = ReadNonCompressedData(stream);
+    }
+    else
+    	m_error = rCONTENT_ERROR_FILE_NOT_READABLE;
     
     return m_error;
 }

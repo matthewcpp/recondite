@@ -11,6 +11,65 @@ rContentManager::~rContentManager(){
 	UnloadAssets();
 }
 
+rContentError rContentManager::LoadAssetManifestFromFile(const rString& path){
+	std::ifstream manifest(path.c_str();
+	
+	if (!manifest){
+		m_error = rCONTENT_ERROR_FILE_NOT_FOUND;
+	}
+	else{
+		m_error = LoadAssetManifestFromStream(manifest);
+	}
+	
+	return m_error;
+}
+
+rContentError rContentManager::LoadAssetManifestFromStream(std::istream& stream){
+	UnloadAssets();
+	
+	if (stream){
+		rXMLDocument document;
+		document.LoadFromStream(stream);
+		
+		rXMLElementList assets;
+		document.FindElements("asset", assets);
+		LoadManifestAssets(assets);
+	}
+	else{
+		m_error = rCONTENT_ERROR_FILE_NOT_READABLE;
+	}
+	
+	return m_error;
+}
+
+rContentError rContentManager::LoadManifestAssets(rXMLElementList& assets){
+	rXMLElement* assetElement, nameElement, pathElement;
+	rString name, path, type;
+	
+	for (size_t i = 0; i < assets.size(); i++){
+		assetElement = assets[i];
+		nameElement = assetElement->GetFirstChildNamed("name");
+		pathElement = assetElement->GetFirstChildNamed("element");
+		
+		if (nameElement && pathElement){
+			type = asset.GetAttribute<rString>("type", type);
+			name = nameElement->GetText();
+			path = pathElement->GetText();
+			
+			if (type == "texture2D")
+				LoadTextureFromPath(path, name);
+			else if (type == "shader")
+				LoadShaderFromPath(path, name);
+			else if (type == "material")
+				LoadMaterialFromPath(path, name);
+		}
+		else{
+			m_error = rCONTENT_ERROR_PARSE_ERROR;
+		}
+		
+	}
+}
+
 void rContentManager::UnloadAssets(){
 	void UnloadMaterials();
 	void UnloadShaders();

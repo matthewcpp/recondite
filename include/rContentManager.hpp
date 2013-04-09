@@ -8,6 +8,7 @@
 #include "rDefs.hpp"
 
 #include "rGraphicsDevice.hpp"
+#include "xml/rXMLDocument.hpp"
 
 #include "rTexture2D.hpp"
 #include "data/rTexture2DData.hpp"
@@ -23,6 +24,7 @@ public:
 	rContentManager(rGraphicsDevice* graphicsDevice);
 	virtual ~rContentManager();
 	
+public:
 	rTexture2D* GetTextureAsset(const rString& name) const;
 	rTexture2D* LoadTexture(const rTexture2DData& textureData, const rString& name);
 	virtual rTexture2D* LoadTextureFromPath(const rString& path, const rString& name);
@@ -46,7 +48,8 @@ public:
 	size_t NumMaterials() const;
 	
 public:
-	
+	rContentError LoadAssetManifest(const rString& path);
+	rContentError LoadAssetManifest(std::istream& stream);
 	void UnloadAssets();
     virtual void InitDefaultAssets();
 
@@ -72,6 +75,8 @@ private:
 	void UnloadTextures();
 	void UnloadShaders();
 	void UnloadMaterials();
+	
+	void LoadManifestAssets(rXMLElementList& assets);
 	
 	bool LoadTexturesForMaterial(const rMaterialData& materialData, rMaterial* material);
 	

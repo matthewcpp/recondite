@@ -11,8 +11,8 @@ rContentManager::~rContentManager(){
 	UnloadAssets();
 }
 
-rContentError rContentManager::LoadAssetManifestFromFile(const rString& path){
-	std::ifstream manifest(path.c_str();
+rContentError rContentManager::LoadAssetManifestFromPath(const rString& path){
+	std::ifstream manifest(path.c_str());
 	
 	if (!manifest){
 		m_error = rCONTENT_ERROR_FILE_NOT_FOUND;
@@ -31,7 +31,7 @@ rContentError rContentManager::LoadAssetManifestFromStream(std::istream& stream)
 		rXMLDocument document;
 		document.LoadFromStream(stream);
 		
-		rXMLElementList assets;
+		rXMLElementArray assets;
 		document.FindElements("asset", assets);
 		LoadManifestAssets(assets);
 	}
@@ -42,8 +42,8 @@ rContentError rContentManager::LoadAssetManifestFromStream(std::istream& stream)
 	return m_error;
 }
 
-rContentError rContentManager::LoadManifestAssets(rXMLElementList& assets){
-	rXMLElement* assetElement, nameElement, pathElement;
+void rContentManager::LoadManifestAssets(rXMLElementArray& assets){
+	rXMLElement* assetElement, *nameElement, *pathElement;
 	rString name, path, type;
 	
 	for (size_t i = 0; i < assets.size(); i++){
@@ -52,9 +52,9 @@ rContentError rContentManager::LoadManifestAssets(rXMLElementList& assets){
 		pathElement = assetElement->GetFirstChildNamed("element");
 		
 		if (nameElement && pathElement){
-			type = asset.GetAttribute<rString>("type", type);
-			name = nameElement->GetText();
-			path = pathElement->GetText();
+			type = assetElement->GetAttribute<rString>("type", type);
+			name = nameElement->Text();
+			path = pathElement->Text();
 			
 			if (type == "texture2D")
 				LoadTextureFromPath(path, name);

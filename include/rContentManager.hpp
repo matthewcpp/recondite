@@ -48,8 +48,8 @@ public:
 	size_t NumMaterials() const;
 	
 public:
-	rContentError LoadAssetManifest(const rString& path);
-	rContentError LoadAssetManifest(std::istream& stream);
+	virtual rContentError LoadAssetManifestFromPath(const rString& path);
+	rContentError LoadAssetManifestFromStream(std::istream& stream);
 	void UnloadAssets();
     virtual void InitDefaultAssets();
 
@@ -76,7 +76,7 @@ private:
 	void UnloadShaders();
 	void UnloadMaterials();
 	
-	void LoadManifestAssets(rXMLElementList& assets);
+	void LoadManifestAssets(rXMLElementArray& assets);
 	
 	bool LoadTexturesForMaterial(const rMaterialData& materialData, rMaterial* material);
 	

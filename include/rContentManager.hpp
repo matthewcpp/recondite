@@ -2,6 +2,7 @@
 #define R_CONTENTMANAGER_HPP
 
 #include <map>
+#include <list>
 #include <fstream>
 
 #include "rTypes.hpp"
@@ -18,6 +19,12 @@
 
 #include "rShader.hpp"
 #include "data/rShaderData.hpp"
+
+#include "rContentListener.hpp"
+
+typedef std::list<rContentListener*> rContentListenerList;
+typedef rContentListenerList::iterator rContentListenerItr;
+typedef rContentListenerList::const_iterator rContentListenerConstItr;
 
 class rContentManager{
 public:
@@ -51,9 +58,23 @@ public:
 	virtual rContentError LoadAssetManifestFromPath(const rString& path);
 	rContentError LoadAssetManifestFromStream(std::istream& stream);
 	void UnloadAssets();
-    virtual void InitDefaultAssets();
+	virtual void InitDefaultAssets();
 
 	rContentError GetLastError() const;
+	
+public:
+	void AddListener(rContentListener* listener);
+	void RemoveListener(rContentListener* listener);
+	
+private:
+	void NotifyBatchBegin(int total);
+	void NotifyBatchProgress(const rString& assetName, rAssetType type, int current, int total);
+	void NotifyBatchLoadError(const rString& assetName, rAssetType type, rContentError error, int current, int total);
+	void NotifyBatchEnd();
+	
+	void NotifyAssetLoadComplete(const rString& assetName, rAssetType type);
+	void NotifyAssetLoadError(const rString& assetName, rAssetType type, rContentError error);
+	void NotifyAssetUnloaded(const rString& assetName, rAssetType type);
 	
 protected:
 	
@@ -81,6 +102,8 @@ private:
 	bool LoadTexturesForMaterial(const rMaterialData& materialData, rMaterial* material);
 	
 	int m_nextAssetId;
+	
+	rContentListenerList m_listeners;
 };
 
 #endif

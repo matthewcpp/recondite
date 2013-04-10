@@ -374,6 +374,58 @@ size_t rContentManager::NumTextures() const{
 int rContentManager::GetNextAssetId(){
 	return ++m_nextAssetId; 
 }
+
+void rContentManager::AddListener(rContentListener* listener){
+	m_listeners.push_back(listener);
+}
+
+void rContentManager::RemoveListener(rContentListener* listener){
+	rContentListener* curListener;
+	for (rContentListenerItr it = m_listeners.begin(); it != m_listeners.end(); ++it){
+		curListener = *it;
+		
+		if (curListener == listener){
+			m_listeners.erase(it);
+			return;
+		}
+	}
+}
+
+void rContentManager::NotifyBatchBegin(int total) {
+	for (rContentListenerItr it = m_listeners.begin(); it != m_listeners.end(); ++it)
+		(*it)->BeginBatchLoad(total);
+}
+
+void rContentManager::NotifyBatchProgress(const rString& assetName, rAssetType type, int current, int total) {
+	for (rContentListenerItr it = m_listeners.begin(); it != m_listeners.end(); ++it)
+		(*it)->BatchLoadProgress(assetName, type, current, total);
+}
+
+void rContentManager::NotifyBatchLoadError(const rString& assetName, rAssetType type, rContentError error, int current, int total){
+	for (rContentListenerItr it = m_listeners.begin(); it != m_listeners.end(); ++it)
+		(*it)->BatchLoadError(assetName, type, error, current, total);
+}
+
+void rContentManager::NotifyBatchEnd(){
+	for (rContentListenerItr it = m_listeners.begin(); it != m_listeners.end(); ++it)
+		(*it)->EndBatchLoad();
+}
+
+void rContentManager::NotifyAssetLoadComplete(const rString& assetName, rAssetType type){
+	for (rContentListenerItr it = m_listeners.begin(); it != m_listeners.end(); ++it)
+		(*it)->AssetLoadComplete(assetName, type);
+}
+
+void rContentManager::NotifyAssetLoadError(const rString& assetName, rAssetType type, rContentError error){
+	for (rContentListenerItr it = m_listeners.begin(); it != m_listeners.end(); ++it)
+		(*it)->AssetLoadError(assetName, type, error);
+}
+
+void rContentManager::NotifyAssetUnloaded(const rString& assetName, rAssetType type){
+	for (rContentListenerItr it = m_listeners.begin(); it != m_listeners.end(); ++it)
+		(*it)->AssetUnloaded(assetName, type);
+}
+	
 void rContentManager::Init() {}
 void rContentManager::Uninit() {}
 void rContentManager::InitDefaultAssets() {}

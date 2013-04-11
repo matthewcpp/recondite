@@ -5,6 +5,7 @@ rContentManager::rContentManager(rGraphicsDevice* graphicsDevice){
 	m_nextAssetId = 0;
 	
 	m_error = rCONTENT_ERROR_NONE;
+	m_processingBatchFile = false;
 }
 
 rContentManager::~rContentManager(){
@@ -33,7 +34,12 @@ rContentError rContentManager::LoadAssetManifestFromStream(std::istream& stream)
 		
 		rXMLElementArray assets;
 		document.FindElements("asset", assets);
+		
+		m_processingBatchFile = true;
+		NotifyBatchBegin(assets.size());
 		LoadManifestAssets(assets);
+		m_processingBatchFile = false;
+		NotifyBatchEnd();
 	}
 	else{
 		m_error = rCONTENT_ERROR_FILE_NOT_READABLE;
@@ -44,24 +50,51 @@ rContentError rContentManager::LoadAssetManifestFromStream(std::istream& stream)
 
 void rContentManager::LoadManifestAssets(rXMLElementArray& assets){
 	rXMLElement* assetElement, *nameElement, *pathElement;
-	rString name, path, type;
+	rString name, path, typeStr;
+	size_t numAssets = assets.size();
+	rAssetType assetType;
 	
-	for (size_t i = 0; i < assets.size(); i++){
+	for (size_t i = 0; i < numAssets; i++){
 		assetElement = assets[i];
 		nameElement = assetElement->GetFirstChildNamed("name");
 		pathElement = assetElement->GetFirstChildNamed("element");
+		assetElement->GetAttribute<rString>("type", typeStr);
 		
 		if (nameElement && pathElement){
-			type = assetElement->GetAttribute<rString>("type", type);
+			assetType = rAsset::TypeForString(typeStr);
 			name = nameElement->Text();
 			path = pathElement->Text();
 			
-			if (type == "texture2D")
-				LoadTextureFromPath(path, name);
-			else if (type == "shader")
-				LoadShaderFromPath(path, name);
-			else if (type == "material")
-				LoadMaterialFromPath(path, name);
+			switch (assetType){
+			case rASSET_TEXTURE2D:
+				if (GetTextureAsset(name))
+					m_error = rCONTENT_ERROR_ASSET_NAME_ALREADY_PRESENT;
+				else
+					LoadTextureFromPath(path, name);
+				break;
+				
+			case rASSET_SHADER:
+				if (GetShaderAsset(name))
+					m_error = rCONTENT_ERROR_ASSET_NAME_ALREADY_PRESENT;
+				else
+					LoadShaderFromPath(path, name);
+				break;
+				
+			case rASSET_MATERIAL:
+				if (GetMaterialAsset(name))
+					m_error = rCONTENT_ERROR_ASSET_NAME_ALREADY_PRESENT;
+				else
+					LoadMaterialFromPath(path, name);
+				break;
+				
+			default:
+				m_error = rCONTENT_ERROR_UNKNOWN_ASSET_TYPE;
+			};
+			
+			if (m_error)
+				NotifyBatchLoadError(name, assetType, m_error, i, numAssets);
+			else
+				NotifyBatchProgress(name, assetType, i, numAssets);
 		}
 		else{
 			m_error = rCONTENT_ERROR_PARSE_ERROR;
@@ -424,6 +457,10 @@ void rContentManager::NotifyAssetLoadError(const rString& assetName, rAssetType 
 void rContentManager::NotifyAssetUnloaded(const rString& assetName, rAssetType type){
 	for (rContentListenerItr it = m_listeners.begin(); it != m_listeners.end(); ++it)
 		(*it)->AssetUnloaded(assetName, type);
+}
+
+bool rContentManager::ProcessingBatchFile() const{
+	return m_processingBatchFile;
 }
 	
 void rContentManager::Init() {}

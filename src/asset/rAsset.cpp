@@ -8,6 +8,17 @@ rAsset::rAsset(int assetid, const rString& name, const rString& path){
 	m_retainCount = 0;
 }
 
+rAssetType rAsset::TypeForString(const rString& str){
+	if (str == "texture2d")
+		return rASSET_TEXTURE2D;
+	else if (str == "shader")
+		return rASSET_SHADER;
+	else if (str == "material")
+		return rASSET_MATERIAL;
+	else
+		return rASSET_UNKNOWN;
+}
+
 rString rAsset::Name() const{
 	return m_name;
 }

@@ -19,6 +19,8 @@ public:
 	int Release();
 	int RetainCount() const;
 	
+	static rAssetType TypeForString(const rString& str);
+	
 protected:
 	rString m_name;
 	rString m_path;

@@ -61,6 +61,7 @@ public:
 	virtual void InitDefaultAssets();
 
 	rContentError GetLastError() const;
+	bool ProcessingBatchFile() const;
 	
 public:
 	void AddListener(rContentListener* listener);
@@ -104,6 +105,7 @@ private:
 	int m_nextAssetId;
 	
 	rContentListenerList m_listeners;
+	bool m_processingBatchFile;
 };
 
 #endif

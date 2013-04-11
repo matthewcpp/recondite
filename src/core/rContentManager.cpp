@@ -138,6 +138,7 @@ rContentError rContentManager::RemoveTextureAsset(const rString& name){
 		m_graphicsDevice->UnregisterTexture(texture->GraphicsDeviceID());
 		delete texture;
 		m_error = rCONTENT_ERROR_NONE;
+		NotifyAssetUnloaded(name, rASSET_TEXTURE2D);
 	}
 	else{
 		m_error = rCONTENT_ERROR_ASSET_IN_USE;
@@ -154,13 +155,18 @@ rTexture2D* rContentManager::LoadTexture(const rTexture2DData& textureData, cons
 	else
 		m_error = textureData.GetError();
 	
-	if (!m_error){
+	if (m_error){
+		if (!m_processingBatchFile) NotifyAssetLoadError(name, rASSET_TEXTURE2D, m_error);
+	}
+	else
+	{
 		unsigned int textureId = m_graphicsDevice->CreateTexture(textureData.GetWidth(), textureData.GetHeight(), textureData.GetBPP(), textureData.GetData());
 		texture = new rTexture2D(textureData.GetWidth(), textureData.GetHeight(), textureId,
 						GetNextAssetId(), name, textureData.GetPath());
 	
 		rTextureMapEntry entry(name, texture);
 		m_textures.insert(entry);
+		if (!m_processingBatchFile) NotifyAssetLoadComplete(name, rASSET_TEXTURE2D);
 	}
 
 	return texture;
@@ -202,13 +208,18 @@ rShader* rContentManager::LoadShader(const rShaderData& shaderData, const rStrin
 	else
 		m_error = shaderData.GetError();
 	
-	if (!m_error){
+	if (m_error){
+		if (!m_processingBatchFile) NotifyAssetLoadError(name, rASSET_SHADER, m_error);
+	}
+	else
+	{
 		unsigned int shaderId = m_graphicsDevice->CreateShaderProgram(shaderData.GetVertexProgram(), shaderData.GetFragmentProgram());
 	
 		if (shaderId != 0){
 			shader = new rShader(shaderId, GetNextAssetId(), name, shaderData.GetPath());
 			rShadermapEntry entry(name, shader);
 			m_shaders.insert(entry);
+			if (!m_processingBatchFile) NotifyAssetLoadComplete(name, rASSET_SHADER);
 		}
 	}
 	
@@ -230,6 +241,7 @@ rContentError rContentManager::RemoveShaderAsset(const rString& name){
 		m_shaders.erase(result);
 		delete shader;
 		m_error = rCONTENT_ERROR_NONE;
+		NotifyAssetUnloaded(name, rASSET_SHADER);
 	}
 	else{
 		m_error = rCONTENT_ERROR_ASSET_IN_USE;
@@ -323,7 +335,11 @@ rMaterial* rContentManager::LoadMaterial(const rMaterialData& materialData, cons
 	else
 		m_error = materialData.GetError();
 	
-	if (!m_error){
+	if (m_error){
+		if (!m_processingBatchFile) NotifyAssetLoadError(name, rASSET_MATERIAL, m_error);
+	}
+	else
+	{
 		rShader* shader = GetOrLoadShader(materialData.GetShaderName(), materialData.GetShaderPath());
 		
 		if (!shader){
@@ -337,6 +353,7 @@ rMaterial* rContentManager::LoadMaterial(const rMaterialData& materialData, cons
 		if (LoadTexturesForMaterial(materialData, material)){
 			rMaterialMapEntry entry(name, material);
 			m_materials.insert(entry);
+			if (!m_processingBatchFile) NotifyAssetLoadComplete(name, rASSET_MATERIAL);
 		}
 		else{
 			ReleaseAsset(shader);
@@ -366,6 +383,7 @@ rContentError rContentManager::RemoveMaterialAsset(const rString& name){
 			
 		delete material;
 		m_error = rCONTENT_ERROR_NONE;
+		NotifyAssetUnloaded(name, rASSET_MATERIAL);
 	}
 	
 	return m_error;

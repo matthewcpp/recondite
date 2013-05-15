@@ -19,6 +19,19 @@ rAssetType rAsset::TypeForString(const rString& str){
 		return rASSET_UNKNOWN;
 }
 
+rString rAsset::StringForType(rAssetType assetType){
+	switch (assetType) {
+	case rASSET_TEXTURE2D:
+		return "texture2d";
+	case rASSET_SHADER:
+		return "shader";
+	case rASSET_MATERIAL:
+		return "material";
+	default:
+		return "unknown";
+	};
+}
+
 rString rAsset::Name() const{
 	return m_name;
 }

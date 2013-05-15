@@ -20,6 +20,7 @@ public:
 	int RetainCount() const;
 	
 	static rAssetType TypeForString(const rString& str);
+	static rString StringForType(rAssetType assetType);
 	
 protected:
 	rString m_name;

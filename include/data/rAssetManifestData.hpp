@@ -7,6 +7,8 @@
 #include "rTypes.hpp"
 #include "rDefs.hpp"
 
+#include "rAsset.hpp"
+
 #include "xml/rXMLDocument.hpp"
 #include "xml/rXMLElement.hpp"
 
@@ -14,9 +16,12 @@ struct rAssetManifestEntry {
 	rAssetType type;
 	rString name;
 	rString path;
+	
+	rAssetManifestEntry(rAssetType t, const rString& n, const rString& p) : type(t), name(n), path(p) {}
 };
 
 typedef std::map<rString, rAssetManifestEntry> rAssetManifestEntryMap;
+typedef std::pair<rString, rAssetManifestEntry> rAssetManifestMapItem;
 typedef rAssetManifestEntryMap::iterator rAssetManifestEntryItr;
 typedef rAssetManifestEntryMap::const_iterator rAssetManifestEntryConstItr;
 
@@ -42,8 +47,8 @@ public:
 	void Clear();
 	
 private:
-	void CreateAssetCategoryXML(const rString& name, const rAssetManifestEntryMap& category, rXMLElement* parent);
-	rContentError ReadAssetCategory(rAssetType type, rXMLElement* parent);
+	void CreateAssetCategoryXML(const rAssetManifestEntryMap& category, rXMLElement* parent);
+	rContentError ReadAsset(rXMLElement* asset);
 	
 private:
 	

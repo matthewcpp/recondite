@@ -70,6 +70,7 @@ LOCAL_SRC_FILES += ../../../../src/xml/rXMLAttributeList.cpp
 LOCAL_SRC_FILES += ../../../../src/data/rTexture2DData.cpp
 LOCAL_SRC_FILES += ../../../../src/data/rMaterialData.cpp
 LOCAL_SRC_FILES += ../../../../src/data/rShaderData.cpp
+LOCAL_SRC_FILES += ../../../../src/data/rAssetManifestData.cpp
 
 LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv2
 LOCAL_STATIC_LIBRARIES := android_native_app_glue

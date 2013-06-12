@@ -77,8 +77,7 @@ rXMLElement* rXMLElement::GetFirstChildNamed(const rString& name) const{
 }
 
 rXMLElement* rXMLElement::CreateChild(const rString& name, const rString& text){
-	mChildren.push_back(new rXMLElement(this, name, text));
-	return mChildren.back();
+	return new rXMLElement(this, name, text);
 }
 
 

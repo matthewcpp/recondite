@@ -170,6 +170,8 @@ rContentError rMaterialData::WriteToStream(std::ostream& stream){
 		paramNode->CreateChild("value", it->second.value);
 		paramNode->CreateChild("path", it->second.path);
 	}
+
+	xml.WriteToStream(stream);
 	
 	return error;
 }
@@ -199,8 +201,21 @@ void rMaterialData::SetPath(const rString& path){
 	m_path = path;
 }
 
+void rMaterialData::SetShader(const rString& shaderName, const rString& shaderPath){
+	m_shaderName = shaderName;
+	m_shaderPath = shaderPath;
+}
+
 rString rMaterialData::GetShaderName() const{
 	return m_shaderName;
+}
+
+void rMaterialData::SetParameter(rMaterialParameterType type, const rString& name, const rString& value){
+	SetParameter(type, name, value, "");
+}
+
+void rMaterialData::SetParameter(rMaterialParameterType type, const rString& name, const rString& value, const rString& path){
+	m_parameters[name] = rMaterialParameterData (type, name, value, path);
 }
 
 rString rMaterialData::GetShaderPath() const{

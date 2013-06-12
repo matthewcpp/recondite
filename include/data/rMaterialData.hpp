@@ -10,6 +10,9 @@
 #include "xml/rXMLDocument.hpp"
 
 struct rMaterialParameterData{
+	rMaterialParameterData(){}
+	rMaterialParameterData(rMaterialParameterType t, const rString& n, const rString& v, const rString& p) : type(t), name(n), value(v), path(p){}
+
 	rMaterialParameterType type;
 	rString name;
 	rString value;
@@ -40,6 +43,10 @@ public:
 public:	
 	rString GetPath() const;
 	void SetPath(const rString& path);
+
+	void SetShader(const rString& shaderName, const rString& shaderPath);
+	void SetParameter(rMaterialParameterType type, const rString& name, const rString& value);
+	void SetParameter(rMaterialParameterType type, const rString& name, const rString& value, const rString& path);
 	
 	rString GetShaderName() const;
 	rString GetShaderPath() const;

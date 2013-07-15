@@ -14,6 +14,7 @@
 
 union rMaterialParameterValue{
 	rTexture2D* m_texture2d;
+	char m_color[4];
 };
 
 struct rMaterialParameter{
@@ -32,6 +33,9 @@ public:
 	
 	rTexture2D* GetTexture(const rString& name) const;
 	void SetTexture(const rString& name, rTexture2D* texture);
+	
+	void SetColor(const rString& name, rColor& color);
+	bool GetColor(const rString& name, rColor& color);
 	
 	rMaterialParameterType GetParameterType(const rString& name) const;
 	void GetParameterNames(rArrayString& names) const;

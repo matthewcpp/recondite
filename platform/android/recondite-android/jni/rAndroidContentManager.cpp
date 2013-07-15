@@ -77,11 +77,18 @@ rContentError rAndroidContentManager::OpenAsset(const rString& path, rAndroidAss
 
 void rAndroidContentManager::InitDefaultAssets(){
 	#include "rOpenGLDefaultShaders.inl"
-    rShaderData data;
 
-    data.SetShaderData(coloredVertexShader, coloredFragmentShader);
-    LoadShader(data, "default_colored");
+    rShaderData shaderData;
 
-    data.SetShaderData(texturedVertexShader, texturedFragmentShader);
-    LoadShader(data, "default_textured");
+    shaderData.SetShaderData(coloredVertexShader, coloredFragmentShader);
+    LoadShader(shaderData, "default_colored");
+
+    shaderData.SetShaderData(texturedVertexShader, texturedFragmentShader);
+    LoadShader(shaderData, "default_textured");
+
+    rMaterialData materialData;
+    materialData.SetShader("default_colored", "");
+    materialData.SetParameter( rMATERIAL_PARAMETER_COLOR , "fragColor", "255 255 0 255");
+
+	LoadMaterial(materialData, "default_colored");
 }

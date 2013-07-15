@@ -11,7 +11,10 @@
 
 struct rMaterialParameterData{
 	rMaterialParameterData(){}
-	rMaterialParameterData(rMaterialParameterType t, const rString& n, const rString& v, const rString& p) : type(t), name(n), value(v), path(p){}
+	rMaterialParameterData(rMaterialParameterType t, const rString& n, const rString& v, const rString& p);
+	
+	rMaterialParameterData(const rMaterialParameterData& data);
+	void Set(rMaterialParameterType t, const rString& n, const rString& v, const rString& p);
 
 	rMaterialParameterType type;
 	rString name;

@@ -1,4 +1,18 @@
 #include "data/rMaterialData.hpp"
+rMaterialParameterData::rMaterialParameterData(rMaterialParameterType t, const rString& n, const rString& v, const rString& p){
+	Set(t,n,v,p);
+}
+
+rMaterialParameterData::rMaterialParameterData(const rMaterialParameterData& data){
+	Set(data.type, data.name, data.value, data.path);
+}
+
+void rMaterialParameterData::Set(rMaterialParameterType t, const rString& n, const rString& v, const rString& p){
+	type = t;
+	name = n;
+	value = v;
+	path = p;
+}
 
 rMaterialData::rMaterialData(){
 	Clear();
@@ -60,6 +74,8 @@ rContentError rMaterialData::LoadShaderData(const rXMLDocument& xml){
 rMaterialParameterType rMaterialData::GetParameterType(const rString& type){
 	if (type == "texture2D")
 		return rMATERIAL_PARAMETER_TEXTURE2D;
+	else if (type == "color")
+		return rMATERIAL_PARAMETER_COLOR;
 	else
 		return rMATERIAL_PARAMETER_UNKNOWN;
 }
@@ -68,6 +84,8 @@ rString rMaterialData::GetParamterTypeName(rMaterialParameterType type){
 	switch(type){
 		case rMATERIAL_PARAMETER_TEXTURE2D:
 			return "texture2D";
+		case rMATERIAL_PARAMETER_COLOR:
+			return "color";
 		default:
 			return "unknown";
 	}
@@ -230,10 +248,7 @@ bool rMaterialData::GetParameterData(const rString& name, rMaterialParameterData
 	rMaterialParameterDataConstItr result = m_parameters.find(name);
 	
 	if (result != m_parameters.end()){
-		data.name = result->second.name;
-		data.value = result->second.value;
-		data.path  = result->second.path;
-		data.name = result->second.name;
+		data = result->second;
 		return true;
 	}
 	else

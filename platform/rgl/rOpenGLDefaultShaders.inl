@@ -2,16 +2,15 @@
 const char coloredVertexShader[] = 
 
 "attribute vec4 vPosition;"
-"varying vec4 fragColor;"
 "void main() {"
 "  gl_Position = vPosition;"
 "}";
 
 static const char coloredFragmentShader[] = 
 "precision mediump float;"
-"varying vec4 fragColor;"
+"uniform vec4 fragColor;"
 "void main() {"
-"  gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);"
+"  gl_FragColor = fragColor;"
 "}";
 
 //default shader for rendering a textured triangle

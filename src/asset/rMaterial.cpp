@@ -25,6 +25,34 @@ void rMaterial::SetTexture(const rString& name, rTexture2D* texture){
 	m_parameters[name] = parameter;
 }
 
+void rMaterial::SetColor(const rString& name, rColor& color){
+	rMaterialParameter parameter;
+	parameter.m_type = rMATERIAL_PARAMETER_COLOR;
+	
+	parameter.m_value.m_color[0] = color.red;
+	parameter.m_value.m_color[1] = color.green;
+	parameter.m_value.m_color[2] = color.blue;
+	parameter.m_value.m_color[3] = color.alpha;
+	
+	m_parameters[name] = parameter;
+}
+
+bool rMaterial::GetColor(const rString& name, rColor& color){
+	rMaterialParameterConstItr result = m_parameters.find(name);
+	
+	if (result != m_parameters.end() && result->second.m_type == rMATERIAL_PARAMETER_COLOR){
+		
+		color.red = result->second.m_value.m_color[0];
+		color.green = result->second.m_value.m_color[1];
+		color.blue = result->second.m_value.m_color[2];
+		color.alpha = result->second.m_value.m_color[3];
+		return true;
+	}
+	else{
+		return false;
+	}
+}
+
 rShader* rMaterial::Shader() const{
 	return m_shader;
 }

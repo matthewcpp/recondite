@@ -29,8 +29,10 @@
 
 #include "rAndroidContentManager.hpp"
 #include "rOpenGLGraphicsDevice.hpp"
+#include "rViewport.hpp"
 
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "native-activity", __VA_ARGS__))
+#define RLOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "recondite", __VA_ARGS__))
 #define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, "native-activity", __VA_ARGS__))
 
 /**
@@ -62,8 +64,31 @@ struct engine {
 
     rOpenGLGraphicsDevice* graphicsDevice;
     rAndroidContentManager* contentManager;
+    rViewport viewport;
     int frame;
 };
+
+GLuint vertexBuffer;
+GLuint indexBuffer;
+
+GLfloat vVertices[] = { -0.5f,  0.5f, 0.0f,  // Position 0
+                        -0.5f, -0.5f, 0.0f,  // Position 1
+                         0.5f, -0.5f, 0.0f,  // Position 2
+                         0.5f,  0.5f, 0.0f,  // Position 3
+                      };
+
+GLushort vIndices[] = { 0, 1, 2, 0, 2, 3 };
+
+void setupVBOs(){
+	RLOGI("setup vbo...");
+	glGenBuffers(1, &vertexBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+	glBufferData(GL_ARRAY_BUFFER, 12* sizeof(GLfloat), vVertices, GL_STATIC_DRAW);
+
+	glGenBuffers(1, &indexBuffer);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6* sizeof(GLushort), vIndices, GL_STATIC_DRAW);
+}
 
 /**
  * Initialize an EGL context for the current display.
@@ -78,6 +103,7 @@ static int engine_init_display(struct engine* engine, struct android_app* state)
      */
     const EGLint attribs[] = {
             EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
+            EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
             EGL_BLUE_SIZE, 8,
             EGL_GREEN_SIZE, 8,
             EGL_RED_SIZE, 8,
@@ -107,7 +133,13 @@ static int engine_init_display(struct engine* engine, struct android_app* state)
     ANativeWindow_setBuffersGeometry(engine->app->window, 0, 0, format);
 
     surface = eglCreateWindowSurface(display, config, engine->app->window, NULL);
-    context = eglCreateContext(display, config, NULL, NULL);
+
+    EGLint contextAttrs[] = {
+         EGL_CONTEXT_CLIENT_VERSION, 2,
+         EGL_NONE
+    };
+
+    context = eglCreateContext(display, config, NULL, contextAttrs);
 
     if (eglMakeCurrent(display, surface, surface, context) == EGL_FALSE) {
         LOGW("Unable to eglMakeCurrent");
@@ -124,6 +156,10 @@ static int engine_init_display(struct engine* engine, struct android_app* state)
     engine->height = h;
     engine->state.angle = 0;
 
+    RLOGI("display size: %d x %d", engine->width, engine->height);
+
+    engine->viewport.SetSize(w,h);
+
     // Initialize GL state.
     //glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
     glEnable(GL_CULL_FACE);
@@ -132,9 +168,15 @@ static int engine_init_display(struct engine* engine, struct android_app* state)
 
     AAssetManager* assetManager = state->activity->assetManager;
     engine->graphicsDevice = new rOpenGLGraphicsDevice();
+    engine->graphicsDevice->SetClearColor(0,0,0,0);
+
     engine->contentManager = new rAndroidContentManager(assetManager, engine->graphicsDevice);
     engine->contentManager->InitDefaultAssets();
+	engine->contentManager->LoadMaterialFromAsset("box.rmat", "box");
+
     engine->frame = 0;
+
+    setupVBOs();
 
     return 0;
 }
@@ -142,6 +184,8 @@ static int engine_init_display(struct engine* engine, struct android_app* state)
 /**
  * Just the current frame in the display.
  */
+bool idShown = false;
+
 static void engine_draw_frame(struct engine* engine) {
 
 	engine->frame++;
@@ -150,17 +194,55 @@ static void engine_draw_frame(struct engine* engine) {
         return;
     }
 
-    if (engine->frame == 50){
-    	engine->contentManager->LoadMaterialFromAsset("box.rmat", "box");
-    }
 
+    /*
     // Just fill the screen with a color.
     engine->graphicsDevice->SetClearColor(
     		((float)engine->state.x)/engine->width,
     		engine->state.angle,
     		((float)engine->state.y)/engine->height,
     		1.0f);
+     */
+
+
+
+    glViewport(0,0, engine->width, engine->height);
+
     engine->graphicsDevice->Clear();
+    engine->graphicsDevice->SetActiveViewport(engine->viewport);
+
+    rShader* shader = engine->contentManager->GetShaderAsset("default_colored");
+    rMaterial* material = engine->contentManager->GetMaterialAsset("default_colored");
+
+    if (shader){
+    	GLint programId = shader->ProgramId();
+
+    	if (!idShown){
+    		RLOGI("use shader id: %d", programId);
+    		idShown = true;
+    	}
+
+    	glUseProgram(programId);
+    	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+
+    	GLuint gPositionLoc = glGetAttribLocation ( programId, "vPosition" );
+    	GLuint gColorLoc = glGetUniformLocation ( programId, "fragColor" );
+
+		rColor color;
+		material->GetColor("fragColor", color);
+		glUniform4f(gColorLoc, color.red / 255.0f, color.green / 255.0f, color.blue / 255.0f , color.alpha / 255.0f);
+
+
+    	glVertexAttribPointer ( gPositionLoc, 3, GL_FLOAT, GL_FALSE, 0, 0 );
+    	glEnableVertexAttribArray ( gPositionLoc );
+
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+		glDrawElements ( GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0 );
+    }
+    else{
+    	RLOGI("shader error???");
+    }
 
     eglSwapBuffers(engine->display, engine->surface);
 }
@@ -302,9 +384,9 @@ void android_main(struct android_app* state) {
                     ASensorEvent event;
                     while (ASensorEventQueue_getEvents(engine.sensorEventQueue,
                             &event, 1) > 0) {
-                        LOGI("accelerometer: x=%f y=%f z=%f",
+                        ;/*LOGI("accelerometer: x=%f y=%f z=%f",
                                 event.acceleration.x, event.acceleration.y,
-                                event.acceleration.z);
+                                event.acceleration.z);*/
                     }
                 }
             }

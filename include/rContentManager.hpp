@@ -100,7 +100,7 @@ private:
 	
 	void LoadManifestAssets(rXMLElementArray& assets);
 	
-	bool LoadTexturesForMaterial(const rMaterialData& materialData, rMaterial* material);
+	bool LoadMaterialDependencies(const rMaterialData& materialData, rMaterial* material);
 	
 	int m_nextAssetId;
 	

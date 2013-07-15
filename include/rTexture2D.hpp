@@ -2,6 +2,7 @@
 #define R_TEXTURE2D_HPP
 
 #include <map>
+#include <vector>
 
 #include "rTypes.hpp"
 #include "rDefs.hpp"
@@ -30,4 +31,5 @@ typedef rTextureMap::iterator rTextureItr;
 typedef rTextureMap::const_iterator rTextureConstItr;
 typedef std::pair<rString, rTexture2D*> rTextureMapEntry;
 
+typedef std::vector<rTexture2D*> rTextureArray;
 #endif

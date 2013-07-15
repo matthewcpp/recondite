@@ -295,32 +295,49 @@ rTexture2D* rContentManager::GetOrLoadTexture(const rString& textureName, const 
 	return texture;
 }
 
-bool rContentManager::LoadTexturesForMaterial(const rMaterialData& materialData, rMaterial* material){
-	rArrayString texParams;
+bool rContentManager::LoadMaterialDependencies(const rMaterialData& materialData, rMaterial* material){
+	rTextureArray loadedTextures;
+	rArrayString materialParams;
 	rMaterialParameterData paramData;
 	
-	materialData.GetParameterNamesForType(texParams, rMATERIAL_PARAMETER_TEXTURE2D);
+	materialData.GetParameterNames(materialParams);
 	
-	for (size_t i = 0; i < texParams.size(); i++){
-		materialData.GetParameterData(texParams[i], paramData);
+	for (size_t i = 0; i < materialParams.size(); i++){
+		materialData.GetParameterData(materialParams[i], paramData);
 		
-		rTexture2D* texture = GetOrLoadTexture(paramData.value, paramData.path);
-		if (texture){
-			texture->Retain();
-			material->SetTexture(texParams[i], texture);
-		}
-		else{ //missing texture, cannot create material, release previous textures and abort loading process
-			for (size_t j = i-1; j >= 0; j--){
-				rTexture2D* texture = GetTextureAsset(texParams[j]);
-				if (texture) ReleaseAsset(texture);
+		switch (paramData.type){
+			case rMATERIAL_PARAMETER_TEXTURE2D:{
+				rTexture2D* texture = GetOrLoadTexture(paramData.value, paramData.path);
+				
+				if (texture){
+					loadedTextures.push_back(texture);
+					texture->Retain();
+					material->SetTexture(materialParams[i], texture);
+				}
+				else{ //if there is an error, release all textures we have loaded and return false
+					for (size_t t = 0; t < loadedTextures.size(); t++){
+						ReleaseAsset(loadedTextures[t]);
+					}
+					
+					return false;
+				}
 			}
+			break;
 			
-			return false;
-		}
+			case rMATERIAL_PARAMETER_COLOR:{
+				std::stringstream stream(paramData.value);
+				unsigned int c[4];
+				stream >> c[0] >> c[1] >> c[2] >> c[3];
+				rColor color(c[0], c[1], c[2], c[3]);
+				material->SetColor(materialParams[i], color);
+			}
+			break;
+		};
 	}
 	
 	return true;
 }
+
 
 rMaterial* rContentManager::LoadMaterialFromPath(const rString& path, const rString& name){
 	rMaterialData materialData(path);
@@ -350,7 +367,8 @@ rMaterial* rContentManager::LoadMaterial(const rMaterialData& materialData, cons
 		shader->Retain();
 		material = new rMaterial(shader, GetNextAssetId(), name, materialData.GetPath());
 		
-		if (LoadTexturesForMaterial(materialData, material)){
+		if (LoadMaterialDependencies(materialData, material)){
+			
 			rMaterialMapEntry entry(name, material);
 			m_materials.insert(entry);
 			if (!m_processingBatchFile) NotifyAssetLoadComplete(name, rASSET_MATERIAL);

@@ -90,6 +90,14 @@ void setupVBOs(){
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6* sizeof(GLushort), vIndices, GL_STATIC_DRAW);
 }
 
+void createColoredShader(rContentManager* contentManager, const char* name, const char* value){
+    rMaterialData materialData;
+    materialData.SetShader("default_colored", "");
+    materialData.SetParameter( rMATERIAL_PARAMETER_COLOR , "fragColor", value);
+
+    contentManager->LoadMaterial(materialData, name);
+}
+
 /**
  * Initialize an EGL context for the current display.
  */
@@ -176,6 +184,8 @@ static int engine_init_display(struct engine* engine, struct android_app* state)
 
     engine->frame = 0;
 
+    createColoredShader(engine->contentManager, "red_shaded", "255 0 0 255");
+    createColoredShader(engine->contentManager, "green_shaded", "0 255 0 255");
     setupVBOs();
 
     return 0;
@@ -184,7 +194,6 @@ static int engine_init_display(struct engine* engine, struct android_app* state)
 /**
  * Just the current frame in the display.
  */
-bool idShown = false;
 
 static void engine_draw_frame(struct engine* engine) {
 
@@ -194,44 +203,22 @@ static void engine_draw_frame(struct engine* engine) {
         return;
     }
 
-
-    /*
-    // Just fill the screen with a color.
-    engine->graphicsDevice->SetClearColor(
-    		((float)engine->state.x)/engine->width,
-    		engine->state.angle,
-    		((float)engine->state.y)/engine->height,
-    		1.0f);
-     */
-
-
-
     glViewport(0,0, engine->width, engine->height);
 
     engine->graphicsDevice->Clear();
     engine->graphicsDevice->SetActiveViewport(engine->viewport);
 
-    rShader* shader = engine->contentManager->GetShaderAsset("default_colored");
-    rMaterial* material = engine->contentManager->GetMaterialAsset("default_colored");
+    rMaterial* material = (engine-> frame % 120 < 60) ?
+    	engine->contentManager->GetMaterialAsset("red_shaded") :
+    	engine->contentManager->GetMaterialAsset("green_shaded");
 
-    if (shader){
-    	GLint programId = shader->ProgramId();
+    if (material){
+    	engine->graphicsDevice->SetActiveMaterial(material);
+    	GLint programId = material->Shader()->ProgramId();
 
-    	if (!idShown){
-    		RLOGI("use shader id: %d", programId);
-    		idShown = true;
-    	}
-
-    	glUseProgram(programId);
     	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 
     	GLuint gPositionLoc = glGetAttribLocation ( programId, "vPosition" );
-    	GLuint gColorLoc = glGetUniformLocation ( programId, "fragColor" );
-
-		rColor color;
-		material->GetColor("fragColor", color);
-		glUniform4f(gColorLoc, color.red / 255.0f, color.green / 255.0f, color.blue / 255.0f , color.alpha / 255.0f);
-
 
     	glVertexAttribPointer ( gPositionLoc, 3, GL_FLOAT, GL_FALSE, 0, 0 );
     	glEnableVertexAttribArray ( gPositionLoc );

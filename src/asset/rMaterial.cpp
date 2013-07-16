@@ -1,20 +1,31 @@
 #include "rMaterial.hpp"
 
+bool rMaterialParameter::GetColor(rColor& color){
+	if (m_type == rMATERIAL_PARAMETER_COLOR){
+		color.red = m_value.m_color[0];
+		color.green = m_value.m_color[1];
+		color.blue = m_value.m_color[2];
+		color.alpha = m_value.m_color[3];
+		return true;
+	}
+	else{
+		return false;
+	}
+}
+
+rTexture2D* rMaterialParameter::GetTexture(){
+	if (m_type == rMATERIAL_PARAMETER_TEXTURE2D){
+		return m_value.m_texture2d;
+	}
+	else{
+		return NULL;
+	}
+}
+
 rMaterial::rMaterial(rShader* shader, int assetid, const rString& name, const rString& path)
 	:rAsset(assetid, name, path)
 {
 	m_shader = shader;
-}
-
-rTexture2D* rMaterial::GetTexture(const rString& name) const{
-	rTexture2D* texture = NULL;
-	rMaterialParameterConstItr result = m_parameters.find(name);
-	
-	if (result != m_parameters.end() && result->second.m_type == rMATERIAL_PARAMETER_TEXTURE2D){
-			texture = result->second.m_value.m_texture2d;
-	}
-	
-	return texture;
 }
 
 void rMaterial::SetTexture(const rString& name, rTexture2D* texture){
@@ -37,22 +48,6 @@ void rMaterial::SetColor(const rString& name, rColor& color){
 	m_parameters[name] = parameter;
 }
 
-bool rMaterial::GetColor(const rString& name, rColor& color){
-	rMaterialParameterConstItr result = m_parameters.find(name);
-	
-	if (result != m_parameters.end() && result->second.m_type == rMATERIAL_PARAMETER_COLOR){
-		
-		color.red = result->second.m_value.m_color[0];
-		color.green = result->second.m_value.m_color[1];
-		color.blue = result->second.m_value.m_color[2];
-		color.alpha = result->second.m_value.m_color[3];
-		return true;
-	}
-	else{
-		return false;
-	}
-}
-
 rShader* rMaterial::Shader() const{
 	return m_shader;
 }
@@ -61,14 +56,17 @@ rAssetType rMaterial::Type() const{
 	return rASSET_MATERIAL;
 }
 
-rMaterialParameterType rMaterial::GetParameterType(const rString& name) const{
-	rMaterialParameterType materialType = rMATERIAL_PARAMETER_UNKNOWN;
+
+bool rMaterial::GetParameter(const rString& name, rMaterialParameter& param){
 	rMaterialParameterConstItr result = m_parameters.find(name);
 	
-	if (result != m_parameters.end())
-		materialType = result->second.m_type;
-	
-	return materialType;
+	if (result != m_parameters.end()){
+		param = result->second;
+		return true;
+	}
+	else{
+		return false;
+	}
 }
 
 void rMaterial::GetParameterNames(rArrayString& names) const{
@@ -76,13 +74,4 @@ void rMaterial::GetParameterNames(rArrayString& names) const{
 	
 	for (rMaterialParameterConstItr it = m_parameters.begin(); it != m_parameters.end(); ++it)
 		names.push_back(it->first);
-}
-
-void rMaterial::GetParameterNamesForType(rArrayString& names, rMaterialParameterType type){
-	names.clear();
-	
-	for (rMaterialParameterConstItr it = m_parameters.begin(); it != m_parameters.end(); ++it){
-		if (it->second.m_type == type)
-			names.push_back(it->first);
-	}
 }

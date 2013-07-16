@@ -127,19 +127,27 @@ void rOpenGLGraphicsDevice::SetActiveViewport(rViewport& viewport){
 }
 
 void rOpenGLGraphicsDevice::SetActiveMaterial(rMaterial* material){
-
-}
-
-void rOpenGLGraphicsDevice::DrawWireBox(const rAlignedBox3& b, const rColor& color){
-
-}
-
-void rOpenGLGraphicsDevice::DrawLines3(const rVertex3Array& lines , const rColor& color){
-
-}
-
-void rOpenGLGraphicsDevice::DrawPoints3(const rVertex3Array& points , const rColor& color){
-
+	GLint programId = material->Shader()->ProgramId();
+	rArrayString paramNames;
+	rMaterialParameter parameter;
+	material->GetParameterNames(paramNames);
+	
+	glUseProgram(programId);
+	
+	for (size_t i = 0; i < paramNames.size(); i++){
+		material->GetParameter(paramNames[i], parameter);
+		GLint uniformHandle = glGetUniformLocation ( programId, paramNames[i].c_str() );
+		
+		switch (parameter.m_type){
+			case rMATERIAL_PARAMETER_COLOR:{
+				rColor color;
+				parameter.GetColor(color);
+				glUniform4f(uniformHandle, color.red / 255.0f, color.green / 255.0f, color.blue / 255.0f , color.alpha / 255.0f);
+			}
+			break;
+		}
+	}
+	
 }
 
 unsigned int rOpenGLGraphicsDevice::CreateTexture(int width, int height, int bpp , const unsigned char* data){

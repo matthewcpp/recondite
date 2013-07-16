@@ -393,11 +393,15 @@ rContentError rContentManager::RemoveMaterialAsset(const rString& name){
 	
 	rMaterial* material = result->second;
 	if (material->RetainCount() == 0){
-		rArrayString textures;
-		material->GetParameterNamesForType(textures, rMATERIAL_PARAMETER_TEXTURE2D);
+		rArrayString parameterNames;
+		rMaterialParameter parameter;
+		material->GetParameterNames(parameterNames);
 		
-		for (size_t i = 0; i < textures.size(); i++)
-			ReleaseAsset(material->GetTexture(textures[i]));
+		for (size_t i = 0; i < parameterNames.size(); i++){
+			material->GetParameter(parameterNames[i], parameter);
+			if (parameter.m_type == rMATERIAL_PARAMETER_TEXTURE2D)
+				ReleaseAsset(parameter.GetTexture());
+		}
 			
 		delete material;
 		m_error = rCONTENT_ERROR_NONE;

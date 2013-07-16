@@ -30,10 +30,7 @@ public:
 	virtual void DeleteShaderProgram(unsigned int shaderId) = 0;
 	
 	virtual void SetActiveViewport(rViewport& viewport) = 0;
-
-	virtual void DrawLines3(const rVertex3Array& lines , const rColor& color) = 0;
-	virtual void DrawPoints3(const rVertex3Array& points , const rColor& color) = 0;
-	virtual void DrawWireBox(const rAlignedBox3& b, const rColor& color) = 0;
+	virtual void SetActiveMaterial(rMaterial* material) = 0;
 };
 
 #endif

@@ -88,7 +88,7 @@ void rAndroidContentManager::InitDefaultAssets(){
 
     rMaterialData materialData;
     materialData.SetShader("default_colored", "");
-    materialData.SetParameter( rMATERIAL_PARAMETER_COLOR , "fragColor", "255 255 0 255");
+    materialData.SetParameter( rMATERIAL_PARAMETER_COLOR , "fragColor", "255 255 255 255");
 
 	LoadMaterial(materialData, "default_colored");
 }

@@ -50,10 +50,6 @@ public:
 	
 	virtual void SetClearColor(const rColor& color);
 	virtual void SetClearColor(float r, float g, float b, float a);
-
-	virtual void DrawLines3(const rVertex3Array& lines , const rColor& color);
-	virtual void DrawPoints3(const rVertex3Array& points , const rColor& color);
-	virtual void DrawWireBox(const rAlignedBox3& b, const rColor& color);
 	
 protected:
 	

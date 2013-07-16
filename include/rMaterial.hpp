@@ -20,6 +20,9 @@ union rMaterialParameterValue{
 struct rMaterialParameter{
 	rMaterialParameterType m_type;
 	rMaterialParameterValue m_value;
+	
+	bool GetColor(rColor& color);
+	rTexture2D* GetTexture();
 };
 
 typedef std::map<rString, rMaterialParameter> rMaterialParameterMap;
@@ -31,15 +34,11 @@ class rMaterial : public rAsset{
 public:
 	rMaterial(rShader* shader, int assetid, const rString& name, const rString& path);
 	
-	rTexture2D* GetTexture(const rString& name) const;
 	void SetTexture(const rString& name, rTexture2D* texture);
-	
 	void SetColor(const rString& name, rColor& color);
-	bool GetColor(const rString& name, rColor& color);
 	
-	rMaterialParameterType GetParameterType(const rString& name) const;
 	void GetParameterNames(rArrayString& names) const;
-	void GetParameterNamesForType(rArrayString& names, rMaterialParameterType type); 
+	bool GetParameter(const rString& name, rMaterialParameter& param);
 	
 	rShader* Shader() const;
 	

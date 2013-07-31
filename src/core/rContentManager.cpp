@@ -104,9 +104,10 @@ void rContentManager::LoadManifestAssets(rXMLElementArray& assets){
 }
 
 void rContentManager::UnloadAssets(){
-	void UnloadMaterials();
-	void UnloadShaders();
-	void UnloadTextures();
+	UnloadMaterials();
+	UnloadShaders();
+	UnloadTextures();
+	UnloadGeometry();
 	
 }
 
@@ -411,6 +412,10 @@ rContentError rContentManager::RemoveMaterialAsset(const rString& name){
 	return m_error;
 }
 
+void rContentManager::UnloadMaterials(){
+	//todo: implement me
+}
+
 void rContentManager::ReleaseAsset(rAsset* asset){
 	int retainCount = asset->Release();
 	
@@ -471,27 +476,45 @@ void rContentManager::RemoveListener(rContentListener* listener){
 rGeometry* rContentManager::GetGeometryAsset(const rString& name) const{
 	rGeometry* geometry = NULL;
 	
-	rGeometryMap::iterator result = m_geometry.find(name);
+	rGeometryMap::const_iterator result = m_geometry.find(name);
 	
 	if (result != m_geometry.end()){
-		geometry = it->second;
-		m_error = rCONTENT_ERROR_NONE;
-	}
-	else{
-		m_error = rCONTENT_ERROR_ASSET_NOT_PRESENT;
+		geometry = result->second;
 	}
 	
 	return geometry;
 }
 
 rGeometry* rContentManager::LoadGeometry(const rGeometryData& geometryData, const rString& name){
+	rGeometry* geometry = NULL;
+
+	if (m_geometry.count(name))
+		m_error = rCONTENT_ERROR_ASSET_NAME_ALREADY_PRESENT;
+	else
+		m_error = geometryData.GetError();
+	
+	if (m_error){
+		if (!m_processingBatchFile) NotifyAssetLoadError(name, rASSET_GEOMETRY, m_error);
+	}
+	else
+	{
+		unsigned int vertexBuffer = m_graphicsDevice->CreateVertexBuffer(geometryData.GetVertexData(), geometryData.VertexDataSize());
+		
+		unsigned int elementBuffer = m_graphicsDevice->CreateElementBuffer(geometryData.GetElementData(), geometryData.VertexDataSize());
+		
+		geometry = new rGeometry(vertexBuffer, elementBuffer, geometryData.HasTextureCoords(), geometryData.HasNormals(), GetNextAssetId(), name, geometryData.Path());
+		
+		m_geometry[name] = geometry;
+	}
+	
+	return geometry;
 }
 
 rContentError rContentManager::RemoveGeometryAsset(const rString& name){
 	rGeometryMap::iterator result = m_geometry.find(name);
 	
-	if (result){
-		rGeometry* geometry = it->second;
+	if (result != m_geometry.end()){
+		rGeometry* geometry = result->second;
 		
 		m_graphicsDevice->DeleteBuffer(geometry->VertexBufferId());
 		m_graphicsDevice->DeleteBuffer(geometry->ElementBufferId());
@@ -499,13 +522,26 @@ rContentError rContentManager::RemoveGeometryAsset(const rString& name){
 		delete geometry;
 		m_geometry.erase(result);
 		
-		m_error = R_CONTENT_ERROR_NONE;
+		m_error = rCONTENT_ERROR_NONE;
 	}
 	else{
 		m_error = rCONTENT_ERROR_ASSET_NOT_PRESENT;
 	}
 	
 	return m_error;
+}
+
+void rContentManager::UnloadGeometry(){
+	for (rGeometryMap::iterator it = m_geometry.begin(); it != m_geometry.end(); ++it){
+		rGeometry* geometry = it->second;
+		
+		m_graphicsDevice->DeleteBuffer(geometry->VertexBufferId());
+		m_graphicsDevice->DeleteBuffer(geometry->ElementBufferId());
+		
+		delete geometry;
+	}
+	
+	m_geometry.clear();
 }
 
 size_t rContentManager::NumGeometry() const{

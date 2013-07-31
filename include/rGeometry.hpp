@@ -30,6 +30,6 @@ private:
 	
 };
 
-typedef std::map<rString name, rGeometry*> rGeometryMap;
+typedef std::map<rString, rGeometry*> rGeometryMap;
 
 #endif

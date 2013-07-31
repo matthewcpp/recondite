@@ -48,8 +48,8 @@ public:
 	virtual unsigned int CreateShaderProgram(const rString& vertex, const rString& fragment);
 	virtual void DeleteShaderProgram(unsigned int shaderId);
 	
-	virtual unsigned int CreateVertexBuffer(float* vertexData, size_t vertexSize, size_t vertexCount);
-	virtual unsigned int CreateElementBuffer(unsigned short* elementData, size_t elementDataSize);
+	virtual unsigned int CreateVertexBuffer(const float* vertexData, size_t vertexDataSize);
+	virtual unsigned int CreateElementBuffer(const unsigned short* elementData, size_t elementDataSize);
 	virtual void DeleteBuffer(unsigned int bufferId);
 
 	virtual void SetActiveViewport(rViewport& viewport);

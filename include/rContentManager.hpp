@@ -20,7 +20,7 @@
 #include "rShader.hpp"
 #include "data/rShaderData.hpp"
 
-#include "data/rGeometry.hpp"
+#include "rGeometry.hpp"
 #include "data/rGeometryData.hpp"
 
 #include "rContentListener.hpp"
@@ -107,6 +107,7 @@ private:
 	void UnloadTextures();
 	void UnloadShaders();
 	void UnloadMaterials();
+	void UnloadGeometry();
 	
 	void LoadManifestAssets(rXMLElementArray& assets);
 	

@@ -13,24 +13,55 @@ void rGeometryData::SetVertexData(float* vertexData, size_t vertexCount, bool te
 	memcpy(&m_vertexData[0], vertexData, dataSize);
 }
 
-void rGeometryData::SetFaceData(unsigned int* indicies, size_t indexCount){
-	m_indexData.resize(indexCount);
-	
-	memcpy(&m_indexData[0], indicies, indexCount);
-}
-
 const float* rGeometryData::GetVertexData() const{
 	if (m_vertexData.size())
-		return NULL;
-	else
 		return &m_vertexData[0];
+	else
+		return NULL;
 }
 
-const unsigned short* rGeometryData::GetIndexData() const{
-	if (m_indexData.size())
-		return NULL;
+size_t rGeometryData::VertexSize() const{
+	size_t vertexSize = 3;
+	
+	if (m_hasTextureCoords)
+		vertexSize += 2;
+	
+	if (m_hasNormals)
+		vertexSize += 3;
+	
+	return vertexSize * sizeof(float);
+}
+
+size_t rGeometryData::VertexDataSize() const{
+	return VertexCount() * VertexSize();
+}
+
+
+size_t rGeometryData::VertexCount() const{
+	return m_vertexData.size();
+}
+
+
+void rGeometryData::SetElementData(unsigned short* elements, size_t elementCount){
+	m_elementData.resize(elementCount);
+	size_t dataSize = elementCount * sizeof(unsigned short);
+	
+	memcpy(&m_elementData[0], elements, dataSize);
+}
+
+size_t rGeometryData::ElementDataSize() const{
+	ElementCount() * sizeof (unsigned short);
+}
+
+size_t rGeometryData::ElementCount() const{
+	return m_elementData.size();
+}
+
+const unsigned short* rGeometryData::GetElementData() const{
+	if (m_elementData.size())
+		return &m_elementData[0];
 	else
-		return &m_indexData[0];
+		return NULL;
 }
 
 bool rGeometryData::HasTextureCoords() const{
@@ -43,28 +74,18 @@ bool rGeometryData::HasNormals() const{
 
 void rGeometryData::Clear(){
 	m_vertexData.clear();
-	m_indexData.clear();
-	
+	m_elementData.clear();
+	m_path.clear();
+
 	m_hasTextureCoords = false;
 	m_hasNormals = false;
+	m_error = rCONTENT_ERROR_NONE;
 }
 
-size_t rGeometryData::VertexDataSize() const{
-	return m_vertexData.size();
+rString rGeometryData::Path() const{
+	return m_path;
 }
 
-size_t rGeometryData::FaceIndexCount() const{
-	return m_indexData.size();
-}
-
-size_t rGeometryData::VertexSize() const{
-	size_t vertexSize = 3;
-	
-	if (m_hasTextureCoords)
-		vertexSize += 2;
-	
-	if (m_hasNormals)
-		vertexSize += 3;
-	
-	return vertexSize;
+rContentError rGeometryData::GetError() const{
+	return m_error;
 }

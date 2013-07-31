@@ -13,27 +13,33 @@ public:
 	
 public:
 	void SetVertexData(float* vertexData, size_t vertexCount, bool texCoords, bool normals);
-	void SetFaceData(unsigned int* indicies, size_t indexCount);
-	
 	const float* GetVertexData() const;
-	const unsigned short* GetIndexData() const;
+	size_t VertexSize() const;
+	size_t VertexDataSize() const;
+	size_t VertexCount() const;
+	
+	void SetElementData(unsigned short* elements, size_t elementCount);
+	const unsigned short* GetElementData() const;
+	size_t ElementDataSize() const;
+	size_t ElementCount() const;
 	
 	bool HasTextureCoords() const;
 	bool HasNormals() const;
 	
 	void Clear();
 	
-	size_t VertexDataSize() const;
-	size_t FaceIndexCount() const;
-	
-	size_t VertexSize() const;
+	rString Path() const;
+	rContentError GetError() const;
 	
 private:
 	rFloatArray m_vertexData;
-	rIndexArray m_indexData;
+	rIndexArray m_elementData;
 	
 	bool m_hasTextureCoords;
 	bool m_hasNormals;
+	
+	rString m_path;
+	rContentError m_error;
 };
 
 #endif

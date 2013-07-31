@@ -68,8 +68,8 @@ struct engine {
     int frame;
 };
 
-GLuint vertexBuffer;
-GLuint indexBuffer;
+GLuint vertexBuffer = 0;
+GLuint indexBuffer = 0;
 
 GLuint textured_vertexBuffer;
 GLuint textured_indexBuffer;
@@ -91,6 +91,8 @@ void setupVBOs(){
 	glGenBuffers(1, &indexBuffer);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6* sizeof(GLushort), vIndices, GL_STATIC_DRAW);
+
+	RLOGI("vbos: vertex %d , index %d", vertexBuffer, indexBuffer);
 }
 
 void createColoredShader(rContentManager* contentManager, const char* name, const char* value){
@@ -99,6 +101,27 @@ void createColoredShader(rContentManager* contentManager, const char* name, cons
     materialData.SetParameter( rMATERIAL_PARAMETER_COLOR , "fragColor", value);
 
     contentManager->LoadMaterial(materialData, name);
+}
+
+static void createGeometry(struct engine* engine){
+
+	float verts[] = { -0.5f,  0.5f, 0.0f,  // Position 0
+            -0.5f, -0.5f, 0.0f,  // Position 1
+             0.5f, -0.5f, 0.0f,  // Position 2
+             0.5f,  0.5f, 0.0f,  // Position 3
+          };
+
+	unsigned short elements[] = { 0, 1, 2, 0, 2, 3 };
+
+	rGeometryData data;
+	data.SetVertexData(verts, 4, false, false);
+	data.SetElementData(elements, 6);
+
+	rGeometry* geometry = engine->contentManager->LoadGeometry(data, "rect");
+	vertexBuffer = geometry->VertexBufferId();
+	indexBuffer = geometry->ElementBufferId();
+
+	RLOGI("vbos: vertex %d , index %d", vertexBuffer, indexBuffer);
 }
 
 
@@ -192,8 +215,8 @@ static int engine_init_display(struct engine* engine, struct android_app* state)
     createColoredShader(engine->contentManager, "green_shaded", "0 255 0 255");
 
 
-
-    setupVBOs();
+    createGeometry(engine);
+    //setupVBOs();
 
     return 0;
 }

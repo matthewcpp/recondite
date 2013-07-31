@@ -159,16 +159,22 @@ void rOpenGLGraphicsDevice::SetActiveMaterial(rMaterial* material){
 	}
 }
 
-unsigned int rOpenGLGraphicsDevice::CreateVertexBuffer(float* vertexData, size_t vertexSize, size_t vertexCount){
-	GLunit bufferId;
+unsigned int rOpenGLGraphicsDevice::CreateVertexBuffer(const float* vertexData, size_t vertexDataSize){
+	GLuint bufferId;
 	glGenBuffers(1, &bufferId);
+	
+	glBindBuffer(GL_ARRAY_BUFFER, bufferId);
+	glBufferData(GL_ARRAY_BUFFER, vertexDataSize, vertexData, GL_STATIC_DRAW);
 	
 	return bufferId;
 }
 
-unsigned int rOpenGLGraphicsDevice::CreateElementBuffer(unsigned short* elementData, size_t elementDataSize){
-	GLunit bufferId;
+unsigned int rOpenGLGraphicsDevice::CreateElementBuffer(const unsigned short* elementData, size_t elementDataSize){
+	GLuint bufferId;
 	glGenBuffers(1, &bufferId);
+	
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferId);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, elementDataSize, elementData, GL_STATIC_DRAW);
 	
 	return bufferId;
 }

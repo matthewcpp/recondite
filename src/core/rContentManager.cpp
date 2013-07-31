@@ -425,6 +425,9 @@ void rContentManager::ReleaseAsset(rAsset* asset){
 			case rASSET_MATERIAL:
 				RemoveMaterialAsset(asset->Name());
 				break;
+			case rASSET_GEOMETRY:
+				RemoveGeometryAsset(asset->Name());
+				break;
 			default:
 				break;
 		};
@@ -462,6 +465,51 @@ void rContentManager::RemoveListener(rContentListener* listener){
 			return;
 		}
 	}
+}
+
+
+rGeometry* rContentManager::GetGeometryAsset(const rString& name) const{
+	rGeometry* geometry = NULL;
+	
+	rGeometryMap::iterator result = m_geometry.find(name);
+	
+	if (result != m_geometry.end()){
+		geometry = it->second;
+		m_error = rCONTENT_ERROR_NONE;
+	}
+	else{
+		m_error = rCONTENT_ERROR_ASSET_NOT_PRESENT;
+	}
+	
+	return geometry;
+}
+
+rGeometry* rContentManager::LoadGeometry(const rGeometryData& geometryData, const rString& name){
+}
+
+rContentError rContentManager::RemoveGeometryAsset(const rString& name){
+	rGeometryMap::iterator result = m_geometry.find(name);
+	
+	if (result){
+		rGeometry* geometry = it->second;
+		
+		m_graphicsDevice->DeleteBuffer(geometry->VertexBufferId());
+		m_graphicsDevice->DeleteBuffer(geometry->ElementBufferId());
+		
+		delete geometry;
+		m_geometry.erase(result);
+		
+		m_error = R_CONTENT_ERROR_NONE;
+	}
+	else{
+		m_error = rCONTENT_ERROR_ASSET_NOT_PRESENT;
+	}
+	
+	return m_error;
+}
+
+size_t rContentManager::NumGeometry() const{
+	return m_geometry.size();
 }
 
 void rContentManager::NotifyBatchBegin(int total) {

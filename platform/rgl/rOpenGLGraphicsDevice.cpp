@@ -127,6 +127,7 @@ void rOpenGLGraphicsDevice::SetActiveViewport(rViewport& viewport){
 }
 
 void rOpenGLGraphicsDevice::SetActiveMaterial(rMaterial* material){
+	int textureIndex;
 	GLint programId = material->Shader()->ProgramId();
 	rArrayString paramNames;
 	rMaterialParameter parameter;
@@ -145,9 +146,35 @@ void rOpenGLGraphicsDevice::SetActiveMaterial(rMaterial* material){
 				glUniform4f(uniformHandle, color.red / 255.0f, color.green / 255.0f, color.blue / 255.0f , color.alpha / 255.0f);
 			}
 			break;
+			
+		case rMATERIAL_PARAMETER_TEXTURE2D:{
+				rTexture2D* texture = parameter.GetTexture();
+				glActiveTexture ( GL_TEXTURE0 + textureIndex);
+				glBindTexture ( GL_TEXTURE_2D, texture->GraphicsDeviceID() );
+				glUniform1i ( uniformHandle, textureIndex );
+				textureIndex ++;
+			}
+			break;
 		}
 	}
+}
+
+unsigned int rOpenGLGraphicsDevice::CreateVertexBuffer(float* vertexData, size_t vertexSize, size_t vertexCount){
+	GLunit bufferId;
+	glGenBuffers(1, &bufferId);
 	
+	return bufferId;
+}
+
+unsigned int rOpenGLGraphicsDevice::CreateElementBuffer(unsigned short* elementData, size_t elementDataSize){
+	GLunit bufferId;
+	glGenBuffers(1, &bufferId);
+	
+	return bufferId;
+}
+
+void rOpenGLGraphicsDevice::DeleteBuffer(unsigned int bufferId){
+	glDeleteBuffers(1, &bufferId);
 }
 
 unsigned int rOpenGLGraphicsDevice::CreateTexture(int width, int height, int bpp , const unsigned char* data){

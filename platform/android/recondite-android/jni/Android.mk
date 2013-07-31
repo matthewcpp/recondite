@@ -61,6 +61,7 @@ LOCAL_SRC_FILES += ../../../../src/asset/rAsset.cpp
 LOCAL_SRC_FILES += ../../../../src/asset/rMaterial.cpp
 LOCAL_SRC_FILES += ../../../../src/asset/rTexture2D.cpp
 LOCAL_SRC_FILES += ../../../../src/asset/rShader.cpp
+LOCAL_SRC_FILES += ../../../../src/asset/rGeometry.cpp
 LOCAL_SRC_FILES += ../../../../src/xml/rXMLDocument.cpp
 LOCAL_SRC_FILES += ../../../../src/xml/rXMLDocumentLoader.cpp
 LOCAL_SRC_FILES += ../../../../src/xml/rXMLWriter.cpp
@@ -70,6 +71,7 @@ LOCAL_SRC_FILES += ../../../../src/xml/rXMLAttributeList.cpp
 LOCAL_SRC_FILES += ../../../../src/data/rTexture2DData.cpp
 LOCAL_SRC_FILES += ../../../../src/data/rMaterialData.cpp
 LOCAL_SRC_FILES += ../../../../src/data/rShaderData.cpp
+LOCAL_SRC_FILES += ../../../../src/data/rGeometryData.cpp
 LOCAL_SRC_FILES += ../../../../src/data/rAssetManifestData.cpp
 
 LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv2

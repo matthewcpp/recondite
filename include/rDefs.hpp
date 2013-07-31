@@ -8,6 +8,8 @@
 
 #include "rColor.hpp"
 
+typedef std::vector<int> rIntArray;
+typedef std::vector<float> rFloatArray;
 typedef std::vector<unsigned char> rUnsigedByteArray;
 typedef std::vector<unsigned short> rUnsignedShortArray;
 
@@ -43,6 +45,7 @@ enum rAssetType{
 	rASSET_TEXTURE2D = 0,
 	rASSET_SHADER,
 	rASSET_MATERIAL,
+	rASSET_GEOMETRY,
 	rASSET_MODEL,
 	rASSET_SOUND,
 	rASSET_NUM_TYPES,

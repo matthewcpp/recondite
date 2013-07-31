@@ -19,9 +19,6 @@
 	typedef std::vector<rString> rArrayString;
 #endif
 
-typedef std::vector<int> rIntArray;
-typedef std::vector<float> rFloatArray;
-
 typedef std::map<rString,rString> rStringStringMap;
 typedef rStringStringMap::iterator rStringStringMapItr;
 typedef rStringStringMap::const_iterator rStringStringMapConstItr;

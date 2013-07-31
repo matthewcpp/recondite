@@ -49,6 +49,7 @@ public:
     
     int GetBPP() const;
     const unsigned char* GetData() const;
+    rContentError SetData(int width, int height, int bpp, unsigned char* data);
     
 private:
     

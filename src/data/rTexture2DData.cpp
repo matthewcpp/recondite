@@ -29,6 +29,7 @@ void rTexture2DData::Clear(){
     m_size.Set(0,0);
     
     m_data.clear();
+    m_path.clear();
 }
 
 rContentError rTexture2DData::LoadFromPath(const rString& path){
@@ -133,6 +134,18 @@ rContentError rTexture2DData::SetImageData(int width, int height, int bpp, const
     memcpy(&m_data[0], data, imgDataSize);
     
     return rCONTENT_ERROR_NONE;
+}
+
+rContentError rTexture2DData::SetData(int width, int height, int bpp, unsigned char* data){
+	Clear();
+	
+	m_size.Set(width, height);
+	m_bpp = bpp;
+	
+	size_t dataSize = GetDataSize() ;
+	m_data.resize(dataSize);
+	
+	memcpy(&m_data[0] , data, dataSize);
 }
 
 rTexture2DCompressionType rTexture2DData::GetCompressionType() const{

@@ -37,6 +37,9 @@ public:
 	virtual bool Init();
 	virtual bool IsInit() const;
 	virtual void Uninit();
+	
+	virtual void SetClearColor(const rColor& color);
+	virtual void SetClearColor(float r, float g, float b, float a);
 	virtual void Clear();
 	
 	virtual unsigned int CreateTexture(int width, int height, int bpp , const unsigned char* data);
@@ -44,12 +47,15 @@ public:
 	
 	virtual unsigned int CreateShaderProgram(const rString& vertex, const rString& fragment);
 	virtual void DeleteShaderProgram(unsigned int shaderId);
+	
+	virtual unsigned int CreateVertexBuffer(float* vertexData, size_t vertexSize, size_t vertexCount);
+	virtual unsigned int CreateElementBuffer(unsigned short* elementData, size_t elementDataSize);
+	virtual void DeleteBuffer(unsigned int bufferId);
 
 	virtual void SetActiveViewport(rViewport& viewport);
 	void SetActiveMaterial(rMaterial* material);
 	
-	virtual void SetClearColor(const rColor& color);
-	virtual void SetClearColor(float r, float g, float b, float a);
+
 	
 protected:
 	

@@ -20,6 +20,9 @@
 #include "rShader.hpp"
 #include "data/rShaderData.hpp"
 
+#include "data/rGeometry.hpp"
+#include "data/rGeometryData.hpp"
+
 #include "rContentListener.hpp"
 
 typedef std::list<rContentListener*> rContentListenerList;
@@ -53,6 +56,12 @@ public:
 	virtual rMaterial* LoadMaterialFromPath(const rString& path, const rString& name);
 	rContentError RemoveMaterialAsset(const rString& name);
 	size_t NumMaterials() const;
+	
+public:
+	rGeometry* GetGeometryAsset(const rString& name) const;
+	rGeometry* LoadGeometry(const rGeometryData& geometryData, const rString& name);
+	rContentError RemoveGeometryAsset(const rString& name);
+	size_t NumGeometry() const;
 	
 public:
 	virtual rContentError LoadAssetManifestFromPath(const rString& path);
@@ -90,6 +99,7 @@ protected:
 	rTextureMap m_textures;
 	rShaderMap m_shaders;
 	rMaterialMap m_materials;
+	rGeometryMap m_geometry;
 	
 	int GetNextAssetId();
 	

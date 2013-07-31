@@ -71,6 +71,9 @@ struct engine {
 GLuint vertexBuffer;
 GLuint indexBuffer;
 
+GLuint textured_vertexBuffer;
+GLuint textured_indexBuffer;
+
 GLfloat vVertices[] = { -0.5f,  0.5f, 0.0f,  // Position 0
                         -0.5f, -0.5f, 0.0f,  // Position 1
                          0.5f, -0.5f, 0.0f,  // Position 2
@@ -97,6 +100,7 @@ void createColoredShader(rContentManager* contentManager, const char* name, cons
 
     contentManager->LoadMaterial(materialData, name);
 }
+
 
 /**
  * Initialize an EGL context for the current display.
@@ -186,6 +190,9 @@ static int engine_init_display(struct engine* engine, struct android_app* state)
 
     createColoredShader(engine->contentManager, "red_shaded", "255 0 0 255");
     createColoredShader(engine->contentManager, "green_shaded", "0 255 0 255");
+
+
+
     setupVBOs();
 
     return 0;

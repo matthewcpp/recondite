@@ -33,6 +33,7 @@ SRC_FILES = 	../src/math/rMath.cpp \
 		../src/asset/rMaterial.cpp \
 		../src/asset/rTexture2D.cpp \
 		../src/asset/rShader.cpp \
+		../src/asset/rGeometry.cpp \
 		../src/xml/rXMLDocument.cpp\
 		../src/xml/rXMLDocumentLoader.cpp\
 		../src/xml/rXMLWriter.cpp\
@@ -42,7 +43,8 @@ SRC_FILES = 	../src/math/rMath.cpp \
 		../src/data/rTexture2DData.cpp \
 		../src/data/rMaterialData.cpp \
 		../src/data/rShaderData.cpp \
-		../src/data/rAssetManifestData.cpp
+		../src/data/rAssetManifestData.cpp \
+		../src/data/rGeometryData.cpp 
 
 VPATH = ../src/math ../src/geometry ../src/core ../src/asset ../src/data ../src/xml
 

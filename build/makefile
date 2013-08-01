@@ -29,6 +29,7 @@ SRC_FILES = 	../src/math/rMath.cpp \
 		../src/core/rSize.cpp \
 		../src/core/rViewport.cpp \
 		../src/core/rContentManager.cpp \
+		../src/core/rLog.cpp \
 		../src/asset/rAsset.cpp \
 		../src/asset/rMaterial.cpp \
 		../src/asset/rTexture2D.cpp \

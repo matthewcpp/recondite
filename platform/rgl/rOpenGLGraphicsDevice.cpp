@@ -184,17 +184,16 @@ void rOpenGLGraphicsDevice::DeleteBuffer(unsigned int bufferId){
 }
 
 unsigned int rOpenGLGraphicsDevice::CreateTexture(int width, int height, int bpp , const unsigned char* data){
-	GLuint textureID;
-	glGenTextures(1, &textureID);
-	
-	glBindTexture(GL_TEXTURE_2D, textureID);
-	
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	
 	GLenum format = (bpp == 3) ? GL_RGB : GL_RGBA;
+	GLuint textureID;
 	
-	glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+	glPixelStorei ( GL_UNPACK_ALIGNMENT, 1 );
+	glGenTextures(1, &textureID);
+	glBindTexture(GL_TEXTURE_2D, textureID);
+	glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+	
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	
 	return textureID;
 }

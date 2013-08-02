@@ -30,6 +30,8 @@
 #include "rAndroidContentManager.hpp"
 #include "rOpenGLGraphicsDevice.hpp"
 #include "rViewport.hpp"
+#include "rAndroidLog.hpp"
+#include "rLog.hpp"
 
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "native-activity", __VA_ARGS__))
 #define RLOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "recondite", __VA_ARGS__))
@@ -65,35 +67,9 @@ struct engine {
     rOpenGLGraphicsDevice* graphicsDevice;
     rAndroidContentManager* contentManager;
     rViewport viewport;
+    rAndroidLog* log;
     int frame;
 };
-
-GLuint vertexBuffer = 0;
-GLuint indexBuffer = 0;
-
-GLuint textured_vertexBuffer;
-GLuint textured_indexBuffer;
-
-GLfloat vVertices[] = { -0.5f,  0.5f, 0.0f,  // Position 0
-                        -0.5f, -0.5f, 0.0f,  // Position 1
-                         0.5f, -0.5f, 0.0f,  // Position 2
-                         0.5f,  0.5f, 0.0f,  // Position 3
-                      };
-
-GLushort vIndices[] = { 0, 1, 2, 0, 2, 3 };
-
-void setupVBOs(){
-	RLOGI("setup vbo...");
-	glGenBuffers(1, &vertexBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-	glBufferData(GL_ARRAY_BUFFER, 12* sizeof(GLfloat), vVertices, GL_STATIC_DRAW);
-
-	glGenBuffers(1, &indexBuffer);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6* sizeof(GLushort), vIndices, GL_STATIC_DRAW);
-
-	RLOGI("vbos: vertex %d , index %d", vertexBuffer, indexBuffer);
-}
 
 void createColoredShader(rContentManager* contentManager, const char* name, const char* value){
     rMaterialData materialData;
@@ -111,17 +87,46 @@ static void createGeometry(struct engine* engine){
              0.5f,  0.5f, 0.0f,  // Position 3
           };
 
+	float tex_verts[] = { -1.0f,  1.0f, 0.0f,  // Position 0
+	                         0.0f,  0.0f,        // TexCoord 0
+	                        -1.0f, -1.0f, 0.0f,  // Position 1
+	                         0.0f,  1.0f,        // TexCoord 1
+	                         1.0f, -1.0f, 0.0f,  // Position 2
+	                         1.0f,  1.0f,        // TexCoord 2
+	                         1.0f,  1.0f, 0.0f,  // Position 3
+	                         1.0f,  0.0f         // TexCoord 3
+	                      };
+
+
+
 	unsigned short elements[] = { 0, 1, 2, 0, 2, 3 };
 
 	rGeometryData data;
 	data.SetVertexData(verts, 4, false, false);
 	data.SetElementData(elements, 6);
 
-	rGeometry* geometry = engine->contentManager->LoadGeometry(data, "rect");
-	vertexBuffer = geometry->VertexBufferId();
-	indexBuffer = geometry->ElementBufferId();
+	engine->contentManager->LoadGeometry(data, "rect");
 
-	RLOGI("vbos: vertex %d , index %d", vertexBuffer, indexBuffer);
+	data.SetVertexData(tex_verts, 4, true, false);
+	engine->contentManager->LoadGeometry(data, "texture_rect");
+
+	   unsigned char pixels[] = {
+	      128,   92,   61, // brown
+	        191, 27,   224, // purple
+	        0,   0, 255, // Blue
+	      255, 255,   0	// Yellow
+	   };
+
+
+   rTexture2DData texture;
+   texture.SetImageData(2,2,3,pixels);
+   rTexture2D* t = engine->contentManager->LoadTexture(texture, "texture");
+
+   rMaterialData materialData;
+   materialData.SetShader("default_textured", "");
+   materialData.SetParameter( rMATERIAL_PARAMETER_TEXTURE2D , "s_texture", "texture");
+
+   engine->contentManager->LoadMaterial(materialData, "test_tex");
 }
 
 
@@ -203,11 +208,12 @@ static int engine_init_display(struct engine* engine, struct android_app* state)
 
     AAssetManager* assetManager = state->activity->assetManager;
     engine->graphicsDevice = new rOpenGLGraphicsDevice();
+    engine->log = new rAndroidLog();
+    rLog::SetLogTarget(engine->log);
     engine->graphicsDevice->SetClearColor(0,0,0,0);
 
     engine->contentManager = new rAndroidContentManager(assetManager, engine->graphicsDevice);
     engine->contentManager->InitDefaultAssets();
-	engine->contentManager->LoadMaterialFromAsset("box.rmat", "box");
 
     engine->frame = 0;
 
@@ -216,7 +222,6 @@ static int engine_init_display(struct engine* engine, struct android_app* state)
 
 
     createGeometry(engine);
-    //setupVBOs();
 
     return 0;
 }
@@ -224,6 +229,64 @@ static int engine_init_display(struct engine* engine, struct android_app* state)
 /**
  * Just the current frame in the display.
  */
+
+static void drawShaded(struct engine* engine){
+	   rMaterial* material = (engine-> frame % 120 < 60) ?
+	    	engine->contentManager->GetMaterialAsset("red_shaded") :
+	    	engine->contentManager->GetMaterialAsset("green_shaded");
+
+	    if (material){
+	    	engine->graphicsDevice->SetActiveMaterial(material);
+	    	GLint programId = material->Shader()->ProgramId();
+
+	    	GLuint gPositionLoc = glGetAttribLocation ( programId, "vPosition" );
+
+	    	rGeometry* geometry = engine->contentManager->GetGeometryAsset("rect");
+	    	GLuint vertexBuffer = geometry->VertexBufferId();
+	    	GLuint elementBuffer = geometry->ElementBufferId();
+
+	    	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+	    	glVertexAttribPointer ( gPositionLoc, 3, GL_FLOAT, GL_FALSE, 0, 0 );
+	    	glEnableVertexAttribArray ( gPositionLoc );
+
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBuffer);
+
+			glDrawElements ( GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0 );
+
+			glDisableVertexAttribArray ( gPositionLoc );
+
+	    }
+}
+
+static void drawTextured(struct engine* engine){
+	rMaterial* material = engine->contentManager->GetMaterialAsset("test_tex");
+
+	if (material){
+		engine->graphicsDevice->SetActiveMaterial(material);
+
+		GLint programId = material->Shader()->ProgramId();
+
+		GLuint gPositionLoc = glGetAttribLocation ( programId, "a_position" );
+		GLuint gTexCoordLoc = glGetAttribLocation ( programId, "a_texCoord" );
+
+    	rGeometry* geometry = engine->contentManager->GetGeometryAsset("texture_rect");
+    	GLuint vertexBuffer = geometry->VertexBufferId();
+    	GLuint elementBuffer = geometry->ElementBufferId();
+
+    	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+ 	   glVertexAttribPointer ( gPositionLoc, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), 0 );
+ 	   glVertexAttribPointer ( gTexCoordLoc, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)(3*sizeof(GLfloat)) );
+
+	   glEnableVertexAttribArray ( gPositionLoc );
+	   glEnableVertexAttribArray ( gTexCoordLoc );
+
+	   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBuffer);
+	   glDrawElements ( GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0 );
+
+	   glDisableVertexAttribArray ( gPositionLoc );
+	   glDisableVertexAttribArray ( gTexCoordLoc );
+	}
+}
 
 static void engine_draw_frame(struct engine* engine) {
 
@@ -238,28 +301,9 @@ static void engine_draw_frame(struct engine* engine) {
     engine->graphicsDevice->Clear();
     engine->graphicsDevice->SetActiveViewport(engine->viewport);
 
-    rMaterial* material = (engine-> frame % 120 < 60) ?
-    	engine->contentManager->GetMaterialAsset("red_shaded") :
-    	engine->contentManager->GetMaterialAsset("green_shaded");
+    drawTextured(engine);
+    drawShaded(engine);
 
-    if (material){
-    	engine->graphicsDevice->SetActiveMaterial(material);
-    	GLint programId = material->Shader()->ProgramId();
-
-    	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-
-    	GLuint gPositionLoc = glGetAttribLocation ( programId, "vPosition" );
-
-    	glVertexAttribPointer ( gPositionLoc, 3, GL_FLOAT, GL_FALSE, 0, 0 );
-    	glEnableVertexAttribArray ( gPositionLoc );
-
-
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-		glDrawElements ( GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0 );
-    }
-    else{
-    	RLOGI("shader error???");
-    }
 
     eglSwapBuffers(engine->display, engine->surface);
 }

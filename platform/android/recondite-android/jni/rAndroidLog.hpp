@@ -15,6 +15,10 @@ public:
 	void Warning(const rString& message);
 	void Trace(const rString& message);
 	void Info(const rString& message);
+	void Error(const rString& message);
+
+private:
+	void DoLog( int type, const rString& message);
 };
 
 #endif

@@ -16,6 +16,7 @@ public:
 	static void Warning(const rString& message);
 	static void Trace(const rString& message);
 	static void Info(const rString& message);
+	static void Error(const rString& message);
 	
 	static void SetEnabled(bool enabled);
 	static bool Enabled();

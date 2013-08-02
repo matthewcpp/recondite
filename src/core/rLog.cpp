@@ -27,6 +27,11 @@ void rLog::Info(const rString& message){
 		m_logTarget->Info(message);
 }
 
+void rLog::Error(const rString& message){
+	if (m_enabled && m_logTarget)
+		m_logTarget->Error(message);
+}
+
 void rLog::SetEnabled(bool enabled){
 	m_enabled = enabled;
 }

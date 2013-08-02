@@ -10,6 +10,7 @@ public:
 	virtual void Warning(const rString& message) = 0;
 	virtual void Trace(const rString& message) = 0;
 	virtual void Info(const rString& message) = 0;
+	virtual void Error(const rString& message) = 0;
 };
 
 #endif

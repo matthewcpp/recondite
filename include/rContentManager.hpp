@@ -112,6 +112,7 @@ private:
 	void LoadManifestAssets(rXMLElementArray& assets);
 	
 	bool LoadMaterialDependencies(const rMaterialData& materialData, rMaterial* material);
+	void DeleteGeometryBuffers(rGeometry* geometry);
 	
 	int m_nextAssetId;
 	

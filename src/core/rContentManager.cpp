@@ -499,15 +499,38 @@ rGeometry* rContentManager::LoadGeometry(const rGeometryData& geometryData, cons
 	else
 	{
 		unsigned int vertexBuffer = m_graphicsDevice->CreateVertexBuffer(geometryData.GetVertexData(), geometryData.VertexDataSize());
+		geometry = new rGeometry(vertexBuffer, geometryData.HasTextureCoords(), geometryData.HasNormals(), GetNextAssetId(), name, geometryData.Path());
 		
-		unsigned int elementBuffer = m_graphicsDevice->CreateElementBuffer(geometryData.GetElementData(), geometryData.VertexDataSize());
+		rArrayString bufferNames;
+		geometryData.GetElementBufferNames(bufferNames);
 		
-		geometry = new rGeometry(vertexBuffer, elementBuffer, geometryData.HasTextureCoords(), geometryData.HasNormals(), GetNextAssetId(), name, geometryData.Path());
+		for (size_t i = 0; i < bufferNames.size(); i++){
+			rElementBufferData* buffer = geometryData.GetElementBuffer(bufferNames[i]);
+			
+			unsigned int elementBufferId = m_graphicsDevice->CreateElementBuffer(buffer->GetElementData(), buffer->ElementDataSize());
+			geometry->AddElementBuffer(bufferNames[i], elementBufferId, buffer->ElementCount());
+		}
+		
+		
 		
 		m_geometry[name] = geometry;
 	}
 	
 	return geometry;
+}
+
+void rContentManager::DeleteGeometryBuffers(rGeometry* geometry){
+	m_graphicsDevice->DeleteBuffer(geometry->VertexBufferId());
+	
+	rArrayString bufferNames;
+	rElementBuffer elementBuffer;
+	geometry->GetElementBufferNames(bufferNames);
+	
+	for (size_t i = 0; i < bufferNames.size(); i++){
+		geometry->GetElementBuffer(bufferNames[i], elementBuffer);
+		m_graphicsDevice->DeleteBuffer(elementBuffer.BufferId());
+	}
+	
 }
 
 rContentError rContentManager::RemoveGeometryAsset(const rString& name){
@@ -516,9 +539,7 @@ rContentError rContentManager::RemoveGeometryAsset(const rString& name){
 	if (result != m_geometry.end()){
 		rGeometry* geometry = result->second;
 		
-		m_graphicsDevice->DeleteBuffer(geometry->VertexBufferId());
-		m_graphicsDevice->DeleteBuffer(geometry->ElementBufferId());
-		
+		DeleteGeometryBuffers(geometry);
 		delete geometry;
 		m_geometry.erase(result);
 		
@@ -535,9 +556,7 @@ void rContentManager::UnloadGeometry(){
 	for (rGeometryMap::iterator it = m_geometry.begin(); it != m_geometry.end(); ++it){
 		rGeometry* geometry = it->second;
 		
-		m_graphicsDevice->DeleteBuffer(geometry->VertexBufferId());
-		m_graphicsDevice->DeleteBuffer(geometry->ElementBufferId());
-		
+		DeleteGeometryBuffers(geometry);
 		delete geometry;
 	}
 	

@@ -234,63 +234,19 @@ static int engine_init_display(struct engine* engine, struct android_app* state)
  */
 
 static void drawShaded(struct engine* engine){
-	   rMaterial* material = (engine-> frame % 120 < 60) ?
-	    	engine->contentManager->GetMaterialAsset("red_shaded") :
-	    	engine->contentManager->GetMaterialAsset("green_shaded");
+	rGeometry* geometry = engine->contentManager->GetGeometryAsset("rect");
+	rMaterial* material = (engine-> frame % 120 < 60) ?
+		engine->contentManager->GetMaterialAsset("red_shaded") :
+		engine->contentManager->GetMaterialAsset("green_shaded");
 
-	    if (material){
-	    	engine->graphicsDevice->SetActiveMaterial(material);
-	    	GLint programId = material->Shader()->ProgramId();
+	engine->graphicsDevice->RenderGeometry(geometry, "rect", material);
 
-	    	GLuint gPositionLoc = glGetAttribLocation ( programId, "vPosition" );
-
-	    	rGeometry* geometry = engine->contentManager->GetGeometryAsset("rect");
-	    	GLuint vertexBuffer = geometry->VertexBufferId();
-	    	rElementBuffer elementBuffer;
-	    	geometry->GetElementBuffer("rect", elementBuffer);
-
-	    	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-	    	glVertexAttribPointer ( gPositionLoc, 3, GL_FLOAT, GL_FALSE, 0, 0 );
-	    	glEnableVertexAttribArray ( gPositionLoc );
-
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBuffer.BufferId());
-
-			glDrawElements ( GL_TRIANGLES, elementBuffer.Size(), GL_UNSIGNED_SHORT, 0 );
-
-			glDisableVertexAttribArray ( gPositionLoc );
-
-	    }
 }
 
 static void drawTextured(struct engine* engine){
+	rGeometry* geometry = engine->contentManager->GetGeometryAsset("texture_rect");
 	rMaterial* material = engine->contentManager->GetMaterialAsset("test_tex");
-
-	if (material){
-		engine->graphicsDevice->SetActiveMaterial(material);
-
-		GLint programId = material->Shader()->ProgramId();
-
-		GLuint gPositionLoc = glGetAttribLocation ( programId, "a_position" );
-		GLuint gTexCoordLoc = glGetAttribLocation ( programId, "a_texCoord" );
-
-    	rGeometry* geometry = engine->contentManager->GetGeometryAsset("texture_rect");
-    	GLuint vertexBuffer = geometry->VertexBufferId();
-    	rElementBuffer elementBuffer;
-    	geometry->GetElementBuffer("rect", elementBuffer);
-
-    	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
- 	   glVertexAttribPointer ( gPositionLoc, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), 0 );
- 	   glVertexAttribPointer ( gTexCoordLoc, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)(3*sizeof(GLfloat)) );
-
-	   glEnableVertexAttribArray ( gPositionLoc );
-	   glEnableVertexAttribArray ( gTexCoordLoc );
-
-	   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBuffer.BufferId());
-	   glDrawElements ( GL_TRIANGLES, elementBuffer.Size(), GL_UNSIGNED_SHORT, 0 );
-
-	   glDisableVertexAttribArray ( gPositionLoc );
-	   glDisableVertexAttribArray ( gTexCoordLoc );
-	}
+	engine->graphicsDevice->RenderGeometry(geometry, "rect", material);
 }
 
 static void engine_draw_frame(struct engine* engine) {

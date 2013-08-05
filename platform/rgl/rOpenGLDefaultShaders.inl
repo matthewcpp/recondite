@@ -1,9 +1,9 @@
 //default shader for rendering a solid color
 const char coloredVertexShader[] = 
 
-"attribute vec4 vPosition;"
+"attribute vec4 recPosition;"
 "void main() {"
-"  gl_Position = vPosition;"
+"  gl_Position = recPosition;"
 "}";
 
 static const char coloredFragmentShader[] = 
@@ -17,12 +17,12 @@ static const char coloredFragmentShader[] =
 
 const char texturedVertexShader[] =
 
-"attribute vec4 a_position;"
-"attribute vec2 a_texCoord;"
+"attribute vec4 recPosition;"
+"attribute vec2 recTexCoord;"
 "varying vec2 v_texCoord;"
 "void main(){"
-"	gl_Position = a_position;"
-"	v_texCoord = a_texCoord;"
+"	gl_Position = recPosition;"
+"	v_texCoord = recTexCoord;"
 "}";
 
 const char texturedFragmentShader[] =

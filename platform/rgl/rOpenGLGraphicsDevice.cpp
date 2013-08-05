@@ -202,3 +202,40 @@ void rOpenGLGraphicsDevice::UnregisterTexture(int textureID){
 	GLuint texID(textureID);
 	glDeleteTextures(1, &texID);
 }
+
+GLsizei rOpenGLGraphicsDevice::GetVertexStrideForGeometry(const rGeometry* geometry) const{
+	if (geometry->HasTexCoords()){
+		return 5 * sizeof(GLfloat);
+	}
+	else
+		return 0;
+}
+
+void rOpenGLGraphicsDevice::RenderGeometry(rGeometry* geometry, const rString& elementBufferName, rMaterial* material){
+	rElementBuffer elementBuffer;
+	
+	if (geometry && material && geometry->GetElementBuffer(elementBufferName, elementBuffer)){
+		GLsizei stride = GetVertexStrideForGeometry(geometry);
+		SetActiveMaterial(material);
+		
+		GLint programId = material->Shader()->ProgramId();
+		GLuint vertexBuffer = geometry->VertexBufferId();
+		GLuint gPositionLoc = glGetAttribLocation ( programId, "recPosition" );
+		
+		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+		glVertexAttribPointer ( gPositionLoc, 3, GL_FLOAT, GL_FALSE, stride, 0 );
+		glEnableVertexAttribArray ( gPositionLoc );
+		
+		if (geometry->HasTexCoords()){
+			GLuint gTexCoordLoc = glGetAttribLocation ( programId, "recTexCoord" );
+			glVertexAttribPointer ( gTexCoordLoc, 2, GL_FLOAT, GL_FALSE, stride, (void*)(3*sizeof(GLfloat)) );
+			glEnableVertexAttribArray ( gTexCoordLoc );
+		}
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBuffer.BufferId());
+
+		glDrawElements ( GL_TRIANGLES, elementBuffer.Size(), GL_UNSIGNED_SHORT, 0 );
+
+		glDisableVertexAttribArray ( gPositionLoc );
+	}
+}

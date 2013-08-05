@@ -53,13 +53,16 @@ public:
 	virtual void DeleteBuffer(unsigned int bufferId);
 
 	virtual void SetActiveViewport(rViewport& viewport);
-	void SetActiveMaterial(rMaterial* material);
+	virtual void SetActiveMaterial(rMaterial* material);
 	
+	virtual void RenderGeometry(rGeometry* geometry, const rString& elementBuffer, rMaterial* material);
 
 	
 protected:
 	
 	GLuint CompileShader(GLenum type, const char* program);
+	
+	GLsizei GetVertexStrideForGeometry(const rGeometry* geometry) const;
 
 	bool m_isInit;
 	rString m_lastError;

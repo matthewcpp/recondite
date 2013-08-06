@@ -1,9 +1,9 @@
-#ifndef R_COLOUR_HPP
-#define R_COLOUR_HPP
+#ifndef R_COLOR_HPP
+#define R_COLOR_HPP
 
-struct rColour{
-	rColour() {}
-	rColour(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
+struct rColor{
+	rColor() {}
+	rColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
 	
 	void Set(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
 	
@@ -15,19 +15,19 @@ struct rColour{
 	unsigned char red, green, blue, alpha;
 };
 
-unsigned char rColour::Red() const{
+unsigned char rColor::Red() const{
 	return red;
 }
 
-unsigned char rColour::Green() const{
+unsigned char rColor::Green() const{
 	return green;
 }
 
-unsigned char rColour::Blue() const{
+unsigned char rColor::Blue() const{
 	return blue;
 }
 
-unsigned char rColour::Alpha() const{
+unsigned char rColor::Alpha() const{
 	return alpha;
 }
 

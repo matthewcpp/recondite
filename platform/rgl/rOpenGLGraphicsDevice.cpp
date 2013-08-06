@@ -23,7 +23,7 @@ void rOpenGLGraphicsDevice::Clear(){
 }
 
 void rOpenGLGraphicsDevice::SetClearColor(const rColor& color){
-	SetClearColor(float(color.red) / 255.0f, float(color.green) / 255.0f, float(color.blue) / 255.0f, float(color.alpha) / 255.0f);
+	SetClearColor(float(color.Red()) / 255.0f, float(color.Green()) / 255.0f, float(color.Blue()) / 255.0f, float(color.Alpha()) / 255.0f);
 }
 
 void rOpenGLGraphicsDevice::SetClearColor(float r, float g, float b, float a){

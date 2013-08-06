@@ -1,6 +1,6 @@
 #include "rOpenGLDesktopGraphicsDevice.hpp"
 
-bool rOpenGLDesktopGraphicsDevice::Init(){
+bool rOpenGLDesktopGrapicsDevice::Init(){
     GLenum err = glewInit();
     
     if (err == GLEW_OK){
@@ -21,5 +21,5 @@ bool rOpenGLDesktopGraphicsDevice::Init(){
 		m_isInit = false;
 	}
 	
-	return m_isInit
+	return m_isInit;
 }

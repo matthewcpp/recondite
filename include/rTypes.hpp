@@ -8,14 +8,11 @@
 	#include <wx/wx.h>
 
 	typedef wxString rString;
-	typedef wxColor rColor;
 	typedef wxArrayString rArrayString;
 #else
 	#include <string>
-	#include "rColor.hpp"
 
 	typedef std::string rString;
-	typedef rColour rColor;
 	typedef std::vector<rString> rArrayString;
 #endif
 

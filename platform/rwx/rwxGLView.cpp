@@ -31,7 +31,7 @@ void rwxGLView::PrepareToDraw(){
     SetViewportSize();
 
     m_engine->GraphicsDevice()->Clear();
-    m_engine->GraphicsDevice()->SetActiveViewport(m_viewport);
+    m_engine->GraphicsDevice()->SetActiveViewport(&m_viewport);
 }
 
 void rwxGLView::SetCamera(rCamera* camera){
@@ -51,10 +51,6 @@ bool rwxGLView::InitGraphicsDeviceIfNecessary(){
 
     bool result = graphicsDevice->Init();
     m_engine->ContentManager()->InitDefaultAssets();
-
-
-    if (!result)
-	wxMessageBox("Error Initializing Graphics Device: " + m_engine->GraphicsDevice()->GetLastErrorMessage());
 
     return result;
 }

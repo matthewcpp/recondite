@@ -146,6 +146,8 @@ rContentError rTexture2DData::SetData(int width, int height, int bpp, unsigned c
 	m_data.resize(dataSize);
 	
 	memcpy(&m_data[0] , data, dataSize);
+
+	return rCONTENT_ERROR_NONE;
 }
 
 rTexture2DCompressionType rTexture2DData::GetCompressionType() const{

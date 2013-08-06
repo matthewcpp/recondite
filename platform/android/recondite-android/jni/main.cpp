@@ -32,6 +32,7 @@
 #include "rViewport.hpp"
 #include "rMatrix4.hpp"
 #include "rAndroidLog.hpp"
+#include "rCamera.hpp"
 #include "rLog.hpp"
 
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "native-activity", __VA_ARGS__))
@@ -68,6 +69,7 @@ struct engine {
     rOpenGLGraphicsDevice* graphicsDevice;
     rAndroidContentManager* contentManager;
     rViewport viewport;
+    rViewCamera* camera;
     rAndroidLog* log;
     int frame;
 };
@@ -87,6 +89,7 @@ static void createGeometry(struct engine* engine){
              0.5f, -0.5f, 0.0f,  // Position 2
              0.5f,  0.5f, 0.0f,  // Position 3
           };
+	/*
 
 	float tex_verts[] = { -1.0f,  1.0f, 0.0f,  // Position 0
 	                         0.0f,  0.0f,        // TexCoord 0
@@ -97,7 +100,17 @@ static void createGeometry(struct engine* engine){
 	                         1.0f,  1.0f, 0.0f,  // Position 3
 	                         1.0f,  0.0f         // TexCoord 3
 	                      };
+*/
 
+	float tex_verts[] = { 	50.0f,  100.0f, 0.0f,  // Position 0
+	                         0.0f,  0.0f,        // TexCoord 0
+	                        50.0f, 50.0f, 0.0f,  // Position 1
+	                         0.0f,  1.0f,        // TexCoord 1
+	                         100.0f, 50.0f, 0.0f,  // Position 2
+	                         1.0f,  1.0f,        // TexCoord 2
+	                         100.0f,  100.0f, 0.0f,  // Position 3
+	                         1.0f,  0.0f         // TexCoord 3
+	                      };
 
 
 	unsigned short elements[] = { 0, 1, 2, 0, 2, 3 };
@@ -202,7 +215,11 @@ static int engine_init_display(struct engine* engine, struct android_app* state)
     engine->log = new rAndroidLog();
     rLog::SetLogTarget(engine->log);
 
+    engine->camera = new rViewCamera("camera", rVector3::ZeroVector);
+
+    engine->viewport.SetCamera(engine->camera);
     engine->viewport.SetSize(w,h);
+    engine->viewport.SetViewportType(rVIEWPORT_2D);
 
     // Initialize GL state.
     //glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
@@ -236,6 +253,7 @@ static int engine_init_display(struct engine* engine, struct android_app* state)
 
 static void drawShaded(struct engine* engine){
 	rMatrix4 matrix;
+	matrix.SetTranslate(0.25f , 0.25f, 0.0f);
 	rGeometry* geometry = engine->contentManager->GetGeometryAsset("rect");
 	rMaterial* material = (engine-> frame % 120 < 60) ?
 		engine->contentManager->GetMaterialAsset("red_shaded") :
@@ -260,10 +278,8 @@ static void engine_draw_frame(struct engine* engine) {
         return;
     }
 
-    glViewport(0,0, engine->width, engine->height);
-
     engine->graphicsDevice->Clear();
-    engine->graphicsDevice->SetActiveViewport(engine->viewport);
+    engine->graphicsDevice->SetActiveViewport(&engine->viewport);
 
     drawTextured(engine);
     drawShaded(engine);

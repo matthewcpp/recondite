@@ -53,7 +53,7 @@ public:
 	virtual unsigned int CreateElementBuffer(const unsigned short* elementData, size_t elementDataSize);
 	virtual void DeleteBuffer(unsigned int bufferId);
 
-	virtual void SetActiveViewport(rViewport& viewport);
+	virtual void SetActiveViewport(rViewport* viewport);
 	virtual void SetActiveMaterial(rMaterial* material);
 	
 	virtual void RenderGeometry(rGeometry* geometry, const rMatrix4& transform, const rString& elementBuffer, rMaterial* material);
@@ -65,6 +65,9 @@ protected:
 	
 	GLsizei GetVertexStrideForGeometry(const rGeometry* geometry) const;
 
+	rViewport* m_activeViewport;
+	rMatrix4 m_projectionViewMatrix;
+	
 	bool m_isInit;
 	rString m_lastError;
 };

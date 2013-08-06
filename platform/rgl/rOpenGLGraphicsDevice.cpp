@@ -122,8 +122,13 @@ void rOpenGLGraphicsDevice::Uninit(){
 	m_isInit = false;
 }
 
-void rOpenGLGraphicsDevice::SetActiveViewport(rViewport& viewport){
+void rOpenGLGraphicsDevice::SetActiveViewport(rViewport* viewport){
+	m_activeViewport = viewport;
 	
+	rRect screen = viewport->GetScreenRect();
+	glViewport(screen.x, screen.y, screen.width, screen.height);
+	
+	m_activeViewport->GetViewProjectionMatrix(m_projectionViewMatrix);
 }
 
 void rOpenGLGraphicsDevice::SetActiveMaterial(rMaterial* material){
@@ -223,7 +228,9 @@ void rOpenGLGraphicsDevice::RenderGeometry(rGeometry* geometry, const rMatrix4& 
 		GLuint gPositionLoc = glGetAttribLocation ( programId, "recPosition" );
 		GLuint gMatrixLoc = glGetUniformLocation ( programId, "recMVPMatrix" );
 		
-		glUniformMatrix4fv(gMatrixLoc, 1, GL_FALSE, transform.m);
+		rMatrix4 modelViewProjection = m_projectionViewMatrix * transform;
+		
+		glUniformMatrix4fv(gMatrixLoc, 1, GL_FALSE, modelViewProjection.m);
 		
 		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 		glVertexAttribPointer ( gPositionLoc, 3, GL_FLOAT, GL_FALSE, stride, 0 );

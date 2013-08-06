@@ -36,7 +36,7 @@ public:
 	
 	virtual void RenderGeometry(rGeometry* geometry, const rMatrix4& transform, const rString& elementBuffer, rMaterial* material) = 0;
 	
-	virtual void SetActiveViewport(rViewport& viewport) = 0;
+	virtual void SetActiveViewport(rViewport* viewport) = 0;
 	virtual void SetActiveMaterial(rMaterial* material) = 0;
 };
 

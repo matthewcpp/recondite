@@ -2,14 +2,11 @@
 
 rViewport::rViewport(rViewportType type){
 	m_type = type;
-
-	m_rect.x = 0;
-	m_rect.y = 0;
-	m_rect.width = 0;
-	m_rect.height = 0;
+	
+	m_rect.Set(0,0,0,0);
 	
 	m_farClip = 10000.0f;
-	m_nearClip = 0.0f;
+	m_nearClip = 0.01f;
 
 	m_camera = NULL;
 }
@@ -43,9 +40,6 @@ int rViewport::GetSelectionRay(const rPoint& pos , rRay3& selectionRay) const{
 }
 
 void rViewport::GetProjectionMatrix(rMatrix4& matrix) const{
-	if (!m_camera)
-		return;
-	
 	switch (m_type){
 	case rVIEWPORT_PERSP:
 		rMatrixUtil::Perspective(45.0f, (float)m_rect.width / m_rect.height, m_nearClip, m_farClip, matrix);
@@ -66,7 +60,7 @@ void rViewport::GetModelViewMatrix(rMatrix4& matrix) const{
 		rMatrixUtil::LookAt(m_camera->Position(), m_camera->Target(), m_camera->Up(), matrix);
 }
 
-void rViewport::GetModelViewProjectionMatrix(rMatrix4& matrix) const{
+void rViewport::GetViewProjectionMatrix(rMatrix4& matrix) const{
 	rMatrix4 projection, view;
 	GetProjectionMatrix(projection);
 	GetModelViewMatrix(view);

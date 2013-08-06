@@ -43,7 +43,7 @@ public:
 	
 	void GetProjectionMatrix(rMatrix4& matrix) const;
 	void GetModelViewMatrix(rMatrix4& matrix) const;
-	void GetModelViewProjectionMatrix(rMatrix4& matrix) const;
+	void GetViewProjectionMatrix(rMatrix4& matrix) const;
 	
 private:
 	rViewportType m_type;

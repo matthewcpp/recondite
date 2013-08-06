@@ -211,7 +211,7 @@ GLsizei rOpenGLGraphicsDevice::GetVertexStrideForGeometry(const rGeometry* geome
 		return 0;
 }
 
-void rOpenGLGraphicsDevice::RenderGeometry(rGeometry* geometry, const rString& elementBufferName, rMaterial* material){
+void rOpenGLGraphicsDevice::RenderGeometry(rGeometry* geometry, const rMatrix4& transform, const rString& elementBufferName, rMaterial* material){
 	rElementBuffer elementBuffer;
 	
 	if (geometry && material && geometry->GetElementBuffer(elementBufferName, elementBuffer)){
@@ -221,6 +221,9 @@ void rOpenGLGraphicsDevice::RenderGeometry(rGeometry* geometry, const rString& e
 		GLint programId = material->Shader()->ProgramId();
 		GLuint vertexBuffer = geometry->VertexBufferId();
 		GLuint gPositionLoc = glGetAttribLocation ( programId, "recPosition" );
+		GLuint gMatrixLoc = glGetUniformLocation ( programId, "recMVPMatrix" );
+		
+		glUniformMatrix4fv(gMatrixLoc, 1, GL_FALSE, transform.m);
 		
 		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 		glVertexAttribPointer ( gPositionLoc, 3, GL_FLOAT, GL_FALSE, stride, 0 );

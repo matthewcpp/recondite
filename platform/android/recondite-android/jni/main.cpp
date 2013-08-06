@@ -30,6 +30,7 @@
 #include "rAndroidContentManager.hpp"
 #include "rOpenGLGraphicsDevice.hpp"
 #include "rViewport.hpp"
+#include "rMatrix4.hpp"
 #include "rAndroidLog.hpp"
 #include "rLog.hpp"
 
@@ -234,19 +235,21 @@ static int engine_init_display(struct engine* engine, struct android_app* state)
  */
 
 static void drawShaded(struct engine* engine){
+	rMatrix4 matrix;
 	rGeometry* geometry = engine->contentManager->GetGeometryAsset("rect");
 	rMaterial* material = (engine-> frame % 120 < 60) ?
 		engine->contentManager->GetMaterialAsset("red_shaded") :
 		engine->contentManager->GetMaterialAsset("green_shaded");
 
-	engine->graphicsDevice->RenderGeometry(geometry, "rect", material);
+	engine->graphicsDevice->RenderGeometry(geometry, matrix, "rect", material);
 
 }
 
 static void drawTextured(struct engine* engine){
+	rMatrix4 matrix;
 	rGeometry* geometry = engine->contentManager->GetGeometryAsset("texture_rect");
 	rMaterial* material = engine->contentManager->GetMaterialAsset("test_tex");
-	engine->graphicsDevice->RenderGeometry(geometry, "rect", material);
+	engine->graphicsDevice->RenderGeometry(geometry, matrix, "rect", material);
 }
 
 static void engine_draw_frame(struct engine* engine) {

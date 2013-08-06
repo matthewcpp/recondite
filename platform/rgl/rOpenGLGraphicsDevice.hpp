@@ -29,6 +29,7 @@
 #include "rMaterial.hpp"
 
 #include "rGraphicsDevice.hpp"
+#include "rMatrix4.hpp"
 
 class rOpenGLGraphicsDevice : public rGraphicsDevice{
 public:
@@ -55,7 +56,7 @@ public:
 	virtual void SetActiveViewport(rViewport& viewport);
 	virtual void SetActiveMaterial(rMaterial* material);
 	
-	virtual void RenderGeometry(rGeometry* geometry, const rString& elementBuffer, rMaterial* material);
+	virtual void RenderGeometry(rGeometry* geometry, const rMatrix4& transform, const rString& elementBuffer, rMaterial* material);
 
 	
 protected:

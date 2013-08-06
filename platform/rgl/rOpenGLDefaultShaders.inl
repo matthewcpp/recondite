@@ -2,8 +2,9 @@
 const char coloredVertexShader[] = 
 
 "attribute vec4 recPosition;"
+"uniform mat4 recMVPMatrix;"
 "void main() {"
-"  gl_Position = recPosition;"
+"  gl_Position = recMVPMatrix * recPosition;"
 "}";
 
 static const char coloredFragmentShader[] = 
@@ -20,8 +21,9 @@ const char texturedVertexShader[] =
 "attribute vec4 recPosition;"
 "attribute vec2 recTexCoord;"
 "varying vec2 v_texCoord;"
+"uniform mat4 recMVPMatrix;"
 "void main(){"
-"	gl_Position = recPosition;"
+"	gl_Position = recMVPMatrix * recPosition;"
 "	v_texCoord = recTexCoord;"
 "}";
 

@@ -22,4 +22,13 @@ public:
 	virtual rVector3 Target() const;
 };
 
+class rTargetCamera : public rCamera{
+public: 
+	rTargetCamera(const rString& name , const rVector3& position);
+	virtual int Update(const rGameTime& gameTime);
+	
+	virtual rVector3 Target() const;
+	virtual void SetTarget(const rVector3& target);
+};
+
 #endif

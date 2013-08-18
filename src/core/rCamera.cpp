@@ -20,3 +20,22 @@ rVector3 rViewCamera::Target() const{
 int rViewCamera::Update(const rGameTime& gameTime){
 	return 0;
 }
+
+
+rTargetCamera::rTargetCamera(const rString& name , const rVector3& position)
+	:rCamera(name , position)
+{
+
+}
+
+int rTargetCamera::Update(const rGameTime& gameTime){
+	return 0;
+}
+	
+rVector3 rTargetCamera::Target() const{
+	return m_target;
+}
+
+void rTargetCamera::SetTarget(const rVector3& target){
+	m_target = target;
+}

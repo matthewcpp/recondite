@@ -11,10 +11,31 @@ rViewport::rViewport(rViewportType type){
 	m_camera = NULL;
 }
 
+void rViewport::SetNearClip(float nearClip){
+	m_nearClip = nearClip;
+}
+
+float rViewport::NearClip() const{
+	return m_nearClip;
+}
+
+void rViewport::SetFarClip(float farClip){
+	m_farClip = farClip;
+}
+
+float rViewport::FarClip() const{
+	return m_farClip;
+}
+
+void rViewport::SetClipping(float near, float far){
+	m_farClip = near;
+	m_nearClip = far;
+}
+
 int rViewport::GetSelectionRay(const rPoint& pos , rRay3& selectionRay) const{
     rMatrix4 projection, model;
     GetProjectionMatrix(projection);
-    GetModelViewMatrix(model);
+    GetViewMatrix(model);
     
     rVector3 nearPoint , farPoint;
     int result;
@@ -55,17 +76,9 @@ void rViewport::GetProjectionMatrix(rMatrix4& matrix) const{
 	};
 }
 
-void rViewport::GetModelViewMatrix(rMatrix4& matrix) const{
+void rViewport::GetViewMatrix(rMatrix4& matrix) const{
 	if (m_camera)
 		rMatrixUtil::LookAt(m_camera->Position(), m_camera->Target(), m_camera->Up(), matrix);
-}
-
-void rViewport::GetViewProjectionMatrix(rMatrix4& matrix) const{
-	rMatrix4 projection, view;
-	GetProjectionMatrix(projection);
-	GetModelViewMatrix(view);
-	
-	matrix = projection * view;
 }
 
 rCamera* rViewport::Camera() const{

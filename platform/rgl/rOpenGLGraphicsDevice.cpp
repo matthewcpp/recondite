@@ -106,6 +106,7 @@ GLuint rOpenGLGraphicsDevice::CompileShader(GLenum type, const char* program){
 
 	 glGetShaderInfoLog(shader, infoLen, NULL, infoLog);
 	 m_lastError.assign(infoLog, infoLen);
+	 rLog::Error(m_lastError);
 
 	 delete [] infoLog;
       }
@@ -127,8 +128,6 @@ void rOpenGLGraphicsDevice::SetActiveViewport(rViewport* viewport){
 	
 	rRect screen = viewport->GetScreenRect();
 	glViewport(screen.x, screen.y, screen.width, screen.height);
-	
-	m_activeViewport->GetViewProjectionMatrix(m_projectionViewMatrix);
 }
 
 void rOpenGLGraphicsDevice::SetActiveMaterial(rMaterial* material){
@@ -228,9 +227,16 @@ void rOpenGLGraphicsDevice::RenderGeometry(rGeometry* geometry, const rMatrix4& 
 		GLuint gPositionLoc = glGetAttribLocation ( programId, "recPosition" );
 		GLuint gMatrixLoc = glGetUniformLocation ( programId, "recMVPMatrix" );
 		
-		rMatrix4 modelViewProjection = m_projectionViewMatrix * transform;
+		rMatrix4 view, projection;
+		m_activeViewport->GetViewMatrix(view);
+		m_activeViewport->GetProjectionMatrix(projection);
+
+		rMatrix4 modelViewProjection = view * transform;
+		modelViewProjection = projection * modelViewProjection;
 		
 		glUniformMatrix4fv(gMatrixLoc, 1, GL_FALSE, modelViewProjection.m);
+		GLenum error = glGetError();
+
 		
 		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 		glVertexAttribPointer ( gPositionLoc, 3, GL_FLOAT, GL_FALSE, stride, 0 );

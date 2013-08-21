@@ -47,8 +47,10 @@ bool rMatrixUtil::Perspective(float fovy, float aspect, float zNear, float zFar,
 	matrix.m[5] = cotangent;
 	matrix.m[10] = -(zFar + zNear) / deltaZ;
 	matrix.m[11] = -1;
-	matrix.m[15] = -2 * zNear * zFar / deltaZ;
-	matrix.m[16] = 0;
+	matrix.m[14] = -2 * zNear * zFar / deltaZ;
+	matrix.m[15] = 0;
+
+	return true;
 }
 
 void rMatrixUtil::Ortho2D(float left, float right, float bottom, float top, rMatrix4& matrix){

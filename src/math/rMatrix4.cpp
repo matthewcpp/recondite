@@ -15,7 +15,7 @@ rMatrix4::rMatrix4(float* data){
 }
 
 void rMatrix4::LoadIdentity(){
-	memset(this , 0 , sizeof(rMatrix4) );
+	memset(m , 0 , sizeof(float) * 16);
 	SetUniformScale(1.0f);
 }
 
@@ -23,7 +23,7 @@ void rMatrix4::SetUniformScale(float k){
 	m[0] = k;
 	m[5] = k;
 	m[10] = k;
-	m[15] = k;
+	m[15] = 1.0;
 }
 
 void rMatrix4::SetScale(const rVector3& s){
@@ -183,7 +183,7 @@ rMatrix4 rMatrix4::operator -(const rMatrix4& b) const{
 
 rMatrix4 rMatrix4::operator *(const rMatrix4& b) const{
 	rMatrix4 r;
-/*
+
 	r.m[ 0] = m[0] * b.m[0] + m[4] * b.m[1] + m[8] * b.m[2] + m[12] * b.m[3];
 	r.m[ 1] = m[1] * b.m[0] + m[5] * b.m[1] + m[9] * b.m[2] + m[13] * b.m[3];
 	r.m[ 2] = m[2] * b.m[0] + m[6] * b.m[1] + m[10] * b.m[2] + m[14] * b.m[3];
@@ -203,20 +203,7 @@ rMatrix4 rMatrix4::operator *(const rMatrix4& b) const{
 	r.m[13] = m[1] * b.m[12] + m[5] * b.m[13] + m[9] * b.m[14] + m[13] * b.m[15];
 	r.m[14] = m[2] * b.m[12] + m[6] * b.m[13] + m[10] * b.m[14] + m[14] * b.m[15];
 	r.m[15] = m[3] * b.m[12] + m[7] * b.m[13] + m[11] * b.m[14] + m[15] * b.m[15];
-	*/
 	
-	    int i, j;
-
-    for (i = 0; i < 4; i++) {
-	for (j = 0; j < 4; j++) {
-	    r[i*4+j] = 
-		m[i*4+0]*b.m[0*4+j] +
-		m[i*4+1]*b.m[1*4+j] +
-		m[i*4+2]*b.m[2*4+j] +
-		m[i*4+3]*b.m[3*4+j];
-	}
-    }
-
 	return r;
 }
 

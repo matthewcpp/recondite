@@ -69,7 +69,7 @@ struct engine {
     rOpenGLGraphicsDevice* graphicsDevice;
     rAndroidContentManager* contentManager;
     rViewport viewport;
-    rViewCamera* camera;
+    rTargetCamera* camera;
     rAndroidLog* log;
     int frame;
 };
@@ -89,30 +89,35 @@ static void createGeometry(struct engine* engine){
              0.5f, -0.5f, 0.0f,  // Position 2
              0.5f,  0.5f, 0.0f,  // Position 3
           };
+
+	float tex_verts[] = { 	-0.5f,  0.5f, 0.0f,  // Position 0
+	                         0.0f,  0.0f,        // TexCoord 0
+	                         -0.5f, -0.5f, 0.0f,  // Position 1
+	                         0.0f,  1.0f,        // TexCoord 1
+	                         0.5f, -0.5f, 0.0f,  // Position 2
+	                         1.0f,  1.0f,        // TexCoord 2
+	                         0.5f,  0.5f, 0.0f,  // Position 3
+	                         1.0f,  0.0f         // TexCoord 3
+	                      };
 	/*
+	float verts[] = { 50.0f,  100.0f, 0.0f,  // Position 0
+            50.0f, 50.0f, 0.0f,  // Position 1
+             100.0f, 50.0f, 0.0f,  // Position 2
+             100.0f,  100.0f, 0.0f,  // Position 3
+          };
 
-	float tex_verts[] = { -1.0f,  1.0f, 0.0f,  // Position 0
+
+	float tex_verts[] = { 	200.0f,  400.0f, 0.0f,  // Position 0
 	                         0.0f,  0.0f,        // TexCoord 0
-	                        -1.0f, -1.0f, 0.0f,  // Position 1
+	                        200.0f, 200.0f, 0.0f,  // Position 1
 	                         0.0f,  1.0f,        // TexCoord 1
-	                         1.0f, -1.0f, 0.0f,  // Position 2
+	                         400.0f, 200.0f, 0.0f,  // Position 2
 	                         1.0f,  1.0f,        // TexCoord 2
-	                         1.0f,  1.0f, 0.0f,  // Position 3
+	                         400.0f,  400.0f, 0.0f,  // Position 3
 	                         1.0f,  0.0f         // TexCoord 3
 	                      };
+
 */
-
-	float tex_verts[] = { 	50.0f,  100.0f, 0.0f,  // Position 0
-	                         0.0f,  0.0f,        // TexCoord 0
-	                        50.0f, 50.0f, 0.0f,  // Position 1
-	                         0.0f,  1.0f,        // TexCoord 1
-	                         100.0f, 50.0f, 0.0f,  // Position 2
-	                         1.0f,  1.0f,        // TexCoord 2
-	                         100.0f,  100.0f, 0.0f,  // Position 3
-	                         1.0f,  0.0f         // TexCoord 3
-	                      };
-
-
 	unsigned short elements[] = { 0, 1, 2, 0, 2, 3 };
 
 	rGeometryData data;
@@ -215,17 +220,14 @@ static int engine_init_display(struct engine* engine, struct android_app* state)
     engine->log = new rAndroidLog();
     rLog::SetLogTarget(engine->log);
 
-    engine->camera = new rViewCamera("camera", rVector3::ZeroVector);
+    engine->camera = new rTargetCamera("camera", rVector3(0,0,2));
+    engine->camera->SetTarget(rVector3(0,0,-1));
 
     engine->viewport.SetCamera(engine->camera);
+    engine->viewport.SetClipping(0.01f, 1000.0f);
     engine->viewport.SetSize(w,h);
+    //engine->viewport.SetViewportType(rVIEWPORT_PERSP);
     engine->viewport.SetViewportType(rVIEWPORT_2D);
-
-    // Initialize GL state.
-    //glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
-    glEnable(GL_CULL_FACE);
-    //glShadeModel(GL_SMOOTH);
-    glDisable(GL_DEPTH_TEST);
 
     AAssetManager* assetManager = state->activity->assetManager;
     engine->graphicsDevice = new rOpenGLGraphicsDevice();
@@ -253,7 +255,8 @@ static int engine_init_display(struct engine* engine, struct android_app* state)
 
 static void drawShaded(struct engine* engine){
 	rMatrix4 matrix;
-	matrix.SetTranslate(0.25f , 0.25f, 0.0f);
+	//matrix.SetTranslate(250.0f, 0.0f, 0.0f);
+	//matrix.SetUniformScale(2);
 	rGeometry* geometry = engine->contentManager->GetGeometryAsset("rect");
 	rMaterial* material = (engine-> frame % 120 < 60) ?
 		engine->contentManager->GetMaterialAsset("red_shaded") :
@@ -265,6 +268,7 @@ static void drawShaded(struct engine* engine){
 
 static void drawTextured(struct engine* engine){
 	rMatrix4 matrix;
+	//matrix.SetTranslate(0.0f, 250.0f, 0.0f);
 	rGeometry* geometry = engine->contentManager->GetGeometryAsset("texture_rect");
 	rMaterial* material = engine->contentManager->GetMaterialAsset("test_tex");
 	engine->graphicsDevice->RenderGeometry(geometry, matrix, "rect", material);

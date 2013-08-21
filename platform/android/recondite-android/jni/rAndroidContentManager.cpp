@@ -81,10 +81,10 @@ void rAndroidContentManager::InitDefaultAssets(){
     rShaderData shaderData;
 
     shaderData.SetShaderData(coloredVertexShader, coloredFragmentShader);
-    LoadShader(shaderData, "default_colored");
+    rShader* result = LoadShader(shaderData, "default_colored");
 
     shaderData.SetShaderData(texturedVertexShader, texturedFragmentShader);
-    LoadShader(shaderData, "default_textured");
+    result = LoadShader(shaderData, "default_textured");
 
     rMaterialData materialData;
     materialData.SetShader("default_colored", "");

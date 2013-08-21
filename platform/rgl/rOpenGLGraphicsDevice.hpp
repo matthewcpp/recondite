@@ -25,6 +25,8 @@
 #include "rTypes.hpp"
 #include "rDefs.hpp"
 
+#include "rLog.hpp"
+
 #include "rAlignedBox3.hpp"
 
 #include "rViewport.hpp"
@@ -68,7 +70,6 @@ protected:
 	GLsizei GetVertexStrideForGeometry(const rGeometry* geometry) const;
 
 	rViewport* m_activeViewport;
-	rMatrix4 m_projectionViewMatrix;
 	
 	bool m_isInit;
 	rString m_lastError;

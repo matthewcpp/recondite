@@ -6,6 +6,8 @@
 #include "rTypes.hpp"
 #include "rDefs.hpp"
 
+#include "rLog.hpp"
+
 #include "rContentManager.hpp"
 #include "rTexture2D.hpp"
 #include  "rOpenGLGraphicsDevice.hpp"

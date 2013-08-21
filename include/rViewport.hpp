@@ -42,9 +42,16 @@ public:
 	void SetScreenRect(int x, int y, int width, int height);
 	
 	void GetProjectionMatrix(rMatrix4& matrix) const;
-	void GetModelViewMatrix(rMatrix4& matrix) const;
-	void GetViewProjectionMatrix(rMatrix4& matrix) const;
+	void GetViewMatrix(rMatrix4& matrix) const;
 	
+	void SetNearClip(float nearClip);
+	float NearClip() const;
+
+	void SetFarClip(float farClip);
+	float FarClip() const;
+
+	void SetClipping(float near, float far);
+
 private:
 	rViewportType m_type;
 	rRect m_rect;

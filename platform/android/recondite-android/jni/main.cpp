@@ -99,6 +99,7 @@ static void createGeometry(struct engine* engine){
 	                         0.5f,  0.5f, 0.0f,  // Position 3
 	                         1.0f,  0.0f         // TexCoord 3
 	                      };
+
 	/*
 	float verts[] = { 50.0f,  100.0f, 0.0f,  // Position 0
             50.0f, 50.0f, 0.0f,  // Position 1
@@ -123,11 +124,25 @@ static void createGeometry(struct engine* engine){
 	rGeometryData data;
 	data.SetVertexData(verts, 4, false, false);
 	data.CreateElementBuffer("rect",elements, 6);
-
 	engine->contentManager->LoadGeometry(data, "rect");
 
 	data.SetVertexData(tex_verts, 4, true, false);
 	engine->contentManager->LoadGeometry(data, "texture_rect");
+
+	float triangle1VerticesData []= {
+		            -0.5f, -0.25f, 0.0f,
+		            0.5f, -0.25f, 0.0f,
+		            0.0f, 0.559016994f, 0.0f,
+		            };
+
+	unsigned short triangleElements[] ={1,2,3};
+
+
+	rGeometryData triangleData;
+	triangleData.SetVertexData(triangle1VerticesData, 3, false, false);
+	triangleData.CreateElementBuffer("triangle", triangleElements, 3);
+	engine->contentManager->LoadGeometry(triangleData, "triangle");
+
 
 	   unsigned char pixels[] = {
 	      128,   92,   61, // brown
@@ -215,19 +230,19 @@ static int engine_init_display(struct engine* engine, struct android_app* state)
     engine->height = h;
     engine->state.angle = 0;
 
-    RLOGI("display size: %d x %d", engine->width, engine->height);
-
     engine->log = new rAndroidLog();
     rLog::SetLogTarget(engine->log);
 
-    engine->camera = new rTargetCamera("camera", rVector3(0,0,2));
-    engine->camera->SetTarget(rVector3(0,0,-1));
+    rLog::Info("display size: %d x %d", engine->width, engine->height);
+
+    engine->camera = new rTargetCamera("camera", rVector3(0,0,50));
+    engine->camera->SetTarget(rVector3(0,0,-5));
 
     engine->viewport.SetCamera(engine->camera);
-    engine->viewport.SetClipping(0.01f, 1000.0f);
+    engine->viewport.SetClipping(1.0, 100.0f);
     engine->viewport.SetSize(w,h);
-    //engine->viewport.SetViewportType(rVIEWPORT_PERSP);
-    engine->viewport.SetViewportType(rVIEWPORT_2D);
+    engine->viewport.SetViewportType(rVIEWPORT_PERSP);
+    //engine->viewport.SetViewportType(rVIEWPORT_2D);
 
     AAssetManager* assetManager = state->activity->assetManager;
     engine->graphicsDevice = new rOpenGLGraphicsDevice();
@@ -255,8 +270,8 @@ static int engine_init_display(struct engine* engine, struct android_app* state)
 
 static void drawShaded(struct engine* engine){
 	rMatrix4 matrix;
-	//matrix.SetTranslate(250.0f, 0.0f, 0.0f);
-	//matrix.SetUniformScale(2);
+	matrix.SetTranslate(1.0f, 0.0f, 0.0f);
+	matrix.SetUniformScale(2);
 	rGeometry* geometry = engine->contentManager->GetGeometryAsset("rect");
 	rMaterial* material = (engine-> frame % 120 < 60) ?
 		engine->contentManager->GetMaterialAsset("red_shaded") :
@@ -268,7 +283,7 @@ static void drawShaded(struct engine* engine){
 
 static void drawTextured(struct engine* engine){
 	rMatrix4 matrix;
-	//matrix.SetTranslate(0.0f, 250.0f, 0.0f);
+	matrix.SetTranslate(-1.0f, 0.0f, 0.0f);
 	rGeometry* geometry = engine->contentManager->GetGeometryAsset("texture_rect");
 	rMaterial* material = engine->contentManager->GetMaterialAsset("test_tex");
 	engine->graphicsDevice->RenderGeometry(geometry, matrix, "rect", material);
@@ -320,7 +335,46 @@ static void engine_term_display(struct engine* engine) {
 static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) {
     struct engine* engine = (struct engine*)app->userData;
     if (AInputEvent_getType(event) == AINPUT_EVENT_TYPE_MOTION) {
-        engine->animating = 1;
+    	engine->animating = 1;
+
+    	int action = AKeyEvent_getAction(event);
+    	int flags = action & AMOTION_EVENT_ACTION_MASK;
+
+    	switch (flags){
+			case AMOTION_EVENT_ACTION_POINTER_UP:
+			case AMOTION_EVENT_ACTION_UP:
+			{
+				int index = (action & AMOTION_EVENT_ACTION_POINTER_INDEX_MASK)  >> AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
+				int pointerId = AMotionEvent_getPointerId(event, index);
+				int posX = (int)AMotionEvent_getX(event, index);
+				int posY = (int)AMotionEvent_getY(event, index);
+			}
+			break;
+
+			case AMOTION_EVENT_ACTION_POINTER_DOWN:
+			case AMOTION_EVENT_ACTION_DOWN:
+			{
+				int index = (action & AMOTION_EVENT_ACTION_POINTER_INDEX_MASK)  >> AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
+				int pointerId = AMotionEvent_getPointerId(event, index);
+				int posX = (int)AMotionEvent_getX(event, index);
+				int posY = (int)AMotionEvent_getY(event, index);
+			}
+			break;
+
+			case AMOTION_EVENT_ACTION_MOVE:
+			{
+				int pointerCount = AMotionEvent_getPointerCount(event);
+				for (int index = 0; index < pointerCount; index++){
+					int pointerId = AMotionEvent_getPointerId(event, index);
+					int posX = (int)AMotionEvent_getX(event, index);
+					int posY = (int)AMotionEvent_getY(event, index);
+
+				}
+			}
+			break;
+    	};
+
+
         engine->state.x = AMotionEvent_getX(event, 0);
         engine->state.y = AMotionEvent_getY(event, 0);
         return 1;

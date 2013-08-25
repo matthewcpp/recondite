@@ -21,5 +21,5 @@ void rAndroidLog::Error(const rString& message){
 }
 
 void rAndroidLog::DoLog( int type, const rString& message){
-	__android_log_print(type, "recondite", message.c_str());
+	__android_log_print(type, "recondite", "%s",message.c_str());
 }

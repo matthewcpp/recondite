@@ -2,11 +2,14 @@
 #define R_ANDROID_INPUTMANAGER_HPP
 
 #include <android/sensor.h>
+#include <android/log.h>
+#include <android_native_app_glue.h>
 
-#include "rAndroidLog.hpp"
+#include "rInputManager.hpp"
 #include "rTouch.hpp"
 
-class rAndroidInputManager{
+
+class rAndroidInputManager : rInputManager{
 public:
 
 	void ProcessInputEvent(AInputEvent* event);

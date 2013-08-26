@@ -6,18 +6,26 @@
 #include "rTypes.hpp"
 #include "rDefs.hpp"
 
+#include "rLog.hpp"
+
 #include "rTouch.hpp"
 
 typedef std::map<unsigned int , rTouch*> rTouchMap;
 
 class rInputManager {
 public:
-	unsigned int CreateTouch(const rPoint& position);
+	rTouch* CreateTouch(unsigned int id, const rPoint& position, rTouchType type = rTOUCH_DOWN);
 	rTouch* GetTouch(unsigned int id);
-	void UpdateTouch(unsigned int id, rTouchType type, const rPoint& position);
+	bool UpdateTouch(unsigned int id, const rPoint& position, rTouchType type);
 	
-private:
-	unsigned int m_nextTouchId;
+	size_t TouchCount() const;
+	void GetTouchIds(rIntArray& ids);
+	
+protected:
+	void NotifyOfTouch(rTouch* touch);
+	
+protected:
+	rTouchMap m_touches;
 };
 
 #endif

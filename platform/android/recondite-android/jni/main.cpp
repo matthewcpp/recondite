@@ -28,6 +28,8 @@
 #include <android_native_app_glue.h>
 
 #include "rAndroidContentManager.hpp"
+#include "rAndroidInputManager.hpp"
+
 #include "rOpenGLGraphicsDevice.hpp"
 #include "rViewport.hpp"
 #include "rMatrix4.hpp"
@@ -68,6 +70,7 @@ struct engine {
 
     rOpenGLGraphicsDevice* graphicsDevice;
     rAndroidContentManager* contentManager;
+    rAndroidInputManager* inputManager;
     rViewport viewport;
     rTargetCamera* camera;
     rAndroidLog* log;
@@ -246,6 +249,7 @@ static int engine_init_display(struct engine* engine, struct android_app* state)
 
     AAssetManager* assetManager = state->activity->assetManager;
     engine->graphicsDevice = new rOpenGLGraphicsDevice();
+    engine->inputManager = new rAndroidInputManager();
 
     engine->graphicsDevice->SetClearColor(0,0,0,0);
 
@@ -334,46 +338,11 @@ static void engine_term_display(struct engine* engine) {
  */
 static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) {
     struct engine* engine = (struct engine*)app->userData;
+
+    engine->inputManager->ProcessInputEvent(event);
+
     if (AInputEvent_getType(event) == AINPUT_EVENT_TYPE_MOTION) {
     	engine->animating = 1;
-
-    	int action = AKeyEvent_getAction(event);
-    	int flags = action & AMOTION_EVENT_ACTION_MASK;
-
-    	switch (flags){
-			case AMOTION_EVENT_ACTION_POINTER_UP:
-			case AMOTION_EVENT_ACTION_UP:
-			{
-				int index = (action & AMOTION_EVENT_ACTION_POINTER_INDEX_MASK)  >> AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
-				int pointerId = AMotionEvent_getPointerId(event, index);
-				int posX = (int)AMotionEvent_getX(event, index);
-				int posY = (int)AMotionEvent_getY(event, index);
-			}
-			break;
-
-			case AMOTION_EVENT_ACTION_POINTER_DOWN:
-			case AMOTION_EVENT_ACTION_DOWN:
-			{
-				int index = (action & AMOTION_EVENT_ACTION_POINTER_INDEX_MASK)  >> AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
-				int pointerId = AMotionEvent_getPointerId(event, index);
-				int posX = (int)AMotionEvent_getX(event, index);
-				int posY = (int)AMotionEvent_getY(event, index);
-			}
-			break;
-
-			case AMOTION_EVENT_ACTION_MOVE:
-			{
-				int pointerCount = AMotionEvent_getPointerCount(event);
-				for (int index = 0; index < pointerCount; index++){
-					int pointerId = AMotionEvent_getPointerId(event, index);
-					int posX = (int)AMotionEvent_getX(event, index);
-					int posY = (int)AMotionEvent_getY(event, index);
-
-				}
-			}
-			break;
-    	};
-
 
         engine->state.x = AMotionEvent_getX(event, 0);
         engine->state.y = AMotionEvent_getY(event, 0);

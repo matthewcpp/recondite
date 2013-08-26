@@ -1,20 +1,20 @@
 #include "rTouch.hpp"
 
-rTouch::rTouch(unsigned int id, rTouchType type, const rPoint& pos){
+rTouch::rTouch(unsigned int id, const rPoint& pos, rTouchType type){
 	m_id = id;
-	Update(type, pos);
+	Update(pos, type);
 }
 
-rTouch::rTouch(unsigned int id, rTouchType type, int posX, int posY){
+rTouch::rTouch(unsigned int id, int posX, int posY, rTouchType type){
 	m_id = id;
-	Update(type, posX, posY);
+	Update(posX, posY, type);
 }
 
 unsigned int rTouch::Id() const{
 	return m_id;
 }
 
-void rTouch::Update(rTouchType type, const rPoint& pos){
+void rTouch::Update(const rPoint& pos, rTouchType type){
 	m_type = type;
 	
 	if (type == rTOUCH_DOWN){
@@ -24,9 +24,9 @@ void rTouch::Update(rTouchType type, const rPoint& pos){
 	m_currentPosition = pos;
 }
 
-void rTouch::Update(rTouchType type, int posX, int posY){
+void rTouch::Update(int posX, int posY, rTouchType type){
 	rPoint p(posX, posY);
-	Update(type, p);
+	Update(p, type);
 }
 
 rPoint rTouch::GetStartPosition() const{

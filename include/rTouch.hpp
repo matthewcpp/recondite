@@ -15,13 +15,13 @@ enum rTouchType{
 
 class rTouch{
 public:
-	rTouch(unsigned int id, rTouchType type, const rPoint& pos);
-	rTouch(unsigned int id, rTouchType type, int posX, int posY);
+	rTouch(unsigned int id, const rPoint& pos, rTouchType type = rTOUCH_DOWN);
+	rTouch(unsigned int id, int posX, int posY, rTouchType type = rTOUCH_DOWN);
 	
 	unsigned int Id() const;
 	
-	void Update(rTouchType type, const rPoint& pos);
-	void Update(rTouchType type, int posX, int posY);
+	void Update(const rPoint& pos, rTouchType type);
+	void Update(int posX, int posY, rTouchType type);
 	
 	rPoint GetStartPosition() const;
 	

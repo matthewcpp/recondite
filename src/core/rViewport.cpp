@@ -2,13 +2,10 @@
 
 rViewport::rViewport(rViewportType type){
 	m_type = type;
+	m_camera = NULL;
 	
 	m_rect.Set(0,0,0,0);
-	
-	m_farClip = 10000.0f;
-	m_nearClip = 0.01f;
-
-	m_camera = NULL;
+	SetClipping(1.0, 100.0f);
 }
 
 void rViewport::SetNearClip(float nearClip){

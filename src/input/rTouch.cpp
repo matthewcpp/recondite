@@ -1,4 +1,4 @@
-#include "rTouch.hpp"
+#include "input/rTouch.hpp"
 
 rTouch::rTouch(unsigned int id, const rPoint& pos, rTouchType type){
 	m_id = id;

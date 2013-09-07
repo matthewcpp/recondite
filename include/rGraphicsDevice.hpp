@@ -20,6 +20,8 @@ public:
 	virtual bool IsInit() const = 0;
 	virtual void Uninit()  = 0;
 	
+	virtual void SwapBuffers() = 0;
+	
 	virtual void SetClearColor(const rColor& color) = 0;
 	virtual void SetClearColor(float r, float g, float b, float a) = 0;
 	virtual void Clear()  = 0;

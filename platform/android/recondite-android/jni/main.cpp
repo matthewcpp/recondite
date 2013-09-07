@@ -37,6 +37,8 @@
 #include "rCamera.hpp"
 #include "rLog.hpp"
 
+#include "rAndroidApplication.hpp"
+
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "native-activity", __VA_ARGS__))
 #define RLOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "recondite", __VA_ARGS__))
 #define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, "native-activity", __VA_ARGS__))
@@ -67,6 +69,8 @@ struct engine {
     int32_t width;
     int32_t height;
     struct saved_state state;
+
+    rAndroidApplication* androidApplication;
 
     rOpenGLGraphicsDevice* graphicsDevice;
     rAndroidContentManager* contentManager;

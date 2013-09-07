@@ -66,8 +66,6 @@ protected:
 	GLuint CompileShader(GLenum type, const char* program);
 	
 	GLsizei GetVertexStrideForGeometry(const rGeometry* geometry) const;
-
-	rViewport* m_activeViewport;
 	
 	bool m_isInit;
 	rString m_lastError;

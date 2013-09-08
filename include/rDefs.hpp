@@ -2,11 +2,16 @@
 #define R_DEFS_HPP
 
 #include <vector>
+#include <map>
+#include <string>
 
 #include "rVector2.hpp"
 #include "rVector3.hpp"
 
 #include "rColor.hpp"
+
+typedef std::string rString;
+typedef rColour rColor;
 
 typedef std::vector<int> rIntArray;
 typedef std::vector<float> rFloatArray;

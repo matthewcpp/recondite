@@ -20,14 +20,15 @@ public:
 	rAndroidApplication();
 	virtual ~rAndroidApplication();
 
-	bool Init(struct android_app* state);
+	bool Init(android_app* state);
+	void Uninit();
 
 	int32_t OnInput(AInputEvent* event);
 
-	void ProcessCommand(int32_t cmd);
+	void ProcessCommand(android_app* app, int32_t cmd);
 
 	void OnSaveStateCommand();
-	void OnInitWindowCommand();
+	void OnInitWindowCommand(android_app* app);
 	void OnTerminateWindowCommand();
 	void OnApplicationGainFocusCommand();
 	void OnApplicationLostFocusCommand();
@@ -37,6 +38,7 @@ public:
 	void TempInit();
 
 public:
+
 	rAndroidLog* m_log;
 	rAndroidContentManager* m_contentManager;
 	rAndroidInputManager* m_inputManager;

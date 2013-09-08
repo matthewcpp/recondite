@@ -51,4 +51,7 @@ void rAndroidInputManager::ProcessInputEvent(AInputEvent* event){
 			break;
 		};
 	}
+	else if (AInputEvent_getType(event) == AINPUT_EVENT_TYPE_KEY){
+
+	}
 }

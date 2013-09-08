@@ -22,9 +22,11 @@ LOCAL_C_INCLUDES += ../../../include
 LOCAL_C_INCLUDES += ../../../platform/rgl
 
 LOCAL_SRC_FILES := main.cpp
+LOCAL_SRC_FILES += rAndroidLog.cpp
 LOCAL_SRC_FILES += rAndroidContentManager.cpp
 LOCAL_SRC_FILES += rAndroidInputManager.cpp
-LOCAL_SRC_FILES += rAndroidLog.cpp
+LOCAL_SRC_FILES += rAndroidGraphicsDevice.cpp
+LOCAL_SRC_FILES += rAndroidApplication.cpp
 
 LOCAL_SRC_FILES += ../../../../platform/rgl/rOpenGLGraphicsDevice.cpp
 

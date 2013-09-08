@@ -252,7 +252,7 @@ static int engine_init_display(struct engine* engine, struct android_app* state)
     //engine->viewport.SetViewportType(rVIEWPORT_2D);
 
     AAssetManager* assetManager = state->activity->assetManager;
-    engine->graphicsDevice = new rOpenGLGraphicsDevice();
+    //engine->graphicsDevice = new rOpenGLGraphicsDevice();
     engine->inputManager = new rAndroidInputManager();
 
     engine->graphicsDevice->SetClearColor(0,0,0,0);
@@ -407,8 +407,50 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
  * android_native_app_glue.  It runs in its own thread, with its own
  * event loop for receiving input events and doing other things.
  */
+
+void android_onAppCmd(android_app* app, int32_t cmd) {
+	rAndroidApplication* application = (rAndroidApplication*)app->userData;
+	application->ProcessCommand(app, cmd);
+}
+
+int32_t android_onInputEvent(android_app* app, AInputEvent* event){
+	rAndroidApplication* application = (rAndroidApplication*)app->userData;
+	return application->OnInput(event);
+}
+
+void android_main(struct android_app* state){
+	rAndroidApplication application;
+
+	app_dummy();
+
+	state->userData = &application;
+	state->onAppCmd = android_onAppCmd;
+	state->onInputEvent = android_onInputEvent;
+
+    while (1) {
+        // Read all pending events.
+        int ident;
+        int events;
+        struct android_poll_source* source;
+        while ((ident=ALooper_pollAll(0, NULL, &events,  (void**)&source)) >= 0) {
+			if (source != NULL) {
+				source->process(state, source);
+			}
+
+			if (state->destroyRequested != 0) {
+				application.Uninit();
+				return;
+			}
+        }
+
+        application.Draw();
+    }
+}
+
+/*
 void android_main(struct android_app* state) {
     struct engine engine;
+
 
     // Make sure glue isn't stripped.
     app_dummy();
@@ -458,7 +500,7 @@ void android_main(struct android_app* state) {
                             &event, 1) > 0) {
                         ;/*LOGI("accelerometer: x=%f y=%f z=%f",
                                 event.acceleration.x, event.acceleration.y,
-                                event.acceleration.z);*/
+                                event.acceleration.z);
                     }
                 }
             }
@@ -483,4 +525,5 @@ void android_main(struct android_app* state) {
         }
     }
 }
+*/
 //END_INCLUDE(all)

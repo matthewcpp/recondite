@@ -1,6 +1,6 @@
 #include "rAndroidGraphicsDevice.hpp"
 
-bool rAndroidGraphicsDevice::Init(struct android_app* state){
+bool rAndroidGraphicsDevice::Init(android_app* state){
 	EGLint w, h, dummy, format;
 
 	// initialize OpenGL ES and EGL
@@ -20,47 +20,45 @@ bool rAndroidGraphicsDevice::Init(struct android_app* state){
 	};
 	EGLint numConfigs;
 	EGLConfig config;
-	EGLSurface surface;
-	EGLContext context;
 
-	EGLDisplay display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
+	m_display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
 
-	eglInitialize(display, 0, 0);
+	eglInitialize(m_display, 0, 0);
 
 	/* Here, the application chooses the configuration it desires. In this
 	 * sample, we have a very simplified selection process, where we pick
 	 * the first EGLConfig that matches our criteria */
-	eglChooseConfig(display, attribs, &config, 1, &numConfigs);
+	eglChooseConfig(m_display, attribs, &config, 1, &numConfigs);
 
 	/* EGL_NATIVE_VISUAL_ID is an attribute of the EGLConfig that is
 	 * guaranteed to be accepted by ANativeWindow_setBuffersGeometry().
 	 * As soon as we picked a EGLConfig, we can safely reconfigure the
 	 * ANativeWindow buffers to match, using EGL_NATIVE_VISUAL_ID. */
-	eglGetConfigAttrib(display, config, EGL_NATIVE_VISUAL_ID, &format);
+	eglGetConfigAttrib(m_display, config, EGL_NATIVE_VISUAL_ID, &format);
 
-	ANativeWindow_setBuffersGeometry(engine->app->window, 0, 0, format);
+	ANativeWindow_setBuffersGeometry(state->window, 0, 0, format);
 
-	surface = eglCreateWindowSurface(display, config, engine->app->window, NULL);
+	m_surface = eglCreateWindowSurface(m_display, config, state->window, NULL);
 
 	EGLint contextAttrs[] = {
 		 EGL_CONTEXT_CLIENT_VERSION, 2,
 		 EGL_NONE
 	};
 
-	context = eglCreateContext(display, config, NULL, contextAttrs);
+	m_context = eglCreateContext(m_display, config, NULL, contextAttrs);
 
-	if (eglMakeCurrent(display, surface, surface, context) == EGL_FALSE) {
-		LOGW("Unable to eglMakeCurrent");
-		return -1;
+	if (eglMakeCurrent(m_display, m_surface, m_surface, m_context) == EGL_FALSE) {
+		rLog::Error("Unable to eglMakeCurrent");
+		return false;
 	}
 
-	eglQuerySurface(display, surface, EGL_WIDTH, &m_size.x);
-	eglQuerySurface(display, surface, EGL_HEIGHT, &m_size.y);
+	eglQuerySurface(m_display, m_surface, EGL_WIDTH, &m_size.x);
+	eglQuerySurface(m_display, m_surface, EGL_HEIGHT, &m_size.y);
 
 	return rOpenGLGraphicsDevice::Init();
 }
 
-bool rAndroidGraphicsDevice::Uninit(){
+void rAndroidGraphicsDevice::Uninit(){
 	if (m_display != EGL_NO_DISPLAY) {
 		eglMakeCurrent(m_display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
 		if (m_context != EGL_NO_CONTEXT) {
@@ -80,5 +78,9 @@ bool rAndroidGraphicsDevice::Uninit(){
 }
 
 void rAndroidGraphicsDevice::SwapBuffers(){
-	eglSwapBuffers(engine->display, engine->surface);
+	eglSwapBuffers(m_display, m_surface);
+}
+
+rSize rAndroidGraphicsDevice::GetSize() const{
+	return m_size;
 }

@@ -10,6 +10,8 @@
 #include "rLog.hpp"
 
 #include "rInput.hpp"
+#include "input/rController.hpp"
+#include "input/rTouch.hpp"
 
 typedef std::map<unsigned int , rTouch*> rTouchMap;
 typedef std::vector<rController*> rControllerArray;
@@ -25,7 +27,7 @@ public:
 	virtual void GetTouches(rTouchArray& touches) const;
 	
 	rController* CreateController(unsigned int buttonCount, unsigned int dPadCount, unsigned int analogStickCount, unsigned int triggerCount);
-	virtual size_t ControllerCount() const();
+	virtual size_t ControllerCount() const;
 	virtual rControllerState* GetControllerState(size_t index) const;
 	virtual rController* GetController(size_t index) const;
 	

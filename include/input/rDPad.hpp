@@ -1,12 +1,14 @@
 #ifndef R_DPAD_HPP
 #define R_DPAD_HPP
 
+#include "input/rControllerButton.hpp"
+
 enum rDPadButton{
 	rDPAD_LEFT,
 	rDPAD_RIGHT,
 	rDPAD_UP,
 	rDPAD_DOWN
-}
+};
 
 class rDPad {
 public:
@@ -20,6 +22,6 @@ public:
 private:
 	
 	rControllerButton m_buttons[4];
-}
+};
 
 #endif

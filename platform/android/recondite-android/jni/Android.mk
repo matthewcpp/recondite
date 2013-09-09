@@ -82,6 +82,9 @@ LOCAL_SRC_FILES += ../../../../src/data/rShaderData.cpp
 LOCAL_SRC_FILES += ../../../../src/data/rGeometryData.cpp
 LOCAL_SRC_FILES += ../../../../src/data/rAssetManifestData.cpp
 LOCAL_SRC_FILES += ../../../../src/input/rTouch.cpp
+LOCAL_SRC_FILES += ../../../../src/input/rDPad.cpp
+LOCAL_SRC_FILES += ../../../../src/input/rControllerButton.cpp
+LOCAL_SRC_FILES += ../../../../src/input/rController.cpp
 
 LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv2
 LOCAL_STATIC_LIBRARIES := android_native_app_glue

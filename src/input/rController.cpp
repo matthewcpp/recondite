@@ -1,4 +1,4 @@
-#include "rController.hpp"
+#include "input/rController.hpp"
 
 rController::rController(unsigned int buttonCount, unsigned int dPadCount, unsigned int analogStickCount, unsigned int triggerCount){
 	Init(buttonCount, dPadCount, analogStickCount, triggerCount);
@@ -35,25 +35,25 @@ unsigned int rController::TriggerCount() const{
 	return m_triggers.size();
 }
 
-const rButton* rController::Button(unsigned int index) const{
+const rControllerButton* rController::Button(unsigned int index) const{
 	if (index >= m_buttons.size())
 		return NULL;
 	else
-		return m_buttons[index];
+		return &m_buttons[index];
 }
 
-const rDpad* rController::DPad(unsigned int index) const{
+const rDPad* rController::DPad(unsigned int index) const{
 	if (index >= m_dPads.size())
 		return NULL;
 	else
-		return m_dPads[index];
+		return &m_dPads[index];
 }
 
 const rVector2* rController::AnalogStick(unsigned int index) const{
 	if (index >= m_analogSticks.size())
 		return NULL;
 	else
-		return m_analogSticks[index];
+		return &m_analogSticks[index];
 }
 
 float rController::Trigger(unsigned int index) const{
@@ -63,7 +63,7 @@ float rController::Trigger(unsigned int index) const{
 		return m_triggers[index];
 }
 
-bool Controller::SetButton(unsigned int index, rButtonState state){
+bool rController::SetButton(unsigned int index, rButtonState state){
 	if (index < m_buttons.size()){
 		m_buttons[index].SetButtonState(state);
 		return true;
@@ -73,7 +73,7 @@ bool Controller::SetButton(unsigned int index, rButtonState state){
 	}
 }
 
-bool Controller::SetDPadButton(unsigned int index, rDPadButton button, rButtonState state){
+bool rController::SetDPadButton(unsigned int index, rDPadButton button, rButtonState state){
 	if (index < m_dPads.size()){
 		m_dPads[index].SetButtonState(button, state);
 		return true;
@@ -83,7 +83,7 @@ bool Controller::SetDPadButton(unsigned int index, rDPadButton button, rButtonSt
 	}
 }
 
-bool Controller::SetAnalogStick(unsigned int index, float x, float y){
+bool rController::SetAnalogStick(unsigned int index, float x, float y){
 	if (index < m_analogSticks.size()){
 		m_analogSticks[index].Set(x,y);
 		return true;
@@ -93,7 +93,7 @@ bool Controller::SetAnalogStick(unsigned int index, float x, float y){
 	}
 }
 
-bool Controller::SetTrigger(unsigned int index, float value){
+bool rController::SetTrigger(unsigned int index, float value){
 	if (index < m_triggers.size()){
 		m_triggers[index] = value;
 		return true;

@@ -11,7 +11,6 @@
 #include "rColor.hpp"
 
 typedef std::string rString;
-typedef rColour rColor;
 
 typedef std::vector<int> rIntArray;
 typedef std::vector<float> rFloatArray;

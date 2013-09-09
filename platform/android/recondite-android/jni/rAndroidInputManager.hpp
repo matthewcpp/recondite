@@ -6,7 +6,7 @@
 #include <android_native_app_glue.h>
 
 #include "rInputManager.hpp"
-#include "rTouch.hpp"
+#include "input/rTouch.hpp"
 
 
 class rAndroidInputManager : rInputManager{

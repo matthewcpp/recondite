@@ -28,7 +28,7 @@ bool rInputManager::UpdateTouch(unsigned int id, const rPoint& position, rTouchT
 		touch->Update(position, type);
 		
 		if (type == rTOUCH_UP){
-			m_touches.erase(id);
+			m_touches.erase(id);
 			delete touch;
 
 			rLog::Info("Touch (%u) deleted Pos: %d, %d (%u)", id, position.x, position.y, type);
@@ -44,7 +44,7 @@ bool rInputManager::UpdateTouch(unsigned int id, const rPoint& position, rTouchT
 	}
 }
 
-void rInputManager::GetTouches(rTouchArray& touches){
+void rInputManager::GetTouches(rTouchArray& touches) const{
 	touches.clear();
 	
 	for (rTouchMap::const_iterator it = m_touches.begin(); it != m_touches.end(); ++it)
@@ -63,13 +63,13 @@ void rInputManager::GetTouchIds(rIntArray& ids){
 }
 
 rController* rInputManager::CreateController(unsigned int buttonCount, unsigned int dPadCount, unsigned int analogStickCount, unsigned int triggerCount){
-	rController* controller = new Controller(buttonCount, dPadCount, analogStickCount, triggerCount);
+	rController* controller = new rController(buttonCount, dPadCount, analogStickCount, triggerCount);
 	m_controllers.push_back(controller);
 	
 	return controller;
 }
 
-size_t rInputManager::ControllerCount() const(){
+size_t rInputManager::ControllerCount() const{
 	return m_controllers.size();
 }
 
@@ -81,5 +81,5 @@ rController* rInputManager::GetController(size_t index) const{
 	if (index >= m_controllers.size())
 		return NULL;
 	else
-		return m_controllers[i];
+		return m_controllers[index];
 }

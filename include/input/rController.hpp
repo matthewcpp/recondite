@@ -8,10 +8,9 @@
 #include "rVector2.hpp"
 
 #include "rInput.hpp"
+#include "input/rControllerButton.hpp"
 
-
-
-class rController : rControllerState{
+class rController : public rControllerState{
 public:
 	rController(unsigned int buttonCount, unsigned int dPadCount, unsigned int analogStickCount, unsigned int triggerCount);
 	void Init(unsigned int buttonCount, unsigned int dPadCount, unsigned int analogStickCount, unsigned int triggerCount);
@@ -22,8 +21,8 @@ public:
 	virtual unsigned int AnalogStickCount() const;
 	virtual unsigned int TriggerCount() const;
 	
-	virtual const rButton* Button(unsigned int index) const;
-	virtual const rDpad* DPad(unsigned int index) const;
+	virtual const rControllerButton* Button(unsigned int index) const;
+	virtual const rDPad* DPad(unsigned int index) const;
 	virtual const rVector2* AnalogStick(unsigned int index) const;
 	virtual float Trigger(unsigned int index) const;
 	

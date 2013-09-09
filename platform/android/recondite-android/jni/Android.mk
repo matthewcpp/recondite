@@ -22,9 +22,12 @@ LOCAL_C_INCLUDES += ../../../include
 LOCAL_C_INCLUDES += ../../../platform/rgl
 
 LOCAL_SRC_FILES := main.cpp
+LOCAL_SRC_FILES += rAndroidLog.cpp
 LOCAL_SRC_FILES += rAndroidContentManager.cpp
 LOCAL_SRC_FILES += rAndroidInputManager.cpp
-LOCAL_SRC_FILES += rAndroidLog.cpp
+LOCAL_SRC_FILES += rAndroidGraphicsDevice.cpp
+LOCAL_SRC_FILES += rAndroidApplication.cpp
+LOCAL_SRC_FILES += rAndroidDemoApp.cpp
 
 LOCAL_SRC_FILES += ../../../../platform/rgl/rOpenGLGraphicsDevice.cpp
 
@@ -60,6 +63,7 @@ LOCAL_SRC_FILES += ../../../../src/core/rSize.cpp
 LOCAL_SRC_FILES += ../../../../src/core/rViewport.cpp
 LOCAL_SRC_FILES += ../../../../src/core/rContentManager.cpp
 LOCAL_SRC_FILES += ../../../../src/core/rInputManager.cpp
+LOCAL_SRC_FILES += ../../../../src/core/rRenderer.cpp
 LOCAL_SRC_FILES += ../../../../src/core/rLog.cpp
 LOCAL_SRC_FILES += ../../../../src/asset/rAsset.cpp
 LOCAL_SRC_FILES += ../../../../src/asset/rMaterial.cpp

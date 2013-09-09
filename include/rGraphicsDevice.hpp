@@ -20,6 +20,8 @@ public:
 	virtual bool IsInit() const = 0;
 	virtual void Uninit()  = 0;
 	
+	virtual void SwapBuffers() = 0;
+	
 	virtual void SetClearColor(const rColor& color) = 0;
 	virtual void SetClearColor(float r, float g, float b, float a) = 0;
 	virtual void Clear()  = 0;
@@ -36,7 +38,7 @@ public:
 	
 	virtual void RenderGeometry(rGeometry* geometry, const rMatrix4& transform, const rString& elementBuffer, rMaterial* material) = 0;
 	
-	virtual void SetActiveViewport(rViewport* viewport) = 0;
+	virtual void SetViewport(int x , int y, int width, int height) = 0;
 	virtual void SetActiveMaterial(rMaterial* material) = 0;
 };
 

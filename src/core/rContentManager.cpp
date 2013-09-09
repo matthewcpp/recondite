@@ -369,7 +369,6 @@ rMaterial* rContentManager::LoadMaterial(const rMaterialData& materialData, cons
 		material = new rMaterial(shader, GetNextAssetId(), name, materialData.GetPath());
 		
 		if (LoadMaterialDependencies(materialData, material)){
-			
 			rMaterialMapEntry entry(name, material);
 			m_materials.insert(entry);
 			if (!m_processingBatchFile) NotifyAssetLoadComplete(name, rASSET_MATERIAL);

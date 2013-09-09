@@ -8,6 +8,8 @@
 #include "rTypes.hpp"
 #include "rDefs.hpp"
 
+#include "rLog.hpp"
+
 #include "rGraphicsDevice.hpp"
 #include "xml/rXMLDocument.hpp"
 

@@ -10,6 +10,7 @@ bool rOpenGLGraphicsDevice::IsInit() const {
 }
 
 bool rOpenGLGraphicsDevice::Init(){
+	SetClearColor(0,0,0,1);
 	m_isInit = true;
     return m_isInit;
 }
@@ -123,11 +124,8 @@ void rOpenGLGraphicsDevice::Uninit(){
 	m_isInit = false;
 }
 
-void rOpenGLGraphicsDevice::SetActiveViewport(rViewport* viewport){
-	m_activeViewport = viewport;
-	
-	rRect screen = viewport->GetScreenRect();
-	glViewport(screen.x, screen.y, screen.width, screen.height);
+void rOpenGLGraphicsDevice::SetViewport(int x , int y, int width, int height) {
+	glViewport(x, y, width, height);
 }
 
 void rOpenGLGraphicsDevice::SetActiveMaterial(rMaterial* material){
@@ -227,14 +225,7 @@ void rOpenGLGraphicsDevice::RenderGeometry(rGeometry* geometry, const rMatrix4& 
 		GLuint gPositionLoc = glGetAttribLocation ( programId, "recPosition" );
 		GLuint gMatrixLoc = glGetUniformLocation ( programId, "recMVPMatrix" );
 		
-		rMatrix4 view, projection;
-		m_activeViewport->GetViewMatrix(view);
-		m_activeViewport->GetProjectionMatrix(projection);
-
-		rMatrix4 modelViewProjection = view * transform;
-		modelViewProjection = projection * modelViewProjection;
-		
-		glUniformMatrix4fv(gMatrixLoc, 1, GL_FALSE, modelViewProjection.m);
+		glUniformMatrix4fv(gMatrixLoc, 1, GL_FALSE, transform.m);
 		GLenum error = glGetError();
 
 		

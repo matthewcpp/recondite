@@ -55,7 +55,7 @@ public:
 	virtual unsigned int CreateElementBuffer(const unsigned short* elementData, size_t elementDataSize);
 	virtual void DeleteBuffer(unsigned int bufferId);
 
-	virtual void SetActiveViewport(rViewport* viewport);
+	virtual void SetViewport(int x , int y, int width, int height) ;
 	virtual void SetActiveMaterial(rMaterial* material);
 	
 	virtual void RenderGeometry(rGeometry* geometry, const rMatrix4& transform, const rString& elementBuffer, rMaterial* material);

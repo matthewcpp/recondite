@@ -7,6 +7,9 @@ rRenderer::rRenderer(rGraphicsDevice* graphicsDevice){
 
 void rRenderer::Render (rViewport& viewport){
 	m_activeViewport = &viewport;
+	
+	rRect window = viewport.GetScreenRect();
+	m_graphicsDevice->SetViewport(window.x, window.y, window.width, window.height);
 }
 
 void rRenderer::RenderGeometry(rGeometry* geometry, const rMatrix4& transform, const rString& elementBufferName, rMaterial* material){

@@ -20,7 +20,7 @@ public:
 	rAndroidApplication();
 	virtual ~rAndroidApplication();
 
-	bool Init(android_app* state);
+	virtual bool Init(android_app* state);
 	void Uninit();
 
 	int32_t OnInput(AInputEvent* event);
@@ -33,11 +33,11 @@ public:
 	void OnApplicationGainFocusCommand();
 	void OnApplicationLostFocusCommand();
 
-	void Draw();
+	virtual void Draw() = 0;
 
 	void TempInit();
 
-public:
+protected:
 
 	rAndroidLog* m_log;
 	rAndroidContentManager* m_contentManager;
@@ -48,6 +48,8 @@ public:
 	rViewport m_viewport;
 	rTargetCamera* m_camera;
 	rGameTime m_gameTime;
+
+	bool m_started;
 };
 
 #endif

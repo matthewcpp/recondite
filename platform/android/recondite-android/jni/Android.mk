@@ -27,6 +27,7 @@ LOCAL_SRC_FILES += rAndroidContentManager.cpp
 LOCAL_SRC_FILES += rAndroidInputManager.cpp
 LOCAL_SRC_FILES += rAndroidGraphicsDevice.cpp
 LOCAL_SRC_FILES += rAndroidApplication.cpp
+LOCAL_SRC_FILES += rAndroidDemoApp.cpp
 
 LOCAL_SRC_FILES += ../../../../platform/rgl/rOpenGLGraphicsDevice.cpp
 

@@ -10,6 +10,7 @@ bool rOpenGLGraphicsDevice::IsInit() const {
 }
 
 bool rOpenGLGraphicsDevice::Init(){
+	SetClearColor(0,0,0,1);
 	m_isInit = true;
     return m_isInit;
 }
@@ -123,9 +124,8 @@ void rOpenGLGraphicsDevice::Uninit(){
 	m_isInit = false;
 }
 
-void rOpenGLGraphicsDevice::SetActiveViewport(rViewport* viewport){
-	rRect screen = viewport->GetScreenRect();
-	glViewport(screen.x, screen.y, screen.width, screen.height);
+void rOpenGLGraphicsDevice::SetViewport(int x , int y, int width, int height) {
+	glViewport(x, y, width, height);
 }
 
 void rOpenGLGraphicsDevice::SetActiveMaterial(rMaterial* material){

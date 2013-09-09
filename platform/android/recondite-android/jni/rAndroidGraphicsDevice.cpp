@@ -52,6 +52,8 @@ bool rAndroidGraphicsDevice::Init(android_app* state){
 		return false;
 	}
 
+
+
 	eglQuerySurface(m_display, m_surface, EGL_WIDTH, &m_size.x);
 	eglQuerySurface(m_display, m_surface, EGL_HEIGHT, &m_size.y);
 

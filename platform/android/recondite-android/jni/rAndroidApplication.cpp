@@ -8,6 +8,8 @@ rAndroidApplication::rAndroidApplication(){
 
 	m_renderer = NULL;
 	m_camera = NULL;
+
+	m_started = false;
 }
 
 rAndroidApplication::~rAndroidApplication(){
@@ -18,16 +20,29 @@ bool rAndroidApplication::Init(android_app* state){
 	m_log = new rAndroidLog();
 	rLog::SetLogTarget(m_log);
 
+	rLog::Info("Application Init");
+
 	m_graphicsDevice = new rAndroidGraphicsDevice();
+	bool result = m_graphicsDevice->Init(state);
 
-    AAssetManager* assetManager = state->activity->assetManager;
-    m_contentManager = new rAndroidContentManager(assetManager, m_graphicsDevice);
+	if (result){
+		rLog::Info("Graphics Initialized");
 
-    m_inputManager = new rAndroidInputManager();
+		AAssetManager* assetManager = state->activity->assetManager;
+		m_contentManager = new rAndroidContentManager(assetManager, m_graphicsDevice);
+		m_contentManager->InitDefaultAssets();
 
-	TempInit();
+		m_inputManager = new rAndroidInputManager();
 
-	return true;
+		TempInit();
+
+		m_started = true;
+	}
+	else{
+		rLog::Error("Error initializing graphics");
+	}
+
+	return result;
 }
 
 void rAndroidApplication::Uninit(){
@@ -38,13 +53,6 @@ int32_t rAndroidApplication::OnInput(AInputEvent* event){
 	m_inputManager->ProcessInputEvent(event);
 
 	return 1;
-}
-
-void rAndroidApplication::Draw(){
-	m_graphicsDevice->Clear();
-	m_graphicsDevice->SetActiveViewport(&m_viewport);
-
-	m_graphicsDevice->SwapBuffers();
 }
 
 void rAndroidApplication::ProcessCommand(android_app* app, int32_t cmd){
@@ -76,7 +84,7 @@ void rAndroidApplication::OnSaveStateCommand(){
 }
 
 void rAndroidApplication::OnInitWindowCommand(android_app* app){
-	rLog::Info("Application Init Window Command");
+	__android_log_print(ANDROID_LOG_INFO, "recondite", "Application Init Window Command");
 	Init(app);
 }
 
@@ -94,7 +102,7 @@ void rAndroidApplication::OnApplicationLostFocusCommand(){
 }
 
 void rAndroidApplication::TempInit(){
-	m_camera = new rTargetCamera("camera", rVector3(0,0,50));
+	m_camera = new rTargetCamera("camera", rVector3(0,0,5));
 	m_camera->SetTarget(rVector3(0,0,-5));
 
 	rSize size = m_graphicsDevice->GetSize();

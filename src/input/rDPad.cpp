@@ -1,22 +1,22 @@
-#include "input/rDpad.hpp"
+#include "input/rDPad.hpp"
 
-rControllerButton& rDPad::Left(){
+rInputButton& rDPad::Left(){
 	return GetButton(rDPAD_LEFT);
 }
 
-rControllerButton& rDPad::Right(){
+rInputButton& rDPad::Right(){
 	return GetButton(rDPAD_RIGHT);
 }
 
-rControllerButton& rDPad::Up(){
+rInputButton& rDPad::Up(){
 	return GetButton(rDPAD_UP);
 }
 
-rControllerButton& rDPad::Down(){
+rInputButton& rDPad::Down(){
 	return GetButton(rDPAD_DOWN);
 }
 
-rControllerButton& rDPad::GetButton(rDPadButton button){
+rInputButton& rDPad::GetButton(rDPadButton button){
 	return m_buttons[button];
 }
 

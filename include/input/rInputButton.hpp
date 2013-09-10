@@ -1,5 +1,5 @@
-#ifndef R_CONTROLLERBUTTON_HPP
-#define R_CONTROLLERBUTTON_HPP
+#ifndef R_INPUTBUTTON_HPP
+#define R_INPUTBUTTON_HPP
 
 #include "rTypes.hpp"
 #include "rDefs.hpp"
@@ -9,9 +9,9 @@ enum rButtonState {
 	rBUTTON_STATE_DOWN
 };
 
-class rControllerButton {
+class rInputButton {
 public:
-	rControllerButton();
+	rInputButton();
 	
 public:
 	

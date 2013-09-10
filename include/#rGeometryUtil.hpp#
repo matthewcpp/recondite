@@ -1,0 +1,13 @@
+#ifndef R_GEOMETRYUTIL_HPP
+#define R_GEOMETRYUTIL_HPP
+
+#include "rDefs.hpp"
+#include "rTypes.hpp"
+
+#include "rRect.hpp"
+
+namespace rGeometryUtil{
+	void CreateRectVerticies(const rRect rect, rVector2Array& verticies, bool texCoords);
+};
+
+#endif

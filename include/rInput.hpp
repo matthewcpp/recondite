@@ -8,11 +8,11 @@
 
 #include "input/rTouch.hpp"
 #include "input/rDPad.hpp"
-#include "input/rControllerButton.hpp"
+#include "input/rInputButton.hpp"
 
 #include "rVector2.hpp"
 
-typedef std::vector<rControllerButton> rButtonArray;
+typedef std::vector<rInputButton> rButtonArray;
 typedef std::vector<rDPad> rDPadArray;
 typedef std::vector<rTouch*> rTouchArray;
 
@@ -23,7 +23,7 @@ public:
 	virtual unsigned int AnalogStickCount() const = 0;
 	virtual unsigned int TriggerCount() const = 0;
 	
-	virtual const rControllerButton* Button(unsigned int index) const = 0;
+	virtual const rInputButton* Button(unsigned int index) const = 0;
 	virtual const rDPad* DPad(unsigned int index) const = 0;
 	virtual const rVector2* AnalogStick(unsigned int index) const = 0;
 	virtual float Trigger(unsigned int index) const = 0;

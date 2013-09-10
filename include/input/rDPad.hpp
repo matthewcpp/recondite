@@ -1,7 +1,7 @@
 #ifndef R_DPAD_HPP
 #define R_DPAD_HPP
 
-#include "input/rControllerButton.hpp"
+#include "input/rInputButton.hpp"
 
 enum rDPadButton{
 	rDPAD_LEFT,
@@ -12,16 +12,16 @@ enum rDPadButton{
 
 class rDPad {
 public:
-	rControllerButton& Left();
-	rControllerButton& Right();
-	rControllerButton& Up();
-	rControllerButton& Down();
+	rInputButton& Left();
+	rInputButton& Right();
+	rInputButton& Up();
+	rInputButton& Down();
 	
-	rControllerButton& GetButton(rDPadButton button);
+	rInputButton& GetButton(rDPadButton button);
 	void SetButtonState(rDPadButton button, rButtonState state);
 private:
 	
-	rControllerButton m_buttons[4];
+	rInputButton m_buttons[4];
 };
 
 #endif

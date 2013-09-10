@@ -35,7 +35,7 @@ unsigned int rController::TriggerCount() const{
 	return m_triggers.size();
 }
 
-const rControllerButton* rController::Button(unsigned int index) const{
+const rInputButton* rController::Button(unsigned int index) const{
 	if (index >= m_buttons.size())
 		return NULL;
 	else

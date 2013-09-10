@@ -83,7 +83,7 @@ LOCAL_SRC_FILES += ../../../../src/data/rGeometryData.cpp
 LOCAL_SRC_FILES += ../../../../src/data/rAssetManifestData.cpp
 LOCAL_SRC_FILES += ../../../../src/input/rTouch.cpp
 LOCAL_SRC_FILES += ../../../../src/input/rDPad.cpp
-LOCAL_SRC_FILES += ../../../../src/input/rControllerButton.cpp
+LOCAL_SRC_FILES += ../../../../src/input/rInputButton.cpp
 LOCAL_SRC_FILES += ../../../../src/input/rController.cpp
 
 LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv2

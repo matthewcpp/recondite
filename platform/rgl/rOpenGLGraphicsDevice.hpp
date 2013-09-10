@@ -61,13 +61,13 @@ public:
 	virtual void SetActiveMaterial(rMaterial* material);
 	
 	virtual void RenderGeometry(rGeometry* geometry, const rMatrix4& transform, const rString& elementBuffer, rMaterial* material);
-
+	virtual void RenderImmediate(rGeometryData& geometry, const rMatrix4& transform, const rString& elementBuffer, rMaterial* material);
 	
 protected:
 	
 	GLuint CompileShader(GLenum type, const char* program);
 	
-	GLsizei GetVertexStrideForGeometry(const rGeometry* geometry) const;
+	GLsizei GetVertexStrideForGeometry(size_t vertexSize, bool texCoords, bool normals) const;
 	
 	bool m_isInit;
 	rString m_lastError;

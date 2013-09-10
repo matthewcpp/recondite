@@ -73,4 +73,9 @@ enum rMaterialParameterType{
 	rMATERIAL_PARAMETER_UNKNOWN
 };
 
+enum rGeometryType{
+	rGEOMETRY_TRIANGLES,
+	rGEOMETRY_LINES,
+};
+
 #endif

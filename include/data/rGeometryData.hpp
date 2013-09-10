@@ -37,14 +37,20 @@ public:
 	~rGeometryData();
 	
 public:
-	void SetVertexData(float* vertexData, size_t vertexCount, bool texCoords, bool normals);
+	void SetVertexData(float* vertexData, size_t vertexSize, size_t vertexCount, bool texCoords, bool normals);
+	size_t Allocate(size_t vertexSize, size_t vertexCount, bool texCoords, bool normals);
+	
 	const float* GetVertexData() const;
 	size_t VertexSize() const;
+	size_t VertexSizeInBytes() const;
 	size_t VertexDataSize() const;
 	size_t VertexCount() const;
 	
 	rElementBufferData* CreateElementBuffer(const rString& name);
 	rElementBufferData* CreateElementBuffer(const rString& name, unsigned short* elements, size_t elementCount);
+	
+	void SetVertex(size_t index, float x, float y);
+	void SetVertex(size_t index, float x, float y, float u, float v);
 	
 	size_t ElementBufferCount() const;
 	bool RemoveElementBuffer(const rString& name);
@@ -63,6 +69,7 @@ private:
 	rFloatArray m_vertexData;
 	rElementBufferDataMap m_elementBuffers;
 	
+	size_t m_vertexSize;
 	
 	bool m_hasTextureCoords;
 	bool m_hasNormals;

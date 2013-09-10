@@ -79,11 +79,11 @@ void rAndroidDemoApp::CreateGeometry(){
 	unsigned short elements[] = { 0, 1, 2, 0, 2, 3 };
 
 		rGeometryData data;
-		data.SetVertexData(verts, 4, false, false);
+		data.SetVertexData(verts, 3, 4, false, false);
 		data.CreateElementBuffer("rect",elements, 6);
 		m_contentManager->LoadGeometry(data, "rect");
 
-		data.SetVertexData(tex_verts, 4, true, false);
+		data.SetVertexData(tex_verts, 3, 4, true, false);
 		m_contentManager->LoadGeometry(data, "texture_rect");
 }
 

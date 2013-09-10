@@ -36,7 +36,7 @@ void rMaterial::SetTexture(const rString& name, rTexture2D* texture){
 	m_parameters[name] = parameter;
 }
 
-void rMaterial::SetColor(const rString& name, rColor& color){
+void rMaterial::SetColor(const rString& name, const rColor& color){
 	rMaterialParameter parameter;
 	parameter.m_type = rMATERIAL_PARAMETER_COLOR;
 	

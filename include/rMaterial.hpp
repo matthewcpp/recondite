@@ -35,7 +35,7 @@ public:
 	rMaterial(rShader* shader, int assetid, const rString& name, const rString& path);
 	
 	void SetTexture(const rString& name, rTexture2D* texture);
-	void SetColor(const rString& name, rColor& color);
+	void SetColor(const rString& name, const rColor& color);
 	
 	void GetParameterNames(rArrayString& names) const;
 	bool GetParameter(const rString& name, rMaterialParameter& param);

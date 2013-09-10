@@ -1,8 +1,12 @@
 #include "rRenderer.hpp"
 
-rRenderer::rRenderer(rGraphicsDevice* graphicsDevice){
+rRenderer::rRenderer(rGraphicsDevice* graphicsDevice, rContentManager* contentManager){
 	m_graphicsDevice = graphicsDevice;
+	m_contentManager = contentManager;
+	
 	m_activeViewport = NULL;
+	
+	CreateRequiredMaterials();
 }
 
 void rRenderer::Render (rViewport& viewport){
@@ -31,4 +35,35 @@ void rRenderer::ComputeWorldSpaceTransformForObject(const rMatrix4& object, rMat
 		else{
 			world = object;
 		}
+}
+
+void rRenderer::RenderRect(const rRect& rect, const rColor& color){
+	rMaterial* material = m_contentManager->GetMaterialAsset("immediate_color");
+	
+	if (material){
+		material->SetColor("fragColor", color);
+		
+		rGeometryData geometry;
+		rGeometryUtil::CreateRectVerticies(rect, "immediate", geometry, false);
+		
+		rMatrix4 transform;
+		if (m_activeViewport){
+			rRect overlay = m_activeViewport->GetScreenRect();
+			rMatrixUtil::Ortho2D(overlay.Left(), overlay.Right(), overlay.Bottom(), overlay.Top(), transform);
+		}
+		
+		m_graphicsDevice->RenderImmediate(geometry, transform, "immediate", material);
+	}
+}
+
+void rRenderer::RenderRect(const rRect& rect, rTexture2D* texture){
+
+}
+
+void rRenderer::CreateRequiredMaterials(){
+	rMaterialData materialData;
+	materialData.SetShader("default_colored", "");
+	materialData.SetParameter( rMATERIAL_PARAMETER_COLOR , "fragColor", "255 255 255 255");
+	
+	m_contentManager->LoadMaterial(materialData, "immediate_color");
 }

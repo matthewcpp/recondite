@@ -1,10 +1,14 @@
-#ifndef R_GEOMETRYDATA_HPP
-#define R_GEOMETRYDATA_HPP
+#ifndef R_GEOMETRYUTIL_HPP
+#define R_GEOMETRYUTIL_HPP
 
 #include "rDefs.hpp"
 #include "rTypes.hpp"
 
-namespace rGeometryData{
+#include "rRect.hpp"
+#include "data/rGeometryData.hpp"
+
+namespace rGeometryUtil{
+	void CreateRectVerticies(const rRect rect, const rString& name, rGeometryData& geometry, bool texCoords);
 };
 
 #endif

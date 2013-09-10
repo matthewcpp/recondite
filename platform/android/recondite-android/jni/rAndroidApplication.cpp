@@ -33,6 +33,7 @@ bool rAndroidApplication::Init(android_app* state){
 		m_contentManager->InitDefaultAssets();
 
 		m_inputManager = new rAndroidInputManager();
+		m_renderer = new rRenderer(m_graphicsDevice, m_contentManager);
 
 		TempInit();
 
@@ -111,6 +112,4 @@ void rAndroidApplication::TempInit(){
 	m_viewport.SetClipping(1.0, 100.0f);
 	m_viewport.SetSize(size.x,size.y);
 	m_viewport.SetViewportType(rVIEWPORT_PERSP);
-
-	m_renderer = new rRenderer(m_graphicsDevice);
 }

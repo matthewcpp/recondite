@@ -20,6 +20,7 @@ private:
 
 	void DrawTextured();
 	void DrawShaded();
+	void DrawImmediate();
 
 private:
 	unsigned int m_frame;

@@ -56,14 +56,14 @@ size_t rGeometryData::Allocate(size_t vertexSize, size_t vertexCount, bool texCo
 }
 
 void rGeometryData::SetVertex(size_t index, float x, float y){
-	size_t i = VertexSizeInBytes() * index;
+	size_t i = VertexSize() * index;
 	
 	m_vertexData[i] = x;
 	m_vertexData[i + 1] = y;
 }
 
 void rGeometryData::SetVertex(size_t index, float x, float y, float u, float v){
-	size_t i = VertexSizeInBytes() * index;
+	size_t i = VertexSize() * index;
 	
 	m_vertexData[i] = x;
 	m_vertexData[i + 1] = y;

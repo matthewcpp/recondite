@@ -11,6 +11,7 @@ void rAndroidDemoApp::Draw(){
 
 		DrawTextured();
 		DrawShaded();
+		DrawImmediate();
 
 		m_graphicsDevice->SwapBuffers();
 		m_frame++;
@@ -104,4 +105,11 @@ void rAndroidDemoApp::DrawShaded(){
 		m_contentManager->GetMaterialAsset("green_shaded");
 
 	m_renderer->RenderGeometry(geometry, matrix, "rect", material);
+}
+
+void rAndroidDemoApp::DrawImmediate(){
+	rRect square(100,100, 200,200);
+	rColor purple(160,32,240, 255);
+
+	m_renderer->RenderRect(square,purple);
 }

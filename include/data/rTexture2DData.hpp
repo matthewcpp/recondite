@@ -28,7 +28,10 @@ public:
     
     rContentError WriteToPath(const rString& path);
     rContentError WriteToStream(std::ostream& stream);
-    
+	
+	void Allocate(int width, int height, int bpp, bool initDefault = true);
+    size_t GetPixelIndex(int x, int y) const;
+	
     rContentError SetImageData(int width, int height, int bpp, const unsigned char* data);
     
     void Clear();
@@ -50,7 +53,10 @@ public:
     int GetBPP() const;
     const unsigned char* GetData() const;
     rContentError SetData(int width, int height, int bpp, unsigned char* data);
-    
+	
+	void SetPixel(int x, int y, unsigned char r, unsigned char g, unsigned char b, unsigned char a = 255);    
+	void SetPixel(int x, int y, const rColor& color);
+
 private:
     
     rContentError ReadFileHeader(std::istream& stream);

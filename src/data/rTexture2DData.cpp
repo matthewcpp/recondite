@@ -136,14 +136,51 @@ rContentError rTexture2DData::SetImageData(int width, int height, int bpp, const
     return rCONTENT_ERROR_NONE;
 }
 
-rContentError rTexture2DData::SetData(int width, int height, int bpp, unsigned char* data){
+size_t rTexture2DData::GetPixelIndex(int x, int y) const{
+	return (y * m_size.x * m_bpp) + (x * m_bpp);
+}
+
+void rTexture2DData::Allocate(int width, int height, int bpp,  bool initDefault){
 	Clear();
 	
 	m_size.Set(width, height);
 	m_bpp = bpp;
 	
-	size_t dataSize = GetDataSize() ;
+	size_t dataSize = width * height * bpp;
 	m_data.resize(dataSize);
+	
+	if (initDefault){
+	
+		memset(&m_data[0] , 100, dataSize);
+		
+		if (bpp == 4){
+			for (int h = 0; h < m_size.y; h++){
+				for (int w = 0; w < m_size.x; w++){
+					size_t index = GetPixelIndex(w, h);
+					m_data[index + 3] = 255;
+				}
+			}
+		}
+	}
+}
+
+void rTexture2DData::SetPixel(int x, int y, unsigned char r, unsigned char g, unsigned char b, unsigned char a){
+	size_t index = GetPixelIndex(x, y);
+	m_data[index] = r;
+	m_data[index + 1] = g;
+	m_data[index + 2] = b;
+	
+	if (m_bpp == 4)
+		m_data[index + 3] = a;
+}    
+
+void rTexture2DData::SetPixel(int x, int y, const rColor& color){
+	SetPixel(x, y, color.red, color.green, color.blue, color.alpha);
+}
+
+rContentError rTexture2DData::SetData(int width, int height, int bpp, unsigned char* data){
+	Allocate(width, height, bpp, false);
+	size_t dataSize = GetDataSize();
 	
 	memcpy(&m_data[0] , data, dataSize);
 

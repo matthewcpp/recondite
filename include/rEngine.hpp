@@ -4,16 +4,17 @@
 #include "rTypes.hpp"
 #include "rDefs.hpp"
 
-#include "rGraphicsDevice.hpp"
+#include "rRenderer.hpp"
 #include "rContentManager.hpp"
-
+#include "rTime.hpp"
+#include "rInput.hpp"
 
 class rEngine{
 public:
-	virtual rGraphicsDevice* GraphicsDevice() = 0;
-	virtual rContentManager* ContentManager() = 0;
-	
-	virtual ~rEngine() {}
+	rContentManager* content;
+	rRenderer* renderer;
+	rInput* input;
+	rTime time;
 };
 
 #endif

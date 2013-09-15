@@ -5,14 +5,14 @@
 #include "rVector3.hpp"
 #include "rQuaternion.hpp"
 
-#include "rGameTime.hpp"
+#include "rTime.hpp"
 
 class rActor3{
 public:
 	rActor3(const rString& name , const rVector3& position);
 	virtual ~rActor3(){}
 
-	virtual int Update(const rGameTime& gameTime) = 0;
+	virtual int Update(const rTime& gameTime) = 0;
 
 	inline void SetPosition(const rVector3& position);
 	virtual rVector3 Position() const;

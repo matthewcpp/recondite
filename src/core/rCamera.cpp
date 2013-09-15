@@ -17,7 +17,7 @@ rVector3 rViewCamera::Target() const{
 	return m_position + forward;
 }
 
-int rViewCamera::Update(const rGameTime& gameTime){
+int rViewCamera::Update(const rTime& gameTime){
 	return 0;
 }
 
@@ -28,7 +28,7 @@ rTargetCamera::rTargetCamera(const rString& name , const rVector3& position)
 
 }
 
-int rTargetCamera::Update(const rGameTime& gameTime){
+int rTargetCamera::Update(const rTime& gameTime){
 	return 0;
 }
 	

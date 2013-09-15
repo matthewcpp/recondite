@@ -17,7 +17,7 @@ protected:
 class rViewCamera : public rCamera{
 public:
 	rViewCamera(const rString& name , const rVector3& position);
-	virtual int Update(const rGameTime& gameTime);
+	virtual int Update(const rTime& gameTime);
 
 	virtual rVector3 Target() const;
 };
@@ -25,7 +25,7 @@ public:
 class rTargetCamera : public rCamera{
 public: 
 	rTargetCamera(const rString& name , const rVector3& position);
-	virtual int Update(const rGameTime& gameTime);
+	virtual int Update(const rTime& gameTime);
 	
 	virtual rVector3 Target() const;
 	virtual void SetTarget(const rVector3& target);

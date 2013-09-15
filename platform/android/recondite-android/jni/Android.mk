@@ -40,6 +40,7 @@ LOCAL_SRC_FILES += ../../../../src/math/rQuaternion.cpp
 LOCAL_SRC_FILES += ../../../../src/math/rVector2.cpp
 LOCAL_SRC_FILES += ../../../../src/math/rVector3.cpp
 LOCAL_SRC_FILES += ../../../../src/math/rVector4.cpp
+
 LOCAL_SRC_FILES += ../../../../src/geometry/rAlignedBox3.cpp
 LOCAL_SRC_FILES += ../../../../src/geometry/rCircle2.cpp
 LOCAL_SRC_FILES += ../../../../src/geometry/rCone3.cpp
@@ -54,10 +55,11 @@ LOCAL_SRC_FILES += ../../../../src/geometry/rPlane3.cpp
 LOCAL_SRC_FILES += ../../../../src/geometry/rRectangle2.cpp
 LOCAL_SRC_FILES += ../../../../src/geometry/rSphere3.cpp
 LOCAL_SRC_FILES += ../../../../src/geometry/rTriangle2.cpp
+
 LOCAL_SRC_FILES += ../../../../src/core/rActor3.cpp
 LOCAL_SRC_FILES += ../../../../src/core/rCamera.cpp
 LOCAL_SRC_FILES += ../../../../src/core/rColor.cpp
-LOCAL_SRC_FILES += ../../../../src/core/rGameTime.cpp
+LOCAL_SRC_FILES += ../../../../src/core/rTime.cpp
 LOCAL_SRC_FILES += ../../../../src/core/rPoint.cpp
 LOCAL_SRC_FILES += ../../../../src/core/rRect.cpp
 LOCAL_SRC_FILES += ../../../../src/core/rSize.cpp
@@ -66,26 +68,34 @@ LOCAL_SRC_FILES += ../../../../src/core/rContentManager.cpp
 LOCAL_SRC_FILES += ../../../../src/core/rInputManager.cpp
 LOCAL_SRC_FILES += ../../../../src/core/rRenderer.cpp
 LOCAL_SRC_FILES += ../../../../src/core/rLog.cpp
+
 LOCAL_SRC_FILES += ../../../../src/asset/rAsset.cpp
 LOCAL_SRC_FILES += ../../../../src/asset/rMaterial.cpp
 LOCAL_SRC_FILES += ../../../../src/asset/rTexture2D.cpp
 LOCAL_SRC_FILES += ../../../../src/asset/rShader.cpp
 LOCAL_SRC_FILES += ../../../../src/asset/rGeometry.cpp
+
 LOCAL_SRC_FILES += ../../../../src/xml/rXMLDocument.cpp
 LOCAL_SRC_FILES += ../../../../src/xml/rXMLDocumentLoader.cpp
 LOCAL_SRC_FILES += ../../../../src/xml/rXMLWriter.cpp
 LOCAL_SRC_FILES += ../../../../src/xml/rXMLReader.cpp
 LOCAL_SRC_FILES += ../../../../src/xml/rXMLElement.cpp
 LOCAL_SRC_FILES += ../../../../src/xml/rXMLAttributeList.cpp
+
 LOCAL_SRC_FILES += ../../../../src/data/rTexture2DData.cpp
 LOCAL_SRC_FILES += ../../../../src/data/rMaterialData.cpp
 LOCAL_SRC_FILES += ../../../../src/data/rShaderData.cpp
 LOCAL_SRC_FILES += ../../../../src/data/rGeometryData.cpp
 LOCAL_SRC_FILES += ../../../../src/data/rAssetManifestData.cpp
+
 LOCAL_SRC_FILES += ../../../../src/input/rTouch.cpp
 LOCAL_SRC_FILES += ../../../../src/input/rDPad.cpp
 LOCAL_SRC_FILES += ../../../../src/input/rInputButton.cpp
 LOCAL_SRC_FILES += ../../../../src/input/rController.cpp
+
+LOCAL_SRC_FILES += ../../../../src/ui/ruiWidget.cpp
+LOCAL_SRC_FILES += ../../../../src/ui/ruiDPad.cpp
+
 
 LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv2
 LOCAL_STATIC_LIBRARIES := android_native_app_glue

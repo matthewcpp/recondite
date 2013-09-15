@@ -37,6 +37,10 @@ bool rAndroidApplication::Init(android_app* state){
 
 		TempInit();
 
+		m_engine.input = m_inputManager;
+		m_engine.renderer = m_renderer;
+		m_engine.content = m_contentManager;
+
 		m_started = true;
 	}
 	else{

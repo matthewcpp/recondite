@@ -12,7 +12,7 @@
 #include "rLog.hpp"
 #include "rRenderer.hpp"
 
-#include "rGameTime.hpp"
+#include "rEngine.hpp"
 #include "rLog.hpp"
 
 class rAndroidApplication{
@@ -33,6 +33,7 @@ public:
 	void OnApplicationGainFocusCommand();
 	void OnApplicationLostFocusCommand();
 
+	virtual void Update() = 0;
 	virtual void Draw() = 0;
 
 	void TempInit();
@@ -47,7 +48,8 @@ protected:
 	rRenderer* m_renderer;
 	rViewport m_viewport;
 	rTargetCamera* m_camera;
-	rGameTime m_gameTime;
+
+	rEngine m_engine;
 
 	bool m_started;
 };

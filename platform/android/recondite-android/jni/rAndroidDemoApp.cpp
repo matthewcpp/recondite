@@ -4,6 +4,36 @@ rAndroidDemoApp::rAndroidDemoApp(){
 	m_frame = 0;
 }
 
+void rAndroidDemoApp::Update(){
+	if (m_started){
+		m_dpad->Update(m_engine);
+
+		UpdateCamera();
+
+	}
+}
+
+void rAndroidDemoApp::UpdateCamera(){
+	rController* controller = m_inputManager->GetController(0);
+	rDPad* dp = controller->DPad(0);
+
+	if (dp->Down().Down()){
+		m_camera->MoveBackward(0.05);
+	}
+
+	if (dp->Up().Down()){
+		m_camera->MoveForward(0.05);
+	}
+
+	if (dp->Left().Down()){
+		m_camera->MoveLeft(0.05);
+	}
+
+	if (dp->Right().Down()){
+		m_camera->MoveRight(0.05);
+	}
+}
+
 void rAndroidDemoApp::Draw(){
 	if (m_started){
 		m_graphicsDevice->Clear();
@@ -27,6 +57,9 @@ bool rAndroidDemoApp::Init(android_app* state){
 		CreateTextureMaterial();
 		CreateColoredShader("red_shaded", "255 0 0 255");
 		CreateColoredShader("green_shaded", "0 255 0 255");
+
+		rController* controller = m_inputManager->CreateController(1,1,1,2);
+		m_dpad = new ruiDPad(controller->DPad(0), 100, rPoint(30, 300), rSize(300, 300));
 	}
 
 	return result;
@@ -111,5 +144,5 @@ void rAndroidDemoApp::DrawImmediate(){
 	rRect square(100,100, 200,200);
 	rColor purple(160,32,240, 255);
 
-	m_renderer->RenderRect(square,purple);
+	m_dpad->Draw(m_renderer);
 }

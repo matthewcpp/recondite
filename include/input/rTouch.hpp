@@ -5,6 +5,7 @@
 #include "rDefs.hpp"
 
 #include "rPoint.hpp"
+#include "rVector2.hpp"
 
 enum rTouchType{
 	rTOUCH_DOWN,
@@ -15,10 +16,10 @@ enum rTouchType{
 
 class rTouch{
 public:
-	rTouch(unsigned int id, const rPoint& pos, rTouchType type = rTOUCH_DOWN);
-	rTouch(unsigned int id, int posX, int posY, rTouchType type = rTOUCH_DOWN);
+	rTouch(int id, const rPoint& pos, rTouchType type = rTOUCH_DOWN);
+	rTouch(int id, int posX, int posY, rTouchType type = rTOUCH_DOWN);
 	
-	unsigned int Id() const;
+	int Id() const;
 	
 	void Update(const rPoint& pos, rTouchType type);
 	void Update(int posX, int posY, rTouchType type);
@@ -26,11 +27,12 @@ public:
 	rPoint GetStartPosition() const;
 	
 	rPoint GetCurrentPosition() const;
+	rVector2 GetCurrentPositionVector() const;
 	
 	rTouchType GetType() const;
 private:
 	rTouchType m_type;
-	unsigned int m_id;
+	int m_id;
 	
 	rPoint m_startPosition;
 	rPoint m_currentPosition;

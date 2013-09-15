@@ -1,6 +1,8 @@
 #ifndef R_CIRCLE2_T_HPP
 #define R_CIRCLE2_T_HPP
 
+#include <algorithm> 
+
 #include "rVector2.hpp"
 
 struct rCircle2{

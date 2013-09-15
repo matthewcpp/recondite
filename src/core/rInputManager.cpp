@@ -1,6 +1,6 @@
 #include "rInputManager.hpp"
 
-rTouch* rInputManager::CreateTouch(unsigned int id, const rPoint& position, rTouchType type){
+rTouch* rInputManager::CreateTouch(int id, const rPoint& position, rTouchType type){
 	if (m_touches.count(id)){
 		return NULL;
 	}
@@ -12,7 +12,7 @@ rTouch* rInputManager::CreateTouch(unsigned int id, const rPoint& position, rTou
 	}
 }
 
-rTouch* rInputManager::GetTouch(unsigned int id){
+rTouch* rInputManager::GetTouch(int id){
 	rTouchMap::iterator t = m_touches.find(id);
 	
 	if (t == m_touches.end())
@@ -21,7 +21,7 @@ rTouch* rInputManager::GetTouch(unsigned int id){
 		return t->second;
 }
 
-bool rInputManager::UpdateTouch(unsigned int id, const rPoint& position, rTouchType type){
+bool rInputManager::UpdateTouch(int id, const rPoint& position, rTouchType type){
 	rTouch* touch = GetTouch(id);
 	
 	if (touch){
@@ -34,7 +34,7 @@ bool rInputManager::UpdateTouch(unsigned int id, const rPoint& position, rTouchT
 			rLog::Info("Touch (%u) deleted Pos: %d, %d (%u)", id, position.x, position.y, type);
 		}
 		else{
-			rLog::Trace("Touch (%u) updated Pos: %d, %d (%u)", id, position.x, position.y, type);
+			//rLog::Trace("Touch (%u) updated Pos: %d, %d (%u)", id, position.x, position.y, type);
 		}
 		
 		return true;

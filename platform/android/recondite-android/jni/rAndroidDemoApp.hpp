@@ -8,6 +8,7 @@
 #include "data/rGeometryData.hpp"
 
 #include "ui/ruiDPad.hpp"
+#include "ui/ruiAnalogStick.hpp"
 
 #include "rEngine.hpp"
 
@@ -35,6 +36,7 @@ private:
 	unsigned int m_frame;
 
 	ruiDPad* m_dpad;
+	ruiAnalogStick* m_analogStick;
 };
 
 #endif

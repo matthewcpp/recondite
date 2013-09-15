@@ -12,6 +12,8 @@
 #include "data/rGeometryData.hpp"
 #include "rMatrixUtil.hpp"
 
+#include "rCircle2.hpp"
+
 class rRenderer {
 public:
 	rRenderer(rGraphicsDevice* graphicsDevice, rContentManager* contentManager);
@@ -23,11 +25,14 @@ public:
 	
 	void RenderRect(const rRect& rect, const rColor& color);
 	void RenderRect(const rRect& rect, rTexture2D* texture);
+	
+	void RenderCircle(const rCircle2& circle, const rColor& color);
 
 private:
 	void ComputeWorldSpaceTransformForObject(const rMatrix4& object, rMatrix4& world);
 	
 	void CreateRequiredMaterials();
+	void ImmediateColorRender(rGeometryData& geometry, const rColor& color);
 
 private:
 		rGraphicsDevice* m_graphicsDevice;

@@ -1,16 +1,16 @@
 #include "input/rTouch.hpp"
 
-rTouch::rTouch(unsigned int id, const rPoint& pos, rTouchType type){
+rTouch::rTouch(int id, const rPoint& pos, rTouchType type){
 	m_id = id;
 	Update(pos, type);
 }
 
-rTouch::rTouch(unsigned int id, int posX, int posY, rTouchType type){
+rTouch::rTouch(int id, int posX, int posY, rTouchType type){
 	m_id = id;
 	Update(posX, posY, type);
 }
 
-unsigned int rTouch::Id() const{
+int rTouch::Id() const{
 	return m_id;
 }
 
@@ -35,6 +35,10 @@ rPoint rTouch::GetStartPosition() const{
 
 rPoint rTouch::GetCurrentPosition() const{
 	return m_currentPosition;
+}
+
+rVector2 rTouch::GetCurrentPositionVector() const{
+	return rVector2(m_currentPosition.x, m_currentPosition.y);
 }
 
 rTouchType rTouch::GetType() const{

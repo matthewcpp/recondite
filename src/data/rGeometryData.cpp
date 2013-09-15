@@ -33,6 +33,12 @@ void rElementBufferData::Clear(){
 	m_elementData.clear();
 }
 
+void rElementBufferData::Push(unsigned short v1, unsigned short v2, unsigned short v3){
+	m_elementData.push_back(v1);
+	m_elementData.push_back(v2);
+	m_elementData.push_back(v3);
+}
+
 //-------------------------------------------------------
 
 rGeometryData::rGeometryData(){
@@ -69,6 +75,10 @@ void rGeometryData::SetVertex(size_t index, float x, float y, float u, float v){
 	m_vertexData[i + 1] = y;
 	m_vertexData[i + 2] = u;
 	m_vertexData[i + 3] = v;
+}
+
+void rGeometryData::SetVertex(size_t index, const rVector2& v){
+	SetVertex(index, v.x, v.y);
 }
 
 void rGeometryData::SetVertexData(float* vertexData, size_t vertexSize, size_t vertexCount, bool texCoords, bool normals){

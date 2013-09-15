@@ -22,6 +22,8 @@ public:
 	size_t ElementDataSize() const;
 	size_t ElementCount() const;
 	
+	void Push(unsigned short v1, unsigned short v2, unsigned short v3);
+	
 	void Clear();
 	
 private:
@@ -50,6 +52,7 @@ public:
 	rElementBufferData* CreateElementBuffer(const rString& name, unsigned short* elements, size_t elementCount);
 	
 	void SetVertex(size_t index, float x, float y);
+	void SetVertex(size_t index, const rVector2& v);
 	void SetVertex(size_t index, float x, float y, float u, float v);
 	
 	size_t ElementBufferCount() const;

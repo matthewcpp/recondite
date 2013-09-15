@@ -20,6 +20,8 @@ struct rRect{
 	
 	bool ContainsPoint(const rPoint& point);
 	
+	rPoint Center() const;
+	
 	int Left() const;
 	int Right() const;
 	int Bottom() const;

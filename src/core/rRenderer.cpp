@@ -37,14 +37,11 @@ void rRenderer::ComputeWorldSpaceTransformForObject(const rMatrix4& object, rMat
 		}
 }
 
-void rRenderer::RenderRect(const rRect& rect, const rColor& color){
+void rRenderer::ImmediateColorRender(rGeometryData& geometry, const rColor& color){
 	rMaterial* material = m_contentManager->GetMaterialAsset("immediate_color");
 	
 	if (material){
 		material->SetColor("fragColor", color);
-		
-		rGeometryData geometry;
-		rGeometryUtil::CreateRectVerticies(rect, "immediate", geometry, false);
 		
 		rMatrix4 transform;
 		if (m_activeViewport){
@@ -56,8 +53,20 @@ void rRenderer::RenderRect(const rRect& rect, const rColor& color){
 	}
 }
 
+void rRenderer::RenderRect(const rRect& rect, const rColor& color){
+	rGeometryData geometry;
+	rGeometryUtil::CreateRectVerticies(rect, "immediate", geometry, false);
+	ImmediateColorRender(geometry, color);
+}
+
 void rRenderer::RenderRect(const rRect& rect, rTexture2D* texture){
 
+}
+
+void rRenderer::RenderCircle(const rCircle2& circle, const rColor& color){
+	rGeometryData geometry;
+	rGeometryUtil::CreateCircleVerticies(circle, 20,"immediate", geometry);
+	ImmediateColorRender(geometry, color);
 }
 
 void rRenderer::CreateRequiredMaterials(){

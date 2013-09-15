@@ -46,6 +46,10 @@ bool rRect::ContainsPoint(const rPoint& point){
 			point.y >= y && point.y <= y + height;
 }
 
+rPoint rRect::Center() const{
+	return rPoint(x + (width / 2) , y + (height / 2));
+}
+
 int rRect::Left() const{
 	return x;
 }

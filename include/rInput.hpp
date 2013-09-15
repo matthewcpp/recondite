@@ -32,6 +32,7 @@ public:
 class rInput {
 public:
 	virtual void GetTouches(rTouchArray& touches) const = 0;
+	virtual rTouch* GetTouch(int id) = 0;
 
 	virtual size_t ControllerCount() const = 0;
 	virtual rControllerState* GetControllerState(size_t index) const = 0;

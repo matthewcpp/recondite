@@ -7,6 +7,7 @@ rAndroidDemoApp::rAndroidDemoApp(){
 void rAndroidDemoApp::Update(){
 	if (m_started){
 		m_dpad->Update(m_engine);
+		m_analogStick->Update(m_engine);
 
 		UpdateCamera();
 
@@ -60,6 +61,7 @@ bool rAndroidDemoApp::Init(android_app* state){
 
 		rController* controller = m_inputManager->CreateController(1,1,1,2);
 		m_dpad = new ruiDPad(controller->DPad(0), 100, rPoint(30, 300), rSize(300, 300));
+		m_analogStick = new ruiAnalogStick(controller, 0, 101, rPoint(700, 300), rSize(300, 300));
 	}
 
 	return result;
@@ -141,8 +143,6 @@ void rAndroidDemoApp::DrawShaded(){
 }
 
 void rAndroidDemoApp::DrawImmediate(){
-	rRect square(100,100, 200,200);
-	rColor purple(160,32,240, 255);
-
 	m_dpad->Draw(m_renderer);
+	m_analogStick->Draw(m_renderer);
 }

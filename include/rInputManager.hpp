@@ -18,9 +18,9 @@ typedef std::vector<rController*> rControllerArray;
 
 class rInputManager : public rInput{
 public:
-	rTouch* CreateTouch(unsigned int id, const rPoint& position, rTouchType type = rTOUCH_DOWN);
-	rTouch* GetTouch(unsigned int id);
-	bool UpdateTouch(unsigned int id, const rPoint& position, rTouchType type);
+	rTouch* CreateTouch(int id, const rPoint& position, rTouchType type = rTOUCH_DOWN);
+	virtual rTouch* GetTouch(int id);
+	bool UpdateTouch(int id, const rPoint& position, rTouchType type);
 	
 	size_t TouchCount() const;
 	void GetTouchIds(rIntArray& ids);

@@ -31,7 +31,6 @@ LOCAL_SRC_FILES += rAndroidDemoApp.cpp
 
 LOCAL_SRC_FILES += ../../../../platform/rgl/rOpenGLGraphicsDevice.cpp
 
-LOCAL_SRC_FILES += ../../../../src/math/rMath.cpp
 LOCAL_SRC_FILES += ../../../../src/math/rMathUtil.cpp
 LOCAL_SRC_FILES += ../../../../src/math/rMatrix3.cpp
 LOCAL_SRC_FILES += ../../../../src/math/rMatrix4.cpp
@@ -95,6 +94,7 @@ LOCAL_SRC_FILES += ../../../../src/input/rController.cpp
 
 LOCAL_SRC_FILES += ../../../../src/ui/ruiWidget.cpp
 LOCAL_SRC_FILES += ../../../../src/ui/ruiDPad.cpp
+LOCAL_SRC_FILES += ../../../../src/ui/ruiAnalogStick.cpp
 
 
 LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv2

@@ -1,16 +1,11 @@
 #include "rMathUtil.hpp"
 
-void rMath::Matrix3TransformRectangle(const rMatrix3& m , rRectangle2& r){
-	rVector2 tl = r.TopLeft();
-	rVector2 br = r.BottomRight();
-	m.TransformVector2(tl);
-	m.TransformVector2(br);
-	r.Set(tl,br);
+float rMath::DegreeToRad(float deg){
+	return deg * float(M_PI / 180.0f);
 }
 
-void rMath::Matrix3TransformCircle(const rMatrix3& m , rCircle2& c){
-	m.TransformVector2(c.center);
-	c.radius *= 1.0f + (1.0f - m.m[0]);
+float rMath::ConvertRange(float value, float inMin, float inMax, float outMin, float outMax){
+    return outMin + ((value - inMin) / (inMax - inMin)) * (outMax - outMin);
 }
 
 float rMath::Max3(float n1 , float n2, float n3){
@@ -46,7 +41,7 @@ rVector2 rMath::ClosestPointOnSegment(const rLineSegment2& ls , const rCircle2& 
 
 	return ls.s1 + projV;
 }
-
+/*
 void rMath::QuaterionToMatrix(const rQuaternion& q, rMatrix4& m){
 	m.LoadIdentity();
 	
@@ -62,6 +57,7 @@ void rMath::QuaterionToMatrix(const rQuaternion& q, rMatrix4& m){
 	m[9] = 2.0f * (q.y * q.z) - 2.0f * (q.x * q.w);
 	m[10] = 1.0f - 2.0f * (q.x * q.x) - 2.0f * (q.y * q.y);
 }
+*/
 
 bool rMath::PointInBoundedXYPlane(const rVector3& corner1 , const rVector3& corner2 , const rVector3& point){
 	float minX = std::min(corner1.x , corner2.x);
@@ -92,13 +88,4 @@ bool rMath::PointInBoundedYZPlane(const rVector3& corner1 , const rVector3& corn
 
 	return	point.y >= minY && point.y <= maxY &&
 			point.z >= minZ && point.z <= maxZ;
-}
-
-void rMath::SetTransformMatrix(const rVector3& translation, const rQuaternion& rotation, const rVector3& scale, rMatrix4& result){
-	rMatrix4 t, r, s;
-	t.SetTranslate(translation);
-	rMath::QuaterionToMatrix(rotation, r);
-	s.SetScale(scale);
-
-	result = (r * t) * s;
 }

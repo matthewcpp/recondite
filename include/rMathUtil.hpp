@@ -3,8 +3,6 @@
 
 #include <algorithm>
 
-#include "rMath.hpp"
-
 #include "rTypes.hpp"
 #include "rRectangle2.hpp"
 #include "rCircle2.hpp"
@@ -13,19 +11,21 @@
 
 #include "rVector3.hpp"
 
-#include "rMatrix4.hpp"
-#include "rQuaternion.hpp"
+#ifndef M_PI
+	#define M_PI 3.141592653589793238462643f
+#endif
+
+#define rMATH_ZERO_TOLERANCE 1e-06f
 
 namespace rMath{
-	float Max3(float n1 , float n2, float n3);
+	float DegreeToRad(float deg);
+	float ConvertRange(float value, float inMin, float inMax, float outMin, float outMax);
 
-	void Matrix3TransformRectangle(const rMatrix3& m , rRectangle2& r);
-	void Matrix3TransformCircle(const rMatrix3& m , rCircle2& c);
+	float Max3(float n1 , float n2, float n3);
 
 	rVector2 ClosestPointOnSegment(const rLineSegment2& ls , const rCircle2& c);
 
-	void QuaterionToMatrix(const rQuaternion& q, rMatrix4& m);
-	void SetTransformMatrix(const rVector3& translation, const rQuaternion& rotation, const rVector3& scale, rMatrix4& result);
+	//void QuaterionToMatrix(const rQuaternion& q, rMatrix4& m);
 
 	bool PointInBoundedXYPlane(const rVector3& corner1 , const rVector3& corner2 , const rVector3& point);
 	bool PointInBoundedXZPlane(const rVector3& corner1 , const rVector3& corner2 , const rVector3& point);

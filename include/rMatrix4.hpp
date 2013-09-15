@@ -13,7 +13,7 @@ Matrix4 Layout
 
 #include "rVector3.hpp"
 #include "rVector4.hpp"
-#include "rMath.hpp"
+#include "rMathUtil.hpp"
 
 struct rMatrix4{
 

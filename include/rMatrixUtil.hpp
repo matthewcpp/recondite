@@ -3,7 +3,7 @@
 
 #include <cmath>
 
-#include "rMath.hpp"
+#include "rMathUtil.hpp"
 #include "rMatrix4.hpp"
 #include "rVector3.hpp"
 #include "rVector4.hpp"

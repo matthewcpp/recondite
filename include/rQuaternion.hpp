@@ -4,7 +4,7 @@
 #include <cmath>
 
 #include "rVector3.hpp"
-#include "rMath.hpp"
+#include "rMathUtil.hpp"
 
 struct rQuaternion{
 	rQuaternion(){};

@@ -9,7 +9,7 @@
 #include "input/rTouch.hpp"
 
 
-class rAndroidInputManager : rInputManager{
+class rAndroidInputManager : public rInputManager{
 public:
 
 	void ProcessInputEvent(AInputEvent* event);

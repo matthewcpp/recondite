@@ -16,7 +16,7 @@
 typedef std::map<unsigned int , rTouch*> rTouchMap;
 typedef std::vector<rController*> rControllerArray;
 
-class rInputManager : rInput{
+class rInputManager : public rInput{
 public:
 	rTouch* CreateTouch(unsigned int id, const rPoint& position, rTouchType type = rTOUCH_DOWN);
 	rTouch* GetTouch(unsigned int id);

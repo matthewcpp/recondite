@@ -26,6 +26,9 @@ public:
 	virtual const rVector2* AnalogStick(unsigned int index) const;
 	virtual float Trigger(unsigned int index) const;
 	
+	rDPad* DPad(unsigned int index);
+	rInputButton* Button(unsigned int index);
+	
 	bool SetButton(unsigned int index, rButtonState state);
 	bool SetDPadButton(unsigned int index, rDPadButton button, rButtonState state);
 	bool SetAnalogStick(unsigned int index, float x, float y);

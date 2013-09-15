@@ -42,7 +42,21 @@ const rInputButton* rController::Button(unsigned int index) const{
 		return &m_buttons[index];
 }
 
+rInputButton*rController:: Button(unsigned int index){
+	if (index >= m_buttons.size())
+		return NULL;
+	else
+		return &m_buttons[index];
+}
+
 const rDPad* rController::DPad(unsigned int index) const{
+	if (index >= m_dPads.size())
+		return NULL;
+	else
+		return &m_dPads[index];
+}
+
+rDPad* rController::DPad(unsigned int index){
 	if (index >= m_dPads.size())
 		return NULL;
 	else

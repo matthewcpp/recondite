@@ -18,6 +18,8 @@ struct rRect{
 	void SetSize(const rSize& size);
 	void SetSize(int wwidth, int hheight);
 	
+	bool ContainsPoint(const rPoint& point);
+	
 	int Left() const;
 	int Right() const;
 	int Bottom() const;

@@ -76,7 +76,7 @@ void rAndroidGraphicsDevice::Uninit(){
 	m_context = EGL_NO_CONTEXT;
 	m_surface = EGL_NO_SURFACE;
 
-	rAndroidGraphicsDevice::Uninit();
+	rOpenGLGraphicsDevice::Uninit();
 }
 
 void rAndroidGraphicsDevice::SwapBuffers(){

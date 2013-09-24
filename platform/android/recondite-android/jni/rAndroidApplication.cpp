@@ -51,6 +51,7 @@ bool rAndroidApplication::Init(android_app* state){
 }
 
 void rAndroidApplication::Uninit(){
+	m_started = false;
 	m_graphicsDevice->Uninit();
 }
 

@@ -49,27 +49,42 @@ rGeometryData::~rGeometryData(){
 	Clear();
 }
 
-size_t rGeometryData::Allocate(size_t vertexSize, size_t vertexCount, bool texCoords, bool normals){
-	m_vertexSize = vertexSize;
+size_t rGeometryData::Allocate(size_t vertexElementSize, size_t vertexCount, bool texCoords, bool normals){
+	m_vertexElementSize = vertexElementSize;
 	m_hasTextureCoords = texCoords;
 	m_hasNormals = normals;
 	
-	size_t dataSize = VertexSizeInBytes() * vertexCount;
+	size_t dataSize = (VertexSizeInBytes() / 4) * vertexCount;
 	
 	m_vertexData.resize(dataSize);
 	
 	return dataSize;
 }
 
+void rGeometryData::SetVertex(size_t index, const rVector3& v, const rVector2& tc, const rVector3& n){
+	size_t i = VertexElementSize() * index;
+
+	memcpy(&m_vertexData[i], &v, 12);
+	memcpy(&m_vertexData[i + 3], &tc, 8);
+	memcpy(&m_vertexData[i + 5], &n, 12);
+}
+
+void rGeometryData::SetVertex(size_t index, const rVector3& v, const rVector2& tc){
+	size_t i = VertexElementSize() * index;
+
+	memcpy(&m_vertexData[i], &v, 12);
+	memcpy(&m_vertexData[i + 3], &tc, 8);
+}
+
 void rGeometryData::SetVertex(size_t index, float x, float y){
-	size_t i = VertexSize() * index;
+	size_t i = VertexElementSize() * index;
 	
 	m_vertexData[i] = x;
 	m_vertexData[i + 1] = y;
 }
 
 void rGeometryData::SetVertex(size_t index, float x, float y, float u, float v){
-	size_t i = VertexSize() * index;
+	size_t i = VertexElementSize() * index;
 	
 	m_vertexData[i] = x;
 	m_vertexData[i + 1] = y;
@@ -81,8 +96,8 @@ void rGeometryData::SetVertex(size_t index, const rVector2& v){
 	SetVertex(index, v.x, v.y);
 }
 
-void rGeometryData::SetVertexData(float* vertexData, size_t vertexSize, size_t vertexCount, bool texCoords, bool normals){
-	size_t dataSize = Allocate(vertexSize, vertexCount, texCoords, normals);
+void rGeometryData::SetVertexData(float* vertexData, size_t vertexElementSize, size_t vertexCount, bool texCoords, bool normals){
+	size_t dataSize = Allocate(vertexElementSize, vertexCount, texCoords, normals);
 	
 	memcpy(&m_vertexData[0], vertexData, dataSize);
 }
@@ -94,12 +109,12 @@ const float* rGeometryData::GetVertexData() const{
 		return NULL;
 }
 
-size_t rGeometryData::VertexSize() const{
-	return m_vertexSize;
+size_t rGeometryData::VertexElementSize() const{
+	return m_vertexElementSize;
 }
 
 size_t rGeometryData::VertexSizeInBytes() const{
-	size_t vertexSize = m_vertexSize;
+	size_t vertexSize = m_vertexElementSize;
 	
 	if (m_hasTextureCoords)
 		vertexSize += 2;
@@ -110,12 +125,11 @@ size_t rGeometryData::VertexSizeInBytes() const{
 	return vertexSize * sizeof(float);
 }
 
-size_t rGeometryData::VertexDataSize() const{
-	return VertexCount() * VertexSizeInBytes();
+size_t rGeometryData::VertexDataSizeInBytes() const{
+	return VertexDataCount() * VertexSizeInBytes();
 }
 
-
-size_t rGeometryData::VertexCount() const{
+size_t rGeometryData::VertexDataCount() const{
 	return m_vertexData.size();
 }
 

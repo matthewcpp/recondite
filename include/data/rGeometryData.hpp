@@ -39,14 +39,14 @@ public:
 	~rGeometryData();
 	
 public:
-	void SetVertexData(float* vertexData, size_t vertexSize, size_t vertexCount, bool texCoords, bool normals);
-	size_t Allocate(size_t vertexSize, size_t vertexCount, bool texCoords, bool normals);
+	void SetVertexData(float* vertexData, size_t vertexElementSize, size_t vertexCount, bool texCoords, bool normals);
+	size_t Allocate(size_t vertexElementSize, size_t vertexCount, bool texCoords, bool normals);
 	
 	const float* GetVertexData() const;
-	size_t VertexSize() const;
+	size_t VertexElementSize() const;
 	size_t VertexSizeInBytes() const;
-	size_t VertexDataSize() const;
-	size_t VertexCount() const;
+	size_t VertexDataSizeInBytes() const;
+	size_t VertexDataCount() const;
 	
 	rElementBufferData* CreateElementBuffer(const rString& name);
 	rElementBufferData* CreateElementBuffer(const rString& name, unsigned short* elements, size_t elementCount);
@@ -54,6 +54,8 @@ public:
 	void SetVertex(size_t index, float x, float y);
 	void SetVertex(size_t index, const rVector2& v);
 	void SetVertex(size_t index, float x, float y, float u, float v);
+	void SetVertex(size_t index, const rVector3& v, const rVector2& tc, const rVector3& n);
+	void SetVertex(size_t index, const rVector3& v, const rVector2& tc);
 	
 	size_t ElementBufferCount() const;
 	bool RemoveElementBuffer(const rString& name);
@@ -72,7 +74,7 @@ private:
 	rFloatArray m_vertexData;
 	rElementBufferDataMap m_elementBuffers;
 	
-	size_t m_vertexSize;
+	size_t m_vertexElementSize;
 	
 	bool m_hasTextureCoords;
 	bool m_hasNormals;

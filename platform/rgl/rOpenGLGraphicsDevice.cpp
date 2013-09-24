@@ -249,7 +249,7 @@ void rOpenGLGraphicsDevice::RenderImmediate(rGeometryData& geometry, const rMatr
 	rElementBufferData* elementBufferData = geometry.GetElementBuffer(elementBuffer);
 	
 	if (material && elementBufferData){
-		size_t vertexSize = geometry.VertexSize();
+		size_t vertexSize = geometry.VertexElementSize();
 		GLsizei stride = GetVertexStrideForGeometry(vertexSize, geometry.HasTextureCoords(), geometry.HasNormals());
 		
 		SetActiveMaterial(material);

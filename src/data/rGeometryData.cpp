@@ -1,6 +1,5 @@
 #include "data/rGeometryData.hpp"
 
-
 rElementBufferData::rElementBufferData(){}
 
 rElementBufferData::rElementBufferData(unsigned short* elements, size_t elementCount){
@@ -10,7 +9,7 @@ rElementBufferData::rElementBufferData(unsigned short* elements, size_t elementC
 void rElementBufferData::SetElementData(unsigned short* elements, size_t elementCount){
 	m_elementData.resize(elementCount);
 	size_t dataSize = elementCount * sizeof(unsigned short);
-	
+
 	memcpy(&m_elementData[0], elements, dataSize);
 }
 
@@ -54,9 +53,10 @@ size_t rGeometryData::Allocate(size_t vertexElementSize, size_t vertexCount, boo
 	m_hasTextureCoords = texCoords;
 	m_hasNormals = normals;
 	
-	size_t dataSize = (VertexSizeInBytes() / 4) * vertexCount;
-	
-	m_vertexData.resize(dataSize);
+	size_t dataSize = VertexSizeInBytes() * vertexCount;
+	size_t vertexDataCount = dataSize / 4;
+
+	m_vertexData.resize(vertexDataCount);
 	
 	return dataSize;
 }
@@ -78,9 +78,11 @@ void rGeometryData::SetVertex(size_t index, const rVector3& v, const rVector2& t
 
 void rGeometryData::SetVertex(size_t index, float x, float y){
 	size_t i = VertexElementSize() * index;
-	
+
 	m_vertexData[i] = x;
 	m_vertexData[i + 1] = y;
+
+
 }
 
 void rGeometryData::SetVertex(size_t index, float x, float y, float u, float v){

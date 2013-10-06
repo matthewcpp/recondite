@@ -123,7 +123,7 @@ rXMLElement* rXMLElement::CreateChild(const rString& name, const T& text, const 
 
 template<typename T>
 void rXMLElement::GetText(T& val) const{
-	std::istringstream s (m_text);
+	std::istringstream s (mText);
 	s >> val;
 }
 

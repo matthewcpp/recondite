@@ -2,6 +2,7 @@
 #define R_XMLELEMENT_HPP
 
 #include <vector>
+#include <sstream>
 
 #include "rTypes.hpp"
 #include "rXMLAttributeList.hpp"
@@ -11,9 +12,13 @@ typedef std::vector<rXMLElement*> rXMLElementArray;
 
 class rXMLElement{
 public:
-	rXMLElement(rXMLElement* parent, const rString& name, const rString& text = "");
+	rXMLElement(rXMLElement* parent, const rString& name);
+	rXMLElement(rXMLElement* parent, const rString& name, const rString& text);
 	rXMLElement(rXMLElement* parent, const rString& name, const rString& text, const rXMLAttributeList& attributes);
+	
 	~rXMLElement();
+
+public:
 	
 	template<typename T>
 	void AddAttribute(const rString& name, const T& value);
@@ -25,12 +30,20 @@ public:
 	
 	bool RemoveAttribute(const rString& name);
 	
-	rXMLElement* CreateChild(const rString& name, const rString& text = "");
-	rXMLElement* CreateChild(const rString& name, const rString& text, const rXMLAttributeList& attributes);
+	rXMLElement* CreateChild(const rString& name);
+
+	template<typename T>
+	rXMLElement* CreateChild(const rString& name, const T& text);
+
+	template<typename T>
+	rXMLElement* CreateChild(const rString& name, const T& text, const rXMLAttributeList& attributes);
+	
 	void AddChild(rXMLElement* child);
 	
 	void SetName(const rString& name);
-	void SetText(const rString& text);
+	
+	template<typename T>
+	void SetText(const T& text);
 	
 	void FindElements(const rString& search, rXMLElementArray& result) const;
 	
@@ -39,6 +52,10 @@ public:
 	rXMLElement* Parent() const;
 	
 	rString Text() const;
+
+	template<typename T>
+	void GetText(T& val) const;
+
 	rString Name() const;
 	
 	size_t NumChildren() const;
@@ -55,6 +72,7 @@ public:
 	
 private:
 	void Init(rXMLElement* parent, const rString& name, const rString& text);
+
 	void FindElementsRec(const rString& search, rXMLElementArray& result) const;
 	bool RemoveChild(rXMLElement* child);
 	rXMLElement* RemoveChild(size_t index);
@@ -78,6 +96,35 @@ void rXMLElement::AddAttribute(const rString& name, const T& value){
 template<typename T>
 bool rXMLElement::GetAttribute(const rString& name, T& value) const{
 	return mAttributes.GetAttributeAs<T>(name, value);
+}
+
+template<typename T>
+void rXMLElement::SetText(const T& text){
+	std::ostringstream s;
+	s << text;
+	mText = s.str();
+}
+
+template<typename T>
+rXMLElement* rXMLElement::CreateChild(const rString& name, const T& text){
+	std::ostringstream s;
+	s << text;
+
+	return new rXMLElement(this, name, s.str());
+}
+
+template<typename T>
+rXMLElement* rXMLElement::CreateChild(const rString& name, const T& text, const rXMLAttributeList& attributes){
+	std::ostringstream s;
+	s << text;
+
+	return new rXMLElement(this, name, s.str(), attributes);
+}
+
+template<typename T>
+void rXMLElement::GetText(T& val) const{
+	std::istringstream s (m_text);
+	s >> val;
 }
 
 #endif

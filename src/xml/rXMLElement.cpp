@@ -1,5 +1,9 @@
 #include "xml/rXMLElement.hpp"
 
+rXMLElement::rXMLElement(rXMLElement* parent, const rString& name){
+	Init(parent, name, "");
+}
+
 rXMLElement::rXMLElement(rXMLElement* parent, const rString& name, const rString& text){
 	Init(parent, name, text);
 }
@@ -9,18 +13,22 @@ rXMLElement::rXMLElement(rXMLElement* parent, const rString& name, const rString
 	mAttributes = attributes;
 }
 
+rXMLElement::~rXMLElement(){
+	DestroyChildren();
+}
+
 void rXMLElement::Init(rXMLElement* parent, const rString& name, const rString& text){
 	mParent = parent;
 	
 	mName = name;
-	mText = text;
+
+	std::ostringstream s;
+	s << text;
+
+	mText = s.str();
 	
 	if (parent)
 		parent->AddChild(this);
-}
-
-rXMLElement::~rXMLElement(){
-	DestroyChildren();
 }
 
 void rXMLElement::DestroyChildren(){
@@ -76,14 +84,8 @@ rXMLElement* rXMLElement::GetFirstChildNamed(const rString& name) const{
 	return NULL;
 }
 
-rXMLElement* rXMLElement::CreateChild(const rString& name, const rString& text){
-	return new rXMLElement(this, name, text);
-}
-
-
-rXMLElement* rXMLElement::CreateChild(const rString& name, const rString& text, const rXMLAttributeList& attributes){
-	mChildren.push_back(new rXMLElement(this, name, text, attributes));
-	return mChildren.back();
+rXMLElement* rXMLElement::CreateChild(const rString& name){
+	return new rXMLElement(this, name);
 }
 
 void rXMLElement::AddChild(rXMLElement* child){
@@ -126,11 +128,6 @@ void rXMLElement::AddAttributes(const rXMLAttributeList& attributes){
 		mAttributes.SetAttribute(name, value);
 	}
 }
-
-void rXMLElement::SetText(const rString& text){
-	mText = text;
-}
-
 
 void rXMLElement::ClearAttributes(){
 	mAttributes.Clear();

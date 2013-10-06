@@ -85,6 +85,7 @@ LOCAL_SRC_FILES += ../../../../src/data/rTexture2DData.cpp
 LOCAL_SRC_FILES += ../../../../src/data/rMaterialData.cpp
 LOCAL_SRC_FILES += ../../../../src/data/rShaderData.cpp
 LOCAL_SRC_FILES += ../../../../src/data/rGeometryData.cpp
+LOCAL_SRC_FILES += ../../../../src/data/rFontData.cpp
 LOCAL_SRC_FILES += ../../../../src/data/rAssetManifestData.cpp
 
 LOCAL_SRC_FILES += ../../../../src/input/rTouch.cpp

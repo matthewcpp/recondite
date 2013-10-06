@@ -83,29 +83,29 @@ rContentError rTexture2DData::ReadNonCompressedData(std::istream& stream){
 }
 
 
-rContentError rTexture2DData::WriteToPath(const rString& path){
+rContentError rTexture2DData::WriteToPath(const rString& path) const{
+	rContentError error = rCONTENT_ERROR_NONE;
     std::ofstream stream(path.c_str(), std::ios::binary);
     
     if (!stream)
-	m_error = rCONTENT_ERROR_FILE_NOT_WRITABLE;
+		error = rCONTENT_ERROR_FILE_NOT_WRITABLE;
     else
-	m_error =  WriteToStream(stream);
+		error =  WriteToStream(stream);
     
     stream.close();
     
-    return m_error;
+    return error;
 }
 
-rContentError rTexture2DData::WriteToStream(std::ostream& stream){
-    m_error = rCONTENT_ERROR_NONE;
+rContentError rTexture2DData::WriteToStream(std::ostream& stream) const{
     
     WriteFileHeader(stream);
     WriteNonCompressedData(stream);
     
-    return m_error;
+    return rCONTENT_ERROR_NONE;
 }
 
-rContentError rTexture2DData::WriteFileHeader(std::ostream& stream){
+rContentError rTexture2DData::WriteFileHeader(std::ostream& stream) const{
     
     stream.write((char*)&magicNumber, 4);
     stream.write((char*)&m_size, 8);
@@ -115,7 +115,7 @@ rContentError rTexture2DData::WriteFileHeader(std::ostream& stream){
     return rCONTENT_ERROR_NONE;
 }
 
-rContentError rTexture2DData::WriteNonCompressedData(std::ostream& stream){
+rContentError rTexture2DData::WriteNonCompressedData(std::ostream& stream) const{
     stream.write((char*)&m_data[0], m_data.size());
     
     return rCONTENT_ERROR_NONE;
@@ -172,7 +172,33 @@ void rTexture2DData::SetPixel(int x, int y, unsigned char r, unsigned char g, un
 	
 	if (m_bpp == 4)
 		m_data[index + 3] = a;
-}    
+}
+
+void rTexture2DData::GetPixel(int x, int y, rColor& color) const{
+	size_t index = GetPixelIndex(x, y);
+
+	color.red = m_data[index];
+	color.green = m_data[index + 1];
+	color.blue = m_data[index + 2];
+	
+	if (m_bpp == 4)
+		color.alpha = m_data[index + 3];
+	else
+		color.alpha = 255;
+}
+
+void rTexture2DData::FillColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a){
+	rColor c(r,g,b,a);
+	FillColor(c);
+}
+
+void rTexture2DData::FillColor(const rColor& color){
+	for (int x= 0; x < m_size.x; x++){
+		for (int y = 0; y < m_size.y; y++){
+			SetPixel(x,y,color);
+		}
+	}
+}
 
 void rTexture2DData::SetPixel(int x, int y, const rColor& color){
 	SetPixel(x, y, color.red, color.green, color.blue, color.alpha);

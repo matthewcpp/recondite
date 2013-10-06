@@ -162,7 +162,7 @@ rTexture2D* rContentManager::LoadTexture(const rTexture2DData& textureData, cons
 	else
 	{
 		unsigned int textureId = m_graphicsDevice->CreateTexture(textureData.GetWidth(), textureData.GetHeight(), textureData.GetBPP(), textureData.GetData());
-		texture = new rTexture2D(textureData.GetWidth(), textureData.GetHeight(), textureId,
+		texture = new rTexture2D(textureData.GetWidth(), textureData.GetHeight(), textureData.GetBPP(), textureId,
 						GetNextAssetId(), name, textureData.GetPath());
 	
 		rTextureMapEntry entry(name, texture);

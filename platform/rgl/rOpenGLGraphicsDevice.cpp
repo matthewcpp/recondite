@@ -155,6 +155,14 @@ void rOpenGLGraphicsDevice::SetActiveMaterial(rMaterial* material){
 				glBindTexture ( GL_TEXTURE_2D, texture->GraphicsDeviceID() );
 				glUniform1i ( uniformHandle, textureIndex );
 				textureIndex ++;
+				
+				if (texture->Bpp() > 3){
+					glEnable (GL_BLEND);
+					glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+				}
+				else{
+					glDisable(GL_BLEND);
+				}
 			}
 			break;
 		}

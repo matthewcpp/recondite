@@ -26,8 +26,11 @@ public:
     rContentError LoadFromPath(const rString& path);
     rContentError LoadFromStream(std::istream& stream);
     
-    rContentError WriteToPath(const rString& path);
-    rContentError WriteToStream(std::ostream& stream);
+    rContentError WriteToPath(const rString& path) const;
+    rContentError WriteToStream(std::ostream& stream) const;
+
+	void FillColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
+	void FillColor(const rColor& color);
 	
 	void Allocate(int width, int height, int bpp, bool initDefault = true);
     size_t GetPixelIndex(int x, int y) const;
@@ -56,14 +59,15 @@ public:
 	
 	void SetPixel(int x, int y, unsigned char r, unsigned char g, unsigned char b, unsigned char a = 255);    
 	void SetPixel(int x, int y, const rColor& color);
+	void GetPixel(int x, int y, rColor& color) const;
 
 private:
     
     rContentError ReadFileHeader(std::istream& stream);
     rContentError ReadNonCompressedData(std::istream& stream);
     
-    rContentError WriteFileHeader(std::ostream& stream);
-    rContentError WriteNonCompressedData(std::ostream& stream);
+    rContentError WriteFileHeader(std::ostream& stream) const;
+    rContentError WriteNonCompressedData(std::ostream& stream) const;
     
 private:
     

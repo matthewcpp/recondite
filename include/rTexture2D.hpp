@@ -12,17 +12,19 @@
 class rTexture2D : public rAsset{
 public:
 	
-	rTexture2D(int width, int height , unsigned int graphicsDeviceId, int assetid, const rString& name, const rString& path);
+	rTexture2D(int width, int height , int bpp, unsigned int graphicsDeviceId, int assetid, const rString& name, const rString& path);
 	
 	int Width() const;
 	int Height() const;
 	int GraphicsDeviceID() const;
+	int Bpp() const;
 	
 	virtual rAssetType Type() const;
 	
 private:
 	
 	int m_width , m_height;
+	int m_bpp;
 	unsigned int m_graphicsDeviceId;
 };
 

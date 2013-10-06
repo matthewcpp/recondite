@@ -1,5 +1,9 @@
 #include "data/rFontData.hpp"
 
+rGlyphData::rGlyphData(){
+	data = NULL;
+}
+
 rGlyphData::rGlyphData(int s, short w, short h, short t, short l, short a, unsigned char* d){
 	scancode = s;
 	width = w;
@@ -152,8 +156,10 @@ rContentError rFontData::WriteToFile(const rString& dir) {
 	if (!m_textureGenerated)
 		GenerateTexture();
 
+	m_textureFile = m_name + "_texture.rtex";
+
 	rContentError error = WriteGlyphFile (dir + m_name + ".rfnt");
-	error = m_textureData.WriteToPath(dir + m_name + "_texture.rtex");
+	error = m_textureData.WriteToPath(dir + m_textureFile);
 
 	return error;
 }
@@ -164,6 +170,7 @@ rContentError rFontData::WriteGlyphFile(const rString& path) const{
 
 	root->CreateChild<rString>("name", m_name);
 	root->CreateChild<int>("size", m_size);
+	root->CreateChild<rString>("textureFile", m_textureFile);
 
 	rXMLElement* glyphs = root->CreateChild("glyphs");
 	rXMLElement* tc = NULL;
@@ -193,4 +200,143 @@ rContentError rFontData::WriteGlyphFile(const rString& path) const{
 	document.WriteToFile(path);
 
 	return rCONTENT_ERROR_NONE;
+}
+
+rContentError rFontData::LoadFromStream(std::istream& glyph, std::istream& texture){
+	Clear();
+
+	ReadGlyphFile(glyph);
+	m_textureData.LoadFromStream(texture);
+
+	m_textureGenerated = true;
+
+	return rCONTENT_ERROR_NONE;
+}
+
+rContentError rFontData::LoadFromFile(const rString& dir, const rString& name){
+	std::string glyphPath(dir + name + ".rfnt");
+	std::string texturePath(dir + name + "_texture.rtex");
+
+	std::ifstream glyphStream(glyphPath.c_str());
+	std::ifstream textureStream(texturePath.c_str(), std::ios::binary);
+
+	LoadFromStream(glyphStream, textureStream);
+
+	return rCONTENT_ERROR_NONE;
+}
+
+rContentError rFontData::ReadGlyphFile(std::istream& stream){
+	rXMLDocument document;
+	document.LoadFromStream(stream);
+	rXMLElement* root = document.GetRoot();
+
+	rXMLElement* prop = root->GetFirstChildNamed("name");
+	if (prop)
+		m_name = prop->Text();
+
+	prop = root->GetFirstChildNamed("size");
+	if (prop)
+		prop->GetText<int>(m_size);
+
+	prop = root->GetFirstChildNamed("textureFile");
+	if (prop)
+		m_textureFile = prop->Text();
+
+	ParseGlyphs(document);
+
+	return rCONTENT_ERROR_NONE;
+}
+
+rContentError rFontData::ParseGlyphs(rXMLDocument& document){
+	rXMLElement* glyphs = document.GetRoot()->GetFirstChildNamed("glyphs");
+
+	rXMLElement* prop = NULL;
+
+	for (size_t i = 0; i < glyphs->NumChildren(); i++){
+		rXMLElement* data = glyphs->GetChild(i);
+		rGlyphData* glyph = new rGlyphData();
+
+		prop = data->GetFirstChildNamed("scancode");
+		if (prop)
+			prop->GetText<int>(glyph->scancode);
+		
+		prop = data->GetFirstChildNamed("width");
+		if (prop)
+			prop->GetText<short>(glyph->width);
+
+		prop = data->GetFirstChildNamed("height");
+		if (prop)
+			prop->GetText<short>(glyph->height);
+
+		prop = data->GetFirstChildNamed("top");
+		if (prop)
+			prop->GetText<short>(glyph->top);
+
+		prop = data->GetFirstChildNamed("leftBearing");
+		if (prop)
+			prop->GetText<short>(glyph->leftBearing);
+
+		prop = data->GetFirstChildNamed("advance");
+		if (prop)
+			prop->GetText<short>(glyph->advance);
+
+		for (size_t i = 0; i < 4; i++){
+			std::ostringstream s;
+			s << "texCoord" << i;
+
+			float u,v;
+
+			prop = data->GetFirstChildNamed(s.str());
+			if (prop){
+				prop->GetAttribute<float>("u", u);
+				prop->GetAttribute<float>("v", v);
+
+				glyph->texCoords[i].Set(u,v);
+			}
+		}
+
+		m_glyphs[glyph->scancode] = glyph;
+	}
+
+	return rCONTENT_ERROR_NONE;
+}
+
+rContentError rFontData::LoadFontDataFromFile(const rString& path){
+	std::ifstream file(path.c_str());
+
+	if (file){
+		return LoadFontDataFromStream(file);
+	}
+	else{
+		return rCONTENT_ERROR_FILE_NOT_FOUND;
+	}
+}
+
+rContentError rFontData::LoadTextureFromFile(const rString& path){
+	std::ifstream file(path.c_str());
+
+	if (file){
+		return LoadTextureFromStream(file);
+	}
+	else{
+		return rCONTENT_ERROR_FILE_NOT_FOUND;
+	}
+}
+
+rContentError rFontData::LoadTextureFromStream(std::istream& stream){
+	rContentError error = m_textureData.LoadFromStream(stream);
+	m_textureGenerated = (error == rCONTENT_ERROR_NONE);
+
+	return error;
+}
+
+rContentError rFontData::LoadFontDataFromStream(std::istream& stream){
+	Clear();
+	ReadGlyphFile(stream);
+	m_textureGenerated = true;
+	return rCONTENT_ERROR_NONE;
+}
+
+rString rFontData::TextureFile() const{
+	return m_textureFile;
 }

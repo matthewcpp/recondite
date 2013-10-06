@@ -257,7 +257,7 @@ void rOpenGLGraphicsDevice::RenderImmediate(rGeometryData& geometry, const rMatr
 	rElementBufferData* elementBufferData = geometry.GetElementBuffer(elementBuffer);
 	
 	if (material && elementBufferData){
-		size_t vertexSize = geometry.VertexSize();
+		size_t vertexSize = geometry.VertexElementSize();
 		GLsizei stride = GetVertexStrideForGeometry(vertexSize, geometry.HasTextureCoords(), geometry.HasNormals());
 		
 		SetActiveMaterial(material);
@@ -269,7 +269,7 @@ void rOpenGLGraphicsDevice::RenderImmediate(rGeometryData& geometry, const rMatr
 		glUniformMatrix4fv(gMatrixLoc, 1, GL_FALSE, transform.m);
 		
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		glVertexAttribPointer ( gPositionLoc, geometry.VertexSize(), GL_FLOAT, GL_FALSE, stride, geometry.GetVertexData() );
+		glVertexAttribPointer ( gPositionLoc, geometry.VertexElementSize(), GL_FLOAT, GL_FALSE, stride, geometry.GetVertexData() );
 		glEnableVertexAttribArray ( gPositionLoc );
 		
 		if (geometry.HasTextureCoords()){

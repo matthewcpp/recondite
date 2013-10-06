@@ -31,9 +31,11 @@ void rGeometryUtil::CreateRectVerticies(const rRect& rect, const rString& name,r
 }
 
 void rGeometryUtil::CreateCircleVerticies(const rCircle2& circle, size_t segments, const rString& name, rGeometryData& geometry){
-	geometry.Allocate(2, segments + 1, false, false);
+
+	geometry.Allocate(2, segments + 2, false, false);
 	rElementBufferData* buffer = geometry.CreateElementBuffer(name);
 	
+
 	geometry.SetVertex(0, circle.center.x, circle.center.y);
 	
 	float step = 360.0f / (float)segments;
@@ -50,9 +52,10 @@ void rGeometryUtil::CreateCircleVerticies(const rCircle2& circle, size_t segment
 		geometry.SetVertex(index, vertex);
 		
 		if (index > 1){
-			buffer->Push(index, index - 1, 0); 
+			buffer->Push(index, index - 1, 0);
 		}
 		
 		index++;
 	}
+
 }

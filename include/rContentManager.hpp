@@ -25,6 +25,9 @@
 #include "rGeometry.hpp"
 #include "data/rGeometryData.hpp"
 
+#include "rFont.hpp"
+#include "data/rFontData.hpp"
+
 #include "rContentListener.hpp"
 
 typedef std::list<rContentListener*> rContentListenerList;
@@ -66,6 +69,12 @@ public:
 	size_t NumGeometry() const;
 	
 public:
+	rFont* GetFontAsset(const rString& name) const;
+	rFont* LoadFont(const rFontData& fontData, const rString& name);
+	rContentError RemoveFontAsset(const rString& name);
+	size_t NumFonts();
+
+public:
 	virtual rContentError LoadAssetManifestFromPath(const rString& path);
 	rContentError LoadAssetManifestFromStream(std::istream& stream);
 	void UnloadAssets();
@@ -102,6 +111,7 @@ protected:
 	rShaderMap m_shaders;
 	rMaterialMap m_materials;
 	rGeometryMap m_geometry;
+	rFontMap m_fonts;
 	
 	int GetNextAssetId();
 	

@@ -11,6 +11,9 @@ void rAndroidDemoApp::Update(){
 
 		UpdateCamera();
 
+		if (m_frame == 355)
+			m_contentManager->LoadFontFromPath("Consolas.rfnt", "consolas");
+
 	}
 }
 

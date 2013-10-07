@@ -13,20 +13,14 @@
 #include "data/rTexture2DData.hpp"
 #include "rVector2.hpp"
 
-struct rGlyphData{
+#include "rFontGlyph.hpp"
+
+struct rGlyphData : public rFontGlyph{
 	rGlyphData();
 	rGlyphData(int s, short w, short h, short t, short l, short a, unsigned char* d);
 	~rGlyphData();
 
-	int scancode;
-	short width;
-	short height;
-	short top;
-	short leftBearing;
-	short advance;
 	unsigned char* data;
-
-	rVector2 texCoords[4];
 };
 
 struct rGlyphDataHeightSortDesc{
@@ -68,10 +62,13 @@ public:
 	rString TextureFile() const;
 
 	rGlyphData* AddGlyph(int scancode, short width, short height, short top, short leftBearing, short advance, unsigned char* data);
+	void GetGlyphData(rGlyphDataArray& glyphs) const;
 	void RemoveGlyph(int scancode);
 	size_t GlyphCount() const;
 
 	const rTexture2DData& TextureData() const;
+
+	rString GetPath() const;
 
 private:
 	void SetTexCoordsForGlyph(int x, int y, rGlyphData* glyph);
@@ -89,6 +86,7 @@ private:
 
 	rString m_name;
 	rString m_textureFile;
+	rString m_path;
 
 	int m_size;
 	bool m_textureGenerated;

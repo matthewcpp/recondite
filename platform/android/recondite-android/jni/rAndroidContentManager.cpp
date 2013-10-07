@@ -20,6 +20,24 @@ rAndroidContentManager::rAndroidContentManager(AAssetManager* androidAssets, rGr
 	m_androidAssets = androidAssets;
 }
 
+rFont* rAndroidContentManager::LoadFontFromPath(const rString& path, const rString& name){
+	return LoadFontFromAsset(path, name);
+}
+
+rFont* rAndroidContentManager::LoadFontFromAsset(const rString& path, const rString& name){
+	rAndroidAsset asset;
+	rFont* font = NULL;
+	m_error = OpenAsset(path, asset);
+
+	if (!m_error){
+		rFontData fontData;
+		fontData.LoadFontDataFromStream(*(asset.assetData));
+		font = LoadFont(fontData, name);
+	}
+
+	return font;
+}
+
 rTexture2D* rAndroidContentManager::LoadTextureFromPath(const rString& path, const rString& name){
 	return LoadTextureFromAsset(path, name);
 }

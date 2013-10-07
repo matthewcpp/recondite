@@ -12,6 +12,9 @@
 #include "rTexture2D.hpp"
 #include  "rOpenGLGraphicsDevice.hpp"
 
+#include "rFont.hpp"
+#include "data/rFontData.hpp"
+
 #include "android/asset_manager.h"
 
 struct rAndroidAsset{
@@ -31,6 +34,9 @@ public:
 
 	virtual rMaterial* LoadMaterialFromPath(const rString& path, const rString& name);
 	rMaterial* LoadMaterialFromAsset(const rString& path, const rString& name);
+
+	virtual rFont* LoadFontFromPath(const rString& path, const rString& name);
+	rFont* LoadFontFromAsset(const rString& path, const rString& name);
 
 	void InitDefaultAssets();
 private:

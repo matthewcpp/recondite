@@ -4,14 +4,9 @@ rGlyphData::rGlyphData(){
 	data = NULL;
 }
 
-rGlyphData::rGlyphData(int s, short w, short h, short t, short l, short a, unsigned char* d){
-	scancode = s;
-	width = w;
-	height = h;
-	top = t;
-	leftBearing = l;
-	advance = a;
-
+rGlyphData::rGlyphData(int s, short w, short h, short t, short l, short a, unsigned char* d)
+:rFontGlyph(s,w,h,t,l,a)
+{
 	data = new unsigned char [w * h];
 	memcpy(data, d, w * h);
 }
@@ -37,6 +32,9 @@ void rFontData::Clear(){
 	m_glyphs.clear();
 
 	m_name.clear();
+	m_path.clear();
+	m_textureFile.clear();
+
 	m_size = 0;
 	m_textureGenerated = false;
 }
@@ -220,6 +218,8 @@ rContentError rFontData::LoadFromFile(const rString& dir, const rString& name){
 	std::ifstream glyphStream(glyphPath.c_str());
 	std::ifstream textureStream(texturePath.c_str(), std::ios::binary);
 
+	m_path = glyphPath;
+
 	LoadFromStream(glyphStream, textureStream);
 
 	return rCONTENT_ERROR_NONE;
@@ -339,4 +339,16 @@ rContentError rFontData::LoadFontDataFromStream(std::istream& stream){
 
 rString rFontData::TextureFile() const{
 	return m_textureFile;
+}
+
+rString rFontData::GetPath() const{
+	return m_path;
+}
+
+void rFontData::GetGlyphData(rGlyphDataArray& glyphs) const{
+	glyphs.clear();
+	glyphs.reserve(m_glyphs.size());
+
+	for (rGlyphDataMap::const_iterator it = m_glyphs.begin(); it != m_glyphs.end(); ++it)
+		glyphs.push_back(it->second);
 }

@@ -566,6 +566,51 @@ size_t rContentManager::NumGeometry() const{
 	return m_geometry.size();
 }
 
+
+rFont* rContentManager::GetFontAsset(const rString& name) const{
+	rFontMap::const_iterator result = m_fonts.find(name);
+
+	if (result == m_fonts.end()){
+		return NULL;
+	}
+	else {
+		return result->second;
+	}
+}
+
+rFont* rContentManager::LoadFont(const rFontData& fontData, const rString& name){
+	rFont* font = NULL;
+	if (m_fonts.count(name)){
+		m_error = rCONTENT_ERROR_ASSET_NAME_ALREADY_PRESENT;
+		if (!m_processingBatchFile) NotifyAssetLoadError(name, rASSET_FONT, m_error);
+	}
+	else{
+		rTexture2D* fontTexture = LoadTextureFromPath(fontData.TextureFile(), name + "_texture");
+
+		font = new rFont(fontTexture, GetNextAssetId(), name, fontData.GetPath());
+		rGlyphDataArray glyphs;
+		fontData.GetGlyphData(glyphs);
+
+		for (size_t i = 0; i < glyphs.size(); i++){
+			font->AddGlyph(*glyphs[i]);
+		}
+
+		m_fonts[name] = font;
+	}
+
+
+	return NULL;
+}
+
+rContentError rContentManager::RemoveFontAsset(const rString& name){
+	return rCONTENT_ERROR_NONE;
+}
+
+size_t rContentManager::NumFonts(){
+	return m_fonts.size();
+}
+
+
 void rContentManager::NotifyBatchBegin(int total) {
 	for (rContentListenerItr it = m_listeners.begin(); it != m_listeners.end(); ++it)
 		(*it)->BeginBatchLoad(total);

@@ -381,6 +381,10 @@ rMaterial* rContentManager::LoadMaterial(const rMaterialData& materialData, cons
 		}
 	}
 	
+	if (material == NULL){
+		rLog::Error(name + ": unable to load material - %u", m_error);
+	}
+
 	return material;
 }
 
@@ -599,7 +603,7 @@ rFont* rContentManager::LoadFont(const rFontData& fontData, const rString& name)
 	}
 
 
-	return NULL;
+	return font;
 }
 
 rContentError rContentManager::RemoveFontAsset(const rString& name){

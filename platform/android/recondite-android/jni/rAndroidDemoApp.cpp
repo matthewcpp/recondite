@@ -10,10 +10,6 @@ void rAndroidDemoApp::Update(){
 		m_analogStick->Update(m_engine);
 
 		UpdateCamera();
-
-		if (m_frame == 355)
-			m_contentManager->LoadFontFromPath("Consolas.rfnt", "consolas");
-
 	}
 }
 
@@ -61,6 +57,8 @@ bool rAndroidDemoApp::Init(android_app* state){
 		CreateTextureMaterial();
 		CreateColoredShader("red_shaded", "255 0 0 255");
 		CreateColoredShader("green_shaded", "0 255 0 255");
+
+		m_contentManager->LoadFontFromPath("Consolas.rfnt", "consolas");
 
 		rController* controller = m_inputManager->CreateController(1,1,1,2);
 		m_dpad = new ruiDPad(controller->DPad(0), 100, rPoint(30, 300), rSize(300, 300));
@@ -131,6 +129,8 @@ void rAndroidDemoApp::DrawTextured(){
 	matrix.SetTranslate(-1.0f, 0.0f, 0.0f);
 	rGeometry* geometry = m_contentManager->GetGeometryAsset("texture_rect");
 	rMaterial* material = m_contentManager->GetMaterialAsset("test_tex");
+	rTexture2D* texture = m_contentManager->GetTextureAsset("consolas_texture");
+	material->SetTexture("s_texture", texture);
 	m_renderer->RenderGeometry(geometry, matrix, "rect", material);
 }
 
@@ -148,4 +148,17 @@ void rAndroidDemoApp::DrawShaded(){
 void rAndroidDemoApp::DrawImmediate(){
 	m_dpad->Draw(m_renderer);
 	m_analogStick->Draw(m_renderer);
+
+
+	rTexture2D* tex = m_contentManager->GetTextureAsset("consolas_texture");
+
+	if (tex && m_frame > 300){
+		rRect r( 10,10,256,256);
+		m_renderer->RenderRect(r, tex);
+	}
+	else{
+		if (m_frame == 300)
+			rLog::Error("error with font tex");
+
+	}
 }

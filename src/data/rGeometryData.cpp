@@ -86,7 +86,7 @@ void rGeometryData::SetVertex(size_t index, float x, float y){
 }
 
 void rGeometryData::SetVertex(size_t index, float x, float y, float u, float v){
-	size_t i = VertexElementSize() * index;
+	size_t i = 4 * index;
 	
 	m_vertexData[i] = x;
 	m_vertexData[i + 1] = y;

@@ -33,6 +33,7 @@ private:
 	
 	void CreateRequiredMaterials();
 	void ImmediateColorRender(rGeometryData& geometry, const rColor& color);
+	void ImmediateTexturedRender(rGeometryData& geometry, rTexture2D* texture);
 
 private:
 		rGraphicsDevice* m_graphicsDevice;

@@ -53,6 +53,22 @@ void rRenderer::ImmediateColorRender(rGeometryData& geometry, const rColor& colo
 	}
 }
 
+void rRenderer::ImmediateTexturedRender(rGeometryData& geometry, rTexture2D* texture){
+	rMaterial* material = m_contentManager->GetMaterialAsset("immediate_texture");
+	
+	if (material){
+		material->SetTexture("s_texture", texture);
+		
+		rMatrix4 transform;
+		if (m_activeViewport){
+			rRect overlay = m_activeViewport->GetScreenRect();
+			rMatrixUtil::Ortho2D(overlay.Left(), overlay.Right(), overlay.Bottom(), overlay.Top(), transform);
+		}
+		
+		m_graphicsDevice->RenderImmediate(geometry, transform, "immediate", material);
+	}
+}
+
 void rRenderer::RenderRect(const rRect& rect, const rColor& color){
 	rGeometryData geometry;
 	rGeometryUtil::CreateRectVerticies(rect, "immediate", geometry, false);
@@ -60,7 +76,9 @@ void rRenderer::RenderRect(const rRect& rect, const rColor& color){
 }
 
 void rRenderer::RenderRect(const rRect& rect, rTexture2D* texture){
-
+	rGeometryData geometry;
+	rGeometryUtil::CreateRectVerticies(rect, "immediate", geometry, true);
+	ImmediateTexturedRender(geometry, texture);
 }
 
 void rRenderer::RenderCircle(const rCircle2& circle, const rColor& color){
@@ -75,4 +93,9 @@ void rRenderer::CreateRequiredMaterials(){
 	materialData.SetParameter( rMATERIAL_PARAMETER_COLOR , "fragColor", "255 255 255 255");
 	
 	m_contentManager->LoadMaterial(materialData, "immediate_color");
+	
+	rMaterialData texMaterial;
+	texMaterial.SetShader("default_textured", "");
+
+	m_contentManager->LoadMaterial(texMaterial, "immediate_texture");
 }

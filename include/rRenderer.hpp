@@ -28,6 +28,8 @@ public:
 	
 	void RenderCircle(const rCircle2& circle, const rColor& color);
 
+	void RenderString(const rString& text, const rFont* font, const rPoint& pos, const rColor& color);
+
 private:
 	void ComputeWorldSpaceTransformForObject(const rMatrix4& object, rMatrix4& world);
 	

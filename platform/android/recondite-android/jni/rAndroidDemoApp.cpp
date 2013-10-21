@@ -92,6 +92,7 @@ void rAndroidDemoApp::CreateTextureMaterial(){
 	   rMaterialData materialData;
 	   materialData.SetShader("default_textured", "");
 	   materialData.SetParameter( rMATERIAL_PARAMETER_TEXTURE2D , "s_texture", "texture");
+	   materialData.SetParameter( rMATERIAL_PARAMETER_COLOR , "fragColor", "255 255 255 255");
 
 	   m_contentManager->LoadMaterial(materialData, "test_tex");
 }
@@ -147,11 +148,12 @@ void rAndroidDemoApp::DrawImmediate(){
 	m_dpad->Draw(m_renderer);
 	m_analogStick->Draw(m_renderer);
 
+	rFont* font = m_contentManager->GetFontAsset("consolas");
 
-	rTexture2D* tex = m_contentManager->GetTextureAsset("consolas_texture");
+	if (font){
+		rPoint pos(300,300);
+		rColor color(233,48,159,255);
 
-	if (tex){
-		rRect r( 10,10,256,256);
-		m_renderer->RenderRect(r, tex);
+		m_renderer->RenderString("hello world", font, pos, color);
 	}
 }

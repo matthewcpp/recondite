@@ -53,3 +53,7 @@ void rFont::Clear(){
 	
 	m_glyphs.clear();
 }
+
+rTexture2D* rFont::Texture() const{
+	return m_texture;
+}

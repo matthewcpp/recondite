@@ -96,6 +96,60 @@ void rRenderer::CreateRequiredMaterials(){
 	
 	rMaterialData texMaterial;
 	texMaterial.SetShader("default_textured", "");
+	texMaterial.SetParameter( rMATERIAL_PARAMETER_COLOR , "fragColor", "255 255 255 255");
 
 	m_contentManager->LoadMaterial(texMaterial, "immediate_texture");
+	m_contentManager->LoadMaterial(texMaterial, "immediate_text");
+}
+
+void rRenderer::RenderString(const rString& text, const rFont* font, const rPoint& pos, const rColor& color){
+	rGeometryData geometry;
+
+	geometry.Allocate(2, text.size() * 4, true, false);
+	rElementBufferData* elements = geometry.CreateElementBuffer("immediate");
+
+	int xPos = 0;
+	int yPos = 0;
+	int index = 0;
+
+	for (int i = 0; i < text.size(); i++){
+		const rFontGlyph* glyph = font->GetGlyph(text[i]);
+
+		int left = xPos + glyph->leftBearing;
+		int right = left + glyph->width;
+		int top = yPos - glyph->top;
+		int bottom = top + glyph->height;
+
+
+		geometry.SetVertex(index, left, top, glyph->texCoords[0].x, glyph->texCoords[0].y);
+		geometry.SetVertex(index + 1, right , top, glyph->texCoords[1].x, glyph->texCoords[1].y);
+		geometry.SetVertex(index + 2, right, bottom , glyph->texCoords[2].x, glyph->texCoords[2].y);
+		geometry.SetVertex(index + 3, left, bottom, glyph->texCoords[3].x, glyph->texCoords[3].y);
+
+		elements->Push(index, index + 1, index + 2);
+		elements->Push(index, index + 2, index + 3);
+
+		index += 4;
+
+		xPos += glyph->advance;
+	}
+
+	rMaterial* material = m_contentManager->GetMaterialAsset("immediate_text");
+	material->SetColor("fragColor", color);
+
+	if (material){
+		material->SetTexture("s_texture", font->Texture());
+
+		rMatrix4 transform;
+		if (m_activeViewport){
+			rRect overlay = m_activeViewport->GetScreenRect();
+			rMatrixUtil::Ortho2D(overlay.Left(), overlay.Right(), overlay.Bottom(), overlay.Top(), transform);
+		}
+
+		rMatrix4 translate;
+		translate.SetTranslate(pos.x,pos.y, 0.0f);
+		transform *= translate;
+
+		m_graphicsDevice->RenderImmediate(geometry, transform, "immediate", material);
+	}
 }

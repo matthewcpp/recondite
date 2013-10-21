@@ -20,6 +20,7 @@ public:
 	const rFontGlyph* GetGlyph(int scancode) const;
 	rFontGlyph* AddGlyph(const rFontGlyph& g);
 	size_t NumGlyphs() const;
+	rTexture2D* Texture() const;
 	
 	void RemoveGlyph(int scancode);
 	

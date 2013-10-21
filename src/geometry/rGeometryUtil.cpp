@@ -20,7 +20,7 @@ void CreateRectVerticies(const rRect& rect, rGeometryData& geometry){
 
 void rGeometryUtil::CreateRectVerticies(const rRect& rect, const rString& name,rGeometryData& geometry, bool texCoords){
 	static unsigned short rectIndicies[] = {0, 1, 3, 1, 2, 3};
-	geometry.CreateElementBuffer(name, rectIndicies, 6);
+	geometry.CreateElementBuffer(name, rectIndicies, 6, rGEOMETRY_TRIANGLES);
 	
 	if (texCoords){
 		CreateRectVerticiesWithTexCoords(rect, geometry);

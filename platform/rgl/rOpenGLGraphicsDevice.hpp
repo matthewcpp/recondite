@@ -68,6 +68,8 @@ protected:
 	GLuint CompileShader(GLenum type, const char* program);
 	unsigned char* ReflectTexture(int width, int height, int bpp , const unsigned char* data);
 	
+	GLenum GLGeometryType(rGeometryType type) const;
+
 	GLsizei GetVertexStrideForGeometry(size_t vertexSize, bool texCoords, bool normals) const;
 	
 	bool m_isInit;

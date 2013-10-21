@@ -118,7 +118,7 @@ void rAndroidDemoApp::CreateGeometry(){
 
 		rGeometryData data;
 		data.SetVertexData(verts, 3, 4, false, false);
-		data.CreateElementBuffer("rect",elements, 6);
+		data.CreateElementBuffer("rect",elements, 6, rGEOMETRY_TRIANGLES);
 		m_contentManager->LoadGeometry(data, "rect");
 
 		data.SetVertexData(tex_verts, 3, 4, true, false);

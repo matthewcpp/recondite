@@ -511,7 +511,7 @@ rGeometry* rContentManager::LoadGeometry(const rGeometryData& geometryData, cons
 			rElementBufferData* buffer = geometryData.GetElementBuffer(bufferNames[i]);
 			
 			unsigned int elementBufferId = m_graphicsDevice->CreateElementBuffer(buffer->GetElementData(), buffer->ElementDataSize());
-			geometry->AddElementBuffer(bufferNames[i], elementBufferId, buffer->ElementCount());
+			geometry->AddElementBuffer(bufferNames[i], elementBufferId, buffer->ElementCount(), buffer->GeometryType());
 		}
 		
 		

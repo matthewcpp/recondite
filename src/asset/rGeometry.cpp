@@ -43,11 +43,11 @@ bool rGeometry::GetElementBuffer(const rString& name, rElementBuffer& elementBuf
 		
 }
 
-bool rGeometry::AddElementBuffer(const rString& name, unsigned int bufferId, size_t elementCount){
+bool rGeometry::AddElementBuffer(const rString& name, unsigned int bufferId, size_t elementCount, rGeometryType geometryType){
 	rElementBufferIdMap::const_iterator result = m_elementBufferIds.find(name);
 	
 	if (result == m_elementBufferIds.end()){
-		rElementBuffer buffer(bufferId , elementCount);
+		rElementBuffer buffer(bufferId , elementCount, geometryType);
 		m_elementBufferIds[name] = buffer;
 		return true;
 	}

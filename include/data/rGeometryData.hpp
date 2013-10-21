@@ -12,11 +12,11 @@
 class rElementBufferData{
 public:
 	rElementBufferData();
-	rElementBufferData(unsigned short* elements, size_t elementCount);
+	rElementBufferData(unsigned short* elements, size_t elementCount, rGeometryType type);
 	
 public:
 	
-	void SetElementData(unsigned short* elements, size_t elementCount);
+	void SetElementData(unsigned short* elements, size_t elementCount, rGeometryType type);
 	
 	const unsigned short* GetElementData() const;
 	size_t ElementDataSize() const;
@@ -26,9 +26,13 @@ public:
 	
 	void Clear();
 	
+	rGeometryType GeometryType() const;
+	void SetGeometryType(rGeometryType type);
+
 private:
 	
 	rIndexArray m_elementData;
+	rGeometryType m_geometryType;
 };
 
 typedef std::map<rString, rElementBufferData*> rElementBufferDataMap;
@@ -49,7 +53,7 @@ public:
 	size_t VertexDataCount() const;
 	
 	rElementBufferData* CreateElementBuffer(const rString& name);
-	rElementBufferData* CreateElementBuffer(const rString& name, unsigned short* elements, size_t elementCount);
+	rElementBufferData* CreateElementBuffer(const rString& name, unsigned short* elements, size_t elementCount, rGeometryType type);
 	
 	void SetVertex(size_t index, float x, float y);
 	void SetVertex(size_t index, const rVector2& v);

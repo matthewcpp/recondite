@@ -268,7 +268,7 @@ void rOpenGLGraphicsDevice::RenderGeometry(rGeometry* geometry, const rMatrix4& 
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBuffer.BufferId());
 
-		glDrawElements ( GL_TRIANGLES, elementBuffer.Size(), GL_UNSIGNED_SHORT, 0 );
+		glDrawElements ( GLGeometryType(elementBuffer.GeometryType()), elementBuffer.Size(), GL_UNSIGNED_SHORT, 0 );
 
 		glDisableVertexAttribArray ( gPositionLoc );
 	}
@@ -301,8 +301,17 @@ void rOpenGLGraphicsDevice::RenderImmediate(rGeometryData& geometry, const rMatr
 			glEnableVertexAttribArray ( gTexCoordLoc );
 		}
 
-		glDrawElements ( GL_TRIANGLES, elementBufferData->ElementCount(), GL_UNSIGNED_SHORT, elementBufferData->GetElementData() );
+		glDrawElements ( GLGeometryType(elementBufferData->GeometryType()), elementBufferData->ElementCount(), GL_UNSIGNED_SHORT, elementBufferData->GetElementData() );
 
 		glDisableVertexAttribArray ( gPositionLoc );
+	}
+}
+
+GLenum rOpenGLGraphicsDevice::GLGeometryType(rGeometryType type) const{
+	switch (type){
+	case rGEOMETRY_LINES:
+		return GL_LINES;
+	default:
+		return GL_TRIANGLES;
 	}
 }

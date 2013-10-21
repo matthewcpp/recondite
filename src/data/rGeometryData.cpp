@@ -1,16 +1,20 @@
 #include "data/rGeometryData.hpp"
 
-rElementBufferData::rElementBufferData(){}
-
-rElementBufferData::rElementBufferData(unsigned short* elements, size_t elementCount){
-	SetElementData(elements, elementCount);
+rElementBufferData::rElementBufferData(){
+	Clear();
 }
 
-void rElementBufferData::SetElementData(unsigned short* elements, size_t elementCount){
+rElementBufferData::rElementBufferData(unsigned short* elements, size_t elementCount, rGeometryType type){
+	SetElementData(elements, elementCount, type);
+}
+
+void rElementBufferData::SetElementData(unsigned short* elements, size_t elementCount, rGeometryType type){
 	m_elementData.resize(elementCount);
 	size_t dataSize = elementCount * sizeof(unsigned short);
 
 	memcpy(&m_elementData[0], elements, dataSize);
+
+	m_geometryType = type;
 }
 
 size_t rElementBufferData::ElementDataSize() const{
@@ -30,12 +34,21 @@ const unsigned short* rElementBufferData::GetElementData() const{
 
 void rElementBufferData::Clear(){
 	m_elementData.clear();
+	m_geometryType = rGEOMETRY_TRIANGLES;
 }
 
 void rElementBufferData::Push(unsigned short v1, unsigned short v2, unsigned short v3){
 	m_elementData.push_back(v1);
 	m_elementData.push_back(v2);
 	m_elementData.push_back(v3);
+}
+
+rGeometryType rElementBufferData::GeometryType() const{
+	return m_geometryType;
+
+}
+void rElementBufferData::SetGeometryType(rGeometryType type){
+	m_geometryType = type;
 }
 
 //-------------------------------------------------------
@@ -156,11 +169,11 @@ rElementBufferData* rGeometryData::CreateElementBuffer(const rString& name){
 	return buffer;
 }
 
-rElementBufferData* rGeometryData::CreateElementBuffer(const rString& name, unsigned short* elements, size_t elementCount){
+rElementBufferData* rGeometryData::CreateElementBuffer(const rString& name, unsigned short* elements, size_t elementCount, rGeometryType type){
 	rElementBufferData* buffer = CreateElementBuffer(name);
 	
 	if (buffer){
-		buffer->SetElementData(elements, elementCount);
+		buffer->SetElementData(elements, elementCount, type);
 	}
 	
 	return buffer;

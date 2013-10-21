@@ -129,7 +129,7 @@ void rOpenGLGraphicsDevice::SetViewport(int x , int y, int width, int height) {
 }
 
 void rOpenGLGraphicsDevice::SetActiveMaterial(rMaterial* material){
-	int textureIndex;
+	int textureIndex = 0;
 	GLint programId = material->Shader()->ProgramId();
 	rArrayString paramNames;
 	rMaterialParameter parameter;
@@ -195,18 +195,38 @@ void rOpenGLGraphicsDevice::DeleteBuffer(unsigned int bufferId){
 }
 
 unsigned int rOpenGLGraphicsDevice::CreateTexture(int width, int height, int bpp , const unsigned char* data){
+	unsigned char* oglTexData = ReflectTexture(width, height, bpp, data);
+
 	GLenum format = (bpp == 3) ? GL_RGB : GL_RGBA;
 	GLuint textureID;
 	
 	glPixelStorei ( GL_UNPACK_ALIGNMENT, 1 );
 	glGenTextures(1, &textureID);
 	glBindTexture(GL_TEXTURE_2D, textureID);
-	glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-	
+	glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, oglTexData);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	
+	delete[] oglTexData;
+
 	return textureID;
+}
+
+unsigned char* rOpenGLGraphicsDevice::ReflectTexture(int width, int height, int bpp , const unsigned char* data){
+	unsigned char* oglData = new unsigned char[width * height * bpp];
+	unsigned int rowSize = width * bpp;
+
+	int srcRow = height - 1;
+	int destRow = 0;
+
+	while (srcRow >= 0){
+		memcpy(oglData + (destRow * rowSize), data + (srcRow * rowSize), rowSize);
+
+		srcRow--;
+		destRow++;
+	}
+
+	return oglData;
 }
 
 void rOpenGLGraphicsDevice::UnregisterTexture(int textureID){
@@ -261,6 +281,9 @@ void rOpenGLGraphicsDevice::RenderImmediate(rGeometryData& geometry, const rMatr
 		size_t vertexSize = geometry.VertexElementSize();
 		GLsizei stride = GetVertexStrideForGeometry(vertexSize, geometry.HasTextureCoords(), geometry.HasNormals());
 		
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
 		SetActiveMaterial(material);
 		
 		GLint programId = material->Shader()->ProgramId();
@@ -269,17 +292,14 @@ void rOpenGLGraphicsDevice::RenderImmediate(rGeometryData& geometry, const rMatr
 		
 		glUniformMatrix4fv(gMatrixLoc, 1, GL_FALSE, transform.m);
 		
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glVertexAttribPointer ( gPositionLoc, geometry.VertexElementSize(), GL_FLOAT, GL_FALSE, stride, geometry.GetVertexData() );
 		glEnableVertexAttribArray ( gPositionLoc );
 		
 		if (geometry.HasTextureCoords()){
 			GLuint gTexCoordLoc = glGetAttribLocation ( programId, "recTexCoord" );
-			glVertexAttribPointer ( gTexCoordLoc, 2, GL_FLOAT, GL_FALSE, stride, (void*)(vertexSize*sizeof(GLfloat)) );
+			glVertexAttribPointer ( gTexCoordLoc, 2, GL_FLOAT, GL_FALSE, stride, (geometry.GetVertexData()+vertexSize));
 			glEnableVertexAttribArray ( gTexCoordLoc );
 		}
-
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 		glDrawElements ( GL_TRIANGLES, elementBufferData->ElementCount(), GL_UNSIGNED_SHORT, elementBufferData->GetElementData() );
 

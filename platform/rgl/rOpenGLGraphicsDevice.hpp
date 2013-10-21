@@ -66,6 +66,7 @@ public:
 protected:
 	
 	GLuint CompileShader(GLenum type, const char* program);
+	unsigned char* ReflectTexture(int width, int height, int bpp , const unsigned char* data);
 	
 	GLsizei GetVertexStrideForGeometry(size_t vertexSize, bool texCoords, bool normals) const;
 	

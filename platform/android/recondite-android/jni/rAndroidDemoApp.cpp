@@ -104,13 +104,13 @@ void rAndroidDemoApp::CreateGeometry(){
 					  };
 
 	float tex_verts[] = { 	-0.5f,  0.5f, 0.0f,  // Position 0
-	                         0.0f,  0.0f,        // TexCoord 0
+	                         0.0f,  1.0f,        // TexCoord 0
 	                         -0.5f, -0.5f, 0.0f,  // Position 1
-	                         0.0f,  1.0f,        // TexCoord 1
+	                         0.0f,  0.0f,        // TexCoord 1
 	                         0.5f, -0.5f, 0.0f,  // Position 2
-	                         1.0f,  1.0f,        // TexCoord 2
+	                         1.0f,  0.0f,        // TexCoord 2
 	                         0.5f,  0.5f, 0.0f,  // Position 3
-	                         1.0f,  0.0f         // TexCoord 3
+	                         1.0f,  1.0f         // TexCoord 3
 	                      };
 
 	unsigned short elements[] = { 0, 1, 2, 0, 2, 3 };
@@ -129,8 +129,6 @@ void rAndroidDemoApp::DrawTextured(){
 	matrix.SetTranslate(-1.0f, 0.0f, 0.0f);
 	rGeometry* geometry = m_contentManager->GetGeometryAsset("texture_rect");
 	rMaterial* material = m_contentManager->GetMaterialAsset("test_tex");
-	rTexture2D* texture = m_contentManager->GetTextureAsset("consolas_texture");
-	material->SetTexture("s_texture", texture);
 	m_renderer->RenderGeometry(geometry, matrix, "rect", material);
 }
 
@@ -152,13 +150,8 @@ void rAndroidDemoApp::DrawImmediate(){
 
 	rTexture2D* tex = m_contentManager->GetTextureAsset("consolas_texture");
 
-	if (tex && m_frame > 300){
+	if (tex){
 		rRect r( 10,10,256,256);
 		m_renderer->RenderRect(r, tex);
-	}
-	else{
-		if (m_frame == 300)
-			rLog::Error("error with font tex");
-
 	}
 }

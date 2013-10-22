@@ -87,6 +87,24 @@ void rRenderer::RenderCircle(const rCircle2& circle, const rColor& color){
 	ImmediateColorRender(geometry, color);
 }
 
+void rRenderer::RenderWireBox(const rAlignedBox3& box, const rColor color){
+	rGeometryData geometry;
+	rGeometryUtil::CreateWireAlignedBoxVerticies(box, "immediate", geometry);
+
+	rMaterial* material = m_contentManager->GetMaterialAsset("immediate_color");
+
+	if (material){
+		material->SetColor("fragColor", color);
+
+		rMatrix4 transform, modelViewProjection;
+		if (m_activeViewport){
+			ComputeWorldSpaceTransformForObject(transform, modelViewProjection);
+		}
+
+		m_graphicsDevice->RenderImmediate(geometry, modelViewProjection, "immediate", material);
+	}
+}
+
 void rRenderer::CreateRequiredMaterials(){
 	rMaterialData materialData;
 	materialData.SetShader("default_colored", "");

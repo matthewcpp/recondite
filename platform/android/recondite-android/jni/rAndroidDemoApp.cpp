@@ -156,4 +156,8 @@ void rAndroidDemoApp::DrawImmediate(){
 
 		m_renderer->RenderString("hello world", font, pos, color);
 	}
+
+	rColor bc(255,255,0,255);
+	rAlignedBox3 box(1,1,1,-1,-1,-1);
+	m_renderer->RenderWireBox(box, bc);
 }

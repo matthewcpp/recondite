@@ -37,6 +37,11 @@ void rElementBufferData::Clear(){
 	m_geometryType = rGEOMETRY_TRIANGLES;
 }
 
+void rElementBufferData::Push(unsigned short v1, unsigned short v2){
+	m_elementData.push_back(v1);
+	m_elementData.push_back(v2);
+}
+
 void rElementBufferData::Push(unsigned short v1, unsigned short v2, unsigned short v3){
 	m_elementData.push_back(v1);
 	m_elementData.push_back(v2);
@@ -89,13 +94,19 @@ void rGeometryData::SetVertex(size_t index, const rVector3& v, const rVector2& t
 	memcpy(&m_vertexData[i + 3], &tc, 8);
 }
 
+void rGeometryData::SetVertex(size_t index, float x, float y, float z){
+	size_t i = VertexElementSize() * index;
+
+	m_vertexData[i] = x;
+	m_vertexData[i + 1] = y;
+	m_vertexData[i + 2] = z;
+}
+
 void rGeometryData::SetVertex(size_t index, float x, float y){
 	size_t i = VertexElementSize() * index;
 
 	m_vertexData[i] = x;
 	m_vertexData[i + 1] = y;
-
-
 }
 
 void rGeometryData::SetVertex(size_t index, float x, float y, float u, float v){

@@ -59,3 +59,20 @@ void rGeometryUtil::CreateCircleVerticies(const rCircle2& circle, size_t segment
 	}
 
 }
+
+void rGeometryUtil::CreateWireAlignedBoxVerticies(const rAlignedBox3& box, const rString& name, rGeometryData& geometry){
+	unsigned short indicies[] = { 0,1,1,2,2,3,3,0,4,5,5,6,6,7,7,4,0,4,1,5,2,6,3,7 };
+	geometry.CreateElementBuffer(name, indicies, 24, rGEOMETRY_LINES);
+
+	geometry.Allocate(3, 8, false, false);
+
+	geometry.SetVertex(0,box.min.x, box.max.y, box.max.z);
+	geometry.SetVertex(1,box.max.x, box.max.y, box.max.z);
+	geometry.SetVertex(2,box.max.x, box.min.y, box.max.z);
+	geometry.SetVertex(3,box.min.x, box.min.y, box.max.z);
+
+	geometry.SetVertex(4,box.min.x, box.max.y, box.min.z);
+	geometry.SetVertex(5,box.max.x, box.max.y, box.min.z);
+	geometry.SetVertex(6,box.max.x, box.min.y, box.min.z);
+	geometry.SetVertex(7,box.min.x, box.min.y, box.min.z);
+}

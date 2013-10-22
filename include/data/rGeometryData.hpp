@@ -44,6 +44,9 @@ typedef std::map<rString, rElementBufferData*> rElementBufferDataMap;
 class rGeometryData{
 public:
 	rGeometryData();
+	rGeometryData(const rString& path);
+	rGeometryData(std::istream& stream);
+
 	~rGeometryData();
 	
 public:

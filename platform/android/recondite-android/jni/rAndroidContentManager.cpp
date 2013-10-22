@@ -56,12 +56,12 @@ rTexture2D* rAndroidContentManager::LoadTextureFromAsset(const rString& path, co
 }
 
 rMaterial* rAndroidContentManager::LoadMaterialFromPath(const rString& path, const rString& name){
-	LoadMaterialFromAsset(path, name);
+	return LoadMaterialFromAsset(path, name);
 }
 
 rMaterial* rAndroidContentManager::LoadMaterialFromAsset(const rString& path, const rString& name){
 	rAndroidAsset asset;
-	rMaterial* material;
+	rMaterial* material = NULL;
 	m_error = OpenAsset(path, asset);
 
 	if (!m_error){
@@ -70,6 +70,23 @@ rMaterial* rAndroidContentManager::LoadMaterialFromAsset(const rString& path, co
 	}
 
 	return material;
+}
+
+rGeometry* rAndroidContentManager::LoadGeometryFromPath(const rString& path, const rString& name){
+	return LoadGeometryFromAsset(path, name);
+}
+
+rGeometry* rAndroidContentManager::LoadGeometryFromAsset(const rString& path, const rString& name){
+	rAndroidAsset asset;
+	rGeometry* geometry;
+	m_error = OpenAsset(path, asset);
+
+	if (!m_error){
+		rGeometryData geometryData(*(asset.assetData));
+		geometry = LoadGeometry(geometryData, name);
+	}
+
+	return geometry;
 }
 
 rContentError rAndroidContentManager::OpenAsset(const rString& path, rAndroidAsset& androidAsset){

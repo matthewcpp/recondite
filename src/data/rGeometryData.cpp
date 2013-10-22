@@ -68,6 +68,14 @@ rGeometryData::rGeometryData(){
 	Clear();
 }
 
+rGeometryData::rGeometryData(const rString& path){
+	ReadFromFile(path);
+}
+
+rGeometryData::rGeometryData(std::istream& stream){
+	ReadFromStream(stream);
+}
+
 rGeometryData::~rGeometryData(){
 	Clear();
 }

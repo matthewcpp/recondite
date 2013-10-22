@@ -57,8 +57,10 @@ bool rAndroidDemoApp::Init(android_app* state){
 		CreateTextureMaterial();
 		CreateColoredShader("red_shaded", "255 0 0 255");
 		CreateColoredShader("green_shaded", "0 255 0 255");
+		CreateColoredShader("blue_shaded", "0 0 255 255");
 
 		m_contentManager->LoadFontFromPath("Consolas.rfnt", "consolas");
+		m_contentManager->LoadGeometryFromPath("box.rgeo", "wirebox");
 
 		rController* controller = m_inputManager->CreateController(1,1,1,2);
 		m_dpad = new ruiDPad(controller->DPad(0), 100, rPoint(30, 300), rSize(300, 300));
@@ -142,6 +144,13 @@ void rAndroidDemoApp::DrawShaded(){
 		m_contentManager->GetMaterialAsset("green_shaded");
 
 	m_renderer->RenderGeometry(geometry, matrix, "rect", material);
+
+	rGeometry* wirebox = m_contentManager->GetGeometryAsset("wirebox");
+
+	if (wirebox){
+		matrix.SetTranslate(-2.0, 0.0, -3.0);
+		m_renderer->RenderGeometry(wirebox, matrix, "box", m_contentManager->GetMaterialAsset("blue_shaded"));
+	}
 }
 
 void rAndroidDemoApp::DrawImmediate(){

@@ -38,6 +38,9 @@ public:
 	virtual rFont* LoadFontFromPath(const rString& path, const rString& name);
 	rFont* LoadFontFromAsset(const rString& path, const rString& name);
 
+	virtual rGeometry* LoadGeometryFromPath(const rString& path, const rString& name);
+	rGeometry* LoadGeometryFromAsset(const rString& path, const rString& name);
+
 	void InitDefaultAssets();
 private:
 

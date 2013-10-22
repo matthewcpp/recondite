@@ -2,6 +2,7 @@
 #define R_GEOMETRYDATA_HPP
 
 #include <map>
+#include <fstream>
 
 #include "rTypes.hpp"
 #include "rDefs.hpp"
@@ -52,6 +53,7 @@ public:
 	size_t VertexSizeInBytes() const;
 	size_t VertexDataSizeInBytes() const;
 	size_t VertexDataCount() const;
+	size_t VertexCount() const;
 	
 	rElementBufferData* CreateElementBuffer(const rString& name);
 	rElementBufferData* CreateElementBuffer(const rString& name, unsigned short* elements, size_t elementCount, rGeometryType type);
@@ -75,8 +77,25 @@ public:
 	
 	rString Path() const;
 	rContentError GetError() const;
+
+	rContentError WriteToFile(const rString& path);
+	rContentError WriteToStream(std::ostream& stream);
+	rContentError WriteElementBufferData(std::ostream& stream);
+
+	rContentError ReadFromFile(const rString& path);
+	rContentError ReadFromStream(std::istream& stream);
+	rContentError ReadElementBufferData(std::istream& stream, size_t count);
+
+private:
+	
+	rContentError WriteHeaderFile(std::ostream& stream);
+	rContentError ReadHeaderFile(std::istream& stream, size_t vertexCount, size_t elementBufferCount);
+
+	size_t VertexFloatSize() const;
 	
 private:
+	static const int magicNumber;
+
 	rFloatArray m_vertexData;
 	rElementBufferDataMap m_elementBuffers;
 	

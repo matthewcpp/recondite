@@ -91,9 +91,9 @@ public:
 private:
 	
 	rContentError WriteFileHeader(std::ostream& stream);
-	rContentError ReadHeaderFile(std::istream& stream, size_t vertexCount, size_t elementBufferCount);
+	rContentError ReadFileHeader(std::istream& stream, size_t& vertexCount, size_t& elementBufferCount);
 
-	size_t VertexFloatSize() const;
+	size_t VertexFloatCount() const;
 	
 private:
 	static const int magicNumber;

@@ -145,7 +145,7 @@ size_t rGeometryData::VertexElementSize() const{
 	return m_vertexElementSize;
 }
 
-size_t rGeometryData::VertexFloatSize() const{
+size_t rGeometryData::VertexFloatCount() const{
 	size_t vertexSize = m_vertexElementSize;
 	
 	if (m_hasTextureCoords)
@@ -158,15 +158,15 @@ size_t rGeometryData::VertexFloatSize() const{
 }
 
 size_t rGeometryData::VertexSizeInBytes() const{
-	 return VertexFloatSize()* sizeof(float);
+	 return VertexFloatCount()* sizeof(float);
 }
 
 size_t rGeometryData::VertexCount() const{
-	return m_vertexData.size() / VertexFloatSize();
+	return m_vertexData.size() / VertexFloatCount();
 }
 
 size_t rGeometryData::VertexDataSizeInBytes() const{
-	return VertexDataCount() * VertexSizeInBytes();
+	return VertexDataCount() * sizeof(float);
 }
 
 size_t rGeometryData::VertexDataCount() const{
@@ -269,13 +269,16 @@ rContentError rGeometryData::WriteToFile(const rString& path){
 }
 
 rContentError rGeometryData::WriteToStream(std::ostream& stream){
-	rContentError error = WriteFileHeader(stream);
-	
-	stream.write((char*)&m_vertexData[0], VertexDataSizeInBytes());
-	
-	error = WriteElementBufferData(stream);
+	if (stream){
+		rContentError error = WriteFileHeader(stream);
+		stream.write((char*)&m_vertexData[0], VertexDataSizeInBytes());
+		error = WriteElementBufferData(stream);
 
-	return error;
+		return error;
+	}
+	else{
+		return rCONTENT_ERROR_STREAM_ERROR;
+	}
 }
 
 rContentError rGeometryData::WriteFileHeader(std::ostream& stream){
@@ -324,26 +327,35 @@ rContentError rGeometryData::ReadFromFile(const rString& path){
 
 rContentError rGeometryData::ReadFromStream(std::istream& stream){
 	Clear();
-	
+
+	rContentError error = rCONTENT_ERROR_NONE;
+
 	if (stream){
 		size_t vertexCount = 0;
 		size_t elementBufferCount = 0;
 	
-		rContentError error = ReadHeaderFile(stream, vertexCount, elementBufferCount);
+		error = ReadFileHeader(stream, vertexCount, elementBufferCount);
 	
 		Allocate(m_vertexElementSize, vertexCount, m_hasTextureCoords, m_hasNormals);
-		stream.read((char*)&m_vertexData[0], VertexDataSizeInBytes());
+		size_t dataSize = VertexDataSizeInBytes();
+
+		stream.read((char*)&m_vertexData[0], dataSize);
+		std::streamsize bytesRead = stream.gcount();
+
+		if (bytesRead != dataSize)
+			error = rCONTENT_ERROR_STREAM_ERROR;
 	
-		error = ReadElementBufferData(stream, elementBufferCount);
-	
-		return error;
+		if (!error)
+			error = ReadElementBufferData(stream, elementBufferCount);
 	}
 	else{
-		return rCONTENT_ERROR_STREAM_ERROR;
+		error = rCONTENT_ERROR_STREAM_ERROR;
 	}
+
+	return error;
 }
 
-rContentError rGeometryData::ReadHeaderFile(std::istream& stream, size_t vertexCount, size_t elementBufferCount){
+rContentError rGeometryData::ReadFileHeader(std::istream& stream, size_t& vertexCount, size_t& elementBufferCount){
 	int magic;
 	char boolVal;
 	
@@ -364,7 +376,7 @@ rContentError rGeometryData::ReadHeaderFile(std::istream& stream, size_t vertexC
 rContentError rGeometryData::ReadElementBufferData(std::istream& stream, size_t count){
 	size_t nameLength, elementCount;
 	rGeometryType type;
-	rCharBuffer charBuffer;
+	rCharArray charBuffer;
 	
 	for (size_t i = 0; i < count; i++){
 		stream.read((char*)&nameLength, 4);

@@ -502,7 +502,7 @@ rGeometry* rContentManager::LoadGeometry(const rGeometryData& geometryData, cons
 	else
 	{
 		unsigned int vertexBuffer = m_graphicsDevice->CreateVertexBuffer(geometryData.GetVertexData(), geometryData.VertexDataSizeInBytes());
-		geometry = new rGeometry(vertexBuffer, geometryData.HasTextureCoords(), geometryData.HasNormals(), GetNextAssetId(), name, geometryData.Path());
+		geometry = new rGeometry(vertexBuffer, geometryData.VertexElementSize(), geometryData.HasTextureCoords(), geometryData.HasNormals(), GetNextAssetId(), name, geometryData.Path());
 		
 		rArrayString bufferNames;
 		geometryData.GetElementBufferNames(bufferNames);

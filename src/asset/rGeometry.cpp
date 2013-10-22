@@ -1,10 +1,11 @@
 #include "rGeometry.hpp"
 
-rGeometry::rGeometry (unsigned int vertexBufferId, bool texCoords, bool normals, 
+rGeometry::rGeometry (unsigned int vertexBufferId, size_t vertexElementSize, bool texCoords, bool normals,
 	int assetid, const rString& name, const rString& path)
 :rAsset(assetid,name, path)
 {
 	m_vertexBufferId = vertexBufferId;
+	m_vertexElementSize = vertexElementSize;
 	
 	m_hasTexCoords = texCoords;
 	m_hasNormals = normals;
@@ -61,4 +62,8 @@ void rGeometry::GetElementBufferNames(rArrayString& names) const{
 	
 	for (rElementBufferIdMap::const_iterator it = m_elementBufferIds.begin(); it != m_elementBufferIds.end(); ++it)
 		names.push_back(it->first);
+}
+
+size_t rGeometry::VertexElementSize() const{
+	return m_vertexElementSize;
 }

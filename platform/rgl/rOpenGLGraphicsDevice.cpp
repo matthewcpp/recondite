@@ -246,6 +246,7 @@ void rOpenGLGraphicsDevice::RenderGeometry(rGeometry* geometry, const rMatrix4& 
 	rElementBuffer elementBuffer;
 	
 	if (geometry && material && geometry->GetElementBuffer(elementBufferName, elementBuffer)){
+		size_t vertexElementSize = geometry->VertexElementSize();
 		GLsizei stride = GetVertexStrideForGeometry(3, geometry->HasTexCoords(), geometry->HasNormals());
 		SetActiveMaterial(material);
 		
@@ -257,12 +258,12 @@ void rOpenGLGraphicsDevice::RenderGeometry(rGeometry* geometry, const rMatrix4& 
 		glUniformMatrix4fv(gMatrixLoc, 1, GL_FALSE, transform.m);
 		
 		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-		glVertexAttribPointer ( gPositionLoc, 3, GL_FLOAT, GL_FALSE, stride, 0 );
+		glVertexAttribPointer ( gPositionLoc, vertexElementSize, GL_FLOAT, GL_FALSE, stride, 0 );
 		glEnableVertexAttribArray ( gPositionLoc );
 		
 		if (geometry->HasTexCoords()){
 			GLuint gTexCoordLoc = glGetAttribLocation ( programId, "recTexCoord" );
-			glVertexAttribPointer ( gTexCoordLoc, 2, GL_FLOAT, GL_FALSE, stride, (void*)(3*sizeof(GLfloat)) );
+			glVertexAttribPointer ( gTexCoordLoc, 2, GL_FLOAT, GL_FALSE, stride, (void*)(vertexElementSize*sizeof(GLfloat)) );
 			glEnableVertexAttribArray ( gTexCoordLoc );
 		}
 
@@ -292,7 +293,7 @@ void rOpenGLGraphicsDevice::RenderImmediate(rGeometryData& geometry, const rMatr
 		
 		glUniformMatrix4fv(gMatrixLoc, 1, GL_FALSE, transform.m);
 		
-		glVertexAttribPointer ( gPositionLoc, geometry.VertexElementSize(), GL_FLOAT, GL_FALSE, stride, geometry.GetVertexData() );
+		glVertexAttribPointer ( gPositionLoc, vertexSize, GL_FLOAT, GL_FALSE, stride, geometry.GetVertexData() );
 		glEnableVertexAttribArray ( gPositionLoc );
 		
 		if (geometry.HasTextureCoords()){

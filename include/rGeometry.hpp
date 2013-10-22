@@ -28,7 +28,7 @@ typedef std::map<rString, rElementBuffer> rElementBufferIdMap;
 
 class rGeometry : public rAsset{
 public:
-	rGeometry (unsigned int vertexBufferId, bool texCoords, bool normals, 
+	rGeometry (unsigned int vertexBufferId, size_t vertexElementSize, bool texCoords, bool normals,
 		int assetid, const rString& name, const rString& path);
 	
 public:
@@ -42,6 +42,8 @@ public:
 	bool HasTexCoords() const;
 	bool HasNormals() const;
 	
+	size_t VertexElementSize() const;
+
 	virtual rAssetType Type() const;
 private:
 
@@ -49,6 +51,8 @@ private:
 	bool m_hasTexCoords; 
 	bool m_hasNormals;
 	
+	size_t m_vertexElementSize;
+
 	rElementBufferIdMap m_elementBufferIds;
 	
 };

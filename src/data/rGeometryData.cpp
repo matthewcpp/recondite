@@ -25,6 +25,10 @@ size_t rElementBufferData::ElementCount() const{
 	return m_elementData.size();
 }
 
+void rElementBufferData::Allocate(size_t count){
+	m_elementData.resize(count);
+}
+
 const unsigned short* rElementBufferData::GetElementData() const{
 	if (m_elementData.size())
 		return &m_elementData[0];
@@ -265,25 +269,49 @@ rContentError rGeometryData::WriteToFile(const rString& path){
 }
 
 rContentError rGeometryData::WriteToStream(std::ostream& stream){
-	rContentError error = WriteHeaderFile(stream);
+	rContentError error = WriteFileHeader(stream);
+	
+	stream.write((char*)&m_vertexData[0], VertexDataSizeInBytes());
+	
 	error = WriteElementBufferData(stream);
 
 	return error;
 }
 
-rContentError rGeometryData::WriteHeaderFile(std::ostream& stream){
-	stream << magicNumber;
-	stream << m_vertexElementSize;
-	stream << char(m_hasTextureCoords);
-	stream << char(m_hasNormals);
-	stream << VertexCount();
-	stream << m_elementBuffers.size();
+rContentError rGeometryData::WriteFileHeader(std::ostream& stream){
+	char texCoords = char(m_hasTextureCoords);
+	char normals = char(m_hasNormals);
+	size_t vertexCount = VertexCount();
+	size_t elementBufferCount = m_elementBuffers.size();
+	
+	stream.write((char*)&magicNumber, 4);
+	stream.write((char*)&m_vertexElementSize, 4);
+	stream.write(&texCoords, 1);
+	stream.write(&normals, 1);
+	stream.write((char*)&vertexCount, 4);
+	stream.write((char*)&elementBufferCount, 4);
 
 	return rCONTENT_ERROR_NONE;
 }
 
 rContentError rGeometryData::WriteElementBufferData(std::ostream& stream){
-
+	size_t nameLength, elementCount;
+	int type;
+	
+	for (rElementBufferDataMap::const_iterator it = m_elementBuffers.begin(); it != m_elementBuffers.end(); ++it){
+		rElementBufferData* bufferData = it->second;
+		
+		nameLength = it->first.size();
+		stream.write((char*)&nameLength, 4);
+		stream.write(it->first.data(), nameLength);
+		
+		type = int(bufferData->GeometryType());
+		stream.write((char*)&type, 4);
+		
+		elementCount = bufferData->ElementCount();
+		stream.write((char*)&elementCount, 4);
+		stream.write((char*)bufferData->GetElementData(), elementCount * 2);
+	}
 	return rCONTENT_ERROR_NONE;
 }
 
@@ -295,17 +323,24 @@ rContentError rGeometryData::ReadFromFile(const rString& path){
 }
 
 rContentError rGeometryData::ReadFromStream(std::istream& stream){
-	size_t vertexCount = 0;
-	size_t elementBufferCount = 0;
-
-	rContentError error = ReadHeaderFile(stream, vertexCount, elementBufferCount);
-
-	Allocate(m_vertexElementSize, vertexCount, m_hasTextureCoords, m_hasNormals);
-	stream.read((char*)&m_vertexData[0], VertexDataSizeInBytes());
-
-	error = ReadElementBufferData(stream, elementBufferCount);
-
-	return error;
+	Clear();
+	
+	if (stream){
+		size_t vertexCount = 0;
+		size_t elementBufferCount = 0;
+	
+		rContentError error = ReadHeaderFile(stream, vertexCount, elementBufferCount);
+	
+		Allocate(m_vertexElementSize, vertexCount, m_hasTextureCoords, m_hasNormals);
+		stream.read((char*)&m_vertexData[0], VertexDataSizeInBytes());
+	
+		error = ReadElementBufferData(stream, elementBufferCount);
+	
+		return error;
+	}
+	else{
+		return rCONTENT_ERROR_STREAM_ERROR;
+	}
 }
 
 rContentError rGeometryData::ReadHeaderFile(std::istream& stream, size_t vertexCount, size_t elementBufferCount){
@@ -327,5 +362,26 @@ rContentError rGeometryData::ReadHeaderFile(std::istream& stream, size_t vertexC
 }
 
 rContentError rGeometryData::ReadElementBufferData(std::istream& stream, size_t count){
+	size_t nameLength, elementCount;
+	rGeometryType type;
+	rCharBuffer charBuffer;
+	
+	for (size_t i = 0; i < count; i++){
+		stream.read((char*)&nameLength, 4);
+		charBuffer.resize(nameLength);
+		stream.read(&charBuffer[0], nameLength);
+		rString name(&charBuffer[0], nameLength);
+		
+		rElementBufferData* bufferData = CreateElementBuffer(name);
+		
+		stream.read((char*)&type, 4);
+		stream.read((char*)&elementCount, 4);
+		
+		bufferData->SetGeometryType(type);
+		bufferData->Allocate(elementCount);
+		
+		stream.read((char*)bufferData->GetElementData(), elementCount * 2);
+	}
+	
 	return rCONTENT_ERROR_NONE;
 }

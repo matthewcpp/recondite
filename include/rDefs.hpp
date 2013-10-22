@@ -14,6 +14,7 @@ typedef std::string rString;
 
 typedef std::vector<int> rIntArray;
 typedef std::vector<float> rFloatArray;
+typedef std::vector<char> rCharBuffer;
 typedef std::vector<unsigned char> rUnsigedByteArray;
 typedef std::vector<unsigned short> rUnsignedShortArray;
 

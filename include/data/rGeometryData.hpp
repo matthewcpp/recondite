@@ -3,6 +3,7 @@
 
 #include <map>
 #include <fstream>
+#include <cstring>
 
 #include "rTypes.hpp"
 #include "rDefs.hpp"
@@ -18,6 +19,7 @@ public:
 public:
 	
 	void SetElementData(unsigned short* elements, size_t elementCount, rGeometryType type);
+	void Allocate(size_t count);
 	
 	const unsigned short* GetElementData() const;
 	size_t ElementDataSize() const;
@@ -88,7 +90,7 @@ public:
 
 private:
 	
-	rContentError WriteHeaderFile(std::ostream& stream);
+	rContentError WriteFileHeader(std::ostream& stream);
 	rContentError ReadHeaderFile(std::istream& stream, size_t vertexCount, size_t elementBufferCount);
 
 	size_t VertexFloatSize() const;

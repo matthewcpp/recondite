@@ -44,7 +44,7 @@ void rFont::RemoveGlyph(int scancode){
 }
 
 size_t rFont::NumGlyphs() const{
-	m_glyphs.size();
+	return m_glyphs.size();
 }
 
 void rFont::Clear(){

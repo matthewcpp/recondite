@@ -89,4 +89,6 @@ int ruiAnalogStick::UpdateTouch(rEngine& engine){
 			}
 		}
 	}
+	
+	return 0;
 }

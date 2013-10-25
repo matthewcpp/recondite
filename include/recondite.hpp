@@ -34,7 +34,6 @@
 #include "rViewport.hpp"
 
 #include "rGraphicsDevice.hpp"
-#include "rGameTime.hpp"
 
 //content classes
 #include "rTexture2D.hpp"

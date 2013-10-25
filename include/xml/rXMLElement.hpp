@@ -5,7 +5,7 @@
 #include <sstream>
 
 #include "rTypes.hpp"
-#include "rXMLAttributeList.hpp"
+#include "xml/rXMLAttributeList.hpp"
 
 class rXMLElement;
 typedef std::vector<rXMLElement*> rXMLElementArray;

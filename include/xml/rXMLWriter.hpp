@@ -7,7 +7,7 @@
 #include <ostream>
 
 #include "rTypes.hpp"
-#include "rXMLAttributeList.hpp"
+#include "xml/rXMLAttributeList.hpp"
 
 
 class rXMLWriter{

@@ -7,7 +7,8 @@
 
 #include "rTypes.hpp"
 
-#include "rXMLReaderDelegate.hpp"
+#include "xml/rXMLReaderDelegate.hpp"
+#include "xml/rXMLAttributeList.hpp"
 
 #define rXML_SPACE ' '
 #define rXML_QUOTE '"'

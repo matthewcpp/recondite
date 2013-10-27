@@ -23,6 +23,21 @@ void rRenderer::RenderGeometry(rGeometry* geometry, const rMatrix4& transform, c
 	m_graphicsDevice->RenderGeometry(geometry, modelViewProjection, elementBufferName, material);
 }
 
+void rRenderer::RenderModel(const rModel* model, const rMatrix4& transform){
+	rMatrix4 modelViewProjection;
+	ComputeWorldSpaceTransformForObject(transform, modelViewProjection);
+
+	rGeometry* geometry = model->Geometry();
+	rArrayString meshNames;
+	model->GetMeshNames(meshNames);
+
+	for (size_t i = 0; i < meshNames.size(); i++){
+		rMesh* mesh = model->GetMesh(meshNames[i]);
+
+		m_graphicsDevice->RenderGeometry(geometry, modelViewProjection, mesh->buffer, mesh->material);
+	}
+}
+
 void rRenderer::ComputeWorldSpaceTransformForObject(const rMatrix4& object, rMatrix4& world){
 		if (m_activeViewport){
 			rMatrix4 view, projection;

@@ -33,6 +33,8 @@ public:
 
 	void RenderWireBox(const rAlignedBox3& box, const rColor color);
 
+	void RenderModel(const rModel* model, const rMatrix4& transform);
+
 private:
 	void ComputeWorldSpaceTransformForObject(const rMatrix4& object, rMatrix4& world);
 	

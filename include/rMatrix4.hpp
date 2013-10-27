@@ -38,6 +38,10 @@ struct rMatrix4{
 	
 	rVector4 GetTransformedVector4(const rVector4& v) const;
 	void TransformVector4(rVector4& v) const;
+	
+	void SetRotationX(float deg);
+	void SetRotationY(float deg);
+	void SetRotationZ(float deg);
 
 	rMatrix4& operator *=(float k);
 	rMatrix4 operator *(float k);

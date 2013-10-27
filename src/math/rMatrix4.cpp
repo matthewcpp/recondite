@@ -211,3 +211,32 @@ rMatrix4& rMatrix4::operator *=(const rMatrix4& b){
 	*this = *this * b;
 	return *this;
 }
+void rMatrix4::SetRotationX(float deg){
+	float theta = rMath::DegreeToRad(deg);
+
+	float cosTheta = std::cos(theta);
+	float sinTheta = std::sin(theta);
+
+	m[5] = cosTheta;	m[9] = -sinTheta;
+	m[6] = sinTheta;	m[10] = cosTheta;
+}
+
+void rMatrix4::SetRotationY(float deg){
+	float theta = rMath::DegreeToRad(deg);
+
+	float cosTheta = std::cos(theta);
+	float sinTheta = std::sin(theta);
+
+	m[0] = cosTheta;	m[8] = sinTheta;
+	m[2] = -sinTheta;	m[10] = cosTheta;
+}
+
+void rMatrix4::SetRotationZ(float deg){
+	float theta = rMath::DegreeToRad(deg);
+
+	float cosTheta = std::cos(theta);
+	float sinTheta = std::sin(theta);
+
+	m[0] = cosTheta;	m[4] = -sinTheta;
+	m[1] = sinTheta;	m[5] = cosTheta;
+}

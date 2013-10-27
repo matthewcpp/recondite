@@ -52,7 +52,7 @@ public:
 public:
 	void SetVertexData(float* vertexData, size_t vertexElementSize, size_t vertexCount, bool texCoords, bool normals);
 	size_t Allocate(size_t vertexElementSize, size_t vertexCount, bool texCoords, bool normals);
-	
+	void SetVertexDataInfo(size_t vertexElementSize, bool texCoords, bool normals);
 	const float* GetVertexData() const;
 	size_t VertexElementSize() const;
 	size_t VertexSizeInBytes() const;
@@ -69,6 +69,8 @@ public:
 	void SetVertex(size_t index, const rVector3& v, const rVector2& tc, const rVector3& n);
 	void SetVertex(size_t index, const rVector3& v, const rVector2& tc);
 	void SetVertex(size_t index, float x, float y, float z);
+
+	void Push(float x, float y, float z, float u, float v);
 	
 	size_t ElementBufferCount() const;
 	bool RemoveElementBuffer(const rString& name);

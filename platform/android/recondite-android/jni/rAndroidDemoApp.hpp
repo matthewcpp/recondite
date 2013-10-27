@@ -37,6 +37,8 @@ private:
 
 	ruiDPad* m_dpad;
 	ruiAnalogStick* m_analogStick;
+
+	float rot;
 };
 
 #endif

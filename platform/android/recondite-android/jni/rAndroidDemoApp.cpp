@@ -2,10 +2,12 @@
 
 rAndroidDemoApp::rAndroidDemoApp(){
 	m_frame = 0;
+	rot = 0;
 }
 
 void rAndroidDemoApp::Update(){
 	if (m_started){
+		rot += 1.0f;
 		m_dpad->Update(m_engine);
 		m_analogStick->Update(m_engine);
 
@@ -39,8 +41,6 @@ void rAndroidDemoApp::Draw(){
 		m_graphicsDevice->Clear();
 		m_renderer->Render(m_viewport);
 
-		DrawTextured();
-		DrawShaded();
 		DrawImmediate();
 
 		m_graphicsDevice->SwapBuffers();
@@ -53,14 +53,9 @@ bool rAndroidDemoApp::Init(android_app* state){
 
 	if (result){
 		rLog::Info("Init demo assets");
-		CreateGeometry();
-		CreateTextureMaterial();
-		CreateColoredShader("red_shaded", "255 0 0 255");
-		CreateColoredShader("green_shaded", "0 255 0 255");
-		CreateColoredShader("blue_shaded", "0 0 255 255");
 
 		m_contentManager->LoadFontFromPath("Consolas.rfnt", "consolas");
-		m_contentManager->LoadGeometryFromPath("box.rgeo", "wirebox");
+		m_contentManager->LoadModelFromAsset("box.rmdl", "test_box");
 
 		rController* controller = m_inputManager->CreateController(1,1,1,2);
 		m_dpad = new ruiDPad(controller->DPad(0), 100, rPoint(30, 300), rSize(300, 300));
@@ -70,90 +65,16 @@ bool rAndroidDemoApp::Init(android_app* state){
 	return result;
 }
 
-void rAndroidDemoApp::CreateColoredShader(const char* name, const char* value){
-    rMaterialData materialData;
-    materialData.SetShader("default_colored", "");
-    materialData.SetParameter( rMATERIAL_PARAMETER_COLOR , "fragColor", value);
-
-    m_contentManager->LoadMaterial(materialData, name);
-}
-
-void rAndroidDemoApp::CreateTextureMaterial(){
-	   unsigned char pixels[] = {
-		  128,   92,   61, // brown
-			191, 27,   224, // purple
-			0,   0, 255, // Blue
-		  255, 255,   0	// Yellow
-	   };
-
-
-	   rTexture2DData texture;
-	   texture.SetImageData(2,2,3,pixels);
-	   rTexture2D* t = m_contentManager->LoadTexture(texture, "texture");
-
-	   rMaterialData materialData;
-	   materialData.SetShader("default_textured", "");
-	   materialData.SetParameter( rMATERIAL_PARAMETER_TEXTURE2D , "s_texture", "texture");
-	   materialData.SetParameter( rMATERIAL_PARAMETER_COLOR , "fragColor", "255 255 255 255");
-
-	   m_contentManager->LoadMaterial(materialData, "test_tex");
-}
-
-void rAndroidDemoApp::CreateGeometry(){
-	float verts[] = { 	-0.5f,  0.5f, 0.0f,  // Position 0
-						-0.5f, -0.5f, 0.0f,  // Position 1
-						 0.5f, -0.5f, 0.0f,  // Position 2
-						 0.5f,  0.5f, 0.0f,  // Position 3
-					  };
-
-	float tex_verts[] = { 	-0.5f,  0.5f, 0.0f,  // Position 0
-	                         0.0f,  1.0f,        // TexCoord 0
-	                         -0.5f, -0.5f, 0.0f,  // Position 1
-	                         0.0f,  0.0f,        // TexCoord 1
-	                         0.5f, -0.5f, 0.0f,  // Position 2
-	                         1.0f,  0.0f,        // TexCoord 2
-	                         0.5f,  0.5f, 0.0f,  // Position 3
-	                         1.0f,  1.0f         // TexCoord 3
-	                      };
-
-	unsigned short elements[] = { 0, 1, 2, 0, 2, 3 };
-
-		rGeometryData data;
-		data.SetVertexData(verts, 3, 4, false, false);
-		data.CreateElementBuffer("rect",elements, 6, rGEOMETRY_TRIANGLES);
-		m_contentManager->LoadGeometry(data, "rect");
-
-		data.SetVertexData(tex_verts, 3, 4, true, false);
-		m_contentManager->LoadGeometry(data, "texture_rect");
-}
-
-void rAndroidDemoApp::DrawTextured(){
-	rMatrix4 matrix;
-	matrix.SetTranslate(-1.0f, 0.0f, 0.0f);
-	rGeometry* geometry = m_contentManager->GetGeometryAsset("texture_rect");
-	rMaterial* material = m_contentManager->GetMaterialAsset("test_tex");
-	m_renderer->RenderGeometry(geometry, matrix, "rect", material);
-}
-
-void rAndroidDemoApp::DrawShaded(){
-	rMatrix4 matrix;
-	matrix.SetTranslate(1.0f,0,0);
-	rGeometry* geometry = m_contentManager->GetGeometryAsset("rect");
-	rMaterial* material = (m_frame % 120 < 60) ?
-		m_contentManager->GetMaterialAsset("red_shaded") :
-		m_contentManager->GetMaterialAsset("green_shaded");
-
-	m_renderer->RenderGeometry(geometry, matrix, "rect", material);
-
-	rGeometry* wirebox = m_contentManager->GetGeometryAsset("wirebox");
-
-	if (wirebox){
-		matrix.SetTranslate(-2.0, 0.0, -3.0);
-		m_renderer->RenderGeometry(wirebox, matrix, "box", m_contentManager->GetMaterialAsset("blue_shaded"));
-	}
-}
-
 void rAndroidDemoApp::DrawImmediate(){
+	rModel* model = m_contentManager->GetModelAsset("test_box");
+
+
+	if (model){
+		rMatrix4 transform;
+		transform.SetRotationY(rot);
+		m_renderer->RenderModel(model, transform);
+	}
+
 	m_dpad->Draw(m_renderer);
 	m_analogStick->Draw(m_renderer);
 
@@ -165,8 +86,4 @@ void rAndroidDemoApp::DrawImmediate(){
 
 		m_renderer->RenderString("hello world", font, pos, color);
 	}
-
-	rColor bc(255,255,0,255);
-	rAlignedBox3 box(1,1,1,-1,-1,-1);
-	m_renderer->RenderWireBox(box, bc);
 }

@@ -36,8 +36,11 @@ void rXMLDocumentLoader::OnEndElement(const rString& elementName){
 
 void rXMLDocumentLoader::OnReadCharacters(const rString& data){
 	rXMLElement* currentElement = m_stack.top();
-	rString text = currentElement ->Text();
+	rString text = currentElement->Text();
 	
+	if (!text.empty())
+		text += ' ';
+		
 	text += data;
 	
 	currentElement->SetText(text);

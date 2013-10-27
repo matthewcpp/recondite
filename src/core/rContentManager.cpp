@@ -276,15 +276,24 @@ rMaterial* rContentManager::GetMaterialAsset(const rString& name) const{
 		return result->second;
 }
 
-rShader* rContentManager::GetOrLoadShader(const rString& shaderName, const rString& shaderPath){
-	rShader* shader = GetShaderAsset(shaderName);
+rShader* rContentManager::GetOrLoadShader(const rString& name, const rString& path){
+	rShader* shader = GetShaderAsset(name);
 	
 	if (!shader){
-		rShaderData shaderData(shaderPath);
-		shader = LoadShader(shaderData, shaderName);
+		shader = LoadShaderFromPath(path, name);
 	}
 	
 	return shader;
+}
+
+rGeometry* rContentManager::GetOrLoadGeometry(const rString& name, const rString& path){
+	rGeometry* geometry = GetGeometryAsset(name);
+
+	if (!geometry){
+		geometry = LoadGeometryFromPath(path, name);
+	}
+
+	return geometry;
 }
 
 rTexture2D* rContentManager::GetOrLoadTexture(const rString& textureName, const rString& texturePath){
@@ -343,6 +352,16 @@ bool rContentManager::LoadMaterialDependencies(const rMaterialData& materialData
 rMaterial* rContentManager::LoadMaterialFromPath(const rString& path, const rString& name){
 	rMaterialData materialData(path);
 	return LoadMaterial(materialData, name);
+}
+
+rMaterial* rContentManager::GetOrLoadMaterial(const rString& name, const rString& path){
+	rMaterial* material = GetMaterialAsset(name);
+
+	if (!material){
+		material = LoadMaterialFromPath(path, name);
+	}
+
+	return material;
 }
 
 rMaterial* rContentManager::LoadMaterial(const rMaterialData& materialData, const rString& name){
@@ -488,6 +507,12 @@ rGeometry* rContentManager::GetGeometryAsset(const rString& name) const{
 	return geometry;
 }
 
+rGeometry* rContentManager::LoadGeometryFromPath(const rString& path, const rString& name){
+	rGeometryData geometryData(path);
+
+	return LoadGeometry(geometryData, name);
+}
+
 rGeometry* rContentManager::LoadGeometry(const rGeometryData& geometryData, const rString& name){
 	rGeometry* geometry = NULL;
 
@@ -614,6 +639,66 @@ size_t rContentManager::NumFonts(){
 	return m_fonts.size();
 }
 
+rModel* rContentManager::GetModelAsset(const rString& name) const{
+	rModelMap::const_iterator result = m_models.find(name);
+
+	if (result == m_models.end()){
+		return NULL;
+	}
+	else{
+		return result->second;
+	}
+}
+
+rModel* rContentManager::LoadModel(rModelData& modelData, const rString& name){
+	if (m_models.count(name)){
+		m_error = rCONTENT_ERROR_ASSET_NAME_ALREADY_PRESENT;
+		return NULL;
+	}
+	else{
+		rGeometry* geometry = GetOrLoadGeometry(modelData.GetName(), modelData.GetName() + ".rgeo");
+
+		rModel* model = new rModel(geometry, GetNextAssetId(), name, "");
+		rArrayString meshNames;
+		modelData.GetMeshDataNames(meshNames);
+
+		for (size_t i =0; i < meshNames.size(); i++){
+			rMeshData* meshData = modelData.GetMeshData(meshNames[i]);
+			rMaterial* material = GetOrLoadMaterial(meshData->material, meshData->material + ".rmat");
+
+			model->CreateMesh(meshData->name, meshData->buffer, material);
+		}
+
+		m_models[name] = model;
+		m_error = rCONTENT_ERROR_NONE;
+		return model;
+	}
+}
+
+rModel* rContentManager::LoadModelFromPath(const rString& path, const rString& name){
+	rModelData modelData;
+	modelData.LoadFromFile(path);
+
+	return LoadModel(modelData, name);
+}
+
+rModel* rContentManager::GetOrLoadModel(const rString& name, const rString& path){
+	rModel* model = GetModelAsset(name);
+
+	if (!model){
+		model = LoadModelFromPath(path, name);
+	}
+
+	return model;
+}
+
+rContentError rContentManager::RemoveModelAsset(const rString& name){
+	return rCONTENT_ERROR_NONE;
+}
+
+size_t rContentManager::NumModels() const{
+	return m_models.size();
+}
 
 void rContentManager::NotifyBatchBegin(int total) {
 	for (rContentListenerItr it = m_listeners.begin(); it != m_listeners.end(); ++it)

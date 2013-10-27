@@ -89,6 +89,24 @@ rGeometry* rAndroidContentManager::LoadGeometryFromAsset(const rString& path, co
 	return geometry;
 }
 
+rModel* rAndroidContentManager::LoadModelFromPath(const rString& path, const rString& name){
+	return LoadModelFromAsset(path, name);
+}
+
+rModel* rAndroidContentManager::LoadModelFromAsset(const rString& path, const rString& name){
+	rAndroidAsset asset;
+	rModel* model;
+	m_error = OpenAsset(path, asset);
+
+	if (!m_error){
+		rModelData modelData;
+		modelData.LoadFromStream(*(asset.assetData));
+		model = LoadModel(modelData, name);
+	}
+
+	return model;
+}
+
 rContentError rAndroidContentManager::OpenAsset(const rString& path, rAndroidAsset& androidAsset){
 	AAsset* asset = AAssetManager_open(m_androidAssets, path.c_str(), AASSET_MODE_BUFFER);
 

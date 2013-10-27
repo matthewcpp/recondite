@@ -28,6 +28,9 @@
 #include "rFont.hpp"
 #include "data/rFontData.hpp"
 
+#include "rModel.hpp"
+#include "data/rModelData.hpp"
+
 #include "rContentListener.hpp"
 
 typedef std::list<rContentListener*> rContentListenerList;
@@ -51,13 +54,14 @@ public:
 	rShader* GetShaderAsset(const rString& name) const;
 	rShader* LoadShader(const rShaderData& shaderData, const rString& name);
 	virtual rShader* LoadShaderFromPath(const rString& path, const rString& name);
-	rShader* GetOrLoadShader(const rString& shaderName, const rString& shaderPath);
+	rShader* GetOrLoadShader(const rString& name, const rString& path);
 	rContentError RemoveShaderAsset(const rString& name);
 	size_t NumShaders() const;
 	
 public:
 	rMaterial* GetMaterialAsset(const rString& name) const;
 	rMaterial* LoadMaterial(const rMaterialData& materialData, const rString& name);
+	rMaterial* GetOrLoadMaterial(const rString& name, const rString& path);
 	virtual rMaterial* LoadMaterialFromPath(const rString& path, const rString& name);
 	rContentError RemoveMaterialAsset(const rString& name);
 	size_t NumMaterials() const;
@@ -65,6 +69,8 @@ public:
 public:
 	rGeometry* GetGeometryAsset(const rString& name) const;
 	rGeometry* LoadGeometry(const rGeometryData& geometryData, const rString& name);
+	rGeometry* GetOrLoadGeometry(const rString& name, const rString& path);
+	virtual rGeometry* LoadGeometryFromPath(const rString& path, const rString& name);
 	rContentError RemoveGeometryAsset(const rString& name);
 	size_t NumGeometry() const;
 	
@@ -73,6 +79,14 @@ public:
 	rFont* LoadFont(const rFontData& fontData, const rString& name);
 	rContentError RemoveFontAsset(const rString& name);
 	size_t NumFonts();
+
+public:
+	rModel* GetModelAsset(const rString& name) const;
+	rModel* LoadModel(rModelData& modelData, const rString& name);
+	rContentError RemoveModelAsset(const rString& name);
+	virtual rModel* LoadModelFromPath(const rString& path, const rString& name);
+	rModel* GetOrLoadModel(const rString& name, const rString& path);
+	size_t NumModels() const;
 
 public:
 	virtual rContentError LoadAssetManifestFromPath(const rString& path);
@@ -112,6 +126,7 @@ protected:
 	rMaterialMap m_materials;
 	rGeometryMap m_geometry;
 	rFontMap m_fonts;
+	rModelMap m_models;
 	
 	int GetNextAssetId();
 	

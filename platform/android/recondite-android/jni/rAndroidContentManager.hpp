@@ -9,11 +9,7 @@
 #include "rLog.hpp"
 
 #include "rContentManager.hpp"
-#include "rTexture2D.hpp"
 #include  "rOpenGLGraphicsDevice.hpp"
-
-#include "rFont.hpp"
-#include "data/rFontData.hpp"
 
 #include "android/asset_manager.h"
 
@@ -40,6 +36,9 @@ public:
 
 	virtual rGeometry* LoadGeometryFromPath(const rString& path, const rString& name);
 	rGeometry* LoadGeometryFromAsset(const rString& path, const rString& name);
+
+	virtual rModel* LoadModelFromPath(const rString& path, const rString& name);
+	rModel* LoadModelFromAsset(const rString& path, const rString& name);
 
 	void InitDefaultAssets();
 private:

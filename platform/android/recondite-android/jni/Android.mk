@@ -75,6 +75,7 @@ LOCAL_SRC_FILES += ../../../../src/asset/rShader.cpp
 LOCAL_SRC_FILES += ../../../../src/asset/rGeometry.cpp
 LOCAL_SRC_FILES += ../../../../src/asset/rFontGlyph.cpp
 LOCAL_SRC_FILES += ../../../../src/asset/rFont.cpp
+LOCAL_SRC_FILES += ../../../../src/asset/rModel.cpp
 
 LOCAL_SRC_FILES += ../../../../src/xml/rXMLDocument.cpp
 LOCAL_SRC_FILES += ../../../../src/xml/rXMLDocumentLoader.cpp
@@ -87,6 +88,7 @@ LOCAL_SRC_FILES += ../../../../src/data/rTexture2DData.cpp
 LOCAL_SRC_FILES += ../../../../src/data/rMaterialData.cpp
 LOCAL_SRC_FILES += ../../../../src/data/rShaderData.cpp
 LOCAL_SRC_FILES += ../../../../src/data/rGeometryData.cpp
+LOCAL_SRC_FILES += ../../../../src/data/rModelData.cpp
 LOCAL_SRC_FILES += ../../../../src/data/rFontData.cpp
 LOCAL_SRC_FILES += ../../../../src/data/rAssetManifestData.cpp
 

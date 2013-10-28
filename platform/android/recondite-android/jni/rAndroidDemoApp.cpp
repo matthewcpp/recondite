@@ -60,12 +60,15 @@ bool rAndroidDemoApp::Init(android_app* state){
 		rController* controller = m_inputManager->CreateController(1,1,1,2);
 		m_dpad = new ruiDPad(controller->DPad(0), 100, rPoint(30, 300), rSize(300, 300));
 		m_analogStick = new ruiAnalogStick(controller, 0, 101, rPoint(700, 300), rSize(300, 300));
+
+		m_viewport.SetClipping(1,1000);
 	}
 
 	return result;
 }
 
 void rAndroidDemoApp::DrawImmediate(){
+	m_graphicsDevice->EnableDepthTesting(true);
 	rModel* model = m_contentManager->GetModelAsset("test_box");
 
 
@@ -74,6 +77,8 @@ void rAndroidDemoApp::DrawImmediate(){
 		transform.SetRotationY(rot);
 		m_renderer->RenderModel(model, transform);
 	}
+
+	m_graphicsDevice->EnableDepthTesting(false);
 
 	m_dpad->Draw(m_renderer);
 	m_analogStick->Draw(m_renderer);

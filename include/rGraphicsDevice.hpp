@@ -28,6 +28,8 @@ public:
 	virtual void SetClearColor(float r, float g, float b, float a) = 0;
 	virtual void Clear()  = 0;
 	
+	virtual void EnableDepthTesting(bool enable) = 0;
+
 	virtual unsigned int CreateTexture(int width, int height, int bpp , const unsigned char* data) = 0;
 	virtual void UnregisterTexture(int textureID) = 0;
 	

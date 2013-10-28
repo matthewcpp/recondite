@@ -11,6 +11,9 @@ bool rOpenGLGraphicsDevice::IsInit() const {
 
 bool rOpenGLGraphicsDevice::Init(){
 	SetClearColor(0,0,0,1);
+	
+	glEnable(GL_DEPTH_TEST);
+
 	m_isInit = true;
     return m_isInit;
 }
@@ -21,6 +24,15 @@ void rOpenGLGraphicsDevice::DeleteShaderProgram(unsigned int shaderId){
 
 void rOpenGLGraphicsDevice::Clear(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void rOpenGLGraphicsDevice::EnableDepthTesting(bool enable){
+	if (enable){
+		glEnable(GL_DEPTH_TEST);
+	}
+	else{
+		glDisable(GL_DEPTH_TEST);
+	}
 }
 
 void rOpenGLGraphicsDevice::SetClearColor(const rColor& color){

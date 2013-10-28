@@ -47,6 +47,8 @@ public:
 	virtual void SetClearColor(float r, float g, float b, float a);
 	virtual void Clear();
 	
+	virtual void EnableDepthTesting(bool enable);
+
 	virtual unsigned int CreateTexture(int width, int height, int bpp , const unsigned char* data);
 	virtual void UnregisterTexture(int textureID);
 	

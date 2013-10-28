@@ -5,7 +5,7 @@ rViewport::rViewport(rViewportType type){
 	m_camera = NULL;
 	
 	m_rect.Set(0,0,0,0);
-	SetClipping(1.0, 100.0f);
+	SetClipping(1.0f, 100.0f);
 }
 
 void rViewport::SetNearClip(float nearClip){
@@ -25,8 +25,8 @@ float rViewport::FarClip() const{
 }
 
 void rViewport::SetClipping(float near, float far){
-	m_farClip = near;
-	m_nearClip = far;
+	m_farClip = far;
+	m_nearClip = near;
 }
 
 int rViewport::GetSelectionRay(const rPoint& pos , rRay3& selectionRay) const{

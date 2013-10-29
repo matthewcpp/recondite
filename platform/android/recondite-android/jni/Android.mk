@@ -67,6 +67,7 @@ LOCAL_SRC_FILES += ../../../../src/core/rContentManager.cpp
 LOCAL_SRC_FILES += ../../../../src/core/rInputManager.cpp
 LOCAL_SRC_FILES += ../../../../src/core/rRenderer.cpp
 LOCAL_SRC_FILES += ../../../../src/core/rLog.cpp
+LOCAL_SRC_FILES += ../../../../src/core/rPath.cpp
 
 LOCAL_SRC_FILES += ../../../../src/asset/rAsset.cpp
 LOCAL_SRC_FILES += ../../../../src/asset/rMaterial.cpp

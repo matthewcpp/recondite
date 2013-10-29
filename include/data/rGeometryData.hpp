@@ -66,7 +66,7 @@ public:
 	void SetVertex(size_t index, float x, float y);
 	void SetVertex(size_t index, const rVector2& v);
 	void SetVertex(size_t index, float x, float y, float u, float v);
-	void SetVertex(size_t index, const rVector3& v, const rVector2& tc, const rVector3& n);
+	void SetVertex(size_t index, const rVector3& v, const rVector3& n, const rVector2& tc);
 	void SetVertex(size_t index, const rVector3& v, const rVector2& tc);
 	void SetVertex(size_t index, float x, float y, float z);
 

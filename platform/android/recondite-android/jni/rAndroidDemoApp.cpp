@@ -55,7 +55,7 @@ bool rAndroidDemoApp::Init(android_app* state){
 		rLog::Info("Init demo assets");
 
 		m_contentManager->LoadFontFromPath("Consolas.rfnt", "consolas");
-		m_contentManager->LoadModelFromAsset("box.rmdl", "test_box");
+		m_contentManager->LoadModelFromAsset("turtle.rmdl", "turtle");
 
 		rController* controller = m_inputManager->CreateController(1,1,1,2);
 		m_dpad = new ruiDPad(controller->DPad(0), 100, rPoint(30, 300), rSize(300, 300));
@@ -69,11 +69,12 @@ bool rAndroidDemoApp::Init(android_app* state){
 
 void rAndroidDemoApp::DrawImmediate(){
 	m_graphicsDevice->EnableDepthTesting(true);
-	rModel* model = m_contentManager->GetModelAsset("test_box");
+	rModel* model = m_contentManager->GetModelAsset("turtle");
 
 
 	if (model){
 		rMatrix4 transform;
+		transform.SetTranslate(0,-1,0);
 		transform.SetRotationY(rot);
 		m_renderer->RenderModel(model, transform);
 	}
@@ -81,7 +82,7 @@ void rAndroidDemoApp::DrawImmediate(){
 	m_graphicsDevice->EnableDepthTesting(false);
 
 	m_dpad->Draw(m_renderer);
-	m_analogStick->Draw(m_renderer);
+	//m_analogStick->Draw(m_renderer);
 
 	rFont* font = m_contentManager->GetFontAsset("consolas");
 
@@ -89,6 +90,6 @@ void rAndroidDemoApp::DrawImmediate(){
 		rPoint pos(300,300);
 		rColor color(233,48,159,255);
 
-		m_renderer->RenderString("hello world", font, pos, color);
+		m_renderer->RenderString("i like turtles", font, pos, color);
 	}
 }

@@ -73,6 +73,7 @@ protected:
 	GLenum GLGeometryType(rGeometryType type) const;
 
 	GLsizei GetVertexStrideForGeometry(size_t vertexSize, bool texCoords, bool normals) const;
+	GLsizei GetTexCoordStrideForGeometry(size_t vertexSize, bool normals) const;
 	
 	bool m_isInit;
 	rString m_lastError;

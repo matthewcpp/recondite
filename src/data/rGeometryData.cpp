@@ -98,7 +98,7 @@ size_t rGeometryData::Allocate(size_t vertexElementSize, size_t vertexCount, boo
 }
 
 void rGeometryData::SetVertex(size_t index, const rVector3& v, const rVector3& n, const rVector2& tc){
-	size_t i = VertexElementSize() * index;
+	size_t i = 8 * index;
 
 	memcpy(&m_vertexData[i], &v, 12);
 	memcpy(&m_vertexData[i + 3], &n, 12);
@@ -107,7 +107,7 @@ void rGeometryData::SetVertex(size_t index, const rVector3& v, const rVector3& n
 }
 
 void rGeometryData::SetVertex(size_t index, const rVector3& v, const rVector2& tc){
-	size_t i = VertexElementSize() * index;
+	size_t i = 5 * index;
 
 	memcpy(&m_vertexData[i], &v, 12);
 	memcpy(&m_vertexData[i + 3], &tc, 8);

@@ -9,18 +9,33 @@ rSkeleton::~rSkeleton(){
 }
 
 rBone* rSkeleton::CreateBone(const rString& name){
-	if (m_bones.count(name)){
+	int boneId = m_bones.size();
+
+	return CreateBone(boneId, name);
+}
+
+rBone* rSkeleton::CreateBone(int id, const rString& name){
+	if (m_bones.count(id)){
 		return NULL;
 	}
 	else{
-		rBone* bone = new rBone(name);
-		m_bones[name] = bone;
+		rBone* bone = new rBone(id, name);
+		m_bones[id] = bone;
 		return bone;
 	}
 }
 
 rBone* rSkeleton::GetBone(const rString& name) const{
-	rBoneMap::const_iterator result = m_bones.find(name);
+	for (rBoneMap::const_iterator it = m_bones.begin(); it != m_bones.end(); ++it){
+		if (it->second->name == name)
+			return it->second;
+	}
+
+	return NULL;
+}
+
+rBone* rSkeleton::GetBone(int id) const{
+	rBoneMap::const_iterator result = m_bones.find(id);
 
 	if (result == m_bones.end()){
 		return NULL;
@@ -28,13 +43,6 @@ rBone* rSkeleton::GetBone(const rString& name) const{
 	else{
 		return result->second;
 	}
-}
-
-void rSkeleton::GetBoneNames(rArrayString& names) const{
-	names.clear();
-
-	for (rBoneMap::const_iterator it = m_bones.begin(); it != m_bones.end(); ++it)
-		names.push_back(it->first);
 }
 
 void rSkeleton::GetTopLevelBones(rBoneArray& bones) const{
@@ -59,7 +67,8 @@ size_t rSkeleton::NumBones() const{
 
 //--------------
 
-rBone::rBone(const rString& n){
+rBone::rBone(int ID, const rString& n){
+	id = ID;
 	name = n;
 	parent = NULL;
 	position = rVector3::ZeroVector;

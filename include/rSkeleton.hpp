@@ -16,11 +16,16 @@ typedef std::vector<rBone*> rBoneArray;
 struct rBone{
 public:
 	rBone(){}
-	rBone(const rString& n);
+	rBone(int ID, const rString& n);
+
+public:
 
 	void AddChild(rBone* bone);
 	rVector3 WoldPosition() const;
 
+public:
+
+	int id;
 	rBone* parent;
 	rString name;
 	rVector3 position;
@@ -28,7 +33,7 @@ public:
 	rBoneArray children;
 };
 
-typedef std::map<rString, rBone*> rBoneMap;
+typedef std::map<int, rBone*> rBoneMap;
 
 class rSkeleton {
 public:
@@ -38,9 +43,13 @@ public:
 public:
 
 	rBone* CreateBone(const rString& name);
+	rBone* CreateBone(int id, const rString& name);
+
 	rBone* GetBone(const rString& name) const;
-	void GetBoneNames(rArrayString& names) const;
+	rBone* GetBone(int id) const;
+
 	void GetTopLevelBones(rBoneArray& bones) const;
+
 	size_t NumBones() const;
 
 	void Clear();

@@ -49,18 +49,19 @@ void rSkeletonData::WriteHeader(std::ostream& stream, const rSkeleton& skeleton)
 }
 
 void rSkeletonData::WriteBones(std::ostream& stream, const rSkeleton& skeleton){
-	rArrayString boneNames;
 	rBoneArray hierarchy;
-	skeleton.GetBoneNames(boneNames);
 
 	size_t nameLen;
 	rBone* bone = NULL;
-	for (size_t i = 0; i < boneNames.size(); i++){
-		bone = skeleton.GetBone(boneNames[i]);
+	for (size_t i = 0; i <skeleton.NumBones(); i++){
+		bone = skeleton.GetBone(i);
+
+		stream.write((char*)&bone->id, 4);
 
 		nameLen = bone->name.length();
 		stream.write((char*)&nameLen, 4);
 		stream.write(bone->name.c_str(), nameLen);
+
 		stream.write((char*)&bone->position, 12);
 
 		if (bone->parent)
@@ -73,13 +74,8 @@ void rSkeletonData::WriteBones(std::ostream& stream, const rSkeleton& skeleton){
 	for (size_t i = 0; i < hierarchy.size(); i++){
 		bone = hierarchy[i];
 		
-		nameLen = bone->name.length();
-		stream.write((char*)&nameLen, 4);
-		stream.write(bone->name.c_str(), nameLen);
-
-		nameLen = bone->parent->name.length();
-		stream.write((char*)&nameLen, 4);
-		stream.write(bone->parent->name.c_str(), nameLen);
+		stream.write((char*)&bone->id, 4);
+		stream.write((char*)&bone->parent->id, 4);
 	}
 }
 
@@ -92,31 +88,29 @@ void rSkeletonData::ReadHeader(std::istream& stream, rSkeleton& skeleton){
 
 void rSkeletonData::ReadBones(std::istream& stream, rSkeleton& skeleton){
 	char buffer[1024];
+	int id,parentId;
 	size_t nameLen, hierarchyCount;
 	rString name, parent;
 	
 	for (size_t i = 0; i < boneCount; i++){
+		stream.read((char*)&id, 4);
+
 		stream.read((char*)&nameLen, 4);
 		stream.read((char*)&buffer, nameLen);
 		name.assign(buffer, nameLen);
 
-		rBone* bone = skeleton.CreateBone(name);
+		rBone* bone = skeleton.CreateBone(id, name);
 		stream.read((char*)&bone->position, 12);
 	}
 
 	stream.read((char*)&hierarchyCount, 4);
 
 	for (size_t i =0; i < hierarchyCount; i++){
-		stream.read((char*)&nameLen, 4);
-		stream.read((char*)&buffer, nameLen);
-		name.assign(buffer, nameLen);
+		stream.read((char*)&id, 4);
+		stream.read((char*)&parentId, 4);
 
-		stream.read((char*)&nameLen, 4);
-		stream.read((char*)&buffer, nameLen);
-		parent.assign(buffer, nameLen);
-
-		rBone* bone = skeleton.GetBone(name);
-		rBone* parentBone = skeleton.GetBone(parent);
+		rBone* bone = skeleton.GetBone(id);
+		rBone* parentBone = skeleton.GetBone(parentId);
 
 		if (bone && parentBone)
 			parentBone->AddChild(bone);

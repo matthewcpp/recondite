@@ -15,6 +15,7 @@ typedef std::vector<rBone*> rBoneArray;
 
 struct rBone{
 public:
+	rBone(){}
 	rBone(const rString& n);
 
 	void AddChild(rBone* bone);
@@ -37,8 +38,8 @@ public:
 
 	rBone* CreateBone(const rString& name);
 	rBone* GetBone(const rString& name) const;
-	rBone* GetRootBone() const;
-	rBone* SetRootBone(const rString& name);
+	void GetBoneNames(rArrayString& names) const;
+	void GetTopLevelBones(rBoneArray& bones) const;
 	size_t NumBones() const;
 
 	void Clear();

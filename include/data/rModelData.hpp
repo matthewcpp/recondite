@@ -10,6 +10,7 @@
 #include "data/rTexture2DData.hpp"
 #include "data/rMaterialData.hpp"
 #include "data/rGeometryData.hpp"
+#include "data/rSkeletonData.hpp"
 
 #include "rSkeleton.hpp"
 

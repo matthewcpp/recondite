@@ -185,6 +185,11 @@ rContentError rModelData::WriteDependencies(const rString& dir){
 		it->second->WriteToPath(rPath::Assemble(dir, it->first, "rmat"));
 	}
 
+	if (m_skeleton){
+		rSkeletonData skeletonData;
+		skeletonData.WriteToFile(rPath::Assemble(dir, m_name, "rskl"), *m_skeleton);
+	}
+
 	return rCONTENT_ERROR_NONE;
 }
 

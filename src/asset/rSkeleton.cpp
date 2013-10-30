@@ -30,16 +30,20 @@ rBone* rSkeleton::GetBone(const rString& name) const{
 	}
 }
 
-rBone* rSkeleton::GetRootBone() const{
-	return m_rootBone;
+void rSkeleton::GetBoneNames(rArrayString& names) const{
+	names.clear();
+
+	for (rBoneMap::const_iterator it = m_bones.begin(); it != m_bones.end(); ++it)
+		names.push_back(it->first);
 }
 
-rBone* rSkeleton::SetRootBone(const rString& name){
-	rBone* root = GetBone(name);
+void rSkeleton::GetTopLevelBones(rBoneArray& bones) const{
+	bones.clear();
 
-	m_rootBone = root;
-
-	return m_rootBone;
+	for (rBoneMap::const_iterator it = m_bones.begin(); it != m_bones.end(); ++it){
+		if (!it->second->parent)
+			bones.push_back(it->second);
+	}
 }
 
 void rSkeleton::Clear(){

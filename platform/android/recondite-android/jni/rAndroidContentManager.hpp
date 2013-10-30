@@ -40,6 +40,9 @@ public:
 	virtual rModel* LoadModelFromPath(const rString& path, const rString& name);
 	rModel* LoadModelFromAsset(const rString& path, const rString& name);
 
+	virtual rSkeleton* LoadSkeletonFromPath(const rString& path, const rString& name);
+	rSkeleton* LoadSkeletonFromAsset(const rString& path, const rString& name);
+
 	void InitDefaultAssets();
 private:
 

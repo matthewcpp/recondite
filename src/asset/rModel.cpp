@@ -4,6 +4,7 @@ rModel::rModel(rGeometry* geometry, int assetid, const rString& name, const rStr
 :rAsset(assetid, name, path)
 {
 	m_geometry = geometry;
+	m_skeleton = NULL;
 }
 
 rModel::~rModel(){
@@ -61,6 +62,14 @@ void rModel::GetMeshNames(rArrayString& meshNames) const{
 	
 	for (rMeshMap::const_iterator it = m_meshes.begin(); it != m_meshes.end(); ++it)
 		meshNames.push_back(it->first);
+}
+
+rSkeleton* rModel::Skeleton() const{
+	return m_skeleton;
+}
+
+void rModel::SetSkeleton(rSkeleton* skeleton){
+	m_skeleton = skeleton;
 }
 
 //-----------------------

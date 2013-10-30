@@ -186,3 +186,44 @@ void rRenderer::RenderString(const rString& text, const rFont* font, const rPoin
 		m_graphicsDevice->RenderImmediate(geometry, transform, "immediate", material);
 	}
 }
+
+void BuildBoneGeometry(rGeometryData& geometryData, rBone* bone, unsigned short parentVertexIndex){
+	size_t vertexIndex = geometryData.Push(bone->WoldPosition());
+
+	geometryData.GetElementBuffer("skeleton_points")->Push(vertexIndex);
+
+	if (parentVertexIndex != USHRT_MAX){
+		geometryData.GetElementBuffer("skeleton_wire")->Push(parentVertexIndex, vertexIndex);
+	}
+
+	for (size_t i = 0; i < bone->children.size(); i++){
+		BuildBoneGeometry(geometryData, bone->children[i], vertexIndex);
+	}
+}
+
+void rRenderer::RenderSkeleton(const rSkeleton* skeleton, const rMatrix4& transform, const rColor& color){
+	if (skeleton){
+		rBoneArray bones;
+		skeleton->GetTopLevelBones(bones);
+
+		rGeometryData geometryData;
+		geometryData.SetVertexDataInfo(3,false,false);
+
+		geometryData.CreateElementBuffer("skeleton_wire")->SetGeometryType(rGEOMETRY_LINES);
+		geometryData.CreateElementBuffer("skeleton_points")->SetGeometryType(rGEOMETRY_POINTS);
+
+		for (size_t i = 0; i < bones.size(); i++){
+			BuildBoneGeometry(geometryData, bones[i], USHRT_MAX);
+		}
+
+		rMatrix4 modelViewProjection;
+		if (m_activeViewport){
+			ComputeWorldSpaceTransformForObject(transform, modelViewProjection);
+		}
+
+		rMaterial* material = m_contentManager->GetMaterialAsset("immediate_color");
+		material->SetColor("fragColor",color);
+
+		m_graphicsDevice->RenderImmediate(geometryData, modelViewProjection, "skeleton_wire", material);
+	}
+}

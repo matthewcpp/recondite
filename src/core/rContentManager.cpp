@@ -669,6 +669,10 @@ rModel* rContentManager::LoadModel(rModelData& modelData, const rString& name){
 			model->CreateMesh(meshData->name, meshData->buffer, material);
 		}
 
+		rSkeleton* skeleton= GetOrLoadSkeleton(name, name+".rskl");
+		if (skeleton)
+			model->SetSkeleton(skeleton);
+
 		m_models[name] = model;
 		m_error = rCONTENT_ERROR_NONE;
 		return model;
@@ -698,6 +702,51 @@ rContentError rContentManager::RemoveModelAsset(const rString& name){
 
 size_t rContentManager::NumModels() const{
 	return m_models.size();
+}
+
+rSkeleton* rContentManager::GetSkeletonAsset(const rString& name) const{
+	rSkeleton* skeleton = NULL;
+
+	rSkeletonMap::const_iterator result = m_skeletons.find(name);
+
+	if (result != m_skeletons.end())
+		skeleton = result->second;
+
+	return skeleton;
+}
+
+rSkeleton* rContentManager::LoadSkeletonFromPath(const rString& path, const rString& name){
+	rSkeleton* skeleton = new rSkeleton();
+	rSkeletonData skeletonData;
+	int error = skeletonData.ReadFromFile(path, *skeleton);
+
+	if (error){
+		delete skeleton;
+		skeleton = NULL;
+	}
+	else{
+		m_skeletons[name] = skeleton;
+	}
+
+	return skeleton;
+}
+
+rSkeleton* rContentManager::GetOrLoadSkeleton(const rString& name, const rString& path){
+	rSkeleton* skeleton = GetSkeletonAsset(name);
+
+	if (!skeleton){
+		skeleton = LoadSkeletonFromPath(path, name);
+	}
+
+	return skeleton;
+}
+
+rContentError rContentManager::RemoveSkeletonAsset(const rString& name){
+	return rCONTENT_ERROR_NONE;
+}
+
+size_t rContentManager::NumSkeletons(){
+	return m_skeletons.size();
 }
 
 void rContentManager::NotifyBatchBegin(int total) {

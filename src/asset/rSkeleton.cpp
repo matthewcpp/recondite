@@ -70,3 +70,15 @@ void rBone::AddChild(rBone* bone){
 	children.push_back(bone);
 }
 
+rVector3 rBone::WoldPosition() const{
+	rVector3 worldPos = position;
+
+	rBone* parentBone = parent;
+	while (parentBone){
+		worldPos += parentBone->position;
+		parentBone = parentBone->parent;
+	}
+
+	return worldPos;
+}
+

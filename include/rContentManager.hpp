@@ -31,6 +31,9 @@
 #include "rModel.hpp"
 #include "data/rModelData.hpp"
 
+#include "rSkeleton.hpp"
+#include "data/rSkeletonData.hpp"
+
 #include "rContentListener.hpp"
 
 typedef std::list<rContentListener*> rContentListenerList;
@@ -89,6 +92,13 @@ public:
 	size_t NumModels() const;
 
 public:
+	rSkeleton* GetSkeletonAsset(const rString& name) const;
+	virtual rSkeleton* LoadSkeletonFromPath(const rString& path, const rString& name);
+	rSkeleton* GetOrLoadSkeleton(const rString& name, const rString& path);
+	rContentError RemoveSkeletonAsset(const rString& name);
+	size_t NumSkeletons();
+
+public:
 	virtual rContentError LoadAssetManifestFromPath(const rString& path);
 	rContentError LoadAssetManifestFromStream(std::istream& stream);
 	void UnloadAssets();
@@ -127,6 +137,7 @@ protected:
 	rGeometryMap m_geometry;
 	rFontMap m_fonts;
 	rModelMap m_models;
+	rSkeletonMap m_skeletons;
 	
 	int GetNextAssetId();
 	

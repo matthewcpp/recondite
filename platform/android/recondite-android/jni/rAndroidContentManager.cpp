@@ -107,6 +107,25 @@ rModel* rAndroidContentManager::LoadModelFromAsset(const rString& path, const rS
 	return model;
 }
 
+rSkeleton* rAndroidContentManager::LoadSkeletonFromPath(const rString& path, const rString& name){
+	return LoadSkeletonFromAsset(path, name);
+}
+
+rSkeleton* rAndroidContentManager::LoadSkeletonFromAsset(const rString& path, const rString& name){
+	rAndroidAsset asset;
+	rSkeleton* skeleton = NULL;
+	m_error = OpenAsset(path, asset);
+
+	if (!m_error){
+		skeleton = new rSkeleton();
+		rSkeletonData skeletonData;
+		skeletonData.ReadFromStream(*(asset.assetData), *skeleton);
+		m_skeletons[name] = skeleton;
+	}
+
+	return skeleton;
+}
+
 rContentError rAndroidContentManager::OpenAsset(const rString& path, rAndroidAsset& androidAsset){
 	AAsset* asset = AAssetManager_open(m_androidAssets, path.c_str(), AASSET_MODE_BUFFER);
 

@@ -1,6 +1,8 @@
 #ifndef R_RENDERER_HPP
 #define R_RENDERER_HPP
 
+#include <climits>
+
 #include "rDefs.hpp"
 #include "rTypes.hpp"
 
@@ -14,6 +16,8 @@
 
 #include "rCircle2.hpp"
 #include "rAlignedBox3.hpp"
+
+#include "rSkeleton.hpp"
 
 class rRenderer {
 public:
@@ -34,6 +38,8 @@ public:
 	void RenderWireBox(const rAlignedBox3& box, const rColor color);
 
 	void RenderModel(const rModel* model, const rMatrix4& transform);
+
+	void RenderSkeleton(const rSkeleton* skeleton, const rMatrix4& transform, const rColor& color);
 
 private:
 	void ComputeWorldSpaceTransformForObject(const rMatrix4& object, rMatrix4& world);

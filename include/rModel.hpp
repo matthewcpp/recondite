@@ -9,6 +9,7 @@
 #include "rAsset.hpp"
 #include "rGeometry.hpp"
 #include "rMaterial.hpp"
+#include "rSkeleton.hpp"
 
 struct rMesh {
 	rMesh(const rString& n, const rString& buf, rMaterial* mat);
@@ -36,11 +37,16 @@ public:
 	size_t NumMeshes() const;
 	void Clear();
 	
+	rSkeleton* Skeleton() const;
+	void SetSkeleton(rSkeleton* skeleton);
+
 	virtual rAssetType Type() const;
 	
 private:
 	rMeshMap m_meshes;
 	rGeometry* m_geometry;
+
+	rSkeleton* m_skeleton;
 };
 
 typedef std::map<rString, rModel*> rModelMap;

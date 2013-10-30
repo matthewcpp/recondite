@@ -19,6 +19,7 @@ public:
 	rBone(const rString& n);
 
 	void AddChild(rBone* bone);
+	rVector3 WoldPosition() const;
 
 	rBone* parent;
 	rString name;
@@ -48,5 +49,7 @@ private:
 	rBoneMap m_bones;
 	rBone* m_rootBone;
 };
+
+typedef std::map<rString, rSkeleton*> rSkeletonMap;
 
 #endif

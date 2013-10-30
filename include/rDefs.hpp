@@ -78,6 +78,7 @@ enum rMaterialParameterType{
 enum rGeometryType{
 	rGEOMETRY_TRIANGLES,
 	rGEOMETRY_LINES,
+	rGEOMETRY_POINTS
 };
 
 #endif

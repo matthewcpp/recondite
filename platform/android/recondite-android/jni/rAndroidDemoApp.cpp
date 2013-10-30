@@ -71,15 +71,22 @@ void rAndroidDemoApp::DrawImmediate(){
 	m_graphicsDevice->EnableDepthTesting(true);
 	rModel* model = m_contentManager->GetModelAsset("turtle");
 
+	rMatrix4 transform;
+	transform.SetTranslate(0,-1,0);
+	transform.SetRotationY(rot);
 
 	if (model){
-		rMatrix4 transform;
-		transform.SetTranslate(0,-1,0);
-		transform.SetRotationY(rot);
 		m_renderer->RenderModel(model, transform);
 	}
 
 	m_graphicsDevice->EnableDepthTesting(false);
+
+
+	if (model){
+		rColor skeletonColor(255,255,255,255);
+		m_renderer->RenderSkeleton(model->Skeleton(), transform, skeletonColor);
+	}
+
 
 	m_dpad->Draw(m_renderer);
 	//m_analogStick->Draw(m_renderer);

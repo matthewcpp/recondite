@@ -25,6 +25,7 @@ public:
 	size_t ElementDataSize() const;
 	size_t ElementCount() const;
 	
+	void Push(unsigned short v1);
 	void Push(unsigned short v1, unsigned short v2);
 	void Push(unsigned short v1, unsigned short v2, unsigned short v3);
 	
@@ -70,7 +71,8 @@ public:
 	void SetVertex(size_t index, const rVector3& v, const rVector2& tc);
 	void SetVertex(size_t index, float x, float y, float z);
 
-	void Push(float x, float y, float z, float u, float v);
+	size_t Push(float x, float y, float z, float u, float v);
+	size_t Push(const rVector3& v);
 	
 	size_t ElementBufferCount() const;
 	bool RemoveElementBuffer(const rString& name);

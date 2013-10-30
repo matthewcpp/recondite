@@ -11,7 +11,11 @@
 #include "data/rMaterialData.hpp"
 #include "data/rGeometryData.hpp"
 
+#include "rSkeleton.hpp"
+
 #include "xml/rXMLDocument.hpp"
+
+#include "rPath.hpp"
 
 struct rMeshData{
 	rMeshData(){}
@@ -54,6 +58,9 @@ public:
 	
 	rGeometryData& GetGeometryData();
 
+	rSkeleton* GetSkeleton() const;
+	rSkeleton* CreateSkeleton();
+
 	void SetName(const rString& name);
 	rString GetName() const;
 
@@ -69,6 +76,8 @@ private:
 	rMaterialDataMap m_materials;
 	rTexture2DDataMap m_textures;
 	rGeometryData m_geometry;
+
+	rSkeleton* m_skeleton;
 
 	rString m_name;
 };

@@ -1,6 +1,7 @@
 #include "data/rModelData.hpp"
 
 rModelData::rModelData(){
+	m_skeleton = NULL;
 }
 
 rModelData::~rModelData(){
@@ -21,6 +22,11 @@ void rModelData::Clear(){
 	m_meshes.clear();
 	m_materials.clear();
 	m_textures.clear();
+
+	if (m_skeleton){
+		delete m_skeleton;
+		m_skeleton = NULL;
+	}
 }
 
 size_t rModelData::MeshCount() const{
@@ -169,16 +175,16 @@ rContentError rModelData::LoadFromFile(const rString& path){
 }
 
 rContentError rModelData::WriteDependencies(const rString& dir){
-	m_geometry.WriteToFile(dir + m_name + ".rgeo");
+	m_geometry.WriteToFile(rPath::Assemble(dir, m_name, "rgeo"));
 
 	for (rTexture2DDataMap::iterator it = m_textures.begin(); it != m_textures.end(); ++it){
-		it->second->WriteToPath(dir + it->first + ".rtex");
+		it->second->WriteToPath(rPath::Assemble(dir, it->first, "rtex"));
 	}
 
 	for (rMaterialDataMap::iterator it = m_materials.begin(); it!= m_materials.end(); ++it){
-		it->second->WriteToPath(dir + it->first + ".rmat");
+		it->second->WriteToPath(rPath::Assemble(dir, it->first, "rmat"));
 	}
-	
+
 	return rCONTENT_ERROR_NONE;
 }
 
@@ -186,6 +192,9 @@ rContentError rModelData::WriteToFile(const rString& dir){
 	rXMLDocument document;
 	document.CreateRoot("model");
 	document.GetRoot()->CreateChild("name", m_name);
+
+	if (m_skeleton)
+		document.GetRoot()->CreateChild("skeleton", m_name);
 
 	WriteDependencies (dir);
 	rXMLElement* meshes = document.GetRoot()->CreateChild("meshes");
@@ -197,7 +206,7 @@ rContentError rModelData::WriteToFile(const rString& dir){
 		meshNode->CreateChild("buffer", it->second->buffer);
 	}
 
-	document.WriteToFile(dir + m_name + ".rmdl");
+	document.WriteToFile(rPath::Assemble(dir, m_name, "rmdl"));
 
 	return rCONTENT_ERROR_NONE;
 }
@@ -208,6 +217,20 @@ void rModelData::SetName(const rString& name){
 
 rString rModelData::GetName() const{
 	return m_name;
+}
+
+rSkeleton* rModelData::GetSkeleton() const{
+	return m_skeleton;
+}
+
+rSkeleton* rModelData::CreateSkeleton(){
+	if (m_skeleton){
+		return NULL;
+	}
+	else{
+		m_skeleton = new rSkeleton();
+		return m_skeleton;
+	}
 }
 
 //---------------------

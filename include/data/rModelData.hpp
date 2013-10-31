@@ -65,10 +65,6 @@ public:
 	rSkeleton* GetSkeleton() const;
 	rSkeleton* CreateSkeleton();
 
-	size_t NumVertexBoneLinks() const;
-	void CreateVertexBoneLink(unsigned short vertexIndex, unsigned short boneIndex, float weight);
-	const rVertexBoneLinkMap& GetBoneLinks() const;
-
 	void SetName(const rString& name);
 	rString GetName() const;
 
@@ -88,8 +84,6 @@ private:
 	rSkeleton* m_skeleton;
 
 	rString m_name;
-
-	rVertexBoneLinkMap m_vertexBoneLinks;
 };
 
 #endif

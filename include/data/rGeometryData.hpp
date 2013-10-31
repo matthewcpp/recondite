@@ -4,12 +4,15 @@
 #include <map>
 #include <fstream>
 #include <cstring>
+#include <utility>
 
 #include "rTypes.hpp"
 #include "rDefs.hpp"
 
 #include "rVector2.hpp"
 #include "rVector3.hpp"
+
+#include "rVertexBoneLink.hpp"
 
 class rElementBufferData{
 public:
@@ -83,22 +86,29 @@ public:
 	bool HasNormals() const;
 	
 	void Clear();
+
+	const rVertexBoneLinkMap& GetBoneLinks() const;
+	size_t NumVertexBoneLinks() const;
+	void CreateVertexBoneLink(unsigned short vertexIndex, unsigned short boneIndex, float weight);
 	
 	rString Path() const;
 	rContentError GetError() const;
 
 	rContentError WriteToFile(const rString& path);
 	rContentError WriteToStream(std::ostream& stream);
-	rContentError WriteElementBufferData(std::ostream& stream);
 
 	rContentError ReadFromFile(const rString& path);
 	rContentError ReadFromStream(std::istream& stream);
-	rContentError ReadElementBufferData(std::istream& stream, size_t count);
 
 private:
 	
 	rContentError WriteFileHeader(std::ostream& stream);
-	rContentError ReadFileHeader(std::istream& stream, size_t& vertexCount, size_t& elementBufferCount);
+	rContentError WriteElementBufferData(std::ostream& stream);
+	rContentError WriteVertexBoneLinks(std::ostream& stream);
+
+	rContentError ReadFileHeader(std::istream& stream, size_t& vertexCount, size_t& elementBufferCount, size_t& vertexBoneLinkCount);
+	rContentError ReadElementBufferData(std::istream& stream, size_t count);
+	rContentError ReadVertexBoneLinks(std::istream& stream, size_t count);
 
 	size_t VertexFloatCount() const;
 	
@@ -115,6 +125,8 @@ private:
 	
 	rString m_path;
 	rContentError m_error;
+
+	rVertexBoneLinkMap m_vertexBoneLinks;
 };
 
 #endif

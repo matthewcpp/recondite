@@ -220,6 +220,20 @@ bool rGeometryData::HasNormals() const{
 	return m_hasNormals;
 }
 
+const rVertexBoneLinkMap& rGeometryData::GetBoneLinks() const{
+	return m_vertexBoneLinks;
+}
+
+size_t rGeometryData::NumVertexBoneLinks() const{
+	return m_vertexBoneLinks.size();
+}
+
+void rGeometryData::CreateVertexBoneLink(unsigned short vertexIndex, unsigned short boneIndex, float weight){
+	rVertexBoneLink link(vertexIndex, boneIndex, weight);
+
+	m_vertexBoneLinks.insert(std::make_pair(vertexIndex, link));
+}
+
 rElementBufferData* rGeometryData::CreateElementBuffer(const rString& name){
 	rElementBufferData* buffer = NULL;
 	
@@ -312,7 +326,7 @@ rContentError rGeometryData::WriteToStream(std::ostream& stream){
 		rContentError error = WriteFileHeader(stream);
 		stream.write((char*)&m_vertexData[0], VertexDataSizeInBytes());
 		error = WriteElementBufferData(stream);
-
+		error = WriteVertexBoneLinks(stream);
 		return error;
 	}
 	else{
@@ -325,6 +339,7 @@ rContentError rGeometryData::WriteFileHeader(std::ostream& stream){
 	char normals = char(m_hasNormals);
 	size_t vertexCount = VertexCount();
 	size_t elementBufferCount = m_elementBuffers.size();
+	size_t vertexBoneLinkCount = m_vertexBoneLinks.size();
 	
 	stream.write((char*)&magicNumber, 4);
 	stream.write((char*)&m_vertexElementSize, 4);
@@ -332,6 +347,7 @@ rContentError rGeometryData::WriteFileHeader(std::ostream& stream){
 	stream.write(&normals, 1);
 	stream.write((char*)&vertexCount, 4);
 	stream.write((char*)&elementBufferCount, 4);
+	stream.write((char*)&vertexBoneLinkCount, 4);
 
 	return rCONTENT_ERROR_NONE;
 }
@@ -357,6 +373,13 @@ rContentError rGeometryData::WriteElementBufferData(std::ostream& stream){
 	return rCONTENT_ERROR_NONE;
 }
 
+rContentError rGeometryData::WriteVertexBoneLinks(std::ostream& stream){
+	for (rVertexBoneLinkMap::const_iterator it = m_vertexBoneLinks.begin(); it != m_vertexBoneLinks.end(); ++it){
+		stream.write((char*)&it->second, sizeof(rVertexBoneLink));
+	}
+	return rCONTENT_ERROR_NONE;
+}
+
 rContentError rGeometryData::ReadFromFile(const rString& path){
 	std::ifstream file(path.c_str(), std::ios::binary);
 
@@ -372,8 +395,9 @@ rContentError rGeometryData::ReadFromStream(std::istream& stream){
 	if (stream){
 		size_t vertexCount = 0;
 		size_t elementBufferCount = 0;
+		size_t vertexBoneLinkCount = 0;
 	
-		error = ReadFileHeader(stream, vertexCount, elementBufferCount);
+		error = ReadFileHeader(stream, vertexCount, elementBufferCount, vertexBoneLinkCount);
 	
 		Allocate(m_vertexElementSize, vertexCount, m_hasTextureCoords, m_hasNormals);
 		size_t dataSize = VertexDataSizeInBytes();
@@ -384,8 +408,10 @@ rContentError rGeometryData::ReadFromStream(std::istream& stream){
 		if (bytesRead != dataSize)
 			error = rCONTENT_ERROR_STREAM_ERROR;
 	
-		if (!error)
+		if (!error){
 			error = ReadElementBufferData(stream, elementBufferCount);
+			error = ReadVertexBoneLinks(stream, vertexBoneLinkCount);
+		}
 	}
 	else{
 		error = rCONTENT_ERROR_STREAM_ERROR;
@@ -394,7 +420,7 @@ rContentError rGeometryData::ReadFromStream(std::istream& stream){
 	return error;
 }
 
-rContentError rGeometryData::ReadFileHeader(std::istream& stream, size_t& vertexCount, size_t& elementBufferCount){
+rContentError rGeometryData::ReadFileHeader(std::istream& stream, size_t& vertexCount, size_t& elementBufferCount, size_t& vertexBoneLinkCount){
 	int magic;
 	char boolVal;
 	
@@ -408,6 +434,7 @@ rContentError rGeometryData::ReadFileHeader(std::istream& stream, size_t& vertex
 
 	stream.read((char*)&vertexCount, 4);
 	stream.read((char*)&elementBufferCount, 4);
+	stream.read((char*)&vertexBoneLinkCount, 4);
 
 	return rCONTENT_ERROR_NONE;
 }
@@ -434,5 +461,17 @@ rContentError rGeometryData::ReadElementBufferData(std::istream& stream, size_t 
 		stream.read((char*)bufferData->GetElementData(), elementCount * 2);
 	}
 	
+	return rCONTENT_ERROR_NONE;
+}
+
+rContentError rGeometryData::ReadVertexBoneLinks(std::istream& stream, size_t count){
+	rVertexBoneLink link;
+
+	for (size_t i = 0; i < count; i++){
+		stream.read((char*)&link, sizeof(rVertexBoneLink));
+
+		m_vertexBoneLinks.insert(std::make_pair(link.vertexIndex, link));
+	}
+
 	return rCONTENT_ERROR_NONE;
 }

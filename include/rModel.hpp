@@ -11,8 +11,6 @@
 #include "rMaterial.hpp"
 #include "rSkeleton.hpp"
 
-#include "rVertexBoneLink.hpp"
-
 struct rMesh {
 	rMesh(const rString& n, const rString& buf, rMaterial* mat);
 	
@@ -43,16 +41,12 @@ public:
 	void SetSkeleton(rSkeleton* skeleton);
 
 	virtual rAssetType Type() const;
-	
-	const rVertexBoneLinkMap& GetVertexBoneLinks() const;
-	void SetVertexBoneLinks(const rVertexBoneLinkMap& links);
 
 private:
 	rMeshMap m_meshes;
 	rGeometry* m_geometry;
 
 	rSkeleton* m_skeleton;
-	rVertexBoneLinkMap m_vertexBoneLinks;
 };
 
 typedef std::map<rString, rModel*> rModelMap;

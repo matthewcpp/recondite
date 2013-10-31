@@ -67,3 +67,11 @@ void rGeometry::GetElementBufferNames(rArrayString& names) const{
 size_t rGeometry::VertexElementSize() const{
 	return m_vertexElementSize;
 }
+
+const rVertexBoneLinkMap& rGeometry::GetVertexBoneLinks() const{
+	return m_vertexBoneLinks;
+}
+
+void rGeometry::SetVertexBoneLinks(const rVertexBoneLinkMap& links){
+	m_vertexBoneLinks = links;
+}

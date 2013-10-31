@@ -673,8 +673,6 @@ rModel* rContentManager::LoadModel(rModelData& modelData, const rString& name){
 		if (skeleton)
 			model->SetSkeleton(skeleton);
 
-		model->SetVertexBoneLinks(modelData.GetBoneLinks());
-
 		m_models[name] = model;
 		m_error = rCONTENT_ERROR_NONE;
 		return model;

@@ -8,6 +8,8 @@
 
 #include "rAsset.hpp"
 
+#include "rVertexBoneLink.hpp"
+
 class rElementBuffer{
 public:
 	rElementBuffer() : bufferId(0), size(0), geometryType(rGEOMETRY_TRIANGLES){}
@@ -44,6 +46,9 @@ public:
 	
 	size_t VertexElementSize() const;
 
+	const rVertexBoneLinkMap& GetVertexBoneLinks() const;
+	void SetVertexBoneLinks(const rVertexBoneLinkMap& links);
+
 	virtual rAssetType Type() const;
 private:
 
@@ -54,6 +59,8 @@ private:
 	size_t m_vertexElementSize;
 
 	rElementBufferIdMap m_elementBufferIds;
+	rVertexBoneLinkMap m_vertexBoneLinks;
+
 	
 };
 

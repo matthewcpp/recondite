@@ -47,7 +47,6 @@ void rModel::Clear(){
 	}
 	
 	m_meshes.clear();
-	m_vertexBoneLinks.clear();
 }
 
 rGeometry* rModel::Geometry() const{
@@ -71,14 +70,6 @@ rSkeleton* rModel::Skeleton() const{
 
 void rModel::SetSkeleton(rSkeleton* skeleton){
 	m_skeleton = skeleton;
-}
-
-const rVertexBoneLinkMap& rModel::GetVertexBoneLinks() const{
-	return m_vertexBoneLinks;
-}
-
-void rModel::SetVertexBoneLinks(const rVertexBoneLinkMap& links){
-	m_vertexBoneLinks = links;
 }
 
 //-----------------------

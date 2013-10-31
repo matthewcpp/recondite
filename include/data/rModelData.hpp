@@ -3,6 +3,7 @@
 
 #include <map>
 #include <fstream>
+#include <utility>
 
 #include "rTypes.hpp"
 #include "rDefs.hpp"
@@ -15,6 +16,8 @@
 #include "rSkeleton.hpp"
 
 #include "xml/rXMLDocument.hpp"
+
+#include "rVertexBoneLink.hpp"
 
 #include "rPath.hpp"
 
@@ -62,6 +65,10 @@ public:
 	rSkeleton* GetSkeleton() const;
 	rSkeleton* CreateSkeleton();
 
+	size_t NumVertexBoneLinks() const;
+	void CreateVertexBoneLink(unsigned short vertexIndex, unsigned short boneIndex, float weight);
+	const rVertexBoneLinkMap& GetBoneLinks() const;
+
 	void SetName(const rString& name);
 	rString GetName() const;
 
@@ -81,6 +88,8 @@ private:
 	rSkeleton* m_skeleton;
 
 	rString m_name;
+
+	rVertexBoneLinkMap m_vertexBoneLinks;
 };
 
 #endif

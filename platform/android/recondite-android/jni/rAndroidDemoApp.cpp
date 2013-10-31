@@ -55,7 +55,7 @@ bool rAndroidDemoApp::Init(android_app* state){
 		rLog::Info("Init demo assets");
 
 		m_contentManager->LoadFontFromPath("Consolas.rfnt", "consolas");
-		m_contentManager->LoadModelFromAsset("turtle.rmdl", "turtle");
+		m_contentManager->LoadModelFromAsset("reindeer.rmdl", "reindeer");
 
 		rController* controller = m_inputManager->CreateController(1,1,1,2);
 		m_dpad = new ruiDPad(controller->DPad(0), 100, rPoint(30, 300), rSize(300, 300));
@@ -69,7 +69,7 @@ bool rAndroidDemoApp::Init(android_app* state){
 
 void rAndroidDemoApp::DrawImmediate(){
 	m_graphicsDevice->EnableDepthTesting(true);
-	rModel* model = m_contentManager->GetModelAsset("turtle");
+	rModel* model = m_contentManager->GetModelAsset("reindeer");
 
 	rMatrix4 transform;
 	transform.SetTranslate(0,-1,0);

@@ -22,6 +22,7 @@ void rModelData::Clear(){
 	m_meshes.clear();
 	m_materials.clear();
 	m_textures.clear();
+	m_vertexBoneLinks.clear();
 
 	if (m_skeleton){
 		delete m_skeleton;
@@ -148,6 +149,20 @@ rGeometryData& rModelData::GetGeometryData(){
 	return m_geometry;
 }
 
+const rVertexBoneLinkMap& rModelData::GetBoneLinks() const{
+	return m_vertexBoneLinks;
+}
+
+size_t rModelData::NumVertexBoneLinks() const{
+	return m_vertexBoneLinks.size();
+}
+
+void rModelData::CreateVertexBoneLink(unsigned short vertexIndex, unsigned short boneIndex, float weight){
+	rVertexBoneLink link(vertexIndex, boneIndex, weight);
+
+	m_vertexBoneLinks.insert(std::make_pair(vertexIndex, link));
+}
+
 rContentError rModelData::LoadFromStream(std::istream& stream){
 	Clear();
 
@@ -163,6 +178,17 @@ rContentError rModelData::LoadFromStream(std::istream& stream){
 
 		rMeshData* meshData= new rMeshData(meshNode->GetFirstChildNamed("name")->Text(), meshNode->GetFirstChildNamed("buffer")->Text(), meshNode->GetFirstChildNamed("material")->Text());
 		m_meshes[meshData->name] = meshData;
+	}
+
+	rXMLElement* vertexBoneLinks = document.GetRoot()->GetFirstChildNamed("vertexBoneLinks");
+	rVertexBoneLink link;
+	for (size_t i = 0; i < vertexBoneLinks->NumChildren(); i++){
+		rXMLElement* linkNode = vertexBoneLinks->GetChild(i);
+		linkNode->GetAttribute<unsigned short>("bone", link.boneIndex);
+		linkNode->GetAttribute<unsigned short>("vertex", link.vertexIndex);
+		linkNode->GetAttribute<float>("weight", link.weight);
+
+		m_vertexBoneLinks.insert(std::make_pair(link.vertexIndex, link));
 	}
 	
 	return rCONTENT_ERROR_NONE;
@@ -209,6 +235,17 @@ rContentError rModelData::WriteToFile(const rString& dir){
 		meshNode->CreateChild<rString>("name", it->first);
 		meshNode->CreateChild("material", it->second->material);
 		meshNode->CreateChild("buffer", it->second->buffer);
+	}
+
+	rXMLElement* vertexBoneLinks = document.GetRoot()->CreateChild("vertexBoneLinks");
+
+	for (rVertexBoneLinkMap::const_iterator it = m_vertexBoneLinks.begin(); it != m_vertexBoneLinks.end(); ++it){
+		rXMLElement* element = vertexBoneLinks->CreateChild("link");
+		const rVertexBoneLink& link = it->second;
+		
+		element->AddAttribute<unsigned short>("vertex", link.vertexIndex);
+		element->AddAttribute<unsigned short>("bone", link.boneIndex);
+		element->AddAttribute<float>("weight", link.weight);
 	}
 
 	document.WriteToFile(rPath::Assemble(dir, m_name, "rmdl"));

@@ -9,6 +9,8 @@
 
 #include "rVector3.hpp"
 
+#include "rAnimation.hpp"
+
 struct rBone;
 
 typedef std::vector<rBone*> rBoneArray;
@@ -53,10 +55,16 @@ public:
 	size_t NumBones() const;
 
 	void Clear();
+	
+	rAnimation* CreateAnimation(const rString& name);
+	const rAnimation* GetAnimation(const rString& name) const;
+	void DeleteAnimation(const rString& name);
+	size_t NumAnimations() const;
+	void GetAnimationNames(rArrayString& names) const;
 
 private:
 	rBoneMap m_bones;
-	rBone* m_rootBone;
+	rAnimationMap m_animations;
 };
 
 typedef std::map<rString, rSkeleton*> rSkeletonMap;

@@ -1,7 +1,6 @@
 #include "rSkeleton.hpp"
 
 rSkeleton::rSkeleton(){
-	m_rootBone = NULL;
 }
 
 rSkeleton::~rSkeleton(){
@@ -64,6 +63,44 @@ void rSkeleton::Clear(){
 size_t rSkeleton::NumBones() const{
 	return m_bones.size();
 }
+
+rAnimation* rSkeleton::CreateAnimation(const rString& name){
+	if (m_animations.count(name)){
+		return NULL;
+	}
+	else{
+		rAnimation* animation = new rAnimation(name);
+		m_animations[name] = animation;
+		return animation;
+	}
+}
+
+const rAnimation* rSkeleton::GetAnimation(const rString& name) const{
+	rAnimationMap::const_iterator result = m_animations.find(name);
+	
+	if (result == m_animations.end()){
+		return NULL;
+	}
+	else{
+		return result->second;
+	}
+}
+
+void rSkeleton::DeleteAnimation(const rString& name){
+	m_animations.erase(name);
+}
+
+size_t rSkeleton::NumAnimations() const{
+	return m_animations.size();
+}
+	
+void rSkeleton::GetAnimationNames(rArrayString& names) const{
+	names.clear();
+	
+	for (rAnimationMap::const_iterator it = m_animations.begin(); it != m_animations.end(); ++it)
+		names.push_back(it->first);
+}
+
 
 //--------------
 

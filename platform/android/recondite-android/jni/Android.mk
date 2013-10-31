@@ -78,6 +78,7 @@ LOCAL_SRC_FILES += ../../../../src/asset/rFontGlyph.cpp
 LOCAL_SRC_FILES += ../../../../src/asset/rFont.cpp
 LOCAL_SRC_FILES += ../../../../src/asset/rModel.cpp
 LOCAL_SRC_FILES += ../../../../src/asset/rSkeleton.cpp
+LOCAL_SRC_FILES += ../../../../src/asset/rAnimation.cpp
 
 LOCAL_SRC_FILES += ../../../../src/xml/rXMLDocument.cpp
 LOCAL_SRC_FILES += ../../../../src/xml/rXMLDocumentLoader.cpp

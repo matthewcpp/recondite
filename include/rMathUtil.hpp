@@ -19,11 +19,11 @@
 
 namespace rMath{
 	float DegreeToRad(float deg);
+	float RadToDeg(float rad);
+
 	float ConvertRange(float value, float inMin, float inMax, float outMin, float outMax);
 
 	float Max3(float n1 , float n2, float n3);
-
-	rVector2 ClosestPointOnSegment(const rLineSegment2& ls , const rCircle2& c);
 
 	//void QuaterionToMatrix(const rQuaternion& q, rMatrix4& m);
 

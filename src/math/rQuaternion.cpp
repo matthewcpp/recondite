@@ -35,6 +35,21 @@ void rQuaternion::SetFromEulerAngles(float tx , float ty, float tz){
 	z = sin_z_2*cos_y_2*cos_x_2 - cos_z_2*sin_y_2*sin_x_2;
 }
 
+
+void rQuaternion::SetFromAxisAngle(float axisx, float axisy, float axisz, float degrees){
+	float halfAngle = rMath::DegreeToRad(degrees) * 0.5f;
+	float sin = std::sin(halfAngle);
+
+	w = std::cos(halfAngle);
+	x = sin * axisx;
+	y = sin * axisy;
+	z=  sin * axisz;
+}
+
+void rQuaternion::SetFromAxisAngle(const rVector3& axis, float degrees){
+	SetFromAxisAngle(axis.x, axis.y, axis.z, degrees);
+}
+
 void rQuaternion::TransformVector3(rVector3& v) const{
     rVector3 quatVec(x, y , z);
 	rVector3 uv = quatVec.Cross(v);
@@ -102,3 +117,5 @@ rQuaternion rQuaternion::Slerp(const rQuaternion& q1 , const rQuaternion& q2, fl
 	qr.z = q1.z * ratioA + q2.z * ratioB;
 	return qr;
 }
+
+const rQuaternion rQuaternion::Identity = rQuaternion(0,0,0,1);

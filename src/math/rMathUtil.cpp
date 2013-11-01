@@ -1,7 +1,11 @@
 #include "rMathUtil.hpp"
 
 float rMath::DegreeToRad(float deg){
-	return deg * float(M_PI / 180.0f);
+	return deg * (M_PI / 180.0f);
+}
+
+float rMath::RadToDeg(float rad){
+	return rad * (180.0f / M_PI);
 }
 
 float rMath::ConvertRange(float value, float inMin, float inMax, float outMin, float outMax){
@@ -23,24 +27,6 @@ float rMath::Max3(float n1 , float n2, float n3){
 	return n3;
 }
 
-rVector2 rMath::ClosestPointOnSegment(const rLineSegment2& ls , const rCircle2& c){
-	rVector2 segV = ls.s2 - ls.s1 ;
-	rVector2 segN = rVector2::Normalize(segV);
-
-	rVector2 ptV = c.center -  ls.s1;
-
-	float projL = ptV.Dot(segN);
-
-	if (projL < 0)
-		return ls.s1;
-
-	if (projL > segV.Length())
-		return ls.s2;
-
-	rVector2 projV = segN * projL;
-
-	return ls.s1 + projV;
-}
 /*
 void rMath::QuaterionToMatrix(const rQuaternion& q, rMatrix4& m){
 	m.LoadIdentity();

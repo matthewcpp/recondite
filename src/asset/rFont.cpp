@@ -1,9 +1,10 @@
 #include "rFont.hpp"
 
-rFont::rFont(rTexture2D* texture, int assetid, const rString& name, const rString& path)
+rFont::rFont(rTexture2D* texture, size_t size, int assetid, const rString& name, const rString& path)
 :rAsset(assetid, name, path)
 {
 	m_texture = texture;
+	m_size = size;
 }
 
 rAssetType rFont::Type() const{
@@ -45,6 +46,10 @@ void rFont::RemoveGlyph(int scancode){
 
 size_t rFont::NumGlyphs() const{
 	return m_glyphs.size();
+}
+
+size_t rFont::Size() const{
+	return m_size;
 }
 
 void rFont::Clear(){

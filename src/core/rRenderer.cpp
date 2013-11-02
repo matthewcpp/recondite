@@ -142,7 +142,7 @@ void rRenderer::RenderString(const rString& text, const rFont* font, const rPoin
 	rElementBufferData* elements = geometry.CreateElementBuffer("immediate");
 
 	int xPos = 0;
-	int yPos = 0;
+	int yPos = font->Size();
 	int index = 0;
 
 	for (int i = 0; i < text.size(); i++){

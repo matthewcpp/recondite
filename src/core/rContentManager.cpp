@@ -616,7 +616,7 @@ rFont* rContentManager::LoadFont(const rFontData& fontData, const rString& name)
 	else{
 		rTexture2D* fontTexture = LoadTextureFromPath(fontData.TextureFile(), name + "_texture");
 
-		font = new rFont(fontTexture, GetNextAssetId(), name, fontData.GetPath());
+		font = new rFont(fontTexture, fontData.Size(), GetNextAssetId(), name, fontData.GetPath());
 		rGlyphDataArray glyphs;
 		fontData.GetGlyphData(glyphs);
 

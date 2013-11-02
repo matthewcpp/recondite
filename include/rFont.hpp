@@ -14,7 +14,7 @@ typedef std::map<int, rFontGlyph*> rFontGlyphMap;
 
 class rFont : public rAsset{
 public:
-	rFont(rTexture2D* texture, int assetid, const rString& name, const rString& path);
+	rFont(rTexture2D* texture, size_t size, int assetid, const rString& name, const rString& path);
 	~rFont();
 	
 	const rFontGlyph* GetGlyph(int scancode) const;
@@ -27,10 +27,13 @@ public:
 	void Clear();
 	
 	virtual rAssetType Type() const;
+
+	size_t Size() const;
 private:
 
 	rFontGlyphMap m_glyphs;
 	rTexture2D* m_texture;
+	size_t m_size;
 };
 
 typedef std::map<rString, rFont*> rFontMap;

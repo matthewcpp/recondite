@@ -75,7 +75,7 @@ rAnimation* rSkeleton::CreateAnimation(const rString& name){
 	}
 }
 
-const rAnimation* rSkeleton::GetAnimation(const rString& name) const{
+rAnimation* rSkeleton::GetAnimation(const rString& name) const{
 	rAnimationMap::const_iterator result = m_animations.find(name);
 	
 	if (result == m_animations.end()){

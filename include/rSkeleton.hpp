@@ -57,7 +57,7 @@ public:
 	void Clear();
 	
 	rAnimation* CreateAnimation(const rString& name);
-	const rAnimation* GetAnimation(const rString& name) const;
+	rAnimation* GetAnimation(const rString& name) const;
 	void DeleteAnimation(const rString& name);
 	size_t NumAnimations() const;
 	void GetAnimationNames(rArrayString& names) const;

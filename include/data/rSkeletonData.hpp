@@ -19,12 +19,15 @@ public:
 private:
 	void WriteHeader(std::ostream& stream, const rSkeleton& skeleton);
 	void WriteBones(std::ostream& stream, const rSkeleton& skeleton);
+	void WriteAnimations(std::ostream& stream, const rSkeleton& skeleton);
 
 	void ReadHeader(std::istream& stream, rSkeleton& skeleton);
 	void ReadBones(std::istream& stream, rSkeleton& skeleton);
+	void ReadAnimations(std::istream& stream, rSkeleton& skeleton);
 	
 private:
 	size_t boneCount;
+	size_t animationCount;
 	
 	static const int magicNumber;
 	

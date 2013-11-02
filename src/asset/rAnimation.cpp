@@ -37,13 +37,30 @@ void rAnimationTrack::SetKeyframe(size_t i, float time, const rVector3& translat
 	}
 }
 
-void rAnimationTrack::PushKeyframe(float time, const rVector3& translation, rQuaternion& rotation, const rVector3& scale){
+size_t rAnimationTrack::PushKeyframe(float time, const rVector3& translation, rQuaternion& rotation, const rVector3& scale){
 	rAnimationKeyframe keyframe(time, translation, rotation, scale);
 	m_keyframes.push_back(keyframe);
+
+	return m_keyframes.size();
+}
+
+rAnimationKeyframe* rAnimationTrack::GetKeyframe(size_t index) {
+	if (index >= m_keyframes.size()){
+		return NULL;
+	}
+	else{
+		return &m_keyframes[index];
+	}
 }
 
 rAnimation::rAnimation(const rString& name){
 	m_name = name;
+	m_duration = 0.0f;
+}
+
+rAnimation::rAnimation(const rString& name, float duration){
+	m_name = name;
+	m_duration = duration;
 }
 
 rAnimation::~rAnimation(){
@@ -61,7 +78,7 @@ rString rAnimation::Name() const{
 	return m_name;
 }
 
-const rAnimationTrack* rAnimation::GetTrack(unsigned short handle) const{
+rAnimationTrack* rAnimation::GetTrack(unsigned short handle) const{
 	rAnimationTrackMap::const_iterator result = m_tracks.find(handle);
 	
 	if (result == m_tracks.end()){
@@ -95,4 +112,11 @@ void rAnimation::DeleteTrack(unsigned short handle){
 
 size_t rAnimation::NumTracks() const{
 	return m_tracks.size();
+}
+float rAnimation::Duration() const{
+	return m_duration;
+}
+
+void rAnimation::SetDuration(float duration){
+	m_duration = duration;
 }

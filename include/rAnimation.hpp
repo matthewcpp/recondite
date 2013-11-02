@@ -11,7 +11,7 @@
 #include "rQuaternion.hpp"
 
 struct rAnimationKeyframe {
-	rAnimationKeyframe(){}
+	rAnimationKeyframe() : time(0.0f), translation(rVector3::ZeroVector), rotation(rQuaternion::Identity), scale(rVector3::OneVector){}
 	rAnimationKeyframe(float t, const rVector3& trans, const rQuaternion& rot, const rVector3& s)
 	: time(t), translation(trans), rotation(rot), scale(s){}
 	
@@ -19,8 +19,8 @@ struct rAnimationKeyframe {
 	
 	float time;
 	rVector3 translation;
-	rVector3 scale;
 	rQuaternion rotation;
+	rVector3 scale;
 };
 
 typedef std::vector<rAnimationKeyframe> rKeyframeVector;
@@ -38,7 +38,8 @@ public:
 	
 	void AllocateFrames(size_t count);
 	void SetKeyframe(size_t i, float time, const rVector3& translation, rQuaternion& rotation, const rVector3& scale);
-	void PushKeyframe(float time, const rVector3& translation, rQuaternion& rotation, const rVector3& scale);
+	size_t PushKeyframe(float time, const rVector3& translation, rQuaternion& rotation, const rVector3& scale);
+	rAnimationKeyframe* GetKeyframe(size_t index) ;
 	
 private:
 	unsigned short m_handle;
@@ -50,19 +51,24 @@ typedef std::map<unsigned short, rAnimationTrack*> rAnimationTrackMap;
 class rAnimation{
 public:
 	rAnimation(const rString& name);
+	rAnimation(const rString& name, float duration);
 	~rAnimation();
 	
 public:
 	void Clear();
 	rString Name() const;
 	
-	const rAnimationTrack* GetTrack(unsigned short handle) const;
+	rAnimationTrack* GetTrack(unsigned short handle) const;
 	rAnimationTrack* CreateTrack(unsigned short handle);
 	void DeleteTrack(unsigned short handle);
 	size_t NumTracks() const;
+
+	float Duration() const;
+	void SetDuration(float duration);
 	
 private:
 	rString m_name;
+	float m_duration;
 	
 	rAnimationTrackMap m_tracks;
 };

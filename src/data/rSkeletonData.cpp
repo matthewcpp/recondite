@@ -2,26 +2,6 @@
 
 const int rSkeletonData::magicNumber = 1818981234;
 
-rContentError rSkeletonData::ReadFromFile(const rString& path, rSkeleton& skeleton){
-	std::ifstream file(path.c_str(), std::ios::binary);
-
-	return rSkeletonData::ReadFromStream(file, skeleton);
-}
-
-rContentError rSkeletonData::ReadFromStream(std::istream& stream, rSkeleton& skeleton){
-	skeleton.Clear();
-
-	if (stream){
-		ReadHeader(stream, skeleton);
-		ReadBones(stream, skeleton);
-
-		return rCONTENT_ERROR_NONE;
-	}
-	else{
-		return rCONTENT_ERROR_STREAM_ERROR;
-	}
-}
-
 rContentError rSkeletonData::WriteToFile(const rString& path, const rSkeleton& skeleton){
 	std::ofstream file(path.c_str(), std::ios::binary);
 
@@ -33,6 +13,7 @@ rContentError rSkeletonData::WriteToStream(std::ostream& stream, const rSkeleton
 
 		WriteHeader(stream, skeleton);
 		WriteBones(stream, skeleton);
+		WriteAnimations(stream, skeleton);
 
 		return rCONTENT_ERROR_NONE;
 	}
@@ -42,10 +23,12 @@ rContentError rSkeletonData::WriteToStream(std::ostream& stream, const rSkeleton
 }
 
 void rSkeletonData::WriteHeader(std::ostream& stream, const rSkeleton& skeleton){
-	size_t boneCount = skeleton.NumBones();
+	boneCount = skeleton.NumBones();
+	animationCount = skeleton.NumAnimations();
 
 	stream.write((char*)&magicNumber, 4);
 	stream.write((char*)&boneCount, 4);
+	stream.write((char*)&animationCount, 4);
 }
 
 void rSkeletonData::WriteBones(std::ostream& stream, const rSkeleton& skeleton){
@@ -79,11 +62,70 @@ void rSkeletonData::WriteBones(std::ostream& stream, const rSkeleton& skeleton){
 	}
 }
 
+void rSkeletonData::WriteAnimations(std::ostream& stream, const rSkeleton& skeleton){
+	rArrayString animationNames;
+	skeleton.GetAnimationNames(animationNames);
+
+	size_t size, trackCount;
+	rString name;
+	float duration;
+
+	for (size_t i = 0; i < animationNames.size(); i++){
+		rAnimation* animation = skeleton.GetAnimation(animationNames[i]);
+
+		name = animation->Name();
+		size = name.length();
+		duration = animation->Duration();
+		trackCount = animation->NumTracks();
+
+		stream.write((char*)&size, 4);
+		stream.write(name.c_str(), size);
+		stream.write((char*)&duration, 4);
+		stream.write((char*)&trackCount, 4);
+
+		for (unsigned short b = 0; b < skeleton.NumBones(); b++){
+			rAnimationTrack* track = animation->GetTrack(b);
+
+			if (track){
+				const rKeyframeVector& keyframes = track->Keyframes();
+				size = keyframes.size();
+
+				stream.write((char*)&b, 2);
+				stream.write((char*)&size, 4);
+				stream.write((char*)&keyframes[0], size * sizeof(rAnimationKeyframe));
+			}
+		}
+	}
+}
+
+rContentError rSkeletonData::ReadFromFile(const rString& path, rSkeleton& skeleton){
+	std::ifstream file(path.c_str(), std::ios::binary);
+
+	return rSkeletonData::ReadFromStream(file, skeleton);
+}
+
+rContentError rSkeletonData::ReadFromStream(std::istream& stream, rSkeleton& skeleton){
+	skeleton.Clear();
+
+	if (stream){
+		ReadHeader(stream, skeleton);
+		ReadBones(stream, skeleton);
+		ReadAnimations(stream, skeleton);
+
+		return rCONTENT_ERROR_NONE;
+	}
+	else{
+		return rCONTENT_ERROR_STREAM_ERROR;
+	}
+}
+
+
 void rSkeletonData::ReadHeader(std::istream& stream, rSkeleton& skeleton){
 	int magicNum;
 
 	stream.read((char*)&magicNum, 4);
 	stream.read((char*)&boneCount, 4);
+	stream.read((char*)&animationCount, 4);
 }
 
 void rSkeletonData::ReadBones(std::istream& stream, rSkeleton& skeleton){
@@ -96,7 +138,7 @@ void rSkeletonData::ReadBones(std::istream& stream, rSkeleton& skeleton){
 		stream.read((char*)&id, 4);
 
 		stream.read((char*)&nameLen, 4);
-		stream.read((char*)&buffer, nameLen);
+		stream.read((char*)buffer, nameLen);
 		name.assign(buffer, nameLen);
 
 		rBone* bone = skeleton.CreateBone(id, name);
@@ -114,5 +156,35 @@ void rSkeletonData::ReadBones(std::istream& stream, rSkeleton& skeleton){
 
 		if (bone && parentBone)
 			parentBone->AddChild(bone);
+	}
+}
+
+void rSkeletonData::ReadAnimations(std::istream& stream, rSkeleton& skeleton){
+	char buffer[256];
+	size_t size, trackCount;
+	rString name;
+	float duration;
+	unsigned short handle;
+
+	for (size_t i = 0; i < animationCount; i++){
+		stream.read((char*)&size , 4);
+		stream.read(buffer, size);
+		stream.read((char*)&duration, 4);
+		stream.read((char*)&trackCount, 4);
+
+		name.assign(buffer, size);
+
+		rAnimation* animation = skeleton.CreateAnimation(name);
+		animation->SetDuration(duration);
+
+		for (size_t i = 0; i < trackCount; i++){
+			stream.read((char*)&handle , 2);
+			stream.read((char*)&size , 4);
+
+			rAnimationTrack* track = animation->CreateTrack(handle);
+			track->AllocateFrames(size);
+
+			stream.read((char*)&track->Keyframes()[0], size * sizeof (rAnimationKeyframe));
+		}
 	}
 }

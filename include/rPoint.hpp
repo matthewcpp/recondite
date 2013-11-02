@@ -7,6 +7,11 @@ struct rPoint{
 	
 	void Set(int xx, int yy);
 
+	rPoint operator+ (const rPoint& p) const;
+	rPoint& operator+=(const rPoint& p);
+	rPoint operator- (const rPoint& p) const;
+	rPoint& operator-=(const rPoint& p);
+
 	int x;
 	int y;
 };

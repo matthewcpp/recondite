@@ -10,6 +10,7 @@ void rAndroidDemoApp::Update(){
 		rot += 1.0f;
 		m_dpad->Update(m_engine);
 		m_picker->Update(m_engine);
+		m_slider->Update(m_engine);
 
 		UpdateCamera();
 	}
@@ -55,6 +56,7 @@ bool rAndroidDemoApp::Init(android_app* state){
 		rController* controller = m_inputManager->CreateController(1,1,1,2);
 		m_dpad = new ruiDPad(controller->DPad(0), 100, rPoint(700, 300), rSize(300, 300));
 		m_picker = new ruiPicker(102, rPoint(10,10), rSize(250, 35));
+		m_slider = new ruiSlider(101, rPoint(10,75), rSize(250, 35));
 
 		rLog::Info("Init demo assets");
 
@@ -77,6 +79,8 @@ bool rAndroidDemoApp::Init(android_app* state){
 	return result;
 }
 
+#include <sstream>
+
 void rAndroidDemoApp::DrawImmediate(){
 	m_graphicsDevice->EnableDepthTesting(true);
 
@@ -88,9 +92,9 @@ void rAndroidDemoApp::DrawImmediate(){
 		m_renderer->RenderModel(model, transform);
 	}
 
-
 	m_graphicsDevice->EnableDepthTesting(false);
 
 	m_dpad->Draw(m_engine);
 	m_picker->Draw(m_engine);
+	m_slider->Draw(m_engine);
 }

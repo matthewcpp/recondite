@@ -25,11 +25,24 @@ namespace rMath{
 
 	float Max3(float n1 , float n2, float n3);
 
+	template <typename T>
+	T Clamp(const T& val, const T& min, const T& max);
+
 	//void QuaterionToMatrix(const rQuaternion& q, rMatrix4& m);
 
 	bool PointInBoundedXYPlane(const rVector3& corner1 , const rVector3& corner2 , const rVector3& point);
 	bool PointInBoundedXZPlane(const rVector3& corner1 , const rVector3& corner2 , const rVector3& point);
 	bool PointInBoundedYZPlane(const rVector3& corner1 , const rVector3& corner2 , const rVector3& point);
 };
+
+template <typename T>
+T rMath::Clamp(const T& val, const T& min, const T& max){
+	if (val > max)
+		return max;
+	else if (val < min)
+		return min;
+	else
+		return val;
+}
 
 #endif

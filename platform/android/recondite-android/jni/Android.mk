@@ -45,7 +45,6 @@ LOCAL_SRC_FILES += ../../../../src/geometry/rCircle2.cpp
 LOCAL_SRC_FILES += ../../../../src/geometry/rCone3.cpp
 LOCAL_SRC_FILES += ../../../../src/geometry/rFrustrum.cpp
 LOCAL_SRC_FILES += ../../../../src/geometry/rGeometry3.cpp
-LOCAL_SRC_FILES += ../../../../src/geometry/rIntersection2.cpp
 LOCAL_SRC_FILES += ../../../../src/geometry/rIntersection3.cpp
 LOCAL_SRC_FILES += ../../../../src/geometry/rGeometryUtil.cpp
 LOCAL_SRC_FILES += ../../../../src/geometry/rLine2.cpp
@@ -104,6 +103,9 @@ LOCAL_SRC_FILES += ../../../../src/input/rController.cpp
 LOCAL_SRC_FILES += ../../../../src/ui/ruiWidget.cpp
 LOCAL_SRC_FILES += ../../../../src/ui/ruiDPad.cpp
 LOCAL_SRC_FILES += ../../../../src/ui/ruiAnalogStick.cpp
+LOCAL_SRC_FILES += ../../../../src/ui/ruiPickerBase.cpp
+LOCAL_SRC_FILES += ../../../../src/ui/ruiPicker.cpp
+LOCAL_SRC_FILES += ../../../../src/ui/ruiPickerOptionsMenu.cpp
 
 
 LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv2

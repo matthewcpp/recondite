@@ -51,12 +51,12 @@ void ruiAnalogStick::Update(rEngine& engine){
 	UpdateController();
 }
 
-void ruiAnalogStick::Draw(rRenderer* renderer){
+void ruiAnalogStick::Draw(rEngine& engine){
 	rColor gray(205,201,201,255);
 	rColor darkGray(139,137,137,255);
 	
-	renderer->RenderCircle(m_outerCircle, gray);
-	renderer->RenderCircle(m_touchIndicator, darkGray);
+	engine.renderer->RenderCircle(m_outerCircle, gray);
+	engine.renderer->RenderCircle(m_touchIndicator, darkGray);
 }
 
 void ruiAnalogStick::SetCircles(){

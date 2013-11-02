@@ -22,17 +22,17 @@ void ruiDPad::CalculateDefaultButtonRects(){
 	m_buttons[rDPAD_DOWN].Set(m_position.x + squareSize.x, m_position.y + (2 * squareSize.y), squareSize.x, squareSize.y);
 }
 
-void ruiDPad::Draw(rRenderer* renderer){
+void ruiDPad::Draw(rEngine& engine){
 	
 	rColor gray(205,201,201,255);
 	rColor darkGray(139,137,137,255);
 	
 	for (int button = rDPAD_LEFT; button <= rDPAD_DOWN; button++){
 			if (m_dpad->GetButton((rDPadButton)button).Down()){
-				renderer->RenderRect(m_buttons[button], darkGray);
+				engine.renderer->RenderRect(m_buttons[button], darkGray);
 			}
 			else{
-				renderer->RenderRect(m_buttons[button], gray);
+				engine.renderer->RenderRect(m_buttons[button], gray);
 			}
 	}
 }

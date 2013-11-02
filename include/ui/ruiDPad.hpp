@@ -13,7 +13,7 @@ public:
 	void CalculateDefaultButtonRects();
 	
 	virtual void Update(rEngine& engine);
-	virtual void Draw(rRenderer* renderer);
+	virtual void Draw(rEngine& engine);
 	
 private:
 

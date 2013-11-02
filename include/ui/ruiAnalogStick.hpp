@@ -16,7 +16,7 @@ public:
 	ruiAnalogStick(rController* controller, size_t stickIndex, int id, const rPoint& position, const rSize& size);
 	
 	virtual void Update(rEngine& engine);
-	virtual void Draw(rRenderer* renderer);
+	virtual void Draw(rEngine& engine);
 	
 private:
 

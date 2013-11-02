@@ -12,9 +12,11 @@
 
 class ruiWidget{
 public:
+	ruiWidget(int id);
 	ruiWidget(int id, const rPoint& position, const rSize& size);
-	virtual void Draw(rRenderer* renderer) = 0;
+	virtual void Draw(rEngine& engine) = 0;
 	virtual void Update(rEngine& engine) = 0;
+	virtual rRect BoundingBox() const;
 	
 	int Id() const;
 	rSize Size() const;

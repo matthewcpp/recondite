@@ -9,7 +9,7 @@ void rAndroidDemoApp::Update(){
 	if (m_started){
 		rot += 1.0f;
 		m_dpad->Update(m_engine);
-		m_analogStick->Update(m_engine);
+		m_picker->Update(m_engine);
 
 		UpdateCamera();
 	}
@@ -52,16 +52,26 @@ bool rAndroidDemoApp::Init(android_app* state){
 	bool result = rAndroidApplication::Init(state);
 
 	if (result){
+		rController* controller = m_inputManager->CreateController(1,1,1,2);
+		m_dpad = new ruiDPad(controller->DPad(0), 100, rPoint(700, 300), rSize(300, 300));
+		m_picker = new ruiPicker(102, rPoint(10,10), rSize(250, 35));
+
 		rLog::Info("Init demo assets");
 
 		m_contentManager->LoadFontFromPath("Consolas.rfnt", "consolas");
-		m_contentManager->LoadModelFromAsset("reindeer.rmdl", "reindeer");
+		rModel* reindeer = m_contentManager->LoadModelFromPath("reindeer.rmdl", "reindeer");
 
-		rController* controller = m_inputManager->CreateController(1,1,1,2);
-		m_dpad = new ruiDPad(controller->DPad(0), 100, rPoint(30, 300), rSize(300, 300));
-		m_analogStick = new ruiAnalogStick(controller, 0, 101, rPoint(700, 300), rSize(300, 300));
+		rSkeleton* skeleton = reindeer->Skeleton();
+
+		if (skeleton){
+			rArrayString animations;
+			skeleton->GetAnimationNames(animations);
+			m_picker->SetOptions(animations);
+		}
 
 		m_viewport.SetClipping(1,1000);
+
+		rLog::Info("Demo assets loaded");
 	}
 
 	return result;
@@ -69,34 +79,18 @@ bool rAndroidDemoApp::Init(android_app* state){
 
 void rAndroidDemoApp::DrawImmediate(){
 	m_graphicsDevice->EnableDepthTesting(true);
+
 	rModel* model = m_contentManager->GetModelAsset("reindeer");
 
-	rMatrix4 transform;
-	transform.SetTranslate(0,-1,0);
-	transform.SetRotationY(rot);
-
 	if (model){
+		rMatrix4 transform;
+		transform.SetTranslate(0,-1,0);
 		m_renderer->RenderModel(model, transform);
 	}
 
+
 	m_graphicsDevice->EnableDepthTesting(false);
 
-
-	if (model){
-		rColor skeletonColor(255,255,255,255);
-		m_renderer->RenderSkeleton(model->Skeleton(), transform, skeletonColor);
-	}
-
-
-	m_dpad->Draw(m_renderer);
-	//m_analogStick->Draw(m_renderer);
-
-	rFont* font = m_contentManager->GetFontAsset("consolas");
-
-	if (font){
-		rPoint pos(300,300);
-		rColor color(233,48,159,255);
-
-		m_renderer->RenderString("i like turtles", font, pos, color);
-	}
+	m_dpad->Draw(m_engine);
+	m_picker->Draw(m_engine);
 }

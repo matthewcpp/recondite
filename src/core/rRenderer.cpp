@@ -96,6 +96,12 @@ void rRenderer::RenderRect(const rRect& rect, rTexture2D* texture){
 	ImmediateTexturedRender(geometry, texture);
 }
 
+void rRenderer::RenderWireRect(const rRect& rect, const rColor& color){
+	rGeometryData geometry;
+	rGeometryUtil::CreateWireRectVerticies(rect, "immediate", geometry);
+	ImmediateColorRender(geometry, color);
+}
+
 void rRenderer::RenderCircle(const rCircle2& circle, const rColor& color){
 	rGeometryData geometry;
 	rGeometryUtil::CreateCircleVerticies(circle, 20,"immediate", geometry);

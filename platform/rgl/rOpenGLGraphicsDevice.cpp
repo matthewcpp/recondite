@@ -335,6 +335,10 @@ GLenum rOpenGLGraphicsDevice::GLGeometryType(rGeometryType type) const{
 	switch (type){
 	case rGEOMETRY_LINES:
 		return GL_LINES;
+	case rGEOMETRY_LINE_LOOP:
+		return GL_LINE_LOOP;
+	case rGEOMETRY_POINTS:
+		return GL_POINTS;
 	default:
 		return GL_TRIANGLES;
 	}

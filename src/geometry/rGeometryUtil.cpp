@@ -30,6 +30,13 @@ void rGeometryUtil::CreateRectVerticies(const rRect& rect, const rString& name,r
 	}
 }
 
+void rGeometryUtil::CreateWireRectVerticies(const rRect& rect, const rString& name, rGeometryData& geometry){
+	static unsigned short wireRectIndicies[] = {0, 1, 1, 2, 2, 3};
+	geometry.CreateElementBuffer(name, wireRectIndicies, 6, rGEOMETRY_LINE_LOOP);
+
+	CreateRectVerticies(rect, geometry);
+}
+
 void rGeometryUtil::CreateCircleVerticies(const rCircle2& circle, size_t segments, const rString& name, rGeometryData& geometry){
 
 	geometry.Allocate(2, segments + 2, false, false);

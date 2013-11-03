@@ -29,6 +29,7 @@ public:
 	void RenderGeometry(rGeometry* geometry, const rMatrix4& transform, const rString& elementBufferName, rMaterial* material);
 	
 	void RenderRect(const rRect& rect, const rColor& color);
+	void RenderWireRect(const rRect& rect, const rColor& color);
 	void RenderRect(const rRect& rect, rTexture2D* texture);
 	
 	void RenderCircle(const rCircle2& circle, const rColor& color);

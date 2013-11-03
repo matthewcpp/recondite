@@ -15,6 +15,7 @@
 
 namespace rGeometryUtil{
 	void CreateRectVerticies(const rRect& rect, const rString& name, rGeometryData& geometry, bool texCoords);
+	void CreateWireRectVerticies(const rRect& rect, const rString& name, rGeometryData& geometry);
 	void CreateCircleVerticies(const rCircle2& circle, size_t segments, const rString& name, rGeometryData& geometry);
 
 	void CreateWireAlignedBoxVerticies(const rAlignedBox3& box, const rString& name, rGeometryData& geometry);

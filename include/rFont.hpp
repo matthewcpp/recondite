@@ -10,6 +10,8 @@
 #include "rTexture2D.hpp"
 #include "rAsset.hpp"
 
+#include "rSize.hpp"
+
 typedef std::map<int, rFontGlyph*> rFontGlyphMap;
 
 class rFont : public rAsset{
@@ -22,6 +24,8 @@ public:
 	size_t NumGlyphs() const;
 	rTexture2D* Texture() const;
 	
+	rSize MeasureString(const rString& str) const;
+
 	void RemoveGlyph(int scancode);
 	
 	void Clear();

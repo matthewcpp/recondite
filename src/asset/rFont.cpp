@@ -62,3 +62,16 @@ void rFont::Clear(){
 rTexture2D* rFont::Texture() const{
 	return m_texture;
 }
+
+rSize rFont::MeasureString(const rString& str) const{
+	size_t width = 0;
+
+	for (int i = 0; i < str.size(); i++){
+		const rFontGlyph* glyph = GetGlyph(str[i]);
+
+		if (glyph)
+			width += glyph->advance;
+	}
+
+	return rSize(width, Size());
+}

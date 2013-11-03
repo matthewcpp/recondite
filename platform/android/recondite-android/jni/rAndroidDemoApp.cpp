@@ -12,6 +12,7 @@ void rAndroidDemoApp::Update(){
 		m_picker->Update(m_engine);
 		m_slider->Update(m_engine);
 		m_button->Update(m_engine);
+		m_checkbox->Update(m_engine);
 
 		UpdateCamera();
 	}
@@ -59,6 +60,7 @@ bool rAndroidDemoApp::Init(android_app* state){
 		m_picker = new ruiPicker(102, rPoint(10,10), rSize(250, 35));
 		m_slider = new ruiSlider(101, rPoint(10,75), rSize(250, 35));
 		m_button = new ruiButton("click me", 666, rPoint(10, 120), rSize(175, 40));
+		m_checkbox = new ruiCheckbox(667, rPoint(10, 195), rSize(50, 50));
 
 		rLog::Info("Init demo assets");
 
@@ -100,4 +102,5 @@ void rAndroidDemoApp::DrawImmediate(){
 	m_picker->Draw(m_engine);
 	m_slider->Draw(m_engine);
 	m_button->Draw(m_engine);
+	m_checkbox->Draw(m_engine);
 }

@@ -11,6 +11,7 @@
 #include "ui/ruiPicker.hpp"
 #include "ui/ruiSlider.hpp"
 #include "ui/ruiButton.hpp"
+#include "ui/ruiCheckbox.hpp"
 
 #include "rEngine.hpp"
 
@@ -41,6 +42,7 @@ private:
 	ruiPicker* m_picker;
 	ruiSlider* m_slider;
 	ruiButton* m_button;
+	ruiCheckbox* m_checkbox;
 
 	float rot;
 };

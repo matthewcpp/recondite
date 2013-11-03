@@ -81,4 +81,9 @@ enum rGeometryType{
 	rGEOMETRY_POINTS
 };
 
+enum rButtonState {
+	rBUTTON_STATE_UP,
+	rBUTTON_STATE_DOWN
+};
+
 #endif

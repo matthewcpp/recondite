@@ -4,11 +4,6 @@
 #include "rTypes.hpp"
 #include "rDefs.hpp"
 
-enum rButtonState {
-	rBUTTON_STATE_UP,
-	rBUTTON_STATE_DOWN
-};
-
 class rInputButton {
 public:
 	rInputButton();

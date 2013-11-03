@@ -107,6 +107,7 @@ LOCAL_SRC_FILES += ../../../../src/ui/ruiPickerBase.cpp
 LOCAL_SRC_FILES += ../../../../src/ui/ruiPicker.cpp
 LOCAL_SRC_FILES += ../../../../src/ui/ruiPickerOptionsMenu.cpp
 LOCAL_SRC_FILES += ../../../../src/ui/ruiSlider.cpp
+LOCAL_SRC_FILES += ../../../../src/ui/ruiButton.cpp
 
 
 LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv2

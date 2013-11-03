@@ -10,6 +10,7 @@
 #include "ui/ruiDPad.hpp"
 #include "ui/ruiPicker.hpp"
 #include "ui/ruiSlider.hpp"
+#include "ui/ruiButton.hpp"
 
 #include "rEngine.hpp"
 
@@ -39,6 +40,7 @@ private:
 	ruiDPad* m_dpad;
 	ruiPicker* m_picker;
 	ruiSlider* m_slider;
+	ruiButton* m_button;
 
 	float rot;
 };

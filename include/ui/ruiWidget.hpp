@@ -18,6 +18,10 @@ public:
 	virtual void Update(rEngine& engine) = 0;
 	virtual rRect BoundingBox() const;
 	
+	virtual void OnTouchDown(const rTouch& touch) {}
+	virtual void OnTouchMove(const rTouch& touch) {}
+	virtual void OnTouchUp(const rTouch& touch) {}
+
 	int Id() const;
 	rSize Size() const;
 	rPoint Position() const;

@@ -100,6 +100,7 @@ LOCAL_SRC_FILES += ../../../../src/input/rDPad.cpp
 LOCAL_SRC_FILES += ../../../../src/input/rInputButton.cpp
 LOCAL_SRC_FILES += ../../../../src/input/rController.cpp
 
+LOCAL_SRC_FILES += ../../../../src/ui/ruiLayoutManager.cpp
 LOCAL_SRC_FILES += ../../../../src/ui/ruiWidget.cpp
 LOCAL_SRC_FILES += ../../../../src/ui/ruiDPad.cpp
 LOCAL_SRC_FILES += ../../../../src/ui/ruiAnalogStick.cpp

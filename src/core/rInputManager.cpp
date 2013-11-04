@@ -8,6 +8,7 @@ rTouch* rInputManager::CreateTouch(int id, const rPoint& position, rTouchType ty
 		rTouch* touch = new rTouch(id, position, type);
 		m_touches[id] = touch;
 		rLog::Info("Touch (%u) created Pos: %d, %d (%u)", id, position.x, position.y, type);
+		NotifyOfTouch(*touch);
 		return touch;
 	}
 }
@@ -26,6 +27,7 @@ bool rInputManager::UpdateTouch(int id, const rPoint& position, rTouchType type)
 	
 	if (touch){
 		touch->Update(position, type);
+		NotifyOfTouch(*touch);
 		
 		if (type == rTOUCH_UP){
 			m_touches.erase(id);
@@ -82,4 +84,25 @@ rController* rInputManager::GetController(size_t index) const{
 		return NULL;
 	else
 		return m_controllers[index];
+}
+
+void rInputManager::NotifyOfTouch(const rTouch& touch){
+	for (size_t i =0; i < m_listeners.size(); i++){
+		m_listeners[i]->OnTouchEvent(touch);
+	}
+}
+
+void rInputManager::AddListener(rInputListener* listener){
+	m_listeners.push_back(listener);
+}
+
+void rInputManager::RemoveListener(rInputListener* listener){
+	rInputListenerArray::iterator end = m_listeners.end();
+
+	for (rInputListenerArray::iterator it = m_listeners.begin(); it != end; ++it){
+		if (*it == listener){
+			m_listeners.erase(it);
+			break;
+		}
+	}
 }

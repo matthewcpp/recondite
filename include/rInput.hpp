@@ -38,4 +38,9 @@ public:
 	virtual rControllerState* GetControllerState(size_t index) const = 0;
 };
 
+class rInputListener{
+public:
+	virtual void OnTouchEvent(const rTouch& touch) {}
+};
+
 #endif

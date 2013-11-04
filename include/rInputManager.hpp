@@ -15,6 +15,7 @@
 
 typedef std::map<unsigned int , rTouch*> rTouchMap;
 typedef std::vector<rController*> rControllerArray;
+typedef std::vector<rInputListener*> rInputListenerArray;
 
 class rInputManager : public rInput{
 public:
@@ -31,12 +32,16 @@ public:
 	virtual rControllerState* GetControllerState(size_t index) const;
 	virtual rController* GetController(size_t index) const;
 	
+	void AddListener(rInputListener* listener);
+	void RemoveListener(rInputListener* listener);
+
 protected:
-	void NotifyOfTouch(rTouch* touch);
+	void NotifyOfTouch(const rTouch& touch);
 	
 protected:
 	rTouchMap m_touches;
 	rControllerArray m_controllers;
+	rInputListenerArray m_listeners;
 };
 
 #endif

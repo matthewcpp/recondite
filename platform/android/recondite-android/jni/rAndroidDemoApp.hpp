@@ -12,6 +12,7 @@
 #include "ui/ruiSlider.hpp"
 #include "ui/ruiButton.hpp"
 #include "ui/ruiCheckbox.hpp"
+#include "ui/ruiLayoutManager.hpp"
 
 #include "rEngine.hpp"
 
@@ -38,12 +39,7 @@ private:
 private:
 	unsigned int m_frame;
 
-	ruiDPad* m_dpad;
-	ruiPicker* m_picker;
-	ruiSlider* m_slider;
-	ruiButton* m_button;
-	ruiCheckbox* m_checkbox;
-
+	ruiLayoutManager* m_layoutManager;
 	float rot;
 };
 

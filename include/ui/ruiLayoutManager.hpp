@@ -9,7 +9,8 @@
 #include "ui/ruiWidget.hpp"
 typedef std::vector<ruiWidget*> rWidgetVector;
 
-class ruiLayoutManager : public rInputListener {
+class ruiLayoutManager : public rInputListener, public ruiIWidgetManager {
+public:
 	ruiLayoutManager();
 	~ruiLayoutManager();
 	
@@ -24,12 +25,17 @@ public:
 	void Draw(rEngine& engine);
 	
 	void AddWidget(ruiWidget* widget);
+	ruiWidget* GetWidget(int id);
 	
+	virtual void ShowModal(ruiWidget* widget);
+	virtual void EndModal(ruiWidget* widget);
+
 	void Clear();
 private:
 	
 	rWidgetVector m_widgets;
 	ruiWidget* m_activeWidget;
+	ruiWidget* m_modalWidget;
 };
 
 #endif

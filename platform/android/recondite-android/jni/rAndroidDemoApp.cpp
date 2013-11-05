@@ -8,11 +8,8 @@ rAndroidDemoApp::rAndroidDemoApp(){
 void rAndroidDemoApp::Update(){
 	if (m_started){
 		rot += 1.0f;
-		m_dpad->Update(m_engine);
-		m_picker->Update(m_engine);
-		m_slider->Update(m_engine);
-		m_button->Update(m_engine);
-		m_checkbox->Update(m_engine);
+
+		m_layoutManager->Update(m_engine);
 
 		UpdateCamera();
 	}
@@ -41,6 +38,7 @@ void rAndroidDemoApp::UpdateCamera(){
 
 void rAndroidDemoApp::Draw(){
 	if (m_started){
+
 		m_graphicsDevice->Clear();
 		m_renderer->Render(m_viewport);
 
@@ -56,23 +54,29 @@ bool rAndroidDemoApp::Init(android_app* state){
 
 	if (result){
 		rController* controller = m_inputManager->CreateController(1,1,1,2);
-		m_dpad = new ruiDPad(controller->DPad(0), 100, rPoint(700, 300), rSize(300, 300));
-		m_picker = new ruiPicker(102, rPoint(10,10), rSize(250, 35));
-		m_slider = new ruiSlider(101, rPoint(10,75), rSize(250, 35));
-		m_button = new ruiButton("click me", 666, rPoint(10, 120), rSize(175, 40));
-		m_checkbox = new ruiCheckbox(667, rPoint(10, 195), rSize(50, 50));
+
+		m_layoutManager = new ruiLayoutManager();
+
+		m_inputManager->AddListener(m_layoutManager);
+
+		m_layoutManager->AddWidget(new ruiDPad(controller->DPad(0), 100, rPoint(700, 300), rSize(300, 300)));
+		m_layoutManager->AddWidget(new ruiPicker(m_layoutManager, 102, rPoint(10,10), rSize(250, 35)));
+		m_layoutManager->AddWidget(new ruiSlider(101, rPoint(10,75), rSize(250, 35)));
+		m_layoutManager->AddWidget(new ruiButton("click me", 666, rPoint(10, 120), rSize(175, 40)));
+		m_layoutManager->AddWidget(new ruiCheckbox(667, rPoint(10, 195), rSize(50, 50)));
 
 		rLog::Info("Init demo assets");
 
 		m_contentManager->LoadFontFromPath("Consolas.rfnt", "consolas");
 		rModel* reindeer = m_contentManager->LoadModelFromPath("reindeer.rmdl", "reindeer");
 
-		rSkeleton* skeleton = reindeer->Skeleton();
+		if (reindeer){
+			rSkeleton* skeleton = reindeer->Skeleton();
+			ruiPicker* picker = (ruiPicker*)m_layoutManager->GetWidget(102);
 
-		if (skeleton){
 			rArrayString animations;
 			skeleton->GetAnimationNames(animations);
-			m_picker->SetOptions(animations);
+			picker->SetOptions(animations);
 		}
 
 		m_viewport.SetClipping(1,1000);
@@ -98,9 +102,5 @@ void rAndroidDemoApp::DrawImmediate(){
 
 	m_graphicsDevice->EnableDepthTesting(false);
 
-	m_dpad->Draw(m_engine);
-	m_picker->Draw(m_engine);
-	m_slider->Draw(m_engine);
-	m_button->Draw(m_engine);
-	m_checkbox->Draw(m_engine);
+	m_layoutManager->Draw(m_engine);
 }

@@ -104,7 +104,6 @@ LOCAL_SRC_FILES += ../../../../src/ui/ruiLayoutManager.cpp
 LOCAL_SRC_FILES += ../../../../src/ui/ruiWidget.cpp
 LOCAL_SRC_FILES += ../../../../src/ui/ruiDPad.cpp
 LOCAL_SRC_FILES += ../../../../src/ui/ruiAnalogStick.cpp
-LOCAL_SRC_FILES += ../../../../src/ui/ruiPickerBase.cpp
 LOCAL_SRC_FILES += ../../../../src/ui/ruiPicker.cpp
 LOCAL_SRC_FILES += ../../../../src/ui/ruiPickerOptionsMenu.cpp
 LOCAL_SRC_FILES += ../../../../src/ui/ruiSlider.cpp

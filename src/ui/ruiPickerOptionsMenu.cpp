@@ -1,28 +1,19 @@
 #include "ui/ruiPickerOptionsMenu.hpp"
 
-ruiPickerOptionsMenu::ruiPickerOptionsMenu(ruiPickerBase* picker, int id)
+ruiPickerOptionsMenu::ruiPickerOptionsMenu(ruiIControlWithOptions* picker, ruiIWidgetManager* manager, int id)
 :ruiWidget(id)
 {
 	m_picker = picker;
-	
-	rRect pickerBox = m_picker->BoundingBox();
-	
-	m_position.Set(pickerBox.x, pickerBox.Bottom() + 20);
-	m_size.Set(250, picker->NumOptions() * 30);
+	m_manager = manager;
 }
 
-void ruiPickerOptionsMenu::Update(rEngine& engine){
-	rTouch* touch = engine.input->GetTouch(0);
+void ruiPickerOptionsMenu::OnTouchDown(const rTouch& touch){
+	rPoint touchPos = touch.GetCurrentPosition();
 
-	if (touch && touch->GetType() == rTOUCH_DOWN){
-		rPoint touchPos = touch->GetCurrentPosition();
-		rRect rect(m_position, m_size);
+	int yPos = touchPos.y - m_position.y;
+	m_picker->SetSelectionIndex( yPos / 30);
 
-		if (rect.ContainsPoint(touchPos)){
-			int yPos = touchPos.y - m_position.y;
-			m_picker->SubmenuSelection( yPos / 30);
-		}
-	}
+	m_manager->EndModal(this);
 }
 
 void ruiPickerOptionsMenu::Draw(rEngine& engine){
@@ -33,7 +24,6 @@ void ruiPickerOptionsMenu::Draw(rEngine& engine){
 	rColor gray(200,200,200,255);
 	
 	rFont* font = engine.content->GetFontAsset("consolas");
-	rPoint pickerPos = m_picker->Position();
 	
 	rRect box(m_position, m_size);
 	engine.renderer->RenderRect(box, gray);

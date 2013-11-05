@@ -20,8 +20,16 @@ rSize ruiWidget::Size() const{
 	return m_size;
 }
 
+void ruiWidget::SetSize(int x, int y){
+	m_size.Set(x, y);
+}
+
 rPoint ruiWidget::Position() const{
 	return m_position;
+}
+
+void ruiWidget::SetPosition(int x, int y){
+	m_position.Set(x, y);
 }
 
 rRect ruiWidget::BoundingBox() const{

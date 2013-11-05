@@ -1,45 +1,29 @@
 #include "ui/ruiPicker.hpp"
 
-ruiPicker::ruiPicker(int id, const rPoint& position, const rSize& size)
-:ruiPickerBase(id,position, size)
+ruiPicker::ruiPicker(ruiIWidgetManager* manager,int id, const rPoint& position, const rSize& size)
+:ruiWidget(id,position, size)
 {
-	m_optionsMenu = NULL;
+	m_manager = manager;
 }
 
-ruiPicker::ruiPicker(rArrayString& options, int id, const rPoint& position, const rSize& size)
-:ruiPickerBase(options, id,position, size)
+ruiPicker::ruiPicker(rArrayString& options, ruiIWidgetManager* manager,int id, const rPoint& position, const rSize& size)
+:ruiWidget(id,position, size)
 {
+	m_manager = manager;
+
+	SetOptions(options);
 }
 
-void ruiPicker::Update(rEngine& engine){
-	if (!m_optionsMenu){
-		rTouch* touch = engine.input->GetTouch(0);
-
-		if (touch && touch->GetType() == rTOUCH_DOWN){
-			rPoint touchPos = touch->GetCurrentPosition();
-			rRect rect(m_position, m_size);
-
-			if (rect.ContainsPoint(touchPos)){
-				ShowOptionsMenu();
-			}
-		}
-	}
-	else{
-		m_optionsMenu->Update(engine);
-	}
+void ruiPicker::OnTouchDown(const rTouch& touch){
+	ShowOptionsMenu();
 }
 
 void ruiPicker::ShowOptionsMenu(){
-	HideOptionsMenu();
+	ruiPickerOptionsMenu* optionsMenu = new ruiPickerOptionsMenu(this, m_manager, -1);
+	optionsMenu->SetPosition(m_position.x, m_position.y + m_size.y + 20);
+	optionsMenu->SetSize(250, NumOptions() * 30);
 
-	m_optionsMenu = new ruiPickerOptionsMenu(this, -1);
-}
-
-void ruiPicker::HideOptionsMenu(){
-	if (m_optionsMenu){
-		delete m_optionsMenu;
-		m_optionsMenu = NULL;
-	}
+	m_manager->ShowModal(optionsMenu);
 }
 
 void ruiPicker::Draw(rEngine& engine){
@@ -57,14 +41,54 @@ void ruiPicker::Draw(rEngine& engine){
 		
 		engine.renderer->RenderString(text,font, point, black);
 	}
-	
-	if (m_optionsMenu){
-		m_optionsMenu->Draw(engine);
-	}
 
+}
+
+void ruiPicker::AddOption(const rString& option){
+	m_options.push_back(option);
+}
+
+void ruiPicker::SetOptions(const rArrayString& options){
+	m_selectionIndex = 0;
+	m_options = options;
+}
+
+size_t ruiPicker::NumOptions() const{
+	return m_options.size();
+}
+
+size_t ruiPicker::SelectionIndex() const{
+	return m_selectionIndex;
+}
+
+bool ruiPicker::SetSelectionIndex(size_t index){
+	if (index < m_options.size()){
+		m_selectionIndex = index;
+		return true;
+	}
+	else{
+		return false;
+	}
+}
+
+rString ruiPicker::SelectionText() const{
+	if (m_options.size() > 0){
+		return m_options[m_selectionIndex];
+	}
+	else{
+		return "";
+	}
+}
+
+void ruiPicker::Clear(){
+	m_selectionIndex = 0;
+	m_options.clear();
+}
+
+const rArrayString& ruiPicker::Options() const{
+	return m_options;
 }
 
 void ruiPicker::SubmenuSelection(size_t index){
 	SetSelectionIndex(index);
-	HideOptionsMenu();
 }

@@ -40,8 +40,6 @@ bool rAndroidApplication::Init(android_app* state){
 		m_engine.input = m_inputManager;
 		m_engine.renderer = m_renderer;
 		m_engine.content = m_contentManager;
-
-		m_started = true;
 	}
 	else{
 		rLog::Error("Error initializing graphics");
@@ -91,7 +89,7 @@ void rAndroidApplication::OnSaveStateCommand(){
 
 void rAndroidApplication::OnInitWindowCommand(android_app* app){
 	__android_log_print(ANDROID_LOG_INFO, "recondite", "Application Init Window Command");
-	Init(app);
+	m_started = Init(app);
 }
 
 void rAndroidApplication::OnTerminateWindowCommand(){

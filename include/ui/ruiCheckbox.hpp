@@ -12,11 +12,12 @@ public:
 	
 public:
 	
+	virtual void OnTouchDown(const rTouch& touch);
+
 	bool IsChecked () const;
 	void SetChecked(bool checked);
 	
 	virtual void Draw(rEngine& engine);
-	virtual void Update(rEngine& engine);
 	
 private:
 	bool m_isChecked;

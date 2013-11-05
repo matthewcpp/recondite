@@ -60,10 +60,10 @@ bool rAndroidDemoApp::Init(android_app* state){
 		m_inputManager->AddListener(m_layoutManager);
 
 		m_layoutManager->AddWidget(new ruiDPad(controller->DPad(0), 100, rPoint(700, 300), rSize(300, 300)));
-		m_layoutManager->AddWidget(new ruiPicker(m_layoutManager, 102, rPoint(10,10), rSize(250, 35)));
-		m_layoutManager->AddWidget(new ruiSlider(101, rPoint(10,75), rSize(250, 35)));
-		m_layoutManager->AddWidget(new ruiButton("click me", 666, rPoint(10, 120), rSize(175, 40)));
-		m_layoutManager->AddWidget(new ruiCheckbox(667, rPoint(10, 195), rSize(50, 50)));
+		m_layoutManager->AddWidget(new ruiPicker(m_layoutManager, 102, rPoint(25,10), rSize(250, 35)));
+		m_layoutManager->AddWidget(new ruiSlider(101, rPoint(25,75), rSize(250, 35)));
+		m_layoutManager->AddWidget(new ruiButton("click me", 666, rPoint(25, 120), rSize(175, 40)));
+		m_layoutManager->AddWidget(new ruiCheckbox(667, rPoint(25, 195), rSize(50, 50)));
 
 		rLog::Info("Init demo assets");
 

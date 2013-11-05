@@ -41,19 +41,12 @@ void ruiButton::Draw(rEngine& engine){
 	
 }
 
-void ruiButton::Update(rEngine& engine){
-	rTouch* touch = engine.input->GetTouch(0);
-	
-	if (touch){
-		rRect box = BoundingBox();
-		rPoint touchPos = touch->GetCurrentPosition();
-		
-		if (touch->GetType() == rTOUCH_DOWN && box.ContainsPoint(touchPos)){
-			m_state = rBUTTON_STATE_DOWN;
-		}
-	}
-	else
-		m_state = rBUTTON_STATE_UP;
+void ruiButton::OnTouchDown(const rTouch& touch){
+	m_state = rBUTTON_STATE_DOWN;
+}
+
+void ruiButton::OnTouchUp(const rTouch& touch){
+	m_state = rBUTTON_STATE_UP;
 }
 
 rButtonState ruiButton::GetState() const{

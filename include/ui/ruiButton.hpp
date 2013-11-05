@@ -15,8 +15,10 @@ public:
 	rString GetText() const;
 	rString SetText(const rString& text);
 	
+	virtual void OnTouchDown(const rTouch& touch);
+	virtual void OnTouchUp(const rTouch& touch);
+
 	virtual void Draw(rEngine& engine);
-	virtual void Update(rEngine& engine);
 	
 	rButtonState GetState() const;
 	

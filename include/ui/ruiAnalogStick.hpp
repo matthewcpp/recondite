@@ -14,17 +14,20 @@ class ruiAnalogStick : public ruiWidget{
 public:
 
 	ruiAnalogStick(rController* controller, size_t stickIndex, int id, const rPoint& position, const rSize& size);
-	
-	virtual void Update(rEngine& engine);
+
+	virtual void OnTouchDown(const rTouch& touch);
+	virtual void OnTouchMove(const rTouch& touch);
+	virtual void OnTouchUp(const rTouch& touch);
+
 	virtual void Draw(rEngine& engine);
 	
 private:
 
 	void SetCircles();
-	int UpdateTouch(rEngine& engine);
-	void UpdateTouchIndicator(rEngine& engine);
 	void UpdateController();
 	
+	void UpdateStick(const rVector2& position);
+
 private:
 	size_t m_stickIndex;
 	rController* m_controller;
@@ -32,7 +35,7 @@ private:
 	rSize m_indicatorSize;
 	
 	rCircle2 m_outerCircle;
-	rCircle2 m_touchIndicator;
+	rCircle2 m_stick;
 	
 	int m_touchId;
 };

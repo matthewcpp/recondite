@@ -11,44 +11,58 @@ ruiAnalogStick::ruiAnalogStick(rController* controller, size_t stickIndex, int i
 	m_touchId = -1;
 }
 
-void ruiAnalogStick::UpdateTouchIndicator(rEngine& engine){
-	rVector2 touchPos = engine.input->GetTouch(m_touchId)->GetCurrentPositionVector();
-	float distance = touchPos.Distance(m_outerCircle.center);
-	
-	rVector2 pos = touchPos - m_outerCircle.center;
+void ruiAnalogStick::UpdateStick(const rVector2& position){
+	float distance = position.Distance(m_outerCircle.center);
+
+	rVector2 pos = position - m_outerCircle.center;
 	pos.Normalize();
-	
-	float radius =  m_outerCircle.radius - m_touchIndicator.radius;
+
+	float radius =  m_outerCircle.radius - m_stick.radius;
 	float scale = distance < radius ? distance : radius;
 	pos *= (scale);
-	m_touchIndicator.center = m_outerCircle.center + pos;
+	m_stick.center = m_outerCircle.center + pos;
 }
 
 void ruiAnalogStick::UpdateController(){
-	float x = rMath::ConvertRange(	m_touchIndicator.center.x, 
+	float x = rMath::ConvertRange(	m_stick.center.x,
 									m_outerCircle.center.x - m_outerCircle.radius,
 									m_outerCircle.center.x + m_outerCircle.radius,
 									-1.0f, 1.0f);
 									
-	float y = -rMath::ConvertRange(	m_touchIndicator.center.y, 
+	float y = -rMath::ConvertRange(	m_stick.center.y,
 									m_outerCircle.center.y - m_outerCircle.radius,
 									m_outerCircle.center.y + m_outerCircle.radius,
 									-1.0f, 1.0f);
 	
 	m_controller->SetAnalogStick(m_stickIndex, x, y);
 }
-	
-void ruiAnalogStick::Update(rEngine& engine){
-	UpdateTouch(engine);
-		
-	if (m_touchId >= 0){
-		UpdateTouchIndicator(engine);
+
+void ruiAnalogStick::OnTouchDown(const rTouch& touch){
+	if (m_touchId == -1){
+			rVector2 pos = touch.GetCurrentPositionVector();
+
+			if (m_stick.ContainsPoint(pos)){
+				m_touchId = touch.Id();
+				UpdateController();
+			}
 	}
-	else{
-		m_touchIndicator.center = m_outerCircle.center;
+}
+
+void ruiAnalogStick::OnTouchMove(const rTouch& touch){
+		if (touch.Id() == m_touchId){
+			rVector2 pos = touch.GetCurrentPositionVector();
+
+			UpdateStick(pos);
+			UpdateController();
+		}
+}
+
+void ruiAnalogStick::OnTouchUp(const rTouch& touch){
+	if (touch.Id() == m_touchId){
+		m_stick.center = m_outerCircle.center;
+		m_touchId = -1;
+		UpdateController();
 	}
-	
-	UpdateController();
 }
 
 void ruiAnalogStick::Draw(rEngine& engine){
@@ -56,7 +70,7 @@ void ruiAnalogStick::Draw(rEngine& engine){
 	rColor darkGray(139,137,137,255);
 	
 	engine.renderer->RenderCircle(m_outerCircle, gray);
-	engine.renderer->RenderCircle(m_touchIndicator, darkGray);
+	engine.renderer->RenderCircle(m_stick, darkGray);
 }
 
 void ruiAnalogStick::SetCircles(){
@@ -66,29 +80,5 @@ void ruiAnalogStick::SetCircles(){
 	float rad = ((float)std::max(m_size.x, m_size.y) / 2.0f);
 	
 	m_outerCircle.Set(center.x, center.y, rad);
-	m_touchIndicator.Set(center.x, center.y, rad / 3.0f);
-}
-
-int ruiAnalogStick::UpdateTouch(rEngine& engine){
-	if (m_touchId  >= 0){
-		if (engine.input->GetTouch(m_touchId) == NULL)
-			m_touchId = -1;
-	}
-	else{
-		rTouchArray touches;
-		engine.input->GetTouches(touches);
-		
-		for (size_t i = 0; i < touches.size(); i++){
-			if (touches[i]->GetType() == rTOUCH_DOWN){
-				rVector2 pt = touches[i]->GetCurrentPositionVector();
-				
-				if (m_touchIndicator.ContainsPoint(pt)){
-					m_touchId = touches[i]->Id();
-					break;
-				}
-			}
-		}
-	}
-	
-	return 0;
+	m_stick.Set(center.x, center.y, rad / 3.0f);
 }

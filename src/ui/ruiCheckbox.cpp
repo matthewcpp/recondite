@@ -6,6 +6,10 @@ ruiCheckbox::ruiCheckbox(int id, const rPoint& position, const rSize& size)
 	m_isChecked = false;
  }
 
+void ruiCheckbox::OnTouchDown(const rTouch& touch){
+	m_isChecked = !m_isChecked;
+}
+
 bool ruiCheckbox::IsChecked () const{
 	return m_isChecked;
 }
@@ -24,18 +28,5 @@ void ruiCheckbox::Draw(rEngine& engine){
 		rColor blue(0,0,255,255);
 		rRect fill(outline.x + 5, outline.y + 5, outline.width - 12, outline.height - 12);
 		engine.renderer->RenderRect(fill, blue);
-	}
-}
-
-void ruiCheckbox::Update(rEngine& engine){
-	rTouch* touch = engine.input->GetTouch(0);
-
-	if (touch && touch->GetType() == rTOUCH_DOWN){
-		rPoint touchPos = touch->GetCurrentPosition();
-		rRect box = BoundingBox();
-
-		if (box.ContainsPoint(touchPos)){
-			m_isChecked = !m_isChecked;
-		}
 	}
 }

@@ -59,8 +59,6 @@ void rFontData::RemoveGlyph(int scancode){
 	}
 }
 
-#include <iostream>
-
 void rFontData::GenerateTexture(){
 	rGlyphDataArray sortedGlyphs;
 
@@ -156,8 +154,8 @@ rContentError rFontData::WriteToFile(const rString& dir) {
 
 	m_textureFile = m_name + "_texture.rtex";
 
-	rContentError error = WriteGlyphFile (dir + m_name + ".rfnt");
-	error = m_textureData.WriteToPath(dir + m_textureFile);
+	rContentError error = WriteGlyphFile (rPath::Assemble(dir , m_name , ".rfnt"));
+	error = m_textureData.WriteToPath(rPath::Combine(dir , m_textureFile));
 
 	return error;
 }

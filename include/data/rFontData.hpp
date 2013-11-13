@@ -15,6 +15,8 @@
 
 #include "rFontGlyph.hpp"
 
+#include "rPath.hpp"
+
 struct rGlyphData : public rFontGlyph{
 	rGlyphData();
 	rGlyphData(int s, short w, short h, short t, short l, short a, unsigned char* d);

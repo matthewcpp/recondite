@@ -6,10 +6,12 @@
 #include "rInput.hpp"
 #include "rEngine.hpp"
 
+#include "ui/ruiBase.hpp"
+
 #include "ui/ruiWidget.hpp"
 typedef std::vector<ruiWidget*> rWidgetVector;
 
-class ruiLayoutManager : public rInputListener, public ruiIWidgetManager {
+class ruiLayoutManager : public rInputListener, public ruiIWidgetManager, public ruiOverlay {
 public:
 	ruiLayoutManager();
 	~ruiLayoutManager();
@@ -24,9 +26,11 @@ public:
 	void Update(rEngine& engine);
 	void Draw(rEngine& engine);
 	
-	void AddWidget(ruiWidget* widget);
+	virtual void AddWidget(ruiWidget* widget);
 	ruiWidget* GetWidget(int id);
 	
+	virtual rContentError LoadOverlay(const rString& path);
+
 	virtual void ShowModal(ruiWidget* widget);
 	virtual void EndModal(ruiWidget* widget);
 

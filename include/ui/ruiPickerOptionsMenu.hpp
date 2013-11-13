@@ -5,20 +5,14 @@
 #include "rDefs.hpp"
 
 #include "ui/ruiWidget.hpp"
+#include "ui/ruiBase.hpp"
 
 #include "rEngine.hpp"
 
-class ruiIControlWithOptions {
-public:
-	virtual const rArrayString& Options() const = 0;
-
-	virtual size_t SelectionIndex() const = 0;
-	virtual bool SetSelectionIndex(size_t index) = 0;
-};
 
 class ruiPickerOptionsMenu : public ruiWidget{
 public:
-	ruiPickerOptionsMenu(ruiIControlWithOptions* picker, ruiIWidgetManager* manager, int id);
+	ruiPickerOptionsMenu(ruiIControlWithOptions* picker, int id);
 	
 public:
 	virtual void OnTouchDown(const rTouch& touch);
@@ -27,7 +21,6 @@ public:
 	
 private:
 	ruiIControlWithOptions* m_picker;
-	ruiIWidgetManager* m_manager;
 };
 
 #endif

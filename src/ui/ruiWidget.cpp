@@ -35,3 +35,15 @@ void ruiWidget::SetPosition(int x, int y){
 rRect ruiWidget::BoundingBox() const{
 	return rRect(m_position, m_size);
 }
+
+ruiIWidgetManager* ruiWidget::widgetManager = NULL;
+
+void ruiWidget::ShowModal(ruiWidget* widget){
+	if (widgetManager)
+		widgetManager->ShowModal(widget);
+}
+
+void ruiWidget::EndModal(ruiWidget* widget){
+	if (widgetManager)
+		widgetManager->EndModal(widget);
+}

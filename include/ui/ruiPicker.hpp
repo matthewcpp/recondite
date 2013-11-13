@@ -6,12 +6,13 @@
 
 #include "rEngine.hpp"
 
+#include "ruiBase.hpp"
 #include "ruiPickerOptionsMenu.hpp"
 
 class ruiPicker : public ruiWidget, public ruiIControlWithOptions{
 public:
-	ruiPicker(ruiIWidgetManager* manager, int id, const rPoint& position, const rSize& size);
-	ruiPicker(rArrayString& options, ruiIWidgetManager* manager, int id, const rPoint& position, const rSize& size);
+	ruiPicker(int id, const rPoint& position, const rSize& size);
+	ruiPicker(rArrayString& options, int id, const rPoint& position, const rSize& size);
 	
 public:
 	void AddOption(const rString& option);
@@ -36,7 +37,6 @@ public:
 	virtual void SubmenuSelection(size_t index);
 
 private:
-	ruiIWidgetManager* m_manager;
 
 	size_t m_selectionIndex;
 	rArrayString m_options;

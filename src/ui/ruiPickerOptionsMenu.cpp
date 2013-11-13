@@ -1,10 +1,9 @@
 #include "ui/ruiPickerOptionsMenu.hpp"
 
-ruiPickerOptionsMenu::ruiPickerOptionsMenu(ruiIControlWithOptions* picker, ruiIWidgetManager* manager, int id)
+ruiPickerOptionsMenu::ruiPickerOptionsMenu(ruiIControlWithOptions* picker, int id)
 :ruiWidget(id)
 {
 	m_picker = picker;
-	m_manager = manager;
 }
 
 void ruiPickerOptionsMenu::OnTouchDown(const rTouch& touch){
@@ -13,7 +12,7 @@ void ruiPickerOptionsMenu::OnTouchDown(const rTouch& touch){
 	int yPos = touchPos.y - m_position.y;
 	m_picker->SetSelectionIndex( yPos / 30);
 
-	m_manager->EndModal(this);
+	EndModal(this);
 }
 
 void ruiPickerOptionsMenu::Draw(rEngine& engine){

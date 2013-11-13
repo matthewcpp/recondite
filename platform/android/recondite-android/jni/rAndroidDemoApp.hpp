@@ -7,13 +7,7 @@
 #include "data/rTexture2DData.hpp"
 #include "data/rGeometryData.hpp"
 
-#include "ui/ruiDPad.hpp"
-#include "ui/ruiPicker.hpp"
-#include "ui/ruiSlider.hpp"
-#include "ui/ruiButton.hpp"
-#include "ui/ruiCheckbox.hpp"
-#include "ui/ruiLayoutManager.hpp"
-#include "ui/ruiText.hpp"
+#include "ruiDemoController.hpp"
 
 #include "rEngine.hpp"
 
@@ -42,6 +36,8 @@ private:
 
 	ruiLayoutManager* m_layoutManager;
 	float rot;
+
+	ruiDemoController* m_uiController;
 };
 
 #endif

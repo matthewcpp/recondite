@@ -1,16 +1,12 @@
 #include "ui/ruiPicker.hpp"
 
-ruiPicker::ruiPicker(ruiIWidgetManager* manager,int id, const rPoint& position, const rSize& size)
+ruiPicker::ruiPicker(int id, const rPoint& position, const rSize& size)
+:ruiWidget(id,position, size)
+{}
+
+ruiPicker::ruiPicker(rArrayString& options, int id, const rPoint& position, const rSize& size)
 :ruiWidget(id,position, size)
 {
-	m_manager = manager;
-}
-
-ruiPicker::ruiPicker(rArrayString& options, ruiIWidgetManager* manager,int id, const rPoint& position, const rSize& size)
-:ruiWidget(id,position, size)
-{
-	m_manager = manager;
-
 	SetOptions(options);
 }
 
@@ -19,11 +15,11 @@ void ruiPicker::OnTouchDown(const rTouch& touch){
 }
 
 void ruiPicker::ShowOptionsMenu(){
-	ruiPickerOptionsMenu* optionsMenu = new ruiPickerOptionsMenu(this, m_manager, -1);
+	ruiPickerOptionsMenu* optionsMenu = new ruiPickerOptionsMenu(this, -1);
 	optionsMenu->SetPosition(m_position.x, m_position.y + m_size.y + 20);
 	optionsMenu->SetSize(250, NumOptions() * 30);
 
-	m_manager->ShowModal(optionsMenu);
+	ShowModal(optionsMenu);
 }
 
 void ruiPicker::Draw(rEngine& engine){

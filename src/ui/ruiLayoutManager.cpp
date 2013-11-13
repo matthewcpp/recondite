@@ -133,3 +133,7 @@ void ruiLayoutManager::EndModal(ruiWidget* widget){
 		m_modalWidget = NULL;
 	}
 }
+
+rContentError ruiLayoutManager::LoadOverlay(const rString& path){
+	return rCONTENT_ERROR_NONE;
+}

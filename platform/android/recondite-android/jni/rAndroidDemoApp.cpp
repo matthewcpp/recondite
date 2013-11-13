@@ -3,6 +3,8 @@
 rAndroidDemoApp::rAndroidDemoApp(){
 	m_frame = 0;
 	rot = 0;
+
+	m_uiController = NULL;
 }
 
 void rAndroidDemoApp::Update(){
@@ -53,18 +55,13 @@ bool rAndroidDemoApp::Init(android_app* state){
 	bool result = rAndroidApplication::Init(state);
 
 	if (result){
-		rController* controller = m_inputManager->CreateController(1,1,1,2);
-
 		m_layoutManager = new ruiLayoutManager();
+		ruiWidget::widgetManager = m_layoutManager;
+
+		m_uiController = new ruiDemoController(m_inputManager->CreateController(1,1,1,2));
+		m_uiController->Init(m_layoutManager);
 
 		m_inputManager->AddListener(m_layoutManager);
-
-		m_layoutManager->AddWidget(new ruiDPad(controller->DPad(0), 100, rPoint(700, 300), rSize(300, 300)));
-		m_layoutManager->AddWidget(new ruiPicker(m_layoutManager, 102, rPoint(25,10), rSize(250, 35)));
-		m_layoutManager->AddWidget(new ruiSlider(101, rPoint(25,75), rSize(250, 35)));
-		m_layoutManager->AddWidget(new ruiButton("click me", 666, rPoint(25, 120), rSize(175, 40)));
-		m_layoutManager->AddWidget(new ruiCheckbox(667, rPoint(25, 195), rSize(50, 50)));
-		m_layoutManager->AddWidget(new ruiText("Hello Android, How R U?\nDroid Does.", 900, rPoint(25, 275), rSize(200, 150)));
 
 		rLog::Info("Init demo assets");
 

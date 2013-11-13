@@ -10,13 +10,7 @@
 
 #include "rEngine.hpp"
 
-class ruiWidget;
-
-class ruiIWidgetManager{
-public:
-	virtual void ShowModal(ruiWidget* widget) = 0;
-	virtual void EndModal(ruiWidget* widget) = 0;
-};
+#include "ruiBase.hpp"
 
 class ruiWidget{
 public:
@@ -38,6 +32,13 @@ public:
 	rPoint Position() const;
 	void SetPosition(int x, int y);
 	
+public:
+	static ruiIWidgetManager* widgetManager;
+
+protected:
+	static void ShowModal(ruiWidget* widget);
+	static void EndModal(ruiWidget* widget);
+
 protected:
 	rSize m_size;
 	rPoint m_position;

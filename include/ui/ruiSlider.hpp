@@ -24,7 +24,6 @@ public:
 	rRect HandleRect() const;
 	
 	virtual void Draw(rEngine& engine);
-	virtual void Update(rEngine& engine);
 	
 	virtual void OnTouchDown(const rTouch& touch);
 	virtual void OnTouchMove(const rTouch& touch);

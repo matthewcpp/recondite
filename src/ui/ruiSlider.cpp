@@ -55,8 +55,6 @@ void ruiSlider::HandleDrag(const rPoint& position){
 	m_prevDrag = position;
 }
 
-void ruiSlider::Update(rEngine& engine){}
-
 rRect ruiSlider::HandleRect() const{
 	float ratio =  m_value / 100.0f;
 	int handleOffset = int (m_size.x * ratio) - (m_handleSize / 2);

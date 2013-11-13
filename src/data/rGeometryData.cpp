@@ -157,6 +157,17 @@ size_t rGeometryData::Push(float x, float y, float z, float u, float v){
 	return vertexIndex;
 }
 
+size_t  rGeometryData::Push(float x, float y, float u, float v){
+	size_t vertexIndex = VertexCount();
+
+	m_vertexData.push_back(x);
+	m_vertexData.push_back(y);
+	m_vertexData.push_back(u);
+	m_vertexData.push_back(v);
+
+	return vertexIndex;
+}
+
 size_t rGeometryData::Push(const rVector3& v){
 	size_t vertexIndex = VertexCount();
 

@@ -141,37 +141,90 @@ void rRenderer::CreateRequiredMaterials(){
 	m_contentManager->LoadMaterial(texMaterial, "immediate_text");
 }
 
-void rRenderer::RenderString(const rString& text, const rFont* font, const rPoint& pos, const rColor& color){
-	rGeometryData geometry;
+void rRenderer::WriteWord(rFontGlyphArray& glyphs, rGeometryData& geometry, int startX, int startY){
+	rElementBufferData* elements = geometry.GetElementBuffer("immediate");
 
-	geometry.Allocate(2, text.size() * 4, true, false);
-	rElementBufferData* elements = geometry.CreateElementBuffer("immediate");
+	int xPos = startX;
+	int yPos = startY;
 
-	int xPos = 0;
-	int yPos = font->Size();
-	int index = 0;
-
-	for (int i = 0; i < text.size(); i++){
-		const rFontGlyph* glyph = font->GetGlyph(text[i]);
+	rFontGlyph* glyph = NULL;
+	for (size_t i = 0; i < glyphs.size(); i++){
+		glyph = glyphs[i];
 
 		int left = xPos + glyph->leftBearing;
 		int right = left + glyph->width;
 		int top = yPos - glyph->top;
 		int bottom = top + glyph->height;
 
-
-		geometry.SetVertex(index, left, top, glyph->texCoords[0].x, glyph->texCoords[0].y);
-		geometry.SetVertex(index + 1, right , top, glyph->texCoords[1].x, glyph->texCoords[1].y);
-		geometry.SetVertex(index + 2, right, bottom , glyph->texCoords[2].x, glyph->texCoords[2].y);
-		geometry.SetVertex(index + 3, left, bottom, glyph->texCoords[3].x, glyph->texCoords[3].y);
+		unsigned short index = geometry.Push(left, top, glyph->texCoords[0].x, glyph->texCoords[0].y);
+		geometry.Push(right , top, glyph->texCoords[1].x, glyph->texCoords[1].y);
+		geometry.Push(right, bottom , glyph->texCoords[2].x, glyph->texCoords[2].y);
+		geometry.Push(left, bottom, glyph->texCoords[3].x, glyph->texCoords[3].y);
 
 		elements->Push(index, index + 1, index + 2);
 		elements->Push(index, index + 2, index + 3);
 
-		index += 4;
-
 		xPos += glyph->advance;
 	}
+
+	glyphs.clear();
+}
+
+void rRenderer::RenderString(const rString& str, const rFont* font, const rRect& bounding, const rColor& color){
+	rGeometryData geometry;
+	rFontGlyphArray wordGlyphs;
+
+	geometry.SetVertexDataInfo(2, true, false);
+	rElementBufferData* elements = geometry.CreateElementBuffer("immediate");
+
+	int xPos = 0;
+	int yPos = font->LineHeight();
+
+	int wordWidth = 0;
+	int spaceLeft = bounding.width;
+
+	for (int i = 0; i < str.size(); i++){
+		int c = str[i];
+
+		if (c == '\n'){
+			if (wordWidth > spaceLeft ){ //current word will not fit on this line
+				yPos += font->LineHeight();
+				xPos = 0;
+			}
+
+			WriteWord(wordGlyphs, geometry, xPos, yPos);
+
+			yPos += font->LineHeight();
+			xPos = 0;
+			spaceLeft = bounding.width;
+			wordWidth = 0;
+
+		}
+		else{
+			rFontGlyph* glyph = font->GetGlyph(c);
+
+			if (c == ' '){
+				if (wordWidth + glyph->advance > spaceLeft ){ //current word will not fit on this line
+					yPos += font->LineHeight();
+					xPos = 0;
+					spaceLeft = bounding.width;
+				}
+
+				WriteWord(wordGlyphs, geometry, xPos, yPos);
+
+				spaceLeft -= wordWidth + glyph->advance;
+				xPos += wordWidth + glyph->advance;;
+				wordWidth = 0;
+
+			}
+			else{
+				wordWidth += glyph->advance;
+				wordGlyphs.push_back(glyph);
+			}
+		}
+	}
+
+	WriteWord(wordGlyphs, geometry, xPos, yPos);
 
 	rMaterial* material = m_contentManager->GetMaterialAsset("immediate_text");
 	material->SetColor("fragColor", color);
@@ -186,11 +239,16 @@ void rRenderer::RenderString(const rString& text, const rFont* font, const rPoin
 		}
 
 		rMatrix4 translate;
-		translate.SetTranslate(pos.x,pos.y, 0.0f);
+		translate.SetTranslate(bounding.x,bounding.y, 0.0f);
 		transform *= translate;
 
 		m_graphicsDevice->RenderImmediate(geometry, transform, "immediate", material);
 	}
+}
+
+void rRenderer::RenderString(const rString& text, const rFont* font, const rPoint& pos, const rColor& color){
+	rRect bounding(pos.x, pos.y, INT_MAX, INT_MAX);
+	RenderString(text, font, bounding, color);
 }
 
 void BuildBoneGeometry(rGeometryData& geometryData, rBone* bone, unsigned short parentVertexIndex){

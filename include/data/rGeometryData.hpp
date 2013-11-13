@@ -76,6 +76,7 @@ public:
 
 	size_t Push(float x, float y, float z, float u, float v);
 	size_t Push(const rVector3& v);
+	size_t Push(float x, float y, float u, float v);
 	
 	size_t ElementBufferCount() const;
 	bool RemoveElementBuffer(const rString& name);

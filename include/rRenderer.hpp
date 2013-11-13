@@ -35,6 +35,7 @@ public:
 	void RenderCircle(const rCircle2& circle, const rColor& color);
 
 	void RenderString(const rString& text, const rFont* font, const rPoint& pos, const rColor& color);
+	void RenderString(const rString& str, const rFont* font, const rRect& bounding, const rColor& color);
 
 	void RenderWireBox(const rAlignedBox3& box, const rColor color);
 
@@ -43,6 +44,7 @@ public:
 	void RenderSkeleton(const rSkeleton* skeleton, const rMatrix4& transform, const rColor& color);
 
 private:
+	void WriteWord(rFontGlyphArray& glyphs, rGeometryData& geometry, int startX, int startY);
 	void ComputeWorldSpaceTransformForObject(const rMatrix4& object, rMatrix4& world);
 	
 	void CreateRequiredMaterials();

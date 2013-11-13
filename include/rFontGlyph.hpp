@@ -1,6 +1,8 @@
 #ifndef R_FONTGLYPH_HPP
 #define R_FONTGLYPH_HPP
 
+#include <vector>
+
 #include "rTypes.hpp"
 #include "rDefs.hpp"
 
@@ -26,5 +28,7 @@ public:
 
 	rVector2 texCoords[4];
 };
+
+typedef std::vector<rFontGlyph*> rFontGlyphArray;
 
 #endif

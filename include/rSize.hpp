@@ -9,6 +9,11 @@ struct rSize{
 
 	int x;
 	int y;
+
+	bool operator == (const rSize& sz) const;
+	bool operator != (const rSize& sz) const;
+
+	static const rSize Default;
 };
 
 #endif

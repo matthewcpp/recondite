@@ -2,6 +2,8 @@
 #define R_FONT_HPP
 
 #include <map>
+#include <algorithm>
+#include <climits>
 
 #include "rTypes.hpp"
 #include "rDefs.hpp"
@@ -19,12 +21,12 @@ public:
 	rFont(rTexture2D* texture, size_t size, int assetid, const rString& name, const rString& path);
 	~rFont();
 	
-	const rFontGlyph* GetGlyph(int scancode) const;
+	rFontGlyph* GetGlyph(int scancode) const;
 	rFontGlyph* AddGlyph(const rFontGlyph& g);
 	size_t NumGlyphs() const;
 	rTexture2D* Texture() const;
 	
-	rSize MeasureString(const rString& str) const;
+	rSize MeasureString(const rString& str, int lineWidth = INT_MAX) const;
 
 	void RemoveGlyph(int scancode);
 	
@@ -33,6 +35,8 @@ public:
 	virtual rAssetType Type() const;
 
 	size_t Size() const;
+	size_t LineHeight() const;
+
 private:
 
 	rFontGlyphMap m_glyphs;

@@ -7,7 +7,7 @@ ruiCheckbox::ruiCheckbox(int id, const rPoint& position, const rSize& size)
  }
 
 void ruiCheckbox::OnTouchDown(const rTouch& touch){
-	m_isChecked = !m_isChecked;
+	SetChecked( !m_isChecked);
 }
 
 bool ruiCheckbox::IsChecked () const{
@@ -15,7 +15,10 @@ bool ruiCheckbox::IsChecked () const{
 }
 
 void ruiCheckbox::SetChecked(bool checked){
-	m_isChecked = checked;
+	if (checked != m_isChecked){
+		m_isChecked = checked;
+		Trigger(ruiEVENT_CHECKBOX_CHANGE);
+	}
 }
 
 void ruiCheckbox::Draw(rEngine& engine){

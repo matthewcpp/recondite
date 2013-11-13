@@ -60,6 +60,9 @@ size_t ruiPicker::SelectionIndex() const{
 bool ruiPicker::SetSelectionIndex(size_t index){
 	if (index < m_options.size()){
 		m_selectionIndex = index;
+
+		Trigger(ruiEVENT_PICKER_CHANGE);
+
 		return true;
 	}
 	else{

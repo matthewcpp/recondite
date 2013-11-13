@@ -31,5 +31,4 @@ public:
 	virtual bool SetSelectionIndex(size_t index) = 0;
 };
 
-
 #endif

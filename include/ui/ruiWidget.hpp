@@ -10,7 +10,8 @@
 
 #include "rEngine.hpp"
 
-#include "ruiBase.hpp"
+#include "ui/ruiBase.hpp"
+#include "ui/ruiGenericWidgetFunctor.hpp"
 
 class ruiWidget{
 public:
@@ -32,6 +33,10 @@ public:
 	rPoint Position() const;
 	void SetPosition(int x, int y);
 	
+	template <typename T>
+	void Bind(int eventType, T* target, typename ruiGenericFunctionPointer<T>::Type method);
+	void Trigger(int eventType);
+
 public:
 	static ruiIWidgetManager* widgetManager;
 
@@ -45,6 +50,14 @@ protected:
 	
 private:
 	int m_id;
+
+	ruiFunctorMap m_eventTable;
 };
+
+template <typename T>
+void ruiWidget::Bind(int eventType, T* target, typename ruiGenericFunctionPointer<T>::Type method){
+	ruiGenericWidgetFunctor<T>* functor = new ruiGenericWidgetFunctor<T>(target, method);
+	m_eventTable.insert(std::make_pair(eventType , (ruiWidgetFunctor*)functor));
+}
 
 #endif

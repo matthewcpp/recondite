@@ -47,6 +47,13 @@ void ruiButton::OnTouchDown(const rTouch& touch){
 
 void ruiButton::OnTouchUp(const rTouch& touch){
 	m_state = rBUTTON_STATE_UP;
+
+	rRect box = BoundingBox();
+	rPoint currentPos = touch.GetCurrentPosition();
+
+	if (box.ContainsPoint(currentPos)){
+		Trigger(ruiEVENT_BUTTON_CLICK);
+	}
 }
 
 rButtonState ruiButton::GetState() const{

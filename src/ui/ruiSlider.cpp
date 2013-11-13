@@ -14,7 +14,12 @@ int ruiSlider::GetValue() const{
 }
 
 void ruiSlider::SetValue(int value){
-	m_value = rMath::Clamp<int>(value, 0 , 100);
+	value = rMath::Clamp<int>(value, 0 , 100);
+
+	if (value != m_value){
+		m_value = rMath::Clamp<int>(value, 0 , 100);
+		Trigger(ruiEVENT_SLIDER_CHANGE);
+	}
 }
 
 void ruiSlider::SetHandleSize(int size){
@@ -50,7 +55,7 @@ void ruiSlider::HandleDrag(const rPoint& position){
 	rPoint delta = position - m_prevDrag;
 	int change = int(round(((float)delta.x / (float)m_size.x) * 100.0f));
 	
-	m_value = rMath::Clamp(m_value + change, 0 , 100);
+	SetValue(rMath::Clamp(m_value + change, 0 , 100));
 	
 	m_prevDrag = position;
 }

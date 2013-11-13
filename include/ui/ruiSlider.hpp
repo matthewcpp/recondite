@@ -8,6 +8,7 @@
 #include "rMathUtil.hpp"
 
 #include "ui/ruiWidget.hpp"
+#include "ui/ruiEventType.hpp"
 
 class ruiSlider : public ruiWidget{
 public:

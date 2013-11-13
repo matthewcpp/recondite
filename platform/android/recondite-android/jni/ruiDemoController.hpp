@@ -13,13 +13,25 @@
 
 #include "input/rController.hpp"
 
+#include "rLog.hpp"
+
 class ruiDemoController : public ruiController {
 public:
 	ruiDemoController(rController* controller);
 	virtual void Init(ruiOverlay* overlay);
 
+	void OnPickerChange(ruiWidget* button);
+	void OnSliderChange(ruiWidget* slider);
+	void OnCheckboxChange(ruiWidget* checkbox);
+	void OnButtonClick(ruiWidget* button);
+
 private:
 	rController* m_controller;
+
+	ruiPicker* m_picker;
+	ruiSlider* m_slider;
+	ruiCheckbox* m_checkbox;
+	ruiButton* m_button;
 };
 
 #endif

@@ -6,8 +6,10 @@
 
 #include "rEngine.hpp"
 
-#include "ruiBase.hpp"
-#include "ruiPickerOptionsMenu.hpp"
+#include "ui/ruiBase.hpp"
+#include "ui/ruiPickerOptionsMenu.hpp"
+
+#include "ui/ruiEventType.hpp"
 
 class ruiPicker : public ruiWidget, public ruiIControlWithOptions{
 public:

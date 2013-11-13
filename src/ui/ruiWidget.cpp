@@ -36,6 +36,13 @@ rRect ruiWidget::BoundingBox() const{
 	return rRect(m_position, m_size);
 }
 
+void ruiWidget::Trigger(int eventType){
+	std::pair<ruiFunctorMap::iterator, ruiFunctorMap::iterator> result = m_eventTable.equal_range(eventType);
+
+	for (ruiFunctorMap::iterator it = result.first; it != result.second; ++it)
+		it->second->Call(this);
+}
+
 ruiIWidgetManager* ruiWidget::widgetManager = NULL;
 
 void ruiWidget::ShowModal(ruiWidget* widget){

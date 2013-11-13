@@ -5,6 +5,7 @@
 #include "rDefs.hpp"
 
 #include "ui/ruiWidget.hpp"
+#include "ui/ruiEventType.hpp"
 
 class ruiButton : public ruiWidget{
 public:

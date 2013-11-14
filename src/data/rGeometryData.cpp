@@ -178,6 +178,17 @@ size_t rGeometryData::Push(const rVector3& v){
 	return vertexIndex;
 }
 
+bool rGeometryData::GetVertexPosition(size_t index, rVector3& pos){
+	if (index < VertexCount()){
+		size_t i = VertexFloatCount() * index;
+		pos.Set(m_vertexData[i], m_vertexData[i + 1], m_vertexData[i + 2]);
+		return true;
+	}
+	else{
+		return false;
+	}
+}
+
 void rGeometryData::SetVertexData(float* vertexData, size_t vertexElementSize, size_t vertexCount, bool texCoords, bool normals){
 	size_t dataSize = Allocate(vertexElementSize, vertexCount, texCoords, normals);
 	

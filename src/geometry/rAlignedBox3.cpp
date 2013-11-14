@@ -118,6 +118,11 @@ void rAlignedBox3::AddBox(const rAlignedBox3& box){
 	if (box.max.z > max.z) max.z = box.max.z;
 }
 
+void rAlignedBox3::AddPoint(float x, float y, float z){
+	rVector3 pt(x,y,z);
+	AddPoint(pt);
+}
+
 void rAlignedBox3::AddPoint(const rVector3& pt){
 	if (pt.x < min.x) min.x = pt.x;
 	if (pt.y < min.y) min.y = pt.y;
@@ -132,4 +137,4 @@ void rAlignedBox3::Empty(){
 	*this = rAlignedBox3::NullBox;
 }
 
-const rAlignedBox3 rAlignedBox3::NullBox = rAlignedBox3(rVector3::ZeroVector ,rVector3::ZeroVector);
+const rAlignedBox3 rAlignedBox3::NullBox = rAlignedBox3(rVector3::ZeroVector, rVector3::ZeroVector);

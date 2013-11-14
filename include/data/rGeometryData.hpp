@@ -74,6 +74,8 @@ public:
 	void SetVertex(size_t index, const rVector3& v, const rVector2& tc);
 	void SetVertex(size_t index, float x, float y, float z);
 
+	bool GetVertexPosition(size_t index, rVector3& pos);
+
 	size_t Push(float x, float y, float z, float u, float v);
 	size_t Push(const rVector3& v);
 	size_t Push(float x, float y, float u, float v);

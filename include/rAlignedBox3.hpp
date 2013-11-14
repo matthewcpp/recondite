@@ -23,6 +23,7 @@ struct rAlignedBox3{
 	
 	void AddBox(const rAlignedBox3& box);
 	void AddPoint(const rVector3& pt);
+	void AddPoint(float x, float y, float z);
 
 	void GetCorners(rVector3 corners[]) const;
 

@@ -16,10 +16,12 @@
 #include "rSkeleton.hpp"
 
 #include "xml/rXMLDocument.hpp"
+#include "xml/rXMLUtil.hpp"
 
 #include "rVertexBoneLink.hpp"
 
 #include "rPath.hpp"
+#include "rAlignedBox3.hpp"
 
 struct rMeshData{
 	rMeshData(){}
@@ -28,6 +30,7 @@ struct rMeshData{
 	rString name;
 	rString buffer;
 	rString material;
+	rAlignedBox3 boundingBox;
 };
 
 typedef std::map<rString, rMeshData*> rMeshDataMap;
@@ -68,6 +71,8 @@ public:
 	void SetName(const rString& name);
 	rString GetName() const;
 
+	rAlignedBox3& GetBoundingBox();
+
 	rContentError WriteToFile(const rString& dir);
 	rContentError LoadFromFile(const rString& path);
 	rContentError LoadFromStream(std::istream& stream);
@@ -82,6 +87,7 @@ private:
 	rGeometryData m_geometry;
 
 	rSkeleton* m_skeleton;
+	rAlignedBox3 m_boundingBox;
 
 	rString m_name;
 };

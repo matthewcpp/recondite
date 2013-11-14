@@ -23,6 +23,8 @@ void rModelData::Clear(){
 	m_materials.clear();
 	m_textures.clear();
 
+	m_boundingBox.Empty();
+
 	if (m_skeleton){
 		delete m_skeleton;
 		m_skeleton = NULL;
@@ -155,6 +157,7 @@ rContentError rModelData::LoadFromStream(std::istream& stream){
 	document.LoadFromStream(stream);
 
 	m_name = document.GetRoot()->GetFirstChildNamed("name")->Text();
+	rXMLUtil::ReadAlignedBox3FromFromElement(document.GetRoot()->GetFirstChildNamed("boundingBox"), m_boundingBox);
 	
 	rXMLElement* meshesNode = document.GetRoot()->GetFirstChildNamed("meshes");
 
@@ -162,6 +165,7 @@ rContentError rModelData::LoadFromStream(std::istream& stream){
 		rXMLElement* meshNode = meshesNode->GetChild(i);
 
 		rMeshData* meshData= new rMeshData(meshNode->GetFirstChildNamed("name")->Text(), meshNode->GetFirstChildNamed("buffer")->Text(), meshNode->GetFirstChildNamed("material")->Text());
+		rXMLUtil::ReadAlignedBox3FromFromElement(meshNode->GetFirstChildNamed("boundingBox"), meshData->boundingBox);
 		m_meshes[meshData->name] = meshData;
 	}
 	
@@ -197,6 +201,7 @@ rContentError rModelData::WriteToFile(const rString& dir){
 	rXMLDocument document;
 	document.CreateRoot("model");
 	document.GetRoot()->CreateChild("name", m_name);
+	rXMLUtil::CreateAlignedBox3Element(document.GetRoot(), "boundingBox", m_boundingBox);
 
 	if (m_skeleton)
 		document.GetRoot()->CreateChild("skeleton", m_name);
@@ -205,10 +210,14 @@ rContentError rModelData::WriteToFile(const rString& dir){
 	rXMLElement* meshes = document.GetRoot()->CreateChild("meshes");
 
 	for (rMeshDataMap::iterator it = m_meshes.begin(); it != m_meshes.end(); ++it){
+		rMeshData* meshData = it->second;
+
 		rXMLElement* meshNode = meshes->CreateChild("mesh");
-		meshNode->CreateChild<rString>("name", it->first);
-		meshNode->CreateChild("material", it->second->material);
-		meshNode->CreateChild("buffer", it->second->buffer);
+		meshNode->CreateChild<rString>("name",meshData->name);
+		meshNode->CreateChild("material", meshData->material);
+		meshNode->CreateChild("buffer", meshData->buffer);
+
+		rXMLUtil::CreateAlignedBox3Element(meshNode, "boundingBox", meshData->boundingBox);
 	}
 
 	document.WriteToFile(rPath::Assemble(dir, m_name, "rmdl"));
@@ -236,6 +245,10 @@ rSkeleton* rModelData::CreateSkeleton(){
 		m_skeleton = new rSkeleton();
 		return m_skeleton;
 	}
+}
+
+rAlignedBox3& rModelData::GetBoundingBox(){
+	return m_boundingBox;
 }
 
 //---------------------

@@ -86,6 +86,7 @@ LOCAL_SRC_FILES += ../../../../src/xml/rXMLWriter.cpp
 LOCAL_SRC_FILES += ../../../../src/xml/rXMLReader.cpp
 LOCAL_SRC_FILES += ../../../../src/xml/rXMLElement.cpp
 LOCAL_SRC_FILES += ../../../../src/xml/rXMLAttributeList.cpp
+LOCAL_SRC_FILES += ../../../../src/xml/rXMLUtil.cpp
 
 LOCAL_SRC_FILES += ../../../../src/data/rTexture2DData.cpp
 LOCAL_SRC_FILES += ../../../../src/data/rMaterialData.cpp

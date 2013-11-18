@@ -108,3 +108,19 @@ bool rMatrixUtil::Unproject(const rVector3& point, const rMatrix4& modelMatrix, 
 	
 	return true;
 }
+
+void rMatrixUtil::QuaterionToMatrix(const rQuaternion& q, rMatrix4& m){
+	m.LoadIdentity();
+	
+	m[0] = 1.0f - 2.0f * (q.y * q.y) - 2.0f * (q.z * q.z);
+	m[1] = 2.0f * (q.x * q.y) + 2.0f * (q.z * q.w);
+	m[2] = 2.0f * (q.x * q.z) - 2.0f * (q.y * q.w);
+
+	m[4] = 2.0f * (q.x * q.y) - 2.0f * (q.z * q.w);
+	m[5] = 1.0f - 2 * (q.x * q.x) - 2 * (q.z * q.z);
+	m[6] = 2.0f * (q.y * q.z) + 2 * (q.x * q.w);
+
+	m[8] = 2.0f * (q.x * q.z) + 2.0f * (q.y * q.w);
+	m[9] = 2.0f * (q.y * q.z) - 2.0f * (q.x * q.w);
+	m[10] = 1.0f - 2.0f * (q.x * q.x) - 2.0f * (q.y * q.y);
+}

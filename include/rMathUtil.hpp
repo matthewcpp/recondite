@@ -28,8 +28,6 @@ namespace rMath{
 	template <typename T>
 	T Clamp(const T& val, const T& min, const T& max);
 
-	//void QuaterionToMatrix(const rQuaternion& q, rMatrix4& m);
-
 	bool PointInBoundedXYPlane(const rVector3& corner1 , const rVector3& corner2 , const rVector3& point);
 	bool PointInBoundedXZPlane(const rVector3& corner1 , const rVector3& corner2 , const rVector3& point);
 	bool PointInBoundedYZPlane(const rVector3& corner1 , const rVector3& corner2 , const rVector3& point);

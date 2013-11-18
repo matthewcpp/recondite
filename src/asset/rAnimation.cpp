@@ -53,6 +53,56 @@ rAnimationKeyframe* rAnimationTrack::GetKeyframe(size_t index) {
 	}
 }
 
+void rAnimationTrack::DetermineKeyframes(float animationTime, unsigned short keyframeHint, unsigned short& start, unsigned short& end) const{
+	start = keyframeHint;
+
+	for (size_t i = start + 1; i < m_keyframes.size(); i ++){
+			if (animationTime >= m_keyframes[i].time)
+				start = i;
+			else 
+				break;
+		}
+
+	if (start == m_keyframes.size() - 1){
+		end = start;
+	}
+	else{
+		end = start + 1;
+	}
+}
+
+unsigned short rAnimationTrack::InterpolateKeyframe(float animationTime, rMatrix4& transform, unsigned short keyframeHint) const{
+	rMatrix4 transM, rotM, scaleM;
+	rVector3 translate, scale;
+	rQuaternion rotate;
+
+	unsigned short start, end;
+	DetermineKeyframes(animationTime, keyframeHint, start, end);
+
+	if (start == end){
+		translate = m_keyframes[start].translation;
+		rotate = m_keyframes[start].rotation;
+		scale = m_keyframes[start].scale;
+	}
+	else {
+		const rAnimationKeyframe& prevKey = m_keyframes[start];
+		const rAnimationKeyframe& nextKey = m_keyframes[end];
+		
+
+		float interpolateVal = rMath::ConvertRange(animationTime, prevKey.time, nextKey.time, 0.0f, 1.0f);
+		translate = rVector3::Lerp(prevKey.translation, nextKey.translation, interpolateVal);
+		rotate = rQuaternion::Slerp(prevKey.rotation, nextKey.rotation, interpolateVal);
+		scale = rVector3::Lerp(prevKey.scale, nextKey.scale, interpolateVal);
+	}
+
+	rMatrixUtil::QuaterionToMatrix(rotate, rotM);
+	transM.SetTranslate(translate);
+	scaleM.SetScale(rVector3::OneVector);
+	transform = scaleM * transM * rotM;
+
+	return start;
+}
+
 rAnimation::rAnimation(const rString& name){
 	m_name = name;
 	m_duration = 0.0f;

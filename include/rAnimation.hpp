@@ -9,6 +9,9 @@
 
 #include "rVector3.hpp"
 #include "rQuaternion.hpp"
+#include "rMatrix4.hpp"
+
+#include "rMatrixUtil.hpp"
 
 struct rAnimationKeyframe {
 	rAnimationKeyframe() : time(0.0f), translation(rVector3::ZeroVector), rotation(rQuaternion::Identity), scale(rVector3::OneVector){}
@@ -39,8 +42,12 @@ public:
 	void AllocateFrames(size_t count);
 	void SetKeyframe(size_t i, float time, const rVector3& translation, rQuaternion& rotation, const rVector3& scale);
 	size_t PushKeyframe(float time, const rVector3& translation, rQuaternion& rotation, const rVector3& scale);
-	rAnimationKeyframe* GetKeyframe(size_t index) ;
+	rAnimationKeyframe* GetKeyframe(size_t index);
+
+	unsigned short InterpolateKeyframe(float animationTime, rMatrix4& transform, unsigned short keyframeHint) const;
 	
+private:
+	void DetermineKeyframes(float animationTime, unsigned short keyframeHint, unsigned short& start, unsigned short& end) const;
 private:
 	unsigned short m_handle;
 	rKeyframeVector m_keyframes;

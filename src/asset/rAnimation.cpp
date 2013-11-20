@@ -98,7 +98,7 @@ unsigned short rAnimationTrack::InterpolateKeyframe(float animationTime, rMatrix
 	rMatrixUtil::QuaterionToMatrix(rotate, rotM);
 	transM.SetTranslate(translate);
 	scaleM.SetScale(rVector3::OneVector);
-	transform = scaleM * transM * rotM;
+	transform = transM * rotM * scaleM;
 
 	return start;
 }

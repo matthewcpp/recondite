@@ -1,10 +1,12 @@
 #include "rGeometry.hpp"
 
-rGeometry::rGeometry (unsigned int vertexBufferId, size_t vertexElementSize, bool texCoords, bool normals,
+rGeometry::rGeometry (unsigned int vertexBufferId, size_t vertexElementSize, unsigned int vertexBoneLinkBufferId, bool texCoords, bool normals,
 	int assetid, const rString& name, const rString& path)
 :rAsset(assetid,name, path)
 {
 	m_vertexBufferId = vertexBufferId;
+	m_vertexBoneLinkBufferId = vertexBoneLinkBufferId;
+
 	m_vertexElementSize = vertexElementSize;
 	
 	m_hasTexCoords = texCoords;
@@ -13,6 +15,9 @@ rGeometry::rGeometry (unsigned int vertexBufferId, size_t vertexElementSize, boo
 
 unsigned int rGeometry::VertexBufferId() const{
 	return m_vertexBufferId;
+}
+unsigned int rGeometry::VertexBoneLinkBufferId() const{
+	return m_vertexBoneLinkBufferId;
 }
 
 bool rGeometry::HasTexCoords() const{

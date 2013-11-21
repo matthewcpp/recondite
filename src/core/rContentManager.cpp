@@ -526,8 +526,17 @@ rGeometry* rContentManager::LoadGeometry(const rGeometryData& geometryData, cons
 	}
 	else
 	{
-		unsigned int vertexBuffer = m_graphicsDevice->CreateVertexBuffer(geometryData.GetVertexData(), geometryData.VertexDataSizeInBytes());
-		geometry = new rGeometry(vertexBuffer, geometryData.VertexElementSize(), geometryData.HasTextureCoords(), geometryData.HasNormals(), GetNextAssetId(), name, geometryData.Path());
+		unsigned int vertexBuffer = m_graphicsDevice->CreateArrayBuffer((const char*)geometryData.GetVertexData(), geometryData.VertexDataSizeInBytes());
+		unsigned int boneLinkBuffer = 0;
+
+		if (geometryData.NumVertexBoneLinks() > 0){
+			rVertexBoneDataArray vertexBoneData;
+			geometryData.CreateVetexBoneDataArray(vertexBoneData);
+
+			boneLinkBuffer = m_graphicsDevice->CreateArrayBuffer((const char*)&vertexBoneData[0], vertexBoneData.size() * sizeof (rVertexBoneDataArray::value_type));
+		}
+
+		geometry = new rGeometry(vertexBuffer, geometryData.VertexElementSize(), boneLinkBuffer ,geometryData.HasTextureCoords(), geometryData.HasNormals(), GetNextAssetId(), name, geometryData.Path());
 		
 		rArrayString bufferNames;
 		geometryData.GetElementBufferNames(bufferNames);

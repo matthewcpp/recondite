@@ -2,6 +2,7 @@
 #define R_VERTEXBONELINK_HPP
 
 #include <map>
+#include <vector>
 
 struct rVertexBoneLink{
 	rVertexBoneLink(){}
@@ -13,5 +14,15 @@ struct rVertexBoneLink{
 };
 
 typedef std::multimap<unsigned short , rVertexBoneLink> rVertexBoneLinkMap;
+typedef std::pair<rVertexBoneLinkMap::const_iterator, rVertexBoneLinkMap::const_iterator> rVertexBoneLinkResult;
+
+#define rMAX_VERTEX_BONE_INFLUENCES 4
+
+struct rVertexBoneData{
+	int boneIndex[rMAX_VERTEX_BONE_INFLUENCES];
+	float weight[rMAX_VERTEX_BONE_INFLUENCES];
+};
+
+typedef std::vector<rVertexBoneData> rVertexBoneDataArray;
 
 #endif

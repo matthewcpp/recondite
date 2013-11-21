@@ -30,11 +30,12 @@ typedef std::map<rString, rElementBuffer> rElementBufferIdMap;
 
 class rGeometry : public rAsset{
 public:
-	rGeometry (unsigned int vertexBufferId, size_t vertexElementSize, bool texCoords, bool normals,
+	rGeometry (unsigned int vertexBufferId, size_t vertexElementSize, unsigned int vertexBoneLinkBufferId, bool texCoords, bool normals,
 		int assetid, const rString& name, const rString& path);
 	
 public:
 	unsigned int VertexBufferId() const;
+	unsigned int VertexBoneLinkBufferId() const;
 	
 	size_t ElementBufferCount() const;
 	bool GetElementBuffer(const rString& name, rElementBuffer& elementBuffer) const;
@@ -53,6 +54,8 @@ public:
 private:
 
 	unsigned int m_vertexBufferId; 
+	unsigned int m_vertexBoneLinkBufferId;
+
 	bool m_hasTexCoords; 
 	bool m_hasNormals;
 	
@@ -60,8 +63,6 @@ private:
 
 	rElementBufferIdMap m_elementBufferIds;
 	rVertexBoneLinkMap m_vertexBoneLinks;
-
-	
 };
 
 typedef std::map<rString, rGeometry*> rGeometryMap;

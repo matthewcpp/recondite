@@ -182,12 +182,12 @@ void rOpenGLGraphicsDevice::SetActiveMaterial(rMaterial* material){
 	}
 }
 
-unsigned int rOpenGLGraphicsDevice::CreateVertexBuffer(const float* vertexData, size_t vertexDataSize){
+unsigned int rOpenGLGraphicsDevice::CreateArrayBuffer(const char* data, size_t dataSize){
 	GLuint bufferId;
 	glGenBuffers(1, &bufferId);
 	
 	glBindBuffer(GL_ARRAY_BUFFER, bufferId);
-	glBufferData(GL_ARRAY_BUFFER, vertexDataSize, vertexData, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, dataSize, data, GL_STATIC_DRAW);
 	
 	return bufferId;
 }

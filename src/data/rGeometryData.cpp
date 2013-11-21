@@ -256,6 +256,32 @@ void rGeometryData::CreateVertexBoneLink(unsigned short vertexIndex, unsigned sh
 	m_vertexBoneLinks.insert(std::make_pair(vertexIndex, link));
 }
 
+void rGeometryData::CreateVetexBoneDataArray(rVertexBoneDataArray& vertexBoneData) const{
+	if (m_vertexBoneLinks.size() > 0){
+		size_t vertexCount = VertexCount();
+		vertexBoneData.resize(vertexCount);
+
+		int linkNum;
+		for (size_t i = 0; i < vertexCount; i++){
+			linkNum = 0;
+			rVertexBoneLinkResult links = m_vertexBoneLinks.equal_range(i);
+
+			for (rVertexBoneLinkMap::const_iterator it = links.first; it != links.second; ++it){
+				vertexBoneData[i].boneIndex[linkNum] = it->second.boneIndex;
+				vertexBoneData[i].weight[linkNum] = it->second.weight;
+				linkNum++;
+			}
+
+			if (linkNum < rMAX_VERTEX_BONE_INFLUENCES){
+				vertexBoneData[i].boneIndex[linkNum] = -1;
+			}
+		}
+	}
+	else {
+		vertexBoneData.clear();
+	}
+}
+
 rElementBufferData* rGeometryData::CreateElementBuffer(const rString& name){
 	rElementBufferData* buffer = NULL;
 	

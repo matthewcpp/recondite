@@ -55,7 +55,7 @@ public:
 	virtual unsigned int CreateShaderProgram(const rString& vertex, const rString& fragment);
 	virtual void DeleteShaderProgram(unsigned int shaderId);
 	
-	virtual unsigned int CreateVertexBuffer(const float* vertexData, size_t vertexDataSize);
+	virtual unsigned int CreateArrayBuffer(const char* data, size_t dataSize);
 	virtual unsigned int CreateElementBuffer(const unsigned short* elementData, size_t elementDataSize);
 	virtual void DeleteBuffer(unsigned int bufferId);
 

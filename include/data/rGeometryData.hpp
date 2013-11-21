@@ -93,6 +93,7 @@ public:
 	const rVertexBoneLinkMap& GetBoneLinks() const;
 	size_t NumVertexBoneLinks() const;
 	void CreateVertexBoneLink(unsigned short vertexIndex, unsigned short boneIndex, float weight);
+	void CreateVetexBoneDataArray(rVertexBoneDataArray& vertexBoneData) const;
 	
 	rString Path() const;
 	rContentError GetError() const;

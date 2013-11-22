@@ -44,7 +44,6 @@ public:
 	void RenderSkeleton(const rSkeleton* skeleton, const rMatrix4& transform, const rColor& color);
 
 private:
-	void WriteWord(rFontGlyphArray& glyphs, rGeometryData& geometry, int startX, int startY);
 	void ComputeWorldSpaceTransformForObject(const rMatrix4& object, rMatrix4& world);
 	
 	void CreateRequiredMaterials();

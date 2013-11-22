@@ -11,6 +11,9 @@
 
 #include "data/rGeometryData.hpp"
 
+#include "rFont.hpp"
+#include "rSkeleton.hpp"
+
 #include "rMathUtil.hpp"
 
 namespace rGeometryUtil{
@@ -19,6 +22,8 @@ namespace rGeometryUtil{
 	void CreateCircleVerticies(const rCircle2& circle, size_t segments, const rString& name, rGeometryData& geometry);
 
 	void CreateWireAlignedBoxVerticies(const rAlignedBox3& box, const rString& name, rGeometryData& geometry);
+	void Create2DText(const rString& str, const rFont* font, const rRect& bounding, const rString& name, rGeometryData& geometry);
+	void CreateSkeletonGeometry(const rSkeleton* skeleton, const rString& name, rGeometryData geometryData);
 };
 
 #endif

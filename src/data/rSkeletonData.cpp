@@ -92,7 +92,10 @@ void rSkeletonData::WriteAnimations(std::ostream& stream, const rSkeleton& skele
 
 				stream.write((char*)&b, 2);
 				stream.write((char*)&size, 4);
-				stream.write((char*)&keyframes[0], size * sizeof(rAnimationKeyframe));
+
+				if (size > 0){
+					stream.write((char*)&keyframes[0], size * sizeof(rAnimationKeyframe));
+				}
 			}
 		}
 	}
@@ -184,7 +187,9 @@ void rSkeletonData::ReadAnimations(std::istream& stream, rSkeleton& skeleton){
 			rAnimationTrack* track = animation->CreateTrack(handle);
 			track->AllocateFrames(size);
 
-			stream.read((char*)&track->Keyframes()[0], size * sizeof (rAnimationKeyframe));
+			if (size > 0){
+				stream.read((char*)&track->Keyframes()[0], size * sizeof (rAnimationKeyframe));
+			}
 		}
 	}
 }

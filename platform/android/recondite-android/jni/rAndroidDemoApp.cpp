@@ -56,26 +56,18 @@ bool rAndroidDemoApp::Init(android_app* state){
 
 	if (result){
 		m_layoutManager = new ruiLayoutManager();
-		ruiWidget::widgetManager = m_layoutManager;
-
-		m_uiController = new ruiDemoController(m_inputManager->CreateController(1,1,1,2));
-		m_uiController->Init(m_layoutManager);
-
-		m_inputManager->AddListener(m_layoutManager);
 
 		rLog::Info("Init demo assets");
-
 		m_contentManager->LoadFontFromPath("Consolas.rfnt", "consolas");
-		rModel* reindeer = m_contentManager->LoadModelFromPath("reindeer.rmdl", "reindeer");
 
-		if (reindeer){
-			rSkeleton* skeleton = reindeer->Skeleton();
-			ruiPicker* picker = (ruiPicker*)m_layoutManager->GetWidget(102);
+		m_contentManager->LoadModelFromPath("reindeer.rmdl", "reindeer");
+		m_contentManager->LoadModelFromPath("chicken.rmdl", "chicken");
 
-			rArrayString animations;
-			skeleton->GetAnimationNames(animations);
-			picker->SetOptions(animations);
-		}
+		m_inputManager->AddListener(m_layoutManager);
+		ruiWidget::widgetManager = m_layoutManager;
+
+		m_uiController = new ruiDemoController(m_contentManager,  m_inputManager->CreateController(1,1,1,2));
+		m_uiController->Init(m_layoutManager);
 
 		m_viewport.SetClipping(1,1000);
 
@@ -90,7 +82,7 @@ bool rAndroidDemoApp::Init(android_app* state){
 void rAndroidDemoApp::DrawImmediate(){
 	m_graphicsDevice->EnableDepthTesting(true);
 
-	rModel* model = m_contentManager->GetModelAsset("reindeer");
+	rModel* model = m_contentManager->GetModelAsset(m_uiController->GetActiveModelName());
 
 	if (model){
 		rMatrix4 transform;

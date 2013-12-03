@@ -713,6 +713,15 @@ size_t rContentManager::NumModels() const{
 	return m_models.size();
 }
 
+void rContentManager::GetModelNames(rArrayString& names) const{
+	names.clear();
+
+	rModelMap::const_iterator end =  m_models.end();
+	for (rModelMap::const_iterator it = m_models.begin(); it != end; ++it){
+		names.push_back(it->first);
+	}
+}
+
 rSkeleton* rContentManager::GetSkeletonAsset(const rString& name) const{
 	rSkeleton* skeleton = NULL;
 

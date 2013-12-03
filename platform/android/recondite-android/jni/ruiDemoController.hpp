@@ -12,26 +12,30 @@
 #include "ui/ruiText.hpp"
 
 #include "input/rController.hpp"
+#include "rContentManager.hpp"
 
 #include "rLog.hpp"
 
 class ruiDemoController : public ruiController {
 public:
-	ruiDemoController(rController* controller);
+	ruiDemoController(rContentManager* contentManager, rController* controller);
 	virtual void Init(ruiOverlay* overlay);
 
-	void OnPickerChange(ruiWidget* button);
-	void OnSliderChange(ruiWidget* slider);
-	void OnCheckboxChange(ruiWidget* checkbox);
-	void OnButtonClick(ruiWidget* button);
+	void OnModelChange(ruiWidget* widget);
+
+	rString GetActiveModelName();
+
+private:
+	void SetActiveModel(const rString& name);
 
 private:
 	rController* m_controller;
+	rContentManager* m_contentManager;
 
-	ruiPicker* m_picker;
-	ruiSlider* m_slider;
-	ruiCheckbox* m_checkbox;
-	ruiButton* m_button;
+	rString m_activeModelName;
+
+	ruiPicker* m_modelPicker;
+	ruiPicker* m_animationPicker;
 };
 
 #endif

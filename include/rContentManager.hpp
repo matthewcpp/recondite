@@ -90,6 +90,7 @@ public:
 	virtual rModel* LoadModelFromPath(const rString& path, const rString& name);
 	rModel* GetOrLoadModel(const rString& name, const rString& path);
 	size_t NumModels() const;
+	void GetModelNames(rArrayString& names) const;
 
 public:
 	rSkeleton* GetSkeletonAsset(const rString& name) const;

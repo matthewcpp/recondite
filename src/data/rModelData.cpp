@@ -53,6 +53,7 @@ rMeshData* rModelData::CreateMeshData(const rString& name){
 	}
 	else{
 		rMeshData* meshData = new rMeshData();
+		meshData->name = name;
 		m_meshes[name] = meshData;
 		
 		return meshData;

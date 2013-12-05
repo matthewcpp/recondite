@@ -1,6 +1,8 @@
 #ifndef R_ANDROIDAPPLICATION_HPP
 #define R_ANDROIDAPPLICATION_HPP
 
+#include <time.h>
+
 #include "rDefs.hpp"
 #include "rTypes.hpp"
 
@@ -33,10 +35,17 @@ public:
 	void OnApplicationGainFocusCommand();
 	void OnApplicationLostFocusCommand();
 
-	virtual void Update() = 0;
-	virtual void Draw() = 0;
+	virtual void Update();
+	virtual void Draw();
+
+	void Tick();
 
 	void TempInit();
+
+	unsigned long GetTimeMiliseconds() const;
+
+	unsigned int GetTargetFPS() const;
+	void SetTargetFPS(unsigned int targetFPS);
 
 protected:
 
@@ -52,6 +61,7 @@ protected:
 	rEngine m_engine;
 
 	bool m_started;
+	unsigned int m_targetFPS;
 };
 
 #endif

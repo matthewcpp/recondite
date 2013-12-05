@@ -8,23 +8,28 @@ public:
 	void Start(unsigned long seedTime);
 	void Update(unsigned long currentTime);
 
-	inline unsigned long Time() const;
+	inline unsigned long RunningTime() const;
 	inline float TimeDeltaSeconds() const;
 	inline unsigned long TimeDeltaMilliseconds() const;
+	inline unsigned long LastUpdateTime() const;
 
 private:
 
 	void Init();
 
-	unsigned long m_gameTime;
+	unsigned long m_runningTime;
 	unsigned long m_lastUpdateTime;
 
 	float m_timeDeltaSeconds;
 	unsigned long m_timeDeltaMilliseconds;
 };
 
-unsigned long rTime::Time() const{
-	return m_gameTime;
+unsigned long rTime::LastUpdateTime() const{
+	return m_lastUpdateTime;
+}
+
+unsigned long rTime::RunningTime() const{
+	return m_runningTime;
 }
 
 float rTime::TimeDeltaSeconds() const{

@@ -10,6 +10,8 @@ rAndroidApplication::rAndroidApplication(){
 	m_camera = NULL;
 
 	m_started = false;
+
+	m_targetFPS = 30;
 }
 
 rAndroidApplication::~rAndroidApplication(){
@@ -34,6 +36,8 @@ bool rAndroidApplication::Init(android_app* state){
 
 		m_inputManager = new rAndroidInputManager();
 		m_renderer = new rRenderer(m_graphicsDevice, m_contentManager);
+
+		m_engine.time.Start(GetTimeMiliseconds());
 
 		TempInit();
 
@@ -115,4 +119,40 @@ void rAndroidApplication::TempInit(){
 	m_viewport.SetClipping(1.0, 100.0f);
 	m_viewport.SetSize(size.x,size.y);
 	m_viewport.SetViewportType(rVIEWPORT_PERSP);
+}
+
+void rAndroidApplication::Tick(){
+	unsigned long time = GetTimeMiliseconds();
+
+	unsigned long delta = time - m_engine.time.LastUpdateTime();
+	unsigned int ms = 1000 / m_targetFPS;
+
+	if (delta >= ms){
+		m_engine.time.Update(time);
+		Update();
+		Draw();
+	}
+}
+
+void rAndroidApplication::Update(){
+
+}
+
+void rAndroidApplication::Draw(){
+
+}
+
+unsigned int rAndroidApplication::GetTargetFPS() const{
+	return m_targetFPS;
+}
+
+void rAndroidApplication::SetTargetFPS(unsigned int targetFPS){
+	m_targetFPS = targetFPS;
+}
+
+unsigned long rAndroidApplication::GetTimeMiliseconds() const{
+	struct timespec res;
+	clock_gettime(CLOCK_REALTIME, &res);
+
+	return 1000 * res.tv_sec +  (res.tv_nsec / 1000000);
 }

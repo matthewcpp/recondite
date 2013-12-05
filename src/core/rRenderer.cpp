@@ -142,26 +142,28 @@ void rRenderer::CreateRequiredMaterials(){
 }
 
 void rRenderer::RenderString(const rString& str, const rFont* font, const rRect& bounding, const rColor& color){
-	rGeometryData geometry;
-	rGeometryUtil::Create2DText(str, font, bounding, "immediate", geometry);
+	if (font){
+		rGeometryData geometry;
+		rGeometryUtil::Create2DText(str, font, bounding, "immediate", geometry);
 
-	rMaterial* material = m_contentManager->GetMaterialAsset("immediate_text");
-	material->SetColor("fragColor", color);
+		rMaterial* material = m_contentManager->GetMaterialAsset("immediate_text");
+		material->SetColor("fragColor", color);
 
-	if (material){
-		material->SetTexture("s_texture", font->Texture());
+		if (material){
+			material->SetTexture("s_texture", font->Texture());
 
-		rMatrix4 transform;
-		if (m_activeViewport){
-			rRect overlay = m_activeViewport->GetScreenRect();
-			rMatrixUtil::Ortho2D(overlay.Left(), overlay.Right(), overlay.Bottom(), overlay.Top(), transform);
+			rMatrix4 transform;
+			if (m_activeViewport){
+				rRect overlay = m_activeViewport->GetScreenRect();
+				rMatrixUtil::Ortho2D(overlay.Left(), overlay.Right(), overlay.Bottom(), overlay.Top(), transform);
+			}
+
+			rMatrix4 translate;
+			translate.SetTranslate(bounding.x,bounding.y, 0.0f);
+			transform *= translate;
+
+			m_graphicsDevice->RenderImmediate(geometry, transform, "immediate", material);
 		}
-
-		rMatrix4 translate;
-		translate.SetTranslate(bounding.x,bounding.y, 0.0f);
-		transform *= translate;
-
-		m_graphicsDevice->RenderImmediate(geometry, transform, "immediate", material);
 	}
 }
 

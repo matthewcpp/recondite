@@ -55,6 +55,8 @@ void android_main(struct android_app* state){
 			}
         }
 
+        application.Tick();
+
         application.Update();
         application.Draw();
     }

@@ -9,6 +9,8 @@ rAndroidDemoApp::rAndroidDemoApp(){
 
 void rAndroidDemoApp::Update(){
 	if (m_started){
+		rAndroidApplication::Update();
+
 		rot += 1.0f;
 
 		m_layoutManager->Update(m_engine);
@@ -62,12 +64,15 @@ bool rAndroidDemoApp::Init(android_app* state){
 
 		m_contentManager->LoadModelFromPath("reindeer.rmdl", "reindeer");
 		m_contentManager->LoadModelFromPath("chicken.rmdl", "chicken");
+		m_contentManager->LoadModelFromPath("turtle.rmdl", "turtle");
+		m_contentManager->LoadModelFromPath("cat.rmdl", "cat");
 
 		m_inputManager->AddListener(m_layoutManager);
 		ruiWidget::widgetManager = m_layoutManager;
 
 		m_uiController = new ruiDemoController(m_contentManager,  m_inputManager->CreateController(1,1,1,2));
 		m_uiController->Init(m_layoutManager);
+
 
 		m_viewport.SetClipping(1,1000);
 

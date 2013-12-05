@@ -17,6 +17,7 @@ void rAndroidDemoApp::Update(){
 
 		UpdateCamera();
 	}
+
 }
 
 void rAndroidDemoApp::UpdateCamera(){

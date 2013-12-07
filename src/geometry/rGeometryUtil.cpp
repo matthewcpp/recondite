@@ -183,7 +183,7 @@ void BuildBoneGeometry(rGeometryData& geometryData, rBone* bone, unsigned short 
 	}
 }
 
-void rGeometryUtil::CreateSkeletonGeometry(const rSkeleton* skeleton, const rString& name, rGeometryData geometryData){
+void rGeometryUtil::CreateSkeletonGeometry(const rSkeleton* skeleton, const rString& name, rGeometryData& geometryData){
 	rBoneArray bones;
 	skeleton->GetTopLevelBones(bones);
 

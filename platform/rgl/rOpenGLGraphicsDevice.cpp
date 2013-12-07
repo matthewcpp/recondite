@@ -36,7 +36,7 @@ void rOpenGLGraphicsDevice::EnableDepthTesting(bool enable){
 }
 
 void rOpenGLGraphicsDevice::SetClearColor(const rColor& color){
-	SetClearColor(float(color.Red()) / 255.0f, float(color.Green()) / 255.0f, float(color.Blue()) / 255.0f, float(color.Alpha()) / 255.0f);
+	SetClearColor(float(color.red) / 255.0f, float(color.green) / 255.0f, float(color.blue) / 255.0f, float(color.alpha) / 255.0f);
 }
 
 void rOpenGLGraphicsDevice::SetClearColor(float r, float g, float b, float a){
@@ -160,8 +160,8 @@ void rOpenGLGraphicsDevice::SetActiveMaterial(rMaterial* material){
 				glUniform4f(uniformHandle, color.red / 255.0f, color.green / 255.0f, color.blue / 255.0f , color.alpha / 255.0f);
 			}
 			break;
-			
-		case rMATERIAL_PARAMETER_TEXTURE2D:{
+
+			case rMATERIAL_PARAMETER_TEXTURE2D:{
 				rTexture2D* texture = parameter.GetTexture();
 				glActiveTexture ( GL_TEXTURE0 + textureIndex);
 				glBindTexture ( GL_TEXTURE_2D, texture->GraphicsDeviceID() );
@@ -178,7 +178,15 @@ void rOpenGLGraphicsDevice::SetActiveMaterial(rMaterial* material){
 
 			}
 			break;
+
+			case rMATERIAL_PARAMETER_FLOAT:{
+				float f = parameter.GetFloat();
+				glUniform1f(uniformHandle, f);
+			}
+			break;
 		}
+
+
 	}
 }
 

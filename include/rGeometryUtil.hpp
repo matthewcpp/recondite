@@ -23,7 +23,7 @@ namespace rGeometryUtil{
 
 	void CreateWireAlignedBoxVerticies(const rAlignedBox3& box, const rString& name, rGeometryData& geometry);
 	void Create2DText(const rString& str, const rFont* font, const rRect& bounding, const rString& name, rGeometryData& geometry);
-	void CreateSkeletonGeometry(const rSkeleton* skeleton, const rString& name, rGeometryData geometryData);
+	void CreateSkeletonGeometry(const rSkeleton* skeleton, const rString& name, rGeometryData& geometryData);
 };
 
 #endif

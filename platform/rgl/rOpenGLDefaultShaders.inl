@@ -7,7 +7,17 @@ const char coloredVertexShader[] =
 "  gl_Position = recMVPMatrix * recPosition;"
 "}";
 
-static const char coloredFragmentShader[] = 
+const char pointVertexShader[] = 
+
+"attribute vec4 recPosition;"
+"uniform float recPointSize;"
+"uniform mat4 recMVPMatrix;"
+"void main() {"
+"  gl_PointSize = recPointSize;"
+"  gl_Position = recMVPMatrix * recPosition;"
+"}";
+
+const char coloredFragmentShader[] = 
 "precision mediump float;"
 "uniform vec4 fragColor;"
 "void main() {"

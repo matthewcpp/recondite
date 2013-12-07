@@ -53,4 +53,8 @@ void ruiDemoController::OnUpdate(rEngine& engine){
 
 void ruiDemoController::OnDraw(rEngine& engine){
 	m_pawn->Draw(engine);
+
+	rSkeleton* skeleton = m_pawn->Model()->Skeleton();
+	rMatrix4 transform;
+	engine.renderer->RenderSkeleton(skeleton, transform, rColor::White);
 }

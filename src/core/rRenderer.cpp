@@ -185,6 +185,16 @@ void rRenderer::RenderSkeleton(const rSkeleton* skeleton, const rMatrix4& transf
 		rMaterial* material = m_contentManager->GetMaterialAsset("immediate_color");
 		material->SetColor("fragColor",color);
 
+		m_graphicsDevice->EnableDepthTesting(false);
+
 		m_graphicsDevice->RenderImmediate(geometryData, modelViewProjection, "skeleton_wire", material);
+
+		material = m_contentManager->GetMaterialAsset("default_points");
+		material->SetColor("fragColor",color);
+		material->SetFloat("recPointSize",5.0f);
+
+
+		m_graphicsDevice->RenderImmediate(geometryData, modelViewProjection, "skeleton_points", material);
+		m_graphicsDevice->EnableDepthTesting(true);
 	}
 }

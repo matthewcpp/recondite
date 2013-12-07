@@ -22,6 +22,10 @@ rTexture2D* rMaterialParameter::GetTexture(){
 	}
 }
 
+float rMaterialParameter::GetFloat(){
+	return m_value.m_float;
+}
+
 rMaterial::rMaterial(rShader* shader, int assetid, const rString& name, const rString& path)
 	:rAsset(assetid, name, path)
 {
@@ -46,6 +50,13 @@ void rMaterial::SetColor(const rString& name, const rColor& color){
 	parameter.m_value.m_color[3] = color.alpha;
 	
 	m_parameters[name] = parameter;
+}
+
+void rMaterial::SetFloat(const rString& name, float value){
+	rMaterialParameter parameter;
+		parameter.m_type = rMATERIAL_PARAMETER_FLOAT;
+		parameter.m_value.m_float = value;
+		m_parameters[name] = parameter;
 }
 
 rShader* rMaterial::Shader() const{

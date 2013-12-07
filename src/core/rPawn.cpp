@@ -30,7 +30,6 @@ int rPawn::Update(rEngine& engine){
 void rPawn::Draw(rEngine& engine){
 	if (m_model){
 		rMatrix4 transform;
-		transform.SetTranslate(0,-1,0);
 		engine.renderer->RenderModel(m_model, transform);
 	}
 }

@@ -15,6 +15,7 @@
 union rMaterialParameterValue{
 	rTexture2D* m_texture2d;
 	char m_color[4];
+	float m_float;
 };
 
 struct rMaterialParameter{
@@ -23,6 +24,7 @@ struct rMaterialParameter{
 	
 	bool GetColor(rColor& color);
 	rTexture2D* GetTexture();
+	float GetFloat();
 };
 
 typedef std::map<rString, rMaterialParameter> rMaterialParameterMap;
@@ -36,6 +38,7 @@ public:
 	
 	void SetTexture(const rString& name, rTexture2D* texture);
 	void SetColor(const rString& name, const rColor& color);
+	void SetFloat(const rString& name, float value);
 	
 	void GetParameterNames(rArrayString& names) const;
 	bool GetParameter(const rString& name, rMaterialParameter& param);

@@ -3,32 +3,17 @@
 
 struct rColor{
 	rColor() {}
-	rColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
+	rColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a)
+	:red(r), green(g), blue (b), alpha(a){}
 	
 	void Set(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
 	
-	inline unsigned char Red() const;
-	inline unsigned char Green() const;
-	inline unsigned char Blue() const;
-	inline unsigned char Alpha() const;
-	
 	unsigned char red, green, blue, alpha;
+
+	static const rColor White;
+	static const rColor Red;
+	static const rColor Green;
+	static const rColor Blue;
 };
-
-unsigned char rColor::Red() const{
-	return red;
-}
-
-unsigned char rColor::Green() const{
-	return green;
-}
-
-unsigned char rColor::Blue() const{
-	return blue;
-}
-
-unsigned char rColor::Alpha() const{
-	return alpha;
-}
 
 #endif

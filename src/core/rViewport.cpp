@@ -78,11 +78,11 @@ void rViewport::GetViewMatrix(rMatrix4& matrix) const{
 		rMatrixUtil::LookAt(m_camera->Position(), m_camera->Target(), m_camera->Up(), matrix);
 }
 
-rCamera* rViewport::Camera() const{
+riCamera* rViewport::Camera() const{
 	return m_camera;
 }
 
-void rViewport::SetCamera(rCamera* camera){
+void rViewport::SetCamera(riCamera* camera){
 	m_camera = camera;
 }
 

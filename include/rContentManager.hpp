@@ -36,17 +36,19 @@
 
 #include "rContentListener.hpp"
 
+#include "interface/riContentManager.hpp"
+
 typedef std::list<rContentListener*> rContentListenerList;
 typedef rContentListenerList::iterator rContentListenerItr;
 typedef rContentListenerList::const_iterator rContentListenerConstItr;
 
-class rContentManager{
+class rContentManager : public riContentManager{
 public:
 	rContentManager(rGraphicsDevice* graphicsDevice);
 	virtual ~rContentManager();
 	
 public:
-	rTexture2D* GetTextureAsset(const rString& name) const;
+	virtual rTexture2D* GetTextureAsset(const rString& name) const;
 	rTexture2D* LoadTexture(const rTexture2DData& textureData, const rString& name);
 	virtual rTexture2D* LoadTextureFromPath(const rString& path, const rString& name);
 	rTexture2D* GetOrLoadTexture(const rString& textureName, const rString& texturePath);
@@ -54,7 +56,7 @@ public:
 	size_t NumTextures() const;
 	
 public:
-	rShader* GetShaderAsset(const rString& name) const;
+	virtual rShader* GetShaderAsset(const rString& name) const;
 	rShader* LoadShader(const rShaderData& shaderData, const rString& name);
 	virtual rShader* LoadShaderFromPath(const rString& path, const rString& name);
 	rShader* GetOrLoadShader(const rString& name, const rString& path);
@@ -62,7 +64,7 @@ public:
 	size_t NumShaders() const;
 	
 public:
-	rMaterial* GetMaterialAsset(const rString& name) const;
+	virtual rMaterial* GetMaterialAsset(const rString& name) const;
 	rMaterial* LoadMaterial(const rMaterialData& materialData, const rString& name);
 	rMaterial* GetOrLoadMaterial(const rString& name, const rString& path);
 	virtual rMaterial* LoadMaterialFromPath(const rString& path, const rString& name);
@@ -70,7 +72,7 @@ public:
 	size_t NumMaterials() const;
 	
 public:
-	rGeometry* GetGeometryAsset(const rString& name) const;
+	virtual rGeometry* GetGeometryAsset(const rString& name) const;
 	rGeometry* LoadGeometry(const rGeometryData& geometryData, const rString& name);
 	rGeometry* GetOrLoadGeometry(const rString& name, const rString& path);
 	virtual rGeometry* LoadGeometryFromPath(const rString& path, const rString& name);
@@ -78,13 +80,13 @@ public:
 	size_t NumGeometry() const;
 	
 public:
-	rFont* GetFontAsset(const rString& name) const;
+	virtual rFont* GetFontAsset(const rString& name) const;
 	rFont* LoadFont(const rFontData& fontData, const rString& name);
 	rContentError RemoveFontAsset(const rString& name);
 	size_t NumFonts();
 
 public:
-	rModel* GetModelAsset(const rString& name) const;
+	virtual rModel* GetModelAsset(const rString& name) const;
 	rModel* LoadModel(rModelData& modelData, const rString& name);
 	rContentError RemoveModelAsset(const rString& name);
 	virtual rModel* LoadModelFromPath(const rString& path, const rString& name);
@@ -93,7 +95,7 @@ public:
 	void GetModelNames(rArrayString& names) const;
 
 public:
-	rSkeleton* GetSkeletonAsset(const rString& name) const;
+	virtual rSkeleton* GetSkeletonAsset(const rString& name) const;
 	virtual rSkeleton* LoadSkeletonFromPath(const rString& path, const rString& name);
 	rSkeleton* GetOrLoadSkeleton(const rString& name, const rString& path);
 	rContentError RemoveSkeletonAsset(const rString& name);

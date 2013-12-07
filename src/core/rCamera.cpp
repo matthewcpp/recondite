@@ -5,6 +5,18 @@ rCamera::rCamera(const rString& name , const rVector3& position)
 	:rActor3(name , position)
 {}
 
+rVector3 rCamera::Position() const{
+	return rActor3::Position();
+}
+
+rVector3 rCamera::Up() const{
+	return rActor3::Up();
+}
+
+int rCamera::Update(rEngine& engine){
+	return 0;
+}
+
 rViewCamera::rViewCamera(const rString& name , const rVector3& position)
 	:rCamera(name , position)
 {
@@ -17,10 +29,6 @@ rVector3 rViewCamera::Target() const{
 	return m_position + forward;
 }
 
-int rViewCamera::Update(const rTime& gameTime){
-	return 0;
-}
-
 
 rTargetCamera::rTargetCamera(const rString& name , const rVector3& position)
 	:rCamera(name , position)
@@ -28,10 +36,6 @@ rTargetCamera::rTargetCamera(const rString& name , const rVector3& position)
 
 }
 
-int rTargetCamera::Update(const rTime& gameTime){
-	return 0;
-}
-	
 rVector3 rTargetCamera::Target() const{
 	return m_target;
 }

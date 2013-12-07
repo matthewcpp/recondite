@@ -2,8 +2,6 @@
 
 rAndroidDemoApp::rAndroidDemoApp(){
 	m_frame = 0;
-	rot = 0;
-
 	m_uiController = NULL;
 }
 
@@ -11,13 +9,11 @@ void rAndroidDemoApp::Update(){
 	if (m_started){
 		rAndroidApplication::Update();
 
-		rot += 1.0f;
-
+		m_uiController->OnUpdate(m_engine);
 		m_layoutManager->Update(m_engine);
 
 		UpdateCamera();
 	}
-
 }
 
 void rAndroidDemoApp::UpdateCamera(){
@@ -47,7 +43,11 @@ void rAndroidDemoApp::Draw(){
 		m_graphicsDevice->Clear();
 		m_renderer->Render(m_viewport);
 
-		DrawImmediate();
+		m_graphicsDevice->EnableDepthTesting(true);
+		m_uiController->OnDraw(m_engine);
+
+		m_graphicsDevice->EnableDepthTesting(false);
+		m_layoutManager->Draw(m_engine);
 
 		m_graphicsDevice->SwapBuffers();
 		m_frame++;
@@ -68,35 +68,18 @@ bool rAndroidDemoApp::Init(android_app* state){
 		m_contentManager->LoadModelFromPath("turtle.rmdl", "turtle");
 		m_contentManager->LoadModelFromPath("cat.rmdl", "cat");
 
+		rLog::Info("Demo assets loaded");
+
 		m_inputManager->AddListener(m_layoutManager);
 		ruiWidget::widgetManager = m_layoutManager;
 
 		m_uiController = new ruiDemoController(m_contentManager,  m_inputManager->CreateController(1,1,1,2));
 		m_uiController->Init(m_layoutManager);
 
-
 		m_viewport.SetClipping(1,1000);
 
-		rLog::Info("Demo assets loaded");
+
 	}
 
 	return result;
-}
-
-#include <sstream>
-
-void rAndroidDemoApp::DrawImmediate(){
-	m_graphicsDevice->EnableDepthTesting(true);
-
-	rModel* model = m_contentManager->GetModelAsset(m_uiController->GetActiveModelName());
-
-	if (model){
-		rMatrix4 transform;
-		transform.SetTranslate(0,-1,0);
-		m_renderer->RenderModel(model, transform);
-	}
-
-	m_graphicsDevice->EnableDepthTesting(false);
-
-	m_layoutManager->Draw(m_engine);
 }

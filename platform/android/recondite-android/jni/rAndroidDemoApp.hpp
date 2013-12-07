@@ -29,14 +29,11 @@ private:
 
 	void DrawTextured();
 	void DrawShaded();
-	void DrawImmediate();
 
 private:
 	unsigned int m_frame;
 
 	ruiLayoutManager* m_layoutManager;
-	float rot;
-
 	ruiDemoController* m_uiController;
 };
 

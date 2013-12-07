@@ -3,6 +3,12 @@
 ruiDemoController::ruiDemoController(rContentManager* contentManager, rController* controller){
 	m_controller = controller;
 	m_contentManager = contentManager;
+
+	m_pawn = new rPawn(NULL, "demo pawn", rVector3::ZeroVector);
+}
+
+ruiDemoController::~ruiDemoController(){
+	delete m_pawn;
 }
 
 void ruiDemoController::Init(ruiOverlay* overlay){
@@ -31,20 +37,20 @@ void ruiDemoController::OnModelChange(ruiWidget* widget){
 	SetActiveModel(modelPicker->SelectionText());
 }
 
-rString ruiDemoController::GetActiveModelName(){
-	return m_activeModelName;
-}
-
 void ruiDemoController::SetActiveModel(const rString& name){
 	rArrayString animationNames;
 	rModel* model = m_contentManager->GetModelAsset(name);
-	rSkeleton* skeleton = model->Skeleton();
 
-	if (skeleton){
-		skeleton->GetAnimationNames(animationNames);
-	}
+	m_pawn->SetModel(model);
+	model->Skeleton()->GetAnimationNames(animationNames);
 
 	m_animationPicker->SetOptions(animationNames);
+}
 
-	m_activeModelName = name;
+void ruiDemoController::OnUpdate(rEngine& engine){
+	m_pawn->Update(engine);
+}
+
+void ruiDemoController::OnDraw(rEngine& engine){
+	m_pawn->Draw(engine);
 }

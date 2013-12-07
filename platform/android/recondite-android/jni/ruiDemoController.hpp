@@ -14,16 +14,22 @@
 #include "input/rController.hpp"
 #include "rContentManager.hpp"
 
+#include "rEngine.hpp"
+#include "rPawn.hpp"
+
 #include "rLog.hpp"
 
 class ruiDemoController : public ruiController {
 public:
 	ruiDemoController(rContentManager* contentManager, rController* controller);
+	~ruiDemoController();
+
 	virtual void Init(ruiOverlay* overlay);
 
-	void OnModelChange(ruiWidget* widget);
+	void OnUpdate(rEngine& engine);
+	void OnDraw(rEngine& engine);
 
-	rString GetActiveModelName();
+	void OnModelChange(ruiWidget* widget);
 
 private:
 	void SetActiveModel(const rString& name);
@@ -32,10 +38,10 @@ private:
 	rController* m_controller;
 	rContentManager* m_contentManager;
 
-	rString m_activeModelName;
-
 	ruiPicker* m_modelPicker;
 	ruiPicker* m_animationPicker;
+
+	rPawn* m_pawn;
 };
 
 #endif

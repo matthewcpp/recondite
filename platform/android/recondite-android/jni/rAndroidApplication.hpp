@@ -17,6 +17,8 @@
 #include "rEngine.hpp"
 #include "rLog.hpp"
 
+#include "rCamera.hpp"
+
 class rAndroidApplication{
 public:
 	rAndroidApplication();

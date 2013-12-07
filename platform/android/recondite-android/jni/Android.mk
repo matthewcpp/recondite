@@ -56,6 +56,7 @@ LOCAL_SRC_FILES += ../../../../src/geometry/rSphere3.cpp
 LOCAL_SRC_FILES += ../../../../src/geometry/rTriangle2.cpp
 
 LOCAL_SRC_FILES += ../../../../src/core/rActor3.cpp
+LOCAL_SRC_FILES += ../../../../src/core/rPawn.cpp
 LOCAL_SRC_FILES += ../../../../src/core/rCamera.cpp
 LOCAL_SRC_FILES += ../../../../src/core/rColor.cpp
 LOCAL_SRC_FILES += ../../../../src/core/rTime.cpp
@@ -79,6 +80,7 @@ LOCAL_SRC_FILES += ../../../../src/asset/rFont.cpp
 LOCAL_SRC_FILES += ../../../../src/asset/rModel.cpp
 LOCAL_SRC_FILES += ../../../../src/asset/rSkeleton.cpp
 LOCAL_SRC_FILES += ../../../../src/asset/rAnimation.cpp
+LOCAL_SRC_FILES += ../../../../src/asset/rAnimationPlayer.cpp
 
 LOCAL_SRC_FILES += ../../../../src/xml/rXMLDocument.cpp
 LOCAL_SRC_FILES += ../../../../src/xml/rXMLDocumentLoader.cpp

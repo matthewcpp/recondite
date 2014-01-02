@@ -117,6 +117,10 @@ void rGeometryData::SetVertex(size_t index, const rVector3& v, const rVector2& t
 	memcpy(&m_vertexData[i + 3], &tc, 8);
 }
 
+void rGeometryData::SetVertex(size_t index, const rVector3& v){
+	SetVertex(index, v.x, v.y, v.z);
+}
+
 void rGeometryData::SetVertex(size_t index, float x, float y, float z){
 	size_t i = VertexElementSize() * index;
 
@@ -182,6 +186,19 @@ bool rGeometryData::GetVertexPosition(size_t index, rVector3& pos){
 	if (index < VertexCount()){
 		size_t i = VertexFloatCount() * index;
 		pos.Set(m_vertexData[i], m_vertexData[i + 1], m_vertexData[i + 2]);
+		return true;
+	}
+	else{
+		return false;
+	}
+}
+
+bool rGeometryData::TransformVertex(size_t index, const rMatrix4& transform){
+	if (index < VertexCount()){
+		rVector3 pos;
+		GetVertexPosition(index, pos);
+		transform.TransformVector3(pos);
+		SetVertex(index, pos.x, pos.y, pos.z);
 		return true;
 	}
 	else{

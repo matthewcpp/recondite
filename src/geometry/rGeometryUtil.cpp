@@ -170,16 +170,15 @@ void rGeometryUtil::Create2DText(const rString& str, const rFont* font, const rR
 }
 
 void BuildBoneGeometry(rGeometryData& geometryData, rBone* bone, unsigned short parentVertexIndex){
-	size_t vertexIndex = geometryData.Push(bone->WoldPosition());
-
-	geometryData.GetElementBuffer("skeleton_points")->Push(vertexIndex);
+	geometryData.SetVertex(bone->id, bone->WoldPosition());
+	geometryData.GetElementBuffer("skeleton_points")->Push(bone->id);
 
 	if (parentVertexIndex != USHRT_MAX){
-		geometryData.GetElementBuffer("skeleton_wire")->Push(parentVertexIndex, vertexIndex);
+		geometryData.GetElementBuffer("skeleton_wire")->Push(parentVertexIndex, bone->id);
 	}
 
 	for (size_t i = 0; i < bone->children.size(); i++){
-		BuildBoneGeometry(geometryData, bone->children[i], vertexIndex);
+		BuildBoneGeometry(geometryData, bone->children[i], bone->id);
 	}
 }
 
@@ -187,7 +186,7 @@ void rGeometryUtil::CreateSkeletonGeometry(const rSkeleton* skeleton, const rStr
 	rBoneArray bones;
 	skeleton->GetTopLevelBones(bones);
 
-	geometryData.SetVertexDataInfo(3,false,false);
+	geometryData.Allocate(3, skeleton->NumBones(), false, false);
 
 	geometryData.CreateElementBuffer(name + "_wire")->SetGeometryType(rGEOMETRY_LINES);
 	geometryData.CreateElementBuffer(name + "_points")->SetGeometryType(rGEOMETRY_POINTS);

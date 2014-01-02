@@ -32,6 +32,10 @@ bool rAnimationPlayer::PlayAnimation(const rString& name){
 	}
 }
 
+float rAnimationPlayer::AnimationTime() const{
+	return m_animationTime;
+}
+
 void rAnimationPlayer::SetSkeleton(rSkeleton* skeleton){
 	m_skeleton = skeleton;
 	m_animationTime = 0;
@@ -57,17 +61,19 @@ void rAnimationPlayer::UpdateTransformData(){
 void rAnimationPlayer::UpdateTransformDataRec(rBone* parentBone, rBone* currentBone){
 	rAnimationTrack* track = m_currentAnimation->GetTrack(currentBone->id);
 
-	rMatrix4 currentBoneTransform;
-	m_keyframeInfo[currentBone->id] = track->InterpolateKeyframe(m_animationTime, currentBoneTransform, m_keyframeInfo[currentBone->id]);
+	if (track){
+		rMatrix4 currentBoneTransform;
+		m_keyframeInfo[currentBone->id] = track->InterpolateKeyframe(m_animationTime, currentBoneTransform, m_keyframeInfo[currentBone->id]);
 
-	if (parentBone){
-		currentBoneTransform = m_transformData[parentBone->id] * currentBoneTransform;
-	}
+		if (parentBone){
+			currentBoneTransform = m_transformData[parentBone->id] * currentBoneTransform;
+		}
 
-	m_transformData[currentBone->id] = currentBoneTransform;
+		m_transformData[currentBone->id] = currentBoneTransform;
 
-	for (size_t i = 0; i < currentBone->children.size(); i++){
-		UpdateTransformDataRec(currentBone, currentBone->children[i]);
+		for (size_t i = 0; i < currentBone->children.size(); i++){
+			UpdateTransformDataRec(currentBone, currentBone->children[i]);
+		}
 	}
 }
 

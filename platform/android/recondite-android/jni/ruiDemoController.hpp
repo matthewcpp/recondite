@@ -30,6 +30,7 @@ public:
 	void OnDraw(rEngine& engine);
 
 	void OnModelChange(ruiWidget* widget);
+	void OnAnimationChange(ruiWidget* widget);
 
 private:
 	void SetActiveModel(const rString& name);

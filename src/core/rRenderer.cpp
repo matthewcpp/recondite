@@ -172,12 +172,15 @@ void rRenderer::RenderString(const rString& text, const rFont* font, const rPoin
 	RenderString(text, font, bounding, color);
 }
 
-void rRenderer::RenderSkeleton(const rSkeleton* skeleton, const rMatrix4& transform, const rColor& color){
+void rRenderer::RenderSkeleton(const rSkeleton* skeleton, const rMatrix4Vector& transformArray, const rColor& color){
 	if (skeleton){
 		rGeometryData geometryData;
 		rGeometryUtil::CreateSkeletonGeometry(skeleton, "skeleton", geometryData);
 
-		rMatrix4 modelViewProjection;
+		for (size_t i = 0; i <transformArray.size(); i++)
+			geometryData.TransformVertex(i, transformArray[i]);
+
+		rMatrix4 modelViewProjection, transform;
 		if (m_activeViewport){
 			ComputeWorldSpaceTransformForObject(transform, modelViewProjection);
 		}

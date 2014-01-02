@@ -13,7 +13,7 @@ public:
 	rModel* Model() const;
 	void SetModel(rModel* model);
 	
-	rAnimationPlayer& AnimationPlayer();
+	rAnimationPlayer* AnimationPlayer();
 	
 	virtual int Update(rEngine& engine);
 	virtual void Draw(rEngine& engine);

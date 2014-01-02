@@ -19,8 +19,8 @@ void rPawn::SetModel(rModel* model){
 		m_animationPlayer.SetSkeleton(NULL);
 }
 	
-rAnimationPlayer& rPawn::AnimationPlayer(){
-	return m_animationPlayer;
+rAnimationPlayer* rPawn::AnimationPlayer(){
+	return &m_animationPlayer;
 }
 
 int rPawn::Update(rEngine& engine){

@@ -18,6 +18,7 @@
 #include "rAlignedBox3.hpp"
 
 #include "rSkeleton.hpp"
+#include "rAnimationPlayer.hpp"
 
 class rRenderer {
 public:
@@ -41,7 +42,7 @@ public:
 
 	void RenderModel(const rModel* model, const rMatrix4& transform);
 
-	void RenderSkeleton(const rSkeleton* skeleton, const rMatrix4& transform, const rColor& color);
+	void RenderSkeleton(const rSkeleton* skeleton, const rMatrix4Vector& transformArray, const rColor& color);
 
 private:
 	void ComputeWorldSpaceTransformForObject(const rMatrix4& object, rMatrix4& world);

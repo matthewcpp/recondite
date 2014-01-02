@@ -11,6 +11,7 @@
 
 #include "rVector2.hpp"
 #include "rVector3.hpp"
+#include "rMatrix4.hpp"
 
 #include "rVertexBoneLink.hpp"
 
@@ -73,8 +74,11 @@ public:
 	void SetVertex(size_t index, const rVector3& v, const rVector3& n, const rVector2& tc);
 	void SetVertex(size_t index, const rVector3& v, const rVector2& tc);
 	void SetVertex(size_t index, float x, float y, float z);
+	void SetVertex(size_t index, const rVector3& v);
 
 	bool GetVertexPosition(size_t index, rVector3& pos);
+	
+	bool TransformVertex(size_t index, const rMatrix4& transform);
 
 	size_t Push(float x, float y, float z, float u, float v);
 	size_t Push(const rVector3& v);

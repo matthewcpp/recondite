@@ -21,6 +21,7 @@ void ruiDemoController::Init(ruiOverlay* overlay){
 	m_modelPicker->Bind(ruiEVENT_PICKER_CHANGE, this, &ruiDemoController::OnModelChange);
 
 	m_animationPicker = new ruiPicker(101, rPoint(25,60), rSize(250, 35));
+	m_animationPicker->Bind(ruiEVENT_PICKER_CHANGE, this, &ruiDemoController::OnAnimationChange);
 
 	overlay->AddWidget(new ruiDPad(m_controller->DPad(0), 999, rPoint(700, 300), rSize(300, 300)));
 	overlay->AddWidget(m_modelPicker);
@@ -29,6 +30,12 @@ void ruiDemoController::Init(ruiOverlay* overlay){
 	if (models.size() > 0)
 		SetActiveModel(models[0]);
 
+}
+
+void ruiDemoController::OnAnimationChange(ruiWidget* widget){
+	ruiPicker* animPicker = (ruiPicker*)widget;
+
+	m_pawn->AnimationPlayer()->PlayAnimation(animPicker->SelectionText());
 }
 
 void ruiDemoController::OnModelChange(ruiWidget* widget){
@@ -55,6 +62,9 @@ void ruiDemoController::OnDraw(rEngine& engine){
 	m_pawn->Draw(engine);
 
 	rSkeleton* skeleton = m_pawn->Model()->Skeleton();
-	rMatrix4 transform;
-	engine.renderer->RenderSkeleton(skeleton, transform, rColor::White);
+
+	rAnimationPlayer* animationPlayer = m_pawn->AnimationPlayer();
+	const rMatrix4Vector& transformData = animationPlayer->GetTransformData();
+
+	engine.renderer->RenderSkeleton(skeleton, transformData, rColor::White);
 }

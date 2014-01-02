@@ -25,7 +25,7 @@ public:
 	void Update(const rTime& time);
 
 	const rMatrix4Vector& GetTransformData() const;
-
+	float AnimationTime() const;
 private:
 	void UpdateTransformDataRec(rBone* parentBone, rBone* currentBone);
 

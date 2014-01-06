@@ -43,11 +43,12 @@ bool rIntersection2::RectangleContainsCircle(const rRectangle2& r , const rCircl
 
 bool rIntersection2::LineSegmentInstersectsCircle(const rLineSegment2& ls , const rCircle2& c){
 	
+	/*
 	rVector2 closest = rMath::ClosestPointOnSegment(ls ,c);
 
 	if(c.center.Distance(closest) < c.radius)
 		return true;
-
+		*/
 
 	return false;
 }

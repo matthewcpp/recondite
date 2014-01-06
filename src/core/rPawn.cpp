@@ -25,6 +25,8 @@ rAnimationPlayer* rPawn::AnimationPlayer(){
 
 int rPawn::Update(rEngine& engine){
 	m_animationPlayer.Update(engine.time);
+
+	return 0;
 }
 
 void rPawn::Draw(rEngine& engine){

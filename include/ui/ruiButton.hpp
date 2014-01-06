@@ -14,7 +14,7 @@ public:
 public:
 	
 	rString GetText() const;
-	rString SetText(const rString& text);
+	void SetText(const rString& text);
 	
 	virtual void OnTouchDown(const rTouch& touch);
 	virtual void OnTouchUp(const rTouch& touch);

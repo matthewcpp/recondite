@@ -12,7 +12,7 @@ rString ruiButton::GetText() const{
 	return m_text;
 }
 
-rString ruiButton::SetText(const rString& text){
+void ruiButton::SetText(const rString& text){
 	m_text = text;
 }
 

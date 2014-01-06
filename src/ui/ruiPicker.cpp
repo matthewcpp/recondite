@@ -2,11 +2,14 @@
 
 ruiPicker::ruiPicker(int id, const rPoint& position, const rSize& size)
 :ruiWidget(id,position, size)
-{}
+{
+	m_selectionIndex = 0;
+}
 
 ruiPicker::ruiPicker(rArrayString& options, int id, const rPoint& position, const rSize& size)
 :ruiWidget(id,position, size)
 {
+	m_selectionIndex = 0;
 	SetOptions(options);
 }
 

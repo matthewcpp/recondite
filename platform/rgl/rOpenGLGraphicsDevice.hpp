@@ -16,7 +16,6 @@
 #elif WIN32 || LINUX
 	#include <GL/glew.h>
 	#include <GL/gl.h>
-	#include <GL/glu.h>
 #else
 	#include <GLES2/gl2.h>
 #endif

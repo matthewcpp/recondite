@@ -350,3 +350,7 @@ void rFontData::GetGlyphData(rGlyphDataArray& glyphs) const{
 	for (rGlyphDataMap::const_iterator it = m_glyphs.begin(); it != m_glyphs.end(); ++it)
 		glyphs.push_back(it->second);
 }
+
+bool rFontData::TextureDataPresent() const{
+	return m_textureGenerated;
+}

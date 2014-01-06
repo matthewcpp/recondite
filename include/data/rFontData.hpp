@@ -69,6 +69,7 @@ public:
 	size_t GlyphCount() const;
 
 	const rTexture2DData& TextureData() const;
+	bool TextureDataPresent() const;
 
 	rString GetPath() const;
 

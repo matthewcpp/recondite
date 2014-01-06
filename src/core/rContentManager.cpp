@@ -623,7 +623,14 @@ rFont* rContentManager::LoadFont(const rFontData& fontData, const rString& name)
 		if (!m_processingBatchFile) NotifyAssetLoadError(name, rASSET_FONT, m_error);
 	}
 	else{
-		rTexture2D* fontTexture = LoadTextureFromPath(fontData.TextureFile(), name + "_texture");
+		rTexture2D* fontTexture = NULL;
+		
+		if (fontData.TextureDataPresent()){
+			fontTexture = LoadTexture(fontData.TextureData(), name + "_texture");
+		}
+		else{
+			fontTexture = LoadTextureFromPath(fontData.TextureFile(), name + "_texture");
+		}
 
 		font = new rFont(fontTexture, fontData.Size(), GetNextAssetId(), name, fontData.GetPath());
 		rGlyphDataArray glyphs;

@@ -28,10 +28,20 @@ namespace rMath{
 	template <typename T>
 	T Clamp(const T& val, const T& min, const T& max);
 
+	template <typename T>
+	int RoundToInt(T r);
+
 	bool PointInBoundedXYPlane(const rVector3& corner1 , const rVector3& corner2 , const rVector3& point);
 	bool PointInBoundedXZPlane(const rVector3& corner1 , const rVector3& corner2 , const rVector3& point);
 	bool PointInBoundedYZPlane(const rVector3& corner1 , const rVector3& corner2 , const rVector3& point);
 };
+
+template <typename T>
+int rMath::RoundToInt(T r) {
+  int tmp = static_cast<int> (r);
+  tmp += (r - tmp >= 0.5) - (r - tmp <= -0.5);
+  return tmp;
+}
 
 template <typename T>
 T rMath::Clamp(const T& val, const T& min, const T& max){

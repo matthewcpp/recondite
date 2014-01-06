@@ -53,7 +53,7 @@ void ruiSlider::StartDrag(const rPoint& position){
 
 void ruiSlider::HandleDrag(const rPoint& position){
 	rPoint delta = position - m_prevDrag;
-	int change = int(round(((float)delta.x / (float)m_size.x) * 100.0f));
+	int change = int(rMath::RoundToInt(((float)delta.x / (float)m_size.x) * 100.0f));
 	
 	SetValue(rMath::Clamp(m_value + change, 0 , 100));
 	

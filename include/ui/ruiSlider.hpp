@@ -1,8 +1,6 @@
 #ifndef RUI_SLIDER_HPP
 #define RUI_SLIDER_HPP
 
-#include <cmath>
-
 #include "rTypes.hpp"
 #include "rDefs.hpp"
 #include "rMathUtil.hpp"

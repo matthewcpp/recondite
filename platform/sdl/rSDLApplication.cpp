@@ -19,6 +19,7 @@ bool rSDLApplication::Init(){
 
 	 m_isRunning = true;
 
+	 m_inputManager = new rSDLInputManager();
 	 m_graphicsDevice = new rSDLGraphicsDevice();
 	 m_graphicsDevice->Init();
 
@@ -31,6 +32,8 @@ bool rSDLApplication::Init(){
 
 	 m_engine.content = m_contentManager;
 	 m_engine.renderer = new rRenderer(m_graphicsDevice, m_contentManager);
+	 m_engine.time.Start(GetTimeMiliseconds());
+	 m_engine.input = m_inputManager;
 
 	 m_layoutManager = new ruiLayoutManager();
 	 ruiPicker* picker = new ruiPicker(100, rPoint(25,10), rSize(250, 35));
@@ -40,7 +43,7 @@ bool rSDLApplication::Init(){
 
 	 TempInit();
 
-	 m_engine.time.Start(GetTimeMiliseconds());
+
 
 	 return true;
 }

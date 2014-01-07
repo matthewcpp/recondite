@@ -331,7 +331,6 @@ rContentError rFontData::LoadTextureFromStream(std::istream& stream){
 rContentError rFontData::LoadFontDataFromStream(std::istream& stream){
 	Clear();
 	ReadGlyphFile(stream);
-	m_textureGenerated = true;
 	return rCONTENT_ERROR_NONE;
 }
 

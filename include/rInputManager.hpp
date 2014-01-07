@@ -13,6 +13,8 @@
 #include "input/rController.hpp"
 #include "input/rTouch.hpp"
 
+#include "input/rMouse.hpp"
+
 typedef std::map<unsigned int , rTouch*> rTouchMap;
 typedef std::vector<rController*> rControllerArray;
 typedef std::vector<rInputListener*> rInputListenerArray;
@@ -22,6 +24,10 @@ public:
 	rTouch* CreateTouch(int id, const rPoint& position, rTouchType type = rTOUCH_DOWN);
 	virtual rTouch* GetTouch(int id);
 	bool UpdateTouch(int id, const rPoint& position, rTouchType type);
+
+	void CreateMouseMotionEvent(int x, int y);
+	void CreateMouseButtonEvent(rMouseButton button, rButtonState state, const rPoint& position);
+	virtual const rMouseState* GetMouseState() const;
 	
 	size_t TouchCount() const;
 	void GetTouchIds(rIntArray& ids);
@@ -37,11 +43,14 @@ public:
 
 protected:
 	void NotifyOfTouch(const rTouch& touch);
+	void NotifyOfMouseEvent();
 	
 protected:
 	rTouchMap m_touches;
 	rControllerArray m_controllers;
 	rInputListenerArray m_listeners;
+
+	rMouse m_mouse;
 };
 
 #endif

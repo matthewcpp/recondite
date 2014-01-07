@@ -14,6 +14,8 @@ struct rPoint{
 
 	int x;
 	int y;
+
+	static const rPoint Zero;
 };
 
 #endif

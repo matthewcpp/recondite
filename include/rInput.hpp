@@ -9,6 +9,7 @@
 #include "input/rTouch.hpp"
 #include "input/rDPad.hpp"
 #include "input/rInputButton.hpp"
+#include "input/rMouse.hpp"
 
 #include "rVector2.hpp"
 
@@ -36,6 +37,7 @@ public:
 
 	virtual size_t ControllerCount() const = 0;
 	virtual rControllerState* GetControllerState(size_t index) const = 0;
+	virtual const rMouseState* GetMouseState() const = 0;
 };
 
 class rInputListener{

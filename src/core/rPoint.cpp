@@ -1,5 +1,7 @@
 #include "rPoint.hpp"
 
+const rPoint rPoint::Zero = rPoint(0,0);
+
 rPoint rPoint::operator+ (const rPoint& p) const{
 	return rPoint(x + p.x, y + p.y);
 }

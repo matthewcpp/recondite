@@ -86,6 +86,27 @@ rController* rInputManager::GetController(size_t index) const{
 		return m_controllers[index];
 }
 
+void rInputManager::CreateMouseMotionEvent(int x, int y){
+	m_mouse.SetPosition(x,y);
+	NotifyOfMouseEvent();
+
+}
+
+void rInputManager::CreateMouseButtonEvent(rMouseButton button, rButtonState state, const rPoint& position){
+	m_mouse.SetPosition(position);
+	m_mouse.SetButtonState(button, state);
+
+	NotifyOfMouseEvent();
+}
+
+const rMouseState* rInputManager::GetMouseState() const{
+	return &m_mouse;
+}
+
+void rInputManager::NotifyOfMouseEvent(){
+
+}
+
 void rInputManager::NotifyOfTouch(const rTouch& touch){
 	for (size_t i =0; i < m_listeners.size(); i++){
 		m_listeners[i]->OnTouchEvent(touch);

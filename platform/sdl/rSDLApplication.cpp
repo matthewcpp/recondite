@@ -22,7 +22,7 @@ bool rSDLApplication::Init(){
 	 m_graphicsDevice = new rSDLGraphicsDevice();
 	 m_graphicsDevice->Init();
 
-	 m_contentManager = new rSDLContentManager(m_graphicsDevice);
+	 m_contentManager = new rOpenGLContentManager(m_graphicsDevice);
 	 m_contentManager->InitDefaultAssets();
 
 	 rFontData fontData;

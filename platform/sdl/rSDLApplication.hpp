@@ -5,7 +5,7 @@
 
 #include "rApplication.hpp"
 #include "rSDLGraphicsDevice.hpp"
-#include "rSDLContentManager.hpp"
+#include "rOpenGLContentManager.hpp"
 
 #include "ui/ruiLayoutManager.hpp"
 
@@ -36,7 +36,7 @@ public:
 
 protected:
 	rSDLGraphicsDevice* m_graphicsDevice;
-	rSDLContentManager* m_contentManager;
+	rOpenGLContentManager* m_contentManager;
 
 	ruiLayoutManager* m_layoutManager;
 

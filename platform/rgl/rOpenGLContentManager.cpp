@@ -1,12 +1,12 @@
-#include "rSDLContentManager.hpp"
+#include "rOpenGLContentManager.hpp"
 
-rSDLContentManager::rSDLContentManager(rGraphicsDevice* graphicsDevice)
+rOpenGLContentManager::rOpenGLContentManager(rGraphicsDevice* graphicsDevice)
 	:rContentManager(graphicsDevice)
 {
 
 }
 
-void rSDLContentManager::InitDefaultAssets(){
+void rOpenGLContentManager::InitDefaultAssets(){
 	#include "rOpenGLDefaultShaders.inl"
 
     rShaderData shaderData;

@@ -54,3 +54,27 @@ void ruiWidget::EndModal(ruiWidget* widget){
 	if (widgetManager)
 		widgetManager->EndModal(widget);
 }
+
+void ruiWidget::OnTouchDown(const rTouch& touch){
+	OnPointerDown(touch.GetCurrentPosition());
+}
+
+void ruiWidget::OnTouchMove(const rTouch& touch){
+	OnPointerMove(touch.GetCurrentPosition());
+}
+
+void ruiWidget::OnTouchUp(const rTouch& touch){
+	OnPointerUp(touch.GetCurrentPosition());
+}
+
+void ruiWidget::OnMouseLeftDown(const rMouseState& mouse){
+	OnPointerDown(mouse.Position());
+}
+
+void ruiWidget::OnMouseLeftUp(const rMouseState& mouse){
+	OnPointerUp(mouse.Position());
+}
+
+void ruiWidget::OnMouseMotion(const rMouseState& mouse){
+	OnPointerMove(mouse.Position());
+}

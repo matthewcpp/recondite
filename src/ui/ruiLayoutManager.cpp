@@ -3,17 +3,32 @@
 ruiLayoutManager::ruiLayoutManager(){
 	m_activeWidget = NULL;
 	m_modalWidget = NULL;
+
+	ruiWidget::widgetManager = this;
 }
 ruiLayoutManager::~ruiLayoutManager(){
 	Clear();
 }
 
-bool ruiLayoutManager::InjectTouchDown(const rTouch& touch){
+ruiWidget* ruiLayoutManager::SelectWidget(const rPoint& position){
 	rRect boundingBox;
+
+	for (size_t i = 0; i < m_widgets.size(); i++){
+		boundingBox = m_widgets[i]->BoundingBox();
+
+		if (boundingBox.ContainsPoint(position)){
+			return m_widgets[i];
+		}
+	}
+
+	return NULL;
+}
+
+bool ruiLayoutManager::InjectTouchDown(const rTouch& touch){
 	rPoint currentTouchPos = touch.GetCurrentPosition();
 	
 	if (m_modalWidget){
-		boundingBox = m_modalWidget->BoundingBox();
+		rRect boundingBox = m_modalWidget->BoundingBox();
 
 		if (boundingBox.ContainsPoint(currentTouchPos)){
 			m_modalWidget->OnTouchDown(touch);
@@ -21,14 +36,12 @@ bool ruiLayoutManager::InjectTouchDown(const rTouch& touch){
 		return true;
 	}
 	else{
-		for (size_t i = 0; i < m_widgets.size(); i++){
-			boundingBox = m_widgets[i]->BoundingBox();
+		ruiWidget* widget = SelectWidget(currentTouchPos);
 
-			if (boundingBox.ContainsPoint(currentTouchPos)){
-				m_activeWidget = m_widgets[i];
-				m_activeWidget->OnTouchDown(touch);
-				return true;
-			}
+		if (widget){
+			m_activeWidget = widget;
+			m_activeWidget->OnTouchDown(touch);
+			return true;
 		}
 	}
 
@@ -56,6 +69,58 @@ bool ruiLayoutManager::InjectTouchUp(const rTouch& touch){
 	}
 	else if (m_activeWidget){
 		m_activeWidget->OnTouchUp(touch);
+		return true;
+	}
+	else{
+		return false;
+	}
+}
+
+bool ruiLayoutManager::InjectMouseDownEvent(rMouseButton button, const rMouseState& mouse){
+	rPoint position = mouse.Position();
+	
+	if (m_modalWidget){
+		rRect boundingBox = m_modalWidget->BoundingBox();
+
+		if (boundingBox.ContainsPoint(position)){
+			m_modalWidget->MouseDownEvent(button, mouse);
+		}
+		return true;
+	}
+	else{
+		ruiWidget* widget = SelectWidget(position);
+
+		if (widget){
+			m_activeWidget = widget;
+			m_activeWidget->MouseDownEvent(button, mouse);
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool ruiLayoutManager::InjectMouseUpEvent(rMouseButton button, const rMouseState& mouse){
+	if (m_modalWidget){
+		m_modalWidget->MouseUpEvent(button, mouse);
+		return true;
+	}
+	else if (m_activeWidget){
+		m_activeWidget->MouseUpEvent(button, mouse);
+		return true;
+	}
+	else{
+		return false;
+	}
+}
+
+bool ruiLayoutManager::InjectMouseMotionEvent(const rMouseState& mouse){
+	if (m_modalWidget){
+		m_modalWidget->OnMouseMotion(mouse);
+		return true;
+	}
+	else if (m_activeWidget){
+		m_activeWidget->OnMouseMotion(mouse);
 		return true;
 	}
 	else{
@@ -101,23 +166,6 @@ void ruiLayoutManager::Clear(){
 	m_widgets.clear();
 
 	ShowModal(NULL);
-}
-
-void ruiLayoutManager::OnTouchEvent(const rTouch& touch){
-	switch(touch.GetType()){
-	case rTOUCH_DOWN:
-		InjectTouchDown(touch);
-		break;
-
-	case rTOUCH_MOVE:
-		InjectTouchMove(touch);
-		break;
-
-	case rTOUCH_CANCEL:
-	case rTOUCH_UP:
-		InjectTouchUp(touch);
-		break;
-	}
 }
 
 void ruiLayoutManager::ShowModal(ruiWidget* widget){

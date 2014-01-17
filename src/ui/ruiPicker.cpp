@@ -13,7 +13,7 @@ ruiPicker::ruiPicker(rArrayString& options, int id, const rPoint& position, cons
 	SetOptions(options);
 }
 
-void ruiPicker::OnTouchDown(const rTouch& touch){
+void ruiPicker::OnPointerDown(const rPoint& position){
 	ShowOptionsMenu();
 }
 

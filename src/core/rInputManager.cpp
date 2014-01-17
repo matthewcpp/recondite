@@ -1,5 +1,9 @@
 #include "rInputManager.hpp"
 
+rInputManager::rInputManager(ruiInput* uiInput){
+	m_ui = uiInput;
+}
+
 rTouch* rInputManager::CreateTouch(int id, const rPoint& position, rTouchType type){
 	if (m_touches.count(id)){
 		return NULL;
@@ -8,7 +12,7 @@ rTouch* rInputManager::CreateTouch(int id, const rPoint& position, rTouchType ty
 		rTouch* touch = new rTouch(id, position, type);
 		m_touches[id] = touch;
 		rLog::Info("Touch (%u) created Pos: %d, %d (%u)", id, position.x, position.y, type);
-		NotifyOfTouch(*touch);
+		m_ui->InjectTouchDown(*touch);
 		return touch;
 	}
 }
@@ -27,9 +31,9 @@ bool rInputManager::UpdateTouch(int id, const rPoint& position, rTouchType type)
 	
 	if (touch){
 		touch->Update(position, type);
-		NotifyOfTouch(*touch);
 		
 		if (type == rTOUCH_UP){
+			m_ui->InjectTouchUp(*touch);
 			m_touches.erase(id);
 			delete touch;
 
@@ -37,6 +41,7 @@ bool rInputManager::UpdateTouch(int id, const rPoint& position, rTouchType type)
 		}
 		else{
 			//rLog::Trace("Touch (%u) updated Pos: %d, %d (%u)", id, position.x, position.y, type);
+			m_ui->InjectTouchMove(*touch);
 		}
 		
 		return true;
@@ -88,42 +93,21 @@ rController* rInputManager::GetController(size_t index) const{
 
 void rInputManager::CreateMouseMotionEvent(int x, int y){
 	m_mouse.SetPosition(x,y);
-	NotifyOfMouseEvent();
-
+	m_ui->InjectMouseMotionEvent(m_mouse);
 }
 
 void rInputManager::CreateMouseButtonEvent(rMouseButton button, rButtonState state, const rPoint& position){
 	m_mouse.SetPosition(position);
 	m_mouse.SetButtonState(button, state);
 
-	NotifyOfMouseEvent();
+	if (state == rBUTTON_STATE_DOWN){
+		m_ui->InjectMouseDownEvent(button, m_mouse);
+	}
+	else{
+		m_ui->InjectMouseUpEvent(button, m_mouse);
+	}
 }
 
 const rMouseState* rInputManager::GetMouseState() const{
 	return &m_mouse;
-}
-
-void rInputManager::NotifyOfMouseEvent(){
-
-}
-
-void rInputManager::NotifyOfTouch(const rTouch& touch){
-	for (size_t i =0; i < m_listeners.size(); i++){
-		m_listeners[i]->OnTouchEvent(touch);
-	}
-}
-
-void rInputManager::AddListener(rInputListener* listener){
-	m_listeners.push_back(listener);
-}
-
-void rInputManager::RemoveListener(rInputListener* listener){
-	rInputListenerArray::iterator end = m_listeners.end();
-
-	for (rInputListenerArray::iterator it = m_listeners.begin(); it != end; ++it){
-		if (*it == listener){
-			m_listeners.erase(it);
-			break;
-		}
-	}
 }

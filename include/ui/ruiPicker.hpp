@@ -21,6 +21,8 @@ public:
 	void SetOptions(const rArrayString& options);
 	size_t NumOptions() const;
 
+	virtual void OnPointerDown(const rPoint& position);
+
 	virtual size_t SelectionIndex() const;
 	virtual bool SetSelectionIndex(size_t index);
 
@@ -30,7 +32,6 @@ public:
 
 	virtual const rArrayString& Options() const;
 
-	virtual void OnTouchDown(const rTouch& touch);
 
 	virtual void Draw(rEngine& engine);
 	

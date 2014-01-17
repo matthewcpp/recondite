@@ -40,9 +40,4 @@ public:
 	virtual const rMouseState* GetMouseState() const = 0;
 };
 
-class rInputListener{
-public:
-	virtual void OnTouchEvent(const rTouch& touch) {}
-};
-
 #endif

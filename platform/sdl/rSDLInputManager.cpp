@@ -1,5 +1,10 @@
 #include "rSDLInputManager.hpp"
 
+rSDLInputManager::rSDLInputManager(ruiInput* uiInput)
+	:rInputManager(uiInput)
+{
+}
+
 void rSDLInputManager::ProcessInputEvent(SDL_Event& event){
 	switch (event.type){
 	case SDL_MOUSEMOTION:

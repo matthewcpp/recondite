@@ -13,17 +13,15 @@
 #include "ui/ruiBase.hpp"
 #include "ui/ruiGenericWidgetFunctor.hpp"
 
-class ruiWidget{
+#include "ui/ruiEventHandler.hpp"
+
+class ruiWidget : public ruiEventHandler{
 public:
 	ruiWidget(int id);
 	ruiWidget(int id, const rPoint& position, const rSize& size);
 	virtual void Draw(rEngine& engine) = 0;
 	virtual void Update(rEngine& engine) {}
 	virtual rRect BoundingBox() const;
-	
-	virtual void OnTouchDown(const rTouch& touch) {}
-	virtual void OnTouchMove(const rTouch& touch) {}
-	virtual void OnTouchUp(const rTouch& touch) {}
 
 	int Id() const;
 
@@ -36,6 +34,14 @@ public:
 	template <typename T>
 	void Bind(int eventType, T* target, typename ruiGenericFunctionPointer<T>::Type method);
 	void Trigger(int eventType);
+
+	virtual void OnTouchDown(const rTouch& touch);
+	virtual void OnTouchMove(const rTouch& touch);
+	virtual void OnTouchUp(const rTouch& touch);
+
+	virtual void OnMouseLeftDown(const rMouseState& mouse);
+	virtual void OnMouseLeftUp(const rMouseState& mouse);
+	virtual void OnMouseMotion(const rMouseState& mouse);
 
 public:
 	static ruiIWidgetManager* widgetManager;

@@ -7,7 +7,8 @@
 enum rMouseButton{
 	rMOUSE_BUTTON_LEFT = 0,
 	rMOUSE_BUTTON_MIDDLE,
-	rMOUSE_BUTTON_RIGHT
+	rMOUSE_BUTTON_RIGHT,
+	rMOUSE_BUTTON_NONE
 };
 
 class rMouseState {

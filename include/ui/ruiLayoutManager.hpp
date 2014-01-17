@@ -11,17 +11,20 @@
 #include "ui/ruiWidget.hpp"
 typedef std::vector<ruiWidget*> rWidgetVector;
 
-class ruiLayoutManager : public rInputListener, public ruiIWidgetManager, public ruiOverlay {
+class ruiLayoutManager : public ruiInput, public ruiIWidgetManager, public ruiOverlay {
 public:
 	ruiLayoutManager();
 	~ruiLayoutManager();
 	
 public:
-	virtual void OnTouchEvent(const rTouch& touch);
 
-	bool InjectTouchDown(const rTouch& touch);
-	bool InjectTouchMove(const rTouch& touch);
-	bool InjectTouchUp(const rTouch& touch);
+	virtual bool InjectTouchDown(const rTouch& touch);
+	virtual bool InjectTouchMove(const rTouch& touch);
+	virtual bool InjectTouchUp(const rTouch& touch);
+
+	virtual bool InjectMouseDownEvent(rMouseButton button, const rMouseState& mouse);
+	virtual bool InjectMouseUpEvent(rMouseButton button, const rMouseState& mouse);
+	virtual bool InjectMouseMotionEvent(const rMouseState& mouse);
 	
 	void Update(rEngine& engine);
 	void Draw(rEngine& engine);
@@ -35,6 +38,11 @@ public:
 	virtual void EndModal(ruiWidget* widget);
 
 	void Clear();
+
+private:
+
+	ruiWidget* SelectWidget(const rPoint& position);
+
 private:
 	
 	rWidgetVector m_widgets;

@@ -7,6 +7,7 @@
 
 class rSDLInputManager : public rInputManager{
 public:
+	rSDLInputManager(ruiInput* uiInput);
 	void ProcessInputEvent(SDL_Event& event);
 
 private:

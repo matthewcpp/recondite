@@ -6,6 +6,17 @@
 
 class ruiWidget;
 
+class ruiInput{
+public:
+	virtual bool InjectTouchDown(const rTouch& touch) = 0;
+	virtual bool InjectTouchMove(const rTouch& touch) = 0;
+	virtual bool InjectTouchUp(const rTouch& touch) = 0;
+
+	virtual bool InjectMouseDownEvent(rMouseButton button, const rMouseState& mouse) = 0;
+	virtual bool InjectMouseUpEvent(rMouseButton button, const rMouseState& mouse) = 0;
+	virtual bool InjectMouseMotionEvent(const rMouseState& mouse) = 0;
+};
+
 class ruiOverlay{
 public:
 	virtual void AddWidget(ruiWidget* widget) = 0;
@@ -14,6 +25,7 @@ public:
 
 class ruiIWidgetManager{
 public:
+
 	virtual void ShowModal(ruiWidget* widget) = 0;
 	virtual void EndModal(ruiWidget* widget) = 0;
 };

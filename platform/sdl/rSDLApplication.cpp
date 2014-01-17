@@ -19,7 +19,7 @@ bool rSDLApplication::Init(){
 
 	 m_isRunning = true;
 
-	 m_inputManager = new rSDLInputManager();
+	 
 	 m_graphicsDevice = new rSDLGraphicsDevice();
 	 m_graphicsDevice->Init();
 
@@ -36,6 +36,8 @@ bool rSDLApplication::Init(){
 	 m_engine.input = m_inputManager;
 
 	 m_layoutManager = new ruiLayoutManager();
+	 m_inputManager = new rSDLInputManager(m_layoutManager);
+
 	 ruiPicker* picker = new ruiPicker(100, rPoint(25,10), rSize(250, 35));
 	 picker->AddOption("item 1");
 	 picker->AddOption("item 2");
@@ -76,6 +78,8 @@ void rSDLApplication::Draw(){
 void rSDLApplication::ProcessEvent(SDL_Event& event){
 	if (event.type == SDL_QUIT)
 		m_isRunning = false;
+
+	m_inputManager->ProcessInputEvent(event);
 }
 
 unsigned long rSDLApplication::GetTimeMiliseconds() const{

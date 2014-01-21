@@ -15,7 +15,7 @@ public:
 	ruiPickerOptionsMenu(ruiIControlWithOptions* picker, int id);
 	
 public:
-	virtual void OnTouchDown(const rTouch& touch);
+	virtual void OnPointerDown(const rPoint& position);
 
 	virtual void Draw(rEngine& engine);
 	

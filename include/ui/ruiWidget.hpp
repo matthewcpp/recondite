@@ -44,7 +44,7 @@ public:
 	virtual void OnMouseMotion(const rMouseState& mouse);
 
 public:
-	static ruiIWidgetManager* widgetManager;
+	static ruiIOverlay* widgetManager;
 
 protected:
 	static void ShowModal(ruiWidget* widget);

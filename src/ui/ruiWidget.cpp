@@ -43,7 +43,7 @@ void ruiWidget::Trigger(int eventType){
 		it->second->Call(this);
 }
 
-ruiIWidgetManager* ruiWidget::widgetManager = NULL;
+ruiIOverlay* ruiWidget::widgetManager = NULL;
 
 void ruiWidget::ShowModal(ruiWidget* widget){
 	if (widgetManager)

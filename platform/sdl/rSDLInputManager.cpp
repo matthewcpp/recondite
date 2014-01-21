@@ -1,7 +1,6 @@
 #include "rSDLInputManager.hpp"
 
-rSDLInputManager::rSDLInputManager(ruiInput* uiInput)
-	:rInputManager(uiInput)
+rSDLInputManager::rSDLInputManager()
 {
 }
 

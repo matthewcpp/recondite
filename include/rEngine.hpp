@@ -5,13 +5,13 @@
 #include "rDefs.hpp"
 
 #include "rRenderer.hpp"
-#include "interface/riContentManager.hpp"
+#include "rContentManager.hpp"
 #include "rTime.hpp"
 #include "rInput.hpp"
 
 class rEngine{
 public:
-	riContentManager* content;
+	rContentManager* content;
 	rRenderer* renderer;
 	rInput* input;
 	rTime time;

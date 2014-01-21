@@ -25,6 +25,8 @@ public:
 	rRenderer(rGraphicsDevice* graphicsDevice, rContentManager* contentManager);
 	
 public:
+	void CreateRequiredMaterials();
+
 	void Render (rViewport& viewport);
 	
 	void RenderGeometry(rGeometry* geometry, const rMatrix4& transform, const rString& elementBufferName, rMaterial* material);
@@ -47,7 +49,6 @@ public:
 private:
 	void ComputeWorldSpaceTransformForObject(const rMatrix4& object, rMatrix4& world);
 	
-	void CreateRequiredMaterials();
 	void ImmediateColorRender(rGeometryData& geometry, const rColor& color);
 	void ImmediateTexturedRender(rGeometryData& geometry, rTexture2D* texture);
 

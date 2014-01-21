@@ -5,8 +5,6 @@ rRenderer::rRenderer(rGraphicsDevice* graphicsDevice, rContentManager* contentMa
 	m_contentManager = contentManager;
 	
 	m_activeViewport = NULL;
-	
-	CreateRequiredMaterials();
 }
 
 void rRenderer::Render (rViewport& viewport){

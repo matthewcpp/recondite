@@ -13,37 +13,25 @@
 #include "rViewport.hpp"
 #include "rCamera.hpp"
 
-//temp
-#include "rAlignedBox3.hpp"
-#include "ui/ruiPicker.hpp"
-
 class rSDLApplication : public rApplication{
 public:
-	rSDLApplication();
+	rSDLApplication(rModule* module);
 	~rSDLApplication();
 
 public:
 	bool Init();
 	void Uninit();
 
-	virtual void Update();
-	virtual void Draw();
-
 	void ProcessEvent(SDL_Event& event);
 
 	virtual unsigned long GetTimeMiliseconds() const;
-
-	void TempInit();
 
 protected:
 	rSDLGraphicsDevice* m_graphicsDevice;
 	rOpenGLContentManager* m_contentManager;
 	rSDLInputManager* m_inputManager;
 
-	ruiLayoutManager* m_layoutManager;
 
-	rViewport m_viewport;
-	rTargetCamera* m_camera;
 };
 
 #endif

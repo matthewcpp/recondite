@@ -1,10 +1,13 @@
 #include "SDL.h"
 
 #include "rSDLApplication.hpp"
+#include "rDemoModule.hpp"
 
 int main(int argc, char** argv){
 
-	rSDLApplication app;
+	rDemoModule* demoModule = new rDemoModule();
+
+	rSDLApplication app(demoModule);
 	app.Init();
 
 	SDL_Event event;
@@ -20,6 +23,8 @@ int main(int argc, char** argv){
 	}
 
 	app.Uninit();
+
+	delete demoModule;
 
 	return 0;
 }

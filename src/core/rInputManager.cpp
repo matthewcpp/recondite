@@ -1,6 +1,10 @@
 #include "rInputManager.hpp"
 
-rInputManager::rInputManager(ruiInput* uiInput){
+rInputManager::rInputManager(){
+	m_ui = NULL;
+}
+
+void rInputManager::SetUI(ruiInput* uiInput){
 	m_ui = uiInput;
 }
 

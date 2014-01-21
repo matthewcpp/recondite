@@ -1,17 +1,21 @@
 #ifndef RUI_LAYOUTMANAGER_HPP
 #define RUI_LAYOUTMANAGER_HPP
 
-#include <vector>
+#include <map>
 
 #include "rInput.hpp"
 #include "rEngine.hpp"
 
+#include "rViewport.hpp"
+
+#include "ui/ruiOverlay.hpp"
+#include "ui/ruiWidget.hpp"
 #include "ui/ruiBase.hpp"
 
-#include "ui/ruiWidget.hpp"
-typedef std::vector<ruiWidget*> rWidgetVector;
+typedef std::map<rViewport* , ruiOverlay*> ruiViewportOverlayMap;
 
-class ruiLayoutManager : public ruiInput, public ruiIWidgetManager, public ruiOverlay {
+
+class ruiLayoutManager : public ruiInput {
 public:
 	ruiLayoutManager();
 	~ruiLayoutManager();
@@ -28,26 +32,19 @@ public:
 	
 	void Update(rEngine& engine);
 	void Draw(rEngine& engine);
-	
-	virtual void AddWidget(ruiWidget* widget);
-	ruiWidget* GetWidget(int id);
-	
-	virtual rContentError LoadOverlay(const rString& path);
-
-	virtual void ShowModal(ruiWidget* widget);
-	virtual void EndModal(ruiWidget* widget);
 
 	void Clear();
 
-private:
-
-	ruiWidget* SelectWidget(const rPoint& position);
+	ruiOverlay* CreateOverlay(rViewport* viewport);
 
 private:
+	rViewport* DetermineViewport(const rPoint& point);
+
 	
-	rWidgetVector m_widgets;
-	ruiWidget* m_activeWidget;
-	ruiWidget* m_modalWidget;
+
+private:
+	ruiViewportOverlayMap m_overlays;
+
 };
 
 #endif

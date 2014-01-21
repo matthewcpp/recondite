@@ -17,22 +17,10 @@ public:
 	virtual bool InjectMouseMotionEvent(const rMouseState& mouse) = 0;
 };
 
-class ruiOverlay{
+class ruiIOverlay {
 public:
-	virtual void AddWidget(ruiWidget* widget) = 0;
-	virtual rContentError LoadOverlay(const rString& path) = 0;
-};
-
-class ruiIWidgetManager{
-public:
-
 	virtual void ShowModal(ruiWidget* widget) = 0;
 	virtual void EndModal(ruiWidget* widget) = 0;
-};
-
-class ruiController {
-public:
-	virtual void Init(ruiOverlay* overlay) = 0;
 };
 
 class ruiIControlWithOptions {

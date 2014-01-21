@@ -6,10 +6,9 @@ ruiPickerOptionsMenu::ruiPickerOptionsMenu(ruiIControlWithOptions* picker, int i
 	m_picker = picker;
 }
 
-void ruiPickerOptionsMenu::OnTouchDown(const rTouch& touch){
-	rPoint touchPos = touch.GetCurrentPosition();
+void ruiPickerOptionsMenu::OnPointerDown(const rPoint& position){
 
-	int yPos = touchPos.y - m_position.y;
+	int yPos = position.y - m_position.y;
 	m_picker->SetSelectionIndex( yPos / 30);
 
 	EndModal(this);

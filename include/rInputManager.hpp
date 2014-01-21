@@ -23,7 +23,8 @@ typedef std::vector<rController*> rControllerArray;
 class rInputManager : public rInput{
 public:
 
-	rInputManager(ruiInput* uiInput);
+	rInputManager();
+	void SetUI(ruiInput* uiInput);
 
 	rTouch* CreateTouch(int id, const rPoint& position, rTouchType type = rTOUCH_DOWN);
 	virtual rTouch* GetTouch(int id);

@@ -6,9 +6,7 @@ void rDemoModule::Update(rEngine& engine){
 void rDemoModule::Draw(rEngine& engine){
 	engine.renderer->Render(m_viewport);
 
-	rAlignedBox3 box(-1,-1,-1, 1, 1, 1);
-
-	engine.renderer->RenderWireBox(box, rColor::White);
+	m_pawn->Draw(engine);
 }
 
 void rDemoModule::Init(rEngine& engine){
@@ -28,6 +26,13 @@ void rDemoModule::LoadContent(rEngine& engine){
 	rFontData fontData;
 	fontData.LoadFromFile("assets/", "Consolas");
 	rFont* font = engine.content->LoadFont(fontData, "consolas");
+
+	rModel* model = engine.content->LoadModelFromPath("assets/reindeer.rmdl", "reindeer");
+	model = engine.content->LoadModelFromPath("assets/chicken.rmdl", "chicken");
+	model = engine.content->LoadModelFromPath("assets/turtle.rmdl", "turtle");
+	model = engine.content->LoadModelFromPath("assets/cat.rmdl", "cat");
+
+	m_pawn = new rPawn(model, "pawn" , rVector3::ZeroVector);
 }
 
 void rDemoModule::Uninit(rEngine& engine){
@@ -36,8 +41,6 @@ void rDemoModule::Uninit(rEngine& engine){
 void rDemoModule::InitUI(ruiLayoutManager& uiManager, rEngine& engine){
 	ruiOverlay* overlay = uiManager.CreateOverlay(&m_viewport);
 
-	ruiPicker* picker = new ruiPicker(100, rPoint(25,10), rSize(250, 35));
-	picker->AddOption("item 1");
-	picker->AddOption("item 2");
-	overlay->AddWidget(picker);
+	m_controller = new ruiDemoController(engine.content, m_pawn); 
+	m_controller->Init(overlay);
 }

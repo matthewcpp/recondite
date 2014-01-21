@@ -23,6 +23,9 @@ void rModelData::Clear(){
 	m_materials.clear();
 	m_textures.clear();
 
+	m_name.clear();
+	m_path.clear();
+
 	m_boundingBox.Empty();
 
 	if (m_skeleton){
@@ -175,8 +178,10 @@ rContentError rModelData::LoadFromStream(std::istream& stream){
 
 rContentError rModelData::LoadFromFile(const rString& path){
 	std::ifstream file (path.c_str());
+	rContentError error =  LoadFromStream(file);
+	m_path = path;
 
-	return LoadFromStream(file);
+	return error;
 }
 
 rContentError rModelData::WriteDependencies(const rString& dir){
@@ -232,6 +237,10 @@ void rModelData::SetName(const rString& name){
 
 rString rModelData::GetName() const{
 	return m_name;
+}
+
+rString rModelData::GetPath() const{
+	return m_path;
 }
 
 rSkeleton* rModelData::GetSkeleton() const{

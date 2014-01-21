@@ -70,6 +70,7 @@ public:
 
 	void SetName(const rString& name);
 	rString GetName() const;
+	rString GetPath() const;
 
 	rAlignedBox3& GetBoundingBox();
 
@@ -90,6 +91,7 @@ private:
 	rAlignedBox3 m_boundingBox;
 
 	rString m_name;
+	rString m_path;
 };
 
 #endif

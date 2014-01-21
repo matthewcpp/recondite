@@ -311,13 +311,14 @@ bool rContentManager::LoadMaterialDependencies(const rMaterialData& materialData
 	rMaterialParameterData paramData;
 	
 	materialData.GetParameterNames(materialParams);
+	rString materialDirectory = rPath::Directory(materialData.GetPath());
 	
 	for (size_t i = 0; i < materialParams.size(); i++){
 		materialData.GetParameterData(materialParams[i], paramData);
 		
 		switch (paramData.type){
 			case rMATERIAL_PARAMETER_TEXTURE2D:{
-				rTexture2D* texture = GetOrLoadTexture(paramData.value, paramData.path);
+				rTexture2D* texture = GetOrLoadTexture(paramData.value, rPath::Combine(materialDirectory, paramData.path));
 				
 				if (texture){
 					loadedTextures.push_back(texture);
@@ -377,7 +378,9 @@ rMaterial* rContentManager::LoadMaterial(const rMaterialData& materialData, cons
 	}
 	else
 	{
-		rShader* shader = GetOrLoadShader(materialData.GetShaderName(), materialData.GetShaderPath());
+		rString materialDirectory = rPath::Directory(materialData.GetPath());
+		rString shaderPath = rPath::Combine(materialDirectory, materialData.GetShaderPath());
+		rShader* shader = GetOrLoadShader(materialData.GetShaderName(), shaderPath);
 		
 		if (!shader){
 			m_error = rCONTENT_ERROR_UNABLE_TO_LOAD_DEPENDENCY;
@@ -672,7 +675,9 @@ rModel* rContentManager::LoadModel(rModelData& modelData, const rString& name){
 		return NULL;
 	}
 	else{
-		rGeometry* geometry = GetOrLoadGeometry(modelData.GetName(), modelData.GetName() + ".rgeo");
+		rString modelDir = rPath::Directory(modelData.GetPath());
+		rString geometryFile = rPath::Assemble(modelDir, modelData.GetName(), ".rgeo");
+		rGeometry* geometry = GetOrLoadGeometry(modelData.GetName(), geometryFile);
 
 		rModel* model = new rModel(geometry, GetNextAssetId(), name, "");
 		rArrayString meshNames;
@@ -680,12 +685,14 @@ rModel* rContentManager::LoadModel(rModelData& modelData, const rString& name){
 
 		for (size_t i =0; i < meshNames.size(); i++){
 			rMeshData* meshData = modelData.GetMeshData(meshNames[i]);
-			rMaterial* material = GetOrLoadMaterial(meshData->material, meshData->material + ".rmat");
+			rString materialFile = rPath::Assemble(modelDir, meshData->material, ".rmat");
+			rMaterial* material = GetOrLoadMaterial(meshData->material, materialFile);
 
 			model->CreateMesh(meshData->name, meshData->buffer, material);
 		}
 
-		rSkeleton* skeleton= GetOrLoadSkeleton(name, name+".rskl");
+		rString skeletonFile = rPath::Assemble(modelDir, name, ".rskl");
+		rSkeleton* skeleton= GetOrLoadSkeleton(name, skeletonFile);
 		if (skeleton)
 			model->SetSkeleton(skeleton);
 

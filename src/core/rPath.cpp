@@ -55,11 +55,13 @@ rString rPath::Extension(const rString& path){
 rString rPath::Combine(const rString& dir, const rString& filename){
 	rString result = dir;
 
-	char dirLast = *dir.rbegin();
-	char filenameFirst = *filename.begin();
+	if (dir.length() > 0 && filename.length() > 0){
+		char dirLast = *dir.rbegin();
+		char filenameFirst = *filename.begin();
 
-	if (dirLast != '/' && filenameFirst != '/'){
-		result += '/';
+		if (dirLast != '/' && filenameFirst != '/'){
+			result += '/';
+		}
 	}
 
 	result += filename;
@@ -70,12 +72,14 @@ rString rPath::Combine(const rString& dir, const rString& filename){
 rString rPath::Assemble(const rString& dir, const rString& filename, const rString& ext){
 	rString result = rPath::Combine(dir, filename);
 
-	char extFirst = *ext.begin();
+	if (ext.length() > 0){
+		char extFirst = *ext.begin();
 
-	if (extFirst != '.')
-		result += '.';
+		if (extFirst != '.')
+			result += '.';
 
-	result += ext;
+		result += ext;
+	}
 
 	return result;
 }

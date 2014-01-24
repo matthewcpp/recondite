@@ -1,6 +1,8 @@
 #ifndef RUI_DEMOCONTROLLER_HPP
 #define RUI_DEMOCONTROLLER_HPP
 
+#include <sstream>
+
 #include "ui/ruiPicker.hpp"
 #include "ui/ruiSlider.hpp"
 #include "ui/ruiButton.hpp"
@@ -36,6 +38,8 @@ private:
 
 	ruiPicker* m_modelPicker;
 	ruiPicker* m_animationPicker;
+
+	ruiText* m_animationTime;
 
 	rPawn* m_pawn;
 };

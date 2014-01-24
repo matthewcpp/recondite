@@ -1,12 +1,17 @@
 #include "rDemoModule.hpp"
 
 void rDemoModule::Update(rEngine& engine){
+	m_pawn->Update(engine);
+
+	m_controller->OnUpdate(engine);
 }
 
 void rDemoModule::Draw(rEngine& engine){
 	engine.renderer->Render(m_viewport);
 
 	m_pawn->Draw(engine);
+
+	m_controller->OnDraw(engine);
 }
 
 void rDemoModule::Init(rEngine& engine){

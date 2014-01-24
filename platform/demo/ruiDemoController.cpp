@@ -20,8 +20,11 @@ void ruiDemoController::Init(ruiOverlay* overlay){
 	m_animationPicker = new ruiPicker(101, rPoint(25,60), rSize(250, 35));
 	m_animationPicker->Bind(ruiEVENT_PICKER_CHANGE, this, &ruiDemoController::OnAnimationChange);
 
+	m_animationTime = new ruiText("0.0", 102, rPoint(25, 110), rSize(100, 35));
+
 	overlay->AddWidget(m_modelPicker);
 	overlay->AddWidget(m_animationPicker);
+	overlay->AddWidget(m_animationTime);
 
 	if (models.size() > 0)
 		SetActiveModel(models[0]);
@@ -51,7 +54,11 @@ void ruiDemoController::SetActiveModel(const rString& name){
 }
 
 void ruiDemoController::OnUpdate(rEngine& engine){
-	m_pawn->Update(engine);
+	rAnimationPlayer* animationPlayer = m_pawn->AnimationPlayer();
+	std::ostringstream stream;
+	stream << animationPlayer->AnimationTime();
+
+	m_animationTime->SetText(stream.str());
 }
 
 void ruiDemoController::OnDraw(rEngine& engine){

@@ -72,35 +72,40 @@ void rAnimationTrack::DetermineKeyframes(float animationTime, unsigned short key
 }
 
 unsigned short rAnimationTrack::InterpolateKeyframe(float animationTime, rMatrix4& transform, unsigned short keyframeHint) const{
-	rMatrix4 transM, rotM, scaleM;
-	rVector3 translate, scale;
-	rQuaternion rotate;
+	if (m_keyframes.size() > 0){
+		rMatrix4 transM, rotM, scaleM;
+		rVector3 translate, scale;
+		rQuaternion rotate;
+	
+		unsigned short start, end;
+		DetermineKeyframes(animationTime, keyframeHint, start, end);
 
-	unsigned short start, end;
-	DetermineKeyframes(animationTime, keyframeHint, start, end);
-
-	if (start == end){
-		translate = m_keyframes[start].translation;
-		rotate = m_keyframes[start].rotation;
-		scale = m_keyframes[start].scale;
-	}
-	else {
-		const rAnimationKeyframe& prevKey = m_keyframes[start];
-		const rAnimationKeyframe& nextKey = m_keyframes[end];
+		if (start == end){
+			translate = m_keyframes[start].translation;
+			rotate = m_keyframes[start].rotation;
+			scale = m_keyframes[start].scale;
+		}
+		else {
+			const rAnimationKeyframe& prevKey = m_keyframes[start];
+			const rAnimationKeyframe& nextKey = m_keyframes[end];
 		
 
-		float interpolateVal = rMath::ConvertRange(animationTime, prevKey.time, nextKey.time, 0.0f, 1.0f);
-		translate = rVector3::Lerp(prevKey.translation, nextKey.translation, interpolateVal);
-		rotate = rQuaternion::Slerp(prevKey.rotation, nextKey.rotation, interpolateVal);
-		scale = rVector3::Lerp(prevKey.scale, nextKey.scale, interpolateVal);
+			float interpolateVal = rMath::ConvertRange(animationTime, prevKey.time, nextKey.time, 0.0f, 1.0f);
+			translate = rVector3::Lerp(prevKey.translation, nextKey.translation, interpolateVal);
+			rotate = rQuaternion::Slerp(prevKey.rotation, nextKey.rotation, interpolateVal);
+			scale = rVector3::Lerp(prevKey.scale, nextKey.scale, interpolateVal);
+		}
+
+		rMatrixUtil::QuaterionToMatrix(rotate, rotM);
+		transM.SetTranslate(translate);
+		scaleM.SetScale(rVector3::OneVector);
+		transform = transM * rotM * scaleM;
+
+		return start;
 	}
-
-	rMatrixUtil::QuaterionToMatrix(rotate, rotM);
-	transM.SetTranslate(translate);
-	scaleM.SetScale(rVector3::OneVector);
-	transform = transM * rotM * scaleM;
-
-	return start;
+	else{
+		return 0;
+	}
 }
 
 rAnimation::rAnimation(const rString& name){

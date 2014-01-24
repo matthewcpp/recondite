@@ -45,7 +45,11 @@ void rAnimationPlayer::SetSkeleton(rSkeleton* skeleton){
 		size_t numBones = skeleton->NumBones();
 
 		m_transformData.resize(numBones);
-		m_keyframeInfo.resize(numBones, 0);
+		m_keyframeInfo.resize(numBones);
+
+		memset(&m_keyframeInfo[0], 0, m_keyframeInfo.size() * sizeof (rUnsignedShortArray::value_type));
+		for (size_t i = 0; i < m_transformData.size(); i++)
+			m_transformData[i].LoadIdentity();
 	}
 }
 
@@ -66,7 +70,7 @@ void rAnimationPlayer::UpdateTransformDataRec(rBone* parentBone, rBone* currentB
 		m_keyframeInfo[currentBone->id] = track->InterpolateKeyframe(m_animationTime, currentBoneTransform, m_keyframeInfo[currentBone->id]);
 
 		if (parentBone){
-			currentBoneTransform = m_transformData[parentBone->id] * currentBoneTransform;
+			currentBoneTransform = currentBoneTransform * m_transformData[parentBone->id] ;
 		}
 
 		m_transformData[currentBone->id] = currentBoneTransform;

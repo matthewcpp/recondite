@@ -6,6 +6,8 @@
 #include "rCamera.hpp"
 #include "rPawn.hpp"
 
+#include "rLog.hpp"
+
 #include "rModule.hpp"
 
 #include "ui/ruiPicker.hpp"

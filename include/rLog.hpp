@@ -7,7 +7,7 @@
 #include "rTypes.hpp"
 #include "rDefs.hpp"
 
-#include "rLogTarget.hpp"
+#include "log/rLogTarget.hpp"
 
 class rLog{
 public:

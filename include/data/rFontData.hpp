@@ -45,9 +45,6 @@ public:
 
 	rContentError WriteToFile(const rString& dir);
 
-	rContentError LoadFromFile(const rString& dir, const rString& name);
-	rContentError LoadFromStream(std::istream& glyph, std::istream& texture);
-
 	rContentError LoadFontDataFromFile(const rString& path);
 	rContentError LoadFontDataFromStream(std::istream& stream);
 
@@ -61,7 +58,6 @@ public:
 	rString Name() const;
 	void SetName(const rString& name);
 
-	rString TextureFile() const;
 
 	rGlyphData* AddGlyph(int scancode, short width, short height, short top, short leftBearing, short advance, unsigned char* data);
 	void GetGlyphData(rGlyphDataArray& glyphs) const;
@@ -72,6 +68,10 @@ public:
 	bool TextureDataPresent() const;
 
 	rString GetPath() const;
+	void SetPath(const rString& path);
+
+	rString TextureFile() const;
+	rString TexturePath() const;
 
 private:
 	void SetTexCoordsForGlyph(int x, int y, rGlyphData* glyph);

@@ -198,29 +198,12 @@ rContentError rFontData::WriteGlyphFile(const rString& path) const{
 	return rCONTENT_ERROR_NONE;
 }
 
-rContentError rFontData::LoadFromStream(std::istream& glyph, std::istream& texture){
-	Clear();
+rContentError rFontData::LoadFontDataFromFile(const rString& path){
+	std::ifstream dataStream(path.c_str());
+	rContentError error =  LoadFontDataFromStream(dataStream);
+	m_path = path;
 
-	ReadGlyphFile(glyph);
-	m_textureData.LoadFromStream(texture);
-
-	m_textureGenerated = true;
-
-	return rCONTENT_ERROR_NONE;
-}
-
-rContentError rFontData::LoadFromFile(const rString& dir, const rString& name){
-	std::string glyphPath(dir + name + ".rfnt");
-	std::string texturePath(dir + name + "_texture.rtex");
-
-	std::ifstream glyphStream(glyphPath.c_str());
-	std::ifstream textureStream(texturePath.c_str(), std::ios::binary);
-
-	m_path = glyphPath;
-
-	LoadFromStream(glyphStream, textureStream);
-
-	return rCONTENT_ERROR_NONE;
+	return error;
 }
 
 rContentError rFontData::ReadGlyphFile(std::istream& stream){
@@ -299,17 +282,6 @@ rContentError rFontData::ParseGlyphs(rXMLDocument& document){
 	return rCONTENT_ERROR_NONE;
 }
 
-rContentError rFontData::LoadFontDataFromFile(const rString& path){
-	std::ifstream file(path.c_str());
-
-	if (file){
-		return LoadFontDataFromStream(file);
-	}
-	else{
-		return rCONTENT_ERROR_FILE_NOT_FOUND;
-	}
-}
-
 rContentError rFontData::LoadTextureFromFile(const rString& path){
 	std::ifstream file(path.c_str());
 
@@ -338,8 +310,17 @@ rString rFontData::TextureFile() const{
 	return m_textureFile;
 }
 
+rString rFontData::TexturePath() const{
+	rString dir = rPath::Directory(m_path);
+	return rPath::Combine(dir, m_textureFile);
+}
+
 rString rFontData::GetPath() const{
 	return m_path;
+}
+
+void rFontData::SetPath(const rString& path){
+	m_path = path;
 }
 
 void rFontData::GetGlyphData(rGlyphDataArray& glyphs) const{

@@ -82,6 +82,7 @@ public:
 public:
 	virtual rFont* GetFontAsset(const rString& name) const;
 	rFont* LoadFont(const rFontData& fontData, const rString& name);
+	virtual rFont* LoadFontFromPath(const rString& path, const rString& name);
 	rContentError RemoveFontAsset(const rString& name);
 	size_t NumFonts();
 

@@ -619,6 +619,12 @@ rFont* rContentManager::GetFontAsset(const rString& name) const{
 	}
 }
 
+rFont* rContentManager::LoadFontFromPath(const rString& path, const rString& name){
+	rFontData fontData;
+	fontData.LoadFontDataFromFile(path);
+	return LoadFont(fontData, name);
+}
+
 rFont* rContentManager::LoadFont(const rFontData& fontData, const rString& name){
 	rFont* font = NULL;
 	if (m_fonts.count(name)){
@@ -632,7 +638,7 @@ rFont* rContentManager::LoadFont(const rFontData& fontData, const rString& name)
 			fontTexture = LoadTexture(fontData.TextureData(), name + "_texture");
 		}
 		else{
-			fontTexture = LoadTextureFromPath(fontData.TextureFile(), name + "_texture");
+			fontTexture = GetOrLoadTexture(name + "_texture", fontData.TexturePath());
 		}
 
 		font = new rFont(fontTexture, fontData.Size(), GetNextAssetId(), name, fontData.GetPath());

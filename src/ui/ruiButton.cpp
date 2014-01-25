@@ -41,17 +41,16 @@ void ruiButton::Draw(rEngine& engine){
 	
 }
 
-void ruiButton::OnTouchDown(const rTouch& touch){
+void ruiButton::OnPointerDown(const rPoint& position){
 	m_state = rBUTTON_STATE_DOWN;
 }
 
-void ruiButton::OnTouchUp(const rTouch& touch){
+void ruiButton::OnPointerUp(const rPoint& position){
 	m_state = rBUTTON_STATE_UP;
 
 	rRect box = BoundingBox();
-	rPoint currentPos = touch.GetCurrentPosition();
 
-	if (box.ContainsPoint(currentPos)){
+	if (box.ContainsPoint(position)){
 		Trigger(ruiEVENT_BUTTON_CLICK);
 	}
 }

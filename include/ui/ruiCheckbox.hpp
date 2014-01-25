@@ -13,7 +13,7 @@ public:
 	
 public:
 	
-	virtual void OnTouchDown(const rTouch& touch);
+	virtual void OnPointerDown(const rPoint& position);
 
 	bool IsChecked () const;
 	void SetChecked(bool checked);

@@ -24,8 +24,9 @@ public:
 	
 	virtual void Draw(rEngine& engine);
 	
-	virtual void OnTouchDown(const rTouch& touch);
-	virtual void OnTouchMove(const rTouch& touch);
+	virtual void OnPointerDown(const rPoint& position);
+	virtual void OnPointerMove(const rPoint& position);
+	virtual void OnPointerUp(const rPoint& position);
 
 private:
 	void StartDrag(const rPoint& position);

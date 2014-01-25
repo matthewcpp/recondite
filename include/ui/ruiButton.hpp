@@ -16,8 +16,8 @@ public:
 	rString GetText() const;
 	void SetText(const rString& text);
 	
-	virtual void OnTouchDown(const rTouch& touch);
-	virtual void OnTouchUp(const rTouch& touch);
+	virtual void OnPointerDown(const rPoint& position);
+	virtual void OnPointerUp(const rPoint& position);
 
 	virtual void Draw(rEngine& engine);
 	

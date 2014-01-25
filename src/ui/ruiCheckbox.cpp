@@ -6,7 +6,7 @@ ruiCheckbox::ruiCheckbox(int id, const rPoint& position, const rSize& size)
 	m_isChecked = false;
  }
 
-void ruiCheckbox::OnTouchDown(const rTouch& touch){
+void ruiCheckbox::OnPointerDown(const rPoint& position){
 	SetChecked( !m_isChecked);
 }
 

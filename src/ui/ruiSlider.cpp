@@ -30,19 +30,23 @@ int ruiSlider::GetHandleSize() const{
 	return m_handleSize;
 }
 
-void ruiSlider::OnTouchDown(const rTouch& touch){
+void ruiSlider::OnPointerDown(const rPoint& position){
 	rRect handle = HandleRect();
-	rPoint touchPos = touch.GetCurrentPosition();
 
-	if (handle.ContainsPoint(touchPos))
-		StartDrag(touchPos);
+	if (handle.ContainsPoint(position))
+		StartDrag(position);
+	else
+		handleGrabbed = false;
 
 }
-void ruiSlider::OnTouchMove(const rTouch& touch){
-	rPoint touchPos = touch.GetCurrentPosition();
 
+void ruiSlider::OnPointerUp(const rPoint& position){
+	handleGrabbed = false;
+}
+
+void ruiSlider::OnPointerMove(const rPoint& position){
 	if (handleGrabbed)
-		HandleDrag(touchPos);
+		HandleDrag(position);
 }
 
 void ruiSlider::StartDrag(const rPoint& position){

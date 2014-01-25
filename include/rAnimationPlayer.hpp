@@ -18,6 +18,12 @@ public:
 
 public:
 	bool PlayAnimation(const rString& name);
+	bool SetAnimation(const rString& name);
+
+	void Pause();
+	void Play();
+	void Stop();
+
 	void SetSkeleton(rSkeleton* skeleton);
 
 	void UpdateTransformData();
@@ -26,6 +32,8 @@ public:
 
 	const rMatrix4Vector& GetTransformData() const;
 	float AnimationTime() const;
+
+	const rAnimation* CurrentAnimation() const;
 private:
 	void UpdateTransformDataRec(rBone* parentBone, rBone* currentBone);
 
@@ -38,6 +46,7 @@ private:
 	rUnsignedShortArray m_keyframeInfo;
 
 	bool m_isLooping;
+	bool m_playing;
 };
 
 #endif

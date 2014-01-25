@@ -30,6 +30,10 @@ public:
 	void OnModelChange(ruiWidget* widget);
 	void OnAnimationChange(ruiWidget* widget);
 
+	void OnAnimationPlay(ruiWidget* widget);
+	void OnAnimationPause(ruiWidget* widget);
+	void OnAnimationStop(ruiWidget* widget);
+
 private:
 	void SetActiveModel(const rString& name);
 
@@ -40,6 +44,7 @@ private:
 	ruiPicker* m_animationPicker;
 
 	ruiText* m_animationTime;
+	ruiSlider* m_progressSlider;
 
 	rPawn* m_pawn;
 };

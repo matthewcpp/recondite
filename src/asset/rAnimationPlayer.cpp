@@ -5,9 +5,10 @@ rAnimationPlayer::rAnimationPlayer(){
 	m_skeleton = NULL;
 	m_currentAnimation = NULL;
 	m_isLooping = false;
+	m_playing = false;
 }
 void rAnimationPlayer::Update(const rTime& time){
-	if (m_currentAnimation){
+	if (m_currentAnimation && m_playing){
 		m_animationTime += time.TimeDeltaSeconds();
 
 		if (m_animationTime > m_currentAnimation->Duration()){
@@ -18,18 +19,43 @@ void rAnimationPlayer::Update(const rTime& time){
 	}
 }
 
-bool rAnimationPlayer::PlayAnimation(const rString& name){
+bool rAnimationPlayer::SetAnimation(const rString& name){
 	m_currentAnimation = m_skeleton->GetAnimation(name);
 
 	if (m_currentAnimation){
-		m_animationTime = 0.0f;
-		memset(&m_keyframeInfo[0], 0, m_keyframeInfo.size() * sizeof (rUnsignedShortArray::value_type));
-		UpdateTransformData();
+		Stop();
 		return true;
 	}
 	else {
 		return false;
 	}
+}
+
+void rAnimationPlayer::Pause(){
+	m_playing = false;
+}
+
+void rAnimationPlayer::Play(){
+	m_playing = true;
+}
+
+void rAnimationPlayer::Stop(){
+	m_animationTime = 0.0f;
+	m_playing = false;
+		
+	for (size_t i = 0; i < m_transformData.size(); i++){
+		m_keyframeInfo[i] = 0;
+		m_transformData[i].LoadIdentity();
+	}
+}
+
+bool rAnimationPlayer::PlayAnimation(const rString& name){
+	bool result = SetAnimation(name);
+
+	if (result)
+		Play();
+
+	return result;
 }
 
 float rAnimationPlayer::AnimationTime() const{
@@ -79,6 +105,10 @@ void rAnimationPlayer::UpdateTransformDataRec(rBone* parentBone, rBone* currentB
 			UpdateTransformDataRec(currentBone, currentBone->children[i]);
 		}
 	}
+}
+
+const rAnimation* rAnimationPlayer::CurrentAnimation() const{
+	return m_currentAnimation;
 }
 
 const rMatrix4Vector& rAnimationPlayer::GetTransformData() const{

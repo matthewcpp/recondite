@@ -108,5 +108,5 @@ void ruiDemoController::OnDraw(rEngine& engine){
 	rAnimationPlayer* animationPlayer = m_pawn->AnimationPlayer();
 	const rMatrix4Vector& transformData = animationPlayer->GetTransformData();
 
-	engine.renderer->RenderSkeleton(skeleton, transformData, rColor::White);
+	engine.renderer->RenderSkeleton(skeleton, transformData, rColor::White, rColor::Green, 5.0f);
 }

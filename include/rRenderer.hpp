@@ -44,7 +44,7 @@ public:
 
 	void RenderModel(const rModel* model, const rMatrix4& transform);
 
-	void RenderSkeleton(const rSkeleton* skeleton, const rMatrix4Vector& transformArray, const rColor& color);
+	void RenderSkeleton(const rSkeleton* skeleton, const rMatrix4Vector& transformArray, const rColor& lineColor, const rColor& pointColor, float pointSize);
 
 private:
 	void ComputeWorldSpaceTransformForObject(const rMatrix4& object, rMatrix4& world);

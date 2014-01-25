@@ -170,7 +170,7 @@ void rRenderer::RenderString(const rString& text, const rFont* font, const rPoin
 	RenderString(text, font, bounding, color);
 }
 
-void rRenderer::RenderSkeleton(const rSkeleton* skeleton, const rMatrix4Vector& transformArray, const rColor& color){
+void rRenderer::RenderSkeleton(const rSkeleton* skeleton, const rMatrix4Vector& transformArray, const rColor& lineColor, const rColor& pointColor, float pointSize){
 	if (skeleton){
 		rGeometryData geometryData;
 		rGeometryUtil::CreateSkeletonGeometry(skeleton, "skeleton", geometryData);
@@ -184,15 +184,15 @@ void rRenderer::RenderSkeleton(const rSkeleton* skeleton, const rMatrix4Vector& 
 		}
 
 		rMaterial* material = m_contentManager->GetMaterialAsset("immediate_color");
-		material->SetColor("fragColor",color);
+		material->SetColor("fragColor",lineColor);
 
 		m_graphicsDevice->EnableDepthTesting(false);
 
 		m_graphicsDevice->RenderImmediate(geometryData, modelViewProjection, "skeleton_wire", material);
 
 		material = m_contentManager->GetMaterialAsset("default_points");
-		material->SetColor("fragColor",color);
-		material->SetFloat("recPointSize",5.0f);
+		material->SetColor("fragColor", pointColor);
+		material->SetFloat("recPointSize", pointSize);
 
 
 		m_graphicsDevice->RenderImmediate(geometryData, modelViewProjection, "skeleton_points", material);

@@ -2,6 +2,8 @@
 
 bool rSDLGraphicsDevice::Init(){
     GLenum err = glewInit();
+
+	glEnable(GL_PROGRAM_POINT_SIZE);
     
 	return rOpenGLGraphicsDevice::Init();
 }

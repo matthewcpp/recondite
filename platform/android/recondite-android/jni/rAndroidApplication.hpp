@@ -11,17 +11,14 @@
 #include "rAndroidLog.hpp"
 #include "rAndroidGraphicsDevice.hpp"
 
+#include "rApplication.hpp"
+
 #include "rLog.hpp"
-#include "rRenderer.hpp"
+#include "rModule.hpp"
 
-#include "rEngine.hpp"
-#include "rLog.hpp"
-
-#include "rCamera.hpp"
-
-class rAndroidApplication{
+class rAndroidApplication : public rApplication{
 public:
-	rAndroidApplication();
+	rAndroidApplication(rModule* module);
 	virtual ~rAndroidApplication();
 
 	virtual bool Init(android_app* state);
@@ -40,14 +37,8 @@ public:
 	virtual void Update();
 	virtual void Draw();
 
-	void Tick();
+	virtual unsigned long GetTimeMiliseconds() const;
 
-	void TempInit();
-
-	unsigned long GetTimeMiliseconds() const;
-
-	unsigned int GetTargetFPS() const;
-	void SetTargetFPS(unsigned int targetFPS);
 
 protected:
 
@@ -56,14 +47,7 @@ protected:
 	rAndroidInputManager* m_inputManager;
 	rAndroidGraphicsDevice* m_graphicsDevice;
 
-	rRenderer* m_renderer;
-	rViewport m_viewport;
-	rTargetCamera* m_camera;
-
-	rEngine m_engine;
-
 	bool m_started;
-	unsigned int m_targetFPS;
 };
 
 #endif

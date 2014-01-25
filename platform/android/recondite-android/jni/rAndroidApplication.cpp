@@ -1,17 +1,14 @@
 #include "rAndroidApplication.hpp"
 
-rAndroidApplication::rAndroidApplication(){
+rAndroidApplication::rAndroidApplication(rModule* module)
+:rApplication(module)
+{
 	m_log = NULL;
 	m_contentManager = NULL;
 	m_inputManager = NULL;
 	m_graphicsDevice = NULL;
 
-	m_renderer = NULL;
-	m_camera = NULL;
-
 	m_started = false;
-
-	m_targetFPS = 30;
 }
 
 rAndroidApplication::~rAndroidApplication(){
@@ -32,18 +29,9 @@ bool rAndroidApplication::Init(android_app* state){
 
 		AAssetManager* assetManager = state->activity->assetManager;
 		m_contentManager = new rAndroidContentManager(assetManager, m_graphicsDevice);
-		m_contentManager->InitDefaultAssets();
-
 		m_inputManager = new rAndroidInputManager();
-		m_renderer = new rRenderer(m_graphicsDevice, m_contentManager);
 
-		m_engine.time.Start(GetTimeMiliseconds());
-
-		TempInit();
-
-		m_engine.input = m_inputManager;
-		m_engine.renderer = m_renderer;
-		m_engine.content = m_contentManager;
+		InitEngine(m_graphicsDevice, m_contentManager, m_inputManager);
 	}
 	else{
 		rLog::Error("Error initializing graphics");
@@ -109,45 +97,16 @@ void rAndroidApplication::OnApplicationLostFocusCommand(){
 	rLog::Info("Application Lost Focus Command");
 }
 
-void rAndroidApplication::TempInit(){
-	m_camera = new rTargetCamera("camera", rVector3(0,0,5));
-	m_camera->SetTarget(rVector3(0,0,-5));
-
-	rSize size = m_graphicsDevice->GetSize();
-
-	m_viewport.SetCamera(m_camera);
-	m_viewport.SetClipping(1.0, 100.0f);
-	m_viewport.SetSize(size.x,size.y);
-	m_viewport.SetViewportType(rVIEWPORT_PERSP);
-}
-
-void rAndroidApplication::Tick(){
-	unsigned long time = GetTimeMiliseconds();
-
-	unsigned long delta = time - m_engine.time.LastUpdateTime();
-	unsigned int ms = 1000 / m_targetFPS;
-
-	if (delta >= ms){
-		m_engine.time.Update(time);
-		Update();
-		Draw();
+void rAndroidApplication::Update(){
+	if (m_started){
+		rApplication::Update();
 	}
 }
 
-void rAndroidApplication::Update(){
-
-}
-
 void rAndroidApplication::Draw(){
-
-}
-
-unsigned int rAndroidApplication::GetTargetFPS() const{
-	return m_targetFPS;
-}
-
-void rAndroidApplication::SetTargetFPS(unsigned int targetFPS){
-	m_targetFPS = targetFPS;
+	if (m_started){
+		rApplication::Draw();
+	}
 }
 
 unsigned long rAndroidApplication::GetTimeMiliseconds() const{

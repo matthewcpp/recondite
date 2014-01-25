@@ -28,10 +28,7 @@ void rDemoModule::InitView(rEngine& engine){
 }
 
 void rDemoModule::LoadContent(rEngine& engine){
-	rFontData fontData;
-	fontData.LoadFromFile("assets/", "Consolas");
-	rFont* font = engine.content->LoadFont(fontData, "consolas");
-
+	rFont* font = engine.content->LoadFontFromPath("assets/consolas.rfnt", "consolas");
 	rModel* model = engine.content->LoadModelFromPath("assets/reindeer.rmdl", "reindeer");
 	model = engine.content->LoadModelFromPath("assets/chicken.rmdl", "chicken");
 	model = engine.content->LoadModelFromPath("assets/turtle.rmdl", "turtle");

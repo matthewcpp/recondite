@@ -20,6 +20,7 @@ LOCAL_MODULE    := recondite-android
 
 LOCAL_C_INCLUDES += ../../../include
 LOCAL_C_INCLUDES += ../../../platform/rgl
+LOCAL_C_INCLUDES += ../../../platform/demo
 
 LOCAL_SRC_FILES := main.cpp
 LOCAL_SRC_FILES += rAndroidLog.cpp
@@ -27,9 +28,9 @@ LOCAL_SRC_FILES += rAndroidContentManager.cpp
 LOCAL_SRC_FILES += rAndroidInputManager.cpp
 LOCAL_SRC_FILES += rAndroidGraphicsDevice.cpp
 LOCAL_SRC_FILES += rAndroidApplication.cpp
-LOCAL_SRC_FILES += rAndroidDemoApp.cpp
-LOCAL_SRC_FILES += ruiDemoController.cpp
 
+LOCAL_SRC_FILES += ../../../../platform/demo/rDemoModule.cpp
+LOCAL_SRC_FILES += ../../../../platform/demo/ruiDemoController.cpp
 LOCAL_SRC_FILES += ../../../../platform/rgl/rOpenGLGraphicsDevice.cpp
 
 LOCAL_SRC_FILES += ../../../../src/math/rMathUtil.cpp
@@ -69,6 +70,8 @@ LOCAL_SRC_FILES += ../../../../src/core/rInputManager.cpp
 LOCAL_SRC_FILES += ../../../../src/core/rRenderer.cpp
 LOCAL_SRC_FILES += ../../../../src/core/rLog.cpp
 LOCAL_SRC_FILES += ../../../../src/core/rPath.cpp
+LOCAL_SRC_FILES += ../../../../src/core/rApplication.cpp
+
 
 LOCAL_SRC_FILES += ../../../../src/asset/rAsset.cpp
 LOCAL_SRC_FILES += ../../../../src/asset/rMaterial.cpp
@@ -103,6 +106,7 @@ LOCAL_SRC_FILES += ../../../../src/input/rTouch.cpp
 LOCAL_SRC_FILES += ../../../../src/input/rDPad.cpp
 LOCAL_SRC_FILES += ../../../../src/input/rInputButton.cpp
 LOCAL_SRC_FILES += ../../../../src/input/rController.cpp
+LOCAL_SRC_FILES += ../../../../src/input/rMouse.cpp
 
 LOCAL_SRC_FILES += ../../../../src/ui/ruiLayoutManager.cpp
 LOCAL_SRC_FILES += ../../../../src/ui/ruiWidget.cpp
@@ -114,6 +118,8 @@ LOCAL_SRC_FILES += ../../../../src/ui/ruiSlider.cpp
 LOCAL_SRC_FILES += ../../../../src/ui/ruiButton.cpp
 LOCAL_SRC_FILES += ../../../../src/ui/ruiCheckbox.cpp
 LOCAL_SRC_FILES += ../../../../src/ui/ruiText.cpp
+LOCAL_SRC_FILES += ../../../../src/ui/ruiOverlay.cpp
+LOCAL_SRC_FILES += ../../../../src/ui/ruiEventHandler.cpp
 
 
 LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv2

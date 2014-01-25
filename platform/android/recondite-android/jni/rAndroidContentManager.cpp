@@ -32,6 +32,7 @@ rFont* rAndroidContentManager::LoadFontFromAsset(const rString& path, const rStr
 	if (!m_error){
 		rFontData fontData;
 		fontData.LoadFontDataFromStream(*(asset.assetData));
+		fontData.SetPath(path);
 		font = LoadFont(fontData, name);
 	}
 

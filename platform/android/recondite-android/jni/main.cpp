@@ -9,16 +9,17 @@
 #include <android/log.h>
 #include <android_native_app_glue.h>
 
-#include "rAndroidDemoApp.hpp"
+#include "rAndroidApplication.hpp"
+#include "rDemoModule.hpp"
 
 void android_onAppCmd(android_app* app, int32_t cmd) {
-	rAndroidDemoApp* application = (rAndroidDemoApp*)app->userData;
+	rAndroidApplication* application = (rAndroidApplication*)app->userData;
 	application->ProcessCommand(app, cmd);
 
 }
 
 int32_t android_onInputEvent(android_app* app, AInputEvent* event){
-	rAndroidDemoApp* application = (rAndroidDemoApp*)app->userData;
+	rAndroidApplication* application = (rAndroidApplication*)app->userData;
 	return application->OnInput(event);
 }
 
@@ -29,15 +30,14 @@ int32_t android_onInputEvent(android_app* app, AInputEvent* event){
  */
 
 void android_main(struct android_app* state){
-	rAndroidDemoApp application;
+	rDemoModule* demoModule = new rDemoModule();
+	rAndroidApplication application(demoModule);
 
 	app_dummy();
 
 	state->userData = &application;
 	state->onAppCmd = android_onAppCmd;
 	state->onInputEvent = android_onInputEvent;
-
-	__android_log_print(ANDROID_LOG_INFO, "recondite", "Hello World");
 
     while (1) {
         // Read all pending events.

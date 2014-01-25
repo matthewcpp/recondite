@@ -20,19 +20,22 @@ void rDemoModule::Init(rEngine& engine){
 }
 
 void rDemoModule::InitView(rEngine& engine){
-	m_camera = new rViewCamera("camera", rVector3(0,0,5));
+	rSize displaySize = engine.application->DisplaySize();
+
+	m_camera = new rViewCamera("camera", rVector3(0,1,5));
 	m_viewport.SetCamera(m_camera);
 	m_viewport.SetClipping(1,1000);
-	m_viewport.SetSize(640,480);
+	m_viewport.SetSize(displaySize);
 	m_viewport.SetViewportType(rVIEWPORT_PERSP);
 }
 
 void rDemoModule::LoadContent(rEngine& engine){
 	rFont* font = engine.content->LoadFontFromPath("assets/consolas.rfnt", "consolas");
-	rModel* model = engine.content->LoadModelFromPath("assets/reindeer.rmdl", "reindeer");
+	rModel* model = NULL;
+	model = engine.content->LoadModelFromPath("assets/reindeer.rmdl", "reindeer");
 	model = engine.content->LoadModelFromPath("assets/chicken.rmdl", "chicken");
-	model = engine.content->LoadModelFromPath("assets/turtle.rmdl", "turtle");
 	model = engine.content->LoadModelFromPath("assets/cat.rmdl", "cat");
+	model = engine.content->LoadModelFromPath("assets/turtle.rmdl", "turtle");
 
 	m_pawn = new rPawn(model, "pawn" , rVector3::ZeroVector);
 }

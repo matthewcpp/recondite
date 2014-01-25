@@ -76,6 +76,7 @@ void ruiDemoController::SetActiveModel(const rString& name){
 
 	m_pawn->SetModel(model);
 	model->Skeleton()->GetAnimationNames(animationNames);
+	m_pawn->AnimationPlayer()->SetAnimation(animationNames[0]);
 
 	m_animationPicker->SetOptions(animationNames);
 }

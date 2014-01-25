@@ -36,7 +36,13 @@ void rAnimationPlayer::Pause(){
 }
 
 void rAnimationPlayer::Play(){
-	m_playing = true;
+	if (m_currentAnimation){
+		if (m_playing && m_animationTime >= m_currentAnimation->Duration() && !m_isLooping){
+			Stop();
+		}
+
+		m_playing = true;
+	}
 }
 
 void rAnimationPlayer::Stop(){
@@ -90,20 +96,21 @@ void rAnimationPlayer::UpdateTransformData(){
 
 void rAnimationPlayer::UpdateTransformDataRec(rBone* parentBone, rBone* currentBone){
 	rAnimationTrack* track = m_currentAnimation->GetTrack(currentBone->id);
+	rMatrix4 currentBoneTransform;
 
 	if (track){
-		rMatrix4 currentBoneTransform;
+		
 		m_keyframeInfo[currentBone->id] = track->InterpolateKeyframe(m_animationTime, currentBoneTransform, m_keyframeInfo[currentBone->id]);
 
 		if (parentBone){
 			currentBoneTransform = currentBoneTransform * m_transformData[parentBone->id] ;
 		}
+	}
 
-		m_transformData[currentBone->id] = currentBoneTransform;
+	m_transformData[currentBone->id] = currentBoneTransform;
 
-		for (size_t i = 0; i < currentBone->children.size(); i++){
-			UpdateTransformDataRec(currentBone, currentBone->children[i]);
-		}
+	for (size_t i = 0; i < currentBone->children.size(); i++){
+		UpdateTransformDataRec(currentBone, currentBone->children[i]);
 	}
 }
 

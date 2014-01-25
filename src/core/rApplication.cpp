@@ -63,6 +63,8 @@ void rApplication::InitEngine(rGraphicsDevice* graphics, rContentManager* conten
 	m_layoutManager = new ruiLayoutManager();
 	input->SetUI(m_layoutManager);
 
+	m_engine.application = this;
+
 	m_engine.content = content;
 	m_engine.input = input;
 	m_engine.renderer = new rRenderer(graphics, content);
@@ -76,4 +78,12 @@ void rApplication::InitEngine(rGraphicsDevice* graphics, rContentManager* conten
 
 	m_module->Init(m_engine);
 	m_module->InitUI(*m_layoutManager, m_engine);
+}
+
+void rApplication::SetDisplaySize(int width, int height){
+	m_displaySize.Set(width, height);
+}
+
+rSize rApplication::DisplaySize() const{
+	return m_displaySize;
 }

@@ -9,12 +9,15 @@
 #include "rTime.hpp"
 #include "rInput.hpp"
 
+#include "interface/riApplication.hpp"
+
 class rEngine{
 public:
 	rContentManager* content;
 	rRenderer* renderer;
 	rInput* input;
 	rTime time;
+	riApplication* application;
 };
 
 #endif

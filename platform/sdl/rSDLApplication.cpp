@@ -8,13 +8,10 @@ rSDLApplication::~rSDLApplication(){
 }
 
 bool rSDLApplication::Init(){
-	int width = 640;
-	int height = 480;
-
 	if( SDL_Init( SDL_INIT_VIDEO ) < 0 ) 
 		return false;
 
-	 if( SDL_SetVideoMode( width, height, 0, SDL_OPENGL  ) == 0 )
+	if( SDL_SetVideoMode( m_displaySize.x, m_displaySize.y, 0, SDL_OPENGL  ) == 0 )
 		 return false;
 
 	 m_graphicsDevice = new rSDLGraphicsDevice();

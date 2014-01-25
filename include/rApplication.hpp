@@ -6,7 +6,9 @@
 #include "rGraphicsDevice.hpp"
 #include "rInputManager.hpp"
 
-class rApplication{
+#include "interface/riApplication.hpp"
+
+class rApplication : public riApplication{
 public:
 	virtual unsigned long GetTimeMiliseconds() const = 0;
 	virtual void Update();
@@ -23,6 +25,9 @@ public:
 	unsigned int GetTargetFPS() const;
 	void SetTargetFPS(unsigned int targetFPS);
 
+	virtual void SetDisplaySize(int width, int height);
+	virtual rSize DisplaySize() const;
+
 protected:
 	void InitEngine(rGraphicsDevice* graphics, rContentManager* content, rInputManager* input);
 
@@ -36,6 +41,8 @@ protected:
 
 	rGraphicsDevice* m_graphicsDevice;
 	ruiLayoutManager* m_layoutManager;
+
+	rSize m_displaySize;
 };
 
 #endif

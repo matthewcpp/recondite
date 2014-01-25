@@ -7,7 +7,7 @@ void rLog::SetLogTarget(rLogTarget* target){
 	m_logTarget = target;
 }
 
-void rLog::Debug(const rString& format, ...){
+void rLog::Debug(const rString format, ...){
 	if (m_enabled && m_logTarget){
 		va_list args;
 		va_start(args, format);
@@ -19,7 +19,7 @@ void rLog::Debug(const rString& format, ...){
 		}
 }
 
-void rLog::Warning(const rString& format, ...){
+void rLog::Warning(const rString format, ...){
 	if (m_enabled && m_logTarget){
 		va_list args;
 		va_start(args, format);
@@ -31,7 +31,7 @@ void rLog::Warning(const rString& format, ...){
 	}
 }
 
-void rLog::Trace(const rString& format, ...){
+void rLog::Trace(const rString format, ...){
 	if (m_enabled && m_logTarget){
 		va_list args;
 		va_start(args, format);
@@ -43,7 +43,7 @@ void rLog::Trace(const rString& format, ...){
 	}
 }
 
-void rLog::Info(const rString& format, ...){
+void rLog::Info(const rString format, ...){
 	if (m_enabled && m_logTarget){
 		va_list args;
 		va_start(args, format);
@@ -55,7 +55,7 @@ void rLog::Info(const rString& format, ...){
 	}
 }
 
-void rLog::Error(const rString& format, ...){
+void rLog::Error(const rString format, ...){
 	if (m_enabled && m_logTarget){
 		va_list args;
 		va_start(args, format);
@@ -76,7 +76,7 @@ bool rLog::Enabled(){
 }
 
 //note this is a temporary implementation for now
-rString rLog::FormatString(const rString& format, va_list args){
+rString rLog::FormatString(const rString format, va_list args){
 	char buffer[2056];
 	vsprintf (buffer, format.c_str(), args);
 	

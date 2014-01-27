@@ -269,6 +269,35 @@ GLsizei rOpenGLGraphicsDevice::GetTexCoordStrideForGeometry(size_t vertexSize, b
 		return (vertexSize + 2) * sizeof (GLfloat);
 }
 
+void rOpenGLGraphicsDevice::RenderGeometry(riGeometry* geometry, const rMatrix4& transform, const rString& elementBufferName, rMaterial* material){
+	if (geometry && material && geometry->HasElementBuffer(elementBufferName)){
+		rElementBuffer* elementBuffer = geometry->GetElementBuffer(elementBufferName);
+
+		SetActiveMaterial(material);
+
+		GLint programId = material->Shader()->ProgramId();
+
+		glBindBuffer(GL_ARRAY_BUFFER, geometry->VertexBufferId());
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBuffer->BufferId());
+
+		GLuint gMatrixLoc = glGetUniformLocation ( programId, "recMVPMatrix" );
+		glUniformMatrix4fv(gMatrixLoc, 1, GL_FALSE, transform.m);
+
+		size_t attributeCount = geometry->AttributeCount();
+		for (size_t i = 0; i < attributeCount; i++){
+			rGeometryAttribute* attribute = geometry->Attribute(i);
+			GLuint attributeLocation = glGetAttribLocation ( programId, attribute->name.c_str() );
+
+			glVertexAttribPointer ( attributeLocation, attribute->size, GLDataType(attribute->type), GL_FALSE, attribute->stride, (void*)attribute->offset );
+			glEnableVertexAttribArray ( attributeLocation );
+		}
+
+		glDrawElements ( GLGeometryType(elementBuffer->GeometryType()), elementBuffer->Size(), GL_UNSIGNED_SHORT, elementBuffer->ElementData() );
+	}
+
+
+}
+
 void rOpenGLGraphicsDevice::RenderGeometry(rGeometry* geometry, const rMatrix4& transform, const rString& elementBufferName, rMaterial* material){
 	rElementBuffer elementBuffer;
 	
@@ -350,4 +379,8 @@ GLenum rOpenGLGraphicsDevice::GLGeometryType(rGeometryType type) const{
 	default:
 		return GL_TRIANGLES;
 	}
+}
+
+GLenum rOpenGLGraphicsDevice::GLDataType(rDataType type) const{
+	return GL_FLOAT;
 }

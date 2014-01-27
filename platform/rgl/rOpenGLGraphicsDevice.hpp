@@ -34,6 +34,8 @@
 #include "rGraphicsDevice.hpp"
 #include "rMatrix4.hpp"
 
+#include "interface/riGeometry.hpp"
+
 class rOpenGLGraphicsDevice : public rGraphicsDevice{
 public:
 	rOpenGLGraphicsDevice();
@@ -60,6 +62,8 @@ public:
 
 	virtual void SetViewport(int x , int y, int width, int height) ;
 	virtual void SetActiveMaterial(rMaterial* material);
+
+	virtual void RenderGeometry(riGeometry* geometry, const rMatrix4& transform, const rString& elementBufferName, rMaterial* material);
 	
 	virtual void RenderGeometry(rGeometry* geometry, const rMatrix4& transform, const rString& elementBuffer, rMaterial* material);
 	virtual void RenderImmediate(rGeometryData& geometry, const rMatrix4& transform, const rString& elementBuffer, rMaterial* material);
@@ -70,6 +74,7 @@ protected:
 	unsigned char* ReflectTexture(int width, int height, int bpp , const unsigned char* data);
 	
 	GLenum GLGeometryType(rGeometryType type) const;
+	GLenum GLDataType(rDataType type) const;
 
 	GLsizei GetVertexStrideForGeometry(size_t vertexSize, bool texCoords, bool normals) const;
 	GLsizei GetTexCoordStrideForGeometry(size_t vertexSize, bool normals) const;

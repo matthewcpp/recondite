@@ -50,7 +50,7 @@ void rRenderer::ComputeWorldSpaceTransformForObject(const rMatrix4& object, rMat
 		}
 }
 
-void rRenderer::ImmediateColorRender(rGeometryData& geometry, const rColor& color){
+void rRenderer::ImmediateColorRender(rImmediateBuffer& geometry, const rColor& color){
 	rMaterial* material = m_contentManager->GetMaterialAsset("immediate_color");
 	
 	if (material){
@@ -62,11 +62,11 @@ void rRenderer::ImmediateColorRender(rGeometryData& geometry, const rColor& colo
 			rMatrixUtil::Ortho2D(overlay.Left(), overlay.Right(), overlay.Bottom(), overlay.Top(), transform);
 		}
 		
-		m_graphicsDevice->RenderImmediate(geometry, transform, "immediate", material);
+		m_graphicsDevice->RenderImmediate(geometry, transform, material);
 	}
 }
 
-void rRenderer::ImmediateTexturedRender(rGeometryData& geometry, rTexture2D* texture){
+void rRenderer::ImmediateTexturedRender(rImmediateBuffer& geometry, rTexture2D* texture){
 	rMaterial* material = m_contentManager->GetMaterialAsset("immediate_texture");
 	
 	if (material){
@@ -78,37 +78,37 @@ void rRenderer::ImmediateTexturedRender(rGeometryData& geometry, rTexture2D* tex
 			rMatrixUtil::Ortho2D(overlay.Left(), overlay.Right(), overlay.Bottom(), overlay.Top(), transform);
 		}
 		
-		m_graphicsDevice->RenderImmediate(geometry, transform, "immediate", material);
+		m_graphicsDevice->RenderImmediate(geometry, transform, material);
 	}
 }
 
 void rRenderer::RenderRect(const rRect& rect, const rColor& color){
-	rGeometryData geometry;
-	rGeometryUtil::CreateRectVerticies(rect, "immediate", geometry, false);
+	rImmediateBuffer geometry;
+	rGeometryUtil::CreateRectVerticies(rect, geometry, false);
 	ImmediateColorRender(geometry, color);
 }
 
 void rRenderer::RenderRect(const rRect& rect, rTexture2D* texture){
-	rGeometryData geometry;
-	rGeometryUtil::CreateRectVerticies(rect, "immediate", geometry, true);
+	rImmediateBuffer geometry;
+	rGeometryUtil::CreateRectVerticies(rect, geometry, true);
 	ImmediateTexturedRender(geometry, texture);
 }
 
 void rRenderer::RenderWireRect(const rRect& rect, const rColor& color){
-	rGeometryData geometry;
-	rGeometryUtil::CreateWireRectVerticies(rect, "immediate", geometry);
+	rImmediateBuffer geometry;
+	rGeometryUtil::CreateWireRectVerticies(rect, geometry);
 	ImmediateColorRender(geometry, color);
 }
 
 void rRenderer::RenderCircle(const rCircle2& circle, const rColor& color){
-	rGeometryData geometry;
-	rGeometryUtil::CreateCircleVerticies(circle, 20,"immediate", geometry);
+	rImmediateBuffer geometry;
+	rGeometryUtil::CreateCircleVerticies(circle, 20, geometry);
 	ImmediateColorRender(geometry, color);
 }
 
 void rRenderer::RenderWireBox(const rAlignedBox3& box, const rColor color){
-	rGeometryData geometry;
-	rGeometryUtil::CreateWireAlignedBoxVerticies(box, "immediate", geometry);
+	rImmediateBuffer geometry;
+	rGeometryUtil::CreateWireAlignedBoxVerticies(box, geometry);
 
 	rMaterial* material = m_contentManager->GetMaterialAsset("immediate_color");
 
@@ -120,7 +120,7 @@ void rRenderer::RenderWireBox(const rAlignedBox3& box, const rColor color){
 			ComputeWorldSpaceTransformForObject(transform, modelViewProjection);
 		}
 
-		m_graphicsDevice->RenderImmediate(geometry, modelViewProjection, "immediate", material);
+		m_graphicsDevice->RenderImmediate(geometry, modelViewProjection,  material);
 	}
 }
 
@@ -141,8 +141,8 @@ void rRenderer::CreateRequiredMaterials(){
 
 void rRenderer::RenderString(const rString& str, const rFont* font, const rRect& bounding, const rColor& color){
 	if (font){
-		rGeometryData geometry;
-		rGeometryUtil::Create2DText(str, font, bounding, "immediate", geometry);
+		rImmediateBuffer geometry;
+		rGeometryUtil::Create2DText(str, font, bounding, geometry);
 
 		rMaterial* material = m_contentManager->GetMaterialAsset("immediate_text");
 		material->SetColor("fragColor", color);
@@ -160,7 +160,7 @@ void rRenderer::RenderString(const rString& str, const rFont* font, const rRect&
 			translate.SetTranslate(bounding.x,bounding.y, 0.0f);
 			transform *= translate;
 
-			m_graphicsDevice->RenderImmediate(geometry, transform, "immediate", material);
+			m_graphicsDevice->RenderImmediate(geometry, transform, material);
 		}
 	}
 }
@@ -172,11 +172,13 @@ void rRenderer::RenderString(const rString& text, const rFont* font, const rPoin
 
 void rRenderer::RenderSkeleton(const rSkeleton* skeleton, const rMatrix4Vector& transformArray, const rColor& lineColor, const rColor& pointColor, float pointSize){
 	if (skeleton){
-		rGeometryData geometryData;
-		rGeometryUtil::CreateSkeletonGeometry(skeleton, "skeleton", geometryData);
+		rImmediateBuffer pointData, lineData;
+		rGeometryUtil::CreateSkeletonGeometry(skeleton, pointData, lineData);
 
-		for (size_t i = 0; i <transformArray.size(); i++)
-			geometryData.TransformVertex(i, transformArray[i]);
+		for (size_t i = 0; i <transformArray.size(); i++){
+			pointData.TransformVertex(i, transformArray[i]);
+			lineData.TransformVertex(i, transformArray[i]);
+		}
 
 		rMatrix4 modelViewProjection, transform;
 		if (m_activeViewport){
@@ -188,14 +190,14 @@ void rRenderer::RenderSkeleton(const rSkeleton* skeleton, const rMatrix4Vector& 
 
 		m_graphicsDevice->EnableDepthTesting(false);
 
-		m_graphicsDevice->RenderImmediate(geometryData, modelViewProjection, "skeleton_wire", material);
+		m_graphicsDevice->RenderImmediate(lineData, modelViewProjection, material);
 
 		material = m_contentManager->GetMaterialAsset("default_points");
 		material->SetColor("fragColor", pointColor);
 		material->SetFloat("recPointSize", pointSize);
 
 
-		m_graphicsDevice->RenderImmediate(geometryData, modelViewProjection, "skeleton_points", material);
+		m_graphicsDevice->RenderImmediate(pointData, modelViewProjection, material);
 		m_graphicsDevice->EnableDepthTesting(true);
 	}
 }

@@ -15,6 +15,15 @@
 
 #include "rVertexBoneLink.hpp"
 
+struct rModelVertex{
+	rVector3 position;
+	rVector2 texCoord;
+	rVector3 normal;
+
+	int boneIndex[4];
+	float boneWeights[4];
+};
+
 class rElementBufferData{
 public:
 	rElementBufferData();

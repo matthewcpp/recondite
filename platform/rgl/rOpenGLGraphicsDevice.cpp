@@ -269,35 +269,6 @@ GLsizei rOpenGLGraphicsDevice::GetTexCoordStrideForGeometry(size_t vertexSize, b
 		return (vertexSize + 2) * sizeof (GLfloat);
 }
 
-void rOpenGLGraphicsDevice::RenderGeometry(riGeometry* geometry, const rMatrix4& transform, const rString& elementBufferName, rMaterial* material){
-	if (geometry && material && geometry->HasElementBuffer(elementBufferName)){
-		rElementBuffer* elementBuffer = geometry->GetElementBuffer(elementBufferName);
-
-		SetActiveMaterial(material);
-
-		GLint programId = material->Shader()->ProgramId();
-
-		glBindBuffer(GL_ARRAY_BUFFER, geometry->VertexBufferId());
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBuffer->BufferId());
-
-		GLuint gMatrixLoc = glGetUniformLocation ( programId, "recMVPMatrix" );
-		glUniformMatrix4fv(gMatrixLoc, 1, GL_FALSE, transform.m);
-
-		size_t attributeCount = geometry->AttributeCount();
-		for (size_t i = 0; i < attributeCount; i++){
-			rGeometryAttribute* attribute = geometry->Attribute(i);
-			GLuint attributeLocation = glGetAttribLocation ( programId, attribute->name.c_str() );
-
-			glVertexAttribPointer ( attributeLocation, attribute->size, GLDataType(attribute->type), GL_FALSE, attribute->stride, (void*)attribute->offset );
-			glEnableVertexAttribArray ( attributeLocation );
-		}
-
-		glDrawElements ( GLGeometryType(elementBuffer->GeometryType()), elementBuffer->Size(), GL_UNSIGNED_SHORT, elementBuffer->ElementData() );
-	}
-
-
-}
-
 void rOpenGLGraphicsDevice::RenderGeometry(rGeometry* geometry, const rMatrix4& transform, const rString& elementBufferName, rMaterial* material){
 	rElementBuffer elementBuffer;
 	
@@ -333,38 +304,38 @@ void rOpenGLGraphicsDevice::RenderGeometry(rGeometry* geometry, const rMatrix4& 
 	}
 }
 
-void rOpenGLGraphicsDevice::RenderImmediate(rGeometryData& geometry, const rMatrix4& transform, const rString& elementBuffer, rMaterial* material){
-	rElementBufferData* elementBufferData = geometry.GetElementBuffer(elementBuffer);
-	
-	if (material && elementBufferData){
-		size_t vertexElementSize = geometry.VertexElementSize();
-		GLsizei vertexStride = GetVertexStrideForGeometry(vertexElementSize, geometry.HasTextureCoords(), geometry.HasNormals());
-		
+void rOpenGLGraphicsDevice::RenderImmediate(rImmediateBuffer& geometry, const rMatrix4& transform, rMaterial* material){
+	if (material){
+		size_t vertexElementSize = geometry.VertexSize();
+		bool texCoords = geometry.HasTexCoords();
+
+		GLsizei vertexStride = vertexElementSize * sizeof (GLfloat);
+		if (texCoords)
+			vertexStride += 2 * sizeof (GLfloat);
+
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 		SetActiveMaterial(material);
-		
+
 		GLint programId = material->Shader()->ProgramId();
 		GLuint gPositionLoc = glGetAttribLocation ( programId, "recPosition" );
 		GLuint gMatrixLoc = glGetUniformLocation ( programId, "recMVPMatrix" );
 		
 		glUniformMatrix4fv(gMatrixLoc, 1, GL_FALSE, transform.m);
-		
-		glVertexAttribPointer ( gPositionLoc, vertexElementSize, GL_FLOAT, GL_FALSE, vertexStride, geometry.GetVertexData() );
+
+		glVertexAttribPointer ( gPositionLoc, vertexElementSize, GL_FLOAT, GL_FALSE, vertexStride, geometry.VertexData() );
 		glEnableVertexAttribArray ( gPositionLoc );
-		
-		if (geometry.HasTextureCoords()){
+
+		if (texCoords){
 			GLuint gTexCoordLoc = glGetAttribLocation ( programId, "recTexCoord" );
-			GLsizei texCoordStride = GetTexCoordStrideForGeometry(vertexElementSize, geometry.HasNormals());
-			GLuint firstTexCoordOffset = (texCoordStride / sizeof (GLfloat)) - 2;
-			glVertexAttribPointer ( gTexCoordLoc, 2, GL_FLOAT, GL_FALSE, texCoordStride, (geometry.GetVertexData() + firstTexCoordOffset));
+			glVertexAttribPointer ( gTexCoordLoc, 2, GL_FLOAT, GL_FALSE, vertexStride, geometry.VertexData() + (vertexElementSize * sizeof (GLfloat)));
 			glEnableVertexAttribArray ( gTexCoordLoc );
 		}
-
-		glDrawElements ( GLGeometryType(elementBufferData->GeometryType()), elementBufferData->ElementCount(), GL_UNSIGNED_SHORT, elementBufferData->GetElementData() );
+		glDrawElements ( GLGeometryType(geometry.GeometryType()), geometry.IndexCount(), GL_UNSIGNED_SHORT, geometry.IndexData() );
 
 		glDisableVertexAttribArray ( gPositionLoc );
+
 	}
 }
 

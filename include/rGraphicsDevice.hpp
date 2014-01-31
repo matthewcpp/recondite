@@ -13,6 +13,7 @@
 #include "rGeometry.hpp"
 
 #include "data/rGeometryData.hpp"
+#include "data/rImmediateBuffer.hpp"
 
 class rGraphicsDevice{
 public:
@@ -41,7 +42,7 @@ public:
 	virtual void DeleteBuffer(unsigned int bufferId) = 0;
 	
 	virtual void RenderGeometry(rGeometry* geometry, const rMatrix4& transform, const rString& elementBuffer, rMaterial* material) = 0;
-	virtual void RenderImmediate(rGeometryData& geometry, const rMatrix4& transform, const rString& elementBuffer, rMaterial* material) = 0;
+	virtual void RenderImmediate(rImmediateBuffer& geometry, const rMatrix4& transform, rMaterial* material) = 0;
 	
 	virtual void SetViewport(int x , int y, int width, int height) = 0;
 	virtual void SetActiveMaterial(rMaterial* material) = 0;

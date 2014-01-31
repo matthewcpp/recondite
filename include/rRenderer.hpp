@@ -11,7 +11,7 @@
 #include "rContentManager.hpp"
 
 #include "rGeometryUtil.hpp"
-#include "data/rGeometryData.hpp"
+#include "data/rImmediateBuffer.hpp"
 #include "rMatrixUtil.hpp"
 
 #include "rCircle2.hpp"
@@ -49,8 +49,8 @@ public:
 private:
 	void ComputeWorldSpaceTransformForObject(const rMatrix4& object, rMatrix4& world);
 	
-	void ImmediateColorRender(rGeometryData& geometry, const rColor& color);
-	void ImmediateTexturedRender(rGeometryData& geometry, rTexture2D* texture);
+	void ImmediateColorRender(rImmediateBuffer& geometry, const rColor& color);
+	void ImmediateTexturedRender(rImmediateBuffer& geometry, rTexture2D* texture);
 
 private:
 		rGraphicsDevice* m_graphicsDevice;

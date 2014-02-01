@@ -17,6 +17,7 @@
 #include "rMathUtil.hpp"
 
 namespace rGeometryUtil{
+	void CreateRoundedRectVerticies(const rRect& rect, float radius, int detail, rImmediateBuffer& geometry);
 	void CreateRectVerticies(const rRect& rect, rImmediateBuffer& geometry, bool texCoords);
 	void CreateWireRectVerticies(const rRect& rect, rImmediateBuffer& geometry);
 	void CreateCircleVerticies(const rCircle2& circle, size_t segments, rImmediateBuffer& geometry);

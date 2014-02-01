@@ -1,5 +1,7 @@
 #include "rGeometryUtil.hpp"
 
+unsigned short rectIndicies[] = {0, 1, 3, 1, 2, 3};
+
 void CreateRectVerticiesWithTexCoords(const rRect& rect, rImmediateBuffer& geometry){
 	geometry.PushVertex(rect.x, rect.y, 0.0f,1.0f);
 	geometry.PushVertex(rect.x + rect.width, rect.y, 1.0f,1.0f);
@@ -14,9 +16,50 @@ void CreateRectVerticies(const rRect& rect, rImmediateBuffer& geometry){
 	geometry.PushVertex(rect.x , rect.y + rect.height);
 }
 
-void rGeometryUtil::CreateRectVerticies(const rRect& rect, rImmediateBuffer& geometry, bool texCoords){
-	static unsigned short rectIndicies[] = {0, 1, 3, 1, 2, 3};
+void AppendRectVerticies(const rRect& rect, rImmediateBuffer& geometry){
+	unsigned short offset = geometry.VertexCount();
 
+	CreateRectVerticies(rect, geometry);
+
+	for (size_t i = 0; i < 6; i ++)
+		geometry.PushIndex(offset + rectIndicies[i]);
+
+}
+
+void CircleSweep(float x, float y, float radius, float start, float end, size_t count, rImmediateBuffer& geometry){
+	unsigned short centerIndex = geometry.VertexCount();
+	unsigned short currentIndex = centerIndex;
+	rVector2 center(x,y);
+
+	geometry.PushVertex(center);
+
+	float deg = start;
+	float step = (end - start) / (float)count;
+	rVector2 vertex;
+
+	for (size_t i = 0; i <= count; i++){
+		float rad = rMath::DegreeToRad(deg);
+
+		vertex.Set(std::cos(rad), std::sin(rad));
+		vertex.x *= radius;
+		vertex.y *= -radius;
+		vertex = center + vertex;
+
+		geometry.PushVertex(vertex);
+		currentIndex += 1;
+
+		if (count){
+			geometry.PushIndex(centerIndex, currentIndex - 1, currentIndex);
+		}
+		
+		deg += step;
+
+		if (deg > end)
+			deg = end;
+	}
+}
+
+void rGeometryUtil::CreateRectVerticies(const rRect& rect, rImmediateBuffer& geometry, bool texCoords){
 	geometry.Reset(rGEOMETRY_TRIANGLES, 2, texCoords);
 
 	geometry.SetIndexBuffer(rectIndicies, 6);
@@ -194,4 +237,22 @@ void rGeometryUtil::CreateSkeletonGeometry(const rSkeleton* skeleton, rImmediate
 	for (size_t i = 0; i < bones.size(); i++){
 		BuildBoneGeometry(pointData, lineData, bones[i], USHRT_MAX);
 	}
+}
+
+void rGeometryUtil::CreateRoundedRectVerticies(const rRect& rect, float radius, int detail, rImmediateBuffer& geometry){
+	geometry.Reset(rGEOMETRY_TRIANGLES, 2, false);
+
+	CircleSweep(rect.Right() - radius , rect.Top() + radius, radius, 0.0f, 90.0f, detail, geometry);
+	CircleSweep(rect.Left() + radius , rect.Top() + radius, radius, 90.0f, 180.0f, detail, geometry);
+	CircleSweep(rect.Left() + radius , rect.Bottom() - radius, radius, 180.0f, 270.0f, detail, geometry);
+	CircleSweep(rect.Right() - radius , rect.Bottom() - radius, radius, 270.0f, 360.0f, detail, geometry);
+
+	rRect r(rect.x + radius, rect.y, rect.width - (2* radius), rect.height);
+	AppendRectVerticies(r, geometry);
+
+	r.Set(rect.x, rect.y+ radius, radius, rect.height - (2* radius));
+	AppendRectVerticies(r, geometry);
+
+	r.x = rect.Right() - radius;
+	AppendRectVerticies(r, geometry);
 }

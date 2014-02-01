@@ -34,6 +34,8 @@ public:
 	void RenderRect(const rRect& rect, const rColor& color);
 	void RenderWireRect(const rRect& rect, const rColor& color);
 	void RenderRect(const rRect& rect, rTexture2D* texture);
+
+	void RenderRoundedRect(const rRect& rect, float radius, const rColor& color);
 	
 	void RenderCircle(const rCircle2& circle, const rColor& color);
 

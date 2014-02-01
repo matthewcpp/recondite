@@ -88,6 +88,12 @@ void rRenderer::RenderRect(const rRect& rect, const rColor& color){
 	ImmediateColorRender(geometry, color);
 }
 
+void rRenderer::RenderRoundedRect(const rRect& rect, float radius, const rColor& color){
+	rImmediateBuffer geometry;
+	rGeometryUtil::CreateRoundedRectVerticies(rect, radius, 10, geometry);
+	ImmediateColorRender(geometry, color);
+}
+
 void rRenderer::RenderRect(const rRect& rect, rTexture2D* texture){
 	rImmediateBuffer geometry;
 	rGeometryUtil::CreateRectVerticies(rect, geometry, true);

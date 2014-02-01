@@ -305,13 +305,11 @@ void rOpenGLGraphicsDevice::RenderGeometry(rGeometry* geometry, const rMatrix4& 
 }
 
 void rOpenGLGraphicsDevice::RenderImmediate(rImmediateBuffer& geometry, const rMatrix4& transform, rMaterial* material){
-	if (material){
+	if (material && geometry.VertexCount() > 0){
 		size_t vertexElementSize = geometry.VertexSize();
 		bool texCoords = geometry.HasTexCoords();
 
-		GLsizei vertexStride = vertexElementSize * sizeof (GLfloat);
-		if (texCoords)
-			vertexStride += 2 * sizeof (GLfloat);
+		GLsizei vertexStride = texCoords ? (vertexElementSize + 2) * sizeof (GLfloat) : 0;
 
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -321,6 +319,7 @@ void rOpenGLGraphicsDevice::RenderImmediate(rImmediateBuffer& geometry, const rM
 		GLint programId = material->Shader()->ProgramId();
 		GLuint gPositionLoc = glGetAttribLocation ( programId, "recPosition" );
 		GLuint gMatrixLoc = glGetUniformLocation ( programId, "recMVPMatrix" );
+		GLuint gTexCoordLoc = 0;
 		
 		glUniformMatrix4fv(gMatrixLoc, 1, GL_FALSE, transform.m);
 
@@ -328,13 +327,16 @@ void rOpenGLGraphicsDevice::RenderImmediate(rImmediateBuffer& geometry, const rM
 		glEnableVertexAttribArray ( gPositionLoc );
 
 		if (texCoords){
-			GLuint gTexCoordLoc = glGetAttribLocation ( programId, "recTexCoord" );
+			gTexCoordLoc = glGetAttribLocation ( programId, "recTexCoord" );
 			glVertexAttribPointer ( gTexCoordLoc, 2, GL_FLOAT, GL_FALSE, vertexStride, geometry.VertexData() + (vertexElementSize * sizeof (GLfloat)));
 			glEnableVertexAttribArray ( gTexCoordLoc );
 		}
 		glDrawElements ( GLGeometryType(geometry.GeometryType()), geometry.IndexCount(), GL_UNSIGNED_SHORT, geometry.IndexData() );
 
 		glDisableVertexAttribArray ( gPositionLoc );
+
+		if (texCoords)
+			glDisableVertexAttribArray ( gTexCoordLoc );
 
 	}
 }

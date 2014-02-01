@@ -10,6 +10,7 @@ int main(int argc, char** argv){
 	rDemoModule* demoModule = new rDemoModule();
 
 	rLog::SetLogTarget(new rLogFile("recondite.log"));
+	rLog::Info("Application Start");
 
 	rSDLApplication app(demoModule);
 	app.SetDisplaySize(1024, 768);
@@ -26,6 +27,8 @@ int main(int argc, char** argv){
 		app.Tick();
 		SDL_Delay(1);
 	}
+
+	rLog::Info("Application Shutdown");
 
 	app.Uninit();
 

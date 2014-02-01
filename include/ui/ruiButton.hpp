@@ -28,6 +28,7 @@ private:
 	rButtonState m_state;
 	
 	rString m_text;
+	rSize m_cachedSize;
 };
 
 #endif

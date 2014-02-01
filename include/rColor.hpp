@@ -14,6 +14,7 @@ struct rColor{
 	static const rColor Red;
 	static const rColor Green;
 	static const rColor Blue;
+	static const rColor Black;
 };
 
 #endif

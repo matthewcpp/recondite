@@ -185,7 +185,8 @@ rContentError rModelData::LoadFromFile(const rString& path){
 }
 
 rContentError rModelData::WriteDependencies(const rString& dir){
-	m_geometry.WriteToFile(rPath::Assemble(dir, m_name, "rgeo"));
+	rGeometryDataWriter writer;
+	writer.WriteToFile(rPath::Assemble(dir, m_name, "rgeo"), m_geometry);
 
 	for (rTexture2DDataMap::iterator it = m_textures.begin(); it != m_textures.end(); ++it){
 		it->second->WriteToPath(rPath::Assemble(dir, it->first, "rtex"));

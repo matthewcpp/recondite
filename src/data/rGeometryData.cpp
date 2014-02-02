@@ -41,15 +41,6 @@ void rElementBufferData::Clear(){
 	m_geometryType = rGEOMETRY_TRIANGLES;
 }
 
-void rElementBufferData::Push(unsigned short v1){
-	m_elementData.push_back(v1);
-}
-
-void rElementBufferData::Push(unsigned short v1, unsigned short v2){
-	m_elementData.push_back(v1);
-	m_elementData.push_back(v2);
-}
-
 void rElementBufferData::Push(unsigned short v1, unsigned short v2, unsigned short v3){
 	m_elementData.push_back(v1);
 	m_elementData.push_back(v2);
@@ -66,126 +57,37 @@ void rElementBufferData::SetGeometryType(rGeometryType type){
 
 //-------------------------------------------------------
 
-const int rGeometryData::magicNumber = 1868916594;
-
 rGeometryData::rGeometryData(){
 	Clear();
-}
-
-rGeometryData::rGeometryData(const rString& path){
-	ReadFromFile(path);
-}
-
-rGeometryData::rGeometryData(std::istream& stream){
-	ReadFromStream(stream);
 }
 
 rGeometryData::~rGeometryData(){
 	Clear();
 }
 
-void rGeometryData::SetVertexDataInfo(size_t vertexElementSize, bool texCoords, bool normals){
-	m_vertexElementSize = vertexElementSize;
-	m_hasTextureCoords = texCoords;
-	m_hasNormals = normals;
-}
-
-size_t rGeometryData::Allocate(size_t vertexElementSize, size_t vertexCount, bool texCoords, bool normals){
-	SetVertexDataInfo(vertexElementSize,  texCoords, normals);
-	
-	size_t dataSize = VertexSizeInBytes() * vertexCount;
-	size_t vertexDataCount = dataSize / 4;
-
-	m_vertexData.resize(vertexDataCount);
-	
-	return dataSize;
+void rGeometryData::Allocate(size_t size){
+	m_vertexData.resize(size);
 }
 
 void rGeometryData::SetVertex(size_t index, const rVector3& v, const rVector3& n, const rVector2& tc){
-	size_t i = 8 * index;
+	if (index < m_vertexData.size()){
+		rModelVertex& vertex = m_vertexData[index];
 
-	memcpy(&m_vertexData[i], &v, 12);
-	memcpy(&m_vertexData[i + 3], &n, 12);
-	memcpy(&m_vertexData[i + 6], &tc, 8);
+		vertex.position = v;
+		vertex.normal = n;
+		vertex.texCoord = tc;
+	}
 	
 }
 
-void rGeometryData::SetVertex(size_t index, const rVector3& v, const rVector2& tc){
-	size_t i = 5 * index;
-
-	memcpy(&m_vertexData[i], &v, 12);
-	memcpy(&m_vertexData[i + 3], &tc, 8);
+void rGeometryData::PushVertex(const rVector3& v, const rVector3& n, const rVector2& tc){
+	rModelVertex vertex(v, n, tc);
+	m_vertexData.push_back(vertex);
 }
 
-void rGeometryData::SetVertex(size_t index, const rVector3& v){
-	SetVertex(index, v.x, v.y, v.z);
-}
-
-void rGeometryData::SetVertex(size_t index, float x, float y, float z){
-	size_t i = VertexElementSize() * index;
-
-	m_vertexData[i] = x;
-	m_vertexData[i + 1] = y;
-	m_vertexData[i + 2] = z;
-}
-
-void rGeometryData::SetVertex(size_t index, float x, float y){
-	size_t i = VertexElementSize() * index;
-
-	m_vertexData[i] = x;
-	m_vertexData[i + 1] = y;
-}
-
-void rGeometryData::SetVertex(size_t index, float x, float y, float u, float v){
-	size_t i = 4 * index;
-	
-	m_vertexData[i] = x;
-	m_vertexData[i + 1] = y;
-	m_vertexData[i + 2] = u;
-	m_vertexData[i + 3] = v;
-}
-
-void rGeometryData::SetVertex(size_t index, const rVector2& v){
-	SetVertex(index, v.x, v.y);
-}
-
-size_t rGeometryData::Push(float x, float y, float z, float u, float v){
-	size_t vertexIndex = VertexCount();
-
-	m_vertexData.push_back(x);
-	m_vertexData.push_back(y);
-	m_vertexData.push_back(z);
-	m_vertexData.push_back(u);
-	m_vertexData.push_back(v);
-
-	return vertexIndex;
-}
-
-size_t  rGeometryData::Push(float x, float y, float u, float v){
-	size_t vertexIndex = VertexCount();
-
-	m_vertexData.push_back(x);
-	m_vertexData.push_back(y);
-	m_vertexData.push_back(u);
-	m_vertexData.push_back(v);
-
-	return vertexIndex;
-}
-
-size_t rGeometryData::Push(const rVector3& v){
-	size_t vertexIndex = VertexCount();
-
-	m_vertexData.push_back(v.x);
-	m_vertexData.push_back(v.y);
-	m_vertexData.push_back(v.z);
-
-	return vertexIndex;
-}
-
-bool rGeometryData::GetVertexPosition(size_t index, rVector3& pos){
-	if (index < VertexCount()){
-		size_t i = VertexFloatCount() * index;
-		pos.Set(m_vertexData[i], m_vertexData[i + 1], m_vertexData[i + 2]);
+bool rGeometryData::GetVertex(size_t index, rModelVertex& data) const{
+	if (index < m_vertexData.size()){
+		data = m_vertexData[index];
 		return true;
 	}
 	else{
@@ -193,77 +95,44 @@ bool rGeometryData::GetVertexPosition(size_t index, rVector3& pos){
 	}
 }
 
-bool rGeometryData::TransformVertex(size_t index, const rMatrix4& transform){
-	if (index < VertexCount()){
-		rVector3 pos;
-		GetVertexPosition(index, pos);
-		transform.TransformVector3(pos);
-		SetVertex(index, pos.x, pos.y, pos.z);
-		return true;
-	}
-	else{
-		return false;
+void rGeometryData::TransformVertex(size_t index, const rMatrix4& transform){
+	if (index <  m_vertexData.size()){
+		rModelVertex& vertex = m_vertexData[index];
+
+		transform.TransformVector3(vertex.position);
+		transform.TransformVector3(vertex.normal);
+		vertex.normal.Normalize();
 	}
 }
 
-void rGeometryData::SetVertexData(float* vertexData, size_t vertexElementSize, size_t vertexCount, bool texCoords, bool normals){
-	size_t dataSize = Allocate(vertexElementSize, vertexCount, texCoords, normals);
-	
-	memcpy(&m_vertexData[0], vertexData, dataSize);
-}
-
-const float* rGeometryData::GetVertexData() const{
+const char* rGeometryData::VertexData() const{
 	if (m_vertexData.size())
-		return &m_vertexData[0];
+		return (char*)&m_vertexData[0];
 	else
 		return NULL;
 }
 
-size_t rGeometryData::VertexElementSize() const{
-	return m_vertexElementSize;
-}
-
-size_t rGeometryData::VertexFloatCount() const{
-	size_t vertexSize = m_vertexElementSize;
-	
-	if (m_hasTextureCoords)
-		vertexSize += 2;
-	
-	if (m_hasNormals)
-		vertexSize += 3;
-	
-	return vertexSize;
-}
-
-size_t rGeometryData::VertexSizeInBytes() const{
-	 return VertexFloatCount()* sizeof(float);
+char* rGeometryData::VertexData(){
+	if (m_vertexData.size())
+		return (char*)&m_vertexData[0];
+	else
+		return NULL;
 }
 
 size_t rGeometryData::VertexCount() const{
-	return m_vertexData.size() / VertexFloatCount();
-}
-
-size_t rGeometryData::VertexDataSizeInBytes() const{
-	return VertexDataCount() * sizeof(float);
-}
-
-size_t rGeometryData::VertexDataCount() const{
 	return m_vertexData.size();
 }
 
-bool rGeometryData::HasTextureCoords() const{
-	return m_hasTextureCoords;
+size_t rGeometryData::VertexDataSize() const{
+	return m_vertexData.size() * sizeof (rModelVertexArray::value_type);
 }
 
-bool rGeometryData::HasNormals() const{
-	return m_hasNormals;
-}
 
-const rVertexBoneLinkMap& rGeometryData::GetBoneLinks() const{
+const rVertexBoneLinkMap& rGeometryData::VertexBoneLinks() const{
 	return m_vertexBoneLinks;
 }
 
-size_t rGeometryData::NumVertexBoneLinks() const{
+size_t rGeometryData::VertexBoneLinkCount() const{
 	return m_vertexBoneLinks.size();
 }
 
@@ -365,178 +234,12 @@ void rGeometryData::Clear(){
 		delete it->second;
 	
 	m_elementBuffers.clear();
-
-	m_hasTextureCoords = false;
-	m_hasNormals = false;
-	m_error = rCONTENT_ERROR_NONE;
 }
 
 rString rGeometryData::Path() const{
 	return m_path;
 }
 
-rContentError rGeometryData::GetError() const{
-	return m_error;
-}
-
-rContentError rGeometryData::WriteToFile(const rString& path){
-	std::ofstream file (path.c_str(), std::ios::binary);
-
-	rContentError error = WriteToStream(file);
-	return error;
-}
-
-rContentError rGeometryData::WriteToStream(std::ostream& stream){
-	if (stream){
-		rContentError error = WriteFileHeader(stream);
-		stream.write((char*)&m_vertexData[0], VertexDataSizeInBytes());
-		error = WriteElementBufferData(stream);
-		error = WriteVertexBoneLinks(stream);
-		return error;
-	}
-	else{
-		return rCONTENT_ERROR_STREAM_ERROR;
-	}
-}
-
-rContentError rGeometryData::WriteFileHeader(std::ostream& stream){
-	char texCoords = char(m_hasTextureCoords);
-	char normals = char(m_hasNormals);
-	size_t vertexCount = VertexCount();
-	size_t elementBufferCount = m_elementBuffers.size();
-	size_t vertexBoneLinkCount = m_vertexBoneLinks.size();
-	
-	stream.write((char*)&magicNumber, 4);
-	stream.write((char*)&m_vertexElementSize, 4);
-	stream.write(&texCoords, 1);
-	stream.write(&normals, 1);
-	stream.write((char*)&vertexCount, 4);
-	stream.write((char*)&elementBufferCount, 4);
-	stream.write((char*)&vertexBoneLinkCount, 4);
-
-	return rCONTENT_ERROR_NONE;
-}
-
-rContentError rGeometryData::WriteElementBufferData(std::ostream& stream){
-	size_t nameLength, elementCount;
-	int type;
-	
-	for (rElementBufferDataMap::const_iterator it = m_elementBuffers.begin(); it != m_elementBuffers.end(); ++it){
-		rElementBufferData* bufferData = it->second;
-		
-		nameLength = it->first.size();
-		stream.write((char*)&nameLength, 4);
-		stream.write(it->first.data(), nameLength);
-		
-		type = int(bufferData->GeometryType());
-		stream.write((char*)&type, 4);
-		
-		elementCount = bufferData->ElementCount();
-		stream.write((char*)&elementCount, 4);
-		stream.write((char*)bufferData->GetElementData(), elementCount * 2);
-	}
-	return rCONTENT_ERROR_NONE;
-}
-
-rContentError rGeometryData::WriteVertexBoneLinks(std::ostream& stream){
-	for (rVertexBoneLinkMap::const_iterator it = m_vertexBoneLinks.begin(); it != m_vertexBoneLinks.end(); ++it){
-		stream.write((char*)&it->second, sizeof(rVertexBoneLink));
-	}
-	return rCONTENT_ERROR_NONE;
-}
-
-rContentError rGeometryData::ReadFromFile(const rString& path){
-	std::ifstream file(path.c_str(), std::ios::binary);
-
-	m_error = ReadFromStream(file);
-	return m_error;
-}
-
-rContentError rGeometryData::ReadFromStream(std::istream& stream){
-	Clear();
-
-	rContentError error = rCONTENT_ERROR_NONE;
-
-	if (stream){
-		size_t vertexCount = 0;
-		size_t elementBufferCount = 0;
-		size_t vertexBoneLinkCount = 0;
-	
-		error = ReadFileHeader(stream, vertexCount, elementBufferCount, vertexBoneLinkCount);
-	
-		Allocate(m_vertexElementSize, vertexCount, m_hasTextureCoords, m_hasNormals);
-		size_t dataSize = VertexDataSizeInBytes();
-
-		stream.read((char*)&m_vertexData[0], dataSize);
-		std::streamsize bytesRead = stream.gcount();
-
-		if (bytesRead != dataSize)
-			error = rCONTENT_ERROR_STREAM_ERROR;
-	
-		if (!error){
-			error = ReadElementBufferData(stream, elementBufferCount);
-			error = ReadVertexBoneLinks(stream, vertexBoneLinkCount);
-		}
-	}
-	else{
-		error = rCONTENT_ERROR_STREAM_ERROR;
-	}
-
-	return error;
-}
-
-rContentError rGeometryData::ReadFileHeader(std::istream& stream, size_t& vertexCount, size_t& elementBufferCount, size_t& vertexBoneLinkCount){
-	int magic;
-	char boolVal;
-	
-
-	stream.read((char*)&magic, 4);
-	stream.read((char*)&m_vertexElementSize, 4);
-	stream.read((char*)&boolVal, 1);
-	m_hasTextureCoords = (boolVal == 1);
-	stream.read((char*)&boolVal, 1);
-	m_hasNormals = (boolVal == 1);
-
-	stream.read((char*)&vertexCount, 4);
-	stream.read((char*)&elementBufferCount, 4);
-	stream.read((char*)&vertexBoneLinkCount, 4);
-
-	return rCONTENT_ERROR_NONE;
-}
-
-rContentError rGeometryData::ReadElementBufferData(std::istream& stream, size_t count){
-	size_t nameLength, elementCount;
-	rGeometryType type;
-	rCharArray charBuffer;
-	
-	for (size_t i = 0; i < count; i++){
-		stream.read((char*)&nameLength, 4);
-		charBuffer.resize(nameLength);
-		stream.read(&charBuffer[0], nameLength);
-		rString name(&charBuffer[0], nameLength);
-		
-		rElementBufferData* bufferData = CreateElementBuffer(name);
-		
-		stream.read((char*)&type, 4);
-		stream.read((char*)&elementCount, 4);
-		
-		bufferData->SetGeometryType(type);
-		bufferData->Allocate(elementCount);
-		
-		stream.read((char*)bufferData->GetElementData(), elementCount * 2);
-	}
-	
-	return rCONTENT_ERROR_NONE;
-}
-
-rContentError rGeometryData::ReadVertexBoneLinks(std::istream& stream, size_t count){
-	rVertexBoneLink link;
-
-	for (size_t i = 0; i < count; i++){
-		stream.read((char*)&link, sizeof(rVertexBoneLink));
-
-		m_vertexBoneLinks.insert(std::make_pair(link.vertexIndex, link));
-	}
-
-	return rCONTENT_ERROR_NONE;
+void rGeometryData::SetPath(const rString& path){
+	m_path = path;
 }

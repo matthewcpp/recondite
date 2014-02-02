@@ -71,7 +71,6 @@ protected:
 	unsigned char* ReflectTexture(int width, int height, int bpp , const unsigned char* data);
 	
 	GLenum GLGeometryType(rGeometryType type) const;
-	GLenum GLDataType(rDataType type) const;
 
 	GLsizei GetVertexStrideForGeometry(size_t vertexSize, bool texCoords, bool normals) const;
 	GLsizei GetTexCoordStrideForGeometry(size_t vertexSize, bool normals) const;

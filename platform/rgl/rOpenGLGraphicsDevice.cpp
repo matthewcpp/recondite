@@ -353,7 +353,3 @@ GLenum rOpenGLGraphicsDevice::GLGeometryType(rGeometryType type) const{
 		return GL_TRIANGLES;
 	}
 }
-
-GLenum rOpenGLGraphicsDevice::GLDataType(rDataType type) const{
-	return GL_FLOAT;
-}

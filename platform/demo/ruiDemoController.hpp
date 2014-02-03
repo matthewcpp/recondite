@@ -2,6 +2,7 @@
 #define RUI_DEMOCONTROLLER_HPP
 
 #include <sstream>
+#include <map>
 
 #include "ui/ruiPicker.hpp"
 #include "ui/ruiSlider.hpp"
@@ -11,11 +12,15 @@
 #include "ui/ruiText.hpp"
 
 #include "rContentManager.hpp"
+#include "data/rGeometryData.hpp"
+#include "data/rGeometryDataFile.hpp"
 
 #include "rEngine.hpp"
 #include "rPawn.hpp"
 
 #include "rLog.hpp"
+
+typedef std::map<rString, rImmediateBuffer*> rImmediateBufferMap;
 
 class ruiDemoController{
 public:
@@ -37,6 +42,9 @@ public:
 private:
 	void SetActiveModel(const rString& name);
 
+	void SetupImmediateBuffer(const rString name);
+	void RenderAnimated(rEngine& engine);
+
 private:
 	rContentManager* m_contentManager;
 
@@ -47,6 +55,10 @@ private:
 	ruiSlider* m_progressSlider;
 
 	rPawn* m_pawn;
+
+	//temp
+	rGeometryData m_geometryData;
+	rImmediateBufferMap m_buffers;
 };
 
 #endif

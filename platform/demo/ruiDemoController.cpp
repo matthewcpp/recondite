@@ -79,6 +79,8 @@ void ruiDemoController::SetActiveModel(const rString& name){
 	m_pawn->AnimationPlayer()->SetAnimation(animationNames[0]);
 
 	m_animationPicker->SetOptions(animationNames);
+
+	SetupImmediateBuffer(name);
 }
 
 void ruiDemoController::OnUpdate(rEngine& engine){
@@ -88,7 +90,7 @@ void ruiDemoController::OnUpdate(rEngine& engine){
 
 
 	if (anim){
-		float progress = animationTime/ anim->Duration();
+		float progress = animationTime / anim->Duration();
 		m_progressSlider->SetValue(int(progress * 100));
 	}
 	else{
@@ -102,7 +104,8 @@ void ruiDemoController::OnUpdate(rEngine& engine){
 }
 
 void ruiDemoController::OnDraw(rEngine& engine){
-	m_pawn->Draw(engine);
+	RenderAnimated(engine);
+	//m_pawn->Draw(engine);
 
 	rSkeleton* skeleton = m_pawn->Model()->Skeleton();
 
@@ -110,4 +113,76 @@ void ruiDemoController::OnDraw(rEngine& engine){
 	const rMatrix4Vector& transformData = animationPlayer->GetTransformData();
 
 	engine.renderer->RenderSkeleton(skeleton, transformData, rColor::White, rColor::Green, 5.0f);
+}
+
+void ruiDemoController::SetupImmediateBuffer(const rString name){
+	rString file = "assets/" + name + ".rgeo";
+	rGeometryDataReader reader;
+	reader.ReadFromFile(file, m_geometryData);
+
+	for (rImmediateBufferMap::iterator it = m_buffers.begin(); it != m_buffers.end(); ++it)
+		delete it->second;
+	
+	m_buffers.clear();
+
+	rArrayString elementBuffers;
+	m_geometryData.GetElementBufferNames(elementBuffers);
+
+	for (size_t i = 0; i < elementBuffers.size(); i++){
+		rElementBufferData* bufferData = m_geometryData.GetElementBuffer(elementBuffers[i]);
+
+		rImmediateBuffer* buffer = new rImmediateBuffer(rGEOMETRY_TRIANGLES, 3, true);
+		buffer->Allocate(m_geometryData.VertexCount());
+		buffer->SetIndexBuffer(bufferData->GetElementData(), bufferData->ElementCount());
+
+		m_buffers[elementBuffers[i]] = buffer;
+	}
+}
+
+void ruiDemoController::RenderAnimated(rEngine& engine){
+	rAnimationPlayer* animationPlayer = m_pawn->AnimationPlayer();
+	rModel* model = engine.content->GetModelAsset(m_modelPicker->SelectionText());
+
+	const rMatrix4Vector& transformData = animationPlayer->GetTransformData();
+	const rVertexBoneLinkMap& boneLinks = m_geometryData.VertexBoneLinks();
+
+	rVector3 position;
+	rVector2 texCoord;
+	rMatrix4 mat;
+	int count;
+
+	for (size_t i =0; i < m_geometryData.VertexCount(); i++){
+		m_geometryData.GetVertex(i, &position, &texCoord, NULL);
+
+		rVertexBoneLinkResult result = boneLinks.equal_range(i);
+
+		count = 0;
+		for (rVertexBoneLinkMap::const_iterator it = result.first; it != result.second; ++it){
+			const rVertexBoneLink& link = it->second;
+			if (count)
+				mat += transformData[link.boneIndex] * link.weight;
+			else 
+				mat = transformData[link.boneIndex] * link.weight;
+
+			count ++;
+		}
+
+		mat.TransformVector3(position);
+
+		rImmediateBufferMap::iterator end = m_buffers.end();
+		for (rImmediateBufferMap::iterator it = m_buffers.begin(); it != end; ++it){
+			it->second->SetVertex(i, position, texCoord);
+		}
+	}
+
+	rArrayString meshNames;
+	model->GetMeshNames(meshNames);
+
+	for (size_t i = 0; i < meshNames.size(); i++){
+		rMesh* mesh = model->GetMesh(meshNames[i]);
+
+		if (m_buffers.count(mesh->buffer)){
+			engine.renderer->RenderBuffer(*m_buffers[mesh->buffer], mesh->material);
+		}
+	}
 }

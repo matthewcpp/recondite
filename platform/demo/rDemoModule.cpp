@@ -8,9 +8,6 @@ void rDemoModule::Update(rEngine& engine){
 
 void rDemoModule::Draw(rEngine& engine){
 	engine.renderer->Render(m_viewport);
-
-	m_pawn->Draw(engine);
-
 	m_controller->OnDraw(engine);
 }
 

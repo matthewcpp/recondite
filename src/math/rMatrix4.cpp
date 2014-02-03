@@ -140,7 +140,7 @@ rMatrix4& rMatrix4::operator *=(float k){
 	return *this;                                          
 }     
 
-rMatrix4 rMatrix4::operator *(float k){
+rMatrix4 rMatrix4::operator *(float k) const{
 	rMatrix4 r;
 
 	for (size_t i = 0; i < 16; i++)

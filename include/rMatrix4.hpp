@@ -44,7 +44,7 @@ struct rMatrix4{
 	void SetRotationZ(float deg);
 
 	rMatrix4& operator *=(float k);
-	rMatrix4 operator *(float k);
+	rMatrix4 operator *(float k) const;
 	
 	rMatrix4& operator +=(const rMatrix4& b);
 	rMatrix4 operator +(const rMatrix4& b) const;

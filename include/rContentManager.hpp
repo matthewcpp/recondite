@@ -24,6 +24,7 @@
 
 #include "rGeometry.hpp"
 #include "data/rGeometryData.hpp"
+#include "data/rGeometryDataFile.hpp"
 
 #include "rFont.hpp"
 #include "data/rFontData.hpp"

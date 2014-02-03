@@ -1,5 +1,7 @@
 #include "data/rGeometryDataFile.hpp"
 
+#include <iostream>
+
 rGeometryDataReader::rGeometryDataReader(){
 	m_geometryData = NULL;
 	m_error = rCONTENT_ERROR_NONE;
@@ -10,7 +12,7 @@ rContentError rGeometryDataReader::GetError() const{
 }
 
 rContentError rGeometryDataReader::ReadFromFile(const rString& path, rGeometryData& geometryData){
-	std::ifstream file(path.c_str());
+	std::ifstream file(path.c_str(), std::ios::binary);
 
 	if (file){
 		ReadFromStream(file, geometryData);
@@ -116,7 +118,7 @@ rContentError rGeometryDataWriter::GetError() const{
 }
 
 rContentError rGeometryDataWriter::WriteToFile(const rString& path, const rGeometryData& geometryData){
-	std::ofstream file (path.c_str());
+	std::ofstream file (path.c_str(), std::ios::binary);
 
 	if (file){
 		WriteToStream(file, geometryData);
@@ -197,6 +199,7 @@ void rGeometryDataWriter::WriteVertexBoneLinks(std::ostream& stream){
 	rVertexBoneLinkMap::const_iterator end = vertexBoneLinks.end();
 
 	for (rVertexBoneLinkMap::const_iterator it = vertexBoneLinks.begin(); it != end; ++it){
-		stream.write((char*)&it->second, sizeof (rVertexBoneLink));
+		rVertexBoneLink link = it->second;
+		stream.write((char*)&link, sizeof (rVertexBoneLink));
 	}
 }

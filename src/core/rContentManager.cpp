@@ -511,7 +511,9 @@ rGeometry* rContentManager::GetGeometryAsset(const rString& name) const{
 }
 
 rGeometry* rContentManager::LoadGeometryFromPath(const rString& path, const rString& name){
-	rGeometryData geometryData(path);
+	rGeometryData geometryData;
+	rGeometryDataReader reader;
+	reader.ReadFromFile(path, geometryData);
 
 	return LoadGeometry(geometryData, name);
 }
@@ -522,24 +524,24 @@ rGeometry* rContentManager::LoadGeometry(const rGeometryData& geometryData, cons
 	if (m_geometry.count(name))
 		m_error = rCONTENT_ERROR_ASSET_NAME_ALREADY_PRESENT;
 	else
-		m_error = geometryData.GetError();
+		m_error = rCONTENT_ERROR_NONE;
 	
 	if (m_error){
 		if (!m_processingBatchFile) NotifyAssetLoadError(name, rASSET_GEOMETRY, m_error);
 	}
 	else
 	{
-		unsigned int vertexBuffer = m_graphicsDevice->CreateArrayBuffer((const char*)geometryData.GetVertexData(), geometryData.VertexDataSizeInBytes());
+		unsigned int vertexBuffer = m_graphicsDevice->CreateArrayBuffer((const char*)geometryData.VertexData(), geometryData.VertexDataSize());
 		unsigned int boneLinkBuffer = 0;
 
-		if (geometryData.NumVertexBoneLinks() > 0){
+		if (geometryData.VertexBoneLinkCount() > 0){
 			rVertexBoneDataArray vertexBoneData;
 			geometryData.CreateVetexBoneDataArray(vertexBoneData);
 
 			boneLinkBuffer = m_graphicsDevice->CreateArrayBuffer((const char*)&vertexBoneData[0], vertexBoneData.size() * sizeof (rVertexBoneDataArray::value_type));
 		}
 
-		geometry = new rGeometry(vertexBuffer, geometryData.VertexElementSize(), boneLinkBuffer ,geometryData.HasTextureCoords(), geometryData.HasNormals(), GetNextAssetId(), name, geometryData.Path());
+		geometry = new rGeometry(vertexBuffer, boneLinkBuffer , GetNextAssetId(), name, geometryData.Path());
 		
 		rArrayString bufferNames;
 		geometryData.GetElementBufferNames(bufferNames);
@@ -551,8 +553,6 @@ rGeometry* rContentManager::LoadGeometry(const rGeometryData& geometryData, cons
 			geometry->AddElementBuffer(bufferNames[i], elementBufferId, buffer->ElementCount(), buffer->GeometryType());
 		}
 		
-		
-		
 		m_geometry[name] = geometry;
 	}
 	
@@ -563,12 +563,12 @@ void rContentManager::DeleteGeometryBuffers(rGeometry* geometry){
 	m_graphicsDevice->DeleteBuffer(geometry->VertexBufferId());
 	
 	rArrayString bufferNames;
-	rElementBuffer elementBuffer;
+	const rElementBuffer* elementBuffer = NULL;
 	geometry->GetElementBufferNames(bufferNames);
 	
 	for (size_t i = 0; i < bufferNames.size(); i++){
-		geometry->GetElementBuffer(bufferNames[i], elementBuffer);
-		m_graphicsDevice->DeleteBuffer(elementBuffer.BufferId());
+		elementBuffer = geometry->GetElementBuffer(bufferNames[i]);
+		m_graphicsDevice->DeleteBuffer(elementBuffer->BufferId());
 	}
 	
 }

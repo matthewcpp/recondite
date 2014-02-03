@@ -20,6 +20,9 @@ void rOpenGLContentManager::InitDefaultAssets(){
     shaderData.SetShaderData(texturedVertexShader, texturedFragmentShader);
     result = LoadShader(shaderData, "default_textured");
 
+	shaderData.SetShaderData(modelVertexShader, texturedFragmentShader);
+    result = LoadShader(shaderData, "default_model");
+
     rMaterialData materialData;
     materialData.SetShader("default_colored", "");
     materialData.SetParameter( rMATERIAL_PARAMETER_COLOR , "fragColor", "255 255 255 255");

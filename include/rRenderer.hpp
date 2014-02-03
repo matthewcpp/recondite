@@ -45,6 +45,7 @@ public:
 	void RenderWireBox(const rAlignedBox3& box, const rColor color);
 
 	void RenderModel(const rModel* model, const rMatrix4& transform);
+	void RenderBuffer(const rImmediateBuffer& buffer, rMaterial* material);
 
 	void RenderSkeleton(const rSkeleton* skeleton, const rMatrix4Vector& transformArray, const rColor& lineColor, const rColor& pointColor, float pointSize);
 

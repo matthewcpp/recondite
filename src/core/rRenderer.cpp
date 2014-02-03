@@ -21,6 +21,13 @@ void rRenderer::RenderGeometry(rGeometry* geometry, const rMatrix4& transform, c
 	m_graphicsDevice->RenderGeometry(geometry, modelViewProjection, elementBufferName, material);
 }
 
+void rRenderer::RenderBuffer(const rImmediateBuffer& buffer, rMaterial* material){
+	rMatrix4 identity, modelViewProjection;
+	ComputeWorldSpaceTransformForObject(identity, modelViewProjection);
+
+	m_graphicsDevice->RenderImmediate(buffer, modelViewProjection, material);
+}
+
 void rRenderer::RenderModel(const rModel* model, const rMatrix4& transform){
 	rMatrix4 modelViewProjection;
 	ComputeWorldSpaceTransformForObject(transform, modelViewProjection);

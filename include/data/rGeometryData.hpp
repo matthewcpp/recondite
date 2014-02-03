@@ -74,6 +74,7 @@ public:
 	void SetVertex(size_t index, const rVector3& v, const rVector3& n, const rVector2& tc);
 	void PushVertex(const rVector3& v, const rVector3& n, const rVector2& tc);
 	bool GetVertex(size_t index, rModelVertex& data) const;
+	void GetVertex(size_t index, rVector3* position, rVector2* texCoord, rVector3* normal) const;
 	
 	void TransformVertex(size_t index, const rMatrix4& transform);
 

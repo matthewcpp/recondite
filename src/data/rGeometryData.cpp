@@ -95,6 +95,22 @@ bool rGeometryData::GetVertex(size_t index, rModelVertex& data) const{
 	}
 }
 
+void rGeometryData::GetVertex(size_t index, rVector3* position, rVector2* texCoord, rVector3* normal) const {
+	if (index >= m_vertexData.size())
+		return;
+
+	const rModelVertex& vertex = m_vertexData[index];
+
+	if (position)
+		*position = vertex.position;
+
+	if (texCoord)
+		*texCoord = vertex.texCoord;
+
+	if (normal)
+		*normal = vertex.normal;
+}
+
 void rGeometryData::TransformVertex(size_t index, const rMatrix4& transform){
 	if (index <  m_vertexData.size()){
 		rModelVertex& vertex = m_vertexData[index];
@@ -230,10 +246,13 @@ void rGeometryData::Clear(){
 	m_vertexData.clear();
 	m_path.clear();
 	
-	for (rElementBufferDataMap::iterator it = m_elementBuffers.begin(); it != m_elementBuffers.end(); ++it)
+	rElementBufferDataMap::iterator end = m_elementBuffers.end();
+	for (rElementBufferDataMap::iterator it = m_elementBuffers.begin(); it != end; ++it)
 		delete it->second;
 	
 	m_elementBuffers.clear();
+
+	m_vertexBoneLinks.clear();
 }
 
 rString rGeometryData::Path() const{

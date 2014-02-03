@@ -63,8 +63,8 @@ public:
 	virtual void SetViewport(int x , int y, int width, int height) ;
 	virtual void SetActiveMaterial(rMaterial* material);
 
-	virtual void RenderGeometry(rGeometry* geometry, const rMatrix4& transform, const rString& elementBuffer, rMaterial* material);
-	virtual void RenderImmediate(rImmediateBuffer& geometry, const rMatrix4& transform, rMaterial* material);
+	virtual void RenderGeometry(const rGeometry* geometry, const rMatrix4& transform, const rString& elementBuffer, rMaterial* material);
+	virtual void RenderImmediate(const rImmediateBuffer& geometry, const rMatrix4& transform, rMaterial* material);
 protected:
 	
 	GLuint CompileShader(GLenum type, const char* program);

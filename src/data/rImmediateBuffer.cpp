@@ -194,7 +194,7 @@ void rImmediateBuffer::PushIndex(unsigned short v1, unsigned int v2, unsigned in
 	m_indexData.push_back(v3);
 }
 
-void rImmediateBuffer::SetIndexBuffer(unsigned short* indices, size_t indexCount){
+void rImmediateBuffer::SetIndexBuffer(const unsigned short* indices, size_t indexCount){
 	m_indexData.resize(indexCount);
 	memcpy(&m_indexData[0], indices, indexCount * sizeof(unsigned short));
 }

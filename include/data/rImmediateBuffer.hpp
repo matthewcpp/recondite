@@ -48,7 +48,7 @@ public:
 	void PushIndex(unsigned short v1, unsigned int v2);
 	void PushIndex(unsigned short v1, unsigned int v2, unsigned int v3);
 
-	void SetIndexBuffer(unsigned short* indices, size_t indexCount);
+	void SetIndexBuffer(const unsigned short* indices, size_t indexCount);
 
 	void Reset(rGeometryType geometryType, size_t vertexSize, bool texCoords);
 

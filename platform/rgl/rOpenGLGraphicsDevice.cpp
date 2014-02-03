@@ -254,7 +254,7 @@ void rOpenGLGraphicsDevice::UnregisterTexture(int textureID){
 	glDeleteTextures(1, &texID);
 }
 
-void rOpenGLGraphicsDevice::RenderGeometry(rGeometry* geometry, const rMatrix4& transform, const rString& elementBufferName, rMaterial* material){
+void rOpenGLGraphicsDevice::RenderGeometry(const rGeometry* geometry, const rMatrix4& transform, const rString& elementBufferName, rMaterial* material){
 	if (geometry && material){
 		rElementBuffer* elementBuffer = geometry->GetElementBuffer(elementBufferName);
 	
@@ -292,7 +292,7 @@ void rOpenGLGraphicsDevice::RenderGeometry(rGeometry* geometry, const rMatrix4& 
 	}
 }
 
-void rOpenGLGraphicsDevice::RenderImmediate(rImmediateBuffer& geometry, const rMatrix4& transform, rMaterial* material){
+void rOpenGLGraphicsDevice::RenderImmediate(const rImmediateBuffer& geometry, const rMatrix4& transform, rMaterial* material){
 	if (material && geometry.VertexCount() > 0){
 		size_t vertexElementSize = geometry.VertexSize();
 		bool texCoords = geometry.HasTexCoords();

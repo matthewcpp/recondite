@@ -59,33 +59,24 @@ void rOrbitCamera::UpdatePosition(){
 	rQuaternion xform(m_rotation);
 	rVector3 cameraVector = rVector3::ForwardVector;
 	xform.TransformVector3(cameraVector);
-	cameraVector *= m_radius;
+	cameraVector *= m_distance;
 	m_position = m_target + cameraVector;
+
+	m_needsUpdate = false;
 }
 
 void rOrbitCamera::SetYaw(float yaw){
 	m_rotation.y = yaw;
-
-	UpdatePosition();
+	m_needsUpdate = true;
 }
 
 float rOrbitCamera::Yaw() const{
 	return m_rotation.y;
 }
 
-void rOrbitCamera::Orbit(float yaw, float roll, float zoom){
-	m_rotation.y += yaw;
-	m_rotation.x += roll;
-	m_radius += zoom;
-
-	UpdatePosition();
-}
-
 void rOrbitCamera::SetRoll(float roll){
 	m_rotation.x = roll;
-
-	UpdatePosition();
-
+	m_needsUpdate = true;
 }
 
 float rOrbitCamera::Roll() const{
@@ -98,18 +89,18 @@ float rOrbitCamera::Radius() const{
 
 void rOrbitCamera::SetRadius(float radius){
 	m_radius = radius;
-	UpdatePosition();
+	m_needsUpdate = true;
 }
 
 void rOrbitCamera::SetTarget(const rVector3& target){
 	m_target = target;
-
-	UpdatePosition();
+	m_needsUpdate = true;
 }
 
 void rOrbitCamera::Reset(const rVector3 target, float radius, float yaw, float roll){
 	m_target = target;
 	m_radius = radius;
+	m_distance = radius;
 	m_rotation.y = yaw;
 	m_rotation.x = roll;
 
@@ -118,4 +109,35 @@ void rOrbitCamera::Reset(const rVector3 target, float radius, float yaw, float r
 
 rVector3 rOrbitCamera::Target() const{
 	return m_target;
+}
+
+int rOrbitCamera::Update(rEngine& engine){
+	if (m_needsUpdate)
+		UpdatePosition();
+
+	return 0;
+}
+
+float rOrbitCamera::Distance() const{
+	return m_distance;
+}
+
+void rOrbitCamera::SetDistance(float distance){
+	m_distance = distance;
+
+	float minDistance = m_radius / 10.0f;
+	if (m_distance < minDistance)
+		m_distance = minDistance;
+
+	m_needsUpdate = true;
+}
+
+void rOrbitCamera::MoveCloserIn(){
+	float step = m_radius / 10.0f;
+	SetDistance(m_distance - step);
+}
+
+void rOrbitCamera::MoveFartherAway(){
+	float step = m_radius / 10.0f;
+	SetDistance(m_distance + step);
 }

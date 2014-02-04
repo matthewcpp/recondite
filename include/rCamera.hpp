@@ -5,6 +5,7 @@
 #include "rActor3.hpp"
 
 #include "interface/riCamera.hpp"
+#include "rMathUtil.hpp"
 
 class rCamera : public rActor3, public riCamera{
 public:
@@ -33,6 +34,36 @@ public:
 	
 	virtual rVector3 Target() const;
 	virtual void SetTarget(const rVector3& target);
+};
+
+class rOrbitCamera : public rCamera {
+public:
+	rOrbitCamera(const rString& name , const rVector3& position);
+
+	void SetYaw(float yaw);
+	float Yaw() const;
+
+	void SetRoll(float roll);
+	float Roll() const;
+
+	void Orbit(float yaw, float roll, float zoom);
+
+	float Radius() const;
+	void SetRadius(float radius);
+
+	void Reset(const rVector3 target, float radius, float yaw, float roll);
+
+	virtual void SetTarget(const rVector3& target);
+	virtual rVector3 Target() const;
+
+private:
+	void UpdatePosition();
+
+private:
+
+	float m_yaw;
+	float m_roll;
+	float m_radius;
 };
 
 #endif

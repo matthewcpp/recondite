@@ -1,8 +1,10 @@
 #include "ruiDemoController.hpp"
 
-ruiDemoController::ruiDemoController(rContentManager* contentManager, rPawn* pawn){
+ruiDemoController::ruiDemoController(rContentManager* contentManager, rPawn* pawn, rDemoCamera* camera){
 	m_contentManager = contentManager;
 	m_pawn = pawn;
+	m_camera = camera;
+
 }
 
 ruiDemoController::~ruiDemoController(){
@@ -31,7 +33,6 @@ void ruiDemoController::Init(ruiOverlay* overlay){
 	stopButton->Bind(ruiEVENT_BUTTON_CLICK, this, &ruiDemoController::OnAnimationStop);
 
 	m_progressSlider = new ruiSlider(106, rPoint(145, 110), rSize(130, 35));
-
 
 	overlay->AddWidget(m_modelPicker);
 	overlay->AddWidget(m_animationPicker);
@@ -73,12 +74,16 @@ void ruiDemoController::OnModelChange(ruiWidget* widget){
 void ruiDemoController::SetActiveModel(const rString& name){
 	rArrayString animationNames;
 	rModel* model = m_contentManager->GetModelAsset(name);
+	rAlignedBox3 boundingBox = model->BoundingBox();
+	float radius = rMath::Max3(boundingBox.Width(), boundingBox.Height(), boundingBox.Depth()) * 2;
 
 	m_pawn->SetModel(model);
 	model->Skeleton()->GetAnimationNames(animationNames);
 	m_pawn->AnimationPlayer()->SetAnimation(animationNames[0]);
 
 	m_animationPicker->SetOptions(animationNames);
+
+	m_camera->Reset(boundingBox.Center(), radius, 0, 0);
 
 	SetupImmediateBuffer(name);
 }
@@ -105,7 +110,8 @@ void ruiDemoController::OnUpdate(rEngine& engine){
 
 void ruiDemoController::OnDraw(rEngine& engine){
 	RenderAnimated(engine);
-	//m_pawn->Draw(engine);
+	/*
+	m_pawn->Draw(engine);
 
 	rSkeleton* skeleton = m_pawn->Model()->Skeleton();
 
@@ -113,6 +119,7 @@ void ruiDemoController::OnDraw(rEngine& engine){
 	const rMatrix4Vector& transformData = animationPlayer->GetTransformData();
 
 	engine.renderer->RenderSkeleton(skeleton, transformData, rColor::White, rColor::Green, 5.0f);
+	*/
 }
 
 void ruiDemoController::SetupImmediateBuffer(const rString name){

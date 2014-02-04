@@ -14,6 +14,7 @@
 #include "ui/ruiOverlay.hpp"
 
 #include "ruiDemoController.hpp"
+#include "rDemoCamera.hpp"
 
 class rDemoModule : public rModule{
 public:
@@ -32,7 +33,7 @@ private:
 
 private:
 	rViewport m_viewport;
-	rViewCamera* m_camera;
+	rDemoCamera* m_camera;
 	rPawn* m_pawn;
 
 	ruiDemoController* m_controller;

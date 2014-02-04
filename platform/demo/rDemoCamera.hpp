@@ -4,7 +4,7 @@
 #include "rTypes.hpp"
 #include "rDefs.hpp"
 
-#include "rCamera.hpp"
+#include "rOrbitCamera.hpp"
 #include "rPoint.hpp"
 
 class rDemoCamera : public rOrbitCamera{

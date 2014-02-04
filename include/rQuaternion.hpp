@@ -11,6 +11,7 @@ struct rQuaternion{
 	rQuaternion(float xx , float yy , float zz , float ww) : x(xx) , y(yy) , z(zz) , w(ww){};
 	rQuaternion(const rVector3& eulerAngles);
 	rQuaternion(float tx , float ty, float tz);
+	rQuaternion(const rVector3& axis, float degrees);
 
 	void SetFromEulerAngles(const rVector3& angles);
 	void SetFromEulerAngles(float tx , float ty, float tz);

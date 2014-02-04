@@ -12,6 +12,10 @@ void rQuaternion::SetFromEulerAngles(const rVector3& angles){
 	SetFromEulerAngles(angles.x , angles.y , angles.z);
 }
 
+rQuaternion::rQuaternion(const rVector3& axis, float degrees){
+	SetFromAxisAngle(axis, degrees);
+}
+
 void rQuaternion::SetFromEulerAngles(float tx , float ty, float tz){
 
 	//convert to radian

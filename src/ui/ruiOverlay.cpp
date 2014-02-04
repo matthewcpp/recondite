@@ -165,6 +165,20 @@ bool ruiOverlay::InjectMouseMotionEvent(const rMouseState& mouse){
 	}
 }
 
+bool ruiOverlay::InjectMouseWheelEvent(rMouseWheelDirection direction, const rMouseState& mouse){
+	if (m_modalWidget){
+		m_modalWidget->MouseWheelEvent(direction, mouse);
+		return true;
+	}
+	else if (m_activeWidget){
+		m_activeWidget->MouseWheelEvent(direction, mouse);
+		return true;
+	}
+	else{
+		return false;
+	}
+}
+
 ruiWidget* ruiOverlay::SelectWidget(const rPoint& position){
 	rRect boundingBox;
 

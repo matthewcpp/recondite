@@ -133,3 +133,15 @@ bool ruiLayoutManager::InjectMouseMotionEvent(const rMouseState& mouse){
 
 	return false;
 }
+
+bool ruiLayoutManager::InjectMouseWheelEvent(rMouseWheelDirection direction, const rMouseState& mouse){
+	rPoint position = mouse.Position();
+
+	rViewport* viewport = DetermineViewport(position);
+
+	if (viewport && m_overlays.count(viewport)){
+		return m_overlays[viewport]->InjectMouseWheelEvent(direction, mouse);
+	}
+
+	return false;
+}

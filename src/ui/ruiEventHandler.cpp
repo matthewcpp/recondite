@@ -31,3 +31,10 @@ void ruiEventHandler::MouseUpEvent(rMouseButton button, const rMouseState& mouse
 		break;
 	};
 }
+
+void ruiEventHandler::MouseWheelEvent(rMouseWheelDirection direction, const rMouseState& mouse){
+	if (direction == rMOUSEWHEEL_UP)
+		OnMouseWheelUp(mouse);
+	else
+		OnMouseWheelDown(mouse);
+}

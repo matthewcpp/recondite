@@ -29,6 +29,7 @@ public:
 	virtual bool InjectMouseDownEvent(rMouseButton button, const rMouseState& mouse);
 	virtual bool InjectMouseUpEvent(rMouseButton button, const rMouseState& mouse);
 	virtual bool InjectMouseMotionEvent(const rMouseState& mouse);
+	virtual bool InjectMouseWheelEvent(rMouseWheelDirection direction, const rMouseState& mouse);
 	
 	void Update(rEngine& engine);
 	void Draw(rEngine& engine);

@@ -11,12 +11,18 @@ enum rMouseButton{
 	rMOUSE_BUTTON_NONE
 };
 
+enum rMouseWheelDirection{
+	rMOUSEWHEEL_UP,
+	rMOUSEWHEEL_DOWN
+};
+
 class rMouseState {
 public:
 	virtual rPoint Position() const = 0;
 	virtual rPoint PreviousPosition() const = 0;
 
 	virtual rButtonState GetButtonState(rMouseButton button) const = 0;
+	virtual int GetWheelValue() const = 0;
 };
 
 class rMouse : public rMouseState{
@@ -31,9 +37,13 @@ public:
 	virtual rButtonState GetButtonState(rMouseButton button) const;
 	void SetButtonState (rMouseButton button, rButtonState state);
 
+	void UpdateWheelValue(rMouseWheelDirection direction);
+	virtual int GetWheelValue() const;
+
 private:
 	rPoint m_position;
 	rPoint m_previousPosition;
+	int m_wheelValue;
 	rInputButton m_buttons[3];
 };
 

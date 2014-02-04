@@ -3,6 +3,7 @@
 rMouse::rMouse(){
 	m_previousPosition = rPoint::Zero;
 	m_position = rPoint::Zero;
+	m_wheelValue = 0;
 }
 
 void rMouse::SetPosition(const rPoint& position){
@@ -28,6 +29,18 @@ rButtonState rMouse::GetButtonState(rMouseButton button) const{
 	return m_buttons[button].State();
 }
 
-void rMouse::SetButtonState (rMouseButton button, rButtonState state){
+void rMouse::SetButtonState(rMouseButton button, rButtonState state){
 	m_buttons[button].SetButtonState(state);
+}
+
+void rMouse::UpdateWheelValue(rMouseWheelDirection direction){
+	if (direction == rMOUSEWHEEL_UP)
+		m_wheelValue += 1;
+	else
+		m_wheelValue -= 1;
+
+}
+
+int rMouse::GetWheelValue() const{
+	return m_wheelValue;
 }

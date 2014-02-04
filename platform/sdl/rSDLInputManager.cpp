@@ -17,6 +17,7 @@ void rSDLInputManager::ProcessInputEvent(SDL_Event& event){
 	case SDL_MOUSEBUTTONUP:
 		ProcessMouseButtonEvent(rBUTTON_STATE_UP, event);
 		break;
+
 	};
 }
 
@@ -32,6 +33,12 @@ void rSDLInputManager::ProcessMouseButtonEvent(rButtonState state, SDL_Event& ev
 		break;
 	case SDL_BUTTON_RIGHT:
 		CreateMouseButtonEvent(rMOUSE_BUTTON_RIGHT, state, position);
+		break;
+	case SDL_BUTTON_WHEELUP:
+		CreateMouseWheelEvent(rMOUSEWHEEL_UP);
+		break;
+	case SDL_BUTTON_WHEELDOWN:
+		CreateMouseWheelEvent(rMOUSEWHEEL_DOWN);
 		break;
 	};
 }

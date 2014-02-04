@@ -15,6 +15,7 @@ public:
 	virtual bool InjectMouseDownEvent(rMouseButton button, const rMouseState& mouse) = 0;
 	virtual bool InjectMouseUpEvent(rMouseButton button, const rMouseState& mouse) = 0;
 	virtual bool InjectMouseMotionEvent(const rMouseState& mouse) = 0;
+	virtual bool InjectMouseWheelEvent(rMouseWheelDirection direction, const rMouseState& mouse) = 0;
 };
 
 class ruiIOverlay {

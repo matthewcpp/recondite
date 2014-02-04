@@ -112,6 +112,12 @@ void rInputManager::CreateMouseButtonEvent(rMouseButton button, rButtonState sta
 	}
 }
 
+void rInputManager::CreateMouseWheelEvent(rMouseWheelDirection direction){
+	m_mouse.UpdateWheelValue(direction);
+
+	m_ui->InjectMouseWheelEvent(direction, m_mouse);
+}
+
 const rMouseState* rInputManager::GetMouseState() const{
 	return &m_mouse;
 }

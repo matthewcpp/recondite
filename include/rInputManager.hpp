@@ -32,6 +32,8 @@ public:
 
 	void CreateMouseMotionEvent(int x, int y);
 	void CreateMouseButtonEvent(rMouseButton button, rButtonState state, const rPoint& position);
+	void CreateMouseWheelEvent(rMouseWheelDirection direction);
+
 	virtual const rMouseState* GetMouseState() const;
 	
 	size_t TouchCount() const;

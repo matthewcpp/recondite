@@ -17,6 +17,8 @@ public:
 	virtual void OnMouseRightDown(const rMouseState& mouse) {}
 	virtual void OnMouseRightUp(const rMouseState& mouse) {}
 	virtual void OnMouseMotion(const rMouseState& mouse){}
+	virtual void OnMouseWheelUp(const rMouseState& mouse){}
+	virtual void OnMouseWheelDown(const rMouseState& mouse){}
 
 	virtual void OnPointerDown(const rPoint& position) {}
 	virtual void OnPointerUp(const rPoint& position) {}
@@ -24,6 +26,7 @@ public:
 
 	void MouseDownEvent(rMouseButton button, const rMouseState& mouse);
 	void MouseUpEvent(rMouseButton button, const rMouseState& mouse);
+	void MouseWheelEvent(rMouseWheelDirection direction, const rMouseState& mouse);
 };
 
 #endif

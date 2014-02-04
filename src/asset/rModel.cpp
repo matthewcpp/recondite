@@ -5,19 +5,23 @@ rModel::rModel(rGeometry* geometry, int assetid, const rString& name, const rStr
 {
 	m_geometry = geometry;
 	m_skeleton = NULL;
+
+	m_boundingBox.Empty();
 }
 
 rModel::~rModel(){
 	Clear();
 }
 	
-rMesh* rModel::CreateMesh(const rString& name, const rString& buffer, rMaterial* material){
+rMesh* rModel::CreateMesh(const rString& name, const rString& buffer, rMaterial* material, const rAlignedBox3 boundingBox){
 	if (m_meshes.count(name)){
 		return NULL;
 	}
 	else{
-		rMesh* mesh = new rMesh(name, buffer, material);
+		rMesh* mesh = new rMesh(name, buffer, material, boundingBox);
 		m_meshes[name] = mesh;
+
+		m_boundingBox.AddBox(boundingBox);
 		return mesh;
 	}
 }
@@ -71,10 +75,15 @@ rSkeleton* rModel::Skeleton() const{
 void rModel::SetSkeleton(rSkeleton* skeleton){
 	m_skeleton = skeleton;
 }
+rAlignedBox3 rModel::BoundingBox() const{
+	return m_boundingBox;
+}
+
 
 //-----------------------
-rMesh::rMesh(const rString& n, const rString& buf, rMaterial* mat){
+rMesh::rMesh(const rString& n, const rString& buf, rMaterial* mat, const rAlignedBox3& box){
 	name = n;
 	buffer = buf;
 	material = mat;
+	boundingBox = box;
 }

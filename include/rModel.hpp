@@ -10,13 +10,15 @@
 #include "rGeometry.hpp"
 #include "rMaterial.hpp"
 #include "rSkeleton.hpp"
+#include "rAlignedBox3.hpp"
 
 struct rMesh {
-	rMesh(const rString& n, const rString& buf, rMaterial* mat);
+	rMesh(const rString& n, const rString& buf, rMaterial* mat, const rAlignedBox3& box);
 	
 	rString name;
 	rString buffer;
 	rMaterial* material;
+	rAlignedBox3 boundingBox;
 };
 
 typedef std::map<rString, rMesh*> rMeshMap;
@@ -27,7 +29,7 @@ public:
 	~rModel();
 	
 public:
-	rMesh* CreateMesh(const rString& name, const rString& buffer, rMaterial* material);
+	rMesh* CreateMesh(const rString& name, const rString& buffer, rMaterial* material, const rAlignedBox3 boundingBox);
 	rMesh* GetMesh(const rString& name) const;
 	void DeleteMesh(const rString& name);
 	void GetMeshNames(rArrayString& meshNames) const;
@@ -40,6 +42,8 @@ public:
 	rSkeleton* Skeleton() const;
 	void SetSkeleton(rSkeleton* skeleton);
 
+	rAlignedBox3 BoundingBox() const;
+
 	virtual rAssetType Type() const;
 
 private:
@@ -47,6 +51,7 @@ private:
 	rGeometry* m_geometry;
 
 	rSkeleton* m_skeleton;
+	rAlignedBox3 m_boundingBox;
 };
 
 typedef std::map<rString, rModel*> rModelMap;

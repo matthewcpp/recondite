@@ -694,7 +694,7 @@ rModel* rContentManager::LoadModel(rModelData& modelData, const rString& name){
 			rString materialFile = rPath::Assemble(modelDir, meshData->material, ".rmat");
 			rMaterial* material = GetOrLoadMaterial(meshData->material, materialFile);
 
-			model->CreateMesh(meshData->name, meshData->buffer, material);
+			model->CreateMesh(meshData->name, meshData->buffer, material, meshData->boundingBox);
 		}
 
 		rString skeletonFile = rPath::Assemble(modelDir, name, ".rskl");

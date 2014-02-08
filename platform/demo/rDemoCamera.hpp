@@ -22,9 +22,14 @@ private:
 	void DoZoom(int zoomDirection);
 	void DoOrbit (const rPoint& position, float timeDelta);
 
+	bool ProcessMouse(rEngine& engine);
+	bool ProcessTouch(rEngine& engine);
+
 private:
 	rPoint m_lastUpdatePos;
 	int m_lastWheelValue;
+
+	float m_pinchAmount;
 
 	bool m_orbiting;
 	float m_orbitSpeed;

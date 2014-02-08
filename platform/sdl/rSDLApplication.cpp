@@ -19,6 +19,7 @@ bool rSDLApplication::Init(){
 	 m_inputManager = new rSDLInputManager();
 
 	 InitEngine(m_graphicsDevice, m_contentManager, m_inputManager);
+	 InitModule();
 
 	 return true;
 }

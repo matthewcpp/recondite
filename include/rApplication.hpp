@@ -30,6 +30,7 @@ public:
 
 protected:
 	void InitEngine(rGraphicsDevice* graphics, rContentManager* content, rInputManager* input);
+	void InitModule();
 
 protected:
 	bool m_isRunning;

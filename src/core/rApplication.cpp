@@ -75,7 +75,9 @@ void rApplication::InitEngine(rGraphicsDevice* graphics, rContentManager* conten
 	m_graphicsDevice->Init();
 	m_engine.content->InitDefaultAssets();
 	m_engine.renderer->CreateRequiredMaterials();
+}
 
+void rApplication::InitModule(){
 	m_module->Init(m_engine);
 	m_module->InitUI(*m_layoutManager, m_engine);
 }

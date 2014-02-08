@@ -115,6 +115,7 @@ LOCAL_SRC_FILES += ../../../../src/input/rController.cpp
 LOCAL_SRC_FILES += ../../../../src/input/rMouse.cpp
 LOCAL_SRC_FILES += ../../../../src/input/rGestureTracker.cpp
 LOCAL_SRC_FILES += ../../../../src/input/rPinchGesture.cpp
+LOCAL_SRC_FILES += ../../../../src/input/rDragGesture.cpp
 
 LOCAL_SRC_FILES += ../../../../src/ui/ruiLayoutManager.cpp
 LOCAL_SRC_FILES += ../../../../src/ui/ruiWidget.cpp

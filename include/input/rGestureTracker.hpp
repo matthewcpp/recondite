@@ -8,6 +8,7 @@
 
 #include "input/riGesture.hpp"
 #include "input/rPinchGesture.hpp"
+#include "input/rDragGesture.hpp"
 
 typedef std::map<rString, riGesture*> rGestureMap;
 
@@ -27,7 +28,9 @@ public:
 	virtual riGesture* GetGesture(const rString& name) const;
 	virtual float Amount(const rString& gestureName) const;
 	virtual float AmountDelta(const rString& gestureName) const;
+	virtual rPoint Position(const rString& gestureName, size_t index) const;
 	virtual rPoint PositionDelta(const rString& gestureName, size_t index) const;
+	virtual float Active(const rString& gestureName) const;
 		
 private:
 	

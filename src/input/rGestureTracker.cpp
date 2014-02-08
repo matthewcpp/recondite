@@ -2,6 +2,7 @@
 
 rGestureTracker::rGestureTracker(){
 	TrackGesture("pinch", new rPinchGesture());
+	TrackGesture("drag", new rDragGesture());
 }
 
 void rGestureTracker::OnTouchDown(const rTouch& touch){
@@ -70,4 +71,20 @@ rPoint rGestureTracker::PositionDelta(const rString& gestureName, size_t index) 
 		return pos - prev;
 	else
 		return rPoint::Zero;
+}
+
+rPoint rGestureTracker::Position(const rString& gestureName, size_t index) const{
+	riGesture* gesture = GetGesture(gestureName);
+	rPoint pos;
+
+	if (gesture && gesture->Position(index, pos))
+		return pos;
+	else
+		return rPoint::Zero;
+}
+
+float rGestureTracker::Active(const rString& gestureName) const{
+	riGesture* gesture = GetGesture(gestureName);
+
+	return (gesture && gesture->Active());
 }

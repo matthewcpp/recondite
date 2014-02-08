@@ -26,8 +26,10 @@ class riGestureTracker{
 public:
 	virtual size_t TrackedGestureCount() const = 0;
 	virtual riGesture* GetGesture(const rString& name) const = 0;
+	virtual float Active(const rString& gestureName) const = 0;
 	virtual float Amount(const rString& gestureName) const = 0;
 	virtual float AmountDelta(const rString& gestureName) const = 0;
+	virtual rPoint Position(const rString& gestureName, size_t index) const = 0;
 	virtual rPoint PositionDelta(const rString& gestureName, size_t index) const = 0;
 };
 

@@ -28,12 +28,16 @@ void rDemoModule::InitView(rEngine& engine){
 }
 
 void rDemoModule::LoadContent(rEngine& engine){
-	rFont* font = engine.content->LoadFontFromPath("assets/consolas.rfnt", "consolas");
+	rLog::Info("Loading Assets");
+
+	rFont* font = engine.content->LoadFontFromPath("Consolas.rfnt", "consolas");
 	rModel* model = NULL;
-	model = engine.content->LoadModelFromPath("assets/reindeer.rmdl", "reindeer");
-	model = engine.content->LoadModelFromPath("assets/chicken.rmdl", "chicken");
-	model = engine.content->LoadModelFromPath("assets/cat.rmdl", "cat");
-	model = engine.content->LoadModelFromPath("assets/turtle.rmdl", "turtle");
+	model = engine.content->LoadModelFromPath("reindeer.rmdl", "reindeer");
+	model = engine.content->LoadModelFromPath("chicken.rmdl", "chicken");
+	model = engine.content->LoadModelFromPath("cat.rmdl", "cat");
+	model = engine.content->LoadModelFromPath("turtle.rmdl", "turtle");
+
+	rLog::Info("Loading Complete");
 
 	m_pawn = new rPawn(model, "pawn" , rVector3::ZeroVector);
 }

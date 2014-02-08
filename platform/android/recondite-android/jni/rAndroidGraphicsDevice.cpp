@@ -1,6 +1,10 @@
 #include "rAndroidGraphicsDevice.hpp"
 
-bool rAndroidGraphicsDevice::Init(android_app* state){
+rAndroidGraphicsDevice::rAndroidGraphicsDevice(android_app* state){
+	m_state = state;
+}
+
+bool rAndroidGraphicsDevice::Init(){
 	EGLint w, h, dummy, format;
 
 	// initialize OpenGL ES and EGL
@@ -37,9 +41,9 @@ bool rAndroidGraphicsDevice::Init(android_app* state){
 	 * ANativeWindow buffers to match, using EGL_NATIVE_VISUAL_ID. */
 	eglGetConfigAttrib(m_display, config, EGL_NATIVE_VISUAL_ID, &format);
 
-	ANativeWindow_setBuffersGeometry(state->window, 0, 0, format);
+	ANativeWindow_setBuffersGeometry(m_state->window, 0, 0, format);
 
-	m_surface = eglCreateWindowSurface(m_display, config, state->window, NULL);
+	m_surface = eglCreateWindowSurface(m_display, config, m_state->window, NULL);
 
 	EGLint contextAttrs[] = {
 		 EGL_CONTEXT_CLIENT_VERSION, 2,
@@ -58,6 +62,8 @@ bool rAndroidGraphicsDevice::Init(android_app* state){
 	
 	//opengl es specific initialization code
 	//glEnable(GL_POINT_SPRITE_OES);
+
+	rLog::Info("Android Graphics Initialized");
 
 	return rOpenGLGraphicsDevice::Init();
 }

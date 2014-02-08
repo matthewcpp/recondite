@@ -19,25 +19,21 @@ bool rAndroidApplication::Init(android_app* state){
 	m_log = new rAndroidLog();
 	rLog::SetLogTarget(m_log);
 
-	rLog::Info("Application Init");
+	rLog::Info("Android Application Init");
 
-	m_graphicsDevice = new rAndroidGraphicsDevice();
-	bool result = m_graphicsDevice->Init(state);
+	m_graphicsDevice = new rAndroidGraphicsDevice(state);
 
-	if (result){
-		rLog::Info("Graphics Initialized");
+	AAssetManager* assetManager = state->activity->assetManager;
+	m_contentManager = new rAndroidContentManager(assetManager, m_graphicsDevice);
+	m_inputManager = new rAndroidInputManager();
 
-		AAssetManager* assetManager = state->activity->assetManager;
-		m_contentManager = new rAndroidContentManager(assetManager, m_graphicsDevice);
-		m_inputManager = new rAndroidInputManager();
+	InitEngine(m_graphicsDevice, m_contentManager, m_inputManager);
 
-		InitEngine(m_graphicsDevice, m_contentManager, m_inputManager);
-	}
-	else{
-		rLog::Error("Error initializing graphics");
-	}
+	rSize displaySize = m_graphicsDevice->GetSize();
+	SetDisplaySize(displaySize.x, displaySize.y);
 
-	return result;
+	InitModule();
+	return true;
 }
 
 void rAndroidApplication::Uninit(){

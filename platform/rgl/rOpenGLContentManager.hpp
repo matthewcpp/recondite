@@ -8,7 +8,7 @@ public:
 	rOpenGLContentManager(rGraphicsDevice* graphicsDevice);
 
 public:
-	void InitDefaultAssets();
+	virtual void InitDefaultAssets();
 };
 
 #endif

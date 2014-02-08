@@ -15,7 +15,8 @@
 
 class rAndroidGraphicsDevice : public rOpenGLGraphicsDevice{
 public:
-	virtual bool Init(android_app* state);
+	rAndroidGraphicsDevice(android_app* state);
+	virtual bool Init();
 	virtual void Uninit();
 
 	virtual void SwapBuffers();
@@ -27,6 +28,8 @@ private:
     EGLContext m_context;
 
     rSize m_size;
+
+    android_app* m_state;
 };
 
 #endif

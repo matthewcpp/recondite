@@ -15,7 +15,7 @@ rAndroidAsset::~rAndroidAsset(){
 }
 
 rAndroidContentManager::rAndroidContentManager(AAssetManager* androidAssets, rGraphicsDevice* graphicsDevice)
-:rContentManager(graphicsDevice)
+:rOpenGLContentManager(graphicsDevice)
 {
 	m_androidAssets = androidAssets;
 }
@@ -83,7 +83,9 @@ rGeometry* rAndroidContentManager::LoadGeometryFromAsset(const rString& path, co
 	m_error = OpenAsset(path, asset);
 
 	if (!m_error){
-		rGeometryData geometryData(*(asset.assetData));
+		rGeometryData geometryData;
+		rGeometryDataReader reader;
+		reader.ReadFromStream(*(asset.assetData),geometryData );
 		geometry = LoadGeometry(geometryData, name);
 	}
 
@@ -144,30 +146,8 @@ rContentError rAndroidContentManager::OpenAsset(const rString& path, rAndroidAss
 		androidAsset.assetData = new std::istrstream(androidAsset.rawAssetData, androidAsset.assetDataSize);
 		return rCONTENT_ERROR_NONE;
 	}
-	else
+	else{
+		rLog::Error("Unable to open asset: %s", path.c_str());
 		return rCONTENT_ERROR_FILE_NOT_FOUND;
-}
-
-void rAndroidContentManager::InitDefaultAssets(){
-	#include "rOpenGLDefaultShaders.inl"
-
-    rShaderData shaderData;
-
-    shaderData.SetShaderData(coloredVertexShader, coloredFragmentShader);
-    rShader* result = LoadShader(shaderData, "default_colored");
-
-    shaderData.SetShaderData(pointVertexShader, coloredFragmentShader);
-	result = LoadShader(shaderData, "default_points");
-
-    shaderData.SetShaderData(texturedVertexShader, texturedFragmentShader);
-    result = LoadShader(shaderData, "default_textured");
-
-    rMaterialData materialData;
-    materialData.SetShader("default_colored", "");
-    materialData.SetParameter( rMATERIAL_PARAMETER_COLOR , "fragColor", "255 255 255 255");
-	LoadMaterial(materialData, "default_colored");
-
-	materialData.SetShader("default_points", "");
-	materialData.SetParameter( rMATERIAL_PARAMETER_FLOAT , "recPointSize", "1");
-	LoadMaterial(materialData, "default_points");
+	}
 }

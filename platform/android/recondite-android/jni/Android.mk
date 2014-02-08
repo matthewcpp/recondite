@@ -31,7 +31,10 @@ LOCAL_SRC_FILES += rAndroidApplication.cpp
 
 LOCAL_SRC_FILES += ../../../../platform/demo/rDemoModule.cpp
 LOCAL_SRC_FILES += ../../../../platform/demo/ruiDemoController.cpp
+LOCAL_SRC_FILES += ../../../../platform/demo/rDemoCamera.cpp
+
 LOCAL_SRC_FILES += ../../../../platform/rgl/rOpenGLGraphicsDevice.cpp
+LOCAL_SRC_FILES += ../../../../platform/rgl/rOpenGLContentManager.cpp
 
 LOCAL_SRC_FILES += ../../../../src/math/rMathUtil.cpp
 LOCAL_SRC_FILES += ../../../../src/math/rMatrix3.cpp
@@ -59,6 +62,7 @@ LOCAL_SRC_FILES += ../../../../src/geometry/rTriangle2.cpp
 LOCAL_SRC_FILES += ../../../../src/core/rActor3.cpp
 LOCAL_SRC_FILES += ../../../../src/core/rPawn.cpp
 LOCAL_SRC_FILES += ../../../../src/core/rCamera.cpp
+LOCAL_SRC_FILES += ../../../../src/core/rOrbitCamera.cpp
 LOCAL_SRC_FILES += ../../../../src/core/rColor.cpp
 LOCAL_SRC_FILES += ../../../../src/core/rTime.cpp
 LOCAL_SRC_FILES += ../../../../src/core/rPoint.cpp
@@ -97,10 +101,12 @@ LOCAL_SRC_FILES += ../../../../src/data/rTexture2DData.cpp
 LOCAL_SRC_FILES += ../../../../src/data/rMaterialData.cpp
 LOCAL_SRC_FILES += ../../../../src/data/rShaderData.cpp
 LOCAL_SRC_FILES += ../../../../src/data/rGeometryData.cpp
+LOCAL_SRC_FILES += ../../../../src/data/rGeometryDataFile.cpp
 LOCAL_SRC_FILES += ../../../../src/data/rModelData.cpp
 LOCAL_SRC_FILES += ../../../../src/data/rSkeletonData.cpp
 LOCAL_SRC_FILES += ../../../../src/data/rFontData.cpp
 LOCAL_SRC_FILES += ../../../../src/data/rAssetManifestData.cpp
+LOCAL_SRC_FILES += ../../../../src/data/rImmediateBuffer.cpp
 
 LOCAL_SRC_FILES += ../../../../src/input/rTouch.cpp
 LOCAL_SRC_FILES += ../../../../src/input/rDPad.cpp

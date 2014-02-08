@@ -109,10 +109,10 @@ void ruiDemoController::OnUpdate(rEngine& engine){
 }
 
 void ruiDemoController::OnDraw(rEngine& engine){
-	RenderAnimated(engine);
-	/*
-	m_pawn->Draw(engine);
+	//RenderAnimated(engine);
 
+	m_pawn->Draw(engine);
+	/*
 	rSkeleton* skeleton = m_pawn->Model()->Skeleton();
 
 	rAnimationPlayer* animationPlayer = m_pawn->AnimationPlayer();

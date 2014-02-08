@@ -8,7 +8,7 @@
 
 #include "rLog.hpp"
 
-#include "rContentManager.hpp"
+#include "rOpenGLContentManager.hpp"
 #include  "rOpenGLGraphicsDevice.hpp"
 
 #include "android/asset_manager.h"
@@ -22,7 +22,7 @@ struct rAndroidAsset{
 	std::istrstream* assetData;
 };
 
-class rAndroidContentManager : public rContentManager{
+class rAndroidContentManager : public rOpenGLContentManager{
 public:
 	rAndroidContentManager(AAssetManager* androidAssets, rGraphicsDevice* graphicsDevice);
 	virtual rTexture2D* LoadTextureFromPath(const rString& path, const rString& name);
@@ -42,8 +42,6 @@ public:
 
 	virtual rSkeleton* LoadSkeletonFromPath(const rString& path, const rString& name);
 	rSkeleton* LoadSkeletonFromAsset(const rString& path, const rString& name);
-
-	void InitDefaultAssets();
 private:
 
 	rContentError OpenAsset(const rString& path, rAndroidAsset& androidAsset);

@@ -40,7 +40,7 @@ class rOpenGLGraphicsDevice : public rGraphicsDevice{
 public:
 	rOpenGLGraphicsDevice();
 	
-	virtual bool Init();
+	virtual bool Init() = 0;
 	virtual bool IsInit() const;
 	virtual void Uninit();
 	

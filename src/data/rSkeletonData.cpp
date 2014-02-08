@@ -2,6 +2,14 @@
 
 const int rSkeletonData::magicNumber = 1818981234;
 
+rString rSkeletonData::GetPath() const{
+	return m_path;
+}
+
+void rSkeletonData::SetPath(const rString& path){
+	m_path = path;
+}
+
 rContentError rSkeletonData::WriteToFile(const rString& path, const rSkeleton& skeleton){
 	std::ofstream file(path.c_str(), std::ios::binary);
 

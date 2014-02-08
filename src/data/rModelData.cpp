@@ -240,6 +240,10 @@ rString rModelData::GetName() const{
 	return m_name;
 }
 
+void rModelData::SetPath(const rString& path){
+	m_path = path;
+}
+
 rString rModelData::GetPath() const{
 	return m_path;
 }

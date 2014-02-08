@@ -83,3 +83,23 @@ rString rPath::Assemble(const rString& dir, const rString& filename, const rStri
 
 	return result;
 }
+
+void rPath::Split(const rString& path, rString* directory, rString* filename){
+	if (directory)
+		*directory = rPath::Directory(path);
+		
+	if (filename)
+		*filename = rPath::FullFilename(path);
+}
+
+void rPath::Split(const rString& path, rString* directory, rString* filename, rString* ext){
+	if (directory)
+		*directory = rPath::Directory(path);
+		
+	if (filename)
+		*filename = rPath::Filename(path);
+		
+	if (ext)
+		*ext = rPath::Extension(path);
+}
+

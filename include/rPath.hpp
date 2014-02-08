@@ -11,6 +11,9 @@ namespace rPath{
 
 	rString Combine(const rString& dir, const rString& filename);
 	rString Assemble(const rString& dir, const rString& filename, const rString& ext);
+	
+	void Split(const rString& path, rString* directory, rString* filename);
+	void Split(const rString& path, rString* directory, rString* filename, rString* ext);
 };
 
 #endif

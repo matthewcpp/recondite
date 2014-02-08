@@ -50,6 +50,7 @@ rTexture2D* rAndroidContentManager::LoadTextureFromAsset(const rString& path, co
 
 	if (!m_error){
 		rTexture2DData textureData(*(asset.assetData));
+		textureData.SetPath(path);
 		texture = LoadTexture(textureData, name);
 	}
 
@@ -67,6 +68,7 @@ rMaterial* rAndroidContentManager::LoadMaterialFromAsset(const rString& path, co
 
 	if (!m_error){
 		rMaterialData materialData(*(asset.assetData));
+		materialData.SetPath(path);
 		material = LoadMaterial(materialData, name);
 	}
 
@@ -86,6 +88,7 @@ rGeometry* rAndroidContentManager::LoadGeometryFromAsset(const rString& path, co
 		rGeometryData geometryData;
 		rGeometryDataReader reader;
 		reader.ReadFromStream(*(asset.assetData),geometryData );
+		geometryData.SetPath(path);
 		geometry = LoadGeometry(geometryData, name);
 	}
 
@@ -104,6 +107,7 @@ rModel* rAndroidContentManager::LoadModelFromAsset(const rString& path, const rS
 	if (!m_error){
 		rModelData modelData;
 		modelData.LoadFromStream(*(asset.assetData));
+		modelData.SetPath(path);
 		model = LoadModel(modelData, name);
 	}
 
@@ -123,6 +127,7 @@ rSkeleton* rAndroidContentManager::LoadSkeletonFromAsset(const rString& path, co
 		skeleton = new rSkeleton();
 		rSkeletonData skeletonData;
 		skeletonData.ReadFromStream(*(asset.assetData), *skeleton);
+		skeletonData.SetPath(path);
 		m_skeletons[name] = skeleton;
 	}
 
@@ -130,7 +135,7 @@ rSkeleton* rAndroidContentManager::LoadSkeletonFromAsset(const rString& path, co
 }
 
 rContentError rAndroidContentManager::OpenAsset(const rString& path, rAndroidAsset& androidAsset){
-	AAsset* asset = AAssetManager_open(m_androidAssets, path.c_str(), AASSET_MODE_BUFFER);
+	AAsset* asset = AAssetManager_open(m_androidAssets, path.c_str(), AASSET_MODE_STREAMING);
 
 	if (asset){
 		androidAsset.assetDataSize = AAsset_getLength(asset);
@@ -144,6 +149,7 @@ rContentError rAndroidContentManager::OpenAsset(const rString& path, rAndroidAss
 		}
 
 		androidAsset.assetData = new std::istrstream(androidAsset.rawAssetData, androidAsset.assetDataSize);
+		AAsset_close(asset);
 		return rCONTENT_ERROR_NONE;
 	}
 	else{

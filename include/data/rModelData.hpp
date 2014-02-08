@@ -71,6 +71,8 @@ public:
 
 	void SetName(const rString& name);
 	rString GetName() const;
+
+	void SetPath(const rString& path);
 	rString GetPath() const;
 
 	rAlignedBox3& GetBoundingBox();

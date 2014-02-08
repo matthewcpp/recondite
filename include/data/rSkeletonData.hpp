@@ -16,6 +16,9 @@ public:
 	rContentError WriteToFile(const rString& path, const rSkeleton& skeleton);
 	rContentError WriteToStream(std::ostream& stream, const rSkeleton& skeleton);
 
+	rString GetPath() const;
+	void SetPath(const rString& path);
+
 private:
 	void WriteHeader(std::ostream& stream, const rSkeleton& skeleton);
 	void WriteBones(std::ostream& stream, const rSkeleton& skeleton);
@@ -31,6 +34,8 @@ private:
 	
 	static const int magicNumber;
 	
+	rString m_path;
+
 };
 
 #endif

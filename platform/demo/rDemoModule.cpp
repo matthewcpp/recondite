@@ -30,12 +30,12 @@ void rDemoModule::InitView(rEngine& engine){
 void rDemoModule::LoadContent(rEngine& engine){
 	rLog::Info("Loading Assets");
 
-	rFont* font = engine.content->LoadFontFromPath("Consolas.rfnt", "consolas");
+	rFont* font = engine.content->LoadFontFromPath("content/fonts/Consolas.rfnt", "consolas");
 	rModel* model = NULL;
-	model = engine.content->LoadModelFromPath("reindeer.rmdl", "reindeer");
-	model = engine.content->LoadModelFromPath("chicken.rmdl", "chicken");
-	model = engine.content->LoadModelFromPath("cat.rmdl", "cat");
-	model = engine.content->LoadModelFromPath("turtle.rmdl", "turtle");
+	model = engine.content->LoadModelFromPath("content/models/reindeer/reindeer.rmdl", "reindeer");
+	model = engine.content->LoadModelFromPath("content/models/chicken/chicken.rmdl", "chicken");
+	model = engine.content->LoadModelFromPath("content/models/cat/cat.rmdl", "cat");
+	model = engine.content->LoadModelFromPath("content/models/turtle/turtle.rmdl", "turtle");
 
 	rLog::Info("Loading Complete");
 

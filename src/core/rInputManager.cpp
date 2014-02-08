@@ -8,6 +8,10 @@ void rInputManager::SetUI(ruiInput* uiInput){
 	m_ui = uiInput;
 }
 
+size_t rInputManager::TouchCount() const{
+	return m_touches.size();
+}
+
 rTouch* rInputManager::CreateTouch(int id, const rPoint& position, rTouchType type){
 	if (m_touches.count(id)){
 		return NULL;
@@ -15,8 +19,12 @@ rTouch* rInputManager::CreateTouch(int id, const rPoint& position, rTouchType ty
 	else{
 		rTouch* touch = new rTouch(id, position, type);
 		m_touches[id] = touch;
+
 		rLog::Info("Touch (%u) created Pos: %d, %d (%u)", id, position.x, position.y, type);
+
+		m_gestures.OnTouchDown(*touch);
 		m_ui->InjectTouchDown(*touch);
+
 		return touch;
 	}
 }
@@ -37,7 +45,9 @@ bool rInputManager::UpdateTouch(int id, const rPoint& position, rTouchType type)
 		touch->Update(position, type);
 		
 		if (type == rTOUCH_UP){
+			m_gestures.OnTouchUp(*touch);
 			m_ui->InjectTouchUp(*touch);
+
 			m_touches.erase(id);
 			delete touch;
 
@@ -45,6 +55,7 @@ bool rInputManager::UpdateTouch(int id, const rPoint& position, rTouchType type)
 		}
 		else{
 			//rLog::Trace("Touch (%u) updated Pos: %d, %d (%u)", id, position.x, position.y, type);
+			m_gestures.OnTouchMove(*touch);
 			m_ui->InjectTouchMove(*touch);
 		}
 		
@@ -60,10 +71,6 @@ void rInputManager::GetTouches(rTouchArray& touches) const{
 	
 	for (rTouchMap::const_iterator it = m_touches.begin(); it != m_touches.end(); ++it)
 		touches.push_back(it->second);
-}
-
-size_t rInputManager::TouchCount() const{
-	return m_touches.size();
 }
 
 void rInputManager::GetTouchIds(rIntArray& ids){
@@ -120,4 +127,8 @@ void rInputManager::CreateMouseWheelEvent(rMouseWheelDirection direction){
 
 const rMouseState* rInputManager::GetMouseState() const{
 	return &m_mouse;
+}
+
+const riGestureTracker* rInputManager::Gestures() const{
+	return &m_gestures;
 }

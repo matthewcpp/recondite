@@ -28,3 +28,8 @@ void rPoint::Set(int xx, int yy){
 	x = xx;
 	y = yy;
 }
+
+float rPoint::Distance(const rPoint& pt) const{
+	rPoint p = pt - *this;
+	return std::sqrt(p.x * p.x + p.y * p.y);
+}

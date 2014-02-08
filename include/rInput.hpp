@@ -10,6 +10,7 @@
 #include "input/rDPad.hpp"
 #include "input/rInputButton.hpp"
 #include "input/rMouse.hpp"
+#include "input/riGesture.hpp"
 
 #include "rVector2.hpp"
 
@@ -34,10 +35,13 @@ class rInput {
 public:
 	virtual void GetTouches(rTouchArray& touches) const = 0;
 	virtual rTouch* GetTouch(int id) = 0;
+	virtual size_t TouchCount() const = 0;
 
 	virtual size_t ControllerCount() const = 0;
 	virtual rControllerState* GetControllerState(size_t index) const = 0;
 	virtual const rMouseState* GetMouseState() const = 0;
+
+	virtual const riGestureTracker* Gestures() const = 0;
 };
 
 #endif

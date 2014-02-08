@@ -29,7 +29,7 @@ rElementBuffer* rGeometry::GetElementBuffer(const rString& name) const{
 		return result->second;
 	}
 	else{
-		return false;
+		return NULL;
 	}
 		
 }

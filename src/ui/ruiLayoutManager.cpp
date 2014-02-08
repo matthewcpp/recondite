@@ -68,7 +68,7 @@ bool ruiLayoutManager::InjectTouchDown(const rTouch& touch){
 	rViewport* viewport = DetermineViewport(position);
 
 	if (viewport && m_overlays.count(viewport)){
-		return m_overlays[viewport]->InjectTouchUp(touch);
+		return m_overlays[viewport]->InjectTouchDown(touch);
 	}
 
 	return false;

@@ -61,12 +61,15 @@ bool rDemoCamera::ProcessTouch(rEngine& engine){
 
 	if (amount != m_pinchAmount){
 		DoZoom( amount * 100.0f);
+		return true;
 	}
 	else if (engine.input->Gestures()->Active("drag")){
 		DoOrbit(engine.input->Gestures()->Position("drag", 0), engine.time.TimeDeltaSeconds());
+		return true;
 	}
 
 	m_pinchAmount = amount;
+	return false;
 }
 
 int rDemoCamera::Update(rEngine& engine){

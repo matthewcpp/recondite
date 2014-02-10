@@ -12,95 +12,55 @@ rContentManager::~rContentManager(){
 	UnloadAssets();
 }
 
-rContentError rContentManager::LoadAssetManifestFromPath(const rString& path){
-	std::ifstream manifest(path.c_str());
-	
-	if (!manifest){
-		m_error = rCONTENT_ERROR_FILE_NOT_FOUND;
-	}
-	else{
-		m_error = LoadAssetManifestFromStream(manifest);
-	}
-	
-	return m_error;
-}
+void rContentManager::LoadAssetManifest(const rAssetManifestData& assetManifest){
+	m_processingBatchFile = true;
 
-rContentError rContentManager::LoadAssetManifestFromStream(std::istream& stream){
-	UnloadAssets();
-	
-	if (stream){
-		rXMLDocument document;
-		document.LoadFromStream(stream);
-		
-		rXMLElementArray assets;
-		document.FindElements("asset", assets);
-		
-		m_processingBatchFile = true;
-		NotifyBatchBegin(assets.size());
-		LoadManifestAssets(assets);
-		m_processingBatchFile = false;
-		NotifyBatchEnd();
-	}
-	else{
-		m_error = rCONTENT_ERROR_FILE_NOT_READABLE;
-	}
-	
-	return m_error;
-}
+	size_t assetCount = assetManifest.AssetCount();
+	rAssetManifestEntry* entry = NULL;
 
-void rContentManager::LoadManifestAssets(rXMLElementArray& assets){
-	rXMLElement* assetElement, *nameElement, *pathElement;
-	rString name, path, typeStr;
-	size_t numAssets = assets.size();
-	rAssetType assetType;
-	
-	for (size_t i = 0; i < numAssets; i++){
-		assetElement = assets[i];
-		nameElement = assetElement->GetFirstChildNamed("name");
-		pathElement = assetElement->GetFirstChildNamed("element");
-		assetElement->GetAttribute<rString>("type", typeStr);
-		
-		if (nameElement && pathElement){
-			assetType = rAsset::TypeForString(typeStr);
-			name = nameElement->Text();
-			path = pathElement->Text();
-			
-			switch (assetType){
+	for (size_t i =0; i < assetCount; i++){
+		entry = assetManifest.GetManifestEntry(i);
+
+		switch (entry->type){
 			case rASSET_TEXTURE2D:
-				if (GetTextureAsset(name))
-					m_error = rCONTENT_ERROR_ASSET_NAME_ALREADY_PRESENT;
-				else
-					LoadTextureFromPath(path, name);
+				LoadTextureFromPath(entry->path, entry->name);
 				break;
-				
+
 			case rASSET_SHADER:
-				if (GetShaderAsset(name))
-					m_error = rCONTENT_ERROR_ASSET_NAME_ALREADY_PRESENT;
-				else
-					LoadShaderFromPath(path, name);
+				LoadShaderFromPath(entry->path, entry->name);
 				break;
-				
+
 			case rASSET_MATERIAL:
-				if (GetMaterialAsset(name))
-					m_error = rCONTENT_ERROR_ASSET_NAME_ALREADY_PRESENT;
-				else
-					LoadMaterialFromPath(path, name);
+				LoadMaterialFromPath(entry->path, entry->name);
 				break;
-				
+
+			case rASSET_GEOMETRY:
+				LoadGeometryFromPath(entry->path, entry->name);
+				break;
+
+			case rASSET_FONT:
+				LoadFontFromPath(entry->path, entry->name);
+				break;
+
+			case rASSET_MODEL:
+				LoadModelFromPath(entry->path, entry->name);
+				break;
+
 			default:
 				m_error = rCONTENT_ERROR_UNKNOWN_ASSET_TYPE;
-			};
-			
-			if (m_error)
-				NotifyBatchLoadError(name, assetType, m_error, i, numAssets);
-			else
-				NotifyBatchProgress(name, assetType, i, numAssets);
-		}
-		else{
-			m_error = rCONTENT_ERROR_PARSE_ERROR;
-		}
-		
+		};
+
+		if (m_error)
+			NotifyBatchProgress(entry->name, entry->type, i, assetCount);
+		else
+			NotifyBatchLoadError(entry->name, entry->type, m_error, i, assetCount);
 	}
+
+	m_processingBatchFile = false;
+}
+
+void rContentManager::LoadAssetManifestFromPath(const rString& path){
+
 }
 
 void rContentManager::UnloadAssets(){
@@ -151,13 +111,8 @@ rContentError rContentManager::RemoveTextureAsset(const rString& name){
 rTexture2D* rContentManager::LoadTexture(const rTexture2DData& textureData, const rString& name){
 	rTexture2D* texture = NULL;
 	
-	if (m_textures.count(name))
+	if (m_textures.count(name)){
 		m_error = rCONTENT_ERROR_ASSET_NAME_ALREADY_PRESENT;
-	else
-		m_error = textureData.GetError();
-	
-	if (m_error){
-		if (!m_processingBatchFile) NotifyAssetLoadError(name, rASSET_TEXTURE2D, m_error);
 	}
 	else
 	{
@@ -206,12 +161,6 @@ rShader* rContentManager::LoadShader(const rShaderData& shaderData, const rStrin
 	
 	if (m_shaders.count(name))
 		m_error = rCONTENT_ERROR_ASSET_NAME_ALREADY_PRESENT;
-	else
-		m_error = shaderData.GetError();
-	
-	if (m_error){
-		if (!m_processingBatchFile) NotifyAssetLoadError(name, rASSET_SHADER, m_error);
-	}
 	else
 	{
 		unsigned int shaderId = m_graphicsDevice->CreateShaderProgram(shaderData.GetVertexProgram(), shaderData.GetFragmentProgram());
@@ -368,13 +317,8 @@ rMaterial* rContentManager::GetOrLoadMaterial(const rString& name, const rString
 rMaterial* rContentManager::LoadMaterial(const rMaterialData& materialData, const rString& name){
 	rMaterial* material = NULL;
 	
-	if (m_materials.count(name))
+	if (m_materials.count(name)){
 		m_error = rCONTENT_ERROR_ASSET_NAME_ALREADY_PRESENT;
-	else
-		m_error = materialData.GetError();
-	
-	if (m_error){
-		if (!m_processingBatchFile) NotifyAssetLoadError(name, rASSET_MATERIAL, m_error);
 	}
 	else
 	{
@@ -521,16 +465,10 @@ rGeometry* rContentManager::LoadGeometryFromPath(const rString& path, const rStr
 rGeometry* rContentManager::LoadGeometry(const rGeometryData& geometryData, const rString& name){
 	rGeometry* geometry = NULL;
 
-	if (m_geometry.count(name))
+	if (m_geometry.count(name)){
 		m_error = rCONTENT_ERROR_ASSET_NAME_ALREADY_PRESENT;
-	else
-		m_error = rCONTENT_ERROR_NONE;
-	
-	if (m_error){
-		if (!m_processingBatchFile) NotifyAssetLoadError(name, rASSET_GEOMETRY, m_error);
 	}
-	else
-	{
+	else{
 		unsigned int vertexBuffer = m_graphicsDevice->CreateArrayBuffer((const char*)geometryData.VertexData(), geometryData.VertexDataSize());
 		unsigned int boneLinkBuffer = 0;
 
@@ -554,6 +492,7 @@ rGeometry* rContentManager::LoadGeometry(const rGeometryData& geometryData, cons
 		}
 		
 		m_geometry[name] = geometry;
+		m_error = rCONTENT_ERROR_NONE;
 	}
 	
 	return geometry;

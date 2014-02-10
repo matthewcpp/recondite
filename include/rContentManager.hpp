@@ -35,6 +35,8 @@
 #include "rSkeleton.hpp"
 #include "data/rSkeletonData.hpp"
 
+#include "data/rAssetManifestData.hpp"
+
 #include "rContentListener.hpp"
 
 #include "interface/riContentManager.hpp"
@@ -48,6 +50,7 @@ public:
 	rContentManager(rGraphicsDevice* graphicsDevice);
 	virtual ~rContentManager();
 	
+//Textures
 public:
 	virtual rTexture2D* GetTextureAsset(const rString& name) const;
 	rTexture2D* LoadTexture(const rTexture2DData& textureData, const rString& name);
@@ -55,7 +58,8 @@ public:
 	rTexture2D* GetOrLoadTexture(const rString& textureName, const rString& texturePath);
 	rContentError RemoveTextureAsset(const rString& name);
 	size_t NumTextures() const;
-	
+
+//Shaders
 public:
 	virtual rShader* GetShaderAsset(const rString& name) const;
 	rShader* LoadShader(const rShaderData& shaderData, const rString& name);
@@ -63,7 +67,8 @@ public:
 	rShader* GetOrLoadShader(const rString& name, const rString& path);
 	rContentError RemoveShaderAsset(const rString& name);
 	size_t NumShaders() const;
-	
+
+//Materials
 public:
 	virtual rMaterial* GetMaterialAsset(const rString& name) const;
 	rMaterial* LoadMaterial(const rMaterialData& materialData, const rString& name);
@@ -72,6 +77,7 @@ public:
 	rContentError RemoveMaterialAsset(const rString& name);
 	size_t NumMaterials() const;
 	
+//Geometry
 public:
 	virtual rGeometry* GetGeometryAsset(const rString& name) const;
 	rGeometry* LoadGeometry(const rGeometryData& geometryData, const rString& name);
@@ -79,7 +85,8 @@ public:
 	virtual rGeometry* LoadGeometryFromPath(const rString& path, const rString& name);
 	rContentError RemoveGeometryAsset(const rString& name);
 	size_t NumGeometry() const;
-	
+
+//Fonts
 public:
 	virtual rFont* GetFontAsset(const rString& name) const;
 	rFont* LoadFont(const rFontData& fontData, const rString& name);
@@ -87,6 +94,7 @@ public:
 	rContentError RemoveFontAsset(const rString& name);
 	size_t NumFonts();
 
+//Models
 public:
 	virtual rModel* GetModelAsset(const rString& name) const;
 	rModel* LoadModel(rModelData& modelData, const rString& name);
@@ -96,6 +104,7 @@ public:
 	size_t NumModels() const;
 	void GetModelNames(rArrayString& names) const;
 
+//Skeletons
 public:
 	virtual rSkeleton* GetSkeletonAsset(const rString& name) const;
 	virtual rSkeleton* LoadSkeletonFromPath(const rString& path, const rString& name);
@@ -103,9 +112,12 @@ public:
 	rContentError RemoveSkeletonAsset(const rString& name);
 	size_t NumSkeletons();
 
+//Asset Manifest
 public:
-	virtual rContentError LoadAssetManifestFromPath(const rString& path);
-	rContentError LoadAssetManifestFromStream(std::istream& stream);
+	void LoadAssetManifest(const rAssetManifestData& assetManifest);
+	void LoadAssetManifestFromPath(const rString& path);
+
+public:
 	void UnloadAssets();
 	virtual void InitDefaultAssets();
 
@@ -152,7 +164,7 @@ private:
 	void UnloadMaterials();
 	void UnloadGeometry();
 	
-	void LoadManifestAssets(rXMLElementArray& assets);
+
 	
 	bool LoadMaterialDependencies(const rMaterialData& materialData, rMaterial* material);
 	void DeleteGeometryBuffers(rGeometry* geometry);

@@ -30,16 +30,19 @@ void rDemoModule::InitView(rEngine& engine){
 void rDemoModule::LoadContent(rEngine& engine){
 	rLog::Info("Loading Assets");
 
-	rFont* font = engine.content->LoadFontFromPath("content/fonts/Consolas.rfnt", "consolas");
-	rModel* model = NULL;
-	model = engine.content->LoadModelFromPath("content/models/reindeer/reindeer.rmdl", "reindeer");
-	model = engine.content->LoadModelFromPath("content/models/chicken/chicken.rmdl", "chicken");
-	model = engine.content->LoadModelFromPath("content/models/cat/cat.rmdl", "cat");
-	model = engine.content->LoadModelFromPath("content/models/turtle/turtle.rmdl", "turtle");
+	rAssetManifestData manifest;
+
+	manifest.AddManifestEntry(rASSET_FONT, "consolas", "content/fonts/Consolas.rfnt");
+	manifest.AddManifestEntry(rASSET_MODEL, "reindeer", "content/models/reindeer/reindeer.rmdl");
+	manifest.AddManifestEntry(rASSET_MODEL, "chicken", "content/models/chicken/chicken.rmdl");
+	manifest.AddManifestEntry(rASSET_MODEL, "cat", "content/models/cat/cat.rmdl");
+	manifest.AddManifestEntry(rASSET_MODEL, "turtle", "content/models/turtle/turtle.rmdl");
+
+	engine.content->LoadAssetManifest(manifest);
 
 	rLog::Info("Loading Complete");
 
-	m_pawn = new rPawn(model, "pawn" , rVector3::ZeroVector);
+	m_pawn = new rPawn(NULL, "pawn" , rVector3::ZeroVector);
 }
 
 void rDemoModule::Uninit(rEngine& engine){

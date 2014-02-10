@@ -1,16 +1,10 @@
 #ifndef R_ASSET_MANIFEST_DATA_HPP
 #define R_ASSET_MANIFEST_DATA_HPP
 
-#include <fstream>
-#include <map>
+#include <vector>
 
 #include "rTypes.hpp"
 #include "rDefs.hpp"
-
-#include "rAsset.hpp"
-
-#include "xml/rXMLDocument.hpp"
-#include "xml/rXMLElement.hpp"
 
 struct rAssetManifestEntry {
 	rAssetType type;
@@ -20,41 +14,26 @@ struct rAssetManifestEntry {
 	rAssetManifestEntry(rAssetType t, const rString& n, const rString& p) : type(t), name(n), path(p) {}
 };
 
-typedef std::map<rString, rAssetManifestEntry> rAssetManifestEntryMap;
-typedef std::pair<rString, rAssetManifestEntry> rAssetManifestMapItem;
-typedef rAssetManifestEntryMap::iterator rAssetManifestEntryItr;
-typedef rAssetManifestEntryMap::const_iterator rAssetManifestEntryConstItr;
+typedef std::vector<rAssetManifestEntry*> rAssetManifestList;
 
 class rAssetManifestData {
 public:
-	rAssetManifestData(const rString& path);
-	rAssetManifestData(std::istream& stream);
-	
-	rContentError LoadFromFile(const rString& path);
-	rContentError LoadFromStream(std::istream& stream);
-	
-	rContentError WriteToFile(const rString& path);
-	rContentError WriteToStream(std::ostream& stream);
-	
-	rContentError AddManifestEntry(rAssetType type, const rString& name, const rString& path);
-	rContentError DeleteManifestEntry(rAssetType type, const rString& name);
-	
+	~rAssetManifestData();
 
-	rContentError GetError() const;
+	void AddManifestEntry(rAssetType type, const rString& name, const rString& path);
+	rAssetManifestEntry* GetManifestEntry(size_t index) const;
+
 	rString GetPath() const;
-	size_t AssetCount(rAssetType type);
+	void SetPath(const rString& path);
+
+	size_t AssetCount() const;
 	
 	void Clear();
 	
 private:
-	void CreateAssetCategoryXML(const rAssetManifestEntryMap& category, rXMLElement* parent);
-	rContentError ReadAsset(rXMLElement* asset);
 	
-private:
-	
-	rAssetManifestEntryMap m_manifestEntries[rASSET_NUM_TYPES];
-	rContentError m_error;
 	rString m_path;
+	rAssetManifestList m_assets;
 };
 
 #endif

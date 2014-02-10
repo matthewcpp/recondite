@@ -16,6 +16,8 @@
 #include "ruiDemoController.hpp"
 #include "rDemoCamera.hpp"
 
+#include "data/rLogContentListener.hpp"
+
 class rDemoModule : public rModule{
 public:
 

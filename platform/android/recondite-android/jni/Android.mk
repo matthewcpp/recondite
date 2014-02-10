@@ -106,7 +106,9 @@ LOCAL_SRC_FILES += ../../../../src/data/rModelData.cpp
 LOCAL_SRC_FILES += ../../../../src/data/rSkeletonData.cpp
 LOCAL_SRC_FILES += ../../../../src/data/rFontData.cpp
 LOCAL_SRC_FILES += ../../../../src/data/rAssetManifestData.cpp
+LOCAL_SRC_FILES += ../../../../src/data/rAssetManifestDataFile.cpp
 LOCAL_SRC_FILES += ../../../../src/data/rImmediateBuffer.cpp
+LOCAL_SRC_FILES += ../../../../src/data/rLogContentListener.cpp
 
 LOCAL_SRC_FILES += ../../../../src/input/rTouch.cpp
 LOCAL_SRC_FILES += ../../../../src/input/rDPad.cpp

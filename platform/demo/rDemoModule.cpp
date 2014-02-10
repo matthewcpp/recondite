@@ -28,13 +28,10 @@ void rDemoModule::InitView(rEngine& engine){
 }
 
 void rDemoModule::LoadContent(rEngine& engine){
+	engine.content->AddListener(new rLogContentListener());
 	rLog::Info("Loading Assets");
 
-	rAssetManifestData manifest;
-	rAssetManifestDataReader reader;
-	reader.ReadFromFile("content/manifest.xml", manifest);
-
-	engine.content->LoadAssetManifest(manifest);
+	engine.content->LoadAssetManifestFromPath("content/manifest.xml");
 
 	rLog::Info("Loading Complete");
 

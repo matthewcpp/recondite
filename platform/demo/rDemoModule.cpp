@@ -31,12 +31,8 @@ void rDemoModule::LoadContent(rEngine& engine){
 	rLog::Info("Loading Assets");
 
 	rAssetManifestData manifest;
-
-	manifest.AddManifestEntry(rASSET_FONT, "consolas", "content/fonts/Consolas.rfnt");
-	manifest.AddManifestEntry(rASSET_MODEL, "reindeer", "content/models/reindeer/reindeer.rmdl");
-	manifest.AddManifestEntry(rASSET_MODEL, "chicken", "content/models/chicken/chicken.rmdl");
-	manifest.AddManifestEntry(rASSET_MODEL, "cat", "content/models/cat/cat.rmdl");
-	manifest.AddManifestEntry(rASSET_MODEL, "turtle", "content/models/turtle/turtle.rmdl");
+	rAssetManifestDataReader reader;
+	reader.ReadFromFile("content/manifest.xml", manifest);
 
 	engine.content->LoadAssetManifest(manifest);
 

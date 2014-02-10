@@ -36,6 +36,7 @@
 #include "data/rSkeletonData.hpp"
 
 #include "data/rAssetManifestData.hpp"
+#include "data/rAssetManifestDataFile.hpp"
 
 #include "rContentListener.hpp"
 
@@ -114,8 +115,8 @@ public:
 
 //Asset Manifest
 public:
-	void LoadAssetManifest(const rAssetManifestData& assetManifest);
-	void LoadAssetManifestFromPath(const rString& path);
+	virtual void LoadAssetManifest(const rAssetManifestData& assetManifest);
+	virtual void LoadAssetManifestFromPath(const rString& path);
 
 public:
 	void UnloadAssets();

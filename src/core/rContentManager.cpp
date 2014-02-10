@@ -18,6 +18,8 @@ void rContentManager::LoadAssetManifest(const rAssetManifestData& assetManifest)
 	size_t assetCount = assetManifest.AssetCount();
 	rAssetManifestEntry* entry = NULL;
 
+	NotifyBatchBegin(assetManifest.AssetCount());
+
 	for (size_t i =0; i < assetCount; i++){
 		entry = assetManifest.GetManifestEntry(i);
 
@@ -57,10 +59,17 @@ void rContentManager::LoadAssetManifest(const rAssetManifestData& assetManifest)
 	}
 
 	m_processingBatchFile = false;
+	NotifyBatchEnd();
 }
 
 void rContentManager::LoadAssetManifestFromPath(const rString& path){
+	rAssetManifestData manifestData;
+	rAssetManifestDataReader reader;
+	
+	rContentError error = reader.ReadFromFile(path, manifestData);
 
+	if (!error)
+		LoadAssetManifest(manifestData);
 }
 
 void rContentManager::UnloadAssets(){

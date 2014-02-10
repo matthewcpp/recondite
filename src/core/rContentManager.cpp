@@ -16,9 +16,10 @@ void rContentManager::LoadAssetManifest(const rAssetManifestData& assetManifest)
 	m_processingBatchFile = true;
 
 	size_t assetCount = assetManifest.AssetCount();
+	rString manifestPath = assetManifest.GetPath();
 	rAssetManifestEntry* entry = NULL;
 
-	NotifyBatchBegin(assetManifest.AssetCount());
+	NotifyManifestBegin(manifestPath, assetManifest.AssetCount());
 
 	for (size_t i =0; i < assetCount; i++){
 		entry = assetManifest.GetManifestEntry(i);
@@ -53,13 +54,13 @@ void rContentManager::LoadAssetManifest(const rAssetManifestData& assetManifest)
 		};
 
 		if (m_error)
-			NotifyBatchProgress(entry->name, entry->type, i, assetCount);
+			NotifyManifestLoadError(entry->type, entry->name, entry->path, m_error, i, assetCount);
 		else
-			NotifyBatchLoadError(entry->name, entry->type, m_error, i, assetCount);
+			NotifyManifestProgress(entry->type, entry->name, entry->path, i, assetCount);
 	}
 
 	m_processingBatchFile = false;
-	NotifyBatchEnd();
+	NotifyManifestEnd(manifestPath);
 }
 
 void rContentManager::LoadAssetManifestFromPath(const rString& path){
@@ -108,7 +109,7 @@ rContentError rContentManager::RemoveTextureAsset(const rString& name){
 		m_graphicsDevice->UnregisterTexture(texture->GraphicsDeviceID());
 		delete texture;
 		m_error = rCONTENT_ERROR_NONE;
-		NotifyAssetUnloaded(name, rASSET_TEXTURE2D);
+		NotifyAssetUnloaded(rASSET_TEXTURE2D, name);
 	}
 	else{
 		m_error = rCONTENT_ERROR_ASSET_IN_USE;
@@ -131,7 +132,7 @@ rTexture2D* rContentManager::LoadTexture(const rTexture2DData& textureData, cons
 	
 		rTextureMapEntry entry(name, texture);
 		m_textures.insert(entry);
-		if (!m_processingBatchFile) NotifyAssetLoadComplete(name, rASSET_TEXTURE2D);
+		if (!m_processingBatchFile) NotifyAssetLoadComplete(rASSET_TEXTURE2D, name, textureData.GetPath());
 	}
 
 	return texture;
@@ -178,7 +179,7 @@ rShader* rContentManager::LoadShader(const rShaderData& shaderData, const rStrin
 			shader = new rShader(shaderId, GetNextAssetId(), name, shaderData.GetPath());
 			rShadermapEntry entry(name, shader);
 			m_shaders.insert(entry);
-			if (!m_processingBatchFile) NotifyAssetLoadComplete(name, rASSET_SHADER);
+			if (!m_processingBatchFile) NotifyAssetLoadComplete(rASSET_SHADER, name, shaderData.GetPath());
 		}
 	}
 	
@@ -200,7 +201,7 @@ rContentError rContentManager::RemoveShaderAsset(const rString& name){
 		m_shaders.erase(result);
 		delete shader;
 		m_error = rCONTENT_ERROR_NONE;
-		NotifyAssetUnloaded(name, rASSET_SHADER);
+		NotifyAssetUnloaded(rASSET_SHADER, name);
 	}
 	else{
 		m_error = rCONTENT_ERROR_ASSET_IN_USE;
@@ -346,7 +347,7 @@ rMaterial* rContentManager::LoadMaterial(const rMaterialData& materialData, cons
 		if (LoadMaterialDependencies(materialData, material)){
 			rMaterialMapEntry entry(name, material);
 			m_materials.insert(entry);
-			if (!m_processingBatchFile) NotifyAssetLoadComplete(name, rASSET_MATERIAL);
+			if (!m_processingBatchFile) NotifyAssetLoadComplete(rASSET_MATERIAL, name, materialData.GetPath());
 		}
 		else{
 			ReleaseAsset(shader);
@@ -384,7 +385,7 @@ rContentError rContentManager::RemoveMaterialAsset(const rString& name){
 			
 		delete material;
 		m_error = rCONTENT_ERROR_NONE;
-		NotifyAssetUnloaded(name, rASSET_MATERIAL);
+		NotifyAssetUnloaded(rASSET_MATERIAL, name);
 	}
 	
 	return m_error;
@@ -577,7 +578,6 @@ rFont* rContentManager::LoadFont(const rFontData& fontData, const rString& name)
 	rFont* font = NULL;
 	if (m_fonts.count(name)){
 		m_error = rCONTENT_ERROR_ASSET_NAME_ALREADY_PRESENT;
-		if (!m_processingBatchFile) NotifyAssetLoadError(name, rASSET_FONT, m_error);
 	}
 	else{
 		rTexture2D* fontTexture = NULL;
@@ -735,39 +735,39 @@ size_t rContentManager::NumSkeletons(){
 	return m_skeletons.size();
 }
 
-void rContentManager::NotifyBatchBegin(int total) {
+void rContentManager::NotifyManifestBegin(const rString& path, int total) {
 	for (rContentListenerItr it = m_listeners.begin(); it != m_listeners.end(); ++it)
-		(*it)->BeginBatchLoad(total);
+		(*it)->BeginManifestLoad(path, total);
 }
 
-void rContentManager::NotifyBatchProgress(const rString& assetName, rAssetType type, int current, int total) {
+void rContentManager::NotifyManifestProgress(rAssetType type, const rString& name, const rString& path, int current, int total) {
 	for (rContentListenerItr it = m_listeners.begin(); it != m_listeners.end(); ++it)
-		(*it)->BatchLoadProgress(assetName, type, current, total);
+		(*it)->ManifestLoadProgress(type, name, path, current, total);
 }
 
-void rContentManager::NotifyBatchLoadError(const rString& assetName, rAssetType type, rContentError error, int current, int total){
+void rContentManager::NotifyManifestLoadError(rAssetType type, const rString& name, const rString& path, rContentError error, int current, int total){
 	for (rContentListenerItr it = m_listeners.begin(); it != m_listeners.end(); ++it)
-		(*it)->BatchLoadError(assetName, type, error, current, total);
+		(*it)->ManifestLoadError(type, name, path, error, current, total);
 }
 
-void rContentManager::NotifyBatchEnd(){
+void rContentManager::NotifyManifestEnd(const rString& path){
 	for (rContentListenerItr it = m_listeners.begin(); it != m_listeners.end(); ++it)
-		(*it)->EndBatchLoad();
+		(*it)->EndManifestLoad(path);
 }
 
-void rContentManager::NotifyAssetLoadComplete(const rString& assetName, rAssetType type){
+void rContentManager::NotifyAssetLoadComplete(rAssetType type, const rString& name, const rString& path){
 	for (rContentListenerItr it = m_listeners.begin(); it != m_listeners.end(); ++it)
-		(*it)->AssetLoadComplete(assetName, type);
+		(*it)->AssetLoadComplete(type, name, path);
 }
 
-void rContentManager::NotifyAssetLoadError(const rString& assetName, rAssetType type, rContentError error){
+void rContentManager::NotifyAssetLoadError(rAssetType type, const rString& name, const rString& path, rContentError error){
 	for (rContentListenerItr it = m_listeners.begin(); it != m_listeners.end(); ++it)
-		(*it)->AssetLoadError(assetName, type, error);
+		(*it)->AssetLoadError(type, name, path, error);
 }
 
-void rContentManager::NotifyAssetUnloaded(const rString& assetName, rAssetType type){
+void rContentManager::NotifyAssetUnloaded(rAssetType type, const rString& name){
 	for (rContentListenerItr it = m_listeners.begin(); it != m_listeners.end(); ++it)
-		(*it)->AssetUnloaded(assetName, type);
+		(*it)->AssetUnloaded(type, name);
 }
 
 bool rContentManager::ProcessingBatchFile() const{

@@ -157,3 +157,25 @@ rContentError rAndroidContentManager::OpenAsset(const rString& path, rAndroidAss
 		return rCONTENT_ERROR_FILE_NOT_FOUND;
 	}
 }
+
+void rAndroidContentManager::LoadAssetManifestFromPath(const rString& path){
+	LoadAssetManifestFromAsset(path);
+}
+
+void rAndroidContentManager::LoadAssetManifestFromAsset(const rString& path){
+	rAndroidAsset asset;
+	m_error = OpenAsset(path, asset);
+
+	if (m_error){
+		rLog::Error("Unable to Open Asset manifest file: %s", path.c_str());
+	}
+	else{
+		rAssetManifestData manifestData;
+		rAssetManifestDataReader reader;
+
+		reader.ReadFromStream(*(asset.assetData), manifestData);
+		manifestData.SetPath(path);
+
+		LoadAssetManifest(manifestData);
+	}
+}

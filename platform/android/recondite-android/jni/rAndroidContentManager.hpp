@@ -43,6 +43,9 @@ public:
 	virtual rSkeleton* LoadSkeletonFromPath(const rString& path, const rString& name);
 	rSkeleton* LoadSkeletonFromAsset(const rString& path, const rString& name);
 
+	virtual void LoadAssetManifestFromPath(const rString& path);
+	void LoadAssetManifestFromAsset(const rString& path);
+
 private:
 
 	rContentError OpenAsset(const rString& path, rAndroidAsset& androidAsset);

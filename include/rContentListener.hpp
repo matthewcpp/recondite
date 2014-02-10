@@ -7,14 +7,14 @@
 class rContentListener {
 public:
 
-	virtual void BeginBatchLoad(int total) {}
-	virtual void BatchLoadProgress(const rString& assetName, rAssetType type, int current, int total) {}
-	virtual void BatchLoadError(const rString& assetName, rAssetType type, rContentError error, int current, int total) {}
-	virtual void EndBatchLoad() {}
+	virtual void BeginManifestLoad(const rString& path, int total) {}
+	virtual void ManifestLoadProgress(rAssetType type, const rString& name, const rString& path, int current, int total) {}
+	virtual void ManifestLoadError(rAssetType type, const rString& name, const rString& path, rContentError error, int current, int total) {}
+	virtual void EndManifestLoad(const rString& path) {}
 	
-	virtual void AssetLoadComplete(const rString& assetName, rAssetType type) {}
-	virtual void AssetLoadError(const rString& assetName, rAssetType type, rContentError error) {}
-	virtual void AssetUnloaded(const rString& assetName, rAssetType type) {}
+	virtual void AssetLoadComplete(rAssetType type, const rString& name, const rString& path){}
+	virtual void AssetLoadError(rAssetType type, const rString& name, const rString& path, rContentError error){}
+	virtual void AssetUnloaded(rAssetType type, const rString& name){}
 };
 
 #endif

@@ -130,14 +130,14 @@ public:
 	void RemoveListener(rContentListener* listener);
 	
 private:
-	void NotifyBatchBegin(int total);
-	void NotifyBatchProgress(const rString& assetName, rAssetType type, int current, int total);
-	void NotifyBatchLoadError(const rString& assetName, rAssetType type, rContentError error, int current, int total);
-	void NotifyBatchEnd();
+	void NotifyManifestBegin(const rString& path, int total);
+	void NotifyManifestProgress(rAssetType type, const rString& name, const rString& path, int current, int total);
+	void NotifyManifestLoadError(rAssetType type, const rString& name, const rString& path, rContentError error, int current, int total);
+	void NotifyManifestEnd(const rString& path);
 	
-	void NotifyAssetLoadComplete(const rString& assetName, rAssetType type);
-	void NotifyAssetLoadError(const rString& assetName, rAssetType type, rContentError error);
-	void NotifyAssetUnloaded(const rString& assetName, rAssetType type);
+	void NotifyAssetLoadComplete(rAssetType type, const rString& name, const rString& pat);
+	void NotifyAssetLoadError(rAssetType type, const rString& name, const rString& path, rContentError error);
+	void NotifyAssetUnloaded(rAssetType type, const rString& name);
 	
 protected:
 	

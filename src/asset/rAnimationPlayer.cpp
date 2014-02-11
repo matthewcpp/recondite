@@ -6,10 +6,15 @@ rAnimationPlayer::rAnimationPlayer(){
 	m_currentAnimation = NULL;
 	m_isLooping = false;
 	m_playing = false;
+	m_animationSpeed = 1.0f;
 }
 void rAnimationPlayer::Update(const rTime& time){
+	Tick(time.TimeDeltaSeconds() * m_animationSpeed);
+}
+
+void rAnimationPlayer::Tick(float time){
 	if (m_currentAnimation && m_playing){
-		m_animationTime += time.TimeDeltaSeconds();
+		m_animationTime += time;
 
 		if (m_animationTime > m_currentAnimation->Duration()){
 			m_animationTime =  m_currentAnimation->Duration();
@@ -99,15 +104,15 @@ void rAnimationPlayer::UpdateTransformDataRec(rBone* parentBone, rBone* currentB
 	rMatrix4 currentBoneTransform;
 
 	if (track){
-		
 		m_keyframeInfo[currentBone->id] = track->InterpolateKeyframe(m_animationTime, currentBoneTransform, m_keyframeInfo[currentBone->id]);
-
-		if (parentBone){
-			currentBoneTransform = currentBoneTransform * m_transformData[parentBone->id] ;
-		}
+	}
+	
+	if (parentBone){
+		currentBoneTransform =  m_transformData[parentBone->id] * currentBoneTransform;
 	}
 
 	m_transformData[currentBone->id] = currentBoneTransform;
+	
 
 	for (size_t i = 0; i < currentBone->children.size(); i++){
 		UpdateTransformDataRec(currentBone, currentBone->children[i]);
@@ -120,4 +125,12 @@ const rAnimation* rAnimationPlayer::CurrentAnimation() const{
 
 const rMatrix4Vector& rAnimationPlayer::GetTransformData() const{
 	return m_transformData;
+}
+
+float rAnimationPlayer::AnimationSpeed() const{
+	return m_animationSpeed;
+}
+
+void rAnimationPlayer::SetAnimationSpeed(float speed){
+	m_animationSpeed = speed;
 }

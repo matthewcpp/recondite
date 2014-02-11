@@ -29,9 +29,13 @@ public:
 	void UpdateTransformData();
 
 	void Update(const rTime& time);
+	void Tick(float time);
 
 	const rMatrix4Vector& GetTransformData() const;
 	float AnimationTime() const;
+
+	float AnimationSpeed() const;
+	void SetAnimationSpeed(float speed);
 
 	const rAnimation* CurrentAnimation() const;
 private:
@@ -47,6 +51,7 @@ private:
 
 	bool m_isLooping;
 	bool m_playing;
+	float m_animationSpeed;
 };
 
 #endif

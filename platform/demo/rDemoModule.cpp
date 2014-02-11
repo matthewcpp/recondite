@@ -36,6 +36,7 @@ void rDemoModule::LoadContent(rEngine& engine){
 	rLog::Info("Loading Complete");
 
 	m_pawn = new rPawn(NULL, "pawn" , rVector3::ZeroVector);
+	m_pawn->AnimationPlayer()->SetAnimationSpeed(0.25f);
 }
 
 void rDemoModule::Uninit(rEngine& engine){

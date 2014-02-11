@@ -109,9 +109,9 @@ void ruiDemoController::OnUpdate(rEngine& engine){
 }
 
 void ruiDemoController::OnDraw(rEngine& engine){
-	//RenderAnimated(engine);
+	RenderAnimated(engine);
 
-	m_pawn->Draw(engine);
+	//m_pawn->Draw(engine);
 	/*
 	rSkeleton* skeleton = m_pawn->Model()->Skeleton();
 
@@ -123,7 +123,7 @@ void ruiDemoController::OnDraw(rEngine& engine){
 }
 
 void ruiDemoController::SetupImmediateBuffer(const rString name){
-	rString file = "assets/" + name + ".rgeo";
+	rString file = "content/models/" +name + "/" + name + ".rgeo";
 	rGeometryDataReader reader;
 	reader.ReadFromFile(file, m_geometryData);
 

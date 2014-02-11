@@ -15,6 +15,10 @@ rAssetType rAsset::TypeForString(const rString& str){
 		return rASSET_SHADER;
 	else if (str == "material")
 		return rASSET_MATERIAL;
+	else if (str == "model")
+		return rASSET_MODEL;
+	else if (str == "font")
+		return rASSET_FONT;
 	else
 		return rASSET_UNKNOWN;
 }
@@ -27,6 +31,10 @@ rString rAsset::StringForType(rAssetType assetType){
 		return "shader";
 	case rASSET_MATERIAL:
 		return "material";
+	case rASSET_MODEL:
+		return "model";
+	case rASSET_FONT:
+		return "font";
 	default:
 		return "unknown";
 	};

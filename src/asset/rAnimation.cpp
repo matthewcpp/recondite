@@ -80,7 +80,7 @@ unsigned short rAnimationTrack::InterpolateKeyframe(float animationTime, rMatrix
 		unsigned short start, end;
 		DetermineKeyframes(animationTime, keyframeHint, start, end);
 
-		if (1){//if (start == end){
+		if (start == end){
 			translate = m_keyframes[start].translation;
 			rotate = m_keyframes[start].rotation;
 			scale = m_keyframes[start].scale;

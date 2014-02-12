@@ -73,6 +73,12 @@ float rAnimationPlayer::AnimationTime() const{
 	return m_animationTime;
 }
 
+void rAnimationPlayer::SetAnimationTime(float amimationTime){
+	if (m_currentAnimation){
+		m_animationTime = rMath::Clamp<float>(amimationTime, 0.0f, m_currentAnimation->Duration());
+	}
+}
+
 void rAnimationPlayer::SetSkeleton(rSkeleton* skeleton){
 	m_skeleton = skeleton;
 	m_animationTime = 0;
@@ -111,7 +117,7 @@ void rAnimationPlayer::UpdateTransformDataRec(rBone* parentBone, rBone* currentB
 		currentBoneTransform =  m_transformData[parentBone->id] * currentBoneTransform;
 	}
 
-	m_transformData[currentBone->id] = currentBoneTransform;
+	m_transformData[currentBone->id] = currentBoneTransform ;//* currentBone->inverseBindTransform;
 	
 
 	for (size_t i = 0; i < currentBone->children.size(); i++){

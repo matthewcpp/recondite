@@ -32,7 +32,9 @@ public:
 	void Tick(float time);
 
 	const rMatrix4Vector& GetTransformData() const;
+
 	float AnimationTime() const;
+	void SetAnimationTime(float amimationTime);
 
 	float AnimationSpeed() const;
 	void SetAnimationSpeed(float speed);

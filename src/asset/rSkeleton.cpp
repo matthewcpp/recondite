@@ -101,7 +101,22 @@ void rSkeleton::GetAnimationNames(rArrayString& names) const{
 		names.push_back(it->first);
 }
 
+void rSkeleton::CalculateInverseBoneTransformations(){
+	rBoneArray topLevelBones;
+	GetTopLevelBones(topLevelBones);
 
+	for (size_t i = 0; i < topLevelBones.size(); i++){
+		topLevelBones[i]->CalculateInverseBindTransform();
+		CalculateInverseBoneTransformationsRec(topLevelBones[i]);
+	}
+}
+
+void rSkeleton::CalculateInverseBoneTransformationsRec(rBone* parent){
+	for (size_t i = 0; i < parent->children.size(); i++){
+		parent->children[i]->CalculateInverseBindTransform();
+		CalculateInverseBoneTransformationsRec(parent->children[i]);
+	}
+}
 //--------------
 
 rBone::rBone(int ID, const rString& n){
@@ -109,6 +124,7 @@ rBone::rBone(int ID, const rString& n){
 	name = n;
 	parent = NULL;
 	position = rVector3::ZeroVector;
+	rotation = rQuaternion::Identity;
 }
 
 void rBone::AddChild(rBone* bone){
@@ -126,5 +142,19 @@ rVector3 rBone::WoldPosition() const{
 	}
 
 	return worldPos;
+}
+
+void rBone::CalculateInverseBindTransform(){
+	rMatrix4 rotMatrix, transMatrix, xform;
+	rMatrixUtil::QuaterionToMatrix(rotation, rotMatrix);
+	transMatrix.SetTranslate(position);
+
+	xform = transMatrix * rotMatrix;
+	xform.Invert();
+
+	if (parent)
+		inverseBindTransform = parent->inverseBindTransform * xform;
+	else
+		inverseBindTransform = xform;
 }
 

@@ -24,6 +24,7 @@ public:
 
 	void AddChild(rBone* bone);
 	rVector3 WoldPosition() const;
+	void CalculateInverseBindTransform();
 
 public:
 
@@ -31,8 +32,10 @@ public:
 	rBone* parent;
 	rString name;
 	rVector3 position;
+	rQuaternion rotation;
 
 	rBoneArray children;
+	rMatrix4 inverseBindTransform;
 };
 
 typedef std::map<int, rBone*> rBoneMap;
@@ -51,6 +54,7 @@ public:
 	rBone* GetBone(int id) const;
 
 	void GetTopLevelBones(rBoneArray& bones) const;
+	void CalculateInverseBoneTransformations();
 
 	size_t NumBones() const;
 
@@ -61,6 +65,9 @@ public:
 	void DeleteAnimation(const rString& name);
 	size_t NumAnimations() const;
 	void GetAnimationNames(rArrayString& names) const;
+
+private:
+	void CalculateInverseBoneTransformationsRec(rBone* parent);
 
 private:
 	rBoneMap m_bones;

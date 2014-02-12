@@ -168,6 +168,8 @@ void rSkeletonData::ReadBones(std::istream& stream, rSkeleton& skeleton){
 		if (bone && parentBone)
 			parentBone->AddChild(bone);
 	}
+
+	skeleton.CalculateInverseBoneTransformations();
 }
 
 void rSkeletonData::ReadAnimations(std::istream& stream, rSkeleton& skeleton){

@@ -15,4 +15,6 @@ ruiTextBox::ruiTextBox(const rString& text, int id, const rPoint& position, cons
 void ruiTextBox::OnKeyDown(rKey key, const rKeyboardState& keyboard){
 	if (key >= 32 && key <= 176)
 		m_text += char(key);
+
+	m_cachedSize = rSize::Default;
 }

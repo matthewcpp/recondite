@@ -20,8 +20,6 @@ public:
 
 protected:
 	rString m_text;
-	
-private:	
 	rSize m_cachedSize;
 };
 

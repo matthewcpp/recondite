@@ -26,7 +26,7 @@ public:
 	virtual void Init(rEngine& engine);
 	virtual void Uninit(rEngine& engine);
 
-	virtual void InitUI(ruiLayoutManager& uiManager, rEngine& engine);
+	virtual void InitUI(ruiOverlayManager& uiManager, rEngine& engine);
 
 private:
 	void InitView(rEngine& engine);

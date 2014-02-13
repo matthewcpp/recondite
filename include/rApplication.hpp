@@ -41,7 +41,7 @@ protected:
 	rModule* m_module;
 
 	rGraphicsDevice* m_graphicsDevice;
-	ruiLayoutManager* m_layoutManager;
+	ruiOverlayManager* m_overlayManager;
 
 	rSize m_displaySize;
 };

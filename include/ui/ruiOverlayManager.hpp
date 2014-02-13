@@ -1,5 +1,5 @@
-#ifndef RUI_LAYOUTMANAGER_HPP
-#define RUI_LAYOUTMANAGER_HPP
+#ifndef RUI_OVERLAYMANAGER_HPP
+#define RUI_OVERLAYMANAGER_HPP
 
 #include <map>
 
@@ -15,10 +15,10 @@
 typedef std::map<rViewport* , ruiOverlay*> ruiViewportOverlayMap;
 
 
-class ruiLayoutManager : public ruiInput {
+class ruiOverlayManager : public ruiInput {
 public:
-	ruiLayoutManager();
-	~ruiLayoutManager();
+	ruiOverlayManager();
+	~ruiOverlayManager();
 	
 public:
 

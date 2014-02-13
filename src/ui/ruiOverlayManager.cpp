@@ -1,14 +1,14 @@
-#include "ui/ruiLayoutManager.hpp"
+#include "ui/ruiOverlayManager.hpp"
 
-ruiLayoutManager::ruiLayoutManager(){
+ruiOverlayManager::ruiOverlayManager(){
 
 }
 
-ruiLayoutManager::~ruiLayoutManager(){
+ruiOverlayManager::~ruiOverlayManager(){
 	Clear();
 }
 
-ruiOverlay* ruiLayoutManager::CreateOverlay(rViewport* viewport){
+ruiOverlay* ruiOverlayManager::CreateOverlay(rViewport* viewport){
 	ruiViewportOverlayMap::iterator result = m_overlays.find(viewport);
 
 	if (result != m_overlays.end()){
@@ -21,7 +21,7 @@ ruiOverlay* ruiLayoutManager::CreateOverlay(rViewport* viewport){
 	return overlay;
 }
 
-void ruiLayoutManager::Clear(){
+void ruiOverlayManager::Clear(){
 	ruiViewportOverlayMap::iterator end = m_overlays.end();
 
 	for (ruiViewportOverlayMap::iterator it = m_overlays.begin(); it != end; ++it){
@@ -31,7 +31,7 @@ void ruiLayoutManager::Clear(){
 	m_overlays.clear();
 }
 
-rViewport* ruiLayoutManager::DetermineViewport(const rPoint& point){
+rViewport* ruiOverlayManager::DetermineViewport(const rPoint& point){
 	ruiViewportOverlayMap::iterator end = m_overlays.end();
 
 	for (ruiViewportOverlayMap::iterator it = m_overlays.begin(); it != end; ++it){
@@ -46,7 +46,7 @@ rViewport* ruiLayoutManager::DetermineViewport(const rPoint& point){
 
 
 
-void ruiLayoutManager::Update(rEngine& engine){
+void ruiOverlayManager::Update(rEngine& engine){
 	ruiViewportOverlayMap::iterator end = m_overlays.end();
 
 	for (ruiViewportOverlayMap::iterator it = m_overlays.begin(); it != end; ++it){
@@ -54,7 +54,7 @@ void ruiLayoutManager::Update(rEngine& engine){
 	}
 }
 
-void ruiLayoutManager::Draw(rEngine& engine){
+void ruiOverlayManager::Draw(rEngine& engine){
 	ruiViewportOverlayMap::iterator end = m_overlays.end();
 
 	for (ruiViewportOverlayMap::iterator it = m_overlays.begin(); it != end; ++it){
@@ -62,7 +62,7 @@ void ruiLayoutManager::Draw(rEngine& engine){
 	}
 }
 
-bool ruiLayoutManager::InjectKeyDownEvent(rKey key, rKeyboardState& state){
+bool ruiOverlayManager::InjectKeyDownEvent(rKey key, rKeyboardState& state){
 	ruiViewportOverlayMap::iterator end = m_overlays.end();
 
 	for (ruiViewportOverlayMap::iterator it = m_overlays.begin(); it != end; ++it){
@@ -72,7 +72,7 @@ bool ruiLayoutManager::InjectKeyDownEvent(rKey key, rKeyboardState& state){
 	return false;
 }
 
-bool ruiLayoutManager::InjectKeyUpEvent(rKey key, rKeyboardState& state){
+bool ruiOverlayManager::InjectKeyUpEvent(rKey key, rKeyboardState& state){
 	ruiViewportOverlayMap::iterator end = m_overlays.end();
 
 	for (ruiViewportOverlayMap::iterator it = m_overlays.begin(); it != end; ++it){
@@ -82,7 +82,7 @@ bool ruiLayoutManager::InjectKeyUpEvent(rKey key, rKeyboardState& state){
 	return false;
 }
 
-bool ruiLayoutManager::InjectTouchDown(const rTouch& touch){
+bool ruiOverlayManager::InjectTouchDown(const rTouch& touch){
 	rPoint position = touch.GetCurrentPosition();
 
 	rViewport* viewport = DetermineViewport(position);
@@ -94,7 +94,7 @@ bool ruiLayoutManager::InjectTouchDown(const rTouch& touch){
 	return false;
 }
 
-bool ruiLayoutManager::InjectTouchMove(const rTouch& touch){
+bool ruiOverlayManager::InjectTouchMove(const rTouch& touch){
 	rPoint position = touch.GetCurrentPosition();
 
 	rViewport* viewport = DetermineViewport(position);
@@ -106,7 +106,7 @@ bool ruiLayoutManager::InjectTouchMove(const rTouch& touch){
 	return false;
 }
 
-bool ruiLayoutManager::InjectTouchUp(const rTouch& touch){
+bool ruiOverlayManager::InjectTouchUp(const rTouch& touch){
 	rPoint position = touch.GetCurrentPosition();
 
 	rViewport* viewport = DetermineViewport(position);
@@ -118,7 +118,7 @@ bool ruiLayoutManager::InjectTouchUp(const rTouch& touch){
 	return false;
 }
 
-bool ruiLayoutManager::InjectMouseDownEvent(rMouseButton button, const rMouseState& mouse){
+bool ruiOverlayManager::InjectMouseDownEvent(rMouseButton button, const rMouseState& mouse){
 	rPoint position = mouse.Position();
 
 	rViewport* viewport = DetermineViewport(position);
@@ -130,7 +130,7 @@ bool ruiLayoutManager::InjectMouseDownEvent(rMouseButton button, const rMouseSta
 	return false;
 }
 
-bool ruiLayoutManager::InjectMouseUpEvent(rMouseButton button, const rMouseState& mouse){
+bool ruiOverlayManager::InjectMouseUpEvent(rMouseButton button, const rMouseState& mouse){
 	rPoint position = mouse.Position();
 
 	rViewport* viewport = DetermineViewport(position);
@@ -142,7 +142,7 @@ bool ruiLayoutManager::InjectMouseUpEvent(rMouseButton button, const rMouseState
 	return false;
 }
 
-bool ruiLayoutManager::InjectMouseMotionEvent(const rMouseState& mouse){
+bool ruiOverlayManager::InjectMouseMotionEvent(const rMouseState& mouse){
 	rPoint position = mouse.Position();
 
 	rViewport* viewport = DetermineViewport(position);
@@ -154,7 +154,7 @@ bool ruiLayoutManager::InjectMouseMotionEvent(const rMouseState& mouse){
 	return false;
 }
 
-bool ruiLayoutManager::InjectMouseWheelEvent(rMouseWheelDirection direction, const rMouseState& mouse){
+bool ruiOverlayManager::InjectMouseWheelEvent(rMouseWheelDirection direction, const rMouseState& mouse){
 	rPoint position = mouse.Position();
 
 	rViewport* viewport = DetermineViewport(position);

@@ -8,7 +8,7 @@ rApplication::rApplication(rModule* module){
 }
 
 void rApplication::Update(){
-	m_layoutManager->Update(m_engine);
+	m_overlayManager->Update(m_engine);
 
 	m_module->Update(m_engine);
 }
@@ -22,7 +22,7 @@ void rApplication::Draw(){
 	m_module->Draw(m_engine);
 
 	m_graphicsDevice->EnableDepthTesting(false);
-	m_layoutManager->Draw(m_engine);
+	m_overlayManager->Draw(m_engine);
 
 	m_graphicsDevice->SwapBuffers();
 
@@ -60,8 +60,8 @@ void rApplication::SetTargetFPS(unsigned int targetFPS){
 void rApplication::InitEngine(rGraphicsDevice* graphics, rContentManager* content, rInputManager* input){
 	m_graphicsDevice = graphics; 
 
-	m_layoutManager = new ruiLayoutManager();
-	input->SetUI(m_layoutManager);
+	m_overlayManager = new ruiOverlayManager();
+	input->SetUI(m_overlayManager);
 
 	m_engine.application = this;
 
@@ -79,7 +79,7 @@ void rApplication::InitEngine(rGraphicsDevice* graphics, rContentManager* conten
 
 void rApplication::InitModule(){
 	m_module->Init(m_engine);
-	m_module->InitUI(*m_layoutManager, m_engine);
+	m_module->InitUI(*m_overlayManager, m_engine);
 }
 
 void rApplication::SetDisplaySize(int width, int height){

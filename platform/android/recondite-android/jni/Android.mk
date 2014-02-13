@@ -115,11 +115,12 @@ LOCAL_SRC_FILES += ../../../../src/input/rDPad.cpp
 LOCAL_SRC_FILES += ../../../../src/input/rInputButton.cpp
 LOCAL_SRC_FILES += ../../../../src/input/rController.cpp
 LOCAL_SRC_FILES += ../../../../src/input/rMouse.cpp
+LOCAL_SRC_FILES += ../../../../src/input/rKeyboard.cpp
 LOCAL_SRC_FILES += ../../../../src/input/rGestureTracker.cpp
 LOCAL_SRC_FILES += ../../../../src/input/rPinchGesture.cpp
 LOCAL_SRC_FILES += ../../../../src/input/rDragGesture.cpp
 
-LOCAL_SRC_FILES += ../../../../src/ui/ruiLayoutManager.cpp
+LOCAL_SRC_FILES += ../../../../src/ui/ruiOverlayManager.cpp
 LOCAL_SRC_FILES += ../../../../src/ui/ruiWidget.cpp
 LOCAL_SRC_FILES += ../../../../src/ui/ruiDPad.cpp
 LOCAL_SRC_FILES += ../../../../src/ui/ruiAnalogStick.cpp
@@ -129,6 +130,7 @@ LOCAL_SRC_FILES += ../../../../src/ui/ruiSlider.cpp
 LOCAL_SRC_FILES += ../../../../src/ui/ruiButton.cpp
 LOCAL_SRC_FILES += ../../../../src/ui/ruiCheckbox.cpp
 LOCAL_SRC_FILES += ../../../../src/ui/ruiText.cpp
+LOCAL_SRC_FILES += ../../../../src/ui/ruiTextBox.cpp
 LOCAL_SRC_FILES += ../../../../src/ui/ruiOverlay.cpp
 LOCAL_SRC_FILES += ../../../../src/ui/ruiEventHandler.cpp
 

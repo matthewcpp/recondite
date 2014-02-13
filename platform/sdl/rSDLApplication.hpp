@@ -8,7 +8,7 @@
 #include "rOpenGLContentManager.hpp"
 #include "rSDLInputManager.hpp"
 
-#include "ui/ruiLayoutManager.hpp"
+#include "ui/ruiOverlayManager.hpp"
 
 #include "rViewport.hpp"
 #include "rCamera.hpp"

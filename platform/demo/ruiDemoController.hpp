@@ -8,7 +8,7 @@
 #include "ui/ruiSlider.hpp"
 #include "ui/ruiButton.hpp"
 #include "ui/ruiCheckbox.hpp"
-#include "ui/ruiLayoutManager.hpp"
+#include "ui/ruiOverlayManager.hpp"
 #include "ui/ruiText.hpp"
 #include "ui/ruiTextBox.hpp"
 

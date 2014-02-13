@@ -42,7 +42,7 @@ void rDemoModule::LoadContent(rEngine& engine){
 void rDemoModule::Uninit(rEngine& engine){
 }
 
-void rDemoModule::InitUI(ruiLayoutManager& uiManager, rEngine& engine){
+void rDemoModule::InitUI(ruiOverlayManager& uiManager, rEngine& engine){
 	ruiOverlay* overlay = uiManager.CreateOverlay(&m_viewport);
 
 	m_controller = new ruiDemoController(engine.content, m_pawn, m_camera); 

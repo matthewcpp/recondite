@@ -14,6 +14,7 @@
 #include "input/rTouch.hpp"
 
 #include "input/rMouse.hpp"
+#include "input/rKeyboard.hpp"
 #include "input/rGestureTracker.hpp"
 
 #include "ui/ruiBase.hpp"
@@ -36,7 +37,10 @@ public:
 	void CreateMouseButtonEvent(rMouseButton button, rButtonState state, const rPoint& position);
 	void CreateMouseWheelEvent(rMouseWheelDirection direction);
 
+	void CreateKeyboardEvent(rKey key, rKeyState state);
+
 	virtual const rMouseState* GetMouseState() const;
+	virtual const rKeyboardState* GetKeyboardState() const;
 	
 	void GetTouchIds(rIntArray& ids);
 	virtual void GetTouches(rTouchArray& touches) const;
@@ -56,6 +60,7 @@ protected:
 	ruiInput* m_ui;
 
 	rMouse m_mouse;
+	rKeyboard m_keyboard;
 };
 
 #endif

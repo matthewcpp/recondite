@@ -3,6 +3,7 @@
 
 #include "input/rMouse.hpp"
 #include "input/rTouch.hpp"
+#include "input/rKeyboard.hpp"
 
 class ruiEventHandler{
 public:
@@ -23,6 +24,12 @@ public:
 	virtual void OnPointerDown(const rPoint& position) {}
 	virtual void OnPointerUp(const rPoint& position) {}
 	virtual void OnPointerMove(const rPoint& position) {}
+
+	virtual void OnKeyUp(rKey key, const rKeyboardState& keyboard) {};
+	virtual void OnKeyDown(rKey key, const rKeyboardState& keyboard) {};
+
+	virtual void OnActivate() {}
+	virtual void OnDeactivate() {}
 
 	void MouseDownEvent(rMouseButton button, const rMouseState& mouse);
 	void MouseUpEvent(rMouseButton button, const rMouseState& mouse);

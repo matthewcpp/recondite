@@ -61,6 +61,38 @@ void ruiOverlay::EndModal(ruiWidget* widget){
 	}
 }
 
+bool ruiOverlay::InjectKeyDownEvent(rKey key, rKeyboardState& state){
+	if (m_modalWidget){
+		m_modalWidget->OnKeyDown(key, state);
+	}
+	else if (m_activeWidget){
+		m_activeWidget->OnKeyDown(key, state);
+	}
+
+	return false;
+}
+
+bool ruiOverlay::InjectKeyUpEvent(rKey key, rKeyboardState& state){
+	if (m_modalWidget){
+		m_modalWidget->OnKeyUp(key, state);
+	}
+	else if (m_activeWidget){
+		m_activeWidget->OnKeyUp(key, state);
+	}
+
+	return false;
+}
+
+void ruiOverlay::ActivateWidget(ruiWidget* widget){
+	if (m_activeWidget)
+		m_activeWidget->OnDeactivate();
+
+	m_activeWidget = widget;
+
+	if (m_activeWidget)
+		m_activeWidget->OnActivate();
+}
+
 bool ruiOverlay::InjectTouchDown(const rTouch& touch){
 	rPoint currentTouchPos = touch.GetCurrentPosition();
 	
@@ -76,7 +108,8 @@ bool ruiOverlay::InjectTouchDown(const rTouch& touch){
 		ruiWidget* widget = SelectWidget(currentTouchPos);
 
 		if (widget){
-			m_activeWidget = widget;
+			ActivateWidget(widget);
+
 			m_activeWidget->OnTouchDown(touch);
 			return true;
 		}
@@ -128,7 +161,7 @@ bool ruiOverlay::InjectMouseDownEvent(rMouseButton button, const rMouseState& mo
 		ruiWidget* widget = SelectWidget(position);
 
 		if (widget){
-			m_activeWidget = widget;
+			ActivateWidget(widget);
 			m_activeWidget->MouseDownEvent(button, mouse);
 			return true;
 		}

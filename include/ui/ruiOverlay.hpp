@@ -30,6 +30,8 @@ public:
 
 	void Clear();
 
+	void ActivateWidget(ruiWidget* widget);
+
 	virtual bool InjectTouchDown(const rTouch& touch);
 	virtual bool InjectTouchMove(const rTouch& touch);
 	virtual bool InjectTouchUp(const rTouch& touch);
@@ -38,6 +40,9 @@ public:
 	virtual bool InjectMouseUpEvent(rMouseButton button, const rMouseState& mouse);
 	virtual bool InjectMouseMotionEvent(const rMouseState& mouse);
 	virtual bool InjectMouseWheelEvent(rMouseWheelDirection direction, const rMouseState& mouse);
+
+	virtual bool InjectKeyDownEvent(rKey key, rKeyboardState& state);
+	virtual bool InjectKeyUpEvent(rKey key, rKeyboardState& state);
 
 private:
 

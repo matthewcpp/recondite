@@ -18,6 +18,13 @@ void rSDLInputManager::ProcessInputEvent(SDL_Event& event){
 		ProcessMouseButtonEvent(rBUTTON_STATE_UP, event);
 		break;
 
+	case SDL_KEYDOWN:
+		ProcessKeyboardEvent(rKEY_DOWN, event);
+		break;
+
+	case SDL_KEYUP:
+		ProcessKeyboardEvent(rKEY_UP, event);
+		break;
 	};
 }
 
@@ -41,4 +48,8 @@ void rSDLInputManager::ProcessMouseButtonEvent(rButtonState state, SDL_Event& ev
 		CreateMouseWheelEvent(rMOUSEWHEEL_DOWN);
 		break;
 	};
+}
+
+void rSDLInputManager::ProcessKeyboardEvent(rKeyState state, SDL_Event& event){
+	CreateKeyboardEvent(event.key.keysym.sym, state);
 }

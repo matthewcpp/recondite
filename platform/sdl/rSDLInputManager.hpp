@@ -12,6 +12,7 @@ public:
 
 private:
 	void ProcessMouseButtonEvent(rButtonState state, SDL_Event& event);
+	void ProcessKeyboardEvent(rKeyState state, SDL_Event& event);
 };
 
 #endif

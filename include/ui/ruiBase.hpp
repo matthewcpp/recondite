@@ -4,6 +4,9 @@
 #include "rTypes.hpp"
 #include "rDefs.hpp"
 
+#include "input/rMouse.hpp"
+#include "input/rKeyboard.hpp"
+
 class ruiWidget;
 
 class ruiInput{
@@ -16,6 +19,10 @@ public:
 	virtual bool InjectMouseUpEvent(rMouseButton button, const rMouseState& mouse) = 0;
 	virtual bool InjectMouseMotionEvent(const rMouseState& mouse) = 0;
 	virtual bool InjectMouseWheelEvent(rMouseWheelDirection direction, const rMouseState& mouse) = 0;
+
+	
+	virtual bool InjectKeyDownEvent(rKey key, rKeyboardState& state) = 0;
+	virtual bool InjectKeyUpEvent(rKey key, rKeyboardState& state) = 0;
 };
 
 class ruiIOverlay {

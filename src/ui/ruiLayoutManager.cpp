@@ -62,6 +62,26 @@ void ruiLayoutManager::Draw(rEngine& engine){
 	}
 }
 
+bool ruiLayoutManager::InjectKeyDownEvent(rKey key, rKeyboardState& state){
+	ruiViewportOverlayMap::iterator end = m_overlays.end();
+
+	for (ruiViewportOverlayMap::iterator it = m_overlays.begin(); it != end; ++it){
+		it->second->InjectKeyDownEvent(key, state);
+	}
+
+	return false;
+}
+
+bool ruiLayoutManager::InjectKeyUpEvent(rKey key, rKeyboardState& state){
+	ruiViewportOverlayMap::iterator end = m_overlays.end();
+
+	for (ruiViewportOverlayMap::iterator it = m_overlays.begin(); it != end; ++it){
+		it->second->InjectKeyUpEvent(key, state);
+	}
+
+	return false;
+}
+
 bool ruiLayoutManager::InjectTouchDown(const rTouch& touch){
 	rPoint position = touch.GetCurrentPosition();
 

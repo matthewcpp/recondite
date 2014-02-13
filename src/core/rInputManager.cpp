@@ -102,6 +102,19 @@ rController* rInputManager::GetController(size_t index) const{
 		return m_controllers[index];
 }
 
+void rInputManager::CreateKeyboardEvent(rKey key, rKeyState state){
+	m_keyboard.SetKeyState(key, state);
+
+	if (state == rKEY_DOWN)
+		m_ui->InjectKeyDownEvent(key, m_keyboard);
+	else
+		m_ui->InjectKeyUpEvent(key, m_keyboard);
+}
+
+const rKeyboardState* rInputManager::GetKeyboardState() const{
+	return &m_keyboard;
+}
+
 void rInputManager::CreateMouseMotionEvent(int x, int y){
 	m_mouse.SetPosition(x,y);
 	m_ui->InjectMouseMotionEvent(m_mouse);

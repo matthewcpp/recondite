@@ -41,6 +41,7 @@ void ruiDemoController::Init(ruiOverlay* overlay){
 	overlay->AddWidget(pauseButton);
 	overlay->AddWidget(stopButton);
 	overlay->AddWidget(m_progressSlider);
+	overlay->AddWidget(new ruiTextBox(107, rPoint(25, 200), rSize(100, 35)));
 
 	if (models.size() > 0)
 		SetActiveModel(models[0]);

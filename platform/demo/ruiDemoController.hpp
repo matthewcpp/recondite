@@ -10,6 +10,7 @@
 #include "ui/ruiCheckbox.hpp"
 #include "ui/ruiLayoutManager.hpp"
 #include "ui/ruiText.hpp"
+#include "ui/ruiTextBox.hpp"
 
 #include "rContentManager.hpp"
 #include "data/rGeometryData.hpp"

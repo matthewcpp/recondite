@@ -17,10 +17,11 @@ public:
 	void SetText(const rString& text);
 	
 	virtual void Draw(rEngine& engine);
-	
-private:
+
+protected:
 	rString m_text;
 	
+private:	
 	rSize m_cachedSize;
 };
 

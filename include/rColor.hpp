@@ -7,6 +7,9 @@ struct rColor{
 	:red(r), green(g), blue (b), alpha(a){}
 	
 	void Set(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
+	void Set(const unsigned char* color);
+
+	void ToArray(unsigned char* color) const;
 	
 	unsigned char red, green, blue, alpha;
 

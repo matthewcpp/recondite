@@ -12,3 +12,17 @@ void rColor::Set(unsigned char r, unsigned char g, unsigned char b, unsigned cha
 	blue = b;
 	alpha = a;
 }
+
+void rColor::Set(const unsigned char* color){
+	red = color[0];
+	green = color[1];
+	blue = color[2];
+	alpha = color[3];
+}
+
+void rColor::ToArray(unsigned char* color) const{
+	color[0] = red;
+	color[1] = green;
+	color[2] = blue;
+	color[3] = alpha;
+}

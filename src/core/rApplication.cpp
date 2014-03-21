@@ -8,8 +8,9 @@ rApplication::rApplication(rModule* module){
 }
 
 void rApplication::Update(){
+	m_scene->Update(m_engine);
 	m_overlayManager->Update(m_engine);
-
+	
 	m_module->Update(m_engine);
 }
 
@@ -20,6 +21,7 @@ void rApplication::Draw(){
 	m_graphicsDevice->EnableDepthTesting(true);
 
 	m_module->Draw(m_engine);
+	m_scene->Draw(m_engine);
 
 	m_graphicsDevice->EnableDepthTesting(false);
 	m_overlayManager->Draw(m_engine);
@@ -70,6 +72,9 @@ void rApplication::InitEngine(rGraphicsDevice* graphics, rContentManager* conten
 	m_engine.renderer = new rRenderer(graphics, content);
 	m_engine.time.Start(GetTimeMiliseconds());
 
+	m_scene = new rScene();
+	m_engine.scene = m_scene;
+
 	m_isRunning = true;
 
 	m_graphicsDevice->Init();
@@ -80,6 +85,7 @@ void rApplication::InitEngine(rGraphicsDevice* graphics, rContentManager* conten
 void rApplication::InitModule(){
 	m_module->Init(m_engine);
 	m_module->InitUI(*m_overlayManager, m_engine);
+	m_module->LoadScene("Default", m_scene, m_engine);
 }
 
 void rApplication::SetDisplaySize(int width, int height){

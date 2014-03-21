@@ -3,6 +3,7 @@
 
 #include "rEngine.hpp"
 #include "ui/ruiOverlayManager.hpp"
+#include "rScene.hpp"
 
 class rModule {
 public:
@@ -12,6 +13,7 @@ public:
 	virtual void Init(rEngine& engine) = 0;
 	virtual void InitUI(ruiOverlayManager& manager, rEngine& engine) = 0;
 	virtual void Uninit(rEngine& engine) = 0;
+	virtual void LoadScene(const rString& sceneName, rScene* scene, rEngine& engine) = 0;
 
 };
 

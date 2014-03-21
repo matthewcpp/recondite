@@ -19,16 +19,13 @@
 #include "rDemoCamera.hpp"
 
 #include "rEngine.hpp"
-#include "rPawn.hpp"
+#include "rDemoPawn.hpp"
 
 #include "rLog.hpp"
 
-typedef std::map<rString, rImmediateBuffer*> rImmediateBufferMap;
-
 class ruiDemoController{
 public:
-	ruiDemoController(rContentManager* contentManager, rPawn* pawn, rDemoCamera* camera);
-	~ruiDemoController();
+	ruiDemoController(rContentManager* contentManager, rDemoCamera* camera);
 
 	virtual void Init(ruiOverlay* overlay);
 
@@ -42,8 +39,10 @@ public:
 	void OnAnimationPause(ruiWidget* widget);
 	void OnAnimationStop(ruiWidget* widget);
 
-private:
+	void SetPawn(rDemoPawn* pawn);
+
 	void SetActiveModel(const rString& name);
+private:
 
 	void SetupImmediateBuffer(const rString name);
 	void RenderAnimated(rEngine& engine);
@@ -58,12 +57,8 @@ private:
 	ruiText* m_animationTime;
 	ruiSlider* m_progressSlider;
 
-	rPawn* m_pawn;
+	rDemoPawn* m_pawn;
 	rDemoCamera* m_camera;
-
-	//temp
-	rGeometryData m_geometryData;
-	rImmediateBufferMap m_buffers;
 };
 
 #endif

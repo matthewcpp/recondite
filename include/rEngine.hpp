@@ -10,6 +10,7 @@
 #include "rInput.hpp"
 
 #include "interface/riApplication.hpp"
+#include "interface/riScene.hpp"
 
 class rEngine{
 public:
@@ -18,6 +19,7 @@ public:
 	rInput* input;
 	rTime time;
 	riApplication* application;
+	riScene* scene;
 };
 
 #endif

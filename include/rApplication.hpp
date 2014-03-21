@@ -5,6 +5,7 @@
 #include "rModule.hpp"
 #include "rGraphicsDevice.hpp"
 #include "rInputManager.hpp"
+#include "rScene.hpp"
 
 #include "interface/riApplication.hpp"
 
@@ -39,6 +40,7 @@ protected:
 
 	rEngine m_engine;
 	rModule* m_module;
+	rScene* m_scene;
 
 	rGraphicsDevice* m_graphicsDevice;
 	ruiOverlayManager* m_overlayManager;

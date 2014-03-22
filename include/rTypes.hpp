@@ -4,21 +4,22 @@
 #include <vector>
 #include <map>
 
-#ifdef _RECONDITE_WX_
-	#include <wx/wx.h>
-
-	typedef wxString rString;
-	typedef wxArrayString rArrayString;
-#else
-	#include <string>
-
-	typedef std::string rString;
-	typedef std::vector<rString> rArrayString;
-#endif
+#include "rVector2.hpp"
+#include "rVector3.hpp"
+#include "rString.hpp"
 
 typedef std::map<rString,rString> rStringStringMap;
-typedef rStringStringMap::iterator rStringStringMapItr;
-typedef rStringStringMap::const_iterator rStringStringMapConstItr;
-typedef std::pair<rString,rString> rStringStringMapEntry;
 
+typedef std::vector<int> rIntArray;
+typedef std::vector<float> rFloatArray;
+typedef std::vector<char> rCharArray;
+typedef std::vector<unsigned char> rUnsigedByteArray;
+typedef std::vector<unsigned short> rUnsignedShortArray;
+
+typedef std::vector<rVector2> rVector2Array;
+typedef std::vector<rVector3> rVector3Array;
+
+typedef rVector2Array rVertex2Array;
+typedef rVector3Array  rVertex3Array;
+typedef std::vector<unsigned short> rIndexArray;
 #endif

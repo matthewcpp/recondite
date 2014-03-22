@@ -2,8 +2,11 @@
 #define R_STRING_HPP
 
 #include <string>
+#include <vector>
 
-class rString{
+#include "rDefs.hpp"
+
+class RECONDITE_API rString{
 public:
 	rString(){}
 	rString (const char* str) : m_str(str){}
@@ -37,5 +40,7 @@ public:
 private:
 	std::string m_str;
 };
+
+typedef std::vector<rString> rArrayString;
 
 #endif

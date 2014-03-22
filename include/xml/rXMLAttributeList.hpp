@@ -41,7 +41,7 @@ void rXMLAttributeList::SetAttribute(const rString& name , const T& value){
 
 template <typename T>
 bool rXMLAttributeList::GetAttributeAs(const rString& name , T& value) const{
-	rStringStringMapConstItr it = m_attributes.find(name);
+	rStringStringMap::const_iterator it = m_attributes.find(name);
 	
 	if (it == m_attributes.end())
 		return false;

@@ -7,7 +7,7 @@ rXMLAttributeList::rXMLAttributeList(const rXMLAttributeList& list){
 void rXMLAttributeList::AttributeNames(rArrayString& arr) const{
 	arr.clear();
 	
-	for (rStringStringMapConstItr it = m_attributes.begin(); it != m_attributes.end(); ++it)
+	for (rStringStringMap::const_iterator it = m_attributes.begin(); it != m_attributes.end(); ++it)
 		arr.push_back(it->first);
 }
 

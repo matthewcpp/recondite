@@ -1,35 +1,6 @@
 #ifndef R_DEFS_HPP
 #define R_DEFS_HPP
 
-#include <vector>
-#include <map>
-#include <string>
-
-#include "rVector2.hpp"
-#include "rVector3.hpp"
-
-#include "rColor.hpp"
-
-typedef std::string rString;
-
-typedef std::vector<int> rIntArray;
-typedef std::vector<float> rFloatArray;
-typedef std::vector<char> rCharArray;
-typedef std::vector<unsigned char> rUnsigedByteArray;
-typedef std::vector<unsigned short> rUnsignedShortArray;
-
-typedef std::vector<rVector2> rVector2Array;
-typedef std::vector<rVector3> rVector3Array;
-
-typedef rVector2Array rVertex2Array;
-typedef rVector3Array  rVertex3Array;
-typedef std::vector<unsigned short> rIndexArray;
-
-typedef std::map<rString, rColor> rColorMap;
-typedef rColorMap::iterator rColorItr;
-typedef rColorMap::const_iterator rColorConstItr;
-typedef std::pair<rString, rColor> rColorMapEntry;
-
 enum rContentError{
 	rCONTENT_ERROR_NONE = 0,
 	rCONTENT_ERROR_FILE_NOT_FOUND,
@@ -96,5 +67,15 @@ enum rButtonState {
 	rBUTTON_STATE_UP,
 	rBUTTON_STATE_DOWN
 };
+
+#ifdef _MSC_VER
+	#ifdef RECONDITE_BUILD_SHARED
+		#define RECONDITE_API __declspec(dllexport)
+	#else
+		#define RECONDITE_API __declspec(dllimport)
+	#endif
+#else
+	#define RECONDITE_API
+#endif
 
 #endif

@@ -15,6 +15,7 @@ add_rec_src(core_files "rRect")
 add_rec_src(core_files "rRenderer")
 add_rec_src(core_files "rScene")
 add_rec_src(core_files "rSize")
+add_rec_src(core_files "rString")
 add_rec_src(core_files "rTime")
 add_rec_src(core_files "rViewport")
 

@@ -1,5 +1,3 @@
-*.lib
-*.so
-*.a
-*.dll
-librecondite
+*
+
+!.gitignore

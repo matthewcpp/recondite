@@ -57,6 +57,10 @@ bool rString::operator == (const rString& str) const{
 	return m_str == str.m_str;
 }
 
+bool rString::operator == (const char* str) const{
+	return m_str == str;
+}
+
 bool rString::operator != (const rString& str) const{
 	return m_str != str.m_str;
 }
@@ -80,3 +84,34 @@ bool rString::operator >= (const rString& str) const{
 rString::operator const char*() const{
 	return c_str();
 }
+
+char rString::first() const{
+	if (m_str.length() > 0)
+		return m_str[0];
+	else
+		return 0;
+}
+
+char rString::last() const{
+	if (m_str.length() > 0)
+		return m_str[m_str.length() - 1];
+	else
+		return 0;
+}
+
+rString rString::substr (size_t pos, size_t len) const{
+	rString result;
+	result.m_str = m_str.substr(pos,len);
+
+	return result;
+}
+
+size_t rString::find_first_of(char c) const{
+	return m_str.find_first_of(c);
+}
+
+size_t rString::find_last_of(char c) const{
+	return m_str.find_last_of(c);
+}
+
+size_t rString::npos = std::numeric_limits<std::size_t>::max();

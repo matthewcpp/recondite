@@ -21,12 +21,21 @@ public:
 	operator const char*() const;
 
 	bool operator == (const rString& str) const;
+	bool operator == (const char* str) const;
+
 	bool operator != (const rString& str) const;
 	bool operator < (const rString& str) const;
 	bool operator <= (const rString& str) const;
 	bool operator > (const rString& str) const;
 	bool operator >= (const rString& str) const;
+
+	char first() const;
+	char last() const;
 	
+	rString substr (size_t pos = 0, size_t len = npos) const;
+	size_t find_first_of(char c) const;
+	size_t find_last_of(char c) const;
+
 	char& operator[](int index);
 	rString& operator=(const rString& str);
 	rString& operator=(const char* str);
@@ -36,6 +45,8 @@ public:
 	
 	rString operator + (char c) const;
 	rString& operator += (char c);
+
+	static size_t npos;
 
 private:
 	std::string m_str;

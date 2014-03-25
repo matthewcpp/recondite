@@ -295,7 +295,7 @@ bool rContentManager::LoadMaterialDependencies(const rMaterialData& materialData
 			break;
 			
 			case rMATERIAL_PARAMETER_COLOR:{
-				std::stringstream stream(paramData.value);
+				std::stringstream stream(paramData.value.c_str());
 				unsigned int c[4];
 				stream >> c[0] >> c[1] >> c[2] >> c[3];
 				rColor color(c[0], c[1], c[2], c[3]);

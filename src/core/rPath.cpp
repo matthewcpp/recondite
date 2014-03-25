@@ -1,7 +1,7 @@
 #include "rPath.hpp"
 
 rString rPath::Directory(const rString& path){
-	size_t pos = path.find_last_of("/");
+	size_t pos = path.find_last_of('/');
 
 	if (pos == rString::npos){
 		return rString("");
@@ -12,8 +12,8 @@ rString rPath::Directory(const rString& path){
 }
 
 rString rPath::Filename(const rString& path){
-	size_t namepos = path.find_last_of("/");
-	size_t extpos = path.find_last_of(".");
+	size_t namepos = path.find_last_of('/');
+	size_t extpos = path.find_last_of('.');
 
 	if (namepos == rString::npos){
 		namepos = 0;
@@ -31,7 +31,7 @@ rString rPath::Filename(const rString& path){
 }
 
 rString rPath::FullFilename(const rString& path){
-	size_t pos = path.find_last_of("/");
+	size_t pos = path.find_last_of('/');
 
 	if (pos == rString::npos){
 		return path;
@@ -42,7 +42,7 @@ rString rPath::FullFilename(const rString& path){
 }
 
 rString rPath::Extension(const rString& path){
-	size_t pos = path.find_last_of(".");
+	size_t pos = path.find_last_of('.');
 
 	if (pos == rString::npos){
 		return rString("");
@@ -56,8 +56,8 @@ rString rPath::Combine(const rString& dir, const rString& filename){
 	rString result = dir;
 
 	if (dir.length() > 0 && filename.length() > 0){
-		char dirLast = *dir.rbegin();
-		char filenameFirst = *filename.begin();
+		char dirLast = dir.last();
+		char filenameFirst = filename.first();
 
 		if (dirLast != '/' && filenameFirst != '/'){
 			result += '/';
@@ -73,7 +73,7 @@ rString rPath::Assemble(const rString& dir, const rString& filename, const rStri
 	rString result = rPath::Combine(dir, filename);
 
 	if (ext.length() > 0){
-		char extFirst = *ext.begin();
+		char extFirst = ext.first();
 
 		if (extFirst != '.')
 			result += '.';

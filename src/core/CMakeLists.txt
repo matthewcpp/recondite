@@ -1,10 +1,22 @@
 set(core_files)
 
 add_rec_src(core_files "rActor3")
+add_rec_src(core_files "rApplication")
+add_rec_src(core_files "rCamera")
+add_rec_src(core_files "rColor")
 add_rec_src(core_files "rContentManager")
-
+add_rec_src(core_files "rInputManager")
+add_rec_src(core_files "rLog")
+add_rec_src(core_files "rOrbitCamera")
+add_rec_src(core_files "rPath")
+add_rec_src(core_files "rPawn")
+add_rec_src(core_files "rPoint")
+add_rec_src(core_files "rRect")
+add_rec_src(core_files "rRenderer")
+add_rec_src(core_files "rScene")
+add_rec_src(core_files "rSize")
+add_rec_src(core_files "rTime")
+add_rec_src(core_files "rViewport")
 
 set(recondite_files ${recondite_files} ${core_files} PARENT_SCOPE)
 set(core_sources ${core_files} PARENT_SCOPE)
-
-message("core files    " ${core_files})

@@ -63,12 +63,17 @@ bool rVector3::operator!=(const rVector3& v)const{
 }
 
 float rVector3::Distance(const rVector3& v) const{
+	
+	return std::sqrt(DistanceSquared(v));
+}
+
+float rVector3::DistanceSquared(const rVector3& v) const{
 	rVector3 d = v - *this;
-	return std::sqrt(d.x * d.x + d.y * d.y + d.z * d.z);
+	return d.x * d.x + d.y * d.y + d.z * d.z;
 }
 
 float rVector3::Length() const{
-	return std::sqrt ( (x * x) + (y * y) + (z * z ) );
+	return std::sqrt ( LengthSquared() );
 }
 
 float rVector3::LengthSquared() const{

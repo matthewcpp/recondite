@@ -8,6 +8,7 @@ struct rVector3{
 	rVector3(float xx, float yy , float zz) : x(xx) , y (yy) , z (zz){}
 
 	float Distance(const rVector3& v) const;
+	float DistanceSquared(const rVector3& v) const;
 	float Length() const;
 	float LengthSquared() const;
 
@@ -16,7 +17,6 @@ struct rVector3{
 
 	rVector3 Cross(const rVector3& v) const;
 	float Dot(const rVector3& v) const;
-
 
 	void Set(float xx, float yy , float zz);
 

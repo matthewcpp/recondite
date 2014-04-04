@@ -1,10 +1,10 @@
 #include "gtest/gtest.h"
 #include "rVector3.hpp"
 
-class rVector3Test : public ::testing::Test{
+class Math_rVector3 : public ::testing::Test{
 };
 
-TEST(rVector3Test, Set) {
+TEST(Math_rVector3, Set) {
   rVector3 v;
   v.Set(10.0f, 20.0f, 30.0f);
   
@@ -13,7 +13,7 @@ TEST(rVector3Test, Set) {
   EXPECT_EQ(v.z, 30.0f);
 }
 
-TEST(rVector3Test, AdditionOperator){
+TEST(Math_rVector3, AdditionOperator){
 	rVector3 v1(10.0f,20.0f,30.0f);
 	rVector3 v2(-20.0f, 50.0f, 75.0f);
 
@@ -24,7 +24,7 @@ TEST(rVector3Test, AdditionOperator){
 	EXPECT_EQ(result.z, 105.0f);
 }
 
-TEST(rVector3Test, AdditionWithAssignmentOperator){
+TEST(Math_rVector3, AdditionWithAssignmentOperator){
 	rVector3 v1(10.0f,20.0f,30.0f);
 	rVector3 v2(-20.0f, 50.0f, 75.0f);
 
@@ -35,7 +35,7 @@ TEST(rVector3Test, AdditionWithAssignmentOperator){
 	EXPECT_EQ(v1.z, 105.0f);
 }
 
-TEST(rVector3Test, SubtractionOperator){
+TEST(Math_rVector3, SubtractionOperator){
 	rVector3 v1(10.0f,20.0f,30.0f);
 	rVector3 v2(-20.0f, 50.0f, 75.0f);
 
@@ -46,7 +46,7 @@ TEST(rVector3Test, SubtractionOperator){
 	EXPECT_EQ(result.z, -45.0f);
 }
 
-TEST(rVector3Test, SubtractionWithAssignmentOperator){
+TEST(Math_rVector3, SubtractionWithAssignmentOperator){
 	rVector3 v1(10.0f,20.0f,30.0f);
 	rVector3 v2(-20.0f, 50.0f, 75.0f);
 
@@ -57,7 +57,7 @@ TEST(rVector3Test, SubtractionWithAssignmentOperator){
 	EXPECT_EQ(v1.z, -45.0f);
 }
 
-TEST(rVector3Test, ScaleOperator){
+TEST(Math_rVector3, ScaleOperator){
 	rVector3 v(10.0f,20.0f,30.0f);
 
 	rVector3 result = v * 4.0f;
@@ -67,7 +67,7 @@ TEST(rVector3Test, ScaleOperator){
 	EXPECT_EQ(result.z, 120.0f);
 }
 
-TEST(rVector3Test, ScaleWithAssignmentOperator){
+TEST(Math_rVector3, ScaleWithAssignmentOperator){
 	rVector3 v(10.0f,20.0f,30.0f);
 
 	v *= 4.0f;
@@ -77,7 +77,7 @@ TEST(rVector3Test, ScaleWithAssignmentOperator){
 	EXPECT_EQ(v.z, 120.0f);
 }
 
-TEST(rVector3Test, DivisionOperator){
+TEST(Math_rVector3, DivisionOperator){
 	rVector3 v(10.0f,20.0f,30.0f);
 
 	rVector3 result = v / 4.0f;
@@ -87,7 +87,7 @@ TEST(rVector3Test, DivisionOperator){
 	EXPECT_EQ(result.z, 7.5f);
 }
 
-TEST(rVector3Test, DivisionWithAssignmentOperator){
+TEST(Math_rVector3, DivisionWithAssignmentOperator){
 	rVector3 v(10.0f,20.0f,30.0f);
 
 	v /= 4.0f;
@@ -97,7 +97,7 @@ TEST(rVector3Test, DivisionWithAssignmentOperator){
 	EXPECT_EQ(v.z, 7.5f);
 }
 
-TEST(rVector3Test, EqualityOperator){
+TEST(Math_rVector3, EqualityOperator){
 	rVector3 v1(10.0f,20.0f,30.0f);
 	rVector3 v2(10.0f,20.0f,30.0f);
 	rVector3 v3(100.0f,200.0f,300.0f);
@@ -106,7 +106,7 @@ TEST(rVector3Test, EqualityOperator){
 	EXPECT_FALSE(v1 == v3);
 }
 
-TEST(rVector3Test, NotEqualOperator){
+TEST(Math_rVector3, NotEqualOperator){
 	rVector3 v1(10.0f,20.0f,30.0f);
 	rVector3 v2(10.0f,20.0f,30.0f);
 	rVector3 v3(100.0f,200.0f,300.0f);
@@ -115,7 +115,7 @@ TEST(rVector3Test, NotEqualOperator){
 	EXPECT_TRUE(v1 != v3);
 }
 
-TEST(rVector3Test, Distance){
+TEST(Math_rVector3, Distance){
 	rVector3 v1(10.0f, -90.0f, 30.0f);
 	rVector3 v2(100.0f, 250.0f, -54.0f);
 
@@ -124,7 +124,7 @@ TEST(rVector3Test, Distance){
 	EXPECT_FLOAT_EQ(361.602f, distance);
 }
 
-TEST(rVector3Test, DistanceSquared){
+TEST(Math_rVector3, DistanceSquared){
 	rVector3 v1(10.0f, -90.0f, 30.0f);
 	rVector3 v2(100.0f, 250.0f, -54.0f);
 
@@ -133,14 +133,14 @@ TEST(rVector3Test, DistanceSquared){
 	EXPECT_FLOAT_EQ(130756.0064f, distance);
 }
 
-TEST(rVector3Test, Length){
+TEST(Math_rVector3, Length){
 	rVector3 v(3.0f, 2.0f, -1.0f);
 
 	float length = v.Length();
 
 	EXPECT_FLOAT_EQ(3.741657f, length);
 }
-TEST(rVector3Test, LengthSquared){
+TEST(Math_rVector3, LengthSquared){
 	rVector3 v(3.0f, 2.0f, -1.0f);
 
 	float length = v.LengthSquared();
@@ -149,7 +149,3 @@ TEST(rVector3Test, LengthSquared){
 }
 
 
-int main(int argc, char **argv) {
-  ::testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
-}

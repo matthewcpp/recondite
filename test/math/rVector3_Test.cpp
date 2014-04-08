@@ -149,3 +149,35 @@ TEST(Math_rVector3, LengthSquared){
 }
 
 
+TEST(Math_rVector3, LerpT0){
+	rVector3 result =rVector3::Lerp(rVector3::ZeroVector, rVector3::OneVector, 0.0f);
+
+	EXPECT_FLOAT_EQ(result.x, 0.0f);
+	EXPECT_FLOAT_EQ(result.y, 0.0f);
+	EXPECT_FLOAT_EQ(result.z, 0.0f);
+}
+
+TEST(Math_rVector3, LerpT0_5){
+	rVector3 result =rVector3::Lerp(rVector3::ZeroVector, rVector3::OneVector, 0.5f);
+
+	EXPECT_FLOAT_EQ(result.x, 0.5f);
+	EXPECT_FLOAT_EQ(result.y, 0.5f);
+	EXPECT_FLOAT_EQ(result.z, 0.5f);
+}
+
+TEST(Math_rVector3, LerpT1){
+	rVector3 result =rVector3::Lerp(rVector3::ZeroVector, rVector3::OneVector, 1.0f);
+
+	EXPECT_FLOAT_EQ(result.x, 1.0f);
+	EXPECT_FLOAT_EQ(result.y, 1.0f);
+	EXPECT_FLOAT_EQ(result.z, 1.0f);
+}
+
+TEST(Math_rVector3, NegationOperator){
+	rVector3 v(-10.0f, 20.0f, 30.0f);
+	rVector3 nv = -v;
+
+	EXPECT_FLOAT_EQ(nv.x, 10.0f);
+	EXPECT_FLOAT_EQ(nv.y, -20.0f);
+	EXPECT_FLOAT_EQ(nv.z, -30.0f);
+}

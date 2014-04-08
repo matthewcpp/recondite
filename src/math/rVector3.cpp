@@ -110,8 +110,8 @@ rVector3 rVector3::operator-() const{
 	return rVector3(-x , -y , -z);
 }
 
-rVector3 rVector3::Lerp(const rVector3& v1, const rVector3& v2, float t){
-	return (v1 * t) + v2 * (1.0f - t); 
+rVector3 rVector3::Lerp(const rVector3& v0, const rVector3& v1, float t){
+	return v0 + ((v1-v0) * t);
 }
 
 const rVector3 rVector3::ZeroVector = rVector3(0.0f,0.0f,0.0f);

@@ -37,7 +37,7 @@ struct rVector3{
 	bool operator==(const rVector3& v) const;
 	bool operator!=(const rVector3& v) const;
 
-	static rVector3 Lerp(const rVector3& v1, const rVector3& v2, float t);
+	static rVector3 Lerp(const rVector3& v0, const rVector3& v1, float t);
 
 	static  const rVector3 ZeroVector;
 	static  const rVector3 OneVector;

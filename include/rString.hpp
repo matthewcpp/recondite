@@ -18,6 +18,8 @@ public:
 	size_t size() const;
 	size_t length() const;
 
+	void clear();
+
 	operator const char*() const;
 
 	bool operator == (const rString& str) const;

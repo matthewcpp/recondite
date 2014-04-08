@@ -114,4 +114,8 @@ size_t rString::find_last_of(char c) const{
 	return m_str.find_last_of(c);
 }
 
+void rString::clear(){
+	m_str.clear();
+}
+
 size_t rString::npos = std::numeric_limits<std::size_t>::max();

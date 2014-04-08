@@ -63,7 +63,7 @@ void rAnimationTrack::DetermineKeyframes(float animationTime, unsigned short key
 				break;
 		}
 
-	if (start == m_keyframes.size() - 1){
+	if (start >= m_keyframes.size() - 1){
 		end = start;
 	}
 	else{

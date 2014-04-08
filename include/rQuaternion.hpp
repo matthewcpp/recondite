@@ -29,6 +29,9 @@ struct rQuaternion{
 
 	static rQuaternion Slerp(const rQuaternion& q1 , const rQuaternion& q2, float t);
 
+	bool operator==(const rQuaternion& q) const;
+	bool operator!=(const rQuaternion& q) const;
+
 	static const rQuaternion Identity;
 
 	float x , y ,z , w;

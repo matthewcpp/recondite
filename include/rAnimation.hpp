@@ -46,8 +46,9 @@ public:
 
 	unsigned short InterpolateKeyframe(float animationTime, rMatrix4& transform, unsigned short keyframeHint) const;
 	
-private:
+protected:
 	void DetermineKeyframes(float animationTime, unsigned short keyframeHint, unsigned short& start, unsigned short& end) const;
+
 private:
 	unsigned short m_handle;
 	rKeyframeVector m_keyframes;

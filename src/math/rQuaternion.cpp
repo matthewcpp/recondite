@@ -122,4 +122,12 @@ rQuaternion rQuaternion::Slerp(const rQuaternion& q1 , const rQuaternion& q2, fl
 	return qr;
 }
 
+bool rQuaternion::operator==(const rQuaternion& q) const{
+	return x == q.x && y == q.y && z == q.z && w == q.w;
+}
+
+bool rQuaternion::operator!=(const rQuaternion& q) const{
+	return !(*this == q);
+}
+
 const rQuaternion rQuaternion::Identity = rQuaternion(0,0,0,1);

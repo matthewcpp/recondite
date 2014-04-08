@@ -1,6 +1,8 @@
 set(core_files)
 
 add_rec_src(core_files "rActor3")
+add_rec_src(core_files "rAnimation")
+add_rec_src(core_files "rAnimationPlayer")
 add_rec_src(core_files "rApplication")
 add_rec_src(core_files "rCamera")
 add_rec_src(core_files "rColor")

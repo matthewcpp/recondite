@@ -1,7 +1,5 @@
 set(asset_files)
 
-add_rec_src(asset_files "rAnimation")
-add_rec_src(asset_files "rAnimationPlayer")
 add_rec_src(asset_files "rAsset")
 add_rec_src(asset_files "rFont")
 add_rec_src(asset_files "rFontGlyph")

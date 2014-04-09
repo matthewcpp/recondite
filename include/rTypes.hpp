@@ -7,6 +7,7 @@
 #include "rVector2.hpp"
 #include "rVector3.hpp"
 #include "rString.hpp"
+#include "rArrayString.hpp"
 
 typedef std::map<rString,rString> rStringStringMap;
 

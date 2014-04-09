@@ -147,7 +147,7 @@ void rXMLReader::ParseTagType(char c,std::istream* stream){
     //reading element tag
     else if (!CharIsWhitespace(c)){
         state = rXML_READER_STATE_TAG_NAME;
-        currentToken = std::string(1, c);
+        currentToken = rString(1, c);
     }
 }
 
@@ -236,7 +236,7 @@ void rXMLReader::ParseCommentTag(char c){
     currentToken += c;
 
     //check to see if the comment has ended....
-    if (currentToken == std::string(2, rXML_COMMENT_INDICATOR)){
+    if (currentToken == rString(2, rXML_COMMENT_INDICATOR)){
         currentToken.clear();
         state = rXML_READER_STATE_READ_COMMENT;
     }
@@ -285,7 +285,7 @@ void rXMLReader::LookForAttribute(char c){
         state = rXML_READER_STATE_TAG_CLOSE;
     }
     else if (!CharIsWhitespace(c)){
-        currentToken = std::string(1,c);
+        currentToken = rString(1,c);
         state = rXML_READER_STATE_ATTRIBUTE_NAME;
     }
     //need to ensure that the character is not an escapable character or quote..if so throw error?
@@ -300,7 +300,7 @@ void rXMLReader::ParseAttributeName(char c){
         currentToken.clear();
 
         if (c == rXML_EQUALS){
-            tokenStack.push(std::string(1 , rXML_EQUALS));
+            tokenStack.push(rString(1 , rXML_EQUALS));
         }
     }
     else{
@@ -313,10 +313,10 @@ void rXMLReader::ParseAttributeName(char c){
 
 void rXMLReader::ParseAttributeAssign(char c){
     // loooking for a =
-    if (tokenStack.top() != std::string(1 , rXML_EQUALS)){
+    if (tokenStack.top() != rString(1 , rXML_EQUALS)){
 
         if (c == rXML_EQUALS){
-            tokenStack.push(std::string(1 , rXML_EQUALS));
+            tokenStack.push(rString(1 , rXML_EQUALS));
         }
 
         //if we find a non whitespace then there is an error
@@ -329,7 +329,7 @@ void rXMLReader::ParseAttributeAssign(char c){
     else{ //found equal sign...looking for a quote
         if (CharIsQuote(c)){
             tokenStack.pop();
-            tokenStack.push(std::string(1 , c));
+            tokenStack.push(rString(1 , c));
             state = rXML_READER_STATE_ATTRIBUTE_VALUE;
             currentToken.clear();
         }
@@ -345,7 +345,7 @@ void rXMLReader::ParseAttributeAssign(char c){
 void rXMLReader::ParseAttributeValue(char c){
     if (CharIsQuote(c)){//time to end reading attribute value?
         //if the quotes match up then we have read an attribute..need to add it to the attribute list
-        if (tokenStack.top() == std::string(1 , c)){
+        if (tokenStack.top() == rString(1 , c)){
             tokenStack.pop();
             Uncleanse(currentToken);
             attributes.SetAttribute<rString>(tokenStack.top(), currentToken);
@@ -424,7 +424,7 @@ void rXMLReader::ParseCDATAValue(char c){
     }
 }
 
-void rXMLReader::Uncleanse(std::string& text){
+void rXMLReader::Uncleanse(rString& text){
     Escape(text, rXML_ESCAPE_LT , rXML_LT_STRING);
     Escape(text, rXML_ESCAPE_GT , rXML_GT_STRING);
     Escape(text, rXML_ESCAPE_APOS , rXML_APOS_STRING);
@@ -499,7 +499,7 @@ void rXMLReader::Clear(){
         tokenStack.pop();
 }
 
-void rXMLReader::Escape(std::string& text, std::string ch, std::string replacement){
+void rXMLReader::Escape(rString& text, rString ch, rString replacement){
     size_t searchPos = 0;
     size_t matchPos = text.find(ch, searchPos);
 

@@ -7,6 +7,7 @@
 #include "rTypes.hpp"
 #include "rDefs.hpp"
 #include "rSize.hpp"
+#include "rColor.hpp"
 
 enum rTexture2DCompressionType{
     rTexture2DCompressionNone = 0

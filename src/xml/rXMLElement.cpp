@@ -25,7 +25,7 @@ void rXMLElement::Init(rXMLElement* parent, const rString& name, const rString& 
 	std::ostringstream s;
 	s << text;
 
-	mText = s.str();
+	mText = s.str().c_str();
 	
 	if (parent)
 		parent->AddChild(this);

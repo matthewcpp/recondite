@@ -120,14 +120,14 @@ private:
     void ParseCDATATag(char c);
     void ParseCDATAValue(char c);
 
-    void Uncleanse(std::string& text);
+    void Uncleanse(rString& text);
     char NormalizeNewline(char c,std::istream* stream);
 
 private:
     void SetError(rXMLReaderError e);
     bool CharIsWhitespace(char c);
     bool CharIsQuote(char c);
-    void Escape(std::string& text, std::string ch, std::string replacement);
+    void Escape(rString& text, rString ch, rString replacement);
 
 private:
     rXMLAttributeList attributes;

@@ -180,7 +180,7 @@ void rGeometryDataWriter::WriteElementBufferData(std::ostream& stream){
 
 		nameLength = bufferNames[i].size();
 		stream.write((char*)&nameLength, 4);
-		stream.write(bufferNames[i].data(), nameLength);
+		stream.write(bufferNames[i].c_str(), nameLength);
 		
 		type = int(bufferData->GeometryType());
 		stream.write((char*)&type, 4);

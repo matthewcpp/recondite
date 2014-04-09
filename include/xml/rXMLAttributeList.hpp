@@ -36,7 +36,7 @@ void rXMLAttributeList::SetAttribute(const rString& name , const T& value){
 	std::ostringstream str;
 	str << value;
 	
-	m_attributes[name] = str.str();
+	m_attributes[name] = str.str().c_str();
 }
 
 template <typename T>
@@ -46,7 +46,7 @@ bool rXMLAttributeList::GetAttributeAs(const rString& name , T& value) const{
 	if (it == m_attributes.end())
 		return false;
 	
-	std::istringstream str(it->second);
+	std::istringstream str(it->second.c_str());
 	str >> value;
 	
 	return true;

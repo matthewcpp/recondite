@@ -187,7 +187,7 @@ rContentError rFontData::WriteGlyphFile(const rString& path) const{
 			std::ostringstream s;
 			s << "texCoord" << i;
 
-			tc = glyph->CreateChild(s.str());
+			tc = glyph->CreateChild(s.str().c_str());
 			tc->AddAttribute<float>("u", data->texCoords[i].x);
 			tc->AddAttribute<float>("v", data->texCoords[i].y);
 		}
@@ -267,7 +267,7 @@ rContentError rFontData::ParseGlyphs(rXMLDocument& document){
 
 			float u,v;
 
-			prop = data->GetFirstChildNamed(s.str());
+			prop = data->GetFirstChildNamed(s.str().c_str());
 			if (prop){
 				prop->GetAttribute<float>("u", u);
 				prop->GetAttribute<float>("v", v);

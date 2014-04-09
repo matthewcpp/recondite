@@ -102,7 +102,7 @@ template<typename T>
 void rXMLElement::SetText(const T& text){
 	std::ostringstream s;
 	s << text;
-	mText = s.str();
+	mText = s.str().c_str();
 }
 
 template<typename T>
@@ -110,7 +110,7 @@ rXMLElement* rXMLElement::CreateChild(const rString& name, const T& text){
 	std::ostringstream s;
 	s << text;
 
-	return new rXMLElement(this, name, s.str());
+	return new rXMLElement(this, name, s.str().c_str());
 }
 
 template<typename T>
@@ -123,7 +123,7 @@ rXMLElement* rXMLElement::CreateChild(const rString& name, const T& text, const 
 
 template<typename T>
 void rXMLElement::GetText(T& val) const{
-	std::istringstream s (mText);
+	std::istringstream s (mText.c_str());
 	s >> val;
 }
 

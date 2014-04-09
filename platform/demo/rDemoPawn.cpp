@@ -59,7 +59,7 @@ void rDemoPawn::SetModel(rModel* model){
 }
 
 void rDemoPawn::SetupImmediateBuffer(const rString name){
-	rString file = "content/models/" +name + "/" + name + ".rgeo";
+	rString file = "content/models/" + name + "/" + name + ".rgeo";
 	rGeometryDataReader reader;
 	reader.ReadFromFile(file, m_geometryData);
 

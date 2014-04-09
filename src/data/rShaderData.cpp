@@ -43,7 +43,7 @@ rContentError rShaderData::LoadFromPaths(const rString& vertexPath, const rStrin
 	return m_error;
 }
 
-void rShaderData::ReadStreamToString(std::istream& stream, std::string& str){
+void rShaderData::ReadStreamToString(std::istream& stream, rString& str){
 	stream.seekg(0, std::ios::end);
 	str.resize(stream.tellg());
 	stream.seekg(0, std::ios::beg);

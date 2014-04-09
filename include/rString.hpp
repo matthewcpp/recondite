@@ -12,13 +12,21 @@ public:
 	rString (const char* str) : m_str(str){}
 	rString (const char* str, size_t length) : m_str(str, length) {}
 	rString (const rString& str);
+	rString (size_t n, char c): m_str(n,c){}
 	
 	const char* c_str() const;
+
+	void assign(const char* str, int len);
+	size_t find(const rString& str, size_t pos = 0);
+	rString& replace (size_t pos,  size_t len,  const rString& s);
 	
 	size_t size() const;
 	size_t length() const;
+	void resize(size_t size);
+	bool empty() const;
 
 	void clear();
+	void append(const char* str);
 
 	operator const char*() const;
 
@@ -54,6 +62,9 @@ private:
 	std::string m_str;
 };
 
-typedef std::vector<rString> rArrayString;
+std::ostream& operator << (std::ostream& os, const rString& str);
+std::istream& operator >> (std::istream& is, rString& str);
+rString operator +(const char* cstr, const rString& rstr);
+
 
 #endif

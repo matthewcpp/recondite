@@ -118,4 +118,48 @@ void rString::clear(){
 	m_str.clear();
 }
 
+void rString::assign(const char* str, int len){
+	m_str.assign(str, len);
+}
+
+void rString::resize(size_t size){
+	return m_str.resize(size);
+}
+
+bool rString::empty() const{
+	return m_str.empty();
+}
+
+void rString::append(const char* str){
+	m_str += str;
+}
+
+rString& rString::replace (size_t pos,  size_t len,  const rString& s){
+	m_str.replace(pos, len, s.c_str());
+	return *this;
+}
+
+size_t rString::find(const rString& str, size_t pos){
+	return m_str.find(str.c_str(), pos);
+}
+
 size_t rString::npos = std::numeric_limits<std::size_t>::max();
+
+std::ostream& operator<< (std::ostream& os, const rString& str){
+	os << str.c_str();
+	return os;
+}
+
+std::istream& operator >> (std::istream& is, rString& str){
+	std::string stdstr;
+	is >> stdstr;
+	str.assign(stdstr.c_str(), stdstr.length());
+
+	return is;
+}
+
+rString operator +(const char* cstr, const rString& rstr){
+	rString result(cstr);
+	result += rstr;
+	return result;
+}

@@ -96,7 +96,7 @@ void ruiDemoController::OnUpdate(rEngine& engine){
 	std::ostringstream stream;
 	stream << animationTime;
 
-	m_animationTime->SetText(stream.str());
+	m_animationTime->SetText(stream.str().c_str());
 }
 
 void ruiDemoController::OnDraw(rEngine& engine){

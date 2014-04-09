@@ -32,7 +32,7 @@ public:
 	void SetPath(const rString& path);
 private:
 	//todo move to utils
-	static void ReadStreamToString(std::istream& stream, std::string& str);
+	static void ReadStreamToString(std::istream& stream, rString& str);
 	
 private:
 	rString m_vertexProgram;

@@ -22,5 +22,7 @@ add_rec_src(core_files "rString")
 add_rec_src(core_files "rTime")
 add_rec_src(core_files "rViewport")
 
+list(APPEND core_files ${CMAKE_CURRENT_SOURCE_DIR}/../../include/rAnimationCurve.hpp)
+
 set(recondite_files ${recondite_files} ${core_files} PARENT_SCOPE)
 set(core_sources ${core_files} PARENT_SCOPE)

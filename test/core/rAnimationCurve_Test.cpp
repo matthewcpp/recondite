@@ -31,7 +31,7 @@ TEST(Core_rAnimationCurve, AddKey){
 	size_t count = curve.NumKeys();
 	curve.AddKey(0.0f, t1);
 
-	rTestKey* testKey = curve.GetKey(0);
+	const rTestKey* testKey = curve.GetKey(0);
 	EXPECT_EQ(testKey->value.x, t1.x);
 	EXPECT_EQ(testKey->value.y, t1.y);
 	EXPECT_EQ(testKey->value.z, t1.z);
@@ -111,4 +111,33 @@ TEST(Core_rAnimationCurve, DetermineKeyframeNegativeTime){
 	EXPECT_TRUE(result);
 	EXPECT_EQ(start, 0);
 	EXPECT_EQ(end, 0);
+}
+
+TEST(Core_rAnimationCurve, AllocateFrames){
+	rTestVectorCurve curve;
+
+	for (size_t i = 0; i < 4; i++){
+		curve.AddKey(float(i), rTestVector(i,i,i));
+	}
+
+	EXPECT_EQ (curve.NumKeys(), 4);
+
+	curve.AllocateFrames(2);
+
+	EXPECT_EQ(curve.NumKeys(), 2);
+}
+
+TEST(Core_rAnimationCurve, SetKey){
+	rTestVectorCurve curve;
+
+	curve.AllocateFrames(2);
+	rTestVector t1(1.0f, 2.0f, 3.0f);
+
+	EXPECT_TRUE(curve.SetKey(0, 1.0, t1));
+	const rTestVectorCurve::KeyType* key = curve.GetKey(0);
+
+	EXPECT_EQ(key->time, 1.0f);
+	EXPECT_EQ(key->value.x, t1.x);
+	EXPECT_EQ(key->value.y, t1.y);
+	EXPECT_EQ(key->value.z, t1.z);
 }

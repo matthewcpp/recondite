@@ -19,7 +19,8 @@ TEST(Core_rArrayString, GetByIndex){
 	arr.push_back("test2");
 
 	ASSERT_EQ (arr[0], "test0");
-	ASSERT_EQ (arr[1], "test2");
+	ASSERT_EQ (arr[1], "test1");
+	ASSERT_EQ (arr[2], "test2");
 }
 
 TEST(Core_rArrayString, PushBack){
@@ -29,7 +30,7 @@ TEST(Core_rArrayString, PushBack){
 	ASSERT_EQ (arr[0], "test0");
 
 	arr.push_back("test1");
-	ASSERT_EQ (arr[0], "test1");
+	ASSERT_EQ (arr[1], "test1");
 }
 
 

@@ -3,6 +3,7 @@
 
 #include <cstddef>
 #include <stdarg.h>
+#include <cstdio>
 
 #include "rTypes.hpp"
 #include "rDefs.hpp"

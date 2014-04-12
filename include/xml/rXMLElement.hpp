@@ -5,6 +5,7 @@
 #include <sstream>
 
 #include "rTypes.hpp"
+#include "rString.hpp"
 #include "xml/rXMLAttributeList.hpp"
 
 class rXMLElement;
@@ -118,7 +119,7 @@ rXMLElement* rXMLElement::CreateChild(const rString& name, const T& text, const 
 	std::ostringstream s;
 	s << text;
 
-	return new rXMLElement(this, name, s.str(), attributes);
+	return new rXMLElement(this, name, s.str().c_str(), attributes);
 }
 
 template<typename T>

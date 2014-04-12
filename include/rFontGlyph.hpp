@@ -2,6 +2,7 @@
 #define R_FONTGLYPH_HPP
 
 #include <vector>
+#include <cstring>
 
 #include "rTypes.hpp"
 #include "rDefs.hpp"

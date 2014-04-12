@@ -96,7 +96,7 @@ void rXMLWriter::WriteStartElementTagWithAttribute(const rString& name , const r
 	str << attrValue;
 	
 	m_stream << '<'<<name << ' ';
-	WriteAttribute(attrName , str.str());
+	WriteAttribute(attrName , str.str().c_str());
 	m_stream <<">";
 }
 
@@ -148,7 +148,7 @@ void rXMLWriter::WriteElementWithAttribute(const rString& name , const rString& 
 	Indent();
 	
 	m_stream << '<' << name << ' ';
-	WriteAttribute(attrName , str.str());
+	WriteAttribute(attrName , str.str().c_str());
 	m_stream << " />"<<std::endl;
 }
 

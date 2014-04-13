@@ -21,10 +21,12 @@ public:
 	void Clear();
 	
 	rVector3AnimationCurve& TranslationCurve();
-	rVector3AnimationCurve& RotationCurve();
+	rQuaternionAnimationCurve& RotationCurve();
 	rVector3AnimationCurve& ScaleCurve();
 
 	unsigned short InterpolateKeyframe(float animationTime, rMatrix4& transform) const;
+	
+	void EnsureValid();
 
 protected:
 	rVector3 InterpolateVector3(const rVector3AnimationCurve& curve, float animationTime) const;

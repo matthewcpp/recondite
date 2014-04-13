@@ -71,3 +71,29 @@ unsigned short rAnimationTrack::InterpolateKeyframe(float animationTime, rMatrix
 
 	return 0;
 }
+
+rVector3AnimationCurve& rAnimationTrack::TranslationCurve(){
+	return m_translationCurve;
+}
+
+rQuaternionAnimationCurve& rAnimationTrack::RotationCurve(){
+	return m_rotationCurve;
+}
+
+rVector3AnimationCurve& rAnimationTrack::ScaleCurve(){
+	return m_scaleCurve;
+}
+
+void rAnimationTrack::EnsureValid(){
+	if (m_translationCurve.size() == 0){
+		m_translationCurve.AddKey(0.0f, rVector3::ZeroVector);
+	}
+	
+	if (m_scaleCurve.size() == 0){
+		m_scaleCurve.AddKey(0.0f, rVector3::OneVector);
+	}
+	
+	if (m_rotationCurve.size() == 0){
+		m_rotationCurve.AddKey(0.0f, rQuaternion::Identity);
+	}
+}

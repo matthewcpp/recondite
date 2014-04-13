@@ -1,31 +1,25 @@
 #include "gtest/gtest.h"
+
+#include "rVector3.hpp"
 #include "rAnimationCurve.hpp"
 
-struct rTestVector{
-	rTestVector(){}
-	rTestVector(float xx, float yy, float zz) : x(xx) , y(yy), z (zz) {}
-	rTestVector(const rTestVector& v) : x(v.x) , y(v.y), z (v.z) {}
-
-	float x,y,z;
-};
-
-typedef rAnimationCurve<rTestVector> rTestVectorCurve;
+typedef rAnimationCurve<rVector3> rTestVectorCurve;
 typedef rTestVectorCurve::KeyType rTestKey;
 
 class Core_rAnimationCurve : public ::testing::Test{
 };
 
 void SetupCurve(rTestVectorCurve& curve){
-	curve.AddKey(0.0f, rTestVector(0,0,0));
-	curve.AddKey(0.1f, rTestVector(10,10,10));
-	curve.AddKey(0.2f, rTestVector(20,20,20));
-	curve.AddKey(0.3f, rTestVector(30,30,30));
-	curve.AddKey(0.4f, rTestVector(40,40,40));
+	curve.AddKey(0.0f, rVector3(0,0,0));
+	curve.AddKey(0.1f, rVector3(10,10,10));
+	curve.AddKey(0.2f, rVector3(20,20,20));
+	curve.AddKey(0.3f, rVector3(30,30,30));
+	curve.AddKey(0.4f, rVector3(40,40,40));
 }
 
 TEST(Core_rAnimationCurve, AddKey){
-	rTestVector t1(10,10,10);
-	rTestVector t2(20,20,20);
+	rVector3 t1(10,10,10);
+	rVector3 t2(20,20,20);
 	rTestVectorCurve curve;
 
 	size_t count = curve.NumKeys();
@@ -55,7 +49,7 @@ TEST(Core_rAnimationCurve, DetermineKeyframeEmpty){
 
 TEST(Core_rAnimationCurve, DetermineKeyframeOneKey){
 	rTestVectorCurve curve;
-	curve.AddKey(0.0f, rTestVector(0,0,0));
+	curve.AddKey(0.0f, rVector3(0,0,0));
 
 	size_t start, end;
 	bool result = curve.DetermineKeyframes(0.0f, start, end);
@@ -117,7 +111,7 @@ TEST(Core_rAnimationCurve, AllocateFrames){
 	rTestVectorCurve curve;
 
 	for (size_t i = 0; i < 4; i++){
-		curve.AddKey(float(i), rTestVector(i,i,i));
+		curve.AddKey(float(i), rVector3(i,i,i));
 	}
 
 	EXPECT_EQ (curve.NumKeys(), 4);
@@ -131,7 +125,7 @@ TEST(Core_rAnimationCurve, SetKey){
 	rTestVectorCurve curve;
 
 	curve.AllocateFrames(2);
-	rTestVector t1(1.0f, 2.0f, 3.0f);
+	rVector3 t1(1.0f, 2.0f, 3.0f);
 
 	EXPECT_TRUE(curve.SetKey(0, 1.0, t1));
 	const rTestVectorCurve::KeyType* key = curve.GetKey(0);

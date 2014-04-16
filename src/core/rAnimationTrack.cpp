@@ -84,16 +84,16 @@ rVector3AnimationCurve& rAnimationTrack::ScaleCurve(){
 	return m_scaleCurve;
 }
 
-void rAnimationTrack::EnsureValid(){
-	if (m_translationCurve.size() == 0){
+void rAnimationTrack::Finalize(){
+	if (m_translationCurve.NumKeys() == 0){
 		m_translationCurve.AddKey(0.0f, rVector3::ZeroVector);
 	}
 	
-	if (m_scaleCurve.size() == 0){
+	if (m_scaleCurve.NumKeys() == 0){
 		m_scaleCurve.AddKey(0.0f, rVector3::OneVector);
 	}
 	
-	if (m_rotationCurve.size() == 0){
+	if (m_rotationCurve.NumKeys() == 0){
 		m_rotationCurve.AddKey(0.0f, rQuaternion::Identity);
 	}
 }

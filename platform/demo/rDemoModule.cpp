@@ -39,7 +39,7 @@ void rDemoModule::LoadScene(const rString& sceneName, rScene* scene, rEngine& en
 	m_pawn = new rDemoPawn(NULL, "pawn" , rVector3::ZeroVector);
 	scene->AddActor(m_pawn);
 
-	m_pawn->AnimationPlayer()->SetAnimationSpeed(0.25f);
+	//m_pawn->AnimationPlayer()->SetAnimationSpeed(0.25f);
 	m_controller->SetPawn(m_pawn);
 
 	rArrayString models;

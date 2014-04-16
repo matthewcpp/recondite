@@ -27,6 +27,8 @@ private:
 	void ReadHeader(std::istream& stream, rSkeleton& skeleton);
 	void ReadBones(std::istream& stream, rSkeleton& skeleton);
 	void ReadAnimations(std::istream& stream, rSkeleton& skeleton);
+
+	void WriteAnimationCurve(const char* curveData, size_t keyCount, size_t keySize, std::ostream& stream);
 	
 private:
 	size_t boneCount;

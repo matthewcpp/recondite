@@ -19,6 +19,7 @@ public:
 
 	void assign(const char* str, int len);
 	size_t find(const rString& str, size_t pos = 0);
+	size_t find_last_of(const char* str) const;
 	rString& replace (size_t pos,  size_t len,  const rString& s);
 	
 	size_t size() const;

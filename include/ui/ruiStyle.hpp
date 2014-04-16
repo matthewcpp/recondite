@@ -5,6 +5,7 @@
 
 #include "rTypes.hpp"
 #include "rDefs.hpp"
+#include "rColor.hpp"
 
 #include "rFont.hpp"
 #include "rTexture2D.hpp"

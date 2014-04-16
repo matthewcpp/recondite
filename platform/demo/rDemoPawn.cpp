@@ -22,6 +22,7 @@ void rDemoPawn::Draw(rEngine& engine){
 
 		rVertexBoneLinkResult result = boneLinks.equal_range(i);
 
+		mat.LoadIdentity();
 		count = 0;
 		for (rVertexBoneLinkMap::const_iterator it = result.first; it != result.second; ++it){
 			const rVertexBoneLink& link = it->second;

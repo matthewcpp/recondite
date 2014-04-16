@@ -115,6 +115,7 @@ void rAnimationPlayer::UpdateTransformDataRec(rBone* parentBone, rBone* currentB
 	
 	if (parentBone){
 		currentBoneTransform =  m_transformData[parentBone->id] * currentBoneTransform;
+		//currentBoneTransform =  currentBoneTransform * m_transformData[parentBone->id];
 	}
 
 	m_transformData[currentBone->id] = currentBoneTransform ;//* currentBone->inverseBindTransform;

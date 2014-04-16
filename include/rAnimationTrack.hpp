@@ -26,7 +26,7 @@ public:
 
 	unsigned short InterpolateKeyframe(float animationTime, rMatrix4& transform) const;
 	
-	void EnsureValid();
+	void Finalize();
 
 protected:
 	rVector3 InterpolateVector3(const rVector3AnimationCurve& curve, float animationTime) const;

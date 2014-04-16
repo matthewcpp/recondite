@@ -67,3 +67,8 @@ float rAnimation::Duration() const{
 void rAnimation::SetDuration(float duration){
 	m_duration = duration;
 }
+
+void rAnimation::Finalize(){
+	for (rAnimationTrackMap::iterator it = m_tracks.begin(); it != m_tracks.end(); ++it)
+		it->second->Finalize();
+}

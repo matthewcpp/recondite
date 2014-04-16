@@ -70,6 +70,11 @@ void rSkeletonData::WriteBones(std::ostream& stream, const rSkeleton& skeleton){
 	}
 }
 
+void rSkeletonData::WriteAnimationCurve(const char* curveData, size_t keyCount, size_t keySize, std::ostream& stream){
+	stream.write((char*)&keyCount, 4);
+	stream.write(curveData, keyCount * keySize);
+}
+
 void rSkeletonData::WriteAnimations(std::ostream& stream, const rSkeleton& skeleton){
 	rArrayString animationNames;
 	skeleton.GetAnimationNames(animationNames);
@@ -93,17 +98,19 @@ void rSkeletonData::WriteAnimations(std::ostream& stream, const rSkeleton& skele
 
 		for (unsigned short b = 0; b < skeleton.NumBones(); b++){
 			rAnimationTrack* track = animation->GetTrack(b);
+			
 
 			if (track){
-				const rKeyframeVector& keyframes = track->Keyframes();
-				size = keyframes.size();
-
 				stream.write((char*)&b, 2);
-				stream.write((char*)&size, 4);
 
-				if (size > 0){
-					stream.write((char*)&keyframes[0], size * sizeof(rAnimationKeyframe));
-				}
+				rVector3AnimationCurve& translateCurve = track->TranslationCurve();
+				WriteAnimationCurve(translateCurve.GetConstDataPointer(), translateCurve.NumKeys(), sizeof(rVector3AnimationCurve::KeyType), stream);
+
+				rQuaternionAnimationCurve& rotationCurve = track->RotationCurve();
+				WriteAnimationCurve(rotationCurve.GetConstDataPointer(), rotationCurve.NumKeys(), sizeof(rQuaternionAnimationCurve::KeyType), stream);
+
+				rVector3AnimationCurve& scaleCurve = track->ScaleCurve();
+				WriteAnimationCurve(scaleCurve.GetConstDataPointer(), scaleCurve.NumKeys(), sizeof(rVector3AnimationCurve::KeyType), stream);
 			}
 		}
 	}
@@ -192,14 +199,22 @@ void rSkeletonData::ReadAnimations(std::istream& stream, rSkeleton& skeleton){
 
 		for (size_t i = 0; i < trackCount; i++){
 			stream.read((char*)&handle , 2);
-			stream.read((char*)&size , 4);
-
 			rAnimationTrack* track = animation->CreateTrack(handle);
-			track->AllocateFrames(size);
 
-			if (size > 0){
-				stream.read((char*)&track->Keyframes()[0], size * sizeof (rAnimationKeyframe));
-			}
+			stream.read((char*)&size , 4);
+			rVector3AnimationCurve& translateCurve = track->TranslationCurve();
+			translateCurve.AllocateFrames(size);
+			stream.read(translateCurve.GetDataPointer(), size * sizeof(rVector3AnimationCurve::KeyType));
+
+			stream.read((char*)&size , 4);
+			rQuaternionAnimationCurve& rotationCurve = track->RotationCurve();
+			rotationCurve.AllocateFrames(size);
+			stream.read(rotationCurve.GetDataPointer(), size * sizeof(rQuaternionAnimationCurve::KeyType));
+
+			stream.read((char*)&size , 4);
+			rVector3AnimationCurve& scaleCurve = track->ScaleCurve();
+			scaleCurve.AllocateFrames(size);
+			stream.read(scaleCurve.GetDataPointer(), size * sizeof(rVector3AnimationCurve::KeyType));
 		}
 	}
 }

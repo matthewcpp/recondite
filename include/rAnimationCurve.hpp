@@ -30,6 +30,8 @@ public:
 	void GetKeyValue(size_t index, float& time, T& value) const;
 
 	bool DetermineKeyframes(float animationTime, size_t& start, size_t& end) const;
+	const char* GetConstDataPointer() const;
+	char* GetDataPointer();
 
 
 private:
@@ -104,6 +106,23 @@ template <class T>
 void rAnimationCurve<T>::GetKeyValue(size_t index, float& time, T& value) const{
 	time = m_keys[index].time;
 	value = m_keys[index].value;
+}
+
+template <class T>
+const char* rAnimationCurve<T>::GetConstDataPointer() const{
+	if (m_keys.size() > 0)
+		return (const char*)&m_keys[0];
+	else
+		return NULL;
+
+}
+
+template <class T>
+char* rAnimationCurve<T>::GetDataPointer(){
+		if (m_keys.size() > 0)
+		return (char*)&m_keys[0];
+	else
+		return NULL;
 }
 
 #endif

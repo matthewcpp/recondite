@@ -33,6 +33,8 @@ public:
 
 	float Duration() const;
 	void SetDuration(float duration);
+
+	void Finalize();
 	
 private:
 	rString m_name;

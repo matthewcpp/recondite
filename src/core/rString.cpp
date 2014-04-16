@@ -143,6 +143,10 @@ size_t rString::find(const rString& str, size_t pos){
 	return m_str.find(str.c_str(), pos);
 }
 
+size_t rString::find_last_of(const char* str) const{
+	return m_str.find_last_of(str);
+}
+
 size_t rString::npos = std::numeric_limits<std::size_t>::max();
 
 std::ostream& operator<< (std::ostream& os, const rString& str){

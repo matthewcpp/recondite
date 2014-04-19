@@ -97,11 +97,13 @@ void rAnimationPlayer::SetSkeleton(rSkeleton* skeleton){
 }
 
 void rAnimationPlayer::UpdateTransformData(){
-	rBoneArray topLevelBones;
-	m_skeleton->GetTopLevelBones(topLevelBones);
+	if (m_skeleton){
+		rBoneArray topLevelBones;
+		m_skeleton->GetTopLevelBones(topLevelBones);
 
-	for (size_t i = 0; i < topLevelBones.size(); i++){
-		UpdateTransformDataRec(NULL, m_skeleton->GetBone(topLevelBones[i]->id));
+		for (size_t i = 0; i < topLevelBones.size(); i++){
+			UpdateTransformDataRec(NULL, m_skeleton->GetBone(topLevelBones[i]->id));
+		}
 	}
 }
 

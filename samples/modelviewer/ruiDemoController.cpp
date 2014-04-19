@@ -71,10 +71,23 @@ void ruiDemoController::SetActiveModel(const rString& name){
 	float radius = rMath::Max3(boundingBox.Width(), boundingBox.Height(), boundingBox.Depth()) * 2;
 
 	m_pawn->SetModel(model);
-	model->Skeleton()->GetAnimationNames(animationNames);
-	m_pawn->AnimationPlayer()->SetAnimation(animationNames[0]);
+	rSkeleton* skeleton = model->Skeleton();
 
-	m_animationPicker->SetOptions(animationNames);
+	if (skeleton){
+		skeleton->GetAnimationNames(animationNames);
+
+		if (animationNames.size() > 0){
+			m_pawn->AnimationPlayer()->SetAnimation(animationNames[0]);
+			m_animationPicker->SetOptions(animationNames);
+		}
+		else{
+			m_animationPicker->Clear();
+		}
+	}
+	else{
+		m_animationPicker->Clear();
+	}
+	
 
 	m_camera->Reset(boundingBox.Center(), radius, 0, 0);
 }

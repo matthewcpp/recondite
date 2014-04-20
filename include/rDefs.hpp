@@ -68,7 +68,7 @@ enum rButtonState {
 	rBUTTON_STATE_DOWN
 };
 
-/*
+
 #ifdef _MSC_VER
 	#ifdef RECONDITE_BUILD_SHARED
 		#define RECONDITE_API __declspec(dllexport)
@@ -78,7 +78,5 @@ enum rButtonState {
 #else
 	#define RECONDITE_API
 #endif
-	*/
-#define RECONDITE_API
 
 #endif

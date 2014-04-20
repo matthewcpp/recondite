@@ -39,7 +39,7 @@ int rViewport::GetSelectionRay(const rPoint& pos , rRay3& selectionRay) const{
     
 
     rVector3 source((float)pos.x , (float)pos.y , 0.0f);
-    rMatrixUtil::Unproject(source, model, projection, m_rect, nearPoint);
+    result = rMatrixUtil::Unproject(source, model, projection, m_rect, nearPoint);
 	
 	if (result == false)
 		return false;

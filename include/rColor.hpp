@@ -1,7 +1,9 @@
 #ifndef R_COLOR_HPP
 #define R_COLOR_HPP
 
-struct rColor{
+#include "rBuild.hpp"
+
+struct RECONDITE_API rColor{
 	rColor() {}
 	rColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a)
 	:red(r), green(g), blue (b), alpha(a){}

@@ -5,7 +5,7 @@
 #include <vector>
 #include <limits>
 
-#include "rDefs.hpp"
+#include "rBuild.hpp"
 
 class RECONDITE_API rString{
 public:
@@ -64,9 +64,9 @@ private:
 	std::string m_str;
 };
 
-std::ostream& operator << (std::ostream& os, const rString& str);
-std::istream& operator >> (std::istream& is, rString& str);
-rString operator +(const char* cstr, const rString& rstr);
+RECONDITE_API std::ostream& operator << (std::ostream& os, const rString& str);
+RECONDITE_API std::istream& operator >> (std::istream& is, rString& str);
+RECONDITE_API rString operator +(const char* cstr, const rString& rstr);
 
 
 #endif

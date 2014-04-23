@@ -1,8 +1,7 @@
 #ifndef RUI_WIDGET_HPP
 #define RUI_WIDGET_HPP
 
-#include "rTypes.hpp"
-#include "rDefs.hpp"
+#include "rBuild.hpp"
 
 #include "rRenderer.hpp"
 #include "rSize.hpp"
@@ -15,7 +14,7 @@
 
 #include "ui/ruiEventHandler.hpp"
 
-class ruiWidget : public ruiEventHandler{
+class RECONDITE_API ruiWidget : public ruiEventHandler{
 public:
 	ruiWidget(int id);
 	ruiWidget(int id, const rPoint& position, const rSize& size);
@@ -53,6 +52,9 @@ protected:
 protected:
 	rSize m_size;
 	rPoint m_position;
+
+private:
+	void InsertEventBinding(int eventType, ruiWidgetFunctor* functor);
 	
 private:
 	int m_id;
@@ -63,7 +65,7 @@ private:
 template <typename T>
 void ruiWidget::Bind(int eventType, T* target, typename ruiGenericFunctionPointer<T>::Type method){
 	ruiGenericWidgetFunctor<T>* functor = new ruiGenericWidgetFunctor<T>(target, method);
-	m_eventTable.insert(std::make_pair(eventType , (ruiWidgetFunctor*)functor));
+	InsertEventBinding(eventType, functor);
 }
 
 #endif

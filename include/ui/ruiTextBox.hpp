@@ -1,9 +1,11 @@
 #ifndef RUI_TEXTBOX_HPP
 #define RUI_TEXTBOX_HPP
 
+#include "rBuild.hpp"
+
 #include "ui/ruiText.hpp"
 
-class ruiTextBox : public ruiText{
+class RECONDITE_API ruiTextBox : public ruiText{
 public:
 	
 	ruiTextBox(int id, const rPoint& position, const rSize& size);

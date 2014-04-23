@@ -3,14 +3,13 @@
 
 #include <map>
 
-#include "rTypes.hpp"
-#include "rDefs.hpp"
+#include "rBuild.hpp"
 #include "rColor.hpp"
 
 #include "rFont.hpp"
 #include "rTexture2D.hpp"
 
-union ruiStyleProperty{
+union RECONDITE_API ruiStyleProperty{
 	int m_int;
 	float m_float;
 	unsigned char m_color[4];

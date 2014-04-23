@@ -1,7 +1,9 @@
 #ifndef R_TIME_HPP
 #define R_TIME_HPP
 
-class rTime{
+#include "rBuild.hpp"
+
+class RECONDITE_API rTime{
 public:
 	rTime();
 

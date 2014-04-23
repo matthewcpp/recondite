@@ -1,7 +1,7 @@
 #ifndef R_VIEWPORT_HPP
 #define R_VIEWPORT_HPP
 
-#include "rTypes.hpp"
+#include "rBuild.hpp"
 
 #include "rPoint.hpp"
 #include "rSize.hpp"
@@ -19,7 +19,7 @@ enum rViewportType{
 	rVIEWPORT_2D
 };
 
-class rViewport{
+class RECONDITE_API rViewport{
 public:
 	rViewport(rViewportType type = rVIEWPORT_PERSP);
 

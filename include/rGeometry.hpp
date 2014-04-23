@@ -3,14 +3,16 @@
 
 #include <map>
 
-#include "rTypes.hpp"
-#include "rDefs.hpp"
+#include "rBuild.hpp"
+#include "rString.hpp"
+#include "rArrayString.hpp"
 
 #include "rAsset.hpp"
 
 #include "rVertexBoneLink.hpp"
 
-class rElementBuffer{
+
+class RECONDITE_API rElementBuffer{
 public:
 	rElementBuffer(unsigned int buffer, size_t sz, rGeometryType t) : m_bufferId(buffer), m_size(sz), m_geometryType(t){}
 	
@@ -27,7 +29,7 @@ private:
 
 typedef std::map<rString, rElementBuffer*> rElementBufferIdMap;
 
-class rGeometry : public rAsset{
+class RECONDITE_API rGeometry : public rAsset{
 public:
 	rGeometry (unsigned int vertexBufferId, unsigned int vertexBoneLinkBufferId, int assetid, const rString& name, const rString& path);
 	

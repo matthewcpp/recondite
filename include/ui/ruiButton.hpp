@@ -1,13 +1,13 @@
 #ifndef RUI_BUTTON_HPP
 #define RUI_BUTTON_HPP
 
-#include "rTypes.hpp"
-#include "rDefs.hpp"
+#include "rString.hpp"
+#include "rBuild.hpp"
 
 #include "ui/ruiWidget.hpp"
 #include "ui/ruiEventType.hpp"
 
-class ruiButton : public ruiWidget{
+class RECONDITE_API ruiButton : public ruiWidget{
 public:
 	ruiButton(const rString& text, int id, const rPoint& position, const rSize& size);
 	

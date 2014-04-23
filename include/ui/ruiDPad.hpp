@@ -3,13 +3,15 @@
 
 #include <map>
 
+#include "rBuild.hpp"
+
 #include "ui/ruiWidget.hpp"
 #include "input/rDPad.hpp"
 #include "rEngine.hpp"
 
 typedef std::map<int, rDPadButton> rTouchDPadButtonMap;
 
-class ruiDPad : public ruiWidget{
+class RECONDITE_API ruiDPad : public ruiWidget{
 public:
 	ruiDPad(rDPad* dpad, int id, const rPoint& position, const rSize& size);
 

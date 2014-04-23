@@ -3,6 +3,8 @@
 
 #include <map>
 
+#include "rBuild.hpp"
+
 #include "rInput.hpp"
 #include "rEngine.hpp"
 
@@ -15,7 +17,7 @@
 typedef std::map<rViewport* , ruiOverlay*> ruiViewportOverlayMap;
 
 
-class ruiOverlayManager : public ruiInput {
+class RECONDITE_API ruiOverlayManager : public ruiInput {
 public:
 	ruiOverlayManager();
 	~ruiOverlayManager();

@@ -4,12 +4,11 @@
 #include <vector>
 #include <cstring>
 
-#include "rTypes.hpp"
-#include "rDefs.hpp"
+#include "rBuild.hpp"
 
 #include "rVector2.hpp"
 
-struct rFontGlyph{
+struct RECONDITE_API rFontGlyph{
 public:
 	rFontGlyph();
 	rFontGlyph(const rFontGlyph& g);

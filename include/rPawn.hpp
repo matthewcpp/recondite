@@ -1,11 +1,12 @@
 #ifndef R_PAWN_HPP
 #define R_PAWN_HPP
 
+#include "rBuild.hpp"
 #include "rActor3.hpp"
 #include "rAnimationPlayer.hpp"
 #include "rModel.hpp"
 
-class rPawn : public rActor3{
+class RECONDITE_API rPawn : public rActor3{
 public:
 	rPawn(rModel* model, const rString& name , const rVector3& position);
 	

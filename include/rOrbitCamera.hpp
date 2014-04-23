@@ -1,9 +1,10 @@
 #ifndef R_ORBITCAMERA_HPP
 #define R_ORBITCAMERA_HPP
 
+#include "rBuild.hpp"
 #include "rCamera.hpp"
 
-class rOrbitCamera : public rCamera {
+class RECONDITE_API rOrbitCamera : public rCamera {
 public:
 	rOrbitCamera(const rString& name , const rVector3& position);
 

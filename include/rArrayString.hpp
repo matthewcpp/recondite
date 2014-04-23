@@ -3,6 +3,7 @@
 
 #include <vector>
 
+#include "rBuild.hpp"
 #include "rString.hpp"
 
 class RECONDITE_API rArrayString{

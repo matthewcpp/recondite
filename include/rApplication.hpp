@@ -1,6 +1,8 @@
 #ifndef R_APPLICATION_HPP
 #define R_APPLICATION_HPP
 
+#include "rBuild.hpp"
+
 #include "rEngine.hpp"
 #include "rModule.hpp"
 #include "rGraphicsDevice.hpp"
@@ -9,7 +11,7 @@
 
 #include "interface/riApplication.hpp"
 
-class rApplication : public riApplication{
+class RECONDITE_API rApplication : public riApplication{
 public:
 	virtual unsigned long GetTimeMiliseconds() const = 0;
 	virtual void Update();

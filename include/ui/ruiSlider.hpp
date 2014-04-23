@@ -1,14 +1,13 @@
 #ifndef RUI_SLIDER_HPP
 #define RUI_SLIDER_HPP
 
-#include "rTypes.hpp"
-#include "rDefs.hpp"
+#include "rBuild.hpp"
 #include "rMathUtil.hpp"
 
 #include "ui/ruiWidget.hpp"
 #include "ui/ruiEventType.hpp"
 
-class ruiSlider : public ruiWidget{
+class RECONDITE_API ruiSlider : public ruiWidget{
 public:
 	ruiSlider(int id, const rPoint& position, const rSize& size);
 	

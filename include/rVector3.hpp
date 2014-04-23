@@ -3,7 +3,9 @@
 
 #include <cmath>
 
-struct rVector3{
+#include "rBuild.hpp"
+
+struct RECONDITE_API rVector3{
 	rVector3(){}
 	rVector3(float xx, float yy , float zz) : x(xx) , y (yy) , z (zz){}
 

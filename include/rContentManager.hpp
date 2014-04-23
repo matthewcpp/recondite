@@ -5,6 +5,7 @@
 #include <list>
 #include <fstream>
 
+#include "rBuild.hpp"
 #include "rTypes.hpp"
 #include "rDefs.hpp"
 
@@ -46,7 +47,7 @@ typedef std::list<rContentListener*> rContentListenerList;
 typedef rContentListenerList::iterator rContentListenerItr;
 typedef rContentListenerList::const_iterator rContentListenerConstItr;
 
-class rContentManager : public riContentManager{
+class RECONDITE_API rContentManager : public riContentManager{
 public:
 	rContentManager(rGraphicsDevice* graphicsDevice);
 	virtual ~rContentManager();

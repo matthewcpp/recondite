@@ -55,7 +55,6 @@ void rAnimationPlayer::Stop(){
 	m_playing = false;
 		
 	for (size_t i = 0; i < m_transformData.size(); i++){
-		m_keyframeInfo[i] = 0;
 		m_transformData[i].LoadIdentity();
 	}
 }
@@ -88,9 +87,7 @@ void rAnimationPlayer::SetSkeleton(rSkeleton* skeleton){
 		size_t numBones = skeleton->NumBones();
 
 		m_transformData.resize(numBones);
-		m_keyframeInfo.resize(numBones);
 
-		memset(&m_keyframeInfo[0], 0, m_keyframeInfo.size() * sizeof (rUnsignedShortArray::value_type));
 		for (size_t i = 0; i < m_transformData.size(); i++)
 			m_transformData[i].LoadIdentity();
 	}
@@ -112,7 +109,7 @@ void rAnimationPlayer::UpdateTransformDataRec(rBone* parentBone, rBone* currentB
 	rMatrix4 currentBoneTransform;
 
 	if (track){
-		m_keyframeInfo[currentBone->id] = track->InterpolateKeyframe(m_animationTime, currentBoneTransform);
+		track->InterpolateKeyframe(m_animationTime, currentBoneTransform);
 	}
 	
 	if (parentBone){
@@ -132,8 +129,13 @@ const rAnimation* rAnimationPlayer::CurrentAnimation() const{
 	return m_currentAnimation;
 }
 
-const rMatrix4Vector& rAnimationPlayer::GetTransformData() const{
-	return m_transformData;
+const rMatrix4* rAnimationPlayer::GetTransformData() const{
+	if (m_transformData.size() > 0){
+		return &m_transformData[0];
+	}
+	else{
+		return NULL;
+	}
 }
 
 float rAnimationPlayer::AnimationSpeed() const{

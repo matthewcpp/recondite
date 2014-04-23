@@ -1,6 +1,8 @@
 #ifndef R_ANIMATIONTRACK_CPP
 #define R_ANIMATIONTRACK_CPP
 
+#include "rBuild.hpp"
+
 #include "rVector3.hpp"
 #include "rQuaternion.hpp"
 #include "rMatrix4.hpp"
@@ -12,7 +14,7 @@
 typedef rAnimationCurve<rVector3> rVector3AnimationCurve;
 typedef rAnimationCurve<rQuaternion> rQuaternionAnimationCurve;
 
-class rAnimationTrack{
+class RECONDITE_API rAnimationTrack{
 public:
 	rAnimationTrack(unsigned short handle);
 	

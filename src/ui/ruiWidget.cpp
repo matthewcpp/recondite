@@ -42,6 +42,10 @@ void ruiWidget::Trigger(int eventType){
 	for (ruiFunctorMap::iterator it = result.first; it != result.second; ++it)
 		it->second->Call(this);
 }
+void ruiWidget::InsertEventBinding(int eventType, ruiWidgetFunctor* functor){
+	m_eventTable.insert(std::make_pair(eventType , functor));
+}
+
 
 ruiIOverlay* ruiWidget::widgetManager = NULL;
 

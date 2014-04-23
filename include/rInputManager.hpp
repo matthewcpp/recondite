@@ -4,6 +4,7 @@
 #include <map>
 #include <vector>
 
+#include "rBuild.hpp"
 #include "rTypes.hpp"
 #include "rDefs.hpp"
 
@@ -22,7 +23,7 @@
 typedef std::map<unsigned int , rTouch*> rTouchMap;
 typedef std::vector<rController*> rControllerArray;
 
-class rInputManager : public rInput{
+class RECONDITE_API rInputManager : public rInput{
 public:
 
 	rInputManager();

@@ -1,6 +1,8 @@
 #ifndef RI_SCENE_HPP
 #define RI_SCENE_HPP
 
+#include "rString.hpp"
+
 class rActor3;
 
 class riScene{

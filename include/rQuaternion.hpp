@@ -3,10 +3,11 @@
 
 #include <cmath>
 
+#include "rBuild.hpp"
 #include "rVector3.hpp"
 #include "rMathUtil.hpp"
 
-struct rQuaternion{
+struct RECONDITE_API rQuaternion{
 	rQuaternion(){};
 	rQuaternion(float xx , float yy , float zz , float ww) : x(xx) , y(yy) , z(zz) , w(ww){};
 	rQuaternion(const rVector3& eulerAngles);

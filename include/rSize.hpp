@@ -1,7 +1,9 @@
 #ifndef R_SIZE_HPP
 #define R_SIZE_HPP
 
-struct rSize{
+#include "rBuild.hpp"
+
+struct RECONDITE_API rSize{
 	rSize(){}
 	rSize(int xx , int yy) : x(xx) , y(yy){}
 	

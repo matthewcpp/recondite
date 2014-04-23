@@ -5,8 +5,8 @@
 #include <stdarg.h>
 #include <cstdio>
 
-#include "rTypes.hpp"
-#include "rDefs.hpp"
+#include "rBuild.hpp"
+#include "rString.hpp"
 
 #include "log/rLogTarget.hpp"
 

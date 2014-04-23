@@ -1,6 +1,8 @@
 #ifndef RUI_ANALOGSTICK_HPP
 #define RUI_ANALOGSTICK_HPP
 
+#include "rBuild.hpp"
+
 #include "ui/ruiWidget.hpp"
 #include "input/rController.hpp"
 #include "rMathUtil.hpp"
@@ -10,7 +12,7 @@
 #include "rCircle2.hpp"
 #include "rLog.hpp"
 
-class ruiAnalogStick : public ruiWidget{
+class RECONDITE_API ruiAnalogStick : public ruiWidget{
 public:
 
 	ruiAnalogStick(rController* controller, size_t stickIndex, int id, const rPoint& position, const rSize& size);

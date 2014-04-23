@@ -1,13 +1,13 @@
 #ifndef R_CAMERA_HPP
 #define R_CAMERA_HPP
 
-#include "rTypes.hpp"
+#include "rBuild.hpp"
 #include "rActor3.hpp"
 
 #include "interface/riCamera.hpp"
 #include "rMathUtil.hpp"
 
-class rCamera : public rActor3, public riCamera{
+class RECONDITE_API rCamera : public rActor3, public riCamera{
 public:
 	rCamera(const rString& name , const rVector3& position);
 
@@ -20,7 +20,7 @@ protected:
 	rVector3 m_target;
 };
 
-class rViewCamera : public rCamera{
+class RECONDITE_API rViewCamera : public rCamera{
 public:
 	rViewCamera(const rString& name , const rVector3& position);
 
@@ -28,7 +28,7 @@ public:
 	virtual rVector3 Target() const;
 };
 
-class rTargetCamera : public rCamera{
+class RECONDITE_API rTargetCamera : public rCamera{
 public: 
 	rTargetCamera(const rString& name , const rVector3& position);
 	

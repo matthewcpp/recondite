@@ -3,7 +3,7 @@
 
 #include <algorithm>
 
-#include "rTypes.hpp"
+#include "rBuild.hpp"
 #include "rRectangle2.hpp"
 #include "rCircle2.hpp"
 #include "rMatrix3.hpp"
@@ -18,10 +18,10 @@
 #define rMATH_ZERO_TOLERANCE 1e-06f
 
 namespace rMath{
-	float DegreeToRad(float deg);
-	float RadToDeg(float rad);
+	 float RECONDITE_API DegreeToRad(float deg);
+	float RECONDITE_API RadToDeg(float rad);
 
-	float ConvertRange(float value, float inMin, float inMax, float outMin, float outMax);
+	float RECONDITE_API ConvertRange(float value, float inMin, float inMax, float outMin, float outMax);
 
 	float Max3(float n1 , float n2, float n3);
 

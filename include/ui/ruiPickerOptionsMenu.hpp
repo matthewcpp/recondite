@@ -1,8 +1,7 @@
 #ifndef RUI_PICKEROPTIONSMENU_HPP
 #define RUI_PICKEROPTIONSMENU_HPP
 
-#include "rTypes.hpp"
-#include "rDefs.hpp"
+#include "rBuild.hpp"
 
 #include "ui/ruiWidget.hpp"
 #include "ui/ruiBase.hpp"
@@ -10,7 +9,7 @@
 #include "rEngine.hpp"
 
 
-class ruiPickerOptionsMenu : public ruiWidget{
+class RECONDITE_API ruiPickerOptionsMenu : public ruiWidget{
 public:
 	ruiPickerOptionsMenu(ruiIControlWithOptions* picker, int id);
 	

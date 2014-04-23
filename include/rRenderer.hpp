@@ -3,8 +3,7 @@
 
 #include <climits>
 
-#include "rDefs.hpp"
-#include "rTypes.hpp"
+#include "rBuild.hpp"
 
 #include "rViewport.hpp"
 #include "rGraphicsDevice.hpp"
@@ -20,7 +19,7 @@
 #include "rSkeleton.hpp"
 #include "rAnimationPlayer.hpp"
 
-class rRenderer {
+class RECONDITE_API rRenderer {
 public:
 	rRenderer(rGraphicsDevice* graphicsDevice, rContentManager* contentManager);
 	

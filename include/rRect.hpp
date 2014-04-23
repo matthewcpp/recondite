@@ -1,10 +1,11 @@
 #ifndef R_RECT_HPP
 #define R_RECT_HPP
 
+#include "rBuild.hpp"
 #include "rPoint.hpp"
 #include "rSize.hpp"
 
-struct rRect{
+struct RECONDITE_API rRect{
 	rRect() {}
 	rRect(int xx, int yy, int wwidth, int hheight) : x(xx), y(yy), width(wwidth), height(hheight) {}
 	rRect(const rPoint& point, const rSize& size);

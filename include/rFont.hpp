@@ -5,8 +5,8 @@
 #include <algorithm>
 #include <climits>
 
-#include "rTypes.hpp"
-#include "rDefs.hpp"
+#include "rBuild.hpp"
+#include "rString.hpp"
 
 #include "rFontGlyph.hpp"
 #include "rTexture2D.hpp"
@@ -16,7 +16,7 @@
 
 typedef std::map<int, rFontGlyph*> rFontGlyphMap;
 
-class rFont : public rAsset{
+class RECONDITE_API rFont : public rAsset{
 public:
 	rFont(rTexture2D* texture, size_t size, int assetid, const rString& name, const rString& path);
 	~rFont();

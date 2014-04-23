@@ -1,13 +1,13 @@
 #ifndef R_ACTOR3_HPP
 #define R_ACTOR3_HPP
 
-#include "rTypes.hpp"
+#include "rBuild.hpp"
 #include "rVector3.hpp"
 #include "rQuaternion.hpp"
 
 #include "rEngine.hpp"
 
-class rActor3{
+class RECONDITE_API rActor3{
 public:
 	rActor3(const rString& name , const rVector3& position);
 	virtual ~rActor3(){}

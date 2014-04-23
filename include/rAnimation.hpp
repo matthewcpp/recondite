@@ -4,8 +4,8 @@
 #include <vector>
 #include <map>
 
-#include "rTypes.hpp"
-#include "rDefs.hpp"
+#include "rBuild.hpp"
+#include "rString.hpp"
 
 #include "rVector3.hpp"
 #include "rQuaternion.hpp"
@@ -16,7 +16,7 @@
 
 typedef std::map<unsigned short, rAnimationTrack*> rAnimationTrackMap;
 
-class rAnimation{
+class RECONDITE_API rAnimation{
 public:
 	rAnimation(const rString& name);
 	rAnimation(const rString& name, float duration);

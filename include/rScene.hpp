@@ -4,8 +4,7 @@
 #include <map>
 #include <vector>
 
-#include "rTypes.hpp"
-#include "rDefs.hpp"
+#include "rBuild.hpp"
 
 #include "interface/riScene.hpp"
 #include "rActor3.hpp"
@@ -13,7 +12,7 @@
 typedef std::map<rString, rActor3*> rActorMap;
 typedef std::vector<rActor3*> rActorArray;
 
-class rScene : public riScene{
+class RECONDITE_API rScene : public riScene{
 public:
 	void Update(rEngine& engine);
 	void Draw(rEngine& engine);

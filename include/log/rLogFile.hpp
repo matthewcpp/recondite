@@ -3,13 +3,12 @@
 
 #include <fstream>
 
-#include "rTypes.hpp"
 #include "rDefs.hpp"
 
 #include "log/rLogTarget.hpp"
 #include "rLogChain.hpp"
 
-class rLogFile : public rLogTarget{
+class RECONDITE_API rLogFile : public rLogTarget{
 public:
 	rLogFile(const rString& path);
 	

@@ -1,12 +1,11 @@
 #ifndef RUI_TEXT_HPP
 #define RUI_TEXT_HPP
 
-#include "rTypes.hpp"
-#include "rDefs.hpp"
+#include "rBuild.hpp"
 
 #include "ui/ruiWidget.hpp"
 
-class ruiText : public ruiWidget {
+class RECONDITE_API ruiText : public ruiWidget {
 public:
 	ruiText(int id, const rPoint& position, const rSize& size);
 	ruiText(const rString& text, int id, const rPoint& position, const rSize& size);

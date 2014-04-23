@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "rTypes.hpp"
+#include "rBuild.hpp"
 #include "rMatrix4.hpp"
 
 #include "rSkeleton.hpp"
@@ -12,7 +12,7 @@
 
 typedef std::vector<rMatrix4> rMatrix4Vector;
 
-class rAnimationPlayer{
+class RECONDITE_API rAnimationPlayer{
 public:
 	rAnimationPlayer();
 
@@ -31,7 +31,7 @@ public:
 	void Update(const rTime& time);
 	void Tick(float time);
 
-	const rMatrix4Vector& GetTransformData() const;
+	const rMatrix4* GetTransformData() const;
 
 	float AnimationTime() const;
 	void SetAnimationTime(float amimationTime);
@@ -49,7 +49,6 @@ private:
 	rAnimation* m_currentAnimation;
 
 	rMatrix4Vector m_transformData;
-	rUnsignedShortArray m_keyframeInfo;
 
 	bool m_isLooping;
 	bool m_playing;

@@ -1,11 +1,13 @@
 #ifndef RUI_EVENTHANDLER_HPP
 #define RUI_EVENTHANDLER_HPP
 
+#include "rBuild.hpp"
+
 #include "input/rMouse.hpp"
 #include "input/rTouch.hpp"
 #include "input/rKeyboard.hpp"
 
-class ruiEventHandler{
+class RECONDITE_API ruiEventHandler{
 public:
 	virtual void OnTouchDown(const rTouch& touch) {}
 	virtual void OnTouchMove(const rTouch& touch) {}

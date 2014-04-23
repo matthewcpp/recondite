@@ -3,7 +3,9 @@
 
 #include <cmath>
 
-struct rPoint{
+#include "rBuild.hpp"
+
+struct RECONDITE_API rPoint{
 	rPoint(){}
 	rPoint(int xx , int yy) : x(xx) , y(yy){}
 	

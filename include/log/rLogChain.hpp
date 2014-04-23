@@ -11,7 +11,7 @@
 
 typedef std::list<rLogTarget*> rLogTargetList;
 
-class rLogChain : public rLogTarget {
+class RECONDITE_API rLogChain : public rLogTarget {
 public:
 	void AddTarget(rLogTarget* target);
 	

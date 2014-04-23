@@ -3,18 +3,16 @@
 
 #include <vector>
 
-#include "rTypes.hpp"
-#include "rDefs.hpp"
+#include "rBuild.hpp"
 
 #include "rEngine.hpp"
 
 #include "ruiBase.hpp"
 #include "ruiWidget.hpp"
 
-
 typedef std::vector<ruiWidget*> rWidgetVector;
 
-class ruiOverlay : public ruiIOverlay{
+class RECONDITE_API ruiOverlay : public ruiIOverlay{
 public:
 	ruiOverlay();
 

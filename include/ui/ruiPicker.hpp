@@ -1,8 +1,7 @@
 #ifndef RUI_PICKER_HPP
 #define RUI_PICKER_HPP
 
-#include "rTypes.hpp"
-#include "rDefs.hpp"
+#include "rBuild.hpp"
 
 #include "rEngine.hpp"
 
@@ -11,7 +10,7 @@
 
 #include "ui/ruiEventType.hpp"
 
-class ruiPicker : public ruiWidget, public ruiIControlWithOptions{
+class RECONDITE_API ruiPicker : public ruiWidget, public ruiIControlWithOptions{
 public:
 	ruiPicker(int id, const rPoint& position, const rSize& size);
 	ruiPicker(rArrayString& options, int id, const rPoint& position, const rSize& size);

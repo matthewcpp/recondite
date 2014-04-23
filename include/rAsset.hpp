@@ -1,10 +1,11 @@
 #ifndef R_ASSET_HPP
 #define R_ASSET_HPP
 
-#include "rTypes.hpp"
+#include "rBuild.hpp"
 #include "rDefs.hpp"
+#include "rString.hpp"
 
-class rAsset{
+class RECONDITE_API rAsset{
 public:
 	rAsset(int assetid, const rString& name, const rString& path);
 	virtual ~rAsset() {}

@@ -15,15 +15,15 @@ public:
 	virtual size_t Pos() = 0;
 	virtual bool IsOk() const = 0;
 
-	rIStream& operator >> (char c);
-	rIStream& operator >> (unsigned char c);
-	rIStream& operator >> (short s);
-	rIStream& operator >> (unsigned short s);
-	rIStream& operator >> (int i);
-	rIStream& operator >> (unsigned int i);
-	rIStream& operator >> (float f);
+	virtual rIStream& operator >> (char& c) = 0;
+	virtual rIStream& operator >> (unsigned char& c) = 0;
+	virtual rIStream& operator >> (short& s) = 0;
+	virtual rIStream& operator >> (unsigned short& s) = 0;
+	virtual rIStream& operator >> (int& i) = 0;
+	virtual rIStream& operator >> (unsigned int& i) = 0;
+	virtual rIStream& operator >> (float& f) = 0;
 
-	operator bool() const;
+	virtual operator bool() const = 0;
 };
 
 #endif

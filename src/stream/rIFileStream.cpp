@@ -29,7 +29,7 @@ int rIFileStream::Peek(){
 }
 
 void rIFileStream::Seek(size_t pos){
-	m_file.seekg(std::ios::beg, pos);
+	m_file.seekg(pos);
 }
 
 size_t rIFileStream::Pos(){
@@ -38,4 +38,43 @@ size_t rIFileStream::Pos(){
 
 bool rIFileStream::IsOk() const{
 	return !m_file.fail();
+}
+
+rIStream& rIFileStream::operator >> (char& c){
+	m_file >> c;
+	return *this;
+}
+
+rIStream& rIFileStream::operator >> (unsigned char& c){
+	m_file >> c;
+	return *this;
+}
+
+rIStream& rIFileStream::operator >> (short& s){
+	m_file >> s;
+	return *this;
+}
+
+rIStream& rIFileStream::operator >> (unsigned short& s){
+	m_file >> s;
+	return *this;
+}
+
+rIStream& rIFileStream::operator >> (int& i){
+	m_file >> i;
+	return *this;
+}
+
+rIStream& rIFileStream::operator >> (unsigned int& i){
+	m_file >> i;
+	return *this;
+}
+
+rIStream& rIFileStream::operator >> (float& f){
+	m_file >> f;
+	return *this;
+}
+
+rIFileStream::operator bool() const{
+	return IsOk();
 }

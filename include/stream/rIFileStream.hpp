@@ -23,6 +23,16 @@ public:
 	virtual size_t Pos();
 	virtual bool IsOk() const;
 
+	virtual rIStream& operator >> (char& c);
+	virtual rIStream& operator >> (unsigned char& c);
+	virtual rIStream& operator >> (short& s);
+	virtual rIStream& operator >> (unsigned short& s);
+	virtual rIStream& operator >> (int& i) = 0;
+	virtual rIStream& operator >> (unsigned int& i);
+	virtual rIStream& operator >> (float& f);
+
+	virtual operator bool() const;
+
 private:
 	std::ifstream m_file;
 };

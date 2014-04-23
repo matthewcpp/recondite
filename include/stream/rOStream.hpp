@@ -23,7 +23,7 @@ public:
 	virtual rOStream& operator << (unsigned short s) = 0;
 	virtual rOStream& operator << (int i) = 0;
 	virtual rOStream& operator << (unsigned int i) = 0;
-	virtual rOStream& operator << (float f) =0;
+	virtual rOStream& operator << (float f) = 0;
 
 	virtual operator bool() const = 0;
 };

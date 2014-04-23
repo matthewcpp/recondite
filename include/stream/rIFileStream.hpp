@@ -1,0 +1,30 @@
+#ifndef R_IFILESTREAM_HPP
+#define R_IFILESTREAM_HPP
+
+#include <fstream>
+
+#include "rBuild.hpp"
+#include "stream/rIStream.hpp"
+
+#include "rString.hpp"
+
+class RECONDITE_API rIFileStream : public rIStream{
+public:
+	rIFileStream();
+	rIFileStream(const rString& path);
+
+	void Open(const rString& path);
+	void Close();
+	
+	virtual rIStream& Read(char* buffer, size_t size);
+	virtual size_t ReadCount() const;
+	virtual int Peek();
+	virtual void Seek(size_t pos);
+	virtual size_t Pos();
+	virtual bool IsOk() const;
+
+private:
+	std::ifstream m_file;
+};
+
+#endif

@@ -36,6 +36,10 @@ set(input_sources)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/input)
 source_group (input FILES ${input_sources})
 
+set(stream_sources)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/stream)
+source_group (stream FILES ${stream_sources})
+
 #add_library( recondite_static STATIC ${recondite_files})
 add_library( recondite SHARED ${recondite_files})
 

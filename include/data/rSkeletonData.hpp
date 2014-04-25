@@ -3,12 +3,12 @@
 
 #include <fstream>
 
-#include "rTypes.hpp"
-#include "rDefs.hpp"
+#include "rBuild.hpp"
+#include "rString.hpp"
 
 #include "rSkeleton.hpp"
 
-class rSkeletonData{
+class RECONDITE_API rSkeletonData{
 public:
 	rContentError ReadFromFile(const rString& path, rSkeleton& skeleton);
 	rContentError ReadFromStream(std::istream& stream, rSkeleton& skeleton);

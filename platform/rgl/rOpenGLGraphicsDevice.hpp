@@ -20,9 +20,11 @@
 	#include <GLES2/gl2.h>
 #endif
 
+#include "rBuild.hpp"
 
 #include "rTypes.hpp"
 #include "rDefs.hpp"
+#include "rString.hpp"
 
 #include "rLog.hpp"
 
@@ -36,7 +38,7 @@
 
 #include "data/rImmediateBuffer.hpp"
 
-class rOpenGLGraphicsDevice : public rGraphicsDevice{
+class RECONDITE_API rOpenGLGraphicsDevice : public rGraphicsDevice{
 public:
 	rOpenGLGraphicsDevice();
 	

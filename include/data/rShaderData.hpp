@@ -3,10 +3,11 @@
 
 #include <fstream>
 
-#include "rTypes.hpp"
+#include "rBuild.hpp"
 #include "rDefs.hpp"
+#include "rString.hpp"
 
-class rShaderData{
+class RECONDITE_API rShaderData{
 public:
 	rShaderData();
 	rShaderData(const rString& path);

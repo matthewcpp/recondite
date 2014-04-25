@@ -6,14 +6,15 @@
 #include <cstring>
 #include <utility>
 
-#include "rTypes.hpp"
+#include "rBuild.hpp"
 #include "rDefs.hpp"
+#include "rTypes.hpp"
 
 #include "rVector2.hpp"
 #include "rVector3.hpp"
 #include "rMatrix4.hpp"
 
-class rImmediateBuffer {
+class RECONDITE_API rImmediateBuffer {
 public:
 	rImmediateBuffer();
 	rImmediateBuffer(rGeometryType geometryType, size_t vertexSize, bool texCoords);

@@ -4,12 +4,13 @@
 #include <map>
 #include <vector>
 
-#include "rTypes.hpp"
+#include "rBuild.hpp"
 #include "rDefs.hpp"
+#include "rString.hpp"
 
 #include "rAsset.hpp"
 
-class rTexture2D : public rAsset{
+class RECONDITE_API rTexture2D : public rAsset{
 public:
 	
 	rTexture2D(int width, int height , int bpp, unsigned int graphicsDeviceId, int assetid, const rString& name, const rString& path);

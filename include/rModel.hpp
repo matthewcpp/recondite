@@ -3,8 +3,10 @@
 
 #include <map>
 
+#include "rBuild.hpp"
 #include "rTypes.hpp"
 #include "rDefs.hpp"
+#include "rString.hpp"
 
 #include "rAsset.hpp"
 #include "rGeometry.hpp"
@@ -12,7 +14,7 @@
 #include "rSkeleton.hpp"
 #include "rAlignedBox3.hpp"
 
-struct rMesh {
+struct RECONDITE_API rMesh {
 	rMesh(const rString& n, const rString& buf, rMaterial* mat, const rAlignedBox3& box);
 	
 	rString name;
@@ -23,7 +25,7 @@ struct rMesh {
 
 typedef std::map<rString, rMesh*> rMeshMap;
 
-class rModel : public rAsset{
+class RECONDITE_API rModel : public rAsset{
 public:
 	rModel(rGeometry* geometry, int assetid, const rString& name, const rString& path);
 	~rModel();

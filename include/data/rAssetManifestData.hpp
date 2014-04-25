@@ -3,10 +3,11 @@
 
 #include <vector>
 
-#include "rTypes.hpp"
+#include "rBuild.hpp"
 #include "rDefs.hpp"
+#include "rString.hpp"
 
-struct rAssetManifestEntry {
+struct RECONDITE_API rAssetManifestEntry {
 	rAssetType type;
 	rString name;
 	rString path;
@@ -16,7 +17,7 @@ struct rAssetManifestEntry {
 
 typedef std::vector<rAssetManifestEntry*> rAssetManifestList;
 
-class rAssetManifestData {
+class RECONDITE_API rAssetManifestData {
 public:
 	~rAssetManifestData();
 

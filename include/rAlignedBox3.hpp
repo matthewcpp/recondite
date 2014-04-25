@@ -3,10 +3,12 @@
 
 #include <cmath>
 
+#include "rBuild.hpp"
+
 #include "rVector3.hpp"
 #include "rMathUtil.hpp"
 
-struct rAlignedBox3{
+struct RECONDITE_API rAlignedBox3{
 
 	rAlignedBox3();
 	rAlignedBox3(const rVector3& mmax , const rVector3& mmin);

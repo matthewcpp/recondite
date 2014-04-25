@@ -1,15 +1,14 @@
 #ifndef R_LOGCONTENTLISTENER_HPP
 #define R_LOGCONTENTLISTENER_HPP
 
-#include "rTypes.hpp"
-#include "rDefs.hpp"
+#include "rBuild.hpp"
 
 #include "rContentListener.hpp"
 #include "rAsset.hpp"
 
 #include "rLog.hpp"
 
-class rLogContentListener : public rContentListener{
+class RECONDITE_API rLogContentListener : public rContentListener{
 public:
 	virtual void BeginManifestLoad(const rString& path, int total);
 	virtual void ManifestLoadProgress(rAssetType type, const rString& name, const rString& path, int current, int total);

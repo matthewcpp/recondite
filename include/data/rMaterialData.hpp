@@ -4,12 +4,13 @@
 #include <map>
 #include <fstream>
 
-#include "rTypes.hpp"
+#include "rBuild.hpp"
 #include "rDefs.hpp"
+#include "rString.hpp"
 
 #include "xml/rXMLDocument.hpp"
 
-struct rMaterialParameterData{
+struct RECONDITE_API rMaterialParameterData{
 	rMaterialParameterData(){}
 	rMaterialParameterData(rMaterialParameterType t, const rString& n, const rString& v, const rString& p);
 	
@@ -25,7 +26,7 @@ struct rMaterialParameterData{
 typedef std::map<rString, rMaterialParameterData> rMaterialParameterDataMap;
 typedef rMaterialParameterDataMap::const_iterator rMaterialParameterDataConstItr;
 
-class rMaterialData{
+class RECONDITE_API rMaterialData{
 public:
 	rMaterialData();
 	rMaterialData(const rString& path);

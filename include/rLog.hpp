@@ -10,7 +10,7 @@
 
 #include "log/rLogTarget.hpp"
 
-class rLog{
+class RECONDITE_API rLog{
 public:
 	static void SetLogTarget(rLogTarget* target);
 	

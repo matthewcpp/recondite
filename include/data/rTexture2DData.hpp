@@ -4,8 +4,11 @@
 #include <string.h>
 #include <fstream>
 
-#include "rTypes.hpp"
+#include "rBuild.hpp"
 #include "rDefs.hpp"
+#include "rTypes.hpp"
+#include "rString.hpp"
+
 #include "rSize.hpp"
 #include "rColor.hpp"
 
@@ -13,7 +16,7 @@ enum rTexture2DCompressionType{
     rTexture2DCompressionNone = 0
 };
 
-class rTexture2DData {
+class RECONDITE_API rTexture2DData {
 public:
     
     rTexture2DData();

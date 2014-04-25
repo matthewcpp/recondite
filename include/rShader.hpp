@@ -3,12 +3,12 @@
 
 #include <map>
 
-#include "rTypes.hpp"
-#include "rDefs.hpp"
+#include "rBuild.hpp"
+#include "rString.hpp"
 
 #include "rAsset.hpp"
 
-class rShader : public rAsset{
+class RECONDITE_API rShader : public rAsset{
 public:
 	rShader(unsigned int programId, int assetId, const rString& name, const rString& path);
 	

@@ -6,8 +6,10 @@
 #include <cstring>
 #include <utility>
 
-#include "rTypes.hpp"
+#include "rBuild.hpp"
 #include "rDefs.hpp"
+#include "rTypes.hpp"
+#include "rString.hpp"
 
 #include "rVector2.hpp"
 #include "rVector3.hpp"
@@ -15,7 +17,7 @@
 
 #include "rVertexBoneLink.hpp"
 
-struct rModelVertex{
+struct RECONDITE_API rModelVertex{
 	rModelVertex() {}
 	rModelVertex(const rVector3& v, const rVector3& n, const rVector2& tc)
 		:position(v), texCoord(tc), normal(n) {}
@@ -27,7 +29,7 @@ struct rModelVertex{
 
 typedef std::vector<rModelVertex> rModelVertexArray;
 
-class rElementBufferData{
+class RECONDITE_API rElementBufferData{
 public:
 	rElementBufferData();
 	rElementBufferData(unsigned short* elements, size_t elementCount, rGeometryType type);
@@ -56,7 +58,7 @@ private:
 
 typedef std::map<rString, rElementBufferData*> rElementBufferDataMap;
 
-class rGeometryData{
+class RECONDITE_API rGeometryData{
 public:
 	rGeometryData();
 	~rGeometryData();

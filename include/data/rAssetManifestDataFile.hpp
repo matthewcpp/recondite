@@ -3,15 +3,15 @@
 
 #include <fstream>
 
-#include "rTypes.hpp"
-#include "rDefs.hpp"
+#include "rBuild.hpp"
+#include "rString.hpp"
 
 #include "xml/rXMLDocument.hpp"
 #include "xml/rXMLElement.hpp"
 
 #include "data/rAssetManifestData.hpp"
 
-class rAssetManifestDataReader{
+class RECONDITE_API rAssetManifestDataReader{
 public:
 
 	rContentError ReadFromFile(const rString& path, rAssetManifestData& assetManifest);
@@ -22,7 +22,7 @@ private:
 
 };
 
-class rAssetManifestDataWriter{
+class RECONDITE_API rAssetManifestDataWriter{
 public:
 	rContentError WriteToFile(const rString& path, const rAssetManifestData& assetManifest);
 	rContentError WriteToStream(std::ostream& stream, const rAssetManifestData& assetManifest);

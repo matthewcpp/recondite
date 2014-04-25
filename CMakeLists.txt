@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 2.8)
 
 message("SDL Directory:" $ENV{SDL_DIR})
-message("GLEW Directory:" $ENV{GLEW_DIR})
-message("gtest Directory:" $ENV{GTEST_ROOT})
+message("GLEW_ROOT:" $ENV{GLEW_ROOT})
+message("GTEST_ROOT:" $ENV{GTEST_ROOT})
 
 project(recondite C CXX)
 
@@ -19,9 +19,10 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-#add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/platform/rgl)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/platform/rgl)
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/test)
+#add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/samples)
 
 
 

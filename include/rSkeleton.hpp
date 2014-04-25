@@ -4,6 +4,7 @@
 #include <map>
 #include <vector>
 
+#include "rBuild.hpp"
 #include "rTypes.hpp"
 #include "rDefs.hpp"
 
@@ -15,7 +16,7 @@ struct rBone;
 
 typedef std::vector<rBone*> rBoneArray;
 
-struct rBone{
+struct RECONDITE_API rBone{
 public:
 	rBone(){}
 	rBone(int ID, const rString& n);
@@ -40,7 +41,7 @@ public:
 
 typedef std::map<int, rBone*> rBoneMap;
 
-class rSkeleton {
+class RECONDITE_API rSkeleton {
 public:
 	rSkeleton();
 	~rSkeleton();

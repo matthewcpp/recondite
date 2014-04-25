@@ -3,6 +3,7 @@
 
 #include <map>
 
+#include "rBuild.hpp"
 #include "rTypes.hpp"
 #include "rDefs.hpp"
 
@@ -18,7 +19,7 @@ union rMaterialParameterValue{
 	float m_float;
 };
 
-struct rMaterialParameter{
+struct RECONDITE_API rMaterialParameter{
 	rMaterialParameterType m_type;
 	rMaterialParameterValue m_value;
 	
@@ -32,7 +33,7 @@ typedef rMaterialParameterMap::iterator rMaterialParameterItr;
 typedef rMaterialParameterMap::const_iterator rMaterialParameterConstItr;
 typedef std::pair<rString, rMaterialParameter> rMaterialParameterEntry;
 
-class rMaterial : public rAsset{
+class RECONDITE_API rMaterial : public rAsset{
 public:
 	rMaterial(rShader* shader, int assetid, const rString& name, const rString& path);
 	

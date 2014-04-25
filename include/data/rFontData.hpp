@@ -5,8 +5,9 @@
 #include <vector>
 #include <algorithm>
 
-#include "rTypes.hpp"
+#include "rBuild.hpp"
 #include "rDefs.hpp"
+#include "rString.hpp"
 
 #include "xml/rXMLDocument.hpp"
 
@@ -17,7 +18,7 @@
 
 #include "rPath.hpp"
 
-struct rGlyphData : public rFontGlyph{
+struct RECONDITE_API rGlyphData : public rFontGlyph{
 	rGlyphData();
 	rGlyphData(int s, short w, short h, short t, short l, short a, unsigned char* d);
 	~rGlyphData();
@@ -34,7 +35,7 @@ struct rGlyphDataHeightSortDesc{
 typedef std::map <int, rGlyphData*> rGlyphDataMap;
 typedef std::vector <rGlyphData*> rGlyphDataArray;
 
-class rFontData{
+class RECONDITE_API rFontData{
 public:
 	rFontData();
 	~rFontData();

@@ -3,8 +3,9 @@
 
 #include <fstream>
 
-#include "rTypes.hpp"
+#include "rBuild.hpp"
 #include "rDefs.hpp"
+#include "rString.hpp"
 
 #include "data/rGeometryData.hpp"
 
@@ -18,7 +19,7 @@ struct rGeometryFileHeader{
 
 #define rGEOMETRY_MAGIC_NUMBER 1868916594 //rego
 
-class rGeometryDataReader{
+class RECONDITE_API rGeometryDataReader{
 public:
 	rGeometryDataReader();
 
@@ -40,7 +41,7 @@ private:
 	rGeometryFileHeader m_header;
 };
 
-class rGeometryDataWriter{
+class RECONDITE_API rGeometryDataWriter{
 public:
 	rGeometryDataWriter();
 

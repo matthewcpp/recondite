@@ -5,8 +5,9 @@
 #include <fstream>
 #include <utility>
 
-#include "rTypes.hpp"
+#include "rBuild.hpp"
 #include "rDefs.hpp"
+#include "rString.hpp"
 
 #include "data/rTexture2DData.hpp"
 #include "data/rMaterialData.hpp"
@@ -24,7 +25,7 @@
 #include "rPath.hpp"
 #include "rAlignedBox3.hpp"
 
-struct rMeshData{
+struct RECONDITE_API rMeshData{
 	rMeshData(){}
 	rMeshData(const rString& n, const rString& buf, const rString& mat);
 
@@ -38,7 +39,7 @@ typedef std::map<rString, rMeshData*> rMeshDataMap;
 typedef std::map<rString, rMaterialData*> rMaterialDataMap;
 typedef std::map<rString, rTexture2DData*> rTexture2DDataMap;
 
-class rModelData{
+class RECONDITE_API rModelData{
 public:
 	rModelData();
 	~rModelData();

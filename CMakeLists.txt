@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 
-message("SDL Directory:" $ENV{SDL_DIR})
+message("SDL Directory:" $ENV{SDLDIR})
 message("GLEW_ROOT:" $ENV{GLEW_ROOT})
 message("GTEST_ROOT:" $ENV{GTEST_ROOT})
 
@@ -22,7 +22,7 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/platform/rgl)
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/test)
-#add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/samples)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/samples)
 
 
 

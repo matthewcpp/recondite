@@ -23,7 +23,7 @@ namespace rMath{
 
 	float RECONDITE_API ConvertRange(float value, float inMin, float inMax, float outMin, float outMax);
 
-	float Max3(float n1 , float n2, float n3);
+	float RECONDITE_API Max3(float n1 , float n2, float n3);
 
 	template <typename T>
 	T Clamp(const T& val, const T& min, const T& max);

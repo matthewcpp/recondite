@@ -9,7 +9,7 @@ void rDemoPawn::Draw(rEngine& engine){
 	rAnimationPlayer* animationPlayer = AnimationPlayer();
 	rModel* model = Model();
 
-	const rMatrix4Vector& transformData = animationPlayer->GetTransformData();
+	const rMatrix4* transformData = animationPlayer->GetTransformData();
 	const rVertexBoneLinkMap& boneLinks = m_geometryData.VertexBoneLinks();
 
 	rVector3 position;

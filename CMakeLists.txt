@@ -20,6 +20,9 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/platform/rgl)
+set(RGL_INCLUDE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/platform/rgl)
+
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/platform/sdl)
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/test)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/samples)

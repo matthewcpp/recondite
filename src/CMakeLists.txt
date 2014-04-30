@@ -40,7 +40,12 @@ set(stream_sources)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/stream)
 source_group (stream FILES ${stream_sources})
 
-#add_library( recondite_static STATIC ${recondite_files})
+if (MSVC)
+	set(win32_sources)
+	add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/platform/win32)
+	source_group (win32 FILES ${win32_sources})
+endif()
+
 add_library( recondite SHARED ${recondite_files})
 
 add_definitions(-DRECONDITE_BUILD_SHARED)

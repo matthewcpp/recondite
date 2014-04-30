@@ -1,7 +1,7 @@
 #include "rSDLApplication.hpp"
 
-rSDLApplication::rSDLApplication(rModule* module)
-	:rApplication(module)
+rSDLApplication::rSDLApplication()
+	:rApplication()
 {}
 
 rSDLApplication::~rSDLApplication(){

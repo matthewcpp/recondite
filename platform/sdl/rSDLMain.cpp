@@ -1,18 +1,26 @@
 #include "SDL.h"
 
 #include "rSDLApplication.hpp"
-#include "rDemoModule.hpp"
 
 #include "log/rLogFile.hpp"
 
 int main(int argc, char** argv){
 
-	rDemoModule* demoModule = new rDemoModule();
-
 	rLog::SetLogTarget(new rLogFile("recondite.log"));
-	rLog::Info("Application Start");
+	rLog::Info("SDL Application Start");
 
-	rSDLApplication app(demoModule);
+	if (argc < 2){
+		rLog::Error("No module specified");
+		return 1;
+	}
+
+	rSDLApplication app;
+	bool loaded = app.LoadModule("modelviewer.rec");
+
+	if (!loaded){
+		return 1;
+	}
+
 	app.SetDisplaySize(1024, 768);
 	app.Init();
 
@@ -31,8 +39,6 @@ int main(int argc, char** argv){
 	rLog::Info("Application Shutdown");
 
 	app.Uninit();
-
-	delete demoModule;
 
 	return 0;
 }

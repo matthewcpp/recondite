@@ -15,7 +15,7 @@
 
 class rSDLApplication : public rApplication{
 public:
-	rSDLApplication(rModule* module);
+	rSDLApplication();
 	~rSDLApplication();
 
 public:

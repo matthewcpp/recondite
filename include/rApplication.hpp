@@ -8,6 +8,7 @@
 #include "rGraphicsDevice.hpp"
 #include "rInputManager.hpp"
 #include "rScene.hpp"
+#include "rModuleLoader.hpp"
 
 #include "interface/riApplication.hpp"
 
@@ -18,10 +19,11 @@ public:
 	virtual void Draw();
 
 public:
-	rApplication(rModule* module);
+	rApplication();
 	virtual ~rApplication();
 
 	bool IsRunning() const;
+	bool LoadModule(const char* path);
 
 	virtual void Tick();
 
@@ -46,6 +48,7 @@ protected:
 
 	rGraphicsDevice* m_graphicsDevice;
 	ruiOverlayManager* m_overlayManager;
+	rModuleLoader m_moduleLoader;
 
 	rSize m_displaySize;
 };

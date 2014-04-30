@@ -1,10 +1,8 @@
 #include "rApplication.hpp"
 
-rApplication::rApplication(rModule* module){
+rApplication::rApplication(){
 	m_isRunning = false;
 	m_frameCount = 0;
-
-	m_module = module;
 }
 
 void rApplication::Update(){
@@ -12,6 +10,12 @@ void rApplication::Update(){
 	m_overlayManager->Update(m_engine);
 	
 	m_module->Update(m_engine);
+}
+
+bool rApplication::LoadModule(const char* path){
+	m_module = m_moduleLoader.LoadModule(path);
+
+	return m_module != NULL;
 }
 
 void rApplication::Draw(){

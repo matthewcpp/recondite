@@ -92,7 +92,7 @@ if(NOT SDL_BUILDING_LIBRARY)
       NAMES SDLmain SDLmain-1.1
       HINTS
         ENV SDLDIR
-      PATH_SUFFIXES lib
+      PATH_SUFFIXES lib lib/x86
       PATHS
       /sw
       /opt/local

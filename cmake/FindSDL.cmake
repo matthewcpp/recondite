@@ -28,8 +28,8 @@
 # variable, but when these values are unset, SDL_LIBRARY does not get created.
 #
 #
-# $SDLDIR is an environment variable that would
-# correspond to the ./configure --prefix=$SDLDIR
+# $SDL_ROOT is an environment variable that would
+# correspond to the ./configure --prefix=$SDL_ROOT
 # used in building SDL.
 # l.e.galup  9-20-02
 #
@@ -69,7 +69,7 @@
 
 find_path(SDL_INCLUDE_DIR SDL.h
   HINTS
-    ENV SDLDIR
+    ENV SDL_ROOT
   PATH_SUFFIXES include/SDL include/SDL12 include/SDL11 include
 )
 
@@ -78,7 +78,7 @@ find_path(SDL_INCLUDE_DIR SDL.h
 find_library(SDL_LIBRARY_TEMP
   NAMES SDL SDL-1.1
   HINTS
-    ENV SDLDIR
+    ENV SDL_ROOT
   PATH_SUFFIXES lib lib/x86
 )
 
@@ -91,7 +91,7 @@ if(NOT SDL_BUILDING_LIBRARY)
     find_library(SDLMAIN_LIBRARY
       NAMES SDLmain SDLmain-1.1
       HINTS
-        ENV SDLDIR
+        ENV SDL_ROOT
       PATH_SUFFIXES lib lib/x86
       PATHS
       /sw

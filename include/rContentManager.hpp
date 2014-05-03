@@ -32,6 +32,7 @@
 
 #include "rModel.hpp"
 #include "data/rModelData.hpp"
+#include "data/rModelDataFile.hpp"
 
 #include "rSkeleton.hpp"
 #include "data/rSkeletonData.hpp"

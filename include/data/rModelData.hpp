@@ -35,10 +35,6 @@ struct RECONDITE_API rMeshData{
 	rAlignedBox3 boundingBox;
 };
 
-typedef std::map<rString, rMeshData*> rMeshDataMap;
-typedef std::map<rString, rMaterialData*> rMaterialDataMap;
-typedef std::map<rString, rTexture2DData*> rTexture2DDataMap;
-
 class RECONDITE_API rModelData{
 public:
 	rModelData();
@@ -66,6 +62,7 @@ public:
 	void GetTextureDataNames(rArrayString& names) const;
 	
 	rGeometryData& GetGeometryData();
+	const rGeometryData& GetGeometryData() const;
 
 	rSkeleton* GetSkeleton() const;
 	rSkeleton* CreateSkeleton();
@@ -76,14 +73,14 @@ public:
 	void SetPath(const rString& path);
 	rString GetPath() const;
 
-	rAlignedBox3& GetBoundingBox();
-
-	rContentError WriteToFile(const rString& dir);
-	rContentError LoadFromFile(const rString& path);
-	rContentError LoadFromStream(std::istream& stream);
+	const rAlignedBox3& GetBoundingBox() const;
+	void SetBoundingBox(const rAlignedBox3& boundingBox);
 
 private:
-	rContentError WriteDependencies(const rString& dir);
+
+	typedef std::map<rString, rMeshData*> rMeshDataMap;
+	typedef std::map<rString, rMaterialData*> rMaterialDataMap;
+	typedef std::map<rString, rTexture2DData*> rTexture2DDataMap;
 	
 private:
 	rMeshDataMap m_meshes;

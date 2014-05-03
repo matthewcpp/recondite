@@ -30,8 +30,9 @@ void rModelData::Clear(){
 
 	if (m_skeleton){
 		delete m_skeleton;
-		m_skeleton = NULL;
 	}
+
+	m_skeleton = NULL;
 }
 
 size_t rModelData::MeshCount() const{
@@ -154,82 +155,12 @@ rGeometryData& rModelData::GetGeometryData(){
 	return m_geometry;
 }
 
-rContentError rModelData::LoadFromStream(std::istream& stream){
-	Clear();
-
-	rXMLDocument document;
-	document.LoadFromStream(stream);
-
-	m_name = document.GetRoot()->GetFirstChildNamed("name")->Text();
-	rXMLUtil::ReadAlignedBox3FromFromElement(document.GetRoot()->GetFirstChildNamed("boundingBox"), m_boundingBox);
-	
-	rXMLElement* meshesNode = document.GetRoot()->GetFirstChildNamed("meshes");
-
-	for (size_t i = 0; i < meshesNode->NumChildren(); i++){
-		rXMLElement* meshNode = meshesNode->GetChild(i);
-
-		rMeshData* meshData= new rMeshData(meshNode->GetFirstChildNamed("name")->Text(), meshNode->GetFirstChildNamed("buffer")->Text(), meshNode->GetFirstChildNamed("material")->Text());
-		rXMLUtil::ReadAlignedBox3FromFromElement(meshNode->GetFirstChildNamed("boundingBox"), meshData->boundingBox);
-		m_meshes[meshData->name] = meshData;
-	}
-	
-	return rCONTENT_ERROR_NONE;
+const rGeometryData& rModelData::GetGeometryData() const{
+	return m_geometry;
 }
 
-rContentError rModelData::LoadFromFile(const rString& path){
-	std::ifstream file (path.c_str());
-	rContentError error =  LoadFromStream(file);
-	m_path = path;
-
-	return error;
-}
-
-rContentError rModelData::WriteDependencies(const rString& dir){
-	rGeometryDataWriter writer;
-	writer.WriteToFile(rPath::Assemble(dir, m_name, "rgeo"), m_geometry);
-
-	for (rTexture2DDataMap::iterator it = m_textures.begin(); it != m_textures.end(); ++it){
-		it->second->WriteToPath(rPath::Assemble(dir, it->first, "rtex"));
-	}
-
-	for (rMaterialDataMap::iterator it = m_materials.begin(); it!= m_materials.end(); ++it){
-		it->second->WriteToPath(rPath::Assemble(dir, it->first, "rmat"));
-	}
-
-	if (m_skeleton){
-		rSkeletonData skeletonData;
-		skeletonData.WriteToFile(rPath::Assemble(dir, m_name, "rskl"), *m_skeleton);
-	}
-
-	return rCONTENT_ERROR_NONE;
-}
-
-rContentError rModelData::WriteToFile(const rString& dir){
-	rXMLDocument document;
-	document.CreateRoot("model");
-	document.GetRoot()->CreateChild("name", m_name);
-	rXMLUtil::CreateAlignedBox3Element(document.GetRoot(), "boundingBox", m_boundingBox);
-
-	if (m_skeleton)
-		document.GetRoot()->CreateChild("skeleton", m_name);
-
-	WriteDependencies (dir);
-	rXMLElement* meshes = document.GetRoot()->CreateChild("meshes");
-
-	for (rMeshDataMap::iterator it = m_meshes.begin(); it != m_meshes.end(); ++it){
-		rMeshData* meshData = it->second;
-
-		rXMLElement* meshNode = meshes->CreateChild("mesh");
-		meshNode->CreateChild<rString>("name",meshData->name);
-		meshNode->CreateChild("material", meshData->material);
-		meshNode->CreateChild("buffer", meshData->buffer);
-
-		rXMLUtil::CreateAlignedBox3Element(meshNode, "boundingBox", meshData->boundingBox);
-	}
-
-	document.WriteToFile(rPath::Assemble(dir, m_name, "rmdl"));
-
-	return rCONTENT_ERROR_NONE;
+void rModelData::SetBoundingBox(const rAlignedBox3& boundingBox){
+	m_boundingBox = boundingBox;
 }
 
 void rModelData::SetName(const rString& name){
@@ -262,7 +193,7 @@ rSkeleton* rModelData::CreateSkeleton(){
 	}
 }
 
-rAlignedBox3& rModelData::GetBoundingBox(){
+const rAlignedBox3& rModelData::GetBoundingBox() const {
 	return m_boundingBox;
 }
 

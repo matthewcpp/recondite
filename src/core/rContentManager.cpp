@@ -657,10 +657,14 @@ rModel* rContentManager::LoadModel(rModelData& modelData, const rString& name){
 }
 
 rModel* rContentManager::LoadModelFromPath(const rString& path, const rString& name){
+	rModelDataReader reader;
 	rModelData modelData;
-	modelData.LoadFromFile(path);
+	rContentError error = reader.LoadFromFile(path, modelData);
 
-	return LoadModel(modelData, name);
+	if (error)
+		return NULL;
+	else
+		return LoadModel(modelData, name);
 }
 
 rModel* rContentManager::GetOrLoadModel(const rString& name, const rString& path){

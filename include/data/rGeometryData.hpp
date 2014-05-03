@@ -27,8 +27,6 @@ struct RECONDITE_API rModelVertex{
 	rVector3 normal;
 };
 
-typedef std::vector<rModelVertex> rModelVertexArray;
-
 class RECONDITE_API rElementBufferData{
 public:
 	rElementBufferData();
@@ -55,8 +53,6 @@ private:
 	rIndexArray m_elementData;
 	rGeometryType m_geometryType;
 };
-
-typedef std::map<rString, rElementBufferData*> rElementBufferDataMap;
 
 class RECONDITE_API rGeometryData{
 public:
@@ -101,6 +97,10 @@ public:
 
 	rString Path() const;
 	void SetPath(const rString& path);
+
+private:
+	typedef std::vector<rModelVertex> rModelVertexArray;
+	typedef std::map<rString, rElementBufferData*> rElementBufferDataMap;
 
 private:
 

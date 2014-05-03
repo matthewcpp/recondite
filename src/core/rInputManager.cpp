@@ -66,13 +66,6 @@ bool rInputManager::UpdateTouch(int id, const rPoint& position, rTouchType type)
 	}
 }
 
-void rInputManager::GetTouches(rTouchArray& touches) const{
-	touches.clear();
-	
-	for (rTouchMap::const_iterator it = m_touches.begin(); it != m_touches.end(); ++it)
-		touches.push_back(it->second);
-}
-
 void rInputManager::GetTouchIds(rIntArray& ids){
 	ids.clear();
 

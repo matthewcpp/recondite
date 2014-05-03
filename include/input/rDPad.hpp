@@ -1,6 +1,8 @@
 #ifndef R_DPAD_HPP
 #define R_DPAD_HPP
 
+#include "rBuild.hpp"
+
 #include "input/rInputButton.hpp"
 
 enum rDPadButton{
@@ -10,7 +12,7 @@ enum rDPadButton{
 	rDPAD_DOWN
 };
 
-class rDPad {
+class RECONDITE_API rDPad {
 public:
 	rInputButton& Left();
 	rInputButton& Right();

@@ -1,6 +1,8 @@
 #ifndef R_MOUSE_HPP
 #define R_MOUSE_HPP
 
+#include "rBuild.hpp"
+
 #include "rPoint.hpp"
 #include "input/rInputButton.hpp"
 
@@ -16,7 +18,7 @@ enum rMouseWheelDirection{
 	rMOUSEWHEEL_DOWN
 };
 
-class rMouseState {
+class RECONDITE_API rMouseState {
 public:
 	virtual rPoint Position() const = 0;
 	virtual rPoint PreviousPosition() const = 0;
@@ -25,7 +27,7 @@ public:
 	virtual int GetWheelValue() const = 0;
 };
 
-class rMouse : public rMouseState{
+class RECONDITE_API rMouse : public rMouseState{
 public:
 	rMouse();
 

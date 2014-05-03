@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "rTypes.hpp"
+#include "rBuild.hpp"
 #include "rDefs.hpp"
 
 #include "input/rTouch.hpp"
@@ -15,11 +15,9 @@
 
 #include "rVector2.hpp"
 
-typedef std::vector<rInputButton> rButtonArray;
-typedef std::vector<rDPad> rDPadArray;
-typedef std::vector<rTouch*> rTouchArray;
 
-class rControllerState{
+
+class RECONDITE_API rControllerState{
 public:
 	virtual unsigned int ButtonCount() const = 0;
 	virtual unsigned int DPadCount() const = 0;
@@ -32,9 +30,8 @@ public:
 	virtual float Trigger(unsigned int index) const = 0;
 };
 
-class rInput {
+class RECONDITE_API rInput {
 public:
-	virtual void GetTouches(rTouchArray& touches) const = 0;
 	virtual rTouch* GetTouch(int id) = 0;
 	virtual size_t TouchCount() const = 0;
 

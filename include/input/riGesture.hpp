@@ -1,13 +1,13 @@
 #ifndef RI_GESTURE_HPP
 #define RI_GESTURE_HPP
 
-#include "rTypes.hpp"
-#include "rDefs.hpp"
+#include "rBuild.hpp"
+#include "rString.hpp"
 
 #include "rPoint.hpp"
 #include "input/rTouch.hpp"
 
-class riGesture{
+class RECONDITE_API riGesture{
 public:
 	virtual rString Name() const = 0;
 	virtual bool Active() const = 0;
@@ -22,7 +22,7 @@ public:
 	virtual void OnTouchUp(const rTouch& touch) = 0;
 };
 
-class riGestureTracker{
+class RECONDITE_API riGestureTracker{
 public:
 	virtual size_t TrackedGestureCount() const = 0;
 	virtual riGesture* GetGesture(const rString& name) const = 0;

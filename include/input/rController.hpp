@@ -3,6 +3,8 @@
 
 #include <vector>
 
+#include "rBuild.hpp"
+
 #include "rTypes.hpp"
 #include "rDefs.hpp"
 #include "rVector2.hpp"
@@ -10,7 +12,7 @@
 #include "rInput.hpp"
 #include "input/rInputButton.hpp"
 
-class rController : public rControllerState{
+class RECONDITE_API rController : public rControllerState{
 public:
 	rController(unsigned int buttonCount, unsigned int dPadCount, unsigned int analogStickCount, unsigned int triggerCount);
 	void Init(unsigned int buttonCount, unsigned int dPadCount, unsigned int analogStickCount, unsigned int triggerCount);
@@ -33,6 +35,10 @@ public:
 	bool SetDPadButton(unsigned int index, rDPadButton button, rButtonState state);
 	bool SetAnalogStick(unsigned int index, float x, float y);
 	bool SetTrigger(unsigned int index, float value);
+
+private:
+	typedef std::vector<rInputButton> rButtonArray;
+	typedef std::vector<rDPad> rDPadArray;
 	
 private:
 	rButtonArray m_buttons;

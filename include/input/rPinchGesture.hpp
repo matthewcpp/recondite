@@ -1,12 +1,12 @@
 #ifndef R_PINCHGESTURE_HPP
 #define R_PINCHGESTURE_HPP
 
-#include "rTypes.hpp"
-#include "rDefs.hpp"
+#include "rBuild.hpp"
+#include "rString.hpp"
 
 #include "input/riGesture.hpp"
 
-class rPinchGesture : public riGesture{
+class RECONDITE_API rPinchGesture : public riGesture{
 public:
 	rPinchGesture();
 	

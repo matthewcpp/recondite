@@ -1,8 +1,8 @@
 #ifndef R_TOUCHEVENT_HPP
 #define R_TOUCHEVENT_HPP
 
-#include "rTypes.hpp"
-#include "rDefs.hpp"
+#include "rBuild.hpp"
+#include "rString.hpp"
 
 #include "rPoint.hpp"
 #include "rVector2.hpp"
@@ -14,7 +14,7 @@ enum rTouchType{
 	rTOUCH_CANCEL
 };
 
-class rTouch{
+class RECONDITE_API rTouch{
 public:
 	rTouch(int id, const rPoint& pos, rTouchType type = rTOUCH_DOWN);
 	rTouch(int id, int posX, int posY, rTouchType type = rTOUCH_DOWN);

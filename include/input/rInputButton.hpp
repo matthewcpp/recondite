@@ -1,10 +1,10 @@
 #ifndef R_INPUTBUTTON_HPP
 #define R_INPUTBUTTON_HPP
 
-#include "rTypes.hpp"
+#include "rBuild.hpp"
 #include "rDefs.hpp"
 
-class rInputButton {
+class RECONDITE_API rInputButton {
 public:
 	rInputButton();
 	

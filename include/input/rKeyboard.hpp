@@ -1,6 +1,8 @@
 #ifndef R_KEYBOARD_HPP
 #define R_KEYBOARD_HPP
 
+#include "rBuild.hpp"
+
 typedef int rKey;
 
 enum rKeyState{
@@ -8,12 +10,12 @@ enum rKeyState{
 	rKEY_DOWN
 };
 
-class rKeyboardState{
+class RECONDITE_API rKeyboardState{
 public:
 	virtual rKeyState GetKeyState(rKey key) = 0;
 };
 
-class rKeyboard : public rKeyboardState{
+class RECONDITE_API rKeyboard : public rKeyboardState{
 public:
 	virtual rKeyState GetKeyState(rKey key);
 

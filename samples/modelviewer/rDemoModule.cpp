@@ -58,3 +58,8 @@ void rDemoModule::InitUI(ruiOverlayManager& uiManager, rEngine& engine){
 	m_controller = new ruiDemoController(engine.content, m_camera); 
 	m_controller->Init(overlay);
 }
+
+
+void rDemoModule::DeleteActor(rActor3* actor){
+	delete actor;
+}

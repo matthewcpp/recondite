@@ -3,17 +3,15 @@
 
 #include <map>
 
-#include "rTypes.hpp"
-#include "rDefs.hpp"
+#include "rBuild.hpp"
+#include "rString.hpp"
 
 #include "input/riGesture.hpp"
 #include "input/rPinchGesture.hpp"
 #include "input/rDragGesture.hpp"
 
-typedef std::map<rString, riGesture*> rGestureMap;
 
-
-class rGestureTracker : public riGestureTracker{
+class RECONDITE_API rGestureTracker : public riGestureTracker{
 public:
 	rGestureTracker();
 	
@@ -33,7 +31,9 @@ public:
 	virtual float Active(const rString& gestureName) const;
 		
 private:
-	
+	typedef std::map<rString, riGesture*> rGestureMap;
+
+private:
 	rGestureMap m_gestures;
 };
 

@@ -1,12 +1,12 @@
 #ifndef R_DRAGGESTURE_HPP
 #define R_DRAGGESTURE_HPP
 
-#include "rTypes.hpp"
-#include "rDefs.hpp"
+#include "rBuild.hpp"
+#include "rString.hpp"
 
 #include "input/riGesture.hpp"
 
-class rDragGesture : public riGesture{
+class RECONDITE_API rDragGesture : public riGesture{
 public:
 	rDragGesture();
 	

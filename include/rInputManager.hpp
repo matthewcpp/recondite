@@ -20,9 +20,6 @@
 
 #include "ui/ruiBase.hpp"
 
-typedef std::map<unsigned int , rTouch*> rTouchMap;
-typedef std::vector<rController*> rControllerArray;
-
 class RECONDITE_API rInputManager : public rInput{
 public:
 
@@ -44,7 +41,6 @@ public:
 	virtual const rKeyboardState* GetKeyboardState() const;
 	
 	void GetTouchIds(rIntArray& ids);
-	virtual void GetTouches(rTouchArray& touches) const;
 	
 	rController* CreateController(unsigned int buttonCount, unsigned int dPadCount, unsigned int analogStickCount, unsigned int triggerCount);
 	virtual size_t ControllerCount() const;
@@ -53,7 +49,12 @@ public:
 	
 	virtual const riGestureTracker* Gestures() const;
 
-protected:
+private:
+
+	typedef std::map<unsigned int , rTouch*> rTouchMap;
+	typedef std::vector<rController*> rControllerArray;
+
+private:
 	rTouchMap m_touches;
 	rControllerArray m_controllers;
 	rGestureTracker m_gestures;

@@ -28,6 +28,7 @@ public:
 
 	virtual void InitUI(ruiOverlayManager& uiManager, rEngine& engine);
 	virtual void LoadScene(const rString& sceneName, rScene* scene, rEngine& engine);
+	virtual void DeleteActor(rActor3* actor);
 
 private:
 	void InitView(rEngine& engine);

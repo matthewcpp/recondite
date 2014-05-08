@@ -56,5 +56,8 @@ const char texturedFragmentShader[] =
 "uniform vec4 fragColor;"
 "uniform sampler2D s_texture;"
 "void main(){"
-"	gl_FragColor = texture2D( s_texture, v_texCoord ) * fragColor;"
+"	vec4 texturedColor = texture2D( s_texture, v_texCoord ) * fragColor;"
+"	if (texturedColor.a < 0.1)"
+"		discard;"
+"	gl_FragColor = texturedColor;"
 "}";

@@ -1,20 +1,22 @@
 #ifndef R_FRUSTRUM_HPP
 #define R_FRUSTRUM_HPP
 
-#include "rPlane3.hpp"
+#include "rBuild.hpp"
+
+#include "rPlane.hpp"
 #include "rVector3.hpp"
 
-struct rFrustrum{
+struct RECONDITE_API rFrustrum{
 	rFrustrum(){}
 
 	bool PointInFrustrum(const rVector3& p);
 
-	rPlane3 nearPlane;
-	rPlane3 farPlane; 
-	rPlane3 topPlane; 
-	rPlane3 bottomPlane;
-	rPlane3 leftPlane;
-	rPlane3 rightPlane;
+	rPlane near;
+	rPlane far; 
+	rPlane top; 
+	rPlane bottom;
+	rPlane left;
+	rPlane right;
 };
 
 #endif

@@ -20,3 +20,7 @@ void rPlane::Set(const rVector3& n , float dd){
 	normal = n;
 	d = dd;
 }
+void rPlane::Set(float nx, float ny, float nz, float dd){
+	normal.Set(nx,ny,nz);
+	d = dd;
+}

@@ -7,9 +7,10 @@
 struct RECONDITE_API rPlane{
 	rPlane(){}
 	rPlane(const rVector3& n , float dd): normal(n) , d(dd){}
-	rPlane(float a , float b , float c, float dd) : normal(a,b,c), d(dd){}
+	rPlane(float nx , float ny , float nz, float dd) : normal(nx,ny,nz), d(dd){}
 
 	void Set(const rVector3& n , float dd);
+	void Set(float nx, float ny, float nz, float dd);
 
 	float DistanceToPoint(const rVector3& p) const;
 	int Side(const rVector3& p) const;

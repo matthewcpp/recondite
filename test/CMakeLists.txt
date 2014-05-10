@@ -10,6 +10,10 @@ set(core_tests)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/core)
 source_group (core FILES ${core_tests})
 
+set(geometry_tests)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/geometry)
+source_group (geometry FILES ${geometry_tests})
+
 add_executable(recondite_test ${recondite_tests})
 
 include_directories(${GTEST_INCLUDE_DIRS})

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 
-message("SDL Directory:" $ENV{SDL_ROOT})
+message("SDL_ROOT:" $ENV{SDL_ROOT})
 message("GLEW_ROOT:" $ENV{GLEW_ROOT})
 message("GTEST_ROOT:" $ENV{GTEST_ROOT})
 

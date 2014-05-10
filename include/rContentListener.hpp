@@ -1,10 +1,11 @@
 #ifndef R_CONTENT_LISTENER_HPP
 #define R_CONTENT_LISTENER_HPP
 
-#include "rTypes.hpp"
+#include "rBuild.hpp"
 #include "rDefs.hpp"
+#include "rString.hpp"
 
-class rContentListener {
+class RECONDITE_API rContentListener {
 public:
 
 	virtual void BeginManifestLoad(const rString& path, int total) {}

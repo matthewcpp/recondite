@@ -4,7 +4,7 @@
 #include <cmath>
 #include <vector>
 
-#include "rTypes.hpp"
+#include "rBuild.hpp"
 #include "rDefs.hpp"
 
 #include "rViewport.hpp"
@@ -15,7 +15,7 @@
 #include "data/rGeometryData.hpp"
 #include "data/rImmediateBuffer.hpp"
 
-class rGraphicsDevice{
+class RECONDITE_API rGraphicsDevice{
 public:
 	virtual ~rGraphicsDevice(){}
 

@@ -1,7 +1,7 @@
 #include "rPlane.hpp"
 
 float rPlane::DistanceToPoint(const rVector3& p) const{
-	rVector3 planePoint = normal * d;
+	rVector3 planePoint = normal * -d;
 	return normal.Dot(p - planePoint);
 }
 

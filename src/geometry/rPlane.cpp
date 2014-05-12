@@ -1,26 +1,35 @@
 #include "rPlane.hpp"
 
+rPlane::rPlane(const rVector3& pt, const rVector3& n){
+	SetFromPointAndNormal(pt,n);
+}
+
 float rPlane::DistanceToPoint(const rVector3& p) const{
-	rVector3 planePoint = normal * -d;
-	return normal.Dot(p - planePoint);
+	return normal.Dot(p) + d;
+}
+
+void rPlane::Normalize(){
+	float len = normal.Length();
+
+	if (len != 0.0f){
+		float invLen = 1.0f / len;
+		normal *= invLen;
+		d *= invLen;
+	}
 }
 
 int rPlane::Side(const rVector3& p) const{
-	float dist = DistanceToPoint(p);
+	float distance = DistanceToPoint(p);
 
-	if (dist < 0.0f)
-		return -1;
-	else if (dist > 0.0f)
+	if (distance > 0.0f)
 		return 1;
+	else if (distance < 0.0f)
+		return -1;
 	else
 		return 0;
 }
 
-void rPlane::Set(const rVector3& n , float dd){
+void rPlane::SetFromPointAndNormal(const rVector3& pt, const rVector3 n){
 	normal = n;
-	d = dd;
-}
-void rPlane::Set(float nx, float ny, float nz, float dd){
-	normal.Set(nx,ny,nz);
-	d = dd;
+    d = -n.Dot(pt);
 }

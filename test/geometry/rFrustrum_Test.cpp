@@ -6,14 +6,18 @@ class Geometry_rFrustrum : public ::testing::Test{
 };
 
 TEST(Geometry_rFrustrum, PointInPlane){
+	float scale =  10.0f;
 	rFrustrum f;
-	f.near.Set(rVector3::ForwardVector, 10);
-	f.far.Set(rVector3::BackwardVector, 10);
-	f.top.Set(rVector3::DownVector, 10);
-	f.bottom.Set(rVector3::UpVector, 10);
-	f.left.Set(rVector3::RightVector, 10);
-	f.right.Set(rVector3::LeftVector, 10);
+	
+	f.near.SetFromPointAndNormal(rVector3::BackwardVector * scale, rVector3::ForwardVector);
+	f.far.SetFromPointAndNormal(rVector3::ForwardVector * scale, rVector3::BackwardVector);
+	f.left.SetFromPointAndNormal(rVector3::LeftVector * scale, rVector3::RightVector);
+	f.right.SetFromPointAndNormal(rVector3::RightVector * scale, rVector3::LeftVector);
+	f.top.SetFromPointAndNormal(rVector3::UpVector * scale, rVector3::DownVector);
+	f.bottom.SetFromPointAndNormal(rVector3::DownVector * scale, rVector3::UpVector);
 
 	EXPECT_TRUE(f.PointInFrustrum(rVector3::ZeroVector));
-	EXPECT_FALSE(f.PointInFrustrum(rVector3(100,0,0)));
+	EXPECT_TRUE(f.PointInFrustrum(rVector3(1,-1,-1)));
+
+	EXPECT_FALSE(f.PointInFrustrum(rVector3(1,1000,0)));
 }

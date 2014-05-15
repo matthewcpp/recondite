@@ -13,6 +13,8 @@
 
 #include "interface/riCamera.hpp"
 
+#include "rPlane.hpp"
+
 enum rViewportType{
 	rVIEWPORT_PERSP,
 	rVIEWPORT_ORTHO,

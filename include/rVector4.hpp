@@ -1,7 +1,9 @@
 #ifndef R_VECTOR4_HPP
 #define R_VECTOR4_HPP
 
-struct rVector4{
+#include "rBuild.hpp"
+
+struct RECONDITE_API rVector4{
 	rVector4() {}
 	rVector4(float xx, float yy, float zz, float ww) : x(xx), y(yy), z(zz), w(ww) {}
 	

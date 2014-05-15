@@ -12,6 +12,7 @@ Matrix4 Layout
 #include <cstring>
 
 #include "rBuild.hpp"
+
 #include "rVector3.hpp"
 #include "rVector4.hpp"
 #include "rMathUtil.hpp"

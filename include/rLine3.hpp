@@ -1,9 +1,11 @@
 #ifndef R_LINE3_HPP
 #define R_LINE3_HPP
 
+#include "rBuild.hpp"
+
 #include "rVector3.hpp"
 
-struct rRay3{
+struct RECONDITE_API rRay3{
 	rRay3(){}
 	rRay3(const rVector3& p , const rVector3& d) : origin(p) , direction(d){}
 
@@ -13,7 +15,7 @@ struct rRay3{
 	rVector3 direction;
 };
 
-struct rLineSegment3{
+struct RECONDITE_API rLineSegment3{
 	rLineSegment3(){}
         rLineSegment3(const rVector3& _p0 , const rVector3& _p1) : p0(_p0) , p1(_p1){}
 

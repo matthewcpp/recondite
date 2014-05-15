@@ -7,8 +7,8 @@
 #include "rDemoModule.hpp"
 
 extern "C"{
-	RECONDITE_API rModule* CreateModule();
-	RECONDITE_API void DeleteModule(rModule* module);
+	RECONDITE_MODULE_INTERFACE rModule* CreateModule();
+	RECONDITE_MODULE_INTERFACE void DeleteModule(rModule* module);
 }
 
 #endif

@@ -7,6 +7,13 @@
 #include "ui/ruiOverlayManager.hpp"
 #include "rScene.hpp"
 
+//modules need to export 2 methods in order for them to be loaded by the DLL loader classes
+#ifdef _MSC_VER
+	#define RECONDITE_MODULE_INTERFACE __declspec(dllexport)
+#else
+	#define RECONDITE_MODULE_INTERFACE
+#endif
+
 class RECONDITE_API rModule {
 public:
 

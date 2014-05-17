@@ -12,6 +12,7 @@
 #include "rRect.hpp"
 
 #include "rQuaternion.hpp"
+#include "rFrustrum.hpp"
 
 namespace rMatrixUtil{
 	void RECONDITE_API LookAt(const rVector3& eye, const rVector3& target, const rVector3& up, rMatrix4& matrix);
@@ -21,6 +22,7 @@ namespace rMatrixUtil{
 	bool RECONDITE_API Unproject(const rVector3& point, const rMatrix4& modelMatrix, const rMatrix4& projectionMatrix, const rRect& viewport, rVector3& out);
 
 	void RECONDITE_API QuaterionToMatrix(const rQuaternion& q, rMatrix4& m);
+	void RECONDITE_API ExtractViewFrustrum(const rMatrix4& matrix, rFrustrum& frustrum);
 };
 
 #endif

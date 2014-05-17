@@ -44,6 +44,7 @@ public:
 	void SetScreenRect(int x, int y, int width, int height);
 	
 	void GetProjectionMatrix(rMatrix4& matrix) const;
+	void GetCameraMatrix(rMatrix4& matrix) const;
 	void GetViewMatrix(rMatrix4& matrix) const;
 	
 	void SetNearClip(float nearClip);
@@ -53,7 +54,7 @@ public:
 	float FarClip() const;
 
 	void SetClipping(float near, float far);
-	void GetViewFrustrum(rFrustrum& frustrum);
+	void GetViewFrustrum(rFrustrum& frustrum) const;
 
 private:
 	rViewportType m_type;

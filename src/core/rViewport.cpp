@@ -73,9 +73,17 @@ void rViewport::GetProjectionMatrix(rMatrix4& matrix) const{
 	};
 }
 
-void rViewport::GetViewMatrix(rMatrix4& matrix) const{
+void rViewport::GetCameraMatrix(rMatrix4& matrix) const{
 	if (m_camera)
 		rMatrixUtil::LookAt(m_camera->Position(), m_camera->Target(), m_camera->Up(), matrix);
+}
+
+void rViewport::GetViewMatrix(rMatrix4& matrix) const{
+	rMatrix4 projection, camera;
+	GetProjectionMatrix(projection);
+	GetCameraMatrix(camera);
+
+	matrix = projection * camera;
 }
 
 riCamera* rViewport::Camera() const{
@@ -123,5 +131,9 @@ void rViewport::SetScreenRect(int x, int y, int width, int height){
 	m_rect.Set(x, y, width, height);
 }
 
-void rViewport::GetViewFrustrum(rFrustrum& frustrum){
+void rViewport::GetViewFrustrum(rFrustrum& frustrum) const{
+	rMatrix4 view;
+	GetViewMatrix(view);
+
+	rMatrixUtil::ExtractViewFrustrum(view, frustrum);
 }

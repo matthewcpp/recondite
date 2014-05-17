@@ -11,6 +11,7 @@ struct RECONDITE_API rPlane{
 	rPlane(const rVector3& pt, const rVector3& n);
 
 	void SetFromPointAndNormal(const rVector3& pt, const rVector3 n);
+	void Set(float nx , float ny , float nz, float dd);
 	void Normalize();
 
 	float DistanceToPoint(const rVector3& p) const;

@@ -33,3 +33,8 @@ void rPlane::SetFromPointAndNormal(const rVector3& pt, const rVector3 n){
 	normal = n;
     d = -n.Dot(pt);
 }
+
+void rPlane::Set(float nx , float ny , float nz, float dd){
+	normal.Set(nx, ny, nz);
+	d = dd;
+}

@@ -124,3 +124,23 @@ void rMatrixUtil::QuaterionToMatrix(const rQuaternion& q, rMatrix4& m){
 	m[9] = 2.0f * (q.y * q.z) - 2.0f * (q.x * q.w);
 	m[10] = 1.0f - 2.0f * (q.x * q.x) - 2.0f * (q.y * q.y);
 }
+
+void rMatrixUtil::ExtractViewFrustrum(const rMatrix4& matrix, rFrustrum& frustrum){
+	frustrum.pRight.Set(matrix.m[3] - matrix.m[0], matrix.m[7] - matrix.m[4], matrix.m[11] - matrix.m[8], matrix.m[15] - matrix.m[12]);
+	frustrum.pRight.Normalize();
+
+	frustrum.pLeft.Set(matrix.m[3] + matrix.m[0], matrix.m[7] + matrix.m[4], matrix.m[11] + matrix.m[8], matrix.m[15] + matrix.m[12]);
+	frustrum.pLeft.Normalize();
+
+	frustrum.pBottom.Set(matrix.m[3] + matrix.m[1], + matrix.m[7] + matrix.m[5], matrix.m[11] + matrix.m[9], matrix.m[15] + matrix.m[13]);
+	frustrum.pBottom.Normalize();
+
+	frustrum.pTop.Set(matrix.m[3] - matrix.m[1], matrix.m[7] - matrix.m[5], matrix.m[11] - matrix.m[9], matrix.m[15] - matrix.m[13]);
+	frustrum.pTop.Normalize();
+
+	frustrum.pFar.Set(matrix.m[3] - matrix.m[2], matrix.m[7] - matrix.m[6], matrix.m[11] - matrix.m[10], matrix.m[15] - matrix.m[14]);
+	frustrum.pFar.Normalize();
+
+	frustrum.pNear.Set(matrix.m[3] + matrix.m[2], matrix.m[7] + matrix.m[6], matrix.m[11] + matrix.m[10], matrix.m[15] + matrix.m[14]);
+	frustrum.pNear.Normalize();
+}

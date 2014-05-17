@@ -45,12 +45,10 @@ void rRenderer::RenderModel(const rModel* model, const rMatrix4& transform){
 
 void rRenderer::ComputeWorldSpaceTransformForObject(const rMatrix4& object, rMatrix4& world){
 		if (m_activeViewport){
-			rMatrix4 view, projection;
+			rMatrix4 view;
 			m_activeViewport->GetViewMatrix(view);
-			m_activeViewport->GetProjectionMatrix(projection);
 
 			world = view * object;
-			world = projection * world;
 		}
 		else{
 			world = object;

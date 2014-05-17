@@ -11,12 +11,12 @@ struct RECONDITE_API rFrustrum{
 
 	bool PointInFrustrum(const rVector3& p);
 
-	rPlane near;
-	rPlane far; 
-	rPlane top; 
-	rPlane bottom;
-	rPlane left;
-	rPlane right;
+	rPlane pNear;
+	rPlane pFar; 
+	rPlane pTop; 
+	rPlane pBottom;
+	rPlane pLeft;
+	rPlane pRight;
 };
 
 #endif

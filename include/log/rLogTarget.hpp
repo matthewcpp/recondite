@@ -1,10 +1,11 @@
 #ifndef R_LOGTARGET_HPP
 #define R_LOGTARGET_HPP
 
-#include "rTypes.hpp"
-#include "rDefs.hpp"
+#include "rBuild.hpp"
 
-class rLogTarget{
+#include "rString.hpp"
+
+class RECONDITE_API rLogTarget{
 public:
 	virtual void Debug(const rString& message) = 0;
 	virtual void Warning(const rString& message) = 0;

@@ -13,7 +13,7 @@
 
 #include "interface/riCamera.hpp"
 
-#include "rPlane.hpp"
+#include "rFrustrum.hpp"
 
 enum rViewportType{
 	rVIEWPORT_PERSP,
@@ -53,6 +53,7 @@ public:
 	float FarClip() const;
 
 	void SetClipping(float near, float far);
+	void GetViewFrustrum(rFrustrum& frustrum);
 
 private:
 	rViewportType m_type;

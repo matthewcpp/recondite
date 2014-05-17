@@ -30,10 +30,6 @@ namespace rMath{
 
 	template <typename T>
 	int RoundToInt(T r);
-
-	bool PointInBoundedXYPlane(const rVector3& corner1 , const rVector3& corner2 , const rVector3& point);
-	bool PointInBoundedXZPlane(const rVector3& corner1 , const rVector3& corner2 , const rVector3& point);
-	bool PointInBoundedYZPlane(const rVector3& corner1 , const rVector3& corner2 , const rVector3& point);
 };
 
 template <typename T>

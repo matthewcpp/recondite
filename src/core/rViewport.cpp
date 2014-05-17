@@ -122,3 +122,6 @@ void rViewport::SetScreenRect(const rRect& rect){
 void rViewport::SetScreenRect(int x, int y, int width, int height){
 	m_rect.Set(x, y, width, height);
 }
+
+void rViewport::GetViewFrustrum(rFrustrum& frustrum){
+}

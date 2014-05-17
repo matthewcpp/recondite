@@ -26,35 +26,3 @@ float rMath::Max3(float n1 , float n2, float n3){
 	
 	return n3;
 }
-
-
-bool rMath::PointInBoundedXYPlane(const rVector3& corner1 , const rVector3& corner2 , const rVector3& point){
-	float minX = std::min(corner1.x , corner2.x);
-	float minY = std::min(corner1.y , corner2.y);
-	float maxX = std::max(corner1.x , corner2.x);
-	float maxY = std::max(corner1.y , corner2.y);
-
-	return	point.x >= minX && point.x <= maxX && 
-			point.y >= minY && point.y <= maxY;
-}
-
-bool rMath::PointInBoundedXZPlane(const rVector3& corner1 , const rVector3& corner2 , const rVector3& point){
-	float minX = std::min(corner1.x , corner2.x);
-	float minZ = std::min(corner1.z , corner2.z);
-	float maxX = std::max(corner1.x , corner2.x);
-	float maxZ = std::max(corner1.z , corner2.z);
-
-	return	point.x >= minX && point.x <= maxX && 
-			point.z >= minZ && point.z <= maxZ;
-}
-
-bool rMath::PointInBoundedYZPlane(const rVector3& corner1 , const rVector3& corner2 , const rVector3& point){
-
-	float minY = std::min(corner1.y , corner2.y);
-	float minZ = std::min(corner1.z , corner2.z);
-	float maxY = std::max(corner1.y , corner2.y);
-	float maxZ = std::max(corner1.z , corner2.z);
-
-	return	point.y >= minY && point.y <= maxY &&
-			point.z >= minZ && point.z <= maxZ;
-}

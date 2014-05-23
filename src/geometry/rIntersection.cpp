@@ -94,3 +94,60 @@ bool rIntersection::RayIntersectsSphere(const rRay3& ray , const rSphere& sphere
 
 	return true;
 }
+
+bool FrustrumPlaneSphereCheck(const rPlane& plane, const rSphere& sphere, int& planeCount){
+
+
+	return true;
+}
+
+int FrustrumSphereTest(const rFrustrum& frustrum, const rSphere& sphere){
+	int planeCount = 0;
+	float distance;
+
+	distance = frustrum.pNear.DistanceToPoint(sphere.center);
+	if (distance <= -sphere.radius) 
+		return 0;
+	if (distance > sphere.radius)
+		planeCount++;
+
+	distance = frustrum.pFar.DistanceToPoint(sphere.center);
+	if (distance <= -sphere.radius) 
+		return 0;
+	if (distance > sphere.radius)
+		planeCount++;
+
+	distance = frustrum.pLeft.DistanceToPoint(sphere.center);
+	if (distance <= -sphere.radius) 
+		return 0;
+	if (distance > sphere.radius)
+		planeCount++;
+
+	distance = frustrum.pRight.DistanceToPoint(sphere.center);
+	if (distance <= -sphere.radius) 
+		return 0;
+	if (distance > sphere.radius)
+		planeCount++;
+
+	distance = frustrum.pTop.DistanceToPoint(sphere.center);
+	if (distance <= -sphere.radius) 
+		return 0;
+	if (distance > sphere.radius)
+		planeCount++;
+
+	distance = frustrum.pBottom.DistanceToPoint(sphere.center);
+	if (distance <= -sphere.radius) 
+		return 0;
+	if (distance > sphere.radius)
+		planeCount++;
+
+	return planeCount;
+}
+
+bool rIntersection::FrustrumContainsSphere(const rFrustrum& frustrum, const rSphere& sphere){
+	return FrustrumSphereTest(frustrum, sphere) == 6;
+}
+
+bool rIntersection::FrustrumIntersectsSphere(const rFrustrum& frustrum, const rSphere& sphere){
+	return FrustrumSphereTest(frustrum, sphere) > 0;
+}

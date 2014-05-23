@@ -6,7 +6,11 @@
 #include <set>
 #include <iterator>
 
-#include "math/rMath3.hpp"
+#include "rAlignedBox3.hpp"
+#include "rVector3.hpp"
+#include "rSphere.hpp"
+#include "rLine3.hpp"
+
 
 enum rOctreeError{
 	rOCTREE_ERROR_NONE,
@@ -55,7 +59,7 @@ public:
 
 	typedef rVector3 point_type;
 	typedef rAlignedBox3 box_type;
-	typedef rSphere3 sphere_type;
+	typedef rSphere sphere_type;
 	typedef rRay3 ray_type;
 
 	typedef rOctreeNode_t<T> node_type;
@@ -420,7 +424,7 @@ rOctreeError rOctree<T>::InsertItemWithSphere(const T& item, const sphere_type& 
 	if ( ContainsItem(item))
 		return rOCTREE_ERROR_ITEM_ALREADY_IN_TREE;
 
-	if (!rCollision3::AlignedBoxContainsSphere(m_root->m_volume , s))
+	if (!rIntersection::AlignedBoxContainsSphere(m_root->m_volume , s))
 		return rOCTREE_ERROR_ITEM_DOES_NOT_FIT;
 
 	typename rOctree<T>::node_type* target =InsertItemWithSphereRec(item , s , m_root);
@@ -439,7 +443,7 @@ typename rOctree<T>::node_type* rOctree<T>::InsertItemWithSphereRec(const T& ite
 
 		for (size_t i =0; i < node->m_children.size(); i++){
 
-				if (rCollision3::AlignedBoxContainsSphere(volumes[i] , s)){
+				if (rIntersection::AlignedBoxContainsSphere(volumes[i] , s)){
 					if (!node->m_children[i]){
 						node->m_children[i] = new node_type(volumes[i], node->m_depth + 1);
 						m_numNodes++;
@@ -504,7 +508,7 @@ template <class T>
 void rOctree<T>::QueryItemsWithSphere(const sphere_type& s, result_type& result){
 	result.clear();
 
-	if (! m_root || ! rCollision3::AlignedBoxIntersectsSphere(m_root->m_volume , s))
+	if (! m_root || ! rIntersection::AlignedBoxIntersectsSphere(m_root->m_volume , s))
 		return;
 
 	AddNodeItemsToResultSet( m_root,result);
@@ -514,7 +518,7 @@ void rOctree<T>::QueryItemsWithSphere(const sphere_type& s, result_type& result)
 template <class T>
 void rOctree<T>::QueryItemsWithSpehereRec(const sphere_type& s , result_type& result , node_type* node){
 	for (size_t i =0; i < node->m_children.size(); i++){
-			if (node->m_children[i] && rCollision3::AlignedBoxIntersectsSphere(node->m_children[i]->m_volume , s)){
+			if (node->m_children[i] && rIntersection::AlignedBoxIntersectsSphere(node->m_children[i]->m_volume , s)){
 				AddNodeItemsToResultSet(node->m_children[i],result);
 				QueryItemsWithSpehereRec(s , result , node->m_children[i]);
 			}
@@ -525,7 +529,7 @@ template <class T>
 void rOctree<T>::QueryItemsWithRay(const ray_type& r , result_type& result){
 	result.clear();
 
-	if (! m_root || !rCollision3::RayIntersectsAlignedBox(r , m_root->m_volume))
+	if (! m_root || !rIntersection::RayIntersectsAlignedBox(r , m_root->m_volume))
 		return;
 
 	AddNodeItemsToResultSet( m_root,result);
@@ -535,7 +539,7 @@ void rOctree<T>::QueryItemsWithRay(const ray_type& r , result_type& result){
 template <class T>
 void rOctree<T>::QueryItemsWithRayRec(const ray_type& r , result_type& result , node_type* node){
 	for (size_t i =0; i < node->m_children.size(); i++){
-			if (node->m_children[i] && rCollision3::RayIntersectsAlignedBox(r,node->m_children[i]->m_volume)){
+			if (node->m_children[i] && rIntersection::RayIntersectsAlignedBox(r,node->m_children[i]->m_volume)){
 				AddNodeItemsToResultSet(node->m_children[i],result);
 				QueryItemsWithRayRec(r , result , node->m_children[i]);
 			}
@@ -588,7 +592,7 @@ rOctreeError rOctree<T>::UpdateItemWithSphere(T& item, const sphere_type& s){
 	if ( !ContainsItem(item))
 		return rOCTREE_ERROR_ITEM_NOT_FOUND;
 
-	if (!rCollision3::AlignedBoxContainsSphere(m_root->m_volume , s))
+	if (!rIntersection::AlignedBoxContainsSphere(m_root->m_volume , s))
 		return rOCTREE_ERROR_ITEM_DOES_NOT_FIT;
 
 	m_items[item]->RemoveItem(item);

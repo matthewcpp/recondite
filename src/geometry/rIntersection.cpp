@@ -69,14 +69,6 @@ bool rIntersection::RayIntersectsPlane(const rRay3& ray , const rPlane& plane, r
 	return false;
 }
 
-bool rIntersection::RayIntersectsAlignedBox(const rRay3& ray,const rAlignedBox3& box ){
-	if (box.ContainsPoint(ray.origin))
-		return true;
-
-
-	return false;
-}
-
 bool rIntersection::RayIntersectsSphere(const rRay3& ray , const rSphere& sphere){
 	if (sphere.ContainsPoint(ray.origin))
 		return true;
@@ -150,4 +142,58 @@ bool rIntersection::FrustrumContainsSphere(const rFrustrum& frustrum, const rSph
 
 bool rIntersection::FrustrumIntersectsSphere(const rFrustrum& frustrum, const rSphere& sphere){
 	return FrustrumSphereTest(frustrum, sphere) > 0;
+}
+
+bool rIntersection::RayIntersectsAlignedBox(const rRay3& ray, const rAlignedBox3& box){
+	float t0 = 0.0f;
+	float t1 = 10000.0f;
+
+	float tmin, tmax, tymin, tymax, tzmin, tzmax;
+
+	float divx = 1 / ray.direction.x;
+	if (divx >= 0) {
+		tmin = (box.min.x - ray.origin.x) * divx;
+		tmax = (box.max.x - ray.origin.x) * divx;
+	}
+	else {
+		tmin = (box.max.x - ray.origin.x) * divx;
+		tmax = (box.min.x - ray.origin.x) * divx;
+	}
+
+	float divy = 1 / ray.direction.y;
+	if (divy >= 0) {
+		tymin = (box.min.y - ray.origin.y) * divy;
+		tymax = (box.max.y - ray.origin.y) * divy;
+	}
+	else {
+		tymin = (box.max.y - ray.origin.y) * divy;
+		tymax = (box.min.y - ray.origin.y) * divy;
+	}
+	if ( (tmin > tymax) || (tymin > tmax) )
+		return false;
+
+	if (tymin > tmin)
+		tmin = tymin;
+	if (tymax < tmax)
+		tmax = tymax;
+
+	float divz = 1 / ray.direction.z;
+	if (divz >= 0) {
+		tzmin = (box.min.z - ray.origin.z) * divz;
+		tzmax = (box.max.z - ray.origin.z) * divz;
+	}
+	else {
+		tzmin = (box.max.z - ray.origin.z) * divz;
+		tzmax = (box.min.z - ray.origin.z) * divz;
+	}
+	if ( (tmin > tzmax) || (tzmin > tmax) )
+		return false;
+
+	if (tzmin > tmin)
+		tmin = tzmin;
+	if (tzmax < tmax)
+		tmax = tzmax;
+
+	return ( (tmin < t1) && (tmax > t0) );
+
 }

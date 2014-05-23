@@ -43,3 +43,14 @@ TEST(Geometry_rIntersection, FrustrumIntersectsSphere){
 	s.radius = 200;
 	EXPECT_FALSE(rIntersection::FrustrumIntersectsSphere(f,s));
 }
+
+TEST(Geometry_rIntersection, RayBoxIntersection){
+	rRay3 ray(rVector3(0, 0 , 101), rVector3::ForwardVector);
+	rAlignedBox3 box(rVector3::OneVector * 100 , rVector3::OneVector * -100);
+
+	EXPECT_TRUE(rIntersection::RayIntersectsAlignedBox(ray, box));
+	ray.direction.Set(0,0.001,- 0.001);
+	ray.direction.Normalize();
+
+	EXPECT_TRUE(rIntersection::RayIntersectsAlignedBox(ray, box));
+}

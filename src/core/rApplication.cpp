@@ -89,7 +89,7 @@ void rApplication::InitEngine(rGraphicsDevice* graphics, rContentManager* conten
 void rApplication::InitModule(){
 	m_module->Init(m_engine);
 	m_module->InitUI(*m_overlayManager, m_engine);
-	m_module->LoadScene("Default", m_scene, m_engine);
+	m_module->LoadScene("Default", m_engine);
 }
 
 void rApplication::SetDisplaySize(int width, int height){
@@ -98,4 +98,39 @@ void rApplication::SetDisplaySize(int width, int height){
 
 rSize rApplication::DisplaySize() const{
 	return m_displaySize;
+}
+
+rViewport* rApplication::CreateViewport(const rString& name){
+	if (m_viewports.count(name)){
+		return NULL;
+	}
+	else {
+		rViewport* viewport = new rViewport(name);
+		m_viewports[name] = viewport;
+		return viewport;
+	}
+}
+
+rViewport* rApplication::GetViewport(const rString& name) const{
+	rViewportMap::const_iterator it = m_viewports.find(name);
+
+	if (it != m_viewports.end()){
+		return it->second;
+	}
+	else{
+		return NULL;
+	}
+}
+
+void rApplication::DeleteViewport(const rString& name){
+	rViewportMap::iterator it = m_viewports.find(name);
+
+	if (it != m_viewports.end()){
+		delete it->second;
+		m_viewports.erase(it);
+	}
+}
+
+size_t rApplication::NumViewports() const{
+	return m_viewports.size();
 }

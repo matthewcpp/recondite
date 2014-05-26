@@ -1,10 +1,11 @@
 #include "rViewport.hpp"
 
-rViewport::rViewport(rViewportType type){
+rViewport::rViewport(const rString& name, rViewportType type){
 	m_type = type;
 	m_camera = NULL;
 	
 	m_rect.Set(0,0,0,0);
+	m_name = name;
 	SetClipping(1.0f, 100.0f);
 }
 
@@ -136,4 +137,8 @@ void rViewport::GetViewFrustrum(rFrustrum& frustrum) const{
 	GetViewMatrix(view);
 
 	rMatrixUtil::ExtractViewFrustrum(view, frustrum);
+}
+
+rString rViewport::Name() const{
+	return m_name;
 }

@@ -33,9 +33,17 @@ public:
 	virtual void SetDisplaySize(int width, int height);
 	virtual rSize DisplaySize() const;
 
+	virtual rViewport* CreateViewport(const rString& name);
+	virtual rViewport* GetViewport(const rString& name) const;
+	virtual void DeleteViewport(const rString& name);
+	virtual size_t NumViewports() const;
+
 protected:
 	void InitEngine(rGraphicsDevice* graphics, rContentManager* content, rInputManager* input);
 	void InitModule();
+
+protected:
+	typedef std::map<rString, rViewport*> rViewportMap;
 
 protected:
 	bool m_isRunning;
@@ -51,6 +59,8 @@ protected:
 	rModuleLoader m_moduleLoader;
 
 	rSize m_displaySize;
+
+	rViewportMap m_viewports;
 };
 
 #endif

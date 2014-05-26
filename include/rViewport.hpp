@@ -3,6 +3,8 @@
 
 #include "rBuild.hpp"
 
+#include "rString.hpp"
+
 #include "rPoint.hpp"
 #include "rSize.hpp"
 
@@ -23,7 +25,7 @@ enum rViewportType{
 
 class RECONDITE_API rViewport{
 public:
-	rViewport(rViewportType type = rVIEWPORT_PERSP);
+	rViewport(const rString& name, rViewportType type = rVIEWPORT_PERSP);
 
 	int GetSelectionRay(const rPoint& pos , rRay3& selectionRay) const;
 
@@ -56,10 +58,14 @@ public:
 	void SetClipping(float near, float far);
 	void GetViewFrustrum(rFrustrum& frustrum) const;
 
+	rString Name() const;
+
 private:
 	rViewportType m_type;
 	rRect m_rect;
 	riCamera* m_camera;
+
+	rString m_name;
 	
 	float m_nearClip;
 	float m_farClip;

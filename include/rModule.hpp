@@ -22,7 +22,7 @@ public:
 	virtual void Init(rEngine& engine) = 0;
 	virtual void InitUI(ruiOverlayManager& manager, rEngine& engine) = 0;
 	virtual void Uninit(rEngine& engine) = 0;
-	virtual void LoadScene(const rString& sceneName, rScene* scene, rEngine& engine) = 0;
+	virtual void LoadScene(const rString& sceneName, rEngine& engine) = 0;
 	virtual void DeleteActor(rActor3* actor) = 0;
 
 };

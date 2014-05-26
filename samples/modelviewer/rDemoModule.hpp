@@ -27,7 +27,7 @@ public:
 	virtual void Uninit(rEngine& engine);
 
 	virtual void InitUI(ruiOverlayManager& uiManager, rEngine& engine);
-	virtual void LoadScene(const rString& sceneName, rScene* scene, rEngine& engine);
+	virtual void LoadScene(const rString& sceneName, rEngine& engine);
 	virtual void DeleteActor(rActor3* actor);
 
 private:
@@ -36,7 +36,7 @@ private:
 	void LoadUi(rEngine& engine);
 
 private:
-	rViewport m_viewport;
+	rViewport* m_viewport;
 	rDemoCamera* m_camera;
 	rDemoPawn* m_pawn;
 

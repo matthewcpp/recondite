@@ -9,9 +9,6 @@
 #include "interface/riScene.hpp"
 #include "rActor3.hpp"
 
-typedef std::map<rString, rActor3*> rActorMap;
-typedef std::vector<rActor3*> rActorArray;
-
 class RECONDITE_API rScene : public riScene{
 public:
 	void Update(rEngine& engine);
@@ -19,10 +16,16 @@ public:
 
 	virtual void AddActor(rActor3* actor);
 	virtual rActor3* GetActor(const rString& name) const;
+	virtual size_t NumActors () const;
 
 	virtual void DeleteActor(const rString& name);
 
 	void Clear();
+
+private:
+
+	typedef std::map<rString, rActor3*> rActorMap;
+	typedef std::vector<rActor3*> rActorArray;
 
 private:
 	rActorMap m_actors;

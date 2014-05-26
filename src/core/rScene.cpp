@@ -63,3 +63,7 @@ void rScene::Clear(){
 
 	m_actors.clear();
 }
+
+size_t rScene::NumActors () const{
+	return m_actors.size();
+}

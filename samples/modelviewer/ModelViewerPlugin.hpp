@@ -1,9 +1,8 @@
 #ifndef MODELVIEWERPLUGIN_HPP
 #define MODELVIEWERPLUGIN_HPP
 
-#include "rBuild.hpp"
-
 #include "rModule.hpp"
+
 #include "rDemoModule.hpp"
 
 extern "C"{

@@ -5,4 +5,5 @@ rModule* CreateModule(){
 }
 
 void DeleteModule(rModule* module){
+	delete module;
 }

@@ -24,6 +24,11 @@ bool rOStringStream::IsOk() const{
 	return !m_stream.fail();
 }
 
+rOStream& rOStringStream::operator << (const rString& str){
+	m_stream << str.c_str();
+	return *this;
+}
+
 rOStream& rOStringStream::operator << (char c){
 	m_stream << c;
 	return *this;
@@ -66,4 +71,9 @@ rOStream& rOStringStream::operator << (float f){
 
 rOStringStream::operator bool() const{
 	return IsOk();
+}
+
+
+rString rOStringStream::Str() const{
+	return m_stream.str().c_str();
 }

@@ -15,12 +15,12 @@ public:
 
 public:
 
-	virtual rOStream& Write(const char* buffer, size_t size) = 0;
+	virtual rOStream& Write(const char* buffer, size_t size);
 
-	virtual void Seek(size_t pos) = 0;
-	virtual size_t Pos() = 0;
+	virtual void Seek(size_t pos);
+	virtual size_t Pos();
 
-	virtual bool IsOk() const = 0;
+	virtual bool IsOk() const;
 
 	virtual rOStream& operator << (char c);
 	virtual rOStream& operator << (const char* str);
@@ -30,8 +30,11 @@ public:
 	virtual rOStream& operator << (int i);
 	virtual rOStream& operator << (unsigned int i);
 	virtual rOStream& operator << (float f);
+	virtual rOStream& operator << (const rString& str);
 
 	virtual operator bool() const;
+
+	rString Str() const;
 
 private:
 	std::ostringstream m_stream;

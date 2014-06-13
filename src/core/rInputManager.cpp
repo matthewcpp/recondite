@@ -104,7 +104,7 @@ void rInputManager::CreateKeyboardEvent(rKey key, rKeyState state){
 		m_ui->InjectKeyUpEvent(key, m_keyboard);
 }
 
-const rKeyboardState* rInputManager::GetKeyboardState() const{
+const rKeyboardState* rInputManager::Keyboard() const{
 	return &m_keyboard;
 }
 

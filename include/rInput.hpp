@@ -39,7 +39,7 @@ public:
 	virtual rControllerState* GetControllerState(size_t index) const = 0;
 	virtual const rMouseState* GetMouseState() const = 0;
 
-	virtual const rKeyboardState* GetKeyboardState() const = 0;
+	virtual const rKeyboardState* Keyboard() const = 0;
 
 	virtual const riGestureTracker* Gestures() const = 0;
 };

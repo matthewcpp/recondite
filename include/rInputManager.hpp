@@ -38,7 +38,7 @@ public:
 	void CreateKeyboardEvent(rKey key, rKeyState state);
 
 	virtual const rMouseState* GetMouseState() const;
-	virtual const rKeyboardState* GetKeyboardState() const;
+	virtual const rKeyboardState* Keyboard() const;
 	
 	void GetTouchIds(rIntArray& ids);
 	

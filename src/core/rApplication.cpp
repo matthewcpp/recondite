@@ -3,6 +3,7 @@
 rApplication::rApplication(){
 	m_isRunning = false;
 	m_frameCount = 0;
+	m_targetFPS = 30;
 }
 
 void rApplication::Update(){
@@ -21,14 +22,19 @@ bool rApplication::LoadModule(const char* path){
 void rApplication::Draw(){
 	m_graphicsDevice->Clear();
 
-	//application level rendering goes here...
-	m_graphicsDevice->EnableDepthTesting(true);
+	rViewportMap::iterator end = m_viewports.end();
+	for (rViewportMap::iterator it = m_viewports.begin(); it != end; ++it){
+		rViewport* viewport = it->second;
+		//application level rendering goes here...
+		m_graphicsDevice->EnableDepthTesting(true);
 
-	m_module->Draw(m_engine);
-	m_scene->Draw(m_engine);
+		m_engine.renderer->Render(*viewport);
+		m_module->Draw(m_engine);
+		m_scene->Draw(m_engine);
 
-	m_graphicsDevice->EnableDepthTesting(false);
-	m_overlayManager->Draw(m_engine);
+		m_graphicsDevice->EnableDepthTesting(false);
+		m_overlayManager->Draw(it->second, m_engine);
+	}
 
 	m_graphicsDevice->SwapBuffers();
 
@@ -55,7 +61,7 @@ void rApplication::Tick(){
 	}
 }
 
-unsigned int rApplication::GetTargetFPS() const{
+size_t rApplication::TargetFPS() const{
 	return m_targetFPS;
 }
 
@@ -133,4 +139,8 @@ void rApplication::DeleteViewport(const rString& name){
 
 size_t rApplication::NumViewports() const{
 	return m_viewports.size();
+}
+
+size_t rApplication::FrameCount() const{
+	return m_frameCount;
 }

@@ -37,7 +37,7 @@ public:
 	virtual bool InjectKeyUpEvent(rKey key, rKeyboardState& state);
 	
 	void Update(rEngine& engine);
-	void Draw(rEngine& engine);
+	void Draw(rViewport* viewport, rEngine& engine);
 
 	void Clear();
 

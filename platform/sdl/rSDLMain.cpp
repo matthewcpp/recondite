@@ -14,8 +14,10 @@ int main(int argc, char** argv){
 		return 1;
 	}
 
+	rString moduleName(argv[1]);
+
 	rSDLApplication app;
-	bool loaded = app.LoadModule("modelviewer.rec");
+	bool loaded = app.LoadModule(moduleName);
 
 	if (!loaded){
 		return 1;

@@ -27,11 +27,13 @@ public:
 
 	virtual void Tick();
 
-	unsigned int GetTargetFPS() const;
+	virtual size_t TargetFPS() const;
 	void SetTargetFPS(unsigned int targetFPS);
 
-	virtual void SetDisplaySize(int width, int height);
+	void SetDisplaySize(int width, int height);
 	virtual rSize DisplaySize() const;
+
+	virtual size_t FrameCount() const;
 
 	virtual rViewport* CreateViewport(const rString& name);
 	virtual rViewport* GetViewport(const rString& name) const;
@@ -48,7 +50,7 @@ protected:
 protected:
 	bool m_isRunning;
 	unsigned int m_targetFPS;
-	unsigned int m_frameCount;
+	size_t m_frameCount;
 
 	rEngine m_engine;
 	rModule* m_module;

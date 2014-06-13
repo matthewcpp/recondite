@@ -7,7 +7,6 @@ void rDemoModule::Update(rEngine& engine){
 }
 
 void rDemoModule::Draw(rEngine& engine){
-	engine.renderer->Render(*m_viewport);
 	m_controller->OnDraw(engine);
 }
 

@@ -112,10 +112,6 @@ void ruiDemoController::OnUpdate(rEngine& engine){
 	m_animationTime->SetText(stream.str().c_str());
 }
 
-void ruiDemoController::OnDraw(rEngine& engine){
-
-}
-
 void ruiDemoController::SetPawn(rDemoPawn* pawn){
 	m_pawn = pawn;
 }

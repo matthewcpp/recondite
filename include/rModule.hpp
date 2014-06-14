@@ -6,6 +6,7 @@
 #include "rEngine.hpp"
 #include "ui/ruiOverlayManager.hpp"
 #include "rScene.hpp"
+#include "rViewInfo.hpp"
 
 //modules need to export 2 methods in order for them to be loaded by the DLL loader classes
 #ifdef _MSC_VER
@@ -17,8 +18,15 @@
 class RECONDITE_API rModule {
 public:
 
-	virtual void Update(rEngine& engine) = 0;
-	virtual void Draw(rEngine& engine) =0;
+	virtual void BeforeUpdateScene(rEngine& engine) = 0;
+	virtual void AfterUpdateScene(rEngine& engine) = 0;
+	
+	virtual void BeforeRenderScene(rViewInfo& view, rEngine& engine) = 0;
+	virtual void AfterRenderScene(rViewInfo& view, rEngine& engine) = 0;
+
+	virtual void BeforeRenderOverlay(rViewInfo& view, rEngine& engine) = 0;
+	virtual void AfterRenderOverlay(rViewInfo& view, rEngine& engine) = 0;
+
 	virtual void Init(rEngine& engine) = 0;
 	virtual void InitUI(ruiOverlayManager& manager, rEngine& engine) = 0;
 	virtual void Uninit(rEngine& engine) = 0;

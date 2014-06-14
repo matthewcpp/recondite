@@ -1,18 +1,30 @@
 #include "rDemoModule.hpp"
 
-void rDemoModule::Update(rEngine& engine){
+void rDemoModule::BeforeUpdateScene(rEngine& engine){
 	m_camera->Update(engine);
 
 	m_controller->OnUpdate(engine);
 }
 
-void rDemoModule::Draw(rEngine& engine){
-	m_controller->OnDraw(engine);
+void rDemoModule::AfterUpdateScene(rEngine& engine){
 }
 
 void rDemoModule::Init(rEngine& engine){
 	InitView(engine);
 	LoadContent(engine);
+}
+
+
+void rDemoModule::BeforeRenderScene(rViewInfo& view, rEngine& engine){
+}
+
+void rDemoModule::AfterRenderScene(rViewInfo& view, rEngine& engine){
+}
+
+void rDemoModule::BeforeRenderOverlay(rViewInfo& view, rEngine& engine){
+}
+
+void rDemoModule::AfterRenderOverlay(rViewInfo& view, rEngine& engine){
 }
 
 void rDemoModule::InitView(rEngine& engine){

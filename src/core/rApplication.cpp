@@ -7,10 +7,11 @@ rApplication::rApplication(){
 }
 
 void rApplication::Update(){
-	m_scene->Update(m_engine);
+	m_module->BeforeUpdateScene(m_engine);
+		m_scene->Update(m_engine);
+	m_module->AfterUpdateScene(m_engine);
+
 	m_overlayManager->Update(m_engine);
-	
-	m_module->Update(m_engine);
 }
 
 bool rApplication::LoadModule(const char* path){
@@ -24,16 +25,26 @@ void rApplication::Draw(){
 
 	rViewportMap::iterator end = m_viewports.end();
 	for (rViewportMap::iterator it = m_viewports.begin(); it != end; ++it){
-		rViewport* viewport = it->second;
+		rViewInfo view;
+		view.viewport = it->second;
+		view.overlay = m_overlayManager->GetOverlay(view.viewport);
+		
 		//application level rendering goes here...
 		m_graphicsDevice->EnableDepthTesting(true);
 
-		m_engine.renderer->Render(*viewport);
-		m_module->Draw(m_engine);
+		m_engine.renderer->BeginRenderView(*view.viewport);
+		m_module->BeforeRenderScene(view, m_engine);
 		m_scene->Draw(m_engine);
+		m_module->AfterRenderScene(view, m_engine);
+		m_engine.renderer->EndRenderView();
 
 		m_graphicsDevice->EnableDepthTesting(false);
-		m_overlayManager->Draw(it->second, m_engine);
+
+		if (view.overlay){
+			m_module->BeforeRenderOverlay(view, m_engine);
+			view.overlay->Draw(m_engine);
+			m_module->AfterRenderOverlay(view, m_engine);
+		}
 	}
 
 	m_graphicsDevice->SwapBuffers();

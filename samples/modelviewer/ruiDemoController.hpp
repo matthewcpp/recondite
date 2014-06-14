@@ -30,7 +30,6 @@ public:
 	virtual void Init(ruiOverlay* overlay);
 
 	void OnUpdate(rEngine& engine);
-	void OnDraw(rEngine& engine);
 
 	void OnModelChange(ruiWidget* widget);
 	void OnAnimationChange(ruiWidget* widget);

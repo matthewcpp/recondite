@@ -7,11 +7,19 @@ rRenderer::rRenderer(rGraphicsDevice* graphicsDevice, rContentManager* contentMa
 	m_activeViewport = NULL;
 }
 
-void rRenderer::Render (rViewport& viewport){
+void rRenderer::BeginRenderView (rViewport& viewport){
+	m_objectsRendered = 0;
 	m_activeViewport = &viewport;
 	
 	rRect window = viewport.GetScreenRect();
 	m_graphicsDevice->SetViewport(window.x, window.y, window.width, window.height);
+}
+
+void rRenderer::EndRenderView(){
+}
+
+size_t rRenderer::ObjectsRendered() const{
+	return m_objectsRendered;
 }
 
 void rRenderer::RenderGeometry(rGeometry* geometry, const rMatrix4& transform, const rString& elementBufferName, rMaterial* material){
@@ -41,6 +49,8 @@ void rRenderer::RenderModel(const rModel* model, const rMatrix4& transform){
 
 		m_graphicsDevice->RenderGeometry(geometry, modelViewProjection, mesh->buffer, mesh->material);
 	}
+
+	m_objectsRendered++;
 }
 
 void rRenderer::ComputeWorldSpaceTransformForObject(const rMatrix4& object, rMatrix4& world){

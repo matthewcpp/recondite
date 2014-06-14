@@ -21,8 +21,16 @@
 class rDemoModule : public rModule{
 public:
 
-	virtual void Update(rEngine& engine);
-	virtual void Draw(rEngine& engine);
+	virtual void BeforeUpdateScene(rEngine& engine);
+	virtual void AfterUpdateScene(rEngine& engine);
+
+	virtual void BeforeRenderScene(rViewInfo& view, rEngine& engine);
+	virtual void AfterRenderScene(rViewInfo& view, rEngine& engine);
+
+	virtual void BeforeRenderOverlay(rViewInfo& view, rEngine& engine);
+	virtual void AfterRenderOverlay(rViewInfo& view, rEngine& engine);
+
+
 	virtual void Init(rEngine& engine);
 	virtual void Uninit(rEngine& engine);
 

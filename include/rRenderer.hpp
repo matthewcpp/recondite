@@ -26,7 +26,9 @@ public:
 public:
 	void CreateRequiredMaterials();
 
-	void Render (rViewport& viewport);
+	void BeginRenderView (rViewport& viewport);
+	void EndRenderView();
+	size_t ObjectsRendered() const;
 	
 	void RenderGeometry(rGeometry* geometry, const rMatrix4& transform, const rString& elementBufferName, rMaterial* material);
 	
@@ -58,6 +60,8 @@ private:
 		rGraphicsDevice* m_graphicsDevice;
 		rContentManager* m_contentManager;
 		rViewport* m_activeViewport;
+
+		size_t m_objectsRendered;
 };
 
 #endif

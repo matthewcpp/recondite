@@ -50,16 +50,16 @@ public:
 
 	void RenderSkeleton(const rSkeleton* skeleton, const rMatrix4Vector& transformArray, const rColor& lineColor, const rColor& pointColor, float pointSize);
 
-private:
-	void ComputeWorldSpaceTransformForObject(const rMatrix4& object, rMatrix4& world);
-	
+private:	
 	void ImmediateColorRender(rImmediateBuffer& geometry, const rColor& color);
 	void ImmediateTexturedRender(rImmediateBuffer& geometry, rTexture2D* texture);
 
 private:
 		rGraphicsDevice* m_graphicsDevice;
 		rContentManager* m_contentManager;
+
 		rViewport* m_activeViewport;
+		rMatrix4 m_viewMatrix;
 
 		size_t m_objectsRendered;
 };

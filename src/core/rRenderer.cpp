@@ -13,6 +13,8 @@ void rRenderer::BeginRenderView (rViewport& viewport){
 	
 	rRect window = viewport.GetScreenRect();
 	m_graphicsDevice->SetViewport(window.x, window.y, window.width, window.height);
+
+	viewport.GetViewMatrix(m_viewMatrix);
 }
 
 void rRenderer::EndRenderView(){
@@ -23,22 +25,16 @@ size_t rRenderer::ObjectsRendered() const{
 }
 
 void rRenderer::RenderGeometry(rGeometry* geometry, const rMatrix4& transform, const rString& elementBufferName, rMaterial* material){
-	rMatrix4 modelViewProjection;
-	ComputeWorldSpaceTransformForObject(transform, modelViewProjection);
-	
+	rMatrix4 modelViewProjection = m_viewMatrix * transform;
 	m_graphicsDevice->RenderGeometry(geometry, modelViewProjection, elementBufferName, material);
 }
 
 void rRenderer::RenderBuffer(const rImmediateBuffer& buffer, rMaterial* material){
-	rMatrix4 identity, modelViewProjection;
-	ComputeWorldSpaceTransformForObject(identity, modelViewProjection);
-
-	m_graphicsDevice->RenderImmediate(buffer, modelViewProjection, material);
+	m_graphicsDevice->RenderImmediate(buffer, m_viewMatrix, material);
 }
 
 void rRenderer::RenderModel(const rModel* model, const rMatrix4& transform){
-	rMatrix4 modelViewProjection;
-	ComputeWorldSpaceTransformForObject(transform, modelViewProjection);
+	rMatrix4 modelViewProjection = m_viewMatrix * transform;
 
 	rGeometry* geometry = model->Geometry();
 	rArrayString meshNames;
@@ -51,18 +47,6 @@ void rRenderer::RenderModel(const rModel* model, const rMatrix4& transform){
 	}
 
 	m_objectsRendered++;
-}
-
-void rRenderer::ComputeWorldSpaceTransformForObject(const rMatrix4& object, rMatrix4& world){
-		if (m_activeViewport){
-			rMatrix4 view;
-			m_activeViewport->GetViewMatrix(view);
-
-			world = view * object;
-		}
-		else{
-			world = object;
-		}
 }
 
 void rRenderer::ImmediateColorRender(rImmediateBuffer& geometry, const rColor& color){
@@ -135,13 +119,7 @@ void rRenderer::RenderWireBox(const rAlignedBox3& box, const rColor color){
 
 	if (material){
 		material->SetColor("fragColor", color);
-
-		rMatrix4 transform, modelViewProjection;
-		if (m_activeViewport){
-			ComputeWorldSpaceTransformForObject(transform, modelViewProjection);
-		}
-
-		m_graphicsDevice->RenderImmediate(geometry, modelViewProjection,  material);
+		m_graphicsDevice->RenderImmediate(geometry, m_viewMatrix,  material);
 	}
 }
 
@@ -201,24 +179,19 @@ void rRenderer::RenderSkeleton(const rSkeleton* skeleton, const rMatrix4Vector& 
 			lineData.TransformVertex(i, transformArray[i]);
 		}
 
-		rMatrix4 modelViewProjection, transform;
-		if (m_activeViewport){
-			ComputeWorldSpaceTransformForObject(transform, modelViewProjection);
-		}
-
 		rMaterial* material = m_contentManager->GetMaterialAsset("immediate_color");
 		material->SetColor("fragColor",lineColor);
 
 		m_graphicsDevice->EnableDepthTesting(false);
 
-		m_graphicsDevice->RenderImmediate(lineData, modelViewProjection, material);
+		m_graphicsDevice->RenderImmediate(lineData, m_viewMatrix, material);
 
 		material = m_contentManager->GetMaterialAsset("default_points");
 		material->SetColor("fragColor", pointColor);
 		material->SetFloat("recPointSize", pointSize);
 
 
-		m_graphicsDevice->RenderImmediate(pointData, modelViewProjection, material);
+		m_graphicsDevice->RenderImmediate(pointData, m_viewMatrix, material);
 		m_graphicsDevice->EnableDepthTesting(true);
 	}
 }

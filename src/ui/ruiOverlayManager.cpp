@@ -54,12 +54,11 @@ void ruiOverlayManager::Update(rEngine& engine){
 	}
 }
 
-void ruiOverlayManager::Draw(rEngine& engine){
-	ruiViewportOverlayMap::iterator end = m_overlays.end();
+void ruiOverlayManager::Draw(rViewport* viewport, rEngine& engine){
+	ruiViewportOverlayMap::iterator vp = m_overlays.find(viewport);
 
-	for (ruiViewportOverlayMap::iterator it = m_overlays.begin(); it != end; ++it){
-		it->second->Draw(engine);
-	}
+	if (vp != m_overlays.end())
+		vp->second->Draw(engine);
 }
 
 bool ruiOverlayManager::InjectKeyDownEvent(rKey key, rKeyboardState& state){
@@ -164,4 +163,13 @@ bool ruiOverlayManager::InjectMouseWheelEvent(rMouseWheelDirection direction, co
 	}
 
 	return false;
+}
+
+ruiOverlay* ruiOverlayManager::GetOverlay(rViewport* viewport) const{
+	ruiViewportOverlayMap::const_iterator result = m_overlays.find(viewport);
+
+	if (result != m_overlays.end())
+		return result->second;
+	else
+		return NULL;
 }

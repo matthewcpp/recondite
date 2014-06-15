@@ -14,8 +14,6 @@
 #include "ui/ruiWidget.hpp"
 #include "ui/ruiBase.hpp"
 
-typedef std::map<rViewport* , ruiOverlay*> ruiViewportOverlayMap;
-
 
 class RECONDITE_API ruiOverlayManager : public ruiInput {
 public:
@@ -42,11 +40,13 @@ public:
 	void Clear();
 
 	ruiOverlay* CreateOverlay(rViewport* viewport);
+	ruiOverlay* GetOverlay(rViewport* viewport) const;
 
 private:
 	rViewport* DetermineViewport(const rPoint& point);
 
-	
+private:
+	typedef std::map<rViewport* , ruiOverlay*> ruiViewportOverlayMap;
 
 private:
 	ruiViewportOverlayMap m_overlays;

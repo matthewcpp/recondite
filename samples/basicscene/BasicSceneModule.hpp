@@ -8,6 +8,8 @@
 #include "ui/ruiText.hpp"
 #include "stream/rOStringStream.hpp"
 
+#include "primitive/rPrimitiveBox.hpp"
+
 class BasicSceneModule : public rModule{
 public:
 

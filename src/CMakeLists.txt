@@ -40,6 +40,10 @@ set(stream_sources)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/stream)
 source_group (stream FILES ${stream_sources})
 
+set(primitive_sources)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/primitive)
+source_group (primitive FILES ${primitive_sources})
+
 if (MSVC)
 	set(win32_sources)
 	add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/platform/win32)

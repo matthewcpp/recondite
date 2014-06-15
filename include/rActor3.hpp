@@ -12,7 +12,7 @@ public:
 	rActor3(const rString& name , const rVector3& position);
 	virtual ~rActor3(){}
 
-	virtual int Update(rEngine& engine) = 0;
+	virtual int Update(rEngine& engine) { return 0;}
 	virtual void Draw(rEngine& engine) {}
 
 	inline void SetPosition(const rVector3& position);

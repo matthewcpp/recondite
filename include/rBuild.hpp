@@ -2,6 +2,11 @@
 #define R_BUILD_HPP
 
 #ifdef _MSC_VER
+	/*	disable DLL interface warning...templae classes will be private
+		class members which shoud prevent binary issues
+	*/
+	#pragma warning( disable : 4251)
+
 	#ifdef RECONDITE_BUILD_SHARED
 		#define RECONDITE_API __declspec(dllexport)
 	#else

@@ -46,6 +46,13 @@ void ruiWidget::InsertEventBinding(int eventType, ruiWidgetFunctor* functor){
 	m_eventTable.insert(std::make_pair(eventType , functor));
 }
 
+ruiStyle& ruiWidget::Style(){
+	return m_style;
+}
+
+const ruiStyle& ruiWidget::Style() const{
+	return m_style;
+}
 
 ruiIOverlay* ruiWidget::widgetManager = NULL;
 

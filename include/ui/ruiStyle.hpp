@@ -6,40 +6,28 @@
 #include "rBuild.hpp"
 #include "rColor.hpp"
 
-#include "rFont.hpp"
-#include "rTexture2D.hpp"
+#include "rPropertyCollection.hpp"
 
-union RECONDITE_API ruiStyleProperty{
-	int m_int;
-	float m_float;
-	unsigned char m_color[4];
-	rTexture2D* m_texture;
-	rFont* m_font;
-};
 
-typedef std::map<rString, ruiStyleProperty> ruiStylePropertyMap;
-
-class ruiStyle{
+class RECONDITE_API ruiStyle : public rPropertyCollection {
 public:
-	bool GetFont(const rString& name, rFont** font) const;
-	void SetFont(const rString& name, rFont* font);
+	ruiStyle();
 
-	bool GetTexture(const rString& name, rTexture2D** texture) const;
-	void SetTexture(const rString& name, rTexture2D* texture);
-
-	bool GetInt(const rString& name, int& i) const;
-	void SetInt(const rString& name, int i);
-
-	bool GetFloat(const rString& name, float& f) const;
-	void SetFloat(const rString& name, float f);
-
-	bool GetColor(const rString& name, rColor& color) const;
-	void SetColor(const rString& name, const rColor& color);
+	void SetBool(const rString& key, bool val);
+	void SetFont(const rString& key, rFont* font);
+	void SetTexture(const rString& key, rTexture2D* texture);
+	void SetInt(const rString& key, int i);
+	void SetFloat(const rString& key, float f);
+	void SetColor(const rString& key, const rColor& color);
 
 	void Extend(const ruiStyle& style);
 
+	bool HasChanged() const;
+	void MarkChanged();
+	void ClearChanged();
+
 private:
-	ruiStylePropertyMap m_properties;
+	bool m_changed;
 };
 
 #endif

@@ -7,6 +7,8 @@
 #include "rSize.hpp"
 #include "rPoint.hpp"
 
+#include "ruiStyle.hpp"
+
 #include "rEngine.hpp"
 
 #include "ui/ruiBase.hpp"
@@ -42,6 +44,9 @@ public:
 	virtual void OnMouseLeftUp(const rMouseState& mouse);
 	virtual void OnMouseMotion(const rMouseState& mouse);
 
+	ruiStyle& Style();
+	const ruiStyle& Style() const;
+
 public:
 	static ruiIOverlay* widgetManager;
 
@@ -52,6 +57,9 @@ protected:
 protected:
 	rSize m_size;
 	rPoint m_position;
+
+	ruiStyle m_style;
+	ruiStyle m_computedStyle;
 
 private:
 	void InsertEventBinding(int eventType, ruiWidgetFunctor* functor);

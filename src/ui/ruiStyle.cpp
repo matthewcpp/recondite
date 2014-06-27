@@ -1,85 +1,50 @@
 #include "ui/ruiStyle.hpp"
 
-bool ruiStyle::GetFont(const rString& name, rFont** font) const{
-	ruiStylePropertyMap::const_iterator p = m_properties.find(name);
-
-	if (p != m_properties.end()){
-		*font = p->second.m_font;
-		return true;
-	}
-	else{
-		return false;
-	};
+ruiStyle::ruiStyle(){
+	m_changed = false;
 }
 
-void ruiStyle::SetFont(const rString& name, rFont* font){
-	m_properties[name].m_font = font;
+void ruiStyle::SetBool(const rString& key, bool val){
+	rPropertyCollection::SetBool(key, val);
+	m_changed = true;
 }
 
-
-bool ruiStyle::GetTexture(const rString& name, rTexture2D** texture) const{
-	ruiStylePropertyMap::const_iterator p = m_properties.find(name);
-
-	if (p != m_properties.end()){
-		*texture = p->second.m_texture;
-		return true;
-	}
-	else{
-		return false;
-	}
+void ruiStyle::SetFont(const rString& key, rFont* font){
+	rPropertyCollection::SetFont(key, font);
+	m_changed = true;
 }
 
-void ruiStyle::SetTexture(const rString& name, rTexture2D* texture){
-	m_properties[name].m_texture = texture;
+void ruiStyle::SetTexture(const rString& key, rTexture2D* texture){
+	rPropertyCollection::SetTexture(key, texture);
+	m_changed = true;
 }
 
-bool ruiStyle::GetInt(const rString& name, int& i) const{
-	ruiStylePropertyMap::const_iterator p = m_properties.find(name);
-
-	if (p != m_properties.end()){
-		i = p->second.m_int;
-		return true;
-	}
-	else{
-		return false;
-	}
+void ruiStyle::SetInt(const rString& key, int i){
+	rPropertyCollection::SetInt(key, i);
+	m_changed = true;
 }
 
-void ruiStyle::SetInt(const rString& name, int i){
-	m_properties[name].m_int = i;
+void ruiStyle::SetFloat(const rString& key, float f){
+	rPropertyCollection::SetFloat(key, f);
+	m_changed = true;
 }
 
-bool ruiStyle::GetFloat(const rString& name, float& f) const{
-	ruiStylePropertyMap::const_iterator p = m_properties.find(name);
-
-	if (p != m_properties.end()){
-		f = p->second.m_float;
-		return true;
-	}
-	else{
-		return false;
-	}
-}
-
-void ruiStyle::SetFloat(const rString& name, float f){
-	m_properties[name].m_float = f;
-}
-
-bool ruiStyle::GetColor(const rString& name, rColor& color) const{
-	ruiStylePropertyMap::const_iterator p = m_properties.find(name);
-
-	if (p != m_properties.end()){
-		color.Set(p->second.m_color);
-		return true;
-	}
-	else{
-		return false;
-	};
-}
-
-void ruiStyle::SetColor(const rString& name, const rColor& color){
-	color.ToArray(m_properties[name].m_color);
+void ruiStyle::SetColor(const rString& key, const rColor& color){
+	rPropertyCollection::SetColor(key, color);
+	m_changed = true;
 }
 
 void ruiStyle::Extend(const ruiStyle& style){
+}
+
+bool ruiStyle::HasChanged() const{
+	return m_changed;
+}
+
+void ruiStyle::MarkChanged(){
+	m_changed = true;
+}
+
+void ruiStyle::ClearChanged(){
+	m_changed = false;
 }

@@ -9,7 +9,7 @@
 
 class ruiCheckbox : public ruiWidget{
 public:
-	ruiCheckbox(int id, const rPoint& position, const rSize& size);
+	ruiCheckbox(const rString& id, rEngine* engine, const rPoint& position, const rSize& size);
 	
 public:
 	

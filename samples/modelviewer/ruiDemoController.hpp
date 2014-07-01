@@ -27,7 +27,7 @@ class ruiDemoController{
 public:
 	ruiDemoController(rContentManager* contentManager, rDemoCamera* camera);
 
-	virtual void Init(ruiOverlay* overlay);
+	virtual void Init(ruiOverlay* overlay, rEngine* engine);
 
 	void OnUpdate(rEngine& engine);
 

@@ -7,8 +7,8 @@
 
 class RECONDITE_API ruiText : public ruiWidget {
 public:
-	ruiText(int id, const rPoint& position, const rSize& size);
-	ruiText(const rString& text, int id, const rPoint& position, const rSize& size);
+	ruiText(const rString& id, rEngine* engine, const rPoint& position, const rSize& size);
+	ruiText(const rString& text, const rString& id, rEngine* engine, const rPoint& position, const rSize& size);
 	
 public:
 	

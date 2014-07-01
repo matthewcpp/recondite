@@ -68,7 +68,7 @@ void rDemoModule::InitUI(ruiOverlayManager& uiManager, rEngine& engine){
 	ruiOverlay* overlay = uiManager.CreateOverlay(m_viewport);
 
 	m_controller = new ruiDemoController(engine.content, m_camera); 
-	m_controller->Init(overlay);
+	m_controller->Init(overlay, &engine);
 }
 
 

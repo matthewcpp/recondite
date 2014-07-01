@@ -10,7 +10,7 @@
 #include "ruiBase.hpp"
 #include "ruiWidget.hpp"
 
-typedef std::vector<ruiWidget*> rWidgetVector;
+
 
 class RECONDITE_API ruiOverlay : public ruiIOverlay{
 public:
@@ -18,7 +18,7 @@ public:
 
 public:
 	virtual void AddWidget(ruiWidget* widget);
-	ruiWidget* GetWidget(int id);
+	ruiWidget* GetWidget(const rString& id);
 
 	virtual void ShowModal(ruiWidget* widget);
 	virtual void EndModal(ruiWidget* widget);
@@ -42,9 +42,10 @@ public:
 	virtual bool InjectKeyDownEvent(rKey key, rKeyboardState& state);
 	virtual bool InjectKeyUpEvent(rKey key, rKeyboardState& state);
 
-private:
-
 	ruiWidget* SelectWidget(const rPoint& position);
+
+protected:
+	typedef std::vector<ruiWidget*> rWidgetVector;
 
 private:
 

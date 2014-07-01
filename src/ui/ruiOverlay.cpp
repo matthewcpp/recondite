@@ -9,7 +9,7 @@ void ruiOverlay::AddWidget(ruiWidget* widget){
 	m_widgets.push_back(widget);
 }
 
-ruiWidget* ruiOverlay::GetWidget(int id){
+ruiWidget* ruiOverlay::GetWidget(const rString& id){
 	for (size_t i = 0; i < m_widgets.size(); i++){
 		if (m_widgets[i]->Id() == id)
 			return m_widgets[i];

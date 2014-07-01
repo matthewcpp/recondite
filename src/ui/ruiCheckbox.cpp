@@ -1,7 +1,7 @@
 #include "ui/ruiCheckbox.hpp"
 
-ruiCheckbox::ruiCheckbox(int id, const rPoint& position, const rSize& size)
-:ruiWidget(id, position, size)
+ruiCheckbox::ruiCheckbox(const rString& id, rEngine* engine, const rPoint& position, const rSize& size)
+:ruiWidget(id, engine, position, size)
  {
 	m_isChecked = false;
  }

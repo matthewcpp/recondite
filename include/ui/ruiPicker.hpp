@@ -12,8 +12,8 @@
 
 class RECONDITE_API ruiPicker : public ruiWidget, public ruiIControlWithOptions{
 public:
-	ruiPicker(int id, const rPoint& position, const rSize& size);
-	ruiPicker(rArrayString& options, int id, const rPoint& position, const rSize& size);
+	ruiPicker(const rString& id, rEngine* engine, const rPoint& position, const rSize& size);
+	ruiPicker(rArrayString& options, const rString& id, rEngine* engine, const rPoint& position, const rSize& size);
 	
 public:
 	void AddOption(const rString& option);

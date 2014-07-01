@@ -1,18 +1,20 @@
 #include "ui/ruiWidget.hpp"
 
-ruiWidget::ruiWidget(int id){
+ruiWidget::ruiWidget(const rString& id, rEngine* engine){
+	m_engine = engine;
 	m_id = id;
 	m_position.Set(-1,-1);
 	m_size.Set(-1,-1);
 }
 
-ruiWidget::ruiWidget(int id, const rPoint& position, const rSize& size){
+ruiWidget::ruiWidget(const rString& id, rEngine* engine, const rPoint& position, const rSize& size){
+	m_engine = engine;
 	m_id = id;
 	m_position = position;
 	m_size = size;
 }
 
-int ruiWidget::Id() const{
+rString ruiWidget::Id() const{
 	return m_id;
 }
 

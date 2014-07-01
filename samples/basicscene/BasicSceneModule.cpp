@@ -42,7 +42,7 @@ void BasicSceneModule::BeforeRenderScene(rViewInfo& view, rEngine& engine){
 
 void BasicSceneModule::AfterRenderScene(rViewInfo& view, rEngine& engine){
 	rOStringStream str;
-	ruiText* renderInfo = (ruiText*)view.overlay->GetWidget(2);
+	ruiText* renderInfo = (ruiText*)view.overlay->GetWidget("2");
 	size_t actorCount = engine.scene->NumActors();
 	size_t renderCount = engine.renderer->ObjectsRendered();
 
@@ -75,10 +75,10 @@ void BasicSceneModule::Init(rEngine& engine){
 
 void BasicSceneModule::InitUI(ruiOverlayManager& manager, rEngine& engine){
 	ruiOverlay* overlay = manager.CreateOverlay(engine.application->GetViewport("main"));
-	m_textCameraPos = new ruiText(1, rPoint(10,10), rSize(500,35));
+	m_textCameraPos = new ruiText("1", &engine, rPoint(10,10), rSize(500,35));
 	overlay->AddWidget(m_textCameraPos);
 
-	overlay->AddWidget(new ruiText(2, rPoint(10,50), rSize(500,35)));
+	overlay->AddWidget(new ruiText("2", &engine, rPoint(10,50), rSize(500,35)));
 }
 
 void BasicSceneModule::Uninit(rEngine& engine){

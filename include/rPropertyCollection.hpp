@@ -43,7 +43,7 @@ struct rProperty{
 	rPropertyValue value;
 };
 
-class rPropertyCollection{
+class RECONDITE_API rPropertyCollection{
 public:
 	~rPropertyCollection();
 

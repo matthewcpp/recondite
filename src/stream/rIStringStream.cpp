@@ -1,5 +1,15 @@
 #include "stream/rIStringStream.hpp"
 
+rIStringStream::rIStringStream(){
+
+}
+
+rIStringStream::rIStringStream(const rString& str)
+:m_stream(str.c_str())
+{
+
+}
+
 rIStream& rIStringStream::Read(char* buffer, size_t size){
 	m_stream.read(buffer,size);
 	return *this;

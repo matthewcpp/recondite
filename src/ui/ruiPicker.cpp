@@ -1,13 +1,13 @@
 #include "ui/ruiPicker.hpp"
 
-ruiPicker::ruiPicker(const rString& id, rEngine* engine, const rPoint& position, const rSize& size)
-:ruiWidget(id, engine, position, size)
+ruiPicker::ruiPicker(const rString& id, ruiIOverlay* overlay, rEngine* engine, const rPoint& position, const rSize& size)
+:ruiWidget(id, overlay, engine, position, size)
 {
 	m_selectionIndex = 0;
 }
 
-ruiPicker::ruiPicker(rArrayString& options, const rString& id, rEngine* engine, const rPoint& position, const rSize& size)
-:ruiWidget(id, engine, position, size)
+ruiPicker::ruiPicker(rArrayString& options, const rString& id, ruiIOverlay* overlay, rEngine* engine, const rPoint& position, const rSize& size)
+:ruiWidget(id, overlay, engine, position, size)
 {
 	m_selectionIndex = 0;
 	SetOptions(options);
@@ -18,7 +18,7 @@ void ruiPicker::OnPointerDown(const rPoint& position){
 }
 
 void ruiPicker::ShowOptionsMenu(){
-	ruiPickerOptionsMenu* optionsMenu = new ruiPickerOptionsMenu(this, "-1", m_engine);
+	ruiPickerOptionsMenu* optionsMenu = new ruiPickerOptionsMenu(this, "-1", m_overlay, m_engine);
 	optionsMenu->SetPosition(m_position.x, m_position.y + m_size.y + 20);
 	optionsMenu->SetSize(250, NumOptions() * 30);
 

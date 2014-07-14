@@ -9,7 +9,7 @@
 
 class RECONDITE_API ruiButton : public ruiWidget{
 public:
-	ruiButton(const rString& text, const rString& id, rEngine* engine, const rPoint& position, const rSize& size);
+	ruiButton(const rString& text, const rString& id, ruiIOverlay* overlay, rEngine* engine, const rPoint& position, const rSize& size);
 	
 public:
 	

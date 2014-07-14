@@ -1,14 +1,16 @@
 #include "ui/ruiWidget.hpp"
 
-ruiWidget::ruiWidget(const rString& id, rEngine* engine){
+ruiWidget::ruiWidget(const rString& id, ruiIOverlay* overlay, rEngine* engine){
 	m_engine = engine;
+	m_overlay = overlay;
 	m_id = id;
 	m_position.Set(-1,-1);
 	m_size.Set(-1,-1);
 }
 
-ruiWidget::ruiWidget(const rString& id, rEngine* engine, const rPoint& position, const rSize& size){
+ruiWidget::ruiWidget(const rString& id, ruiIOverlay* overlay, rEngine* engine, const rPoint& position, const rSize& size){
 	m_engine = engine;
+	m_overlay = overlay;
 	m_id = id;
 	m_position = position;
 	m_size = size;
@@ -48,12 +50,8 @@ void ruiWidget::InsertEventBinding(int eventType, ruiWidgetFunctor* functor){
 	m_eventTable.insert(std::make_pair(eventType , functor));
 }
 
-ruiStyle& ruiWidget::Style(){
-	return m_style;
-}
-
-const ruiStyle& ruiWidget::Style() const{
-	return m_style;
+ruiStyle* ruiWidget::Style(){
+	return &m_style;
 }
 
 ruiIOverlay* ruiWidget::widgetManager = NULL;

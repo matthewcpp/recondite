@@ -12,25 +12,26 @@
 #include "rEngine.hpp"
 
 #include "ui/ruiBase.hpp"
+#include "ui/ruiWidgetBase.hpp"
 #include "ui/ruiGenericWidgetFunctor.hpp"
 
 #include "ui/ruiEventHandler.hpp"
 
-class RECONDITE_API ruiWidget : public ruiEventHandler{
+class RECONDITE_API ruiWidget : public ruiWidgetBase, public ruiEventHandler{
 public:
-	ruiWidget(const rString& id, rEngine* engine);
-	ruiWidget(const rString& id, rEngine* engine, const rPoint& position, const rSize& size);
+	ruiWidget(const rString& id, ruiIOverlay* overlay, rEngine* engine);
+	ruiWidget(const rString& id, ruiIOverlay* overlay, rEngine* engine, const rPoint& position, const rSize& size);
 
 	virtual void Draw(rEngine& engine) = 0;
 	virtual void Update(rEngine& engine) {}
 	virtual rRect BoundingBox() const;
 
-	rString Id() const;
+	virtual rString Id() const;
 
-	rSize Size() const;
+	virtual rSize Size() const;
 	void SetSize(int x, int y);
 
-	rPoint Position() const;
+	virtual rPoint Position() const;
 	void SetPosition(int x, int y);
 	
 	template <typename T>
@@ -45,8 +46,7 @@ public:
 	virtual void OnMouseLeftUp(const rMouseState& mouse);
 	virtual void OnMouseMotion(const rMouseState& mouse);
 
-	ruiStyle& Style();
-	const ruiStyle& Style() const;
+	virtual ruiStyle* Style();
 
 public:
 	static ruiIOverlay* widgetManager;
@@ -63,6 +63,7 @@ protected:
 	ruiStyle m_computedStyle;
 
 	rEngine* m_engine;
+	ruiIOverlay* m_overlay;
 
 private:
 	void InsertEventBinding(int eventType, ruiWidgetFunctor* functor);

@@ -21,8 +21,8 @@
 
 class RECONDITE_API ruiWidget : public ruiWidgetBase, public ruiEventHandler{
 public:
-	ruiWidget(const rString& id, ruiIOverlay* overlay, rEngine* engine);
-	ruiWidget(const rString& id, ruiIOverlay* overlay, rEngine* engine, const rPoint& position, const rSize& size);
+	ruiWidget(const rString& id, rEngine* engine);
+	ruiWidget(const rString& id, rEngine* engine, const rPoint& position, const rSize& size);
 
 	virtual void Draw(rEngine& engine) = 0;
 	virtual void Update(rEngine& engine) {}
@@ -65,7 +65,6 @@ protected:
 	ruiStyle m_computedStyle;
 
 	rEngine* m_engine;
-	ruiIOverlay* m_overlay;
 
 private:
 	void InsertEventBinding(int eventType, ruiWidgetFunctor* functor);

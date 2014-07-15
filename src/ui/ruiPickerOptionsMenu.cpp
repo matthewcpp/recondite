@@ -1,7 +1,7 @@
 #include "ui/ruiPickerOptionsMenu.hpp"
 
-ruiPickerOptionsMenu::ruiPickerOptionsMenu(ruiIControlWithOptions* picker, const rString& id, ruiIOverlay* overlay, rEngine* engine)
-:ruiWidget(id, overlay, engine)
+ruiPickerOptionsMenu::ruiPickerOptionsMenu(ruiIControlWithOptions* picker, const rString& id, rEngine* engine)
+:ruiWidget(id, engine)
 {
 	m_picker = picker;
 }

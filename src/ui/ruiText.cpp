@@ -1,11 +1,11 @@
 #include "ui/ruiText.hpp"
 
-ruiText::ruiText(const rString& id, ruiIOverlay* overlay, rEngine* engine, const rPoint& position, const rSize& size)
-:ruiWidget(id, overlay, engine, position, size)
+ruiText::ruiText(const rString& id, rEngine* engine, const rPoint& position, const rSize& size)
+:ruiWidget(id, engine, position, size)
 {
 }
-ruiText::ruiText(const rString& text, const rString& id, ruiIOverlay* overlay, rEngine* engine, const rPoint& position, const rSize& size)
-:ruiWidget(id, overlay, engine, position, size)
+ruiText::ruiText(const rString& text, const rString& id, rEngine* engine, const rPoint& position, const rSize& size)
+:ruiWidget(id, engine, position, size)
 {
 	SetText(text);
 }

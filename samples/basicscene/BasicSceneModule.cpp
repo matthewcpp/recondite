@@ -75,10 +75,10 @@ void BasicSceneModule::Init(rEngine& engine){
 
 void BasicSceneModule::InitUI(ruiOverlayManager& manager, rEngine& engine){
 	ruiOverlay* overlay = manager.CreateOverlay(engine.application->GetViewport("main"));
-	m_textCameraPos = new ruiText("1", overlay, &engine, rPoint(10,10), rSize(500,35));
+	m_textCameraPos = new ruiText("1", &engine, rPoint(10,10), rSize(500,35));
 	overlay->AddWidget(m_textCameraPos);
 
-	overlay->AddWidget(new ruiText("2", overlay, &engine, rPoint(10,50), rSize(500,35)));
+	overlay->AddWidget(new ruiText("2", &engine, rPoint(10,50), rSize(500,35)));
 }
 
 void BasicSceneModule::Uninit(rEngine& engine){

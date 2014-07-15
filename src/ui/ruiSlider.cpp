@@ -1,7 +1,7 @@
 #include "ui/ruiSlider.hpp"
 
-ruiSlider::ruiSlider(const rString& id, ruiIOverlay* overlay, rEngine* engine, const rPoint& position, const rSize& size)
-:ruiWidget(id, overlay, engine, position, size)
+ruiSlider::ruiSlider(const rString& id, rEngine* engine, const rPoint& position, const rSize& size)
+:ruiWidget(id, engine, position, size)
 {
 	m_value = 0;
 	m_handleSize = 15;

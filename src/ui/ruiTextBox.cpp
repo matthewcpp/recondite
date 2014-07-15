@@ -1,13 +1,13 @@
 #include "ui/ruiTextBox.hpp"
 
-ruiTextBox::ruiTextBox(const rString& id, ruiIOverlay* overlay, rEngine* engine, const rPoint& position, const rSize& size)
-	:ruiText(id, overlay, engine, position, size)
+ruiTextBox::ruiTextBox(const rString& id, rEngine* engine, const rPoint& position, const rSize& size)
+	:ruiText(id, engine, position, size)
 {
 
 }
 
-ruiTextBox::ruiTextBox(const rString& text, const rString& id, ruiIOverlay* overlay, rEngine* engine, const rPoint& position, const rSize& size)
-	:ruiText(text, id, overlay, engine, position, size)
+ruiTextBox::ruiTextBox(const rString& text, const rString& id, rEngine* engine, const rPoint& position, const rSize& size)
+	:ruiText(text, id, engine, position, size)
 {
 
 }

@@ -15,7 +15,7 @@
 class RECONDITE_API ruiAnalogStick : public ruiWidget{
 public:
 
-	ruiAnalogStick(rController* controller, size_t stickIndex, const rString& id, ruiIOverlay* overlay, rEngine* engine, const rPoint& position, const rSize& size);
+	ruiAnalogStick(rController* controller, size_t stickIndex, const rString& id, rEngine* engine, const rPoint& position, const rSize& size);
 
 	virtual void OnTouchDown(const rTouch& touch);
 	virtual void OnTouchMove(const rTouch& touch);

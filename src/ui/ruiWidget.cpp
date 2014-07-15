@@ -1,16 +1,14 @@
 #include "ui/ruiWidget.hpp"
 
-ruiWidget::ruiWidget(const rString& id, ruiIOverlay* overlay, rEngine* engine){
+ruiWidget::ruiWidget(const rString& id, rEngine* engine){
 	m_engine = engine;
-	m_overlay = overlay;
 	m_id = id;
 	m_position.Set(-1,-1);
 	m_size.Set(-1,-1);
 }
 
-ruiWidget::ruiWidget(const rString& id, ruiIOverlay* overlay, rEngine* engine, const rPoint& position, const rSize& size){
+ruiWidget::ruiWidget(const rString& id, rEngine* engine, const rPoint& position, const rSize& size){
 	m_engine = engine;
-	m_overlay = overlay;
 	m_id = id;
 	m_position = position;
 	m_size = size;

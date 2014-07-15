@@ -11,7 +11,7 @@
 
 class RECONDITE_API ruiPickerOptionsMenu : public ruiWidget{
 public:
-	ruiPickerOptionsMenu(ruiIControlWithOptions* picker, const rString& id, ruiIOverlay* overlay, rEngine* engine);
+	ruiPickerOptionsMenu(ruiIControlWithOptions* picker, const rString& id, rEngine* engine);
 	
 public:
 	virtual void OnPointerDown(const rPoint& position);

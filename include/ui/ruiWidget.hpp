@@ -12,6 +12,8 @@
 #include "rEngine.hpp"
 
 #include "ui/ruiBase.hpp"
+#include "ui/ruiInterface.hpp"
+#include "ui/ruiStyleManager.hpp"
 #include "ui/ruiWidgetBase.hpp"
 #include "ui/ruiGenericWidgetFunctor.hpp"
 

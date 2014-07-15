@@ -7,10 +7,8 @@
 
 #include "rEngine.hpp"
 
-#include "ruiBase.hpp"
+#include "ui/ruiInterface.hpp"
 #include "ruiWidget.hpp"
-
-
 
 class RECONDITE_API ruiOverlay : public ruiIOverlay{
 public:

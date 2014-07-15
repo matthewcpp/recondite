@@ -29,6 +29,7 @@ void ruiOverlayManager::Clear(){
 	}
 
 	m_overlays.clear();
+	m_styleManager.Clear();
 }
 
 rViewport* ruiOverlayManager::DetermineViewport(const rPoint& point){
@@ -44,21 +45,34 @@ rViewport* ruiOverlayManager::DetermineViewport(const rPoint& point){
 	return NULL;
 }
 
+ruiIOverlay* ruiOverlayManager::ActiveOverlay(){
+	return m_activeOverlay;
+}
 
+ruiStyleManager* ruiOverlayManager::Styles(){
+	return &m_styleManager;
+}
 
 void ruiOverlayManager::Update(rEngine& engine){
 	ruiViewportOverlayMap::iterator end = m_overlays.end();
 
 	for (ruiViewportOverlayMap::iterator it = m_overlays.begin(); it != end; ++it){
+		m_activeOverlay = it->second;
 		it->second->Update(engine);
 	}
+
+	m_activeOverlay = NULL;
 }
 
 void ruiOverlayManager::Draw(rViewport* viewport, rEngine& engine){
 	ruiViewportOverlayMap::iterator vp = m_overlays.find(viewport);
 
-	if (vp != m_overlays.end())
+	if (vp != m_overlays.end()){
+		m_activeOverlay = vp->second;
 		vp->second->Draw(engine);
+	}
+
+	m_activeOverlay = NULL;
 }
 
 bool ruiOverlayManager::InjectKeyDownEvent(rKey key, rKeyboardState& state){

@@ -16,5 +16,7 @@ add_rec_src(ui_files "ruiText" "ui")
 add_rec_src(ui_files "ruiTextBox" "ui")
 add_rec_src(ui_files "ruiWidget" "ui")
 
+list(APPEND ui_files ${CMAKE_CURRENT_SOURCE_DIR}/../../include/ui/ruiInterface.hpp)
+
 set(recondite_files ${recondite_files} ${ui_files} PARENT_SCOPE)
 set(ui_sources ${ui_files} PARENT_SCOPE)

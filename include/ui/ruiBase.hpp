@@ -9,7 +9,7 @@
 #include "input/rMouse.hpp"
 #include "input/rKeyboard.hpp"
 
-class RECONDITE_API ruiWidget;
+#include "ui/ruiStyleManager.hpp"
 
 class RECONDITE_API ruiInput{
 public:
@@ -27,11 +27,6 @@ public:
 	virtual bool InjectKeyUpEvent(rKey key, rKeyboardState& state) = 0;
 };
 
-class RECONDITE_API ruiIOverlay {
-public:
-	virtual void ShowModal(ruiWidget* widget) = 0;
-	virtual void EndModal(ruiWidget* widget) = 0;
-};
 
 class RECONDITE_API ruiIControlWithOptions {
 public:

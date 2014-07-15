@@ -11,6 +11,7 @@
 
 #include "interface/riApplication.hpp"
 #include "interface/riScene.hpp"
+#include "ui/ruiInterface.hpp"
 
 class rEngine{
 public:
@@ -20,6 +21,7 @@ public:
 	rTime time;
 	riApplication* application;
 	riScene* scene;
+	ruiIManager* ui;
 };
 
 #endif

@@ -13,9 +13,10 @@
 #include "ui/ruiOverlay.hpp"
 #include "ui/ruiWidget.hpp"
 #include "ui/ruiBase.hpp"
+#include "ui/ruiInterface.hpp"
+#include "ui/ruiStyleManager.hpp"
 
-
-class RECONDITE_API ruiOverlayManager : public ruiInput {
+class RECONDITE_API ruiOverlayManager : public ruiIManager, public ruiInput {
 public:
 	ruiOverlayManager();
 	~ruiOverlayManager();
@@ -42,6 +43,9 @@ public:
 	ruiOverlay* CreateOverlay(rViewport* viewport);
 	ruiOverlay* GetOverlay(rViewport* viewport) const;
 
+	virtual ruiIOverlay* ActiveOverlay();
+	virtual ruiStyleManager* Styles();
+
 private:
 	rViewport* DetermineViewport(const rPoint& point);
 
@@ -50,7 +54,9 @@ private:
 
 private:
 	ruiViewportOverlayMap m_overlays;
-
+	ruiIOverlay* m_activeOverlay;
+	
+	ruiStyleManager m_styleManager;
 };
 
 #endif

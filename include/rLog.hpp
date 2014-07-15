@@ -20,6 +20,8 @@ public:
 	static void Info(const rString format, ...);
 	static void Error(const rString format, ...);
 	
+	static void Shutdown();
+
 	static void SetEnabled(bool enabled);
 	static bool Enabled();
 	

@@ -8,11 +8,17 @@ rSDLApplication::~rSDLApplication(){
 }
 
 bool rSDLApplication::Init(){
-	if( SDL_Init( SDL_INIT_VIDEO ) < 0 ) 
-		return false;
+	int sdlInit = SDL_Init(SDL_INIT_VIDEO);
 
-	if( SDL_SetVideoMode( m_displaySize.x, m_displaySize.y, 0, SDL_OPENGL  ) == 0 )
-		 return false;
+	if (sdlInit < 0){
+		rLog::Error("Error Initializing SDL: %i", sdlInit);
+		return false;
+	}
+
+	if (SDL_SetVideoMode(m_displaySize.x, m_displaySize.y, 0, SDL_OPENGL) == 0){
+		rLog::Error("Error Setting SDL OpenGL Video Mode");
+		return false;
+	}
 
 	 m_graphicsDevice = new rSDLGraphicsDevice();
 	 m_contentManager = new rOpenGLContentManager(m_graphicsDevice);
@@ -25,7 +31,7 @@ bool rSDLApplication::Init(){
 }
 
 void rSDLApplication::Uninit(){
-	m_module->Uninit(m_engine);
+	rApplication::Uninit();
 
 	SDL_Quit();
 }

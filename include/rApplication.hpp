@@ -22,6 +22,9 @@ public:
 	rApplication();
 	virtual ~rApplication();
 
+	virtual bool Init();
+	virtual void Uninit();
+
 	bool IsRunning() const;
 	bool LoadModule(const char* path);
 
@@ -34,6 +37,8 @@ public:
 	virtual rSize DisplaySize() const;
 
 	virtual size_t FrameCount() const;
+
+public:
 
 	virtual rViewport* CreateViewport(const rString& name);
 	virtual rViewport* GetViewport(const rString& name) const;

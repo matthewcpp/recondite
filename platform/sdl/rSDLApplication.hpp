@@ -19,8 +19,8 @@ public:
 	~rSDLApplication();
 
 public:
-	bool Init();
-	void Uninit();
+	virtual bool Init();
+	virtual void Uninit();
 
 	void ProcessEvent(SDL_Event& event);
 

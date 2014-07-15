@@ -67,6 +67,14 @@ void rLog::Error(const rString format, ...){
 	}
 }
 
+void rLog::Shutdown(){
+	if (m_logTarget){
+		m_logTarget->Shutdown();
+		delete m_logTarget;
+		m_logTarget = NULL;
+	}
+}
+
 void rLog::SetEnabled(bool enabled){
 	m_enabled = enabled;
 }

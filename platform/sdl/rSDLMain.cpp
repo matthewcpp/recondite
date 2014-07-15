@@ -3,10 +3,12 @@
 #include "rSDLApplication.hpp"
 
 #include "log/rLogFile.hpp"
+#include "log/rLogStdOut.hpp"
+#include "log/rLogChain.hpp"
 
 int main(int argc, char** argv){
-
-	rLog::SetLogTarget(new rLogFile("recondite.log"));
+	rLogChain* logChain = new rLogChain(new rLogFile("recondite.log"), new rLogStdOut());
+	rLog::SetLogTarget(logChain);
 	rLog::Info("SDL Application Start");
 
 	if (argc < 2){

@@ -155,3 +155,12 @@ size_t rApplication::NumViewports() const{
 size_t rApplication::FrameCount() const{
 	return m_frameCount;
 }
+
+bool rApplication::Init(){
+	return true;
+}
+
+void rApplication::Uninit(){
+	m_module->Uninit(m_engine);
+	rLog::Shutdown();
+}

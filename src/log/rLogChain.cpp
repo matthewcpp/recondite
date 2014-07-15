@@ -1,5 +1,18 @@
 #include "log/rLogChain.hpp"
 
+rLogChain::rLogChain(rLogTarget* target){
+	AddTarget(target);
+}
+
+rLogChain::rLogChain(rLogTarget* target1, rLogTarget* target2){
+	AddTarget(target1);
+	AddTarget(target2);
+}
+
+rLogChain::~rLogChain(){
+	DeleteAllTargets();
+}
+
 void rLogChain::AddTarget(rLogTarget* target){
 	m_targets.push_back(target);
 }
@@ -78,5 +91,13 @@ void rLogChain::Error(const rString& message){
 	
 	for (rLogTargetList::iterator it = m_targets.begin(); it != end; ++it){
 		(*it)->Error(message);
+	}
+}
+
+void rLogChain::Shutdown(){
+	rLogTargetList::iterator end = m_targets.end();
+
+	for (rLogTargetList::iterator it = m_targets.begin(); it != end; ++it){
+		(*it)->Shutdown();
 	}
 }

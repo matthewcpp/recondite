@@ -13,6 +13,11 @@ typedef std::list<rLogTarget*> rLogTargetList;
 
 class RECONDITE_API rLogChain : public rLogTarget {
 public:
+	rLogChain(rLogTarget* target);
+	rLogChain(rLogTarget* target1, rLogTarget* target2);
+	~rLogChain();
+
+public:
 	void AddTarget(rLogTarget* target);
 	
 	void DeleteTarget(size_t index);
@@ -27,6 +32,8 @@ public:
 	virtual void Trace(const rString& message);
 	virtual void Info(const rString& message);
 	virtual void Error(const rString& message);
+
+	virtual void Shutdown();
 	
 private:
 	typedef std::list<rLogTarget*> rLogTargetList;

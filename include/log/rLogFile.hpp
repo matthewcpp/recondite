@@ -18,6 +18,8 @@ public:
 	virtual void Trace(const rString& message);
 	virtual void Info(const rString& message);
 	virtual void Error(const rString& message);
+
+	virtual void Shutdown();
 	
 private:
 

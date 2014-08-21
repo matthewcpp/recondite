@@ -45,10 +45,6 @@ rViewport* ruiOverlayManager::DetermineViewport(const rPoint& point){
 	return NULL;
 }
 
-ruiIOverlay* ruiOverlayManager::ActiveOverlay(){
-	return m_activeOverlay;
-}
-
 ruiStyleManager* ruiOverlayManager::Styles(){
 	return &m_styleManager;
 }

@@ -19,8 +19,6 @@ ruiWidget* ruiOverlay::GetWidget(const rString& id){
 }
 
 void ruiOverlay::Update(rEngine& engine){
-	ruiWidget::widgetManager = this;
-
 	for (size_t i = 0; i < m_widgets.size(); i++)
 		m_widgets[i]->Update(engine);
 	

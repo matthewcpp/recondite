@@ -10,7 +10,7 @@
 #include "ui/ruiInterface.hpp"
 #include "ruiWidget.hpp"
 
-class RECONDITE_API ruiOverlay : public ruiIOverlay{
+class RECONDITE_API ruiOverlay {
 public:
 	ruiOverlay();
 

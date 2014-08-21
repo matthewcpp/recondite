@@ -43,7 +43,6 @@ public:
 	ruiOverlay* CreateOverlay(rViewport* viewport);
 	ruiOverlay* GetOverlay(rViewport* viewport) const;
 
-	virtual ruiIOverlay* ActiveOverlay();
 	virtual ruiStyleManager* Styles();
 
 private:
@@ -54,7 +53,7 @@ private:
 
 private:
 	ruiViewportOverlayMap m_overlays;
-	ruiIOverlay* m_activeOverlay;
+	ruiOverlay* m_activeOverlay;
 	
 	ruiStyleManager m_styleManager;
 };

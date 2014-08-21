@@ -4,8 +4,8 @@
 #include <map>
 
 #include "rBuild.hpp"
+#include "rTypes.hpp"
 #include "rString.hpp"
-#include "rArrayString.hpp"
 
 #include "rAsset.hpp"
 

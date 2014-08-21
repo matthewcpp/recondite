@@ -1,5 +1,6 @@
 #include "gtest/gtest.h"
-#include "rArrayString.hpp"
+#include "rTypes.hpp"
+#include "rString.hpp"
 
 class Core_rArrayString : public ::testing::Test{
 };

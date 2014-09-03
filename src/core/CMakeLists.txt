@@ -26,6 +26,7 @@ add_rec_src(core_files "rViewport")
 list(APPEND core_files ${CMAKE_CURRENT_SOURCE_DIR}/../../include/rAnimationCurve.hpp)
 list(APPEND core_files ${CMAKE_CURRENT_SOURCE_DIR}/../../include/rModuleLoader.hpp)
 list(APPEND core_files ${CMAKE_CURRENT_SOURCE_DIR}/../../include/rContentListener.hpp)
+list(APPEND core_files ${CMAKE_CURRENT_SOURCE_DIR}/../../include/rEventHandler.hpp)
 list(APPEND core_files ${CMAKE_CURRENT_SOURCE_DIR}/../../include/rGraphicsDevice.hpp)
 list(APPEND core_files ${CMAKE_CURRENT_SOURCE_DIR}/../../include/container/rOctree.hpp)
 

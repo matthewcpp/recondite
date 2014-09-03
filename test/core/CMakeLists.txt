@@ -5,6 +5,7 @@ list(APPEND core_test_files ${CMAKE_CURRENT_SOURCE_DIR}/rAnimationCurve_Test.cpp
 list(APPEND core_test_files ${CMAKE_CURRENT_SOURCE_DIR}/rAnimationPlayer_Test.cpp)
 list(APPEND core_test_files ${CMAKE_CURRENT_SOURCE_DIR}/rAnimationTrack_Test.cpp)
 list(APPEND core_test_files ${CMAKE_CURRENT_SOURCE_DIR}/rArrayString_Test.cpp)
+list(APPEND core_test_files ${CMAKE_CURRENT_SOURCE_DIR}/rEventHandler_Test.cpp)
 list(APPEND core_test_files ${CMAKE_CURRENT_SOURCE_DIR}/rViewport_Test.cpp)
 list(APPEND core_test_files ${CMAKE_CURRENT_SOURCE_DIR}/rOctree_Test.cpp)
 

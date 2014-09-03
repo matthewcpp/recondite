@@ -4,15 +4,9 @@
 #include <map>
 #include <list>
 
-class rEvent {
-public:
-	rEvent() : m_handled(false) {}
-	void SetHandled(bool handled = true) {m_handled = handled;}
-	bool Handled() const { return m_handled; }
+#include "rBuild.hpp"
 
-private:
-	bool m_handled;
-};
+#include "rEvent.hpp"
 
 class rFunctorBase{
 public:
@@ -42,9 +36,9 @@ struct rGenericTargetFunctionPointer{
 };
 
 template <typename TargetType>
-class TargetFunctor : public rTargetFunctorBase{
+class rTargetFunctor : public rTargetFunctorBase{
 public:
-	TargetFunctor(TargetType* target, typename rGenericTargetFunctionPointer<TargetType>::Type method): rTargetFunctorBase(0), m_target(target), m_method(method){}
+	rTargetFunctor(TargetType* target, typename rGenericTargetFunctionPointer<TargetType>::Type method): rTargetFunctorBase(0), m_target(target), m_method(method){}
 	virtual void Call(rEvent& event){(*m_target.*m_method)(event);}
 	virtual void* Target() const { return (void*)m_target; }
 	virtual bool Compare(const rFunctorBase& other) const {
@@ -62,11 +56,9 @@ private:
 	typename rGenericTargetFunctionPointer<TargetType>::Type m_method;
 };
 
-typedef void(*FunctionPointerType)(rEvent&);
-
 class GloablFunctor: public rFunctorBase{
 public:
-	GloablFunctor(FunctionPointerType function) : rFunctorBase(1), m_function(function){}
+	GloablFunctor(rEventFunctionPointer function) : rFunctorBase(1), m_function(function){}
 	virtual void Call(rEvent& event){(*m_function)(event);}
 	virtual bool Compare(const rFunctorBase& other) const {
 		if (Type() == other.Type()){
@@ -79,19 +71,21 @@ public:
 	}
 
 private:
-	FunctionPointerType m_function;
+	rEventFunctionPointer m_function;
 };
 
-class rEventHandler{
+class RECONDITE_API rEventHandler{
+public:
+	~rEventHandler();
 
 public:
 	template <typename TargetType>
 	void Bind(int eventType, TargetType* target, typename rGenericTargetFunctionPointer<TargetType>::Type method);
-	void Bind(int eventType, FunctionPointerType function);
+	void Bind(int eventType, rEventFunctionPointer function);
 
 	template <typename TargetType>
 	void Unbind(int eventType, TargetType* target, typename rGenericTargetFunctionPointer<TargetType>::Type method);
-	void Unbind(int eventType, FunctionPointerType function);
+	void Unbind(int eventType, rEventFunctionPointer function);
 
 	void Trigger(int eventType, rEvent& event);
 
@@ -99,65 +93,22 @@ private:
 	void BindFunctor(int eventType, rFunctorBase* functor);
 	void UnbindFunctor(int eventType, rFunctorBase& functor);
 
+	void Clear();
+
 private:
 	rFunctorMap m_functorMap;
 };
 
-void rEventHandler::BindFunctor(int eventType, rFunctorBase* functor){
-	rFunctorList& functorList = m_functorMap[eventType];
-	functorList.push_back(functor);
-}
-
-void rEventHandler::UnbindFunctor(int eventType, rFunctorBase& functor){
-	rFunctorList& functorList = m_functorMap[eventType];
-
-	rFunctorList::iterator iter = functorList.begin();
-	rFunctorList::iterator end = functorList.end();
-
-	while (iter != end)
-	{
-		rFunctorBase* item = *iter;
-
-		if (item->Compare(functor)){
-			delete item;
-			iter = functorList.erase(iter);
-		}
-		else{
-			++iter;
-		}
-	}
-}
 
 template <typename TargetType>
 void rEventHandler::Bind(int eventType, TargetType* target, typename rGenericTargetFunctionPointer<TargetType>::Type method){
-	BindFunctor(eventType, new TargetFunctor<TargetType>(target, method));
+	BindFunctor(eventType, new rTargetFunctor<TargetType>(target, method));
 }
-
-void rEventHandler::Bind(int eventType, FunctionPointerType function){
-	BindFunctor(eventType, new GloablFunctor(function));
-}
-
 
 template <typename TargetType>
 void rEventHandler::Unbind(int eventType, TargetType* target, typename rGenericTargetFunctionPointer<TargetType>::Type method){
-	TargetFunctor<TargetType> functor(target, method);
+	rTargetFunctor<TargetType> functor(target, method);
 	UnbindFunctor(eventType, functor);
-}
-
-void rEventHandler::Unbind(int eventType, FunctionPointerType function){
-	GloablFunctor functor(function);
-	UnbindFunctor(eventType, functor);
-}
-
-void rEventHandler::Trigger(int eventType, rEvent& event){
-	rFunctorList& functorList = m_functorMap[eventType];
-
-	rFunctorList::iterator end = functorList.end();
-	for (rFunctorList::iterator it = functorList.begin(); it != end; ++it){
-		rFunctorBase* functor = *it;
-		functor->Call(event);
-		if (event.Handled()) break;
-	}
 }
 
 #endif

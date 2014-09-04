@@ -29,6 +29,7 @@ list(APPEND core_files ${CMAKE_CURRENT_SOURCE_DIR}/../../include/rModuleLoader.h
 list(APPEND core_files ${CMAKE_CURRENT_SOURCE_DIR}/../../include/rEvent.hpp)
 list(APPEND core_files ${CMAKE_CURRENT_SOURCE_DIR}/../../include/rContentListener.hpp)
 list(APPEND core_files ${CMAKE_CURRENT_SOURCE_DIR}/../../include/rGraphicsDevice.hpp)
+list(APPEND core_files ${CMAKE_CURRENT_SOURCE_DIR}/../../include/rObject.hpp)
 list(APPEND core_files ${CMAKE_CURRENT_SOURCE_DIR}/../../include/container/rOctree.hpp)
 
 set(recondite_files ${recondite_files} ${core_files} PARENT_SCOPE)

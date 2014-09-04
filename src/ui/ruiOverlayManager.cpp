@@ -45,6 +45,15 @@ rViewport* ruiOverlayManager::DetermineViewport(const rPoint& point){
 	return NULL;
 }
 
+ruiOverlay* ruiOverlayManager::DetermineOverlay(const rPoint& point){
+	rViewport* viewport = DetermineViewport(point);
+
+	if (viewport && m_overlays.count(viewport))
+		return m_overlays[viewport];
+	else
+		return NULL;
+}
+
 ruiStyleManager* ruiOverlayManager::Styles(){
 	return &m_styleManager;
 }
@@ -129,11 +138,16 @@ bool ruiOverlayManager::InjectTouchUp(const rTouch& touch){
 
 bool ruiOverlayManager::InjectMouseDownEvent(rMouseButton button, const rMouseState& mouse){
 	rPoint position = mouse.Position();
+	ruiMouseEvent mouseEvent(button, rBUTTON_STATE_DOWN, position);
 
-	rViewport* viewport = DetermineViewport(position);
+	ruiOverlay* overlay = DetermineOverlay(position);
 
-	if (viewport && m_overlays.count(viewport)){
-		return m_overlays[viewport]->InjectMouseDownEvent(button, mouse);
+	if (overlay){		
+		ruiWidget* activeWidget = overlay->ActiveWidget();
+
+		if (activeWidget){
+			//trigger Event
+		}
 	}
 
 	return false;
@@ -141,11 +155,16 @@ bool ruiOverlayManager::InjectMouseDownEvent(rMouseButton button, const rMouseSt
 
 bool ruiOverlayManager::InjectMouseUpEvent(rMouseButton button, const rMouseState& mouse){
 	rPoint position = mouse.Position();
+	ruiMouseEvent mouseEvent(button, rBUTTON_STATE_UP, position);
 
-	rViewport* viewport = DetermineViewport(position);
+	ruiOverlay* overlay = DetermineOverlay(position);
 
-	if (viewport && m_overlays.count(viewport)){
-		return m_overlays[viewport]->InjectMouseUpEvent(button, mouse);
+	if (overlay){
+		ruiWidget* activeWidget = overlay->ActiveWidget();
+
+		if (activeWidget){
+			//trigger Event
+		}
 	}
 
 	return false;
@@ -153,11 +172,17 @@ bool ruiOverlayManager::InjectMouseUpEvent(rMouseButton button, const rMouseStat
 
 bool ruiOverlayManager::InjectMouseMotionEvent(const rMouseState& mouse){
 	rPoint position = mouse.Position();
+	ruiMouseEvent mouseEvent(position);
 
-	rViewport* viewport = DetermineViewport(position);
+	ruiOverlay* overlay = DetermineOverlay(position);
 
-	if (viewport && m_overlays.count(viewport)){
-		return m_overlays[viewport]->InjectMouseMotionEvent(mouse);
+	if (overlay){
+		ruiWidget* activeWidget = overlay->ActiveWidget();
+		ruiWidget* selectedWidget = overlay->SelectWidget(position);
+
+		if (activeWidget){
+			//trigger Event
+		}
 	}
 
 	return false;
@@ -165,11 +190,16 @@ bool ruiOverlayManager::InjectMouseMotionEvent(const rMouseState& mouse){
 
 bool ruiOverlayManager::InjectMouseWheelEvent(rMouseWheelDirection direction, const rMouseState& mouse){
 	rPoint position = mouse.Position();
+	ruiMouseEvent mouseEvent(direction, position);
 
-	rViewport* viewport = DetermineViewport(position);
+	ruiOverlay* overlay = DetermineOverlay(position);
 
-	if (viewport && m_overlays.count(viewport)){
-		return m_overlays[viewport]->InjectMouseWheelEvent(direction, mouse);
+	if (overlay){
+		ruiWidget* activeWidget = overlay->ActiveWidget();
+
+		if (activeWidget){
+			//trigger Event
+		}
 	}
 
 	return false;

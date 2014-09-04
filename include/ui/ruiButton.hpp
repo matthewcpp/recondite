@@ -5,7 +5,7 @@
 #include "rBuild.hpp"
 
 #include "ui/ruiWidget.hpp"
-#include "ui/ruiEventType.hpp"
+#include "ui/ruiEvents.hpp"
 
 class RECONDITE_API ruiButton : public ruiWidget{
 public:

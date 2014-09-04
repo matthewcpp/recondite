@@ -8,7 +8,7 @@
 #include "ui/ruiBase.hpp"
 #include "ui/ruiPickerOptionsMenu.hpp"
 
-#include "ui/ruiEventType.hpp"
+#include "ui/ruiEvents.hpp"
 
 class RECONDITE_API ruiPicker : public ruiWidget, public ruiIControlWithOptions{
 public:

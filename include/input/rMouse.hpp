@@ -15,7 +15,8 @@ enum rMouseButton{
 
 enum rMouseWheelDirection{
 	rMOUSEWHEEL_UP,
-	rMOUSEWHEEL_DOWN
+	rMOUSEWHEEL_DOWN,
+	rMOUSEWHEEL_NONE
 };
 
 class RECONDITE_API rMouseState {

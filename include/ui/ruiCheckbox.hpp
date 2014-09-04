@@ -5,7 +5,7 @@
 #include "rDefs.hpp"
 
 #include "ruiWidget.hpp"
-#include "ui/ruiEventType.hpp"
+#include "ui/ruiEvents.hpp"
 
 class ruiCheckbox : public ruiWidget{
 public:

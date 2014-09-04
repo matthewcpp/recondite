@@ -81,6 +81,10 @@ bool ruiOverlay::InjectKeyUpEvent(rKey key, rKeyboardState& state){
 	return false;
 }
 
+ruiWidget* ruiOverlay::ActiveWidget() const{
+	return m_activeWidget;
+}
+
 void ruiOverlay::ActivateWidget(ruiWidget* widget){
 	if (m_activeWidget)
 		m_activeWidget->OnDeactivate();

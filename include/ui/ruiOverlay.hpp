@@ -27,6 +27,8 @@ public:
 	void Clear();
 
 	void ActivateWidget(ruiWidget* widget);
+	ruiWidget* ActiveWidget() const;
+
 
 	virtual bool InjectTouchDown(const rTouch& touch);
 	virtual bool InjectTouchMove(const rTouch& touch);

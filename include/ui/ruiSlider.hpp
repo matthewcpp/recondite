@@ -5,7 +5,7 @@
 #include "rMathUtil.hpp"
 
 #include "ui/ruiWidget.hpp"
-#include "ui/ruiEventType.hpp"
+#include "ui/ruiEvents.hpp"
 
 class RECONDITE_API ruiSlider : public ruiWidget{
 public:

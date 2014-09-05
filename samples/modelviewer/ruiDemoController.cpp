@@ -13,10 +13,10 @@ void ruiDemoController::Init(ruiOverlay* overlay, rEngine* engine){
 
 	m_modelPicker = new ruiPicker(models, "100", engine, rPoint(25, 10), rSize(250, 35));
 
-	m_modelPicker->Bind(ruiEVENT_PICKER_CHANGE, this, &ruiDemoController::OnModelChange);
+	//m_modelPicker->Bind(ruiEVENT_PICKER_CHANGE, this, &ruiDemoController::OnModelChange);
 
 	m_animationPicker = new ruiPicker("101", engine, rPoint(25, 60), rSize(250, 35));
-	m_animationPicker->Bind(ruiEVENT_PICKER_CHANGE, this, &ruiDemoController::OnAnimationChange);
+	//m_animationPicker->Bind(ruiEVENT_PICKER_CHANGE, this, &ruiDemoController::OnAnimationChange);
 
 	m_animationTime = new ruiText("0.0", "102", engine, rPoint(25, 110), rSize(100, 35));
 
@@ -24,9 +24,9 @@ void ruiDemoController::Init(ruiOverlay* overlay, rEngine* engine){
 	ruiButton* pauseButton = new ruiButton("Pause", "104",  engine, rPoint(135, 160), rSize(100, 35));
 	ruiButton* stopButton = new ruiButton("Stop", "105", engine, rPoint(245, 160), rSize(100, 35));
 
-	playButton->Bind(ruiEVENT_BUTTON_CLICK, this, &ruiDemoController::OnAnimationPlay);
-	pauseButton->Bind(ruiEVENT_BUTTON_CLICK, this, &ruiDemoController::OnAnimationPause);
-	stopButton->Bind(ruiEVENT_BUTTON_CLICK, this, &ruiDemoController::OnAnimationStop);
+	//playButton->Bind(ruiEVENT_BUTTON_CLICK, this, &ruiDemoController::OnAnimationPlay);
+	//pauseButton->Bind(ruiEVENT_BUTTON_CLICK, this, &ruiDemoController::OnAnimationPause);
+	//stopButton->Bind(ruiEVENT_BUTTON_CLICK, this, &ruiDemoController::OnAnimationStop);
 
 	m_progressSlider = new ruiSlider("106", engine, rPoint(145, 110), rSize(130, 35));
 

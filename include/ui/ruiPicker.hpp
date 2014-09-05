@@ -20,8 +20,6 @@ public:
 	void SetOptions(const rArrayString& options);
 	size_t NumOptions() const;
 
-	virtual void OnPointerDown(const rPoint& position);
-
 	virtual size_t SelectionIndex() const;
 	virtual bool SetSelectionIndex(size_t index);
 
@@ -37,6 +35,10 @@ public:
 	void ShowOptionsMenu();
 
 	virtual void SubmenuSelection(size_t index);
+
+public:
+		void OnPointerDown(const rPoint& position);
+		void OnMouseDown(rEvent& event);
 
 private:
 

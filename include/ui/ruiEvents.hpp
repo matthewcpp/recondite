@@ -12,6 +12,10 @@ enum ruiEventType{
 	ruiEVT_MOUSE_ENTER,
 	ruiEVT_MOUSE_LEAVE,
 
+	ruiEVT_TOUCH_DOWN,
+	ruiEVT_TOUCH_MOVE,
+	ruiEVT_TOUCH_UP,
+
 	//temp
 	ruiEVENT_BUTTON_CLICK,
 	ruiEVENT_CHECKBOX_CHANGE,

@@ -7,6 +7,10 @@ ruiSlider::ruiSlider(const rString& id, rEngine* engine, const rPoint& position,
 	m_handleSize = 15;
 	
 	handleGrabbed = false;
+
+	Bind(ruiEVT_MOUSE_DOWN, this, &ruiSlider::OnMouseDown);
+	Bind(ruiEVT_MOUSE_MOTION, this, &ruiSlider::OnMouseMove);
+	Bind(ruiEVT_MOUSE_UP, this, &ruiSlider::OnMouseUp);
 }
 
 int ruiSlider::GetValue() const{
@@ -18,7 +22,7 @@ void ruiSlider::SetValue(int value){
 
 	if (value != m_value){
 		m_value = rMath::Clamp<int>(value, 0 , 100);
-		Trigger(ruiEVENT_SLIDER_CHANGE);
+		//Trigger(ruiEVENT_SLIDER_CHANGE);
 	}
 }
 
@@ -80,4 +84,25 @@ void ruiSlider::Draw(rEngine& engine){
 	
 	engine.renderer->RenderRect(box, gray);
 	engine.renderer->RenderRect(handle, white);
+}
+
+void ruiSlider::OnMouseDown(rEvent& event){
+	ruiMouseEvent& mouseEvent = static_cast<ruiMouseEvent&>(event);
+
+	if (mouseEvent.Button() == rMOUSE_BUTTON_LEFT)
+		OnPointerDown(mouseEvent.Position());
+}
+
+void ruiSlider::OnMouseMove(rEvent& event){
+	ruiMouseEvent& mouseEvent = static_cast<ruiMouseEvent&>(event);
+
+	if (mouseEvent.Button() == rMOUSE_BUTTON_LEFT)
+		OnPointerMove(mouseEvent.Position());
+}
+
+void ruiSlider::OnMouseUp(rEvent& event){
+	ruiMouseEvent& mouseEvent = static_cast<ruiMouseEvent&>(event);
+
+	if (mouseEvent.Button() == rMOUSE_BUTTON_LEFT)
+		OnPointerUp(mouseEvent.Position());
 }

@@ -4,6 +4,8 @@ ruiPicker::ruiPicker(const rString& id, rEngine* engine, const rPoint& position,
 :ruiWidget(id, engine, position, size)
 {
 	m_selectionIndex = 0;
+
+	Bind(ruiEVT_MOUSE_DOWN, this, &ruiPicker::OnMouseDown);
 }
 
 ruiPicker::ruiPicker(rArrayString& options, const rString& id, rEngine* engine, const rPoint& position, const rSize& size)
@@ -64,7 +66,7 @@ bool ruiPicker::SetSelectionIndex(size_t index){
 	if (index < m_options.size()){
 		m_selectionIndex = index;
 
-		Trigger(ruiEVENT_PICKER_CHANGE);
+		//Trigger(ruiEVENT_PICKER_CHANGE);
 
 		return true;
 	}
@@ -93,4 +95,11 @@ const rArrayString& ruiPicker::Options() const{
 
 void ruiPicker::SubmenuSelection(size_t index){
 	SetSelectionIndex(index);
+}
+
+void ruiPicker::OnMouseDown(rEvent& event){
+	ruiMouseEvent& mouseEvent = static_cast<ruiMouseEvent&>(event);
+
+	if (mouseEvent.Button() == rMOUSE_BUTTON_LEFT)
+		OnPointerDown(mouseEvent.Position());
 }

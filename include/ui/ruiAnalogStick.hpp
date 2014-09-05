@@ -16,15 +16,14 @@ class RECONDITE_API ruiAnalogStick : public ruiWidget{
 public:
 
 	ruiAnalogStick(rController* controller, size_t stickIndex, const rString& id, rEngine* engine, const rPoint& position, const rSize& size);
+	virtual void Draw(rEngine& engine);
 
+public:
 	virtual void OnTouchDown(const rTouch& touch);
 	virtual void OnTouchMove(const rTouch& touch);
 	virtual void OnTouchUp(const rTouch& touch);
 
-	virtual void Draw(rEngine& engine);
-	
 private:
-
 	void SetCircles();
 	void UpdateController();
 	

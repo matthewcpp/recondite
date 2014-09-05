@@ -12,13 +12,16 @@ public:
 	ruiCheckbox(const rString& id, rEngine* engine, const rPoint& position, const rSize& size);
 	
 public:
-	
-	virtual void OnPointerDown(const rPoint& position);
 
 	bool IsChecked () const;
 	void SetChecked(bool checked);
 	
 	virtual void Draw(rEngine& engine);
+
+public:
+
+	void OnMouseDown(rEvent& event);
+	void OnPointerDown(const rPoint& position);
 	
 private:
 	bool m_isChecked;

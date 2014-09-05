@@ -79,6 +79,7 @@ void BasicSceneModule::InitUI(ruiOverlayManager& manager, rEngine& engine){
 	overlay->AddWidget(m_textCameraPos);
 
 	overlay->AddWidget(new ruiText("2", &engine, rPoint(10,50), rSize(500,35)));
+	overlay->AddWidget(new ruiButton("Test", "button1", &engine, rPoint(10, 90), rSize(300, 35)));
 }
 
 void BasicSceneModule::Uninit(rEngine& engine){

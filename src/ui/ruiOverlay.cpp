@@ -60,23 +60,23 @@ void ruiOverlay::EndModal(ruiWidget* widget){
 }
 
 bool ruiOverlay::InjectKeyDownEvent(rKey key, rKeyboardState& state){
-	if (m_modalWidget){
-		m_modalWidget->OnKeyDown(key, state);
-	}
-	else if (m_activeWidget){
-		m_activeWidget->OnKeyDown(key, state);
-	}
+	//if (m_modalWidget){
+	//	//m_modalWidget->OnKeyDown(key, state);
+	//}
+	//else if (m_activeWidget){
+	//	//->OnKeyDown(key, state);
+	//}
 
 	return false;
 }
 
 bool ruiOverlay::InjectKeyUpEvent(rKey key, rKeyboardState& state){
-	if (m_modalWidget){
-		m_modalWidget->OnKeyUp(key, state);
-	}
-	else if (m_activeWidget){
-		m_activeWidget->OnKeyUp(key, state);
-	}
+	//if (m_modalWidget){
+	//	m_modalWidget->OnKeyUp(key, state);
+	//}
+	//else if (m_activeWidget){
+	//	m_activeWidget->OnKeyUp(key, state);
+	//}
 
 	return false;
 }
@@ -86,132 +86,141 @@ ruiWidget* ruiOverlay::ActiveWidget() const{
 }
 
 void ruiOverlay::ActivateWidget(ruiWidget* widget){
-	if (m_activeWidget)
-		m_activeWidget->OnDeactivate();
+	//if (m_activeWidget)
+	//	m_activeWidget->OnDeactivate();
 
 	m_activeWidget = widget;
 
-	if (m_activeWidget)
-		m_activeWidget->OnActivate();
+	//if (m_activeWidget)
+	//	m_activeWidget->OnActivate();
 }
 
 bool ruiOverlay::InjectTouchDown(const rTouch& touch){
-	rPoint currentTouchPos = touch.GetCurrentPosition();
-	
-	if (m_modalWidget){
-		rRect boundingBox = m_modalWidget->BoundingBox();
+	//rPoint currentTouchPos = touch.GetCurrentPosition();
+	//
+	//if (m_modalWidget){
+	//	rRect boundingBox = m_modalWidget->BoundingBox();
 
-		if (boundingBox.ContainsPoint(currentTouchPos)){
-			m_modalWidget->OnTouchDown(touch);
-		}
-		return true;
-	}
-	else{
-		ruiWidget* widget = SelectWidget(currentTouchPos);
+	//	if (boundingBox.ContainsPoint(currentTouchPos)){
+	//		m_modalWidget->OnTouchDown(touch);
+	//	}
+	//	return true;
+	//}
+	//else{
+	//	ruiWidget* widget = SelectWidget(currentTouchPos);
 
-		if (widget){
-			ActivateWidget(widget);
+	//	if (widget){
+	//		ActivateWidget(widget);
 
-			m_activeWidget->OnTouchDown(touch);
-			return true;
-		}
-	}
+	//		m_activeWidget->OnTouchDown(touch);
+	//		return true;
+	//	}
+	//}
 
 	return false;
 }
 
 bool ruiOverlay::InjectTouchMove(const rTouch& touch){
-	if (m_modalWidget){
-		m_modalWidget->OnTouchMove(touch);
-		return true;
-	}
-	else if (m_activeWidget){
-		m_activeWidget->OnTouchMove(touch);
-		return true;
-	}
-	else{
-		return false;
-	}
+	//if (m_modalWidget){
+	//	m_modalWidget->OnTouchMove(touch);
+	//	return true;
+	//}
+	//else if (m_activeWidget){
+	//	m_activeWidget->OnTouchMove(touch);
+	//	return true;
+	//}
+	//else{
+	//	return false;
+	//}
+
+	return false;
 }
 
 bool ruiOverlay::InjectTouchUp(const rTouch& touch){
-	if (m_modalWidget){
-		m_modalWidget->OnTouchUp(touch);
-		return true;
-	}
-	else if (m_activeWidget){
-		m_activeWidget->OnTouchUp(touch);
-		return true;
-	}
-	else{
-		return false;
-	}
+	//if (m_modalWidget){
+	//	m_modalWidget->OnTouchUp(touch);
+	//	return true;
+	//}
+	//else if (m_activeWidget){
+	//	m_activeWidget->OnTouchUp(touch);
+	//	return true;
+	//}
+	//else{
+	//	return false;
+	//}
+
+	return false;
 }
 
 bool ruiOverlay::InjectMouseDownEvent(rMouseButton button, const rMouseState& mouse){
-	rPoint position = mouse.Position();
-	
-	if (m_modalWidget){
-		rRect boundingBox = m_modalWidget->BoundingBox();
+	//rPoint position = mouse.Position();
+	//
+	//if (m_modalWidget){
+	//	rRect boundingBox = m_modalWidget->BoundingBox();
 
-		if (boundingBox.ContainsPoint(position)){
-			m_modalWidget->MouseDownEvent(button, mouse);
-		}
-		return true;
-	}
-	else{
-		ruiWidget* widget = SelectWidget(position);
+	//	if (boundingBox.ContainsPoint(position)){
+	//		m_modalWidget->MouseDownEvent(button, mouse);
+	//	}
+	//	return true;
+	//}
+	//else{
+	//	ruiWidget* widget = SelectWidget(position);
 
-		if (widget){
-			ActivateWidget(widget);
-			m_activeWidget->MouseDownEvent(button, mouse);
-			return true;
-		}
-	}
+	//	if (widget){
+	//		ActivateWidget(widget);
+	//		m_activeWidget->MouseDownEvent(button, mouse);
+	//		return true;
+	//	}
+	//}
 
 	return false;
 }
 
 bool ruiOverlay::InjectMouseUpEvent(rMouseButton button, const rMouseState& mouse){
-	if (m_modalWidget){
-		m_modalWidget->MouseUpEvent(button, mouse);
-		return true;
-	}
-	else if (m_activeWidget){
-		m_activeWidget->MouseUpEvent(button, mouse);
-		return true;
-	}
-	else{
-		return false;
-	}
+	//if (m_modalWidget){
+	//	m_modalWidget->MouseUpEvent(button, mouse);
+	//	return true;
+	//}
+	//else if (m_activeWidget){
+	//	m_activeWidget->MouseUpEvent(button, mouse);
+	//	return true;
+	//}
+	//else{
+	//	return false;
+	//}
+	return false;
 }
 
 bool ruiOverlay::InjectMouseMotionEvent(const rMouseState& mouse){
-	if (m_modalWidget){
-		m_modalWidget->OnMouseMotion(mouse);
-		return true;
-	}
-	else if (m_activeWidget){
-		m_activeWidget->OnMouseMotion(mouse);
-		return true;
-	}
-	else{
-		return false;
-	}
+	//if (m_modalWidget){
+	//	m_modalWidget->OnMouseMotion(mouse);
+	//	return true;
+	//}
+	//else if (m_activeWidget){
+	//	m_activeWidget->OnMouseMotion(mouse);
+	//	return true;
+	//}
+	//else{
+	//	return false;
+	//}
+
+	return false;
 }
 
 bool ruiOverlay::InjectMouseWheelEvent(rMouseWheelDirection direction, const rMouseState& mouse){
-	if (m_modalWidget){
-		m_modalWidget->MouseWheelEvent(direction, mouse);
-		return true;
-	}
-	else if (m_activeWidget){
-		m_activeWidget->MouseWheelEvent(direction, mouse);
-		return true;
-	}
-	else{
-		return false;
-	}
+	//if (m_modalWidget){
+	//	m_modalWidget->MouseWheelEvent(direction, mouse);
+	//	return true;
+	//}
+	//else if (m_activeWidget){
+	//	m_activeWidget->MouseWheelEvent(direction, mouse);
+	//	return true;
+	//}
+	//else{
+	//	return false;
+	//}
+
+	return false;
 }
 
 ruiWidget* ruiOverlay::SelectWidget(const rPoint& position){

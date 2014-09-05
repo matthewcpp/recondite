@@ -5,6 +5,11 @@ ruiButton::ruiButton(const rString& text, const rString& id, rEngine* engine, co
 {
 	SetText(text);
 	m_state = rBUTTON_STATE_UP;
+
+	Bind(ruiEVT_MOUSE_DOWN, this, &ruiButton::OnMouseDown);
+	Bind(ruiEVT_MOUSE_UP, this, &ruiButton::OnMouseUp);
+	Bind(ruiEVT_MOUSE_LEAVE, this, &ruiButton::OnMouseLeave);
+	Bind(ruiEVT_MOUSE_ENTER, this, &ruiButton::OnMouseEnter);
 }
 
 
@@ -21,15 +26,22 @@ void ruiButton::SetText(const rString& text){
 void ruiButton::Draw(rEngine& engine){
 	rRect box = BoundingBox();
 	
-	
-	rColor gray(200,200,200,255);
-	rColor darkgray(150,150,150,255);
-	
-	if (m_state == rBUTTON_STATE_DOWN)
-		engine.renderer->RenderRoundedRect(box, 10, darkgray);
-	else
-		engine.renderer->RenderRoundedRect(box, 10, gray);
+	rColor color;
 
+	switch (m_state){
+		case rBUTTON_STATE_DOWN:
+			color.Set(150,150,150,255);
+			break;
+		case rBUTTON_STATE_UP:
+			color.Set(200,200,200,255);
+			break;
+
+		case rBUTTON_STATE_NONE:
+			color.Set(175,175,175,255);
+			break;
+	};
+	
+	engine.renderer->RenderRoundedRect(box, 10, color);
 	
 	rFont* font = engine.content->GetFontAsset("consolas");
 	
@@ -56,10 +68,47 @@ void ruiButton::OnPointerUp(const rPoint& position){
 	rRect box = BoundingBox();
 
 	if (box.ContainsPoint(position)){
-		Trigger(ruiEVENT_BUTTON_CLICK);
+		//trigger button click
 	}
 }
 
-rButtonState ruiButton::GetState() const{
+void ruiButton::OnPointerLeave(const rPoint& position){
+	if (m_state == rBUTTON_STATE_DOWN)
+		m_state = rBUTTON_STATE_NONE;
+	else
+		m_state = rBUTTON_STATE_UP;
+}
+
+void ruiButton::OnPointerEnter(const rPoint& position){
+	if (m_state == rBUTTON_STATE_NONE)
+		m_state = rBUTTON_STATE_DOWN;
+}
+
+rButtonState ruiButton::ButtonState() const{
 	return m_state;
+}
+
+void ruiButton::OnMouseDown(rEvent& event){
+	ruiMouseEvent& mouseEvent = static_cast<ruiMouseEvent&>(event);
+
+	if (mouseEvent.Button() == rMOUSE_BUTTON_LEFT)
+		OnPointerDown(mouseEvent.Position());
+}
+
+void ruiButton::OnMouseUp(rEvent& event){
+	ruiMouseEvent& mouseEvent = static_cast<ruiMouseEvent&>(event);
+
+	if (mouseEvent.Button() == rMOUSE_BUTTON_LEFT)
+		OnPointerUp(mouseEvent.Position());
+}
+
+void ruiButton::OnMouseLeave(rEvent& event){
+	ruiMouseEvent& mouseEvent = static_cast<ruiMouseEvent&>(event);
+
+	OnPointerLeave(mouseEvent.Position());
+}
+
+void ruiButton::OnMouseEnter(rEvent& event){
+	ruiMouseEvent& mouseEvent = static_cast<ruiMouseEvent&>(event);
+	OnPointerEnter(mouseEvent.Position());
 }

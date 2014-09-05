@@ -114,3 +114,10 @@ TEST(Core_rEventHandler, UnbindEventCallbackWithTarget){
 	EXPECT_FALSE(tester1.callbackCalled);
 	EXPECT_TRUE(tester2.callbackCalled);
 }
+
+TEST(Core_rEventHandler, TriggersUnboundEventOk){
+	rEventHandler eventHandler;
+	rEvent event;
+
+	EXPECT_NO_THROW( eventHandler.Trigger(99, event) );
+}

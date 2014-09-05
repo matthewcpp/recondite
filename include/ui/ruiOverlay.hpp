@@ -29,19 +29,6 @@ public:
 	void ActivateWidget(ruiWidget* widget);
 	ruiWidget* ActiveWidget() const;
 
-
-	virtual bool InjectTouchDown(const rTouch& touch);
-	virtual bool InjectTouchMove(const rTouch& touch);
-	virtual bool InjectTouchUp(const rTouch& touch);
-
-	virtual bool InjectMouseDownEvent(rMouseButton button, const rMouseState& mouse);
-	virtual bool InjectMouseUpEvent(rMouseButton button, const rMouseState& mouse);
-	virtual bool InjectMouseMotionEvent(const rMouseState& mouse);
-	virtual bool InjectMouseWheelEvent(rMouseWheelDirection direction, const rMouseState& mouse);
-
-	virtual bool InjectKeyDownEvent(rKey key, rKeyboardState& state);
-	virtual bool InjectKeyUpEvent(rKey key, rKeyboardState& state);
-
 	ruiWidget* SelectWidget(const rPoint& position);
 
 protected:

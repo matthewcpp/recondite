@@ -1,14 +1,14 @@
 #include "ui/ruiWidget.hpp"
 
 ruiWidget::ruiWidget(const rString& id, rEngine* engine)
-	:ruiStyledWidgetBase(id, engine)
+	:ruiWidgetBase(id, engine)
 {
 	m_position.Set(-1,-1);
 	m_size.Set(-1,-1);
 }
 
 ruiWidget::ruiWidget(const rString& id, rEngine* engine, const rPoint& position, const rSize& size)
-	:ruiStyledWidgetBase(id, engine)
+	:ruiWidgetBase(id, engine)
 {
 	m_position = position;
 	m_size = size;

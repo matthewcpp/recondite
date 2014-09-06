@@ -18,16 +18,12 @@ public:
 	virtual void Draw(rEngine& engine);
 	rButtonState ButtonState() const;
 
-private:
-	void OnPointerDown(const rPoint& position);
-	void OnPointerUp(const rPoint& position);
-	void OnPointerLeave(const rPoint& position);
-	void OnPointerEnter(const rPoint& position);
+protected:
+	virtual void OnPointerDown(const rPoint& position);
+	virtual void OnPointerUp(const rPoint& position);
+	virtual void OnPointerLeave(const rPoint& position);
+	virtual void OnPointerEnter(const rPoint& position);
 
-	void OnMouseDown(rEvent& event);
-	void OnMouseUp(rEvent& event);
-	void OnMouseLeave(rEvent& event);
-	void OnMouseEnter(rEvent& event);
 	
 private:
 	

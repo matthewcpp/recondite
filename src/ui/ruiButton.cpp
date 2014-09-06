@@ -1,15 +1,10 @@
 #include "ui/ruiButton.hpp"
 
 ruiButton::ruiButton(const rString& text, const rString& id, rEngine* engine, const rPoint& position, const rSize& size)
-:ruiWidget(id, engine, position, size)
+	:ruiWidget(id, engine, position, size)
 {
 	SetText(text);
 	m_state = rBUTTON_STATE_UP;
-
-	Bind(ruiEVT_MOUSE_DOWN, this, &ruiButton::OnMouseDown);
-	Bind(ruiEVT_MOUSE_UP, this, &ruiButton::OnMouseUp);
-	Bind(ruiEVT_MOUSE_LEAVE, this, &ruiButton::OnMouseLeave);
-	Bind(ruiEVT_MOUSE_ENTER, this, &ruiButton::OnMouseEnter);
 }
 
 
@@ -86,29 +81,4 @@ void ruiButton::OnPointerEnter(const rPoint& position){
 
 rButtonState ruiButton::ButtonState() const{
 	return m_state;
-}
-
-void ruiButton::OnMouseDown(rEvent& event){
-	ruiMouseEvent& mouseEvent = static_cast<ruiMouseEvent&>(event);
-
-	if (mouseEvent.Button() == rMOUSE_BUTTON_LEFT)
-		OnPointerDown(mouseEvent.Position());
-}
-
-void ruiButton::OnMouseUp(rEvent& event){
-	ruiMouseEvent& mouseEvent = static_cast<ruiMouseEvent&>(event);
-
-	if (mouseEvent.Button() == rMOUSE_BUTTON_LEFT)
-		OnPointerUp(mouseEvent.Position());
-}
-
-void ruiButton::OnMouseLeave(rEvent& event){
-	ruiMouseEvent& mouseEvent = static_cast<ruiMouseEvent&>(event);
-
-	OnPointerLeave(mouseEvent.Position());
-}
-
-void ruiButton::OnMouseEnter(rEvent& event){
-	ruiMouseEvent& mouseEvent = static_cast<ruiMouseEvent&>(event);
-	OnPointerEnter(mouseEvent.Position());
 }

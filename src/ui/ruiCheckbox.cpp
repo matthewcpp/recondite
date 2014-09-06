@@ -4,13 +4,7 @@ ruiCheckbox::ruiCheckbox(const rString& id, rEngine* engine, const rPoint& posit
 :ruiWidget(id, engine, position, size)
  {
 	m_isChecked = false;
-
-	Bind(ruiEVT_MOUSE_DOWN, this, &ruiCheckbox::OnMouseDown);
  }
-
-void ruiCheckbox::OnPointerDown(const rPoint& position){
-	SetChecked( !m_isChecked);
-}
 
 bool ruiCheckbox::IsChecked () const{
 	return m_isChecked;
@@ -19,7 +13,8 @@ bool ruiCheckbox::IsChecked () const{
 void ruiCheckbox::SetChecked(bool checked){
 	if (checked != m_isChecked){
 		m_isChecked = checked;
-		//Trigger(ruiEVENT_CHECKBOX_CHANGE);
+		ruiWidgetEvent event(this);
+		Trigger(ruiEVENT_CHECKBOX_CHANGE, event);
 	}
 }
 
@@ -36,9 +31,9 @@ void ruiCheckbox::Draw(rEngine& engine){
 	}
 }
 
-void ruiCheckbox::OnMouseDown(rEvent& event){
-	ruiMouseEvent& mouseEvent = static_cast<ruiMouseEvent&>(event);
+void ruiCheckbox::OnPointerUp(const rPoint& position){
+	rRect boundingBox = BoundingBox();
 
-	if (mouseEvent.Button() == rMOUSE_BUTTON_LEFT)
-		OnPointerDown(mouseEvent.Position());
+	if (boundingBox.ContainsPoint(position))
+		SetChecked( !m_isChecked);
 }

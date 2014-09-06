@@ -63,7 +63,8 @@ void ruiButton::OnPointerUp(const rPoint& position){
 	rRect box = BoundingBox();
 
 	if (box.ContainsPoint(position)){
-		//trigger button click
+		ruiWidgetEvent event(this);
+		Trigger(ruiEVENT_BUTTON_CLICK, event);
 	}
 }
 

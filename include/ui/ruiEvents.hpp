@@ -4,6 +4,8 @@
 #include "rEvent.hpp"
 #include "input/rMouse.hpp"
 
+#include "ruiWidgetBase.hpp"
+
 enum ruiEventType{
 	ruiEVT_MOUSE_DOWN,
 	ruiEVT_MOUSE_UP,
@@ -16,7 +18,6 @@ enum ruiEventType{
 	ruiEVT_TOUCH_MOVE,
 	ruiEVT_TOUCH_UP,
 
-	//temp
 	ruiEVENT_BUTTON_CLICK,
 	ruiEVENT_CHECKBOX_CHANGE,
 	ruiEVENT_SLIDER_CHANGE,
@@ -38,6 +39,14 @@ private:
 	rPoint m_position;
 	rMouseWheelDirection m_wheelDirection;
 	rButtonState m_buttonState;
+};
+
+class ruiWidgetEvent : public rEvent{
+public:
+	ruiWidgetEvent(ruiWidgetBase* widget) : m_widget(widget){}
+	ruiWidgetBase* Widget() const {return m_widget;}
+private:
+	ruiWidgetBase* m_widget;
 };
 
 #endif

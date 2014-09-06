@@ -49,4 +49,16 @@ private:
 	ruiWidgetBase* m_widget;
 };
 
+class ruiContextEvent : public rEvent{
+public:
+	ruiContextEvent(ruiMenu* menu, int selection): m_menu(menu), m_selection(selection) {}
+
+	ruiMenu* Menu() const {return m_menu;}
+	int Selection() const {return m_selection;}
+
+private:
+	ruiMenu* m_menu;
+	int m_selection;
+};
+
 #endif

@@ -10,8 +10,6 @@ void ruiPickerOptionsMenu::OnPointerDown(const rPoint& position){
 
 	int yPos = position.y - m_position.y;
 	m_picker->SetSelectionIndex( yPos / 30);
-
-	EndModal(this);
 }
 
 void ruiPickerOptionsMenu::Draw(rEngine& engine){

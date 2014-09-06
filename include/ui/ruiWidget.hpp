@@ -50,10 +50,6 @@ private:
 	void OnMouseEnter(rEvent& event);
 
 protected:
-	static void ShowModal(ruiWidget* widget);
-	static void EndModal(ruiWidget* widget);
-
-protected:
 	rSize m_size;
 	rPoint m_position;
 };

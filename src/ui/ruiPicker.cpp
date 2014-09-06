@@ -23,8 +23,6 @@ void ruiPicker::ShowOptionsMenu(){
 	ruiPickerOptionsMenu* optionsMenu = new ruiPickerOptionsMenu(this, "-1", m_engine);
 	optionsMenu->SetPosition(m_position.x, m_position.y + m_size.y + 20);
 	optionsMenu->SetSize(250, NumOptions() * 30);
-
-	ShowModal(optionsMenu);
 }
 
 void ruiPicker::Draw(rEngine& engine){

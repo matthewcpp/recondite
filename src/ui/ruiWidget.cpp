@@ -45,15 +45,6 @@ rRect ruiWidget::BoundingBox() const{
 	return rRect(m_position, m_size);
 }
 
-
-void ruiWidget::ShowModal(ruiWidget* widget){
-
-}
-
-void ruiWidget::EndModal(ruiWidget* widget){
-
-}
-
 void ruiWidget::OnMouseDown(rEvent& event){
 	ruiMouseEvent& mouseEvent = static_cast<ruiMouseEvent&>(event);
 

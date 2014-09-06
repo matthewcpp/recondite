@@ -18,9 +18,6 @@ public:
 	virtual void AddWidget(ruiWidget* widget);
 	ruiWidget* GetWidget(const rString& id);
 
-	virtual void ShowModal(ruiWidget* widget);
-	virtual void EndModal(ruiWidget* widget);
-
 	void Update(rEngine& engine);
 	void Draw(rEngine& engine);
 

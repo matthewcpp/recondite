@@ -3,11 +3,18 @@
 
 #include "rBuild.hpp"
 
+#include "rEventHandler.hpp"
+
 #include "ui/ruiStyleManager.hpp"
+
+class ruiMenu;
 
 class RECONDITE_API ruiIManager {
 public:
 	virtual ruiStyleManager* Styles() = 0;
+	virtual bool ShowContextMenu(const ruiMenu* menu, rEventHandler* handler) = 0;
+	virtual void CancelContextMenu() = 0;
+	
 
 	//move this to a InputResponder Interface?
 	virtual bool InsertMouseButtonEvent(rMouseButton button, rButtonState state, const rPoint& position) = 0;

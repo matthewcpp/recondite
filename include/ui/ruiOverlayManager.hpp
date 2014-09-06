@@ -17,24 +17,19 @@
 #include "ui/ruiStyleManager.hpp"
 #include "ui/ruiEvents.hpp"
 
-class RECONDITE_API ruiOverlayManager : public ruiIManager, public ruiInput {
+class RECONDITE_API ruiOverlayManager : public ruiIManager {
 public:
 	ruiOverlayManager();
 	~ruiOverlayManager();
 	
 public:
 
-	virtual bool InjectTouchDown(const rTouch& touch);
-	virtual bool InjectTouchMove(const rTouch& touch);
-	virtual bool InjectTouchUp(const rTouch& touch);
+	virtual bool InsertMouseButtonEvent(rMouseButton button, rButtonState state, const rPoint& position);
+	virtual bool InsertMouseWheelEvent(const rPoint& position, rMouseWheelDirection direction);
+	virtual bool InsertMouseMotionEvent(const rPoint& point);
 
-	virtual bool InjectMouseDownEvent(rMouseButton button, const rMouseState& mouse);
-	virtual bool InjectMouseUpEvent(rMouseButton button, const rMouseState& mouse);
-	virtual bool InjectMouseMotionEvent(const rMouseState& mouse);
-	virtual bool InjectMouseWheelEvent(rMouseWheelDirection direction, const rMouseState& mouse);
-
-	virtual bool InjectKeyDownEvent(rKey key, rKeyboardState& state);
-	virtual bool InjectKeyUpEvent(rKey key, rKeyboardState& state);
+	virtual bool InsertTouchEvent(int id, const rPoint& position, rTouchType type);
+	virtual bool InsertKeyEvent(rKey key, rKeyState state);
 	
 	void Update(rEngine& engine);
 	void Draw(rViewport* viewport, rEngine& engine);
@@ -49,6 +44,10 @@ public:
 private:
 	rViewport* DetermineViewport(const rPoint& point);
 	ruiOverlay* DetermineOverlay(const rPoint& point);
+
+private:
+	bool ProcessMouseDown(rMouseButton button, const rPoint& position);
+	bool ProcessMouseUp(rMouseButton button, const rPoint& position);
 
 private:
 	typedef std::map<rViewport* , ruiOverlay*> ruiViewportOverlayMap;

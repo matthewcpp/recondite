@@ -54,6 +54,15 @@ ruiOverlay* ruiOverlayManager::DetermineOverlay(const rPoint& point){
 		return NULL;
 }
 
+ruiOverlay* ruiOverlayManager::GetOverlay(rViewport* viewport) const{
+	ruiViewportOverlayMap::const_iterator result = m_overlays.find(viewport);
+
+	if (result != m_overlays.end())
+		return result->second;
+	else
+		return NULL;
+}
+
 ruiStyleManager* ruiOverlayManager::Styles(){
 	return &m_styleManager;
 }
@@ -80,64 +89,22 @@ void ruiOverlayManager::Draw(rViewport* viewport, rEngine& engine){
 	m_activeOverlay = NULL;
 }
 
-bool ruiOverlayManager::InjectKeyDownEvent(rKey key, rKeyboardState& state){
-	ruiViewportOverlayMap::iterator end = m_overlays.end();
-
-	for (ruiViewportOverlayMap::iterator it = m_overlays.begin(); it != end; ++it){
-		//it->second->InjectKeyDownEvent(key, state);
-	}
-
+bool ruiOverlayManager::InsertKeyEvent(rKey key, rKeyState state){
 	return false;
 }
 
-bool ruiOverlayManager::InjectKeyUpEvent(rKey key, rKeyboardState& state){
-	ruiViewportOverlayMap::iterator end = m_overlays.end();
-
-	for (ruiViewportOverlayMap::iterator it = m_overlays.begin(); it != end; ++it){
-		//it->second->InjectKeyUpEvent(key, state);
-	}
-
+bool ruiOverlayManager::InsertTouchEvent(int id, const rPoint& position, rTouchType type){
 	return false;
 }
 
-bool ruiOverlayManager::InjectTouchDown(const rTouch& touch){
-	rPoint position = touch.GetCurrentPosition();
-
-	rViewport* viewport = DetermineViewport(position);
-
-	if (viewport && m_overlays.count(viewport)){
-		//return m_overlays[viewport]->InjectTouchDown(touch);
-	}
-
-	return false;
+bool ruiOverlayManager::InsertMouseButtonEvent(rMouseButton button, rButtonState state, const rPoint& position){
+	if (state == rBUTTON_STATE_DOWN)
+		return ProcessMouseDown(button, position);
+	else
+		return ProcessMouseUp(button, position);
 }
 
-bool ruiOverlayManager::InjectTouchMove(const rTouch& touch){
-	rPoint position = touch.GetCurrentPosition();
-
-	rViewport* viewport = DetermineViewport(position);
-
-	if (viewport && m_overlays.count(viewport)){
-		//return m_overlays[viewport]->InjectTouchMove(touch);
-	}
-
-	return false;
-}
-
-bool ruiOverlayManager::InjectTouchUp(const rTouch& touch){
-	rPoint position = touch.GetCurrentPosition();
-
-	rViewport* viewport = DetermineViewport(position);
-
-	if (viewport && m_overlays.count(viewport)){
-		//return m_overlays[viewport]->InjectTouchUp(touch);
-	}
-
-	return false;
-}
-
-bool ruiOverlayManager::InjectMouseDownEvent(rMouseButton button, const rMouseState& mouse){
-	rPoint position = mouse.Position();
+bool ruiOverlayManager::ProcessMouseDown(rMouseButton button, const rPoint& position){
 	ruiMouseEvent event(button, rBUTTON_STATE_DOWN, position);
 
 	ruiOverlay* overlay = DetermineOverlay(position);
@@ -153,25 +120,7 @@ bool ruiOverlayManager::InjectMouseDownEvent(rMouseButton button, const rMouseSt
 	return false;
 }
 
-bool ruiOverlayManager::InjectMouseUpEvent(rMouseButton button, const rMouseState& mouse){
-	rPoint position = mouse.Position();
-	ruiMouseEvent event(button, rBUTTON_STATE_UP, position);
-
-	ruiOverlay* overlay = DetermineOverlay(position);
-
-	if (overlay){
-		ruiWidget* activeWidget = overlay->ActiveWidget();
-
-		if (activeWidget){
-			activeWidget->Trigger(ruiEVT_MOUSE_UP, event);
-		}
-	}
-
-	return false;
-}
-
-bool ruiOverlayManager::InjectMouseMotionEvent(const rMouseState& mouse){
-	rPoint position = mouse.Position();
+bool ruiOverlayManager::InsertMouseMotionEvent(const rPoint& position){
 	ruiMouseEvent event(position);
 
 	ruiOverlay* overlay = DetermineOverlay(position);
@@ -204,8 +153,24 @@ bool ruiOverlayManager::InjectMouseMotionEvent(const rMouseState& mouse){
 	return false;
 }
 
-bool ruiOverlayManager::InjectMouseWheelEvent(rMouseWheelDirection direction, const rMouseState& mouse){
-	rPoint position = mouse.Position();
+bool ruiOverlayManager::ProcessMouseUp(rMouseButton button, const rPoint& position){
+	ruiMouseEvent event(button, rBUTTON_STATE_UP, position);
+
+	ruiOverlay* overlay = DetermineOverlay(position);
+
+	if (overlay){
+		ruiWidget* activeWidget = overlay->ActiveWidget();
+
+		if (activeWidget){
+			activeWidget->Trigger(ruiEVT_MOUSE_UP, event);
+		}
+	}
+
+	return false;
+}
+
+
+bool ruiOverlayManager::InsertMouseWheelEvent(const rPoint& position, rMouseWheelDirection direction){
 	ruiMouseEvent event(direction, position);
 
 	ruiOverlay* overlay = DetermineOverlay(position);
@@ -219,13 +184,4 @@ bool ruiOverlayManager::InjectMouseWheelEvent(rMouseWheelDirection direction, co
 	}
 
 	return false;
-}
-
-ruiOverlay* ruiOverlayManager::GetOverlay(rViewport* viewport) const{
-	ruiViewportOverlayMap::const_iterator result = m_overlays.find(viewport);
-
-	if (result != m_overlays.end())
-		return result->second;
-	else
-		return NULL;
 }

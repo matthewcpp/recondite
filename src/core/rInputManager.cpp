@@ -4,7 +4,7 @@ rInputManager::rInputManager(){
 	m_ui = NULL;
 }
 
-void rInputManager::SetUI(ruiInput* uiInput){
+void rInputManager::SetUI(ruiIManager* uiInput){
 	m_ui = uiInput;
 }
 
@@ -23,7 +23,7 @@ rTouch* rInputManager::CreateTouch(int id, const rPoint& position, rTouchType ty
 		rLog::Info("Touch (%u) created Pos: %d, %d (%u)", id, position.x, position.y, type);
 
 		m_gestures.OnTouchDown(*touch);
-		m_ui->InjectTouchDown(*touch);
+		m_ui->InsertTouchEvent(id, position, type);
 
 		return touch;
 	}
@@ -46,17 +46,17 @@ bool rInputManager::UpdateTouch(int id, const rPoint& position, rTouchType type)
 		
 		if (type == rTOUCH_UP){
 			m_gestures.OnTouchUp(*touch);
-			m_ui->InjectTouchUp(*touch);
+			m_ui->InsertTouchEvent(id, position, type);
 
 			m_touches.erase(id);
 			delete touch;
 
-			rLog::Info("Touch (%u) deleted Pos: %d, %d (%u)", id, position.x, position.y, type);
+			rLog::Info("Touch (%u) ended Pos: %d, %d (%u)", id, position.x, position.y, type);
 		}
 		else{
 			//rLog::Trace("Touch (%u) updated Pos: %d, %d (%u)", id, position.x, position.y, type);
 			m_gestures.OnTouchMove(*touch);
-			m_ui->InjectTouchMove(*touch);
+			m_ui->InsertTouchEvent(id, position, type);
 		}
 		
 		return true;
@@ -98,10 +98,7 @@ rController* rInputManager::GetController(size_t index) const{
 void rInputManager::CreateKeyboardEvent(rKey key, rKeyState state){
 	m_keyboard.SetKeyState(key, state);
 
-	if (state == rKEY_DOWN)
-		m_ui->InjectKeyDownEvent(key, m_keyboard);
-	else
-		m_ui->InjectKeyUpEvent(key, m_keyboard);
+	m_ui->InsertKeyEvent(key, state);
 }
 
 const rKeyboardState* rInputManager::Keyboard() const{
@@ -110,25 +107,20 @@ const rKeyboardState* rInputManager::Keyboard() const{
 
 void rInputManager::CreateMouseMotionEvent(int x, int y){
 	m_mouse.SetPosition(x,y);
-	m_ui->InjectMouseMotionEvent(m_mouse);
+	m_ui->InsertMouseMotionEvent(rPoint(x,y));
 }
 
 void rInputManager::CreateMouseButtonEvent(rMouseButton button, rButtonState state, const rPoint& position){
 	m_mouse.SetPosition(position);
 	m_mouse.SetButtonState(button, state);
 
-	if (state == rBUTTON_STATE_DOWN){
-		m_ui->InjectMouseDownEvent(button, m_mouse);
-	}
-	else{
-		m_ui->InjectMouseUpEvent(button, m_mouse);
-	}
+	m_ui->InsertMouseButtonEvent(button, state, position);
 }
 
 void rInputManager::CreateMouseWheelEvent(rMouseWheelDirection direction){
 	m_mouse.UpdateWheelValue(direction);
 
-	m_ui->InjectMouseWheelEvent(direction, m_mouse);
+	m_ui->InsertMouseWheelEvent(m_mouse.Position(), direction);
 }
 
 const rMouseState* rInputManager::GetMouseState() const{

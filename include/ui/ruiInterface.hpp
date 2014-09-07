@@ -8,11 +8,12 @@
 #include "ui/ruiStyleManager.hpp"
 
 class ruiMenu;
+class ruiWidgetBase;
 
 class RECONDITE_API ruiIManager {
 public:
 	virtual ruiStyleManager* Styles() = 0;
-	virtual bool ShowContextMenu(const ruiMenu* menu, rEventHandler* handler) = 0;
+	virtual bool ShowContextMenu(const ruiMenu* menu, const rPoint& position, rEventHandler* handler) = 0;
 	virtual void CancelContextMenu() = 0;
 	
 

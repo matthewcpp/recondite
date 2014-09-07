@@ -6,7 +6,7 @@
 #include "rCamera.hpp"
 
 #include "ui/ruiText.hpp"
-#include "ui/ruiButton.hpp"
+#include "ui/ruiCheckbox.hpp"
 #include "stream/rOStringStream.hpp"
 
 #include "primitive/rPrimitiveBox.hpp"

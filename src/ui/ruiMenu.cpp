@@ -33,30 +33,10 @@ void ruiMenu::DeleteItem(size_t index){
 		m_menuItems.erase(m_menuItems.begin() + index);
 }
 
-void ruiMenu::Draw(const rRect& bounding, rEngine& engine){
-	size_t rowHeight = 30;
-	rColor black(0,0,0,255);
-	rColor gray(200,200,200,255);
-	
-	rFont* font = engine.content->GetFontAsset("consolas");
-	
-	engine.renderer->RenderRect(bounding, gray);
-	
-	for (size_t i =0; i < m_menuItems.size(); i++){
-		rPoint point(bounding.x, bounding.Top() + (i * rowHeight));
-		engine.renderer->RenderString(m_menuItems[i]->Label(), font, point, black);
-	}
-}
-
-void ruiMenu::Update(rEngine& engine){
-}
-
 //--------------------
 ruiMenuItem::ruiMenuItem(int id, const rString& label){
 	m_id = id;
 	m_label = label;
-	m_checked = false;
-	m_radioId = 0;
 }
 
 rString ruiMenuItem::Label() const{

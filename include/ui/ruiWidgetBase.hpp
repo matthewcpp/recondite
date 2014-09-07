@@ -16,6 +16,7 @@ public:
 public:
 	virtual rRect BoundingBox() const = 0;
 	virtual rSize Size() const = 0;
+	virtual rPoint Position() const = 0;
 
 	virtual void Update(rEngine& engine);
 

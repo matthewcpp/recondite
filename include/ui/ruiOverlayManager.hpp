@@ -17,6 +17,7 @@
 #include "ui/ruiStyleManager.hpp"
 #include "ui/ruiEvents.hpp"
 #include "ui/ruiMenu.hpp"
+#include "ui/ruiMenuManager.hpp"
 
 class RECONDITE_API ruiOverlayManager : public ruiIManager {
 public:
@@ -41,7 +42,7 @@ public:
 	ruiOverlay* GetOverlay(rViewport* viewport) const;
 
 	virtual ruiStyleManager* Styles();
-	virtual bool ShowContextMenu(const ruiMenu* menu, rEventHandler* handler);
+	virtual bool ShowContextMenu(const ruiMenu* menu, const rPoint& position, rEventHandler* handler);
 	virtual void CancelContextMenu();
 
 private:
@@ -60,6 +61,7 @@ private:
 	ruiOverlay* m_activeOverlay;
 	
 	ruiStyleManager m_styleManager;
+	ruiMenuManager m_menuManager;
 };
 
 #endif

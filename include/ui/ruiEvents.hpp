@@ -2,6 +2,8 @@
 #define RUI_EVENTS_HPP
 
 #include "rEvent.hpp"
+#include "rEventHandler.hpp"
+
 #include "input/rMouse.hpp"
 
 #include "ruiWidgetBase.hpp"

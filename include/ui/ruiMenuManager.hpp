@@ -6,9 +6,9 @@
 #include "rEngine.hpp"
 #include "ruiMenu.hpp"
 #include "ruiWidgetBase.hpp"
-#include "rEventHandler.hpp"
+#include "ui/ruiDefaultEventHandler.hpp"
 
-class RECONDITE_API ruiMenuManager : public rEventHandler{
+class RECONDITE_API ruiMenuManager : public ruiDefaultEventHandler{
 public:
 	ruiMenuManager();
 
@@ -20,7 +20,9 @@ public:
 	virtual void Draw(rEngine& engine);
 
 private:
-
+	const ruiMenu* m_menu;
+	rPoint m_position;
+	rEventHandler* m_handler;
 };
 
 #endif

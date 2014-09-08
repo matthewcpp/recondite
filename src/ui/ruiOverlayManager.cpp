@@ -106,6 +106,10 @@ bool ruiOverlayManager::InsertMouseButtonEvent(rMouseButton button, rButtonState
 
 bool ruiOverlayManager::ProcessMouseDown(rMouseButton button, const rPoint& position){
 	ruiMouseEvent event(button, rBUTTON_STATE_DOWN, position);
+	m_menuManager.Trigger(ruiEVT_MOUSE_DOWN, event);
+
+	if (event.Handled())
+		return true;
 
 	ruiOverlay* overlay = DetermineOverlay(position);
 
@@ -122,6 +126,10 @@ bool ruiOverlayManager::ProcessMouseDown(rMouseButton button, const rPoint& posi
 
 bool ruiOverlayManager::InsertMouseMotionEvent(const rPoint& position){
 	ruiMouseEvent event(position);
+	m_menuManager.Trigger(ruiEVT_MOUSE_DOWN, event);
+
+	if (event.Handled())
+		return true;
 
 	ruiOverlay* overlay = DetermineOverlay(position);
 
@@ -155,6 +163,10 @@ bool ruiOverlayManager::InsertMouseMotionEvent(const rPoint& position){
 
 bool ruiOverlayManager::ProcessMouseUp(rMouseButton button, const rPoint& position){
 	ruiMouseEvent event(button, rBUTTON_STATE_UP, position);
+	m_menuManager.Trigger(ruiEVT_MOUSE_DOWN, event);
+
+	if (event.Handled())
+		return true;
 
 	ruiOverlay* overlay = DetermineOverlay(position);
 
@@ -187,8 +199,9 @@ bool ruiOverlayManager::InsertMouseWheelEvent(const rPoint& position, rMouseWhee
 }
 
 bool ruiOverlayManager::ShowContextMenu(const ruiMenu* menu, const rPoint& position, rEventHandler* handler){
-	return false;
+	return m_menuManager.ShowContextMenu(menu, position, handler);
 }
 
 void ruiOverlayManager::CancelContextMenu(){
+	m_menuManager.CancelContextMenu();
 }

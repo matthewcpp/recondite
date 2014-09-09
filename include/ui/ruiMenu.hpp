@@ -24,6 +24,7 @@ public:
 public:
 	ruiMenuItem* AppendItem(int id, const rString& label);
 	ruiMenuItem* GetItem(size_t index) const;
+	size_t NumItems() const;
 	void DeleteItem(size_t index);
 
 	void Clear();

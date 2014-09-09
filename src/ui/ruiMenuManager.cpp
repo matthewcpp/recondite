@@ -26,5 +26,18 @@ void ruiMenuManager::Update(rEngine& engine){
 }
 
 void ruiMenuManager::Draw(rEngine& engine){
-
+	size_t rowHeight = 30;
+	size_t menuItemCount = m_menu->NumItems();
+	rColor black(0,0,0,255);
+	rColor gray(200,200,200,255);
+	
+	rFont* font = engine.content->GetFontAsset("consolas");
+	rRect bounding(m_position, rSize (100, rowHeight * menuItemCount));
+	
+	engine.renderer->RenderRect(bounding, gray);
+	
+	for (size_t i = 0; i < menuItemCount; i++){
+		rPoint point(bounding.x, bounding.Top() + (i * rowHeight));
+		engine.renderer->RenderString(m_menu->GetItem(i)->Label(), font, point, black);
+	}
 }

@@ -34,7 +34,7 @@ public:
 	virtual bool InsertKeyEvent(rKey key, rKeyState state);
 	
 	void Update(rEngine& engine);
-	void Draw(rViewport* viewport, rEngine& engine);
+	void Draw(rEngine& engine);
 
 	void Clear();
 

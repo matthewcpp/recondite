@@ -33,6 +33,10 @@ void ruiMenu::DeleteItem(size_t index){
 		m_menuItems.erase(m_menuItems.begin() + index);
 }
 
+size_t ruiMenu::NumItems() const{
+	return m_menuItems.size();
+}
+
 //--------------------
 ruiMenuItem::ruiMenuItem(int id, const rString& label){
 	m_id = id;

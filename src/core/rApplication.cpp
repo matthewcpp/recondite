@@ -33,19 +33,23 @@ void rApplication::Draw(){
 		m_graphicsDevice->EnableDepthTesting(true);
 
 		m_engine.renderer->BeginRenderView(*view.viewport);
-		m_module->BeforeRenderScene(view, m_engine);
+		//m_module->BeforeRenderScene(view, m_engine);
 		m_scene->Draw(m_engine);
-		m_module->AfterRenderScene(view, m_engine);
+		//m_module->AfterRenderScene(view, m_engine);
 		m_engine.renderer->EndRenderView();
 
-		m_graphicsDevice->EnableDepthTesting(false);
 
+		/*
 		if (view.overlay){
 			m_module->BeforeRenderOverlay(view, m_engine);
 			view.overlay->Draw(m_engine);
 			m_module->AfterRenderOverlay(view, m_engine);
 		}
+		*/
 	}
+
+	m_graphicsDevice->EnableDepthTesting(false);
+	m_overlayManager->Draw(m_engine);
 
 	m_graphicsDevice->SwapBuffers();
 

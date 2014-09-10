@@ -19,10 +19,10 @@ public:
 	rButtonState ButtonState() const;
 
 protected:
-	virtual void OnPointerDown(const rPoint& position);
-	virtual void OnPointerUp(const rPoint& position);
-	virtual void OnPointerLeave(const rPoint& position);
-	virtual void OnPointerEnter(const rPoint& position);
+	virtual bool OnPointerDown(const rPoint& position);
+	virtual bool OnPointerUp(const rPoint& position);
+	virtual bool OnPointerLeave(const rPoint& position);
+	virtual bool OnPointerEnter(const rPoint& position);
 
 	
 private:

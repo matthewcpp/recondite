@@ -24,14 +24,9 @@ public:
 	virtual void Draw(rEngine& engine);
 	
 public:
-
-	void OnMouseDown(rEvent& event);
-	void OnMouseMove(rEvent& event);
-	void OnMouseUp(rEvent& event);
-
-	void OnPointerDown(const rPoint& position);
-	void OnPointerMove(const rPoint& position);
-	void OnPointerUp(const rPoint& position);
+	bool OnPointerDown(const rPoint& position);
+	bool OnPointerMove(const rPoint& position);
+	bool OnPointerUp(const rPoint& position);
 
 private:
 	void StartDrag(const rPoint& position);

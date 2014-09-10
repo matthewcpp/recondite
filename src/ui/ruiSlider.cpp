@@ -7,10 +7,6 @@ ruiSlider::ruiSlider(const rString& id, rEngine* engine, const rPoint& position,
 	m_handleSize = 15;
 	
 	handleGrabbed = false;
-
-	Bind(ruiEVT_MOUSE_DOWN, this, &ruiSlider::OnMouseDown);
-	Bind(ruiEVT_MOUSE_MOTION, this, &ruiSlider::OnMouseMove);
-	Bind(ruiEVT_MOUSE_UP, this, &ruiSlider::OnMouseUp);
 }
 
 int ruiSlider::GetValue() const{
@@ -34,23 +30,37 @@ int ruiSlider::GetHandleSize() const{
 	return m_handleSize;
 }
 
-void ruiSlider::OnPointerDown(const rPoint& position){
+bool ruiSlider::OnPointerDown(const rPoint& position){
 	rRect handle = HandleRect();
 
-	if (handle.ContainsPoint(position))
+	if (handle.ContainsPoint(position)){
 		StartDrag(position);
-	else
+		return true;
+	}
+	else{
 		handleGrabbed = false;
-
+		return false;
+	}
 }
 
-void ruiSlider::OnPointerUp(const rPoint& position){
-	handleGrabbed = false;
+bool ruiSlider::OnPointerUp(const rPoint& position){
+	if (handleGrabbed){
+		handleGrabbed = false;
+		return true;
+	}
+	else{
+		return false;
+	}
 }
 
-void ruiSlider::OnPointerMove(const rPoint& position){
-	if (handleGrabbed)
+bool ruiSlider::OnPointerMove(const rPoint& position){
+	if (handleGrabbed){
 		HandleDrag(position);
+		return true;
+	}
+	else{
+		return false;
+	}
 }
 
 void ruiSlider::StartDrag(const rPoint& position){
@@ -84,25 +94,4 @@ void ruiSlider::Draw(rEngine& engine){
 	
 	engine.renderer->RenderRect(box, gray);
 	engine.renderer->RenderRect(handle, white);
-}
-
-void ruiSlider::OnMouseDown(rEvent& event){
-	ruiMouseEvent& mouseEvent = static_cast<ruiMouseEvent&>(event);
-
-	if (mouseEvent.Button() == rMOUSE_BUTTON_LEFT)
-		OnPointerDown(mouseEvent.Position());
-}
-
-void ruiSlider::OnMouseMove(rEvent& event){
-	ruiMouseEvent& mouseEvent = static_cast<ruiMouseEvent&>(event);
-
-	if (mouseEvent.Button() == rMOUSE_BUTTON_LEFT)
-		OnPointerMove(mouseEvent.Position());
-}
-
-void ruiSlider::OnMouseUp(rEvent& event){
-	ruiMouseEvent& mouseEvent = static_cast<ruiMouseEvent&>(event);
-
-	if (mouseEvent.Button() == rMOUSE_BUTTON_LEFT)
-		OnPointerUp(mouseEvent.Position());
 }

@@ -53,11 +53,12 @@ void ruiButton::Draw(rEngine& engine){
 	
 }
 
-void ruiButton::OnPointerDown(const rPoint& position){
+bool ruiButton::OnPointerDown(const rPoint& position){
 	m_state = rBUTTON_STATE_DOWN;
+	return true;
 }
 
-void ruiButton::OnPointerUp(const rPoint& position){
+bool ruiButton::OnPointerUp(const rPoint& position){
 	m_state = rBUTTON_STATE_UP;
 
 	rRect box = BoundingBox();
@@ -66,18 +67,24 @@ void ruiButton::OnPointerUp(const rPoint& position){
 		ruiWidgetEvent event(this);
 		Trigger(ruiEVENT_BUTTON_CLICK, event);
 	}
+
+	return true;
 }
 
-void ruiButton::OnPointerLeave(const rPoint& position){
+bool ruiButton::OnPointerLeave(const rPoint& position){
 	if (m_state == rBUTTON_STATE_DOWN)
 		m_state = rBUTTON_STATE_NONE;
 	else
 		m_state = rBUTTON_STATE_UP;
+
+	return true;
 }
 
-void ruiButton::OnPointerEnter(const rPoint& position){
+bool ruiButton::OnPointerEnter(const rPoint& position){
 	if (m_state == rBUTTON_STATE_NONE)
 		m_state = rBUTTON_STATE_DOWN;
+
+	return true;
 }
 
 rButtonState ruiButton::ButtonState() const{

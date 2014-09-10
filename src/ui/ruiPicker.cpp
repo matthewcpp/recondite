@@ -5,7 +5,7 @@ ruiPicker::ruiPicker(const rString& id, rEngine* engine, const rPoint& position,
 {
 	m_selectionIndex = 0;
 
-	Bind(ruiEVT_MOUSE_DOWN, this, &ruiPicker::OnMouseDown);
+	Bind(ruiEVT_MENU, this, &ruiPicker::OnSubmenuSelection);
 }
 
 ruiPicker::ruiPicker(rArrayString& options, const rString& id, rEngine* engine, const rPoint& position, const rSize& size)
@@ -15,14 +15,20 @@ ruiPicker::ruiPicker(rArrayString& options, const rString& id, rEngine* engine, 
 	SetOptions(options);
 }
 
-void ruiPicker::OnPointerDown(const rPoint& position){
+bool ruiPicker::OnPointerDown(const rPoint& position){
 	ShowOptionsMenu();
+
+	return true;
 }
 
 void ruiPicker::ShowOptionsMenu(){
-	ruiPickerOptionsMenu* optionsMenu = new ruiPickerOptionsMenu(this, "-1", m_engine);
-	optionsMenu->SetPosition(m_position.x, m_position.y + m_size.y + 20);
-	optionsMenu->SetSize(250, NumOptions() * 30);
+	rRect boundingBox = BoundingBox();
+	ruiMenu* menu = new ruiMenu();
+
+	for (int i = 0; i < m_options.size(); i++)
+		menu->AppendItem(i, m_options[i]);
+
+	m_engine->ui->ShowContextMenu(menu, rPoint(boundingBox.Left(), boundingBox.Bottom() + 3), this);
 }
 
 void ruiPicker::Draw(rEngine& engine){
@@ -64,7 +70,8 @@ bool ruiPicker::SetSelectionIndex(size_t index){
 	if (index < m_options.size()){
 		m_selectionIndex = index;
 
-		//Trigger(ruiEVENT_PICKER_CHANGE);
+		ruiWidgetEvent event(this);
+		Trigger(ruiEVENT_PICKER_CHANGE, event);
 
 		return true;
 	}
@@ -91,13 +98,8 @@ const rArrayString& ruiPicker::Options() const{
 	return m_options;
 }
 
-void ruiPicker::SubmenuSelection(size_t index){
-	SetSelectionIndex(index);
-}
+void ruiPicker::OnSubmenuSelection(rEvent& event){
+	ruiMenuEvent& menuEvent = static_cast<ruiMenuEvent&> (event);
 
-void ruiPicker::OnMouseDown(rEvent& event){
-	ruiMouseEvent& mouseEvent = static_cast<ruiMouseEvent&>(event);
-
-	if (mouseEvent.Button() == rMOUSE_BUTTON_LEFT)
-		OnPointerDown(mouseEvent.Position());
+	SetSelectionIndex(menuEvent.Selection());
 }

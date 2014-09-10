@@ -31,9 +31,14 @@ void ruiCheckbox::Draw(rEngine& engine){
 	}
 }
 
-void ruiCheckbox::OnPointerUp(const rPoint& position){
+bool ruiCheckbox::OnPointerUp(const rPoint& position){
 	rRect boundingBox = BoundingBox();
 
-	if (boundingBox.ContainsPoint(position))
+	if (boundingBox.ContainsPoint(position)){
 		SetChecked( !m_isChecked);
+		return true;
+	}
+	else{
+		return false;
+	}
 }

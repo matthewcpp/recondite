@@ -21,7 +21,7 @@ public:
 
 protected:
 
-	virtual void OnPointerUp(const rPoint& position);
+	virtual bool OnPointerUp(const rPoint& position);
 	
 private:
 	bool m_isChecked;

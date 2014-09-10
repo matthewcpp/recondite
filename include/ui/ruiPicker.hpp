@@ -5,12 +5,13 @@
 
 #include "rEngine.hpp"
 
-#include "ui/ruiBase.hpp"
-#include "ui/ruiPickerOptionsMenu.hpp"
+#include "ui/ruiWidget.hpp"
 
+#include "ui/ruiMenu.hpp"
 #include "ui/ruiEvents.hpp"
 
-class RECONDITE_API ruiPicker : public ruiWidget, public ruiIControlWithOptions{
+
+class RECONDITE_API ruiPicker : public ruiWidget{
 public:
 	ruiPicker(const rString& id, rEngine* engine, const rPoint& position, const rSize& size);
 	ruiPicker(rArrayString& options, const rString& id, rEngine* engine, const rPoint& position, const rSize& size);
@@ -34,11 +35,11 @@ public:
 	
 	void ShowOptionsMenu();
 
-	virtual void SubmenuSelection(size_t index);
+private:
+	void OnSubmenuSelection(rEvent& event);
 
 public:
-		void OnPointerDown(const rPoint& position);
-		void OnMouseDown(rEvent& event);
+		virtual bool OnPointerDown(const rPoint& position);
 
 private:
 

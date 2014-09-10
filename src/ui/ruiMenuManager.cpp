@@ -6,7 +6,7 @@ ruiMenuManager::ruiMenuManager(){
 	CancelContextMenu();
 }
 
-bool ruiMenuManager::ShowContextMenu(const ruiMenu* menu, const rPoint& position, rEventHandler* handler){
+bool ruiMenuManager::ShowContextMenu(ruiMenu* menu, const rPoint& position, rEventHandler* handler){
 	if (m_menu){
 		return false;
 	}
@@ -49,8 +49,27 @@ void ruiMenuManager::Draw(rEngine& engine){
 	}
 }
 
+bool ruiMenuManager::PickMenuItem(const rPoint& position){
+	if (m_handler){
+		rRect boundingBox(m_position, rSize(100, 30 * m_menu->NumItems()));
+
+		if (boundingBox.ContainsPoint(position)){
+			int item = (position.y - boundingBox.y) / 30;
+			ruiMenuItem* menuItem = m_menu->GetItem(item);
+			ruiMenuEvent event(m_menu, menuItem->Id());
+
+			m_handler->Trigger(ruiEVT_MENU,event);
+
+			return true;
+		}
+	}
+
+	return false;
+}
+
 bool ruiMenuManager::OnPointerDown(const rPoint& position){
 	if (m_menu){
+		PickMenuItem(position);
 		CancelContextMenu();
 		return true;
 	}

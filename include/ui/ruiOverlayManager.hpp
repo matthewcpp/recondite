@@ -41,7 +41,7 @@ public:
 	ruiOverlay* GetOverlay(rViewport* viewport) const;
 
 	virtual ruiStyleManager* Styles();
-	virtual bool ShowContextMenu(const ruiMenu* menu, const rPoint& position, rEventHandler* handler);
+	virtual bool ShowContextMenu(ruiMenu* menu, const rPoint& position, rEventHandler* handler);
 	virtual void CancelContextMenu();
 
 private:

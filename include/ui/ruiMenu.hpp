@@ -10,7 +10,8 @@ class RECONDITE_API ruiMenuItem{
 public:
 	ruiMenuItem(int id, const rString& label);
 
-	rString Label() const;
+	rString Label() {return m_label;}
+	int Id() const {return m_id;}
 public:
 	int m_id;
 	rString m_label;

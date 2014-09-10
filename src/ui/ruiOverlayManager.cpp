@@ -200,7 +200,7 @@ bool ruiOverlayManager::InsertMouseWheelEvent(const rPoint& position, rMouseWhee
 	return false;
 }
 
-bool ruiOverlayManager::ShowContextMenu(const ruiMenu* menu, const rPoint& position, rEventHandler* handler){
+bool ruiOverlayManager::ShowContextMenu(ruiMenu* menu, const rPoint& position, rEventHandler* handler){
 	return m_menuManager.ShowContextMenu(menu, position, handler);
 }
 

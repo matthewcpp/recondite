@@ -13,17 +13,20 @@ public:
 	ruiMenuManager();
 
 public:
-	bool ShowContextMenu(const ruiMenu* menu, const rPoint& position, rEventHandler* handler);
+	bool ShowContextMenu(ruiMenu* menu, const rPoint& position, rEventHandler* handler);
 	void CancelContextMenu();
 
 	void Update(rEngine& engine);
 	virtual void Draw(rEngine& engine);
 
 private:
+	bool PickMenuItem(const rPoint& position);
+
+private:
 	virtual bool OnPointerDown(const rPoint& position);
 
 private:
-	const ruiMenu* m_menu;
+	ruiMenu* m_menu;
 	rPoint m_position;
 	rEventHandler* m_handler;
 };

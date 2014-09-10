@@ -43,6 +43,3 @@ ruiMenuItem::ruiMenuItem(int id, const rString& label){
 	m_label = label;
 }
 
-rString ruiMenuItem::Label() const{
-	return m_label;
-}

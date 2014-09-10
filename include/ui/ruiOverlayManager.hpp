@@ -12,7 +12,6 @@
 
 #include "ui/ruiOverlay.hpp"
 #include "ui/ruiWidget.hpp"
-#include "ui/ruiBase.hpp"
 #include "ui/ruiInterface.hpp"
 #include "ui/ruiStyleManager.hpp"
 #include "ui/ruiEvents.hpp"

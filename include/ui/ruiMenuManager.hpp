@@ -20,6 +20,9 @@ public:
 	virtual void Draw(rEngine& engine);
 
 private:
+	virtual bool OnPointerDown(const rPoint& position);
+
+private:
 	const ruiMenu* m_menu;
 	rPoint m_position;
 	rEventHandler* m_handler;

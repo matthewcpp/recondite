@@ -20,6 +20,8 @@ enum ruiEventType{
 	ruiEVT_TOUCH_MOVE,
 	ruiEVT_TOUCH_UP,
 
+	ruiEVT_MENU,
+
 	ruiEVENT_BUTTON_CLICK,
 	ruiEVENT_CHECKBOX_CHANGE,
 	ruiEVENT_SLIDER_CHANGE,
@@ -51,9 +53,9 @@ private:
 	ruiWidgetBase* m_widget;
 };
 
-class ruiContextEvent : public rEvent{
+class ruiMenuEvent : public rEvent{
 public:
-	ruiContextEvent(ruiMenu* menu, int selection): m_menu(menu), m_selection(selection) {}
+	ruiMenuEvent(ruiMenu* menu, int selection): m_menu(menu), m_selection(selection) {}
 
 	ruiMenu* Menu() const {return m_menu;}
 	int Selection() const {return m_selection;}

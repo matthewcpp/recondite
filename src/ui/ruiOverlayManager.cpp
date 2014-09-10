@@ -128,7 +128,7 @@ bool ruiOverlayManager::ProcessMouseDown(rMouseButton button, const rPoint& posi
 
 bool ruiOverlayManager::InsertMouseMotionEvent(const rPoint& position){
 	ruiMouseEvent event(position);
-	m_menuManager.Trigger(ruiEVT_MOUSE_DOWN, event);
+	m_menuManager.Trigger(ruiEVT_MOUSE_MOTION, event);
 
 	if (event.Handled())
 		return true;
@@ -165,7 +165,7 @@ bool ruiOverlayManager::InsertMouseMotionEvent(const rPoint& position){
 
 bool ruiOverlayManager::ProcessMouseUp(rMouseButton button, const rPoint& position){
 	ruiMouseEvent event(button, rBUTTON_STATE_UP, position);
-	m_menuManager.Trigger(ruiEVT_MOUSE_DOWN, event);
+	m_menuManager.Trigger(ruiEVT_MOUSE_UP, event);
 
 	if (event.Handled())
 		return true;

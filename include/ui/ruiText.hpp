@@ -16,6 +16,7 @@ public:
 	void SetText(const rString& text);
 	
 	virtual void Draw(rEngine& engine);
+	virtual rString GetWidgetType() const;
 
 protected:
 	rString m_text;

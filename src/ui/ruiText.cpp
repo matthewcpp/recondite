@@ -36,3 +36,7 @@ void ruiText::Draw(rEngine& engine){
 		engine.renderer->RenderString(m_text, font, boundingBox, white);
 	}
 }
+
+rString ruiText::GetWidgetType() const{
+	return "text";
+}

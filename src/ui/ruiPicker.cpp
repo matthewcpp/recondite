@@ -103,3 +103,7 @@ void ruiPicker::OnSubmenuSelection(rEvent& event){
 
 	SetSelectionIndex(menuEvent.Selection());
 }
+
+rString ruiPicker::GetWidgetType() const{
+	return "picker";
+}

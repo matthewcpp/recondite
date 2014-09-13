@@ -18,6 +18,8 @@ public:
 	virtual void Draw(rEngine& engine);
 	rButtonState ButtonState() const;
 
+	virtual rString GetWidgetType() const;
+
 protected:
 	virtual bool OnPointerDown(const rPoint& position);
 	virtual bool OnPointerUp(const rPoint& position);

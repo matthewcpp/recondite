@@ -11,6 +11,8 @@ public:
 	ruiTextBox(const rString& id, rEngine* engine, const rPoint& position, const rSize& size);
 	ruiTextBox(const rString& text, const rString& id, rEngine* engine, const rPoint& position, const rSize& size);
 
+	virtual rString GetWidgetType() const;
+
 public:
 	virtual void OnKeyDown(rKey key, const rKeyboardState& keyboard);
 

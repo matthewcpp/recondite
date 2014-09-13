@@ -18,3 +18,6 @@ void ruiTextBox::OnKeyDown(rKey key, const rKeyboardState& keyboard){
 
 	m_cachedSize = rSize::Default;
 }
+rString ruiTextBox::GetWidgetType() const{
+	return "textbox";
+}

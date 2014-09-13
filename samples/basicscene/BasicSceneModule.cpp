@@ -73,13 +73,20 @@ void BasicSceneModule::Init(rEngine& engine){
 	engine.scene->AddActor(new rPrimitiveBox("box2", rAlignedBox3(-2,0,0,-1,1,1)));
 }
 
+#include "ui/ruiPicker.hpp"
+
 void BasicSceneModule::InitUI(ruiOverlayManager& manager, rEngine& engine){
 	ruiOverlay* overlay = manager.CreateOverlay(engine.application->GetViewport("main"));
 	m_textCameraPos = new ruiText("1", &engine, rPoint(10,10), rSize(500,35));
 	overlay->AddWidget(m_textCameraPos);
 
 	overlay->AddWidget(new ruiText("2", &engine, rPoint(10,50), rSize(500,35)));
-	overlay->AddWidget(new ruiCheckbox("checkbox1", &engine, rPoint(10, 90), rSize(300, 35)));
+	ruiPicker* p = new ruiPicker("checkbox1", &engine, rPoint(10, 90), rSize(300, 35));
+	p->AddOption("Test 1");
+	p->AddOption("Test 2");
+	p->AddOption("Test 3");
+	overlay->AddWidget(p);
+
 }
 
 void BasicSceneModule::Uninit(rEngine& engine){

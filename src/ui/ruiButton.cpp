@@ -90,3 +90,7 @@ bool ruiButton::OnPointerEnter(const rPoint& position){
 rButtonState ruiButton::ButtonState() const{
 	return m_state;
 }
+
+rString ruiButton::GetWidgetType() const{
+	return "button";
+}

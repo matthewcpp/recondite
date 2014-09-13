@@ -26,7 +26,10 @@ public:
 	bool HasClass(const rString& className) const;
 	void GetClasses(rArrayString& classlist);
 
-	ruiStyle* WidgetStyle();
+	ruiStyle* Style();
+	ruiStyle* ComputedStyle();
+
+	virtual rString GetWidgetType() const = 0;
 
 private:
 	int GetClassIndex(const rString& className) const;
@@ -36,6 +39,8 @@ private:
 	ruiStyle m_style;
 	ruiStyle m_computedStyle;
 	rArrayString m_classList;
+
+	rSize m_computedBestSize;
 };
 
 #endif

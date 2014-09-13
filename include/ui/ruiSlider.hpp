@@ -22,6 +22,7 @@ public:
 	rRect HandleRect() const;
 	
 	virtual void Draw(rEngine& engine);
+	virtual rString GetWidgetType() const;
 	
 public:
 	bool OnPointerDown(const rPoint& position);

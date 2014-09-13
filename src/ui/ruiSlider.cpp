@@ -95,3 +95,7 @@ void ruiSlider::Draw(rEngine& engine){
 	engine.renderer->RenderRect(box, gray);
 	engine.renderer->RenderRect(handle, white);
 }
+
+rString ruiSlider::GetWidgetType() const{
+	return "slider";
+}

@@ -18,6 +18,8 @@ public:
 	ruiAnalogStick(rController* controller, size_t stickIndex, const rString& id, rEngine* engine, const rPoint& position, const rSize& size);
 	virtual void Draw(rEngine& engine);
 
+	virtual rString GetWidgetType() const;
+
 public:
 	virtual void OnTouchDown(const rTouch& touch);
 	virtual void OnTouchMove(const rTouch& touch);

@@ -82,3 +82,7 @@ void ruiAnalogStick::SetCircles(){
 	m_outerCircle.Set(center.x, center.y, rad);
 	m_stick.Set(center.x, center.y, rad / 3.0f);
 }
+
+rString ruiAnalogStick::GetWidgetType() const{
+	return "analogstick";
+}

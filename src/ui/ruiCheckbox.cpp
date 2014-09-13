@@ -42,3 +42,7 @@ bool ruiCheckbox::OnPointerUp(const rPoint& position){
 		return false;
 	}
 }
+
+rString ruiCheckbox::GetWidgetType() const{
+	return "checkbox";
+}

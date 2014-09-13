@@ -101,3 +101,6 @@ int ruiDPad::TouchCountForButton(rDPadButton button) const{
 	return count;
 }
 
+rString ruiDPad::GetWidgetType() const{
+	return "dpad";
+}

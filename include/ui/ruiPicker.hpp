@@ -35,6 +35,8 @@ public:
 	
 	void ShowOptionsMenu();
 
+	virtual rString GetWidgetType() const;
+
 private:
 	void OnSubmenuSelection(rEvent& event);
 

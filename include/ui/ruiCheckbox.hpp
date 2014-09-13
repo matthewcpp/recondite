@@ -19,6 +19,8 @@ public:
 	
 	virtual void Draw(rEngine& engine);
 
+	rString GetWidgetType() const;
+
 protected:
 
 	virtual bool OnPointerUp(const rPoint& position);

@@ -63,19 +63,19 @@ public:
 	bool GetColor(const rString& key, rColor& val) const;
 
 	void SetFont(const rString& key, rFont* val);
-	rFont* GetFont(const rString& key) const;
+	bool GetFont(const rString& key, rFont*& font) const;
 
 	void SetTexture(const rString& key, rTexture2D* val);
-	rTexture2D* GetTexture(const rString& key) const;
+	bool GetTexture(const rString& key, rTexture2D*& texture) const;
 
 	void DeleteProperty(const rString& key);
 	size_t NumProperties() const;
 	void Clear();
 
-private:
+protected:
 	typedef std::map<rString, rProperty*> rPropertyMap;
 
-private:
+protected:
 	rPropertyMap m_properties;
 };
 

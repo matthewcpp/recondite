@@ -103,13 +103,16 @@ void rPropertyCollection::SetFont(const rString& key, rFont* val){
 	m_properties[key] = new rProperty(val);
 }
 
-rFont* rPropertyCollection::GetFont(const rString& key) const{
+bool rPropertyCollection::GetFont(const rString& key, rFont*& font) const{
 	rPropertyMap::const_iterator p = m_properties.find(key);
 
-	if (p != m_properties.end()  && p->second->type == rPROPERTY_TYPE_FONT)
-		return p->second->value.fontVal;
-	else
-		return NULL;
+	if (p != m_properties.end()  && p->second->type == rPROPERTY_TYPE_FONT){
+		font = p->second->value.fontVal;
+		return true;
+	}
+	else{
+		return false;
+	}
 }
 
 void rPropertyCollection::SetTexture(const rString& key, rTexture2D* val){
@@ -117,13 +120,16 @@ void rPropertyCollection::SetTexture(const rString& key, rTexture2D* val){
 	m_properties[key] = new rProperty(val);
 }
 
-rTexture2D* rPropertyCollection::GetTexture(const rString& key) const{
+bool rPropertyCollection::GetTexture(const rString& key, rTexture2D*& texture) const{
 	rPropertyMap::const_iterator p = m_properties.find(key);
 
-	if (p != m_properties.end()  && p->second->type == rPROPERTY_TYPE_TEXTURE)
-		return p->second->value.textureVal;
-	else
-		return NULL;
+	if (p != m_properties.end()  && p->second->type == rPROPERTY_TYPE_TEXTURE){
+		texture = p->second->value.textureVal;
+		return true;
+	}
+	else{
+		return false;
+	}
 }
 
 size_t rPropertyCollection::NumProperties() const{

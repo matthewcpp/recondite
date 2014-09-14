@@ -1,8 +1,8 @@
 #include "ui/ruiDPad.hpp"
 #include "rLog.hpp"
 
-ruiDPad::ruiDPad(rDPad* dpad, const rString& id, rEngine* engine, const rPoint& position, const rSize& size)
-:ruiWidget(id, engine, position, size)
+ruiDPad::ruiDPad(rDPad* dpad, const rString& id, rEngine* engine, const rPoint& position)
+:ruiWidget(id, engine, position)
 {
 	CalculateDefaultButtonRects();
 	
@@ -14,7 +14,8 @@ void ruiDPad::SetDPadButtonRect(rDPadButton button, const rRect& rect){
 }
 
 void ruiDPad::CalculateDefaultButtonRects(){
-	rSize squareSize (m_size.x / 3 , m_size.y / 3);
+	rSize size = Size();
+	rSize squareSize (size.x / 3 , size.y / 3);
 	
 	m_buttons[rDPAD_UP].Set(m_position.x + squareSize.x, m_position.y, squareSize.x, squareSize.y);
 	m_buttons[rDPAD_LEFT].Set(m_position.x, m_position.y + squareSize.y, squareSize.x, squareSize.y);
@@ -103,4 +104,9 @@ int ruiDPad::TouchCountForButton(rDPadButton button) const{
 
 rString ruiDPad::GetWidgetType() const{
 	return "dpad";
+}
+
+rSize ruiDPad::ComputeSize() const{
+	//temporary
+	return rSize(200,200);
 }

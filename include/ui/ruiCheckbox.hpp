@@ -10,7 +10,7 @@
 
 class RECONDITE_API ruiCheckbox : public ruiWidget{
 public:
-	ruiCheckbox(const rString& id, rEngine* engine, const rPoint& position, const rSize& size);
+	ruiCheckbox(const rString& id, rEngine* engine, const rPoint& position);
 	
 public:
 
@@ -20,6 +20,9 @@ public:
 	virtual void Draw(rEngine& engine);
 
 	rString GetWidgetType() const;
+
+protected:
+	virtual rSize ComputeSize() const;
 
 protected:
 

@@ -1,15 +1,15 @@
 #include "ui/ruiPicker.hpp"
 
-ruiPicker::ruiPicker(const rString& id, rEngine* engine, const rPoint& position, const rSize& size)
-:ruiWidget(id, engine, position, size)
+ruiPicker::ruiPicker(const rString& id, rEngine* engine, const rPoint& position)
+:ruiWidget(id, engine, position)
 {
 	m_selectionIndex = 0;
 
 	Bind(ruiEVT_MENU, this, &ruiPicker::OnSubmenuSelection);
 }
 
-ruiPicker::ruiPicker(rArrayString& options, const rString& id, rEngine* engine, const rPoint& position, const rSize& size)
-:ruiWidget(id, engine, position, size)
+ruiPicker::ruiPicker(rArrayString& options, const rString& id, rEngine* engine, const rPoint& position)
+:ruiWidget(id, engine, position)
 {
 	m_selectionIndex = 0;
 	SetOptions(options);
@@ -31,8 +31,23 @@ void ruiPicker::ShowOptionsMenu(){
 	m_engine->ui->ShowContextMenu(menu, rPoint(boundingBox.Left(), boundingBox.Bottom() + 3), this);
 }
 
+rSize ruiPicker::ComputeSize() const{
+	rFont* font = m_engine->content->GetFontAsset("consolas");
+	rSize computedSize(0,0);
+
+	if (font){
+		for (size_t i = 0; i < m_options.size(); i++){
+			rSize size =  font->MeasureString(m_options[i]);
+			computedSize.x = std::max(computedSize.x, size.x);
+			computedSize.y = std::max(computedSize.y, size.y);
+		}
+	}
+
+	return computedSize;
+}
+
 void ruiPicker::Draw(rEngine& engine){
-	rRect box(m_position, m_size);
+	rRect box = BoundingBox();
 	rColor gray(200,200,200,255);
 	engine.renderer->RenderRect(box, gray);
 	
@@ -107,3 +122,4 @@ void ruiPicker::OnSubmenuSelection(rEvent& event){
 rString ruiPicker::GetWidgetType() const{
 	return "picker";
 }
+

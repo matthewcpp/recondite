@@ -21,20 +21,16 @@
 class RECONDITE_API ruiWidget : public ruiWidgetBase, public ruiDefaultEventHandler {
 public:
 	ruiWidget(const rString& id, rEngine* engine);
-	ruiWidget(const rString& id, rEngine* engine, const rPoint& position, const rSize& size);
+	ruiWidget(const rString& id, rEngine* engine, const rPoint& position);
 
 	virtual rRect BoundingBox() const;
 
 	virtual void Draw(rEngine& engine) = 0;
 
-	virtual rSize Size() const;
-	void SetSize(int x, int y);
-
 	virtual rPoint Position() const;
 	void SetPosition(int x, int y);
 
 protected:
-	rSize m_size;
 	rPoint m_position;
 };
 

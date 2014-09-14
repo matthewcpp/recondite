@@ -1,11 +1,11 @@
 #include "ui/ruiText.hpp"
 
-ruiText::ruiText(const rString& id, rEngine* engine, const rPoint& position, const rSize& size)
-:ruiWidget(id, engine, position, size)
+ruiText::ruiText(const rString& id, rEngine* engine, const rPoint& position)
+:ruiWidget(id, engine, position)
 {
 }
-ruiText::ruiText(const rString& text, const rString& id, rEngine* engine, const rPoint& position, const rSize& size)
-:ruiWidget(id, engine, position, size)
+ruiText::ruiText(const rString& text, const rString& id, rEngine* engine, const rPoint& position)
+:ruiWidget(id, engine, position)
 {
 	SetText(text);
 }
@@ -17,7 +17,7 @@ rString ruiText::GetText() const{
 void ruiText::SetText(const rString& text){
 	m_text = text;
 	
-	m_cachedSize = rSize::Default;
+	InvalidateSize();
 }
 
 void ruiText::Draw(rEngine& engine){
@@ -28,10 +28,6 @@ void ruiText::Draw(rEngine& engine){
 	engine.renderer->RenderRect(boundingBox, red);
 	
 	if (font){
-		if (m_cachedSize == rSize::Default){
-			m_cachedSize = font->MeasureString(m_text, m_size.x);
-		}
-		
 		rColor white(255,255,255,255);
 		engine.renderer->RenderString(m_text, font, boundingBox, white);
 	}
@@ -39,4 +35,13 @@ void ruiText::Draw(rEngine& engine){
 
 rString ruiText::GetWidgetType() const{
 	return "text";
+}
+
+rSize ruiText::ComputeSize() const{
+	rFont* font = m_engine->content->GetFontAsset("consolas");
+
+	if (font)
+		return font->MeasureString(m_text);
+	else
+		return rSize(0,0);
 }

@@ -9,7 +9,7 @@
 
 class RECONDITE_API ruiButton : public ruiWidget{
 public:
-	ruiButton(const rString& text, const rString& id, rEngine* engine, const rPoint& position, const rSize& size);
+	ruiButton(const rString& text, const rString& id, rEngine* engine, const rPoint& position);
 	
 public:
 	rString GetText() const;
@@ -19,6 +19,9 @@ public:
 	rButtonState ButtonState() const;
 
 	virtual rString GetWidgetType() const;
+
+protected:
+	virtual rSize ComputeSize() const;
 
 protected:
 	virtual bool OnPointerDown(const rPoint& position);
@@ -32,7 +35,6 @@ private:
 	rButtonState m_state;
 	
 	rString m_text;
-	rSize m_cachedSize;
 };
 
 #endif

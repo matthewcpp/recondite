@@ -1,7 +1,7 @@
 #include "ui/ruiCheckbox.hpp"
 
-ruiCheckbox::ruiCheckbox(const rString& id, rEngine* engine, const rPoint& position, const rSize& size)
-:ruiWidget(id, engine, position, size)
+ruiCheckbox::ruiCheckbox(const rString& id, rEngine* engine, const rPoint& position)
+:ruiWidget(id, engine, position)
  {
 	m_isChecked = false;
  }
@@ -41,6 +41,11 @@ bool ruiCheckbox::OnPointerUp(const rPoint& position){
 	else{
 		return false;
 	}
+}
+
+rSize ruiCheckbox::ComputeSize() const{
+	//temporary
+	return rSize(35,35);
 }
 
 rString ruiCheckbox::GetWidgetType() const{

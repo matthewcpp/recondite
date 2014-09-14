@@ -13,35 +13,34 @@
 
 class RECONDITE_API ruiPicker : public ruiWidget{
 public:
-	ruiPicker(const rString& id, rEngine* engine, const rPoint& position, const rSize& size);
-	ruiPicker(rArrayString& options, const rString& id, rEngine* engine, const rPoint& position, const rSize& size);
+	ruiPicker(const rString& id, rEngine* engine, const rPoint& position);
+	ruiPicker(rArrayString& options, const rString& id, rEngine* engine, const rPoint& position);
 	
 public:
 	void AddOption(const rString& option);
 	void SetOptions(const rArrayString& options);
+	virtual const rArrayString& Options() const;
 	size_t NumOptions() const;
+	void Clear();
 
 	virtual size_t SelectionIndex() const;
 	virtual bool SetSelectionIndex(size_t index);
-
 	rString SelectionText() const;
 
-	void Clear();
-
-	virtual const rArrayString& Options() const;
-
-
-	virtual void Draw(rEngine& engine);
-	
 	void ShowOptionsMenu();
+
+public:
+	virtual void Draw(rEngine& engine);
 
 	virtual rString GetWidgetType() const;
 
-private:
-	void OnSubmenuSelection(rEvent& event);
+protected:
+	virtual rSize ComputeSize() const;
 
-public:
-		virtual bool OnPointerDown(const rPoint& position);
+private:
+	virtual bool OnPointerDown(const rPoint& position);
+
+	void OnSubmenuSelection(rEvent& event);
 
 private:
 

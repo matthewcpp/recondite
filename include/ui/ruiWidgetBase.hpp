@@ -15,14 +15,14 @@ public:
 
 public:
 	virtual rRect BoundingBox() const = 0;
-	virtual rSize Size() const = 0;
+	virtual rSize Size() const;
 	virtual rPoint Position() const = 0;
 
 	virtual void Update(rEngine& engine);
 
 public:
-	void AddClass(const rString& className);
-	void RemoveClass(const rString& className);
+	virtual void AddClass(const rString& className);
+	virtual void RemoveClass(const rString& className);
 	bool HasClass(const rString& className) const;
 	void GetClasses(rArrayString& classlist);
 
@@ -31,16 +31,21 @@ public:
 
 	virtual rString GetWidgetType() const = 0;
 
+protected:
+	virtual rSize ComputeSize() const = 0;
+	void InvalidateSize();
+
 private:
 	int GetClassIndex(const rString& className) const;
 	void RecomputeStyle();
-
+	
 private:
 	ruiStyle m_style;
 	ruiStyle m_computedStyle;
 	rArrayString m_classList;
 
-	rSize m_computedBestSize;
+	rSize m_size;
+
 };
 
 #endif

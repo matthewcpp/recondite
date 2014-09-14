@@ -1,7 +1,7 @@
 #include "ui/ruiSlider.hpp"
 
-ruiSlider::ruiSlider(const rString& id, rEngine* engine, const rPoint& position, const rSize& size)
-:ruiWidget(id, engine, position, size)
+ruiSlider::ruiSlider(const rString& id, rEngine* engine, const rPoint& position)
+:ruiWidget(id, engine, position)
 {
 	m_value = 0;
 	m_handleSize = 15;
@@ -70,8 +70,9 @@ void ruiSlider::StartDrag(const rPoint& position){
 }
 
 void ruiSlider::HandleDrag(const rPoint& position){
+	rSize size = Size();
 	rPoint delta = position - m_prevDrag;
-	int change = int(rMath::RoundToInt(((float)delta.x / (float)m_size.x) * 100.0f));
+	int change = int(rMath::RoundToInt(((float)delta.x / (float)size.x) * 100.0f));
 	
 	SetValue(rMath::Clamp(m_value + change, 0 , 100));
 	
@@ -79,10 +80,16 @@ void ruiSlider::HandleDrag(const rPoint& position){
 }
 
 rRect ruiSlider::HandleRect() const{
+	rSize size = Size();
 	float ratio =  m_value / 100.0f;
-	int handleOffset = int (m_size.x * ratio) - (m_handleSize / 2);
+	int handleOffset = int (size.x * ratio) - (m_handleSize / 2);
 	
-	return rRect(m_position.x + handleOffset, m_position.y - 3, m_handleSize, m_size.y + 6);
+	return rRect(m_position.x + handleOffset, m_position.y - 3, m_handleSize, size.y + 6);
+}
+
+rSize ruiSlider::ComputeSize() const{
+	//temprary
+	return rSize(130,35);
 }
 
 void ruiSlider::Draw(rEngine& engine){

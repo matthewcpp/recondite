@@ -1,7 +1,7 @@
 #include "ui/ruiAnalogStick.hpp"
 
-ruiAnalogStick::ruiAnalogStick(rController* controller, size_t stickIndex, const rString& id, rEngine* engine, const rPoint& position, const rSize& size)
-:ruiWidget(id, engine, position, size)
+ruiAnalogStick::ruiAnalogStick(rController* controller, size_t stickIndex, const rString& id, rEngine* engine, const rPoint& position)
+:ruiWidget(id, engine, position)
 {
 	m_controller = controller;
 	m_stickIndex = stickIndex;
@@ -74,13 +74,19 @@ void ruiAnalogStick::Draw(rEngine& engine){
 }
 
 void ruiAnalogStick::SetCircles(){
-	rRect rect(m_position, m_size);
+	rSize size = Size();
+	rRect rect(m_position, size);
 	rPoint center = rect.Center();
 	
-	float rad = ((float)std::max(m_size.x, m_size.y) / 2.0f);
+	float rad = ((float)std::max(size.x, size.y) / 2.0f);
 	
 	m_outerCircle.Set(center.x, center.y, rad);
 	m_stick.Set(center.x, center.y, rad / 3.0f);
+}
+
+rSize ruiAnalogStick::DoComputeSize() const{
+	//temporary implementation;
+	return rSize(200,200);
 }
 
 rString ruiAnalogStick::GetWidgetType() const{

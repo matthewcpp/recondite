@@ -7,7 +7,7 @@ class Ui_ruiButton : public ::testing::Test{};
 
 
 TEST(Ui_ruiButton, SetsButtonStateOnLeftDown){
-	ruiButton button("test", "test", NULL, rPoint(0,0), rSize(50,50));
+	ruiButton button("test", "test", NULL, rPoint(0,0));
 
 	EXPECT_EQ(rBUTTON_STATE_UP, button.ButtonState());
 
@@ -18,7 +18,7 @@ TEST(Ui_ruiButton, SetsButtonStateOnLeftDown){
 }
 
 TEST(Ui_ruiButton, SetsButtonStateOnLeftUp){
-	ruiButton button("test", "test", NULL, rPoint(0,0), rSize(50,50));
+	ruiButton button("test", "test", NULL, rPoint(0,0));
 
 	ruiMouseEvent event1(rMOUSE_BUTTON_LEFT, rBUTTON_STATE_DOWN, rPoint(20,20));
 	button.Trigger(ruiEVT_MOUSE_DOWN, event1);
@@ -29,7 +29,7 @@ TEST(Ui_ruiButton, SetsButtonStateOnLeftUp){
 
 TEST(Ui_ruiButton, TriggersButtonClickEventWhenClicked){
 	FakeEventListener callbackTester;
-	ruiButton button("test", "test", NULL, rPoint(0,0), rSize(50,50));
+	ruiButton button("test", "test", NULL, rPoint(0,0));
 	button.Bind(ruiEVENT_BUTTON_CLICK, &callbackTester, &FakeEventListener::EventCallback);
 
 	ruiMouseEvent event1(rMOUSE_BUTTON_LEFT, rBUTTON_STATE_DOWN, rPoint(20,20));
@@ -41,7 +41,7 @@ TEST(Ui_ruiButton, TriggersButtonClickEventWhenClicked){
 
 TEST(Ui_ruiButton, DoesNotTriggerEventWhenMouseUpOutsideButton){
 	FakeEventListener callbackTester;
-	ruiButton button("test", "test", NULL, rPoint(0,0), rSize(50,50));
+	ruiButton button("test", "test", NULL, rPoint(0,0));
 	button.Bind(ruiEVENT_BUTTON_CLICK, &callbackTester, &FakeEventListener::EventCallback);
 
 	ruiMouseEvent event1(rMOUSE_BUTTON_LEFT, rBUTTON_STATE_DOWN, rPoint(20,20));

@@ -9,7 +9,7 @@
 
 class RECONDITE_API ruiSlider : public ruiWidget{
 public:
-	ruiSlider(const rString& id, rEngine* engine, const rPoint& position, const rSize& size);
+	ruiSlider(const rString& id, rEngine* engine, const rPoint& position);
 	
 public:
 	
@@ -23,7 +23,10 @@ public:
 	
 	virtual void Draw(rEngine& engine);
 	virtual rString GetWidgetType() const;
-	
+
+protected:
+	virtual rSize ComputeSize() const;
+
 public:
 	bool OnPointerDown(const rPoint& position);
 	bool OnPointerMove(const rPoint& position);

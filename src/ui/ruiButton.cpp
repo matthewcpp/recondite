@@ -1,9 +1,9 @@
 #include "ui/ruiButton.hpp"
 
-ruiButton::ruiButton(const rString& text, const rString& id, rEngine* engine, const rPoint& position, const rSize& size)
-	:ruiWidget(id, engine, position, size)
+ruiButton::ruiButton(const rString& text, const rString& id, rEngine* engine, const rPoint& position)
+	:ruiWidget(id, engine, position)
 {
-	SetText(text);
+	m_text = text;
 	m_state = rBUTTON_STATE_UP;
 }
 
@@ -15,7 +15,7 @@ rString ruiButton::GetText() const{
 void ruiButton::SetText(const rString& text){
 	m_text = text;
 
-	m_cachedSize = rSize::Default;
+	InvalidateSize();
 }
 
 void ruiButton::Draw(rEngine& engine){
@@ -41,16 +41,21 @@ void ruiButton::Draw(rEngine& engine){
 	rFont* font = engine.content->GetFontAsset("consolas");
 	
 	if (font){
-		if (m_cachedSize == rSize::Default){
-			m_cachedSize = font->MeasureString(m_text, m_size.x);
-		}
-
 		rPoint center = box.Center();
-		rPoint textPos(center.x - (m_cachedSize.x / 2), center.y - (m_cachedSize.y / 2));
+		rPoint textPos(center.x - (box.width / 2), center.y - (box.height / 2));
 		
 		engine.renderer->RenderString(m_text, font, textPos, rColor::Black);
 	}
 	
+}
+
+rSize ruiButton::ComputeSize() const{
+	rFont* font = m_engine->content->GetFontAsset("consolas");
+
+	if (font)
+		return font->MeasureString(m_text);
+	else
+		return rSize(0,0);
 }
 
 bool ruiButton::OnPointerDown(const rPoint& position){

@@ -69,19 +69,19 @@ void BasicSceneModule::Init(rEngine& engine){
 
 	engine.content->LoadFontFromPath("content/fonts/Consolas.rfnt", "consolas");
 
-	engine.scene->AddActor(new rPrimitiveBox("box1", rAlignedBox3(0,0,0,1,1,1)));
-	engine.scene->AddActor(new rPrimitiveBox("box2", rAlignedBox3(-2,0,0,-1,1,1)));
+	engine.scene->AddActor(new rPrimitiveBox("box1", rAlignedBox3(0,0,0,1,1,1), rColor::Green));
+	engine.scene->AddActor(new rPrimitiveBox("box2", rAlignedBox3(-2,0,0,-1,1,1), rColor::Blue));
 }
 
 #include "ui/ruiPicker.hpp"
 
 void BasicSceneModule::InitUI(ruiOverlayManager& manager, rEngine& engine){
 	ruiOverlay* overlay = manager.CreateOverlay(engine.application->GetViewport("main"));
-	m_textCameraPos = new ruiText("1", &engine, rPoint(10,10), rSize(500,35));
+	m_textCameraPos = new ruiText("1", &engine, rPoint(10,10));
 	overlay->AddWidget(m_textCameraPos);
 
-	overlay->AddWidget(new ruiText("2", &engine, rPoint(10,50), rSize(500,35)));
-	ruiPicker* p = new ruiPicker("checkbox1", &engine, rPoint(10, 90), rSize(300, 35));
+	overlay->AddWidget(new ruiText("2", &engine, rPoint(10,50)));
+	ruiPicker* p = new ruiPicker("checkbox1", &engine, rPoint(10, 90));
 	p->AddOption("Test 1");
 	p->AddOption("Test 2");
 	p->AddOption("Test 3");

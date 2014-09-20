@@ -18,7 +18,7 @@ typedef std::map<int, rFontGlyph*> rFontGlyphMap;
 
 class RECONDITE_API rFont : public rAsset{
 public:
-	rFont(rTexture2D* texture, size_t size, int assetid, const rString& name, const rString& path);
+	rFont(rTexture2D* texture, size_t size, size_t lineHeight, size_t ascender, size_t descender, int assetid, const rString& name, const rString& path);
 	~rFont();
 	
 	rFontGlyph* GetGlyph(int scancode) const;
@@ -36,12 +36,17 @@ public:
 
 	size_t Size() const;
 	size_t LineHeight() const;
+	size_t Ascender() const;
+	size_t Descender() const;
 
 private:
 
 	rFontGlyphMap m_glyphs;
 	rTexture2D* m_texture;
 	size_t m_size;
+	size_t m_lineHeight;
+	size_t m_ascender;
+	size_t m_descender;
 };
 
 typedef std::map<rString, rFont*> rFontMap;

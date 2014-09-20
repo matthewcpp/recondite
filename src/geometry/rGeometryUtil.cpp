@@ -159,10 +159,12 @@ void rGeometryUtil::Create2DText(const rString& str, const rFont* font, const rR
 	geometry.Reset(rGEOMETRY_TRIANGLES, 2, true);
 
 	int xPos = 0;
-	int yPos = font->LineHeight();
+	int yPos = font->Ascender();
 
 	int wordWidth = 0;
 	int spaceLeft = bounding.width;
+
+	int lineCount = 0;
 
 	for (int i = 0; i < str.size(); i++){
 		int c = str[i];

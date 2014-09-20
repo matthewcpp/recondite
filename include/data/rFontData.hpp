@@ -56,6 +56,15 @@ public:
 	int Size() const;
 	void SetSize(int size);
 
+	size_t Ascender() const;
+	void SetAscender(size_t ascender);
+
+	size_t Descender() const;
+	void SetDescender(size_t descender);
+
+	size_t LineHeight () const;
+	void SetLineHeight(size_t lineHeight);
+
 	rString Name() const;
 	void SetName(const rString& name);
 
@@ -93,6 +102,10 @@ private:
 	rString m_path;
 
 	int m_size;
+	size_t m_lineHeight;
+	size_t m_ascender;
+	size_t m_descender;
+
 	bool m_textureGenerated;
 };
 

@@ -6,6 +6,7 @@ void BasicSceneModule::BeforeUpdateScene(rEngine& engine){
 
 	str << "camera: " << pos.x << ", " << pos.y << ", " << pos.z;
 
+
 	m_textCameraPos->SetText(str.Str());
 
 	float distance = 10 * engine.time.TimeDeltaSeconds();
@@ -80,8 +81,8 @@ void BasicSceneModule::InitUI(ruiOverlayManager& manager, rEngine& engine){
 	m_textCameraPos = new ruiText("1", &engine, rPoint(10,10));
 	overlay->AddWidget(m_textCameraPos);
 
-	overlay->AddWidget(new ruiText("2", &engine, rPoint(10,50)));
-	ruiPicker* p = new ruiPicker("checkbox1", &engine, rPoint(10, 90));
+	overlay->AddWidget(new ruiText("The time has come for all good men to come to the aid of their country\nthe greatest generation\n1945","2", &engine, rPoint(10,50)));
+	ruiPicker* p = new ruiPicker("checkbox1", &engine, rPoint(10, 200));
 	p->AddOption("Test 1");
 	p->AddOption("Test 2");
 	p->AddOption("Test 3");

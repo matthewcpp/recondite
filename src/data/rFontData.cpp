@@ -18,6 +18,9 @@ rGlyphData::~rGlyphData(){
 
 rFontData::rFontData(){
 	m_size = 0;
+	m_ascender = 0;
+	m_descender = 0;
+
 	m_textureGenerated = false;
 }
 
@@ -166,6 +169,9 @@ rContentError rFontData::WriteGlyphFile(const rString& path) const{
 
 	root->CreateChild<rString>("name", m_name);
 	root->CreateChild<int>("size", m_size);
+	root->CreateChild<size_t>("lineHeight", m_lineHeight);
+	root->CreateChild<size_t>("ascender", m_ascender);
+	root->CreateChild<size_t>("descender", m_descender);
 	root->CreateChild<rString>("textureFile", m_textureFile);
 
 	rXMLElement* glyphs = root->CreateChild("glyphs");
@@ -218,6 +224,18 @@ rContentError rFontData::ReadGlyphFile(std::istream& stream){
 	prop = root->GetFirstChildNamed("size");
 	if (prop)
 		prop->GetText<int>(m_size);
+
+	prop = root->GetFirstChildNamed("lineHeight");
+	if (prop)
+		prop->GetText<size_t>(m_lineHeight);
+
+	prop = root->GetFirstChildNamed("ascender");
+	if (prop)
+		prop->GetText<size_t>(m_ascender);
+
+	prop = root->GetFirstChildNamed("descender");
+	if (prop)
+		prop->GetText<size_t>(m_descender);
 
 	prop = root->GetFirstChildNamed("textureFile");
 	if (prop)
@@ -333,4 +351,28 @@ void rFontData::GetGlyphData(rGlyphDataArray& glyphs) const{
 
 bool rFontData::TextureDataPresent() const{
 	return m_textureGenerated;
+}
+
+size_t rFontData::LineHeight () const{
+	return m_lineHeight;
+}
+
+void rFontData::SetLineHeight(size_t lineHeight){
+	m_lineHeight = lineHeight;
+}
+
+size_t rFontData::Ascender() const{
+	return m_ascender;
+}
+
+void rFontData::SetAscender(size_t ascender){
+	m_ascender = ascender;
+}
+
+size_t rFontData::Descender() const{
+	return m_descender;
+}
+
+void rFontData::SetDescender(size_t descender){
+	m_descender = descender;
 }

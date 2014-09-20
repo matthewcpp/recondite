@@ -1,10 +1,13 @@
 #include "rFont.hpp"
 
-rFont::rFont(rTexture2D* texture, size_t size, int assetid, const rString& name, const rString& path)
+rFont::rFont(rTexture2D* texture, size_t size, size_t lineHeight, size_t ascender, size_t descender, int assetid, const rString& name, const rString& path)
 :rAsset(assetid, name, path)
 {
 	m_texture = texture;
 	m_size = size;
+	m_lineHeight = lineHeight;
+	m_ascender = ascender;
+	m_descender = descender;
 }
 
 rAssetType rFont::Type() const{
@@ -53,7 +56,7 @@ size_t rFont::Size() const{
 }
 
 size_t rFont::LineHeight() const{
-	return Size();
+	return m_lineHeight;
 }
 
 void rFont::Clear(){
@@ -67,46 +70,75 @@ rTexture2D* rFont::Texture() const{
 	return m_texture;
 }
 
+size_t rFont::Ascender() const{
+	return m_ascender;
+}
+
+size_t rFont::Descender() const{
+	return m_descender;
+}
+
+
 rSize rFont::MeasureString(const rString& str, int lineWidth) const{
-	rSize result(0, LineHeight());
+	int baseline = Ascender();
+	rSize result(0, 0);
 
 	int spaceLeft = lineWidth;
 	int wordWidth = 0;
+	int wordDepth = 0;
 
-	for (int i = 0; i < str.size(); i++){
+	for (size_t i = 0; i < str.size(); i++){
 		int c = str[i];
 
 		if (c == '\n'){
 			if (wordWidth > spaceLeft ){ //current word will not fit on this line
-				result.y += LineHeight();
+				baseline += LineHeight();
+				spaceLeft = lineWidth - wordWidth;
+				result.x = std::max(result.x, lineWidth - spaceLeft);
+				result.y = baseline + wordDepth;
+			}
+			else{
 				result.x = std::max(result.x, lineWidth - (spaceLeft - wordWidth));
 			}
 
+			baseline += LineHeight();
+			result.y = baseline;
+
 			spaceLeft = lineWidth;
 			wordWidth = 0;
+			wordDepth = 0;
 		}
 		else{
 			const rFontGlyph* glyph = GetGlyph(c);
 
 			if (c == ' '){
 				if (wordWidth + glyph->advance > spaceLeft ){ //current word will not fit on this line
-					result.y += LineHeight();
+					baseline += LineHeight();
 					result.x = std::max(result.x, lineWidth - spaceLeft);
+					result.y = baseline + wordDepth;
 
 					spaceLeft = lineWidth - wordWidth;
 				}
 				else {
+					int bottom = baseline + glyph->height - glyph->top;
+					result.x = std::max(result.x, lineWidth - (spaceLeft - wordWidth));
+					result.y = std::max(result.y , baseline + wordDepth);
 					spaceLeft -= wordWidth + glyph->advance;
-					wordWidth = 0;
 				}
+
+				wordWidth = 0;
+				wordDepth = 0;
 			}
 			else{
 				wordWidth += glyph->advance;
+				wordDepth = std::max(wordDepth,  glyph->height - glyph->top);
 			}
 		}
 	}
 
+	//handle last 'word'
 	result.x = std::max(result.x, lineWidth - (spaceLeft - wordWidth));
+	result.y = std::max(result.y , baseline + (int)Descender());
 
 	return result;
 }

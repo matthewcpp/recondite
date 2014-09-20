@@ -38,8 +38,9 @@ rSize ruiPicker::ComputeSize() const{
 	if (font){
 		for (size_t i = 0; i < m_options.size(); i++){
 			rSize size =  font->MeasureString(m_options[i]);
-			computedSize.x = std::max(computedSize.x, size.x);
-			computedSize.y = std::max(computedSize.y, size.y);
+
+			if (size.x > computedSize.x)
+				computedSize = size;
 		}
 	}
 
@@ -59,7 +60,7 @@ void ruiPicker::Draw(rEngine& engine){
 		rPoint point (m_position.x + 5 , m_position.y + 5);
 		rColor black(0,0,0,255);
 		
-		engine.renderer->RenderString(text,font, point, black);
+		engine.renderer->RenderString(text,font, box, black);
 	}
 
 }

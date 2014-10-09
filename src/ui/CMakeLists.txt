@@ -1,11 +1,13 @@
 set(ui_files)
 
+add_rec_src(ui_files "ruiAbsoluteLayout" "ui")
 add_rec_src(ui_files "ruiAnalogStick" "ui")
 add_rec_src(ui_files "ruiButton" "ui")
 add_rec_src(ui_files "ruiCheckbox" "ui")
 add_rec_src(ui_files "ruiDefaultEventHandler" "ui")
 add_rec_src(ui_files "ruiDPad" "ui")
 add_rec_src(ui_files "ruiMenu" "ui")
+add_rec_src(ui_files "ruiLayout" "ui")
 add_rec_src(ui_files "ruiMenuManager" "ui")
 add_rec_src(ui_files "ruiOverlay" "ui")
 add_rec_src(ui_files "ruiOverlayManager" "ui")

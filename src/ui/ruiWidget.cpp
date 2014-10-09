@@ -21,6 +21,10 @@ void ruiWidget::SetPosition(int x, int y){
 	m_position.Set(x, y);
 }
 
+void ruiWidget::SetPosition(const rPoint& position){
+	m_position = position;
+}
+
 rRect ruiWidget::BoundingBox() const{
 	return rRect(m_position, Size());
 }

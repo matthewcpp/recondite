@@ -29,6 +29,7 @@ public:
 
 	virtual rPoint Position() const;
 	void SetPosition(int x, int y);
+	void SetPosition(const rPoint& position);
 
 protected:
 	rPoint m_position;

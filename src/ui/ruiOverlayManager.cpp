@@ -15,7 +15,7 @@ ruiOverlay* ruiOverlayManager::CreateOverlay(rViewport* viewport){
 		delete result->second;
 	}
 
-	ruiOverlay* overlay = new ruiOverlay();
+	ruiOverlay* overlay = new ruiOverlay(viewport);
 	m_overlays[viewport] = overlay;
 
 	return overlay;
@@ -102,8 +102,10 @@ bool ruiOverlayManager::InsertTouchEvent(int id, const rPoint& position, rTouchT
 bool ruiOverlayManager::InsertMouseButtonEvent(rMouseButton button, rButtonState state, const rPoint& position){
 	if (state == rBUTTON_STATE_DOWN)
 		return ProcessMouseDown(button, position);
-	else
+	else if (state ==rBUTTON_STATE_UP)
 		return ProcessMouseUp(button, position);
+	else
+		return false;
 }
 
 bool ruiOverlayManager::ProcessMouseDown(rMouseButton button, const rPoint& position){

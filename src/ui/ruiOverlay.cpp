@@ -1,7 +1,9 @@
 #include "ui/ruiOverlay.hpp"
 
-ruiOverlay::ruiOverlay(){
+ruiOverlay::ruiOverlay(rViewport* viewport){
 	m_activeWidget = NULL;
+	m_layout = NULL;
+	m_viewport = viewport;
 }
 
 void ruiOverlay::AddWidget(ruiWidget* widget){
@@ -20,6 +22,9 @@ ruiWidget* ruiOverlay::GetWidget(const rString& id){
 void ruiOverlay::Update(rEngine& engine){
 	for (size_t i = 0; i < m_widgets.size(); i++)
 		m_widgets[i]->Update(engine);
+
+	if (m_layout)
+		m_layout->Layout(m_viewport->GetScreenRect());
 }
 
 void ruiOverlay::Draw(rEngine& engine){
@@ -54,4 +59,15 @@ ruiWidget* ruiOverlay::SelectWidget(const rPoint& position){
 	}
 
 	return NULL;
+}
+
+ruiLayout* ruiOverlay::Layout() const{
+	return m_layout;
+}
+
+void ruiOverlay::SetLayout(ruiLayout* layout){
+	if (m_layout)
+		delete m_layout;
+	
+		m_layout = layout;
 }

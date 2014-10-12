@@ -8,11 +8,13 @@
 #include "rEngine.hpp"
 
 #include "ui/ruiInterface.hpp"
+#include "ui/ruiLayout.hpp"
+
 #include "ruiWidget.hpp"
 
 class RECONDITE_API ruiOverlay {
 public:
-	ruiOverlay();
+	ruiOverlay(rViewport* viewport);
 
 public:
 	virtual void AddWidget(ruiWidget* widget);
@@ -28,6 +30,10 @@ public:
 
 	ruiWidget* SelectWidget(const rPoint& position);
 
+	ruiLayout* Layout() const;
+	void SetLayout(ruiLayout* layout);
+
+
 protected:
 	typedef std::vector<ruiWidget*> rWidgetVector;
 
@@ -37,6 +43,8 @@ private:
 
 	ruiWidget* m_activeWidget;
 	ruiWidget* m_modalWidget;
+	ruiLayout* m_layout;
+	rViewport* m_viewport;
 };
 
 #endif

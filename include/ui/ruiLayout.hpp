@@ -7,6 +7,7 @@
 #include "rRect.hpp"
 #include "rEngine.hpp"
 #include "rPoint.hpp"
+#include "rPropertyCollection.hpp"
 
 #include "ui/ruiWidget.hpp"
 
@@ -18,6 +19,7 @@ public:
 public:
 	virtual void SetPosition(const rPoint& position) = 0;
 	virtual rSize GetSize() const = 0;
+	virtual const rPropertyCollection* Properties() const = 0;
 	
 public:
 	size_t Flags() {return m_flags;}
@@ -43,6 +45,7 @@ public:
 	virtual void Layout(rRect& rect) = 0;
 	virtual void Clear();
 	virtual rSize Size() const = 0;
+	const rPropertyCollection* Properties() const;
 	
 protected:
 	typedef std::vector<ruiLayoutItem*> ruiLayoutItemVector;
@@ -51,6 +54,8 @@ protected:
 
 	ruiLayoutItemVector m_layoutItems;
 	rPoint m_position;
+
+	rPropertyCollection m_properties;
 };
 
 class ruiWidgetLayoutItem : public ruiLayoutItem {
@@ -60,6 +65,7 @@ public:
 public:
 	virtual void SetPosition(const rPoint& position);
 	virtual rSize GetSize() const;
+	virtual const rPropertyCollection* Properties() const;
 
 private:
 	ruiWidget* m_widget;
@@ -72,6 +78,7 @@ public:
 public:
 	virtual void SetPosition(const rPoint& position);
 	virtual rSize GetSize() const;
+	virtual const rPropertyCollection* Properties() const;
 
 private:
 	ruiLayout* m_layout;

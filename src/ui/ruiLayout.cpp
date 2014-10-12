@@ -14,6 +14,10 @@ void ruiWidgetLayoutItem::SetPosition(const rPoint& position){
 	m_widget->SetPosition(position);
 }
 
+const rPropertyCollection* ruiWidgetLayoutItem::Properties() const{
+	return m_widget->ComputedStyle();
+}
+
 //--------------------
 
 ruiLayoutLayoutItem::ruiLayoutLayoutItem(ruiLayout* layout, size_t flags)
@@ -28,6 +32,10 @@ rSize ruiLayoutLayoutItem::GetSize() const{
 
 void ruiLayoutLayoutItem::SetPosition(const rPoint& position){
 	m_layout->SetPosition(position);
+}
+
+const rPropertyCollection* ruiLayoutLayoutItem::Properties() const{
+	return m_layout->Properties();
 }
 
 //--------------------
@@ -61,4 +69,8 @@ void ruiLayout::SetPosition(const rPoint& position){
 
 rPoint ruiLayout::Position() const{
 	return m_position;
+}
+
+const rPropertyCollection* ruiLayout::Properties() const{
+	return &m_properties;
 }

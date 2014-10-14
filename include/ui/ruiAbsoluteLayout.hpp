@@ -3,7 +3,7 @@
 
 #include "ruiLayout.hpp"
 
-class ruiAbsoluteLayout : public ruiLayout {
+class RECONDITE_API ruiAbsoluteLayout : public ruiLayout {
 public:
 	ruiAbsoluteLayout();
 
@@ -14,6 +14,7 @@ public:
 	void SetRight(int right);
 
 	virtual void Layout(rRect& rect);
+	virtual rSize Size() const;
 
 private:
 	rPoint DetermineLocalOrigin() const;

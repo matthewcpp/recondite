@@ -1,8 +1,8 @@
 #include "ui/ruiDPad.hpp"
 #include "rLog.hpp"
 
-ruiDPad::ruiDPad(rDPad* dpad, const rString& id, rEngine* engine, const rPoint& position)
-:ruiWidget(id, engine, position)
+ruiDPad::ruiDPad(rDPad* dpad, const rString& id, rEngine* engine)
+:ruiWidget(id, engine)
 {
 	CalculateDefaultButtonRects();
 	

@@ -7,7 +7,7 @@ class Ui_ruiCheckbox : public ::testing::Test{};
 
 TEST(Ui_ruiCheckbox, TriggersCheckboxEventWhenClicked){
 	FakeEventListener callbackTester;
-	ruiCheckbox checkbox("checkbox", NULL, rPoint(0,0));
+	ruiCheckbox checkbox("checkbox", NULL);
 	checkbox.Bind(ruiEVENT_CHECKBOX_CHANGE, &callbackTester, &FakeEventListener::EventCallback);
 
 	ruiMouseEvent event1(rMOUSE_BUTTON_LEFT, rBUTTON_STATE_UP, rPoint(20,20));
@@ -17,7 +17,7 @@ TEST(Ui_ruiCheckbox, TriggersCheckboxEventWhenClicked){
 }
 
 TEST(Ui_ruiCheckbox, SetsMouseEventEventToHandledIfClicked){
-	ruiCheckbox checkbox("checkbox", NULL, rPoint(0,0));
+	ruiCheckbox checkbox("checkbox", NULL);
 	ruiMouseEvent event1(rMOUSE_BUTTON_LEFT, rBUTTON_STATE_UP, rPoint(20,20));
 	ruiMouseEvent event2(rMOUSE_BUTTON_LEFT, rBUTTON_STATE_UP, rPoint(600,20));
 

@@ -8,6 +8,7 @@ ruiDemoController::ruiDemoController(rContentManager* contentManager, rDemoCamer
 }
 
 void ruiDemoController::Init(ruiOverlay* overlay, rEngine* engine){
+	/*
 	rArrayString models;
 	m_contentManager->GetModelNames(models);
 
@@ -38,6 +39,7 @@ void ruiDemoController::Init(ruiOverlay* overlay, rEngine* engine){
 	overlay->AddWidget(stopButton);
 	overlay->AddWidget(m_progressSlider);
 	overlay->AddWidget(new ruiTextBox("107", engine, rPoint(25, 200)));
+	*/
 }
 
 void ruiDemoController::OnAnimationPlay(ruiWidget* widget){

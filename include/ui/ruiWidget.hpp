@@ -21,7 +21,6 @@
 class RECONDITE_API ruiWidget : public ruiWidgetBase, public ruiDefaultEventHandler {
 public:
 	ruiWidget(const rString& id, rEngine* engine);
-	ruiWidget(const rString& id, rEngine* engine, const rPoint& position);
 
 	virtual rRect BoundingBox() const;
 

@@ -8,8 +8,8 @@
 class RECONDITE_API ruiTextBox : public ruiText{
 public:
 	
-	ruiTextBox(const rString& id, rEngine* engine, const rPoint& position);
-	ruiTextBox(const rString& text, const rString& id, rEngine* engine, const rPoint& position);
+	ruiTextBox(const rString& id, rEngine* engine);
+	ruiTextBox(const rString& text, const rString& id, rEngine* engine);
 
 	virtual rString GetWidgetType() const;
 

@@ -10,7 +10,7 @@
 
 class RECONDITE_API ruiCheckbox : public ruiWidget{
 public:
-	ruiCheckbox(const rString& id, rEngine* engine, const rPoint& position);
+	ruiCheckbox(const rString& id, rEngine* engine);
 	
 public:
 

@@ -1,11 +1,8 @@
 #include "ui/ruiAbsoluteLayout.hpp"
 
-ruiAbsoluteLayout::ruiAbsoluteLayout(){
+ruiAbsoluteLayout::ruiAbsoluteLayout() {
 	m_properties.SetInt("top", 0);
 	m_properties.SetInt("left", 0);
-
-	m_properties.SetInt("bottom", -1);
-	m_properties.SetInt("right", -1);
 }
 
 void ruiAbsoluteLayout::Layout(rRect& rect){
@@ -28,7 +25,7 @@ rPoint ruiAbsoluteLayout::DetermineLocalOrigin() const{
 	m_properties.GetInt("top", top);
 	m_properties.GetInt("left", left);
 
-	return rPoint(top, left);
+	return rPoint(left, top);
 }
 
 rPoint ruiAbsoluteLayout::DetermineLayoutItemOrigin(ruiLayoutItem* layoutItem) const{
@@ -40,23 +37,27 @@ rPoint ruiAbsoluteLayout::DetermineLayoutItemOrigin(ruiLayoutItem* layoutItem) c
 	properties->GetInt("top", top);
 	properties->GetInt("left", left);
 
-	return rPoint(top, left);
+	return rPoint(left, top);
+}
+
+rSize ruiAbsoluteLayout::Size() const{
+	return rSize(0,0);
 }
 
 //-----
 
 void ruiAbsoluteLayout::SetTop(int top){
-	m_properties.SetInt("top", 0);
+	m_properties.SetInt("top", top);
 }
 
 void ruiAbsoluteLayout::SetBottom(int bottom){
-	m_properties.SetInt("bottom", -1);
+	m_properties.SetInt("bottom", bottom);
 }
 
 void ruiAbsoluteLayout::SetLeft(int left){
-	m_properties.SetInt("left", 0);
+	m_properties.SetInt("left", left);
 }
 
 void ruiAbsoluteLayout::SetRight(int right){
-	m_properties.SetInt("right", -1);
+	m_properties.SetInt("right", right);
 }

@@ -15,7 +15,7 @@
 class RECONDITE_API ruiAnalogStick : public ruiWidget{
 public:
 
-	ruiAnalogStick(rController* controller, size_t stickIndex, const rString& id, rEngine* engine, const rPoint& position);
+	ruiAnalogStick(rController* controller, size_t stickIndex, const rString& id, rEngine* engine);
 	virtual void Draw(rEngine& engine);
 
 	virtual rString GetWidgetType() const;

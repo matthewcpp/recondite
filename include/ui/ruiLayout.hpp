@@ -11,7 +11,7 @@
 
 #include "ui/ruiWidget.hpp"
 
-class ruiLayoutItem {
+class RECONDITE_API ruiLayoutItem {
 public:
 	ruiLayoutItem(size_t flags) : m_flags(flags) {}
 	virtual ~ruiLayoutItem() {}
@@ -29,13 +29,13 @@ private:
 	size_t m_flags;
 };
 
-class ruiLayout {
+class RECONDITE_API ruiLayout {
 public:
 	virtual ~ruiLayout();
 	
 public:
-	virtual void AddItem(ruiWidget* widget, size_t flags);
-	virtual void AddItem(ruiLayout* layout, size_t flags);
+	virtual void AddItem(ruiWidget* widget, size_t flags = 0);
+	virtual void AddItem(ruiLayout* layout, size_t flags = 0);
 
 	void SetPosition(const rPoint& position);
 	rPoint Position() const;
@@ -58,7 +58,7 @@ protected:
 	rPropertyCollection m_properties;
 };
 
-class ruiWidgetLayoutItem : public ruiLayoutItem {
+class RECONDITE_API ruiWidgetLayoutItem : public ruiLayoutItem {
 public:
 	ruiWidgetLayoutItem(ruiWidget* widget, size_t flags);
 
@@ -71,7 +71,7 @@ private:
 	ruiWidget* m_widget;
 };
 
-class ruiLayoutLayoutItem : public ruiLayoutItem {
+class RECONDITE_API ruiLayoutLayoutItem : public ruiLayoutItem {
 public:
 	ruiLayoutLayoutItem(ruiLayout* layout, size_t flags);
 

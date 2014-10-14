@@ -4,12 +4,7 @@ ruiWidget::ruiWidget(const rString& id, rEngine* engine)
 	:ruiWidgetBase(id, engine)
 {
 	m_position.Set(-1,-1);
-}
-
-ruiWidget::ruiWidget(const rString& id, rEngine* engine, const rPoint& position)
-	:ruiWidgetBase(id, engine)
-{
-	m_position = position;
+	m_position.Set(0,0);
 }
 
 

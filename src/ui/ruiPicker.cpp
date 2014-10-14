@@ -1,15 +1,15 @@
 #include "ui/ruiPicker.hpp"
 
-ruiPicker::ruiPicker(const rString& id, rEngine* engine, const rPoint& position)
-:ruiWidget(id, engine, position)
+ruiPicker::ruiPicker(const rString& id, rEngine* engine)
+:ruiWidget(id, engine)
 {
 	m_selectionIndex = 0;
 
 	Bind(ruiEVT_MENU, this, &ruiPicker::OnSubmenuSelection);
 }
 
-ruiPicker::ruiPicker(rArrayString& options, const rString& id, rEngine* engine, const rPoint& position)
-:ruiWidget(id, engine, position)
+ruiPicker::ruiPicker(rArrayString& options, const rString& id, rEngine* engine)
+:ruiWidget(id, engine)
 {
 	m_selectionIndex = 0;
 	SetOptions(options);

@@ -3,6 +3,7 @@
 ruiWidgetBase::ruiWidgetBase(const rString& id, rEngine* engine)
 	:rObject(id, engine)
 {
+	m_style.MarkChanged();
 	InvalidateSize();
 }
 
@@ -33,26 +34,37 @@ void ruiWidgetBase::GetClasses(rArrayString& classlist){
 }
 
 void ruiWidgetBase::RecomputeStyle(){
+	m_computedStyle.Clear();
 	ruiStyleManager* styleManager = m_engine->ui->Styles();
 	ruiStyle* style = NULL;
 
+	//start with any base level styles for this widget type
 	style = styleManager->GetStyle(GetWidgetType());
 	if (style) m_computedStyle.Extend(*style);
 
+	//next we apply stles for each class assigned to this widget
 	for (size_t i = 0; i < m_classList.size(); i++){
-		style = styleManager->GetStyle(m_classList[i]);
+		style = styleManager->GetStyle("." + m_classList[i]);
 
 		if (style) m_computedStyle.Extend(*style);
 	}
 
+	//apply a style for this particualr widget instance
+	style = styleManager->GetStyle("#" + Id());
+	if (style) m_computedStyle.Extend(*style);
+
+	//finally apply local style override
 	m_computedStyle.Extend(m_style);
+
+	m_style.ClearChanged();
+	InvalidateSize();
 }
+void ruiWidgetBase::Draw(rEngine& engine){}
+
 
 void ruiWidgetBase::Update(rEngine& engine){
-	if (m_style.HasChanged()){
+	if (m_style.HasChanged())
 		RecomputeStyle();
-		m_style.ClearChanged();
-	}
 
 	if (m_size == rSize::Default)
 		m_size = ComputeSize();

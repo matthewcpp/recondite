@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <limits>
+#include <sstream>
 
 #include "rBuild.hpp"
 
@@ -59,6 +60,10 @@ public:
 	rString& operator += (char c);
 
 	static size_t npos;
+
+public:
+
+	static bool ToInt(const rString& str, int& i);
 
 private:
 	std::string m_str;

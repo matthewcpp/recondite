@@ -167,3 +167,16 @@ rString operator +(const char* cstr, const rString& rstr){
 	result += rstr;
 	return result;
 }
+
+bool rString::ToInt(const rString& str, int& i){
+	bool result = true;
+
+	try{
+		i = std::atoi(str.c_str());
+	}
+	catch ( const std::exception& e ){
+		result = false;
+	}
+
+	return result;
+}

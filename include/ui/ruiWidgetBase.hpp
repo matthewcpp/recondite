@@ -19,6 +19,7 @@ public:
 	virtual rPoint Position() const = 0;
 
 	virtual void Update(rEngine& engine);
+	virtual void Draw(rEngine& engine);
 
 public:
 	virtual void AddClass(const rString& className);

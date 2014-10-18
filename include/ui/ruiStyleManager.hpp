@@ -7,10 +7,8 @@
 #include "rBuild.hpp"
 #include "rString.hpp"
 
-#include "xml/rXMLDocument.hpp"
-#include "stream/rIStringStream.hpp"
-
 #include "ruiStyle.hpp"
+#include "ui/ruiStylesheetLoader.hpp"
 
 class RECONDITE_API ruiStyleManager{
 public:
@@ -23,9 +21,7 @@ public:
 	size_t StyleCount() const;
 	void Clear();
 
-	bool ParseStylesheet(std::istream& stream);
-private:
-	typedef std::map<rString, ruiStyle*> ruiStyleMap;
+	bool ParseStylesheet(rIStream& stream);
 
 private:
 	ruiStyleMap m_styles;

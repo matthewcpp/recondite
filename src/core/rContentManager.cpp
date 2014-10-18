@@ -441,7 +441,7 @@ void rContentManager::AddListener(rContentListener* listener){
 
 void rContentManager::RemoveListener(rContentListener* listener){
 	rContentListener* curListener;
-	for (rContentListenerItr it = m_listeners.begin(); it != m_listeners.end(); ++it){
+	for (rContentListenerList::iterator it = m_listeners.begin(); it != m_listeners.end(); ++it){
 		curListener = *it;
 		
 		if (curListener == listener){
@@ -731,6 +731,18 @@ rSkeleton* rContentManager::GetOrLoadSkeleton(const rString& name, const rString
 	return skeleton;
 }
 
+rAssetStream rContentManager::LoadTextFromPath(const rString& path){
+	rIFileStream* fileStream = new rIFileStream(path);
+	rAssetStream streamPtr;
+
+	if (fileStream->IsOk())
+		streamPtr.reset(fileStream);
+	else
+		delete fileStream;
+
+	return streamPtr;
+}
+
 rContentError rContentManager::RemoveSkeletonAsset(const rString& name){
 	return rCONTENT_ERROR_NONE;
 }
@@ -740,37 +752,37 @@ size_t rContentManager::NumSkeletons(){
 }
 
 void rContentManager::NotifyManifestBegin(const rString& path, int total) {
-	for (rContentListenerItr it = m_listeners.begin(); it != m_listeners.end(); ++it)
+	for (rContentListenerList::iterator it = m_listeners.begin(); it != m_listeners.end(); ++it)
 		(*it)->BeginManifestLoad(path, total);
 }
 
 void rContentManager::NotifyManifestProgress(rAssetType type, const rString& name, const rString& path, int current, int total) {
-	for (rContentListenerItr it = m_listeners.begin(); it != m_listeners.end(); ++it)
+	for (rContentListenerList::iterator it = m_listeners.begin(); it != m_listeners.end(); ++it)
 		(*it)->ManifestLoadProgress(type, name, path, current, total);
 }
 
 void rContentManager::NotifyManifestLoadError(rAssetType type, const rString& name, const rString& path, rContentError error, int current, int total){
-	for (rContentListenerItr it = m_listeners.begin(); it != m_listeners.end(); ++it)
+	for (rContentListenerList::iterator it = m_listeners.begin(); it != m_listeners.end(); ++it)
 		(*it)->ManifestLoadError(type, name, path, error, current, total);
 }
 
 void rContentManager::NotifyManifestEnd(const rString& path){
-	for (rContentListenerItr it = m_listeners.begin(); it != m_listeners.end(); ++it)
+	for (rContentListenerList::iterator it = m_listeners.begin(); it != m_listeners.end(); ++it)
 		(*it)->EndManifestLoad(path);
 }
 
 void rContentManager::NotifyAssetLoadComplete(rAssetType type, const rString& name, const rString& path){
-	for (rContentListenerItr it = m_listeners.begin(); it != m_listeners.end(); ++it)
+	for (rContentListenerList::iterator it = m_listeners.begin(); it != m_listeners.end(); ++it)
 		(*it)->AssetLoadComplete(type, name, path);
 }
 
 void rContentManager::NotifyAssetLoadError(rAssetType type, const rString& name, const rString& path, rContentError error){
-	for (rContentListenerItr it = m_listeners.begin(); it != m_listeners.end(); ++it)
+	for (rContentListenerList::iterator it = m_listeners.begin(); it != m_listeners.end(); ++it)
 		(*it)->AssetLoadError(type, name, path, error);
 }
 
 void rContentManager::NotifyAssetUnloaded(rAssetType type, const rString& name){
-	for (rContentListenerItr it = m_listeners.begin(); it != m_listeners.end(); ++it)
+	for (rContentListenerList::iterator it = m_listeners.begin(); it != m_listeners.end(); ++it)
 		(*it)->AssetUnloaded(type, name);
 }
 

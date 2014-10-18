@@ -1,4 +1,4 @@
-#include "ruiStylesheetParser.hpp"
+#include "ui/ruiStylesheetParser.hpp"
 
 ruiStylesheetParser::ruiStylesheetParser(){
 	m_state = PARSING_SELECTOR;
@@ -49,9 +49,9 @@ void ruiStylesheetParser::AddResponder(ruiStyleSheetParserResponder* responder){
 
 bool ruiStylesheetParser::Parse(rIStream& stream){
 	Reset();
-	char ch;
+	char ch = 0;
 
-	while (stream.get(ch)){
+	while (stream.Get(ch)){
 		switch (m_state){
 
 			case PARSING_SELECTOR:
@@ -86,7 +86,7 @@ bool ruiStylesheetParser::ParseSelector(int ch){
 		if (isspace(ch)){
 			return true;
 		}
-		else if (isalpha(ch) || ch == '.'){
+		else if (isalpha(ch) || ch == '.' || ch == '#'){
 			m_currentSelector += (char)ch;
 			return true;
 		}
@@ -101,7 +101,7 @@ bool ruiStylesheetParser::ParseSelector(int ch){
 			m_state = PARSING_OPEN_BRACE;
 			return true;
 		}
-		else if (isalpha(ch)){
+		else if (isalnum (ch) || ch == '_' || ch == '-'){
 			m_currentSelector += (char)ch;
 			return true;
 		}

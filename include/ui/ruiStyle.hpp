@@ -30,4 +30,6 @@ private:
 	bool m_changed;
 };
 
+typedef std::map<rString, ruiStyle*> ruiStyleMap;
+
 #endif

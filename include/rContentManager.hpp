@@ -4,6 +4,7 @@
 #include <map>
 #include <list>
 #include <fstream>
+#include <memory>
 
 #include "rBuild.hpp"
 #include "rTypes.hpp"
@@ -44,9 +45,9 @@
 
 #include "interface/riContentManager.hpp"
 
-typedef std::list<rContentListener*> rContentListenerList;
-typedef rContentListenerList::iterator rContentListenerItr;
-typedef rContentListenerList::const_iterator rContentListenerConstItr;
+
+#include "stream/rIFileStream.hpp"
+typedef std::unique_ptr<rIStream> rAssetStream;
 
 class RECONDITE_API rContentManager : public riContentManager{
 public:
@@ -115,6 +116,10 @@ public:
 	rContentError RemoveSkeletonAsset(const rString& name);
 	size_t NumSkeletons();
 
+//Text
+public:
+	rAssetStream LoadTextFromPath(const rString& path);
+
 //Asset Manifest
 public:
 	virtual void LoadAssetManifest(const rAssetManifestData& assetManifest);
@@ -160,14 +165,15 @@ protected:
 	rSkeletonMap m_skeletons;
 	
 	int GetNextAssetId();
+
+private:
+		typedef std::list<rContentListener*> rContentListenerList;
 	
 private:
 	void UnloadTextures();
 	void UnloadShaders();
 	void UnloadMaterials();
 	void UnloadGeometry();
-	
-
 	
 	bool LoadMaterialDependencies(const rMaterialData& materialData, rMaterial* material);
 	void DeleteGeometryBuffers(rGeometry* geometry);

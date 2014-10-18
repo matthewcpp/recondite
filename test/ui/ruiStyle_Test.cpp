@@ -4,6 +4,20 @@
 
 class Ui_ruiStyle : public ::testing::Test{};
 
+TEST(Ui_ruiStyle, Clear){
+	ruiStyle style;
+
+	style.SetBool("bool", true);
+	style.SetFloat("float", 3.14);
+	style.SetInt("int", 55662187);
+
+	ASSERT_EQ(style.NumProperties(), 3);
+
+	style.Clear();
+
+	ASSERT_EQ(style.NumProperties(), 0);
+}
+
 TEST(Ui_ruiStyle, Extend){
 	ruiStyle baseStyle;
 	rTexture2D* testTexture1 = new rTexture2D(0,0,3,0,0,"test1","/test/rtex1");

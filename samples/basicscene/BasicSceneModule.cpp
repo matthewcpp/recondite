@@ -78,25 +78,23 @@ void BasicSceneModule::Init(rEngine& engine){
 #include "ui/ruiAbsoluteLayout.hpp"
 
 void BasicSceneModule::InitUI(ruiOverlayManager& manager, rEngine& engine){
+	rAssetStream cssFile = engine.content->LoadTextFromPath("content/basicscene/ui/basicscene.rss");
+	
+	if (cssFile)
+		engine.ui->Styles()->ParseStylesheet(*cssFile);
+
 	ruiOverlay* overlay = manager.CreateOverlay(engine.application->GetViewport("main"));
 	ruiAbsoluteLayout* absoluteLayout = new ruiAbsoluteLayout();
 	overlay->SetLayout(absoluteLayout);
-
-	m_textCameraPos = new ruiText("1", &engine);
-	m_textCameraPos->Style()->SetInt("top", 10);
-	m_textCameraPos->Style()->SetInt("left", 10);
+	m_textCameraPos = new ruiText("camera-text", &engine);
 	absoluteLayout->AddItem(m_textCameraPos);
 	overlay->AddWidget(m_textCameraPos);
 
-	ruiText* txt = new ruiText("The time has come for all good men to come to the aid of their country\nthe greatest generation\n1945","2", &engine);
-	txt->Style()->SetInt("top", 50);
-	txt->Style()->SetInt("left", 10);
+	ruiText* txt = new ruiText("The time has come for all good men to come to the aid of their country\nthe greatest generation\n1945","greatest_text", &engine);
 	absoluteLayout->AddItem(txt);
 	overlay->AddWidget(txt);
 	
-	ruiPicker* p = new ruiPicker("checkbox1", &engine);
-	p->Style()->SetInt("top", 200);
-	p->Style()->SetInt("left", 10);
+	ruiPicker* p = new ruiPicker("picker1", &engine);
 
 	p->AddOption("Test 1");
 	p->AddOption("Test 2");

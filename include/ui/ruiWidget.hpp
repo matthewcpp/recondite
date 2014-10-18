@@ -24,8 +24,6 @@ public:
 
 	virtual rRect BoundingBox() const;
 
-	virtual void Draw(rEngine& engine) = 0;
-
 	virtual rPoint Position() const;
 	void SetPosition(int x, int y);
 	void SetPosition(const rPoint& position);

@@ -32,65 +32,9 @@ size_t ruiStyleManager::StyleCount() const{
 	return m_styles.size();
 }
 
-bool ruiStyleManager::ParseStylesheet(std::istream& stream){
-	rXMLDocument document;
-	document.LoadFromStream(stream);
-	
-	rXMLElement* root = document.GetRoot();
-	
-	for (size_t i = 0; i < root->NumChildren(); i++){
-		rXMLElement* styleElement = root->GetChild(i);
-		rString selector;
-
-		styleElement->GetAttribute<rString>("selector", selector);
-		ruiStyle* style = CreateStyle(selector);
-
-		for (size_t p = 0; p < styleElement->NumChildren(); p++){
-			rXMLElement* prop = styleElement->GetChild(p);
-			rString name = prop->Name();
-
-			rPropertyValue propertyValue;
-			int propertyType;
-			prop->GetAttribute<int>("type", propertyType);
-			
-			switch (propertyType)
-			{
-			case rPROPERTY_TYPE_BOOL:
-				prop->GetText<bool>(propertyValue.boolVal);
-				style->SetBool(name, propertyValue.boolVal);
-				break;
-			case rPROPERTY_TYPE_INT:
-				prop->GetText<int>(propertyValue.intVal);
-				style->SetInt(name, propertyValue.intVal);
-				break;
-			case rPROPERTY_TYPE_FLOAT:
-				prop->GetText<float>(propertyValue.floatVal);
-				style->SetInt(name, propertyValue.floatVal);
-				break;
-			case rPROPERTY_TYPE_STRING:{
-				rString str = prop->Text();
-				style->SetString(name, str);
-			}
-				break;
-			case rPROPERTY_TYPE_COLOR:{
-				rString str = prop->Text();
-				rIStringStream stream(str);
-				rColor color;
-
-				stream >> color.red >> color.green >> color.blue >> color.alpha;
-				style->SetColor(name, color);
-			}
-				break;
-			case rPROPERTY_TYPE_FONT:
-				break;
-			case rPROPERTY_TYPE_TEXTURE:
-				break;
-			default:
-				break;
-			}
-		}
-	}
-	
+bool ruiStyleManager::ParseStylesheet(rIStream& stream){
+	ruiStylesheetLoader loader;
+	loader.LoadStylesheet(stream, m_styles);
 
 	return true;
 }

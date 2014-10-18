@@ -35,6 +35,11 @@ bool rIStringStream::IsOk() const{
 	return !m_stream.fail();
 }
 
+rIStream& rIStringStream::Get(char& ch){
+	m_stream.get(ch);
+	return *this;
+}
+
 rIStream& rIStringStream::operator >> (char& c){
 	m_stream >> c;
 	return *this;

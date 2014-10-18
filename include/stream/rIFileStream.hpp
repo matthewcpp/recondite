@@ -22,12 +22,13 @@ public:
 	virtual void Seek(size_t pos);
 	virtual size_t Pos();
 	virtual bool IsOk() const;
+	virtual rIStream& Get(char& ch);
 
 	virtual rIStream& operator >> (char& c);
 	virtual rIStream& operator >> (unsigned char& c);
 	virtual rIStream& operator >> (short& s);
 	virtual rIStream& operator >> (unsigned short& s);
-	virtual rIStream& operator >> (int& i) = 0;
+	virtual rIStream& operator >> (int& i);
 	virtual rIStream& operator >> (unsigned int& i);
 	virtual rIStream& operator >> (float& f);
 

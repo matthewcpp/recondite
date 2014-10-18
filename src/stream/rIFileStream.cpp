@@ -40,6 +40,11 @@ bool rIFileStream::IsOk() const{
 	return !m_file.fail();
 }
 
+rIStream& rIFileStream::Get(char& ch){
+	m_file.get(ch);
+	return *this;
+}
+
 rIStream& rIFileStream::operator >> (char& c){
 	m_file >> c;
 	return *this;

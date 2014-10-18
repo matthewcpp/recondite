@@ -14,6 +14,7 @@ public:
 	virtual void Seek(size_t pos) = 0;
 	virtual size_t Pos() = 0;
 	virtual bool IsOk() const = 0;
+	virtual rIStream& Get(char& ch) = 0;
 
 	virtual rIStream& operator >> (char& c) = 0;
 	virtual rIStream& operator >> (unsigned char& c) = 0;

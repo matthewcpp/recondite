@@ -79,7 +79,7 @@ void ruiSlider::HandleDrag(const rPoint& position){
 	m_prevDrag = position;
 }
 
-rRect ruiSlider::HandleRect() const{
+rRect ruiSlider::HandleRect(){
 	rSize size = Size();
 	float ratio =  m_value / 100.0f;
 	int handleOffset = int (size.x * ratio) - (m_handleSize / 2);
@@ -88,19 +88,22 @@ rRect ruiSlider::HandleRect() const{
 }
 
 rSize ruiSlider::ComputeSize() const{
-	//temprary
+	//temporary
 	return rSize(130,35);
 }
 
 void ruiSlider::Draw(rEngine& engine){
 	rRect box = BoundingBox();
 	rRect handle = HandleRect();
+	ruiStyle* style = ComputedStyle();
 	
-	rColor gray(200,200,200,255);
-	rColor white(255,255,255,255);
-	
-	engine.renderer->RenderRect(box, gray);
-	engine.renderer->RenderRect(handle, white);
+	rColor color(200,200,200,255);
+	style->GetColor("background-color", color);
+	engine.renderer->RenderRect(box, color);
+
+	color.Set(255,255,255,255);
+	style->GetColor("color", color);
+	engine.renderer->RenderRect(handle, color);
 }
 
 rString ruiSlider::GetWidgetType() const{

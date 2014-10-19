@@ -20,6 +20,7 @@ public:
 
 private:
 	void LoadIntProperty(const rString& name, const rString& value);
+	void LoadColorProperty(const rString& name, const rString& value);
 
 private:
 	typedef std::map <rString, rPropertyType> rStylePropertyTypeMap;

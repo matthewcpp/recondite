@@ -14,8 +14,8 @@ public:
 	ruiWidgetBase(const rString& id, rEngine* engine);
 
 public:
-	virtual rRect BoundingBox() const = 0;
-	virtual rSize Size() const;
+	virtual rRect BoundingBox() = 0;
+	virtual rSize Size();
 	virtual rPoint Position() const = 0;
 
 	virtual void Update(rEngine& engine);

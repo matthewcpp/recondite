@@ -35,7 +35,11 @@ void ruiStylesheetLoader::ParseProperty(const rString& name, const rString& valu
 		switch (propertyType){
 			case rPROPERTY_TYPE_INT:
 				LoadIntProperty(name, value);
-			break;
+				break;
+
+			case rPROPERTY_TYPE_COLOR:
+				LoadColorProperty(name, value);
+				break;
 		};
 	}
 }
@@ -47,6 +51,14 @@ void ruiStylesheetLoader::LoadIntProperty(const rString& name, const rString& va
 		m_currentStyle->SetInt(name, intVal);
 }
 
+void ruiStylesheetLoader::LoadColorProperty(const rString& name, const rString& value){
+	int r,g,b,a;
+
+	if (sscanf(value.c_str(), "%i %i %i %i", &r, &g, &b, &a) == 4){
+		m_currentStyle->SetColor(name, rColor(r,g,b,a));
+	}
+}
+
 void ruiStylesheetLoader::InitStylePropertyTypes(){
 	if (s_stylePropertyTypes.size() >0)
 		return;
@@ -55,6 +67,11 @@ void ruiStylesheetLoader::InitStylePropertyTypes(){
 	s_stylePropertyTypes["bottom"] = rPROPERTY_TYPE_INT;
 	s_stylePropertyTypes["left"] = rPROPERTY_TYPE_INT;
 	s_stylePropertyTypes["right"] = rPROPERTY_TYPE_INT;
+
+	s_stylePropertyTypes["color"] = rPROPERTY_TYPE_COLOR;
+	s_stylePropertyTypes["background-color"] = rPROPERTY_TYPE_COLOR;
+
+	s_stylePropertyTypes["Border-color"] = rPROPERTY_TYPE_COLOR;
 }
 
 ruiStylesheetLoader::rStylePropertyTypeMap ruiStylesheetLoader::s_stylePropertyTypes;

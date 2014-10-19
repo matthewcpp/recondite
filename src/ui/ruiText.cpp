@@ -22,14 +22,18 @@ void ruiText::SetText(const rString& text){
 
 void ruiText::Draw(rEngine& engine){
 	rFont* font = engine.content->GetFontAsset("consolas");
-	rColor red(255,0,0,255);
+	ruiStyle* style = ComputedStyle();
+	rColor color(255,255,255,255);
 	rRect boundingBox = BoundingBox();
 
-	engine.renderer->RenderRect(boundingBox, red);
+	if (style->GetColor("background-color", color))
+		engine.renderer->RenderRect(boundingBox, color);
 	
 	if (font){
-		rColor white(255,255,255,255);
-		engine.renderer->RenderString(m_text, font, boundingBox, white);
+		color.Set(255,255,255,255);
+		style->GetColor("color", color);
+
+		engine.renderer->RenderString(m_text, font, boundingBox, color);
 	}
 }
 

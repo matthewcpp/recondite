@@ -20,14 +20,19 @@ void ruiCheckbox::SetChecked(bool checked){
 
 void ruiCheckbox::Draw(rEngine& engine){
 	rRect outline = BoundingBox();
-	rColor gray(200,200,200,255);
-	
-	engine.renderer->RenderWireRect(outline, gray);
+	ruiStyle* style = ComputedStyle();
+	rColor color(200,200,200,255);
+
+	style->GetColor("border-color", color);
+
+	engine.renderer->RenderWireRect(outline, color);
 	
 	if (m_isChecked){
-		rColor blue(0,0,255,255);
+		color.Set(0,0,255,255);
+		style->GetColor("color", color);
+
 		rRect fill(outline.x + 5, outline.y + 5, outline.width - 12, outline.height - 12);
-		engine.renderer->RenderRect(fill, blue);
+		engine.renderer->RenderRect(fill, color);
 	}
 }
 

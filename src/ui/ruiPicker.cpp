@@ -25,10 +25,10 @@ void ruiPicker::ShowOptionsMenu(){
 	rRect boundingBox = BoundingBox();
 	ruiMenu* menu = new ruiMenu();
 
-	for (int i = 0; i < m_options.size(); i++)
+	for (size_t i = 0; i < m_options.size(); i++)
 		menu->AppendItem(i, m_options[i]);
 
-	m_engine->ui->ShowContextMenu(menu, rPoint(boundingBox.Left(), boundingBox.Bottom() + 3), this);
+	m_engine->ui->ShowContextMenu(menu, ComputedStyle(), rPoint(boundingBox.Left(), boundingBox.Bottom() + 3), this);
 }
 
 rSize ruiPicker::ComputeSize() const{
@@ -49,8 +49,12 @@ rSize ruiPicker::ComputeSize() const{
 
 void ruiPicker::Draw(rEngine& engine){
 	rRect box = BoundingBox();
-	rColor gray(200,200,200,255);
-	engine.renderer->RenderRect(box, gray);
+	ruiStyle* style = ComputedStyle();
+
+	rColor color(200,200,200,255);
+	style->GetColor("background-color", color);
+
+	engine.renderer->RenderRect(box, color);
 	
 
 	rFont* font = engine.content->GetFontAsset("consolas");
@@ -58,9 +62,10 @@ void ruiPicker::Draw(rEngine& engine){
 	if (font){
 		rString text = SelectionText();
 		rPoint point (m_position.x + 5 , m_position.y + 5);
-		rColor black(0,0,0,255);
+		color.Set(0,0,0,255);
+		style->GetColor("color", color);
 		
-		engine.renderer->RenderString(text,font, box, black);
+		engine.renderer->RenderString(text,font, box, color);
 	}
 
 }

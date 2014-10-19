@@ -22,7 +22,7 @@ class RECONDITE_API ruiWidget : public ruiWidgetBase, public ruiDefaultEventHand
 public:
 	ruiWidget(const rString& id, rEngine* engine);
 
-	virtual rRect BoundingBox() const;
+	virtual rRect BoundingBox();
 
 	virtual rPoint Position() const;
 	void SetPosition(int x, int y);

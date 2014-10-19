@@ -42,6 +42,7 @@ public:
 
 	virtual ruiStyleManager* Styles();
 	virtual bool ShowContextMenu(ruiMenu* menu, const rPoint& position, rEventHandler* handler);
+	virtual bool ShowContextMenu(ruiMenu* menu, ruiStyle* style, const rPoint& position, rEventHandler* handler);
 	virtual void CancelContextMenu();
 
 private:

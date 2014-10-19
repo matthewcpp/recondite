@@ -20,6 +20,6 @@ void ruiWidget::SetPosition(const rPoint& position){
 	m_position = position;
 }
 
-rRect ruiWidget::BoundingBox() const{
+rRect ruiWidget::BoundingBox(){
 	return rRect(m_position, Size());
 }

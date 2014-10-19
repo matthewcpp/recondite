@@ -85,10 +85,16 @@ ruiStyle* ruiWidgetBase::Style(){
 }
 
 ruiStyle* ruiWidgetBase::ComputedStyle(){
+	if (m_style.HasChanged())
+		RecomputeStyle();
+
 	return &m_computedStyle;
 }
 
-rSize ruiWidgetBase::Size() const{
+rSize ruiWidgetBase::Size(){
+	if (m_size == rSize::Default)
+		m_size = ComputeSize();
+
 	return m_size;
 }
 

@@ -19,7 +19,7 @@ public:
 	void SetHandleSize(int size);
 	int GetHandleSize() const;
 	
-	rRect HandleRect() const;
+	rRect HandleRect();
 	
 	virtual void Draw(rEngine& engine);
 	virtual rString GetWidgetType() const;

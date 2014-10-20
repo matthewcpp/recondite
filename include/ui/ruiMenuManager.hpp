@@ -22,6 +22,7 @@ public:
 private:
 	bool PickMenuItem(const rPoint& position);
 	ruiStyle* GetStyle();
+	void CalculateMenuSize(rEngine& engine);
 
 private:
 	virtual bool OnPointerDown(const rPoint& position);
@@ -31,6 +32,8 @@ private:
 	rPoint m_position;
 	rEventHandler* m_handler;
 	ruiStyle* m_style;
+	rSize m_menuSize;
+	size_t m_rowHeight;
 
 	ruiStyle m_defaultStyle;
 };

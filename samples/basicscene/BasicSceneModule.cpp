@@ -103,7 +103,7 @@ void BasicSceneModule::InitUI(ruiOverlayManager& manager, rEngine& engine){
 	ruiPicker* p = new ruiPicker("picker1", &engine);
 
 	p->AddOption("Test 1");
-	p->AddOption("Test 2");
+	p->AddOption("THis option is pretty long...");
 	p->AddOption("Test 3");
 	absoluteLayout->AddItem(p);
 	overlay->AddWidget(p);

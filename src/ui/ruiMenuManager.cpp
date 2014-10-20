@@ -31,6 +31,8 @@ void ruiMenuManager::CancelContextMenu(){
 	m_position = rPoint::Zero;
 	m_handler = NULL;
 	m_style = NULL;
+	m_menuSize = rSize::Default;
+	m_rowHeight = 0;
 }
 
 void ruiMenuManager::Update(rEngine& engine){
@@ -43,28 +45,52 @@ ruiStyle* ruiMenuManager::GetStyle(){
 		return &m_defaultStyle;
 }
 
-void ruiMenuManager::Draw(rEngine& engine){
+void ruiMenuManager::CalculateMenuSize(rEngine& engine){
+	m_menuSize.Set(0,0);
 	if (!m_menu) return;
 
 	ruiStyle* style = GetStyle();
-	size_t rowHeight = 30;
-	size_t menuItemCount = m_menu->NumItems();
-	rColor color;
-
-	style->GetColor("background-color", color);
-	rRect bounding(m_position, rSize (100, rowHeight * menuItemCount));
-	engine.renderer->RenderRect(bounding, color);
-	
-	style->GetColor("color", color);
-
 	rString fontName;
 	style->GetString("font", fontName);
 	rFont* font = engine.content->GetFontAsset(fontName);
 
 	if (!font) return;
 
+	size_t menuItemCount = m_menu->NumItems();
+	m_rowHeight = font->LineHeight();
+
 	for (size_t i = 0; i < menuItemCount; i++){
-		rPoint point(bounding.x, bounding.Top() + (i * rowHeight));
+		m_menuSize.y += m_rowHeight;
+		rSize strSize = font->MeasureString(m_menu->GetItem(i)->Label());
+		m_menuSize.x = std::max(m_menuSize.x, strSize.x);
+	}
+}
+
+void ruiMenuManager::Draw(rEngine& engine){
+	if (!m_menu) return;
+
+	ruiStyle* style = GetStyle();
+	rString fontName;
+	style->GetString("font", fontName);
+	rFont* font = engine.content->GetFontAsset(fontName);
+
+	if (!font) return;
+
+	if (m_menuSize == rSize::Default)
+		CalculateMenuSize(engine);
+
+	size_t menuItemCount = m_menu->NumItems();
+	rColor color;
+
+	rRect bounding(m_position, m_menuSize);
+
+	style->GetColor("background-color", color);
+	engine.renderer->RenderRect(bounding, color);
+	
+	style->GetColor("color", color);
+
+	for (size_t i = 0; i < menuItemCount; i++){
+		rPoint point(bounding.x, bounding.Top() + (i * m_rowHeight));
 
 		engine.renderer->RenderString(m_menu->GetItem(i)->Label(), font, point, color);
 	}
@@ -72,10 +98,10 @@ void ruiMenuManager::Draw(rEngine& engine){
 
 bool ruiMenuManager::PickMenuItem(const rPoint& position){
 	if (m_handler){
-		rRect boundingBox(m_position, rSize(100, 30 * m_menu->NumItems()));
+		rRect boundingBox(m_position, m_menuSize);
 
 		if (boundingBox.ContainsPoint(position)){
-			int item = (position.y - boundingBox.y) / 30;
+			int item = (position.y - boundingBox.y) / m_rowHeight;
 			ruiMenuItem* menuItem = m_menu->GetItem(item);
 			ruiMenuEvent event(m_menu, menuItem->Id());
 

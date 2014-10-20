@@ -214,7 +214,11 @@ rContentError rFontData::LoadFontDataFromFile(const rString& path){
 
 rContentError rFontData::ReadGlyphFile(std::istream& stream){
 	rXMLDocument document;
-	document.LoadFromStream(stream);
+	rXMLReaderError error = document.LoadFromStream(stream);
+
+	if (error)
+		return rCONTENT_ERROR_PARSE_ERROR;
+
 	rXMLElement* root = document.GetRoot();
 
 	rXMLElement* prop = root->GetFirstChildNamed("name");

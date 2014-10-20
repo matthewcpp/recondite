@@ -21,13 +21,15 @@ void ruiText::SetText(const rString& text){
 }
 
 void ruiText::Draw(rEngine& engine){
-	rFont* font = engine.content->GetFontAsset("consolas");
 	ruiStyle* style = ComputedStyle();
+
 	rColor color(255,255,255,255);
 	rRect boundingBox = BoundingBox();
 
 	if (style->GetColor("background-color", color))
 		engine.renderer->RenderRect(boundingBox, color);
+
+	rFont* font = DetermineFont();
 	
 	if (font){
 		color.Set(255,255,255,255);
@@ -41,8 +43,9 @@ rString ruiText::GetWidgetType() const{
 	return "text";
 }
 
-rSize ruiText::ComputeSize() const{
-	rFont* font = m_engine->content->GetFontAsset("consolas");
+rSize ruiText::ComputeSize(){
+	ruiStyle* style = ComputedStyle();
+	rFont* font = DetermineFont();
 
 	if (font)
 		return font->MeasureString(m_text);

@@ -31,8 +31,8 @@ void ruiPicker::ShowOptionsMenu(){
 	m_engine->ui->ShowContextMenu(menu, ComputedStyle(), rPoint(boundingBox.Left(), boundingBox.Bottom() + 3), this);
 }
 
-rSize ruiPicker::ComputeSize() const{
-	rFont* font = m_engine->content->GetFontAsset("consolas");
+rSize ruiPicker::ComputeSize(){
+	rFont* font = DetermineFont();;
 	rSize computedSize(0,0);
 
 	if (font){
@@ -57,7 +57,7 @@ void ruiPicker::Draw(rEngine& engine){
 	engine.renderer->RenderRect(box, color);
 	
 
-	rFont* font = engine.content->GetFontAsset("consolas");
+	rFont* font = DetermineFont();
 	
 	if (font){
 		rString text = SelectionText();

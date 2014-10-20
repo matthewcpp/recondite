@@ -21,7 +21,7 @@ public:
 	virtual rString GetWidgetType() const;
 
 protected:
-	virtual rSize ComputeSize() const;
+	virtual rSize ComputeSize();
 
 protected:
 	virtual bool OnPointerDown(const rPoint& position);

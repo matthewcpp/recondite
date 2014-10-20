@@ -40,6 +40,10 @@ void ruiStylesheetLoader::ParseProperty(const rString& name, const rString& valu
 			case rPROPERTY_TYPE_COLOR:
 				LoadColorProperty(name, value);
 				break;
+
+			case rPROPERTY_TYPE_STRING:
+				LoadStringProperty(name, value);
+				break;
 		};
 	}
 }
@@ -59,6 +63,10 @@ void ruiStylesheetLoader::LoadColorProperty(const rString& name, const rString& 
 	}
 }
 
+void ruiStylesheetLoader::LoadStringProperty(const rString& name, const rString& value){
+	m_currentStyle->SetString(name, value);
+}
+
 void ruiStylesheetLoader::InitStylePropertyTypes(){
 	if (s_stylePropertyTypes.size() >0)
 		return;
@@ -71,7 +79,7 @@ void ruiStylesheetLoader::InitStylePropertyTypes(){
 	s_stylePropertyTypes["color"] = rPROPERTY_TYPE_COLOR;
 	s_stylePropertyTypes["background-color"] = rPROPERTY_TYPE_COLOR;
 
-	s_stylePropertyTypes["Border-color"] = rPROPERTY_TYPE_COLOR;
+	s_stylePropertyTypes["font"] = rPROPERTY_TYPE_STRING;
 }
 
 ruiStylesheetLoader::rStylePropertyTypeMap ruiStylesheetLoader::s_stylePropertyTypes;

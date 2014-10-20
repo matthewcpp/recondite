@@ -57,6 +57,8 @@ void BasicSceneModule::BeforeRenderOverlay(rViewInfo& view, rEngine& engine){
 void BasicSceneModule::AfterRenderOverlay(rViewInfo& view, rEngine& engine){
 }
 
+#include "data/rLogContentListener.hpp"
+
 void BasicSceneModule::Init(rEngine& engine){
 	rSize displaySize = engine.application->DisplaySize();
 
@@ -68,7 +70,11 @@ void BasicSceneModule::Init(rEngine& engine){
 	m_camera = new rViewCamera("camera", rVector3(0, 0, 3));
 	viewport->SetCamera(m_camera);
 
-	engine.content->LoadFontFromPath("content/fonts/Consolas.rfnt", "consolas");
+	rLogContentListener listener;
+
+	engine.content->AddListener(&listener);
+	engine.content->LoadAssetManifestFromPath("content/basicscene/manifest.xml");
+	engine.content->RemoveListener(&listener);
 
 	engine.scene->AddActor(new rPrimitiveBox("box1", rAlignedBox3(0,0,0,1,1,1), rColor::Green));
 	engine.scene->AddActor(new rPrimitiveBox("box2", rAlignedBox3(-2,0,0,-1,1,1), rColor::Blue));

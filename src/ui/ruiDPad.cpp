@@ -106,7 +106,7 @@ rString ruiDPad::GetWidgetType() const{
 	return "dpad";
 }
 
-rSize ruiDPad::ComputeSize() const{
+rSize ruiDPad::ComputeSize(){
 	//temporary
 	return rSize(200,200);
 }

@@ -87,7 +87,7 @@ rRect ruiSlider::HandleRect(){
 	return rRect(m_position.x + handleOffset, m_position.y - 3, m_handleSize, size.y + 6);
 }
 
-rSize ruiSlider::ComputeSize() const{
+rSize ruiSlider::ComputeSize(){
 	//temporary
 	return rSize(130,35);
 }

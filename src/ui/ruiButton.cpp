@@ -19,6 +19,7 @@ void ruiButton::SetText(const rString& text){
 }
 
 void ruiButton::Draw(rEngine& engine){
+	ruiStyle* style = ComputedStyle();
 	rRect box = BoundingBox();
 	
 	rColor color;
@@ -38,7 +39,7 @@ void ruiButton::Draw(rEngine& engine){
 	
 	engine.renderer->RenderRoundedRect(box, 10, color);
 	
-	rFont* font = engine.content->GetFontAsset("consolas");
+	rFont* font = DetermineFont();
 	
 	if (font){
 		rPoint center = box.Center();
@@ -49,8 +50,10 @@ void ruiButton::Draw(rEngine& engine){
 	
 }
 
-rSize ruiButton::ComputeSize() const{
-	rFont* font = m_engine->content->GetFontAsset("consolas");
+rSize ruiButton::ComputeSize(){
+	ruiStyle* style = ComputedStyle();
+
+	rFont* font = DetermineFont();
 
 	if (font)
 		return font->MeasureString(m_text);

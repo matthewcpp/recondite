@@ -5,6 +5,7 @@ ruiMenuManager::ruiMenuManager(){
 
 	m_defaultStyle.SetColor("color", rColor(0,0,0,255));
 	m_defaultStyle.SetColor("background-color", rColor(200,200,200,255));
+	m_defaultStyle.SetString("font", "consolas");
 
 	CancelContextMenu();
 }
@@ -43,8 +44,7 @@ ruiStyle* ruiMenuManager::GetStyle(){
 }
 
 void ruiMenuManager::Draw(rEngine& engine){
-	if (!m_menu)
-		return;
+	if (!m_menu) return;
 
 	ruiStyle* style = GetStyle();
 	size_t rowHeight = 30;
@@ -56,9 +56,16 @@ void ruiMenuManager::Draw(rEngine& engine){
 	engine.renderer->RenderRect(bounding, color);
 	
 	style->GetColor("color", color);
-	rFont* font = engine.content->GetFontAsset("consolas");
+
+	rString fontName;
+	style->GetString("font", fontName);
+	rFont* font = engine.content->GetFontAsset(fontName);
+
+	if (!font) return;
+
 	for (size_t i = 0; i < menuItemCount; i++){
 		rPoint point(bounding.x, bounding.Top() + (i * rowHeight));
+
 		engine.renderer->RenderString(m_menu->GetItem(i)->Label(), font, point, color);
 	}
 }

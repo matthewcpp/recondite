@@ -101,3 +101,11 @@ rSize ruiWidgetBase::Size(){
 void ruiWidgetBase::InvalidateSize(){
 	m_size = rSize::Default;
 }
+
+rFont* ruiWidgetBase::DetermineFont(){
+	ruiStyle* style = ComputedStyle();
+
+	rString fontName = "consolas";
+	style->GetString("font", fontName);
+	return m_engine->content->GetFontAsset(fontName);
+}

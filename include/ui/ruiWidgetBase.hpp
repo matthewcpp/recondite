@@ -32,8 +32,11 @@ public:
 
 	virtual rString GetWidgetType() const = 0;
 
+protected: //style related utility methods
+	rFont* DetermineFont();
+
 protected:
-	virtual rSize ComputeSize() const = 0;
+	virtual rSize ComputeSize() = 0;
 	void InvalidateSize();
 
 private:

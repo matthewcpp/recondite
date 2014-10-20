@@ -22,7 +22,7 @@ public:
 	rString GetWidgetType() const;
 
 protected:
-	virtual rSize ComputeSize() const;
+	virtual rSize ComputeSize();
 
 protected:
 

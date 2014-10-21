@@ -24,32 +24,32 @@ void rApplication::Draw(){
 	m_graphicsDevice->Clear();
 
 	rViewportMap::iterator end = m_viewports.end();
+	
+	//render the scene in each viewport
+	m_graphicsDevice->EnableDepthTesting(true);
 	for (rViewportMap::iterator it = m_viewports.begin(); it != end; ++it){
 		rViewInfo view;
 		view.viewport = it->second;
 		view.overlay = m_overlayManager->GetOverlay(view.viewport);
-		
-		//application level rendering goes here...
-		m_graphicsDevice->EnableDepthTesting(true);
 
 		m_engine.renderer->BeginRenderView(*view.viewport);
-		//m_module->BeforeRenderScene(view, m_engine);
+		m_module->BeforeRenderScene(view, m_engine);
 		m_scene->Draw(m_engine);
-		//m_module->AfterRenderScene(view, m_engine);
+		m_module->AfterRenderScene(view, m_engine);
 		m_engine.renderer->EndRenderView();
-
-
-		/*
-		if (view.overlay){
-			m_module->BeforeRenderOverlay(view, m_engine);
-			view.overlay->Draw(m_engine);
-			m_module->AfterRenderOverlay(view, m_engine);
-		}
-		*/
 	}
 
+	//render the overlay for each viewport
 	m_graphicsDevice->EnableDepthTesting(false);
-	m_overlayManager->Draw(m_engine);
+	for (rViewportMap::iterator it = m_viewports.begin(); it != end; ++it){
+		rViewInfo view;
+		view.viewport = it->second;
+		view.overlay = m_overlayManager->GetOverlay(view.viewport);
+
+		m_module->BeforeRenderOverlay(view, m_engine);
+		view.overlay->Draw(m_engine);
+		m_module->AfterRenderOverlay(view, m_engine);
+	}
 
 	m_graphicsDevice->SwapBuffers();
 
@@ -87,7 +87,7 @@ void rApplication::SetTargetFPS(unsigned int targetFPS){
 void rApplication::InitEngine(rGraphicsDevice* graphics, rContentManager* content, rInputManager* input){
 	m_graphicsDevice = graphics; 
 
-	m_overlayManager = new ruiOverlayManager();
+	m_overlayManager = new ruiOverlayManager(&m_engine);
 	input->SetUI(m_overlayManager);
 
 	m_engine.application = this;

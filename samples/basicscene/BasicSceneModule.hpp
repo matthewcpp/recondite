@@ -28,14 +28,6 @@ public:
 	virtual void Uninit(rEngine& engine);
 	virtual void LoadScene(const rString& sceneName, rEngine& engine);
 	virtual void DeleteActor(rActor3* actor);
-
-private:
-	ruiText* m_textCameraPos;
-	rViewCamera* m_camera;
-
-private:
-		
-
 };
 
 #endif

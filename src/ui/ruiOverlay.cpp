@@ -71,3 +71,10 @@ void ruiOverlay::SetLayout(ruiLayout* layout){
 	
 		m_layout = layout;
 }
+
+rString ruiOverlay::GetDefaultId () const{
+	rOStringStream str("item");
+	str << m_widgets.size();
+
+	return str.Str();
+}

@@ -1,7 +1,7 @@
 #include "ui/ruiOverlayManager.hpp"
 
-ruiOverlayManager::ruiOverlayManager(){
-
+ruiOverlayManager::ruiOverlayManager(rEngine* engine){
+	m_engine = engine;
 }
 
 ruiOverlayManager::~ruiOverlayManager(){
@@ -9,16 +9,33 @@ ruiOverlayManager::~ruiOverlayManager(){
 }
 
 ruiOverlay* ruiOverlayManager::CreateOverlay(rViewport* viewport){
+
+	ruiOverlay* overlay = new ruiOverlay(viewport);
+	AddOverlayToViewport(overlay, viewport);
+
+	return overlay;
+}
+
+ruiOverlay* ruiOverlayManager::CreateOverlay(const rString& filePath, rViewport* viewport){
+	ruiOverlayLoader loader(m_engine);
+	ruiOverlay* overlay = loader.ParseOverlay(filePath, viewport);
+
+	if (overlay){
+		AddOverlayToViewport(overlay, viewport);
+		return overlay;
+	}
+	else {
+		return NULL;
+	}
+}
+
+void ruiOverlayManager::AddOverlayToViewport(ruiOverlay* overlay, rViewport* viewport){
 	ruiViewportOverlayMap::iterator result = m_overlays.find(viewport);
 
 	if (result != m_overlays.end()){
 		delete result->second;
 	}
-
-	ruiOverlay* overlay = new ruiOverlay(viewport);
 	m_overlays[viewport] = overlay;
-
-	return overlay;
 }
 
 void ruiOverlayManager::Clear(){

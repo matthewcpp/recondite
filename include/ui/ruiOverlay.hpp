@@ -10,6 +10,8 @@
 #include "ui/ruiInterface.hpp"
 #include "ui/ruiLayout.hpp"
 
+#include "stream/rOStringStream.hpp"
+
 #include "ruiWidget.hpp"
 
 class RECONDITE_API ruiOverlay {
@@ -33,7 +35,7 @@ public:
 	ruiLayout* Layout() const;
 	void SetLayout(ruiLayout* layout);
 
-
+	rString GetDefaultId () const;
 protected:
 	typedef std::vector<ruiWidget*> rWidgetVector;
 

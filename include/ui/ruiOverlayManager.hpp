@@ -18,9 +18,11 @@
 #include "ui/ruiMenu.hpp"
 #include "ui/ruiMenuManager.hpp"
 
+#include "ui/ruiOverlayLoader.hpp"
+
 class RECONDITE_API ruiOverlayManager : public ruiIManager {
 public:
-	ruiOverlayManager();
+	ruiOverlayManager(rEngine* engine);
 	~ruiOverlayManager();
 	
 public:
@@ -38,6 +40,7 @@ public:
 	void Clear();
 
 	ruiOverlay* CreateOverlay(rViewport* viewport);
+	ruiOverlay* CreateOverlay(const rString& filePath, rViewport* viewport);
 	ruiOverlay* GetOverlay(rViewport* viewport) const;
 
 	virtual ruiStyleManager* Styles();
@@ -48,6 +51,7 @@ public:
 private:
 	rViewport* DetermineViewport(const rPoint& point);
 	ruiOverlay* DetermineOverlay(const rPoint& point);
+	void AddOverlayToViewport(ruiOverlay* overlay, rViewport* viewport);
 
 private:
 	bool ProcessMouseDown(rMouseButton button, const rPoint& position);
@@ -59,6 +63,7 @@ private:
 private:
 	ruiViewportOverlayMap m_overlays;
 	ruiOverlay* m_activeOverlay;
+	rEngine* m_engine;
 	
 	ruiStyleManager m_styleManager;
 	ruiMenuManager m_menuManager;

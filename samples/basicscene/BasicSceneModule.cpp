@@ -1,37 +1,31 @@
 #include "BasicSceneModule.hpp"
 
 void BasicSceneModule::BeforeUpdateScene(rEngine& engine){
-	rOStringStream str;
-	rVector3 pos = m_camera->Position();
-
-	str << "camera: " << pos.x << ", " << pos.y << ", " << pos.z;
-
-
-	m_textCameraPos->SetText(str.Str());
+	rCamera* camera = (rCamera*)engine.application->GetViewport("main")->Camera();
 
 	float distance = 10 * engine.time.TimeDeltaSeconds();
 
 	const rKeyboardState* keyboard = engine.input->Keyboard();
 
 	if (keyboard->GetKeyState('w') == rKEY_DOWN){
-		m_camera->MoveForward(distance);
+		camera->MoveForward(distance);
 	}
 	else if (keyboard->GetKeyState('s') == rKEY_DOWN){
-		m_camera->MoveBackward(distance);
+		camera->MoveBackward(distance);
 	}
 
 	if (keyboard->GetKeyState('a') == rKEY_DOWN){
-		m_camera->MoveLeft(distance);
+		camera->MoveLeft(distance);
 	}
 	else if (keyboard->GetKeyState('d') == rKEY_DOWN){
-		m_camera->MoveRight(distance);
+		camera->MoveRight(distance);
 	}
 
 	if (keyboard->GetKeyState('r') == rKEY_DOWN){
-		m_camera->MoveUp(distance);
+		camera->MoveUp(distance);
 	}
 	else if (keyboard->GetKeyState('f') == rKEY_DOWN){
-		m_camera->MoveDown(distance);
+		camera->MoveDown(distance);
 	}
 }
 
@@ -42,16 +36,20 @@ void BasicSceneModule::BeforeRenderScene(rViewInfo& view, rEngine& engine){
 }
 
 void BasicSceneModule::AfterRenderScene(rViewInfo& view, rEngine& engine){
-	rOStringStream str;
-	ruiText* renderInfo = (ruiText*)view.overlay->GetWidget("2");
-	size_t actorCount = engine.scene->NumActors();
-	size_t renderCount = engine.renderer->ObjectsRendered();
 
-	str << "Rendered: " << renderCount <<'/' << actorCount << " actors";
-	renderInfo->SetText(str.Str());
 }
 
 void BasicSceneModule::BeforeRenderOverlay(rViewInfo& view, rEngine& engine){
+	riCamera* camera = view.viewport->Camera();
+	rVector3 pos = camera->Position();
+
+	rOStringStream str;
+	str << "camera: " << pos.x << ", " << pos.y << ", " << pos.z;
+
+
+	ruiText* cameraText = (ruiText*)view.overlay->GetWidget("camera-text");
+	if (cameraText) 
+		cameraText->SetText(str.Str());
 }
 
 void BasicSceneModule::AfterRenderOverlay(rViewInfo& view, rEngine& engine){
@@ -67,8 +65,7 @@ void BasicSceneModule::Init(rEngine& engine){
 	viewport->SetSize(displaySize);
 	viewport->SetViewportType(rVIEWPORT_PERSP);
 
-	m_camera = new rViewCamera("camera", rVector3(0, 0, 3));
-	viewport->SetCamera(m_camera);
+	viewport->SetCamera(new rViewCamera("camera", rVector3(0, 0, 3)));
 
 	rLogContentListener listener;
 
@@ -84,6 +81,9 @@ void BasicSceneModule::Init(rEngine& engine){
 #include "ui/ruiAbsoluteLayout.hpp"
 
 void BasicSceneModule::InitUI(ruiOverlayManager& manager, rEngine& engine){
+	manager.CreateOverlay("content/basicscene/ui/basicscene.rtml", engine.application->GetViewport("main"));
+
+	/*
 	rAssetStream cssFile = engine.content->LoadTextFromPath("content/basicscene/ui/basicscene.rss");
 	
 	if (cssFile)
@@ -107,7 +107,7 @@ void BasicSceneModule::InitUI(ruiOverlayManager& manager, rEngine& engine){
 	p->AddOption("Test 3");
 	absoluteLayout->AddItem(p);
 	overlay->AddWidget(p);
-
+	*/
 }
 
 void BasicSceneModule::Uninit(rEngine& engine){

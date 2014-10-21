@@ -95,17 +95,20 @@ void ruiOverlayManager::Update(rEngine& engine){
 	m_activeOverlay = NULL;
 }
 
-void ruiOverlayManager::Draw(rEngine& engine){
+void ruiOverlayManager::Draw(rViewport* viewport){
 	ruiViewportOverlayMap::iterator end = m_overlays.end();
+	ruiViewportOverlayMap::iterator vp = m_overlays.find(viewport);
 
-	for (ruiViewportOverlayMap::iterator it = m_overlays.begin(); it != end; ++it){
-		m_activeOverlay = it->second;
-		it->second->Draw(engine);
+	if (m_overlays.count(viewport)){
+		m_activeOverlay = m_overlays[viewport];
+		m_activeOverlay->Draw(*m_engine);
 	}
 
 	m_activeOverlay = NULL;
+}
 
-	m_menuManager.Draw(engine);
+void ruiOverlayManager::DrawFinal(){
+	m_menuManager.Draw(*m_engine);
 }
 
 bool ruiOverlayManager::InsertKeyEvent(rKey key, rKeyState state){

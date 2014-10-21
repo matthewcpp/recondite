@@ -47,9 +47,11 @@ void rApplication::Draw(){
 		view.overlay = m_overlayManager->GetOverlay(view.viewport);
 
 		m_module->BeforeRenderOverlay(view, m_engine);
-		view.overlay->Draw(m_engine);
+		m_overlayManager->Draw(view.viewport);
 		m_module->AfterRenderOverlay(view, m_engine);
 	}
+
+	m_overlayManager->DrawFinal();
 
 	m_graphicsDevice->SwapBuffers();
 

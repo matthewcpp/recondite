@@ -3,16 +3,19 @@
 ruiPicker::ruiPicker(const rString& id, rEngine* engine)
 :ruiWidget(id, engine)
 {
-	m_selectionIndex = 0;
-
-	Bind(ruiEVT_MENU, this, &ruiPicker::OnSubmenuSelection);
+	Init();
 }
 
 ruiPicker::ruiPicker(rArrayString& options, const rString& id, rEngine* engine)
 :ruiWidget(id, engine)
 {
-	m_selectionIndex = 0;
+	Init();
 	SetOptions(options);
+}
+
+void ruiPicker::Init(){
+	m_selectionIndex = 0;
+	Bind(ruiEVT_MENU, this, &ruiPicker::OnSubmenuSelection);
 }
 
 bool ruiPicker::OnPointerDown(const rPoint& position){

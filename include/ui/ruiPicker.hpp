@@ -36,6 +36,9 @@ public:
 
 protected:
 	virtual rSize ComputeSize();
+	
+private:
+	void Init();
 
 private:
 	virtual bool OnPointerDown(const rPoint& position);

@@ -101,7 +101,7 @@ bool ruiStylesheetParser::ParseSelector(int ch){
 			m_state = PARSING_OPEN_BRACE;
 			return true;
 		}
-		else if (isalnum (ch) || ch == '_' || ch == '-'){
+		else if (isalnum (ch) || ch == '_' || ch == '-' || ch == ':'){
 			m_currentSelector += (char)ch;
 			return true;
 		}

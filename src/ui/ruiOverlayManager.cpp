@@ -168,6 +168,7 @@ bool ruiOverlayManager::InsertMouseMotionEvent(const rPoint& position){
 			}
 			else{
 				activeWidget->Trigger(ruiEVT_MOUSE_LEAVE, event);
+				activeWidget->UiState("");
 				overlay->ActivateWidget(NULL);
 			}
 		}
@@ -176,6 +177,7 @@ bool ruiOverlayManager::InsertMouseMotionEvent(const rPoint& position){
 
 			if (selectedWidget){
 				selectedWidget->Trigger(ruiEVT_MOUSE_ENTER, event);
+				selectedWidget->UiState("hover");
 				overlay->ActivateWidget(selectedWidget);
 			}
 		}

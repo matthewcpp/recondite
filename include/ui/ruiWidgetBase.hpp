@@ -32,6 +32,9 @@ public:
 
 	virtual rString GetWidgetType() const = 0;
 
+	rString UiState() const;
+	void UiState(const rString& state);
+
 protected: //style related utility methods
 	rFont* DetermineFont();
 
@@ -42,11 +45,13 @@ protected:
 private:
 	int GetClassIndex(const rString& className) const;
 	void RecomputeStyle();
+	void ExtendStyle(const rString& selector);
 	
 private:
 	ruiStyle m_style;
 	ruiStyle m_computedStyle;
 	rArrayString m_classList;
+	rString m_uiState;
 
 	rSize m_size;
 

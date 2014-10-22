@@ -33,25 +33,28 @@ void ruiWidgetBase::GetClasses(rArrayString& classlist){
 	classlist = m_classList;
 }
 
+void ruiWidgetBase::ExtendStyle(const rString& selector){
+	ruiStyle* style = m_engine->ui->Styles()->GetStyle(selector);
+	if (style) m_computedStyle.Extend(*style);
+}
+
 void ruiWidgetBase::RecomputeStyle(){
 	m_computedStyle.Clear();
 	ruiStyleManager* styleManager = m_engine->ui->Styles();
 	ruiStyle* style = NULL;
 
 	//start with any base level styles for this widget type
-	style = styleManager->GetStyle(GetWidgetType());
-	if (style) m_computedStyle.Extend(*style);
+	ExtendStyle(GetWidgetType());
+	ExtendStyle(GetWidgetType() + ":" + m_uiState);
 
 	//next we apply stles for each class assigned to this widget
 	for (size_t i = 0; i < m_classList.size(); i++){
-		style = styleManager->GetStyle("." + m_classList[i]);
-
-		if (style) m_computedStyle.Extend(*style);
+		ExtendStyle("." + m_classList[i]);
+		ExtendStyle("." + m_classList[i] + ":" + m_uiState);
 	}
 
 	//apply a style for this particualr widget instance
-	style = styleManager->GetStyle("#" + Id());
-	if (style) m_computedStyle.Extend(*style);
+	ExtendStyle("#" + Id());
 
 	//finally apply local style override
 	m_computedStyle.Extend(m_style);
@@ -108,4 +111,15 @@ rFont* ruiWidgetBase::DetermineFont(){
 	rString fontName = "consolas";
 	style->GetString("font", fontName);
 	return m_engine->content->GetFontAsset(fontName);
+}
+
+rString ruiWidgetBase::UiState() const{
+	return m_uiState;
+}
+
+void ruiWidgetBase::UiState(const rString& state){
+	if (state != m_uiState){
+		m_uiState = state;
+		m_style.MarkChanged();
+	}
 }

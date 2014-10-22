@@ -18,7 +18,9 @@ const char pointVertexShader[] =
 "}";
 
 const char coloredFragmentShader[] = 
-"precision mediump float;"
+"#ifdef GLES2\n"
+"precision mediump float;\n"
+"#endif\n"
 "uniform vec4 fragColor;"
 "void main() {"
 "  gl_FragColor = fragColor;"
@@ -51,7 +53,9 @@ const char modelVertexShader[] =
 
 const char texturedFragmentShader[] =
 
-"precision mediump float;"
+"#ifdef GLES2\n"
+"precision mediump float;\n"
+"#endif\n"
 "varying vec2 v_texCoord;"
 "uniform vec4 fragColor;"
 "uniform sampler2D s_texture;"

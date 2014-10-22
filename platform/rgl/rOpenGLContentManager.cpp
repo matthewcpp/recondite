@@ -8,6 +8,7 @@ rOpenGLContentManager::rOpenGLContentManager(rGraphicsDevice* graphicsDevice)
 
 void rOpenGLContentManager::InitDefaultAssets(){
 	#include "rOpenGLDefaultShaders.inl"
+	rLog::Info("Loading OpengGL Shaders");
 
     rShaderData shaderData;
 

@@ -28,7 +28,8 @@ public:
 	
 	template<typename T>
 	bool GetAttribute(const rString& name, T& value) const;
-	
+
+	bool HasAttribute(const rString& name) const;
 	bool RemoveAttribute(const rString& name);
 	
 	rXMLElement* CreateChild(const rString& name);

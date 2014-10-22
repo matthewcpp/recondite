@@ -10,10 +10,13 @@
 
 #include "xml/rXMLDocument.hpp"
 
+#include "stream/rIStringStream.hpp"
+
 #include "ui/ruiOverlay.hpp"
 #include "ui/ruiAbsoluteLayout.hpp"
 #include "ui/ruiText.hpp"
 #include "ui/ruiPicker.hpp"
+#include "ui/ruiCheckbox.hpp"
 
 class RECONDITE_API ruiOverlayLoader{
 public:
@@ -36,8 +39,9 @@ private:
 	void ParseAbsoluteLayoutItem(rXMLElement* element);
 	void ParseTextItem(rXMLElement* element);
 	void ParsePickerItem(rXMLElement* element);
+	void ParseCheckboxItem(rXMLElement* element);
 
-
+	void ParseClassList(rXMLElement* element, ruiWidget* widget);
 	
 private:
 	rEngine* m_engine;

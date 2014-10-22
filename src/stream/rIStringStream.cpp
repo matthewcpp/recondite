@@ -75,6 +75,16 @@ rIStream& rIStringStream::operator >> (float& f){
 	return *this;
 }
 
+rIStream& rIStringStream::operator >> (rString& str){
+	std::string s;
+	m_stream >> s;
+
+	if (s.length() > 0)
+		str.assign(s.c_str(), s.length());
+
+	return *this;
+}
+
 rIStringStream::operator bool() const{
 	return IsOk();
 }

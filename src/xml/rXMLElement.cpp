@@ -73,6 +73,10 @@ rXMLElement* rXMLElement::GetChild(size_t index) const{
 	return mChildren[index];
 }
 
+bool rXMLElement::HasAttribute(const rString& name) const{
+	return mAttributes.HasAttribute(name);
+}
+
 rXMLElement* rXMLElement::GetFirstChildNamed(const rString& name) const{
 	for (size_t i= 0; i < mChildren.size(); i++){
 		if (mChildren[i]->mName == name){

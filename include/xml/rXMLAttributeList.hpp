@@ -22,6 +22,7 @@ public:
 	
 	size_t RemoveAttribute(const rString& attributeName);
 	void AttributeNames(rArrayString& arr) const;
+	bool HasAttribute(const rString& name) const;
 	
 	size_t NumAttributes() const;
 	void Clear();

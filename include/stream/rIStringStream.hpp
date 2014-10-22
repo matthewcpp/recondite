@@ -30,6 +30,7 @@ public:
 	virtual rIStream& operator >> (int& i);
 	virtual rIStream& operator >> (unsigned int& i);
 	virtual rIStream& operator >> (float& f);
+	virtual rIStream& operator >> (rString& str);
 
 	virtual operator bool() const;
 

@@ -15,6 +15,7 @@ void ruiOverlayLoader::InitParseItemMap(){
 	s_parseItemMap["absolutelayout"] = &ruiOverlayLoader::ParseAbsoluteLayoutItem;
 	s_parseItemMap["text"] = &ruiOverlayLoader::ParseTextItem;
 	s_parseItemMap["picker"] = &ruiOverlayLoader::ParsePickerItem;
+	s_parseItemMap["checkbox"] = &ruiOverlayLoader::ParseCheckboxItem;
 }
 
 void ruiOverlayLoader::Reset(){
@@ -104,6 +105,8 @@ void ruiOverlayLoader::ParseTextItem(rXMLElement* element){
 	element->GetAttribute<rString>("id", id);
 
 	ruiText* text = new ruiText(element->Text(), id, m_engine);
+	ParseClassList(element, text);
+
 	m_layoutStack.back()->AddItem(text);
 	m_currentOverlay->AddWidget(text);
 }
@@ -120,6 +123,40 @@ void ruiOverlayLoader::ParsePickerItem(rXMLElement* element){
 	}
 
 	ruiPicker* picker = new ruiPicker(options, id, m_engine);
+	ParseClassList(element, picker);
+
 	m_layoutStack.back()->AddItem(picker);
 	m_currentOverlay->AddWidget(picker);
+}
+
+void ruiOverlayLoader::ParseCheckboxItem(rXMLElement* element){
+	rString id = m_currentOverlay->GetDefaultId();
+	element->GetAttribute<rString>("id", id);
+
+	ruiCheckbox* checkbox = new ruiCheckbox(id, m_engine);
+
+	rString checked;
+	if (element->GetAttribute<rString>("checked", checked))
+		checkbox->SetChecked(checked == "checked");
+
+	ParseClassList(element, checkbox);
+
+	m_layoutStack.back()->AddItem(checkbox);
+	m_currentOverlay->AddWidget(checkbox);
+}
+
+void ruiOverlayLoader::ParseClassList(rXMLElement* element, ruiWidget* widget){
+	rString classList;
+	if (element->GetAttribute<rString>("class", classList)){
+		rIStringStream stream(classList);
+		rString currentClass;
+
+		while (stream){
+			currentClass.clear();
+			stream >> currentClass;
+
+			if (currentClass.length())
+				widget->AddClass(currentClass);
+		}
+	}
 }

@@ -78,6 +78,7 @@ void ruiStylesheetLoader::InitStylePropertyTypes(){
 
 	s_stylePropertyTypes["color"] = rPROPERTY_TYPE_COLOR;
 	s_stylePropertyTypes["background-color"] = rPROPERTY_TYPE_COLOR;
+	s_stylePropertyTypes["border-color"] = rPROPERTY_TYPE_COLOR;
 
 	s_stylePropertyTypes["font"] = rPROPERTY_TYPE_STRING;
 }

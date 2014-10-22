@@ -22,3 +22,7 @@ void rXMLAttributeList::Clear(){
 size_t rXMLAttributeList::RemoveAttribute(const rString& attributeName){
 	return m_attributes.erase(attributeName);
 }
+
+bool rXMLAttributeList::HasAttribute(const rString& name) const{
+	return m_attributes.count(name) > 0;
+}

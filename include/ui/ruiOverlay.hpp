@@ -35,6 +35,8 @@ public:
 	ruiLayout* Layout() const;
 	void SetLayout(ruiLayout* layout);
 
+	void UpdateLayout(bool force = false);
+
 	rString GetDefaultId () const;
 protected:
 	typedef std::vector<ruiWidget*> rWidgetVector;

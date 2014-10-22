@@ -23,6 +23,10 @@ void ruiOverlay::Update(rEngine& engine){
 	for (size_t i = 0; i < m_widgets.size(); i++)
 		m_widgets[i]->Update(engine);
 
+	UpdateLayout();
+}
+
+void ruiOverlay::UpdateLayout(bool force){
 	if (m_layout)
 		m_layout->Layout(m_viewport->GetScreenRect());
 }

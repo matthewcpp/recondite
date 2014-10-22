@@ -55,6 +55,7 @@ void ruiWidgetBase::RecomputeStyle(){
 
 	//apply a style for this particualr widget instance
 	ExtendStyle("#" + Id());
+	ExtendStyle("#" + Id() + ":" + m_uiState);
 
 	//finally apply local style override
 	m_computedStyle.Extend(m_style);

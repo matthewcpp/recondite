@@ -22,6 +22,7 @@ ruiOverlay* ruiOverlayManager::CreateOverlay(const rString& filePath, rViewport*
 
 	if (overlay){
 		AddOverlayToViewport(overlay, viewport);
+		overlay->UpdateLayout(true);
 		return overlay;
 	}
 	else {
@@ -142,6 +143,7 @@ bool ruiOverlayManager::ProcessMouseDown(rMouseButton button, const rPoint& posi
 
 		if (activeWidget){
 			activeWidget->Trigger(ruiEVT_MOUSE_DOWN, event);
+			activeWidget->UiState("active");
 		}
 	}
 
@@ -166,7 +168,7 @@ bool ruiOverlayManager::InsertMouseMotionEvent(const rPoint& position){
 			if (boundingBox.ContainsPoint(position)){
 				activeWidget->Trigger(ruiEVT_MOUSE_MOTION, event);
 			}
-			else{
+			else if (activeWidget->UiState() == "hover"){
 				activeWidget->Trigger(ruiEVT_MOUSE_LEAVE, event);
 				activeWidget->UiState("");
 				overlay->ActivateWidget(NULL);
@@ -200,7 +202,15 @@ bool ruiOverlayManager::ProcessMouseUp(rMouseButton button, const rPoint& positi
 		ruiWidget* activeWidget = overlay->ActiveWidget();
 
 		if (activeWidget){
+			rRect boundingBox = activeWidget->BoundingBox();
 			activeWidget->Trigger(ruiEVT_MOUSE_UP, event);
+
+			if (boundingBox.ContainsPoint(position))
+				activeWidget->UiState("hover");
+			else{
+				activeWidget->UiState("");
+				overlay->ActivateWidget(NULL);
+			}
 		}
 	}
 

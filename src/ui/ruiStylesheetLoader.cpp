@@ -1,10 +1,12 @@
 #include "ui/ruiStylesheetLoader.hpp"
 
+ruiStylesheetLoader::ruiParseStyleMap ruiStylesheetLoader::s_parseStyleMap;
+
 ruiStylesheetLoader::ruiStylesheetLoader(){
 	m_styleMap = NULL;
 	m_currentStyle = NULL;
 
-	InitStylePropertyTypes();
+	InitParseStyleMap();
 }
 
 bool ruiStylesheetLoader::LoadStylesheet(rIStream& stream, ruiStyleMap& styleMap){
@@ -29,34 +31,33 @@ void ruiStylesheetLoader::StartStyle(const rString& selector){
 	m_styleMap->insert(ruiStyleMap::value_type(selector, m_currentStyle));
 }
 
-void ruiStylesheetLoader::ParseProperty(const rString& name, const rString& value){
-	if (s_stylePropertyTypes.count(name)){
-		rPropertyType propertyType = s_stylePropertyTypes[name];
+ruiStylesheetLoader::ruiParseStyleMethod ruiStylesheetLoader::GetParseStyleMethod(const rString& name){
+	rString propertyName = name;
 
-		switch (propertyType){
-			case rPROPERTY_TYPE_INT:
-				LoadIntProperty(name, value);
-				break;
+	for (size_t i = 0; i < propertyName.size(); i++)
+		propertyName[i] = tolower(propertyName[i]);
 
-			case rPROPERTY_TYPE_COLOR:
-				LoadColorProperty(name, value);
-				break;
-
-			case rPROPERTY_TYPE_STRING:
-				LoadStringProperty(name, value);
-				break;
-		};
-	}
+	if (s_parseStyleMap.count(propertyName))
+		return s_parseStyleMap[propertyName];
+	else
+		return NULL;
 }
 
-void ruiStylesheetLoader::LoadIntProperty(const rString& name, const rString& value){
+void ruiStylesheetLoader::ParseProperty(const rString& name, const rString& value){
+	ruiParseStyleMethod method = GetParseStyleMethod(name);
+
+	if (method)
+		(*this.*method)(name, value);
+}
+
+void ruiStylesheetLoader::ParseIntProperty(const rString& name, const rString& value){
 	int intVal = 0;
 
 	if (rString::ToInt(value, intVal))
 		m_currentStyle->SetInt(name, intVal);
 }
 
-void ruiStylesheetLoader::LoadColorProperty(const rString& name, const rString& value){
+void ruiStylesheetLoader::ParseColorProperty(const rString& name, const rString& value){
 	int r,g,b,a;
 
 	if (sscanf(value.c_str(), "%i %i %i %i", &r, &g, &b, &a) == 4){
@@ -64,31 +65,30 @@ void ruiStylesheetLoader::LoadColorProperty(const rString& name, const rString& 
 	}
 }
 
-void ruiStylesheetLoader::LoadStringProperty(const rString& name, const rString& value){
+void ruiStylesheetLoader::ParseStringProperty(const rString& name, const rString& value){
 	m_currentStyle->SetString(name, value);
 }
 
-void ruiStylesheetLoader::InitStylePropertyTypes(){
-	if (s_stylePropertyTypes.size() >0)
+void ruiStylesheetLoader::InitParseStyleMap(){
+	if (s_parseStyleMap.size() >0)
 		return;
 
-	s_stylePropertyTypes["top"] = rPROPERTY_TYPE_INT;
-	s_stylePropertyTypes["bottom"] = rPROPERTY_TYPE_INT;
-	s_stylePropertyTypes["left"] = rPROPERTY_TYPE_INT;
-	s_stylePropertyTypes["right"] = rPROPERTY_TYPE_INT;
+	s_parseStyleMap["top"] = &ruiStylesheetLoader::ParseIntProperty;
+	s_parseStyleMap["bottom"] = &ruiStylesheetLoader::ParseIntProperty;
+	s_parseStyleMap["left"] = &ruiStylesheetLoader::ParseIntProperty;
+	s_parseStyleMap["right"] = &ruiStylesheetLoader::ParseIntProperty;
 
-	s_stylePropertyTypes["padding-top"] = rPROPERTY_TYPE_INT;
-	s_stylePropertyTypes["padding-bottom"] = rPROPERTY_TYPE_INT;
-	s_stylePropertyTypes["padding-left"] = rPROPERTY_TYPE_INT;
-	s_stylePropertyTypes["padding-right"] = rPROPERTY_TYPE_INT;
 
-	s_stylePropertyTypes["border-radius"] = rPROPERTY_TYPE_INT;
+	s_parseStyleMap["padding-top"] = &ruiStylesheetLoader::ParseIntProperty;
+	s_parseStyleMap["padding-bottom"] = &ruiStylesheetLoader::ParseIntProperty;
+	s_parseStyleMap["padding-left"] = &ruiStylesheetLoader::ParseIntProperty;
+	s_parseStyleMap["padding-right"] = &ruiStylesheetLoader::ParseIntProperty;
 
-	s_stylePropertyTypes["color"] = rPROPERTY_TYPE_COLOR;
-	s_stylePropertyTypes["background-color"] = rPROPERTY_TYPE_COLOR;
-	s_stylePropertyTypes["border-color"] = rPROPERTY_TYPE_COLOR;
+	s_parseStyleMap["border-radius"] = &ruiStylesheetLoader::ParseIntProperty;
 
-	s_stylePropertyTypes["font"] = rPROPERTY_TYPE_STRING;
+	s_parseStyleMap["color"] = &ruiStylesheetLoader::ParseColorProperty;
+	s_parseStyleMap["background-color"] = &ruiStylesheetLoader::ParseColorProperty;
+	s_parseStyleMap["border-color"] = &ruiStylesheetLoader::ParseColorProperty;
+
+	s_parseStyleMap["font"] = &ruiStylesheetLoader::ParseStringProperty;
 }
-
-ruiStylesheetLoader::rStylePropertyTypeMap ruiStylesheetLoader::s_stylePropertyTypes;

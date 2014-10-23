@@ -19,20 +19,23 @@ public:
 	virtual void ParseProperty(const rString& name, const rString& value);
 
 private:
-	void LoadIntProperty(const rString& name, const rString& value);
-	void LoadColorProperty(const rString& name, const rString& value);
-	void LoadStringProperty(const rString& name, const rString& value);
+	typedef void (ruiStylesheetLoader::*ruiParseStyleMethod)(const rString& name, const rString& value);
+	typedef std::map<rString, ruiParseStyleMethod> ruiParseStyleMap;
 
 private:
-	typedef std::map <rString, rPropertyType> rStylePropertyTypeMap;
+	ruiParseStyleMethod GetParseStyleMethod(const rString& name);
+
+	void ParseIntProperty(const rString& name, const rString& value);
+	void ParseColorProperty(const rString& name, const rString& value);
+	void ParseStringProperty(const rString& name, const rString& value);
 
 private:
 	ruiStyleMap* m_styleMap;
 	ruiStyle* m_currentStyle;
 
 private:
-	static void InitStylePropertyTypes();
-	static rStylePropertyTypeMap s_stylePropertyTypes;
+	static void InitParseStyleMap();
+	static ruiParseStyleMap s_parseStyleMap;
 };
 
 #endif

@@ -28,6 +28,15 @@ public:
 	virtual void Uninit(rEngine& engine);
 	virtual void LoadScene(const rString& sceneName, rEngine& engine);
 	virtual void DeleteActor(rActor3* actor);
+
+private:
+	void ReloadCSS();
+
+	void ReloadButtonClick(rEvent& event);
+
+private:
+	ruiOverlayManager* m_overlayManager;
+	rEngine* m_engine;
 };
 
 #endif

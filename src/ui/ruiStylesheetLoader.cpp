@@ -23,6 +23,7 @@ void ruiStylesheetLoader::StartStyle(const rString& selector){
 
 	if (it != m_styleMap->end()){
 		delete it->second;
+		m_styleMap->erase(it);
 	}
 
 	m_styleMap->insert(ruiStyleMap::value_type(selector, m_currentStyle));
@@ -75,6 +76,13 @@ void ruiStylesheetLoader::InitStylePropertyTypes(){
 	s_stylePropertyTypes["bottom"] = rPROPERTY_TYPE_INT;
 	s_stylePropertyTypes["left"] = rPROPERTY_TYPE_INT;
 	s_stylePropertyTypes["right"] = rPROPERTY_TYPE_INT;
+
+	s_stylePropertyTypes["padding-top"] = rPROPERTY_TYPE_INT;
+	s_stylePropertyTypes["padding-bottom"] = rPROPERTY_TYPE_INT;
+	s_stylePropertyTypes["padding-left"] = rPROPERTY_TYPE_INT;
+	s_stylePropertyTypes["padding-right"] = rPROPERTY_TYPE_INT;
+
+	s_stylePropertyTypes["border-radius"] = rPROPERTY_TYPE_INT;
 
 	s_stylePropertyTypes["color"] = rPROPERTY_TYPE_COLOR;
 	s_stylePropertyTypes["background-color"] = rPROPERTY_TYPE_COLOR;

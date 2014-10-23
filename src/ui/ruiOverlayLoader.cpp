@@ -16,6 +16,7 @@ void ruiOverlayLoader::InitParseItemMap(){
 	s_parseItemMap["text"] = &ruiOverlayLoader::ParseTextItem;
 	s_parseItemMap["picker"] = &ruiOverlayLoader::ParsePickerItem;
 	s_parseItemMap["checkbox"] = &ruiOverlayLoader::ParseCheckboxItem;
+	s_parseItemMap["button"] = &ruiOverlayLoader::ParseButtonItem;
 }
 
 void ruiOverlayLoader::Reset(){
@@ -143,6 +144,18 @@ void ruiOverlayLoader::ParseCheckboxItem(rXMLElement* element){
 
 	m_layoutStack.back()->AddItem(checkbox);
 	m_currentOverlay->AddWidget(checkbox);
+}
+
+void ruiOverlayLoader::ParseButtonItem(rXMLElement* element){
+	rString id = m_currentOverlay->GetDefaultId();
+	element->GetAttribute<rString>("id", id);
+
+	ruiButton* button = new ruiButton(element->Text(), id, m_engine);
+
+	ParseClassList(element, button);
+
+	m_layoutStack.back()->AddItem(button);
+	m_currentOverlay->AddWidget(button);
 }
 
 void ruiOverlayLoader::ParseClassList(rXMLElement* element, ruiWidget* widget){

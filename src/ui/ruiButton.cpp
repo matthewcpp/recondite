@@ -20,32 +20,31 @@ void ruiButton::SetText(const rString& text){
 
 void ruiButton::Draw(rEngine& engine){
 	ruiStyle* style = ComputedStyle();
+	int padding[4] = {5,5,5,5};
+	style->GetInt("padding-top", padding[0]);
+	style->GetInt("padding-right", padding[1]);
+
 	rRect box = BoundingBox();
 	
-	rColor color;
+	rColor color(200,200,200,255);
+	style->GetColor("background-color", color);
 
-	switch (m_state){
-		case rBUTTON_STATE_DOWN:
-			color.Set(150,150,150,255);
-			break;
-		case rBUTTON_STATE_UP:
-			color.Set(200,200,200,255);
-			break;
+	int borderRadius = 10;
+	style->GetInt("border-radius", borderRadius);
 
-		case rBUTTON_STATE_NONE:
-			color.Set(175,175,175,255);
-			break;
-	};
-	
-	engine.renderer->RenderRoundedRect(box, 10, color);
+	if (borderRadius > 0)
+		engine.renderer->RenderRoundedRect(box, borderRadius, color);
+	else
+		engine.renderer->RenderRect(box, color);
 	
 	rFont* font = DetermineFont();
 	
 	if (font){
-		rPoint center = box.Center();
-		rPoint textPos(center.x - (box.width / 2), center.y - (box.height / 2));
-		
-		engine.renderer->RenderString(m_text, font, textPos, rColor::Black);
+		color = rColor::Black;
+		style->GetColor("color", color);
+
+		rPoint textPos(m_position.x + padding[1], m_position.y + padding[0]);
+		engine.renderer->RenderString(m_text, font, textPos, color);
 	}
 	
 }
@@ -53,12 +52,23 @@ void ruiButton::Draw(rEngine& engine){
 rSize ruiButton::ComputeSize(){
 	ruiStyle* style = ComputedStyle();
 
+	int padding[4] = {5,5,5,5};
+	style->GetInt("padding-top", padding[0]);
+	style->GetInt("padding-right", padding[1]);
+	style->GetInt("padding-bottom", padding[2]);
+	style->GetInt("padding-left", padding[3]);
+
 	rFont* font = DetermineFont();
 
-	if (font)
-		return font->MeasureString(m_text);
-	else
-		return rSize(0,0);
+	rSize widgetSize(padding[1] + padding[3], padding[0] + padding[2]);
+
+	if (font){
+		rSize fontSize = font->MeasureString(m_text);
+		widgetSize.x += fontSize.x;
+		widgetSize.y += fontSize.y;
+	}
+
+	return widgetSize;
 }
 
 bool ruiButton::OnPointerDown(const rPoint& position){

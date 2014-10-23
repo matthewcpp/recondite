@@ -40,6 +40,7 @@ void ruiWidgetBase::ExtendStyle(const rString& selector){
 
 void ruiWidgetBase::RecomputeStyle(){
 	m_computedStyle.Clear();
+
 	ruiStyleManager* styleManager = m_engine->ui->Styles();
 	ruiStyle* style = NULL;
 
@@ -47,7 +48,7 @@ void ruiWidgetBase::RecomputeStyle(){
 	ExtendStyle(GetWidgetType());
 	ExtendStyle(GetWidgetType() + ":" + m_uiState);
 
-	//next we apply stles for each class assigned to this widget
+	//next apply styles for each class assigned to this widget
 	for (size_t i = 0; i < m_classList.size(); i++){
 		ExtendStyle("." + m_classList[i]);
 		ExtendStyle("." + m_classList[i] + ":" + m_uiState);
@@ -76,7 +77,7 @@ void ruiWidgetBase::Update(rEngine& engine){
 }
 
 int ruiWidgetBase::GetClassIndex(const rString& className) const{
-	for (int i = 0; i < m_classList.size(); i++){
+	for (size_t i = 0; i < m_classList.size(); i++){
 		if (m_classList[i] == className)
 			return i;
 	}

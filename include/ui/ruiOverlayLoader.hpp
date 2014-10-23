@@ -17,6 +17,7 @@
 #include "ui/ruiText.hpp"
 #include "ui/ruiPicker.hpp"
 #include "ui/ruiCheckbox.hpp"
+#include "ui/ruiButton.hpp"
 
 class RECONDITE_API ruiOverlayLoader{
 public:
@@ -40,6 +41,7 @@ private:
 	void ParseTextItem(rXMLElement* element);
 	void ParsePickerItem(rXMLElement* element);
 	void ParseCheckboxItem(rXMLElement* element);
+	void ParseButtonItem(rXMLElement* element);
 
 	void ParseClassList(rXMLElement* element, ruiWidget* widget);
 	

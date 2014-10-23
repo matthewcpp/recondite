@@ -80,34 +80,28 @@ void BasicSceneModule::Init(rEngine& engine){
 #include "ui/ruiPicker.hpp"
 #include "ui/ruiAbsoluteLayout.hpp"
 
+void BasicSceneModule::ReloadCSS(){
+	rLog::Info("Reloading CSS");
+
+	rAssetStream stream = m_engine->content->LoadTextFromPath("content/basicscene/ui/basicscene.rss");
+	
+	if (stream)
+		m_engine->ui->Styles()->ParseStylesheet(*stream);
+}
+
+void BasicSceneModule::ReloadButtonClick(rEvent& event){
+	ReloadCSS();
+}
+
 void BasicSceneModule::InitUI(ruiOverlayManager& manager, rEngine& engine){
-	manager.CreateOverlay("content/basicscene/ui/basicscene.rtml", engine.application->GetViewport("main"));
+	m_overlayManager = &manager;
+	m_engine = &engine;
 
-	/*
-	rAssetStream cssFile = engine.content->LoadTextFromPath("content/basicscene/ui/basicscene.rss");
-	
-	if (cssFile)
-		engine.ui->Styles()->ParseStylesheet(*cssFile);
+	ruiOverlay* overlay = m_overlayManager->CreateOverlay("content/basicscene/ui/basicscene.rtml", m_engine->application->GetViewport("main"));
 
-	ruiOverlay* overlay = manager.CreateOverlay(engine.application->GetViewport("main"));
-	ruiAbsoluteLayout* absoluteLayout = new ruiAbsoluteLayout();
-	overlay->SetLayout(absoluteLayout);
-	m_textCameraPos = new ruiText("camera-text", &engine);
-	absoluteLayout->AddItem(m_textCameraPos);
-	overlay->AddWidget(m_textCameraPos);
 
-	ruiText* txt = new ruiText("The time has come for all good men to come to the aid of their country\nthe greatest generation\n1945","greatest_text", &engine);
-	absoluteLayout->AddItem(txt);
-	overlay->AddWidget(txt);
-	
-	ruiPicker* p = new ruiPicker("picker1", &engine);
-
-	p->AddOption("Test 1");
-	p->AddOption("THis option is pretty long...");
-	p->AddOption("Test 3");
-	absoluteLayout->AddItem(p);
-	overlay->AddWidget(p);
-	*/
+	ruiWidget* reloadButton = overlay->GetWidget("reload-button");
+	reloadButton->Bind(ruiEVENT_BUTTON_CLICK, this, &BasicSceneModule::ReloadButtonClick);
 }
 
 void BasicSceneModule::Uninit(rEngine& engine){

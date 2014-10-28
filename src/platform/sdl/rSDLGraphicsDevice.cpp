@@ -1,4 +1,4 @@
-#include "rSDLGraphicsDevice.hpp"
+#include "sdl/rSDLGraphicsDevice.hpp"
 
 bool rSDLGraphicsDevice::Init(){
     GLenum err = glewInit();

@@ -99,7 +99,6 @@ void BasicSceneModule::InitUI(ruiOverlayManager& manager, rEngine& engine){
 
 	ruiOverlay* overlay = m_overlayManager->CreateOverlay("content/basicscene/ui/basicscene.rtml", m_engine->application->GetViewport("main"));
 
-
 	ruiWidget* reloadButton = overlay->GetWidget("reload-button");
 	reloadButton->Bind(ruiEVENT_BUTTON_CLICK, this, &BasicSceneModule::ReloadButtonClick);
 }

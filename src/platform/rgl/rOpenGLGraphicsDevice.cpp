@@ -1,4 +1,4 @@
-#include "rOpenGLGraphicsDevice.hpp"
+#include "rgl/rOpenGLGraphicsDevice.hpp"
 
 rOpenGLGraphicsDevice::rOpenGLGraphicsDevice()
 {

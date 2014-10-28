@@ -1,4 +1,4 @@
-#include "rSDLInputManager.hpp"
+#include "sdl/rSDLInputManager.hpp"
 
 rSDLInputManager::rSDLInputManager()
 {

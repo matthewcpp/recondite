@@ -1,4 +1,4 @@
-#include "rOpenGLContentManager.hpp"
+#include "rgl/rOpenGLContentManager.hpp"
 
 rOpenGLContentManager::rOpenGLContentManager(rGraphicsDevice* graphicsDevice)
 	:rContentManager(graphicsDevice)
@@ -7,7 +7,7 @@ rOpenGLContentManager::rOpenGLContentManager(rGraphicsDevice* graphicsDevice)
 }
 
 void rOpenGLContentManager::InitDefaultAssets(){
-	#include "rOpenGLDefaultShaders.inl"
+	#include "rgl/rOpenGLDefaultShaders.inl"
 	rLog::Info("Loading OpengGL Shaders");
 
     rShaderData shaderData;

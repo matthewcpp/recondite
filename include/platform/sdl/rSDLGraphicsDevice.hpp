@@ -5,7 +5,7 @@
 
 #include "SDL.h"
 
-#include "rOpenGLGraphicsDevice.hpp"
+#include "rgl/rOpenGLGraphicsDevice.hpp"
 
 class rSDLGraphicsDevice : public rOpenGLGraphicsDevice{
 public:

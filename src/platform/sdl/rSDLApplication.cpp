@@ -1,13 +1,13 @@
-#include "rSDLApplication.hpp"
+#include "sdl/rSDLApplication.hpp"
 
-rSDLApplication::rSDLApplication()
-	:rApplication()
+rApplication::rApplication()
+	:rApplicationBase()
 {}
 
-rSDLApplication::~rSDLApplication(){
+rApplication::~rApplication(){
 }
 
-bool rSDLApplication::Init(){
+bool rApplication::Init(){
 	int sdlInit = SDL_Init(SDL_INIT_VIDEO);
 
 	if (sdlInit < 0){
@@ -30,19 +30,19 @@ bool rSDLApplication::Init(){
 	 return true;
 }
 
-void rSDLApplication::Uninit(){
-	rApplication::Uninit();
+void rApplication::Uninit(){
+	rApplicationBase::Uninit();
 
 	SDL_Quit();
 }
 
-void rSDLApplication::ProcessEvent(SDL_Event& event){
+void rApplication::ProcessEvent(SDL_Event& event){
 	if (event.type == SDL_QUIT)
 		m_isRunning = false;
 
 	m_inputManager->ProcessInputEvent(event);
 }
 
-unsigned long rSDLApplication::GetTimeMiliseconds() const{
+unsigned long rApplication::GetTimeMiliseconds() const{
 	return SDL_GetTicks();
 }

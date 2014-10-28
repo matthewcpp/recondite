@@ -3,9 +3,11 @@
 
 #include "SDL.h"
 
-#include "rApplication.hpp"
+#include "rBuild.hpp"
+
+#include "rApplicationBase.hpp"
 #include "rSDLGraphicsDevice.hpp"
-#include "rOpenGLContentManager.hpp"
+#include "rgl/rOpenGLContentManager.hpp"
 #include "rSDLInputManager.hpp"
 
 #include "ui/ruiOverlayManager.hpp"
@@ -13,10 +15,12 @@
 #include "rViewport.hpp"
 #include "rCamera.hpp"
 
-class rSDLApplication : public rApplication{
+#include "sdl/rSDLMain.hpp"
+
+class RECONDITE_API rApplication : public rApplicationBase{
 public:
-	rSDLApplication();
-	~rSDLApplication();
+	rApplication();
+	~rApplication();
 
 public:
 	virtual bool Init();

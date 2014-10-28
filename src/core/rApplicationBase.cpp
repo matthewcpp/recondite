@@ -1,12 +1,13 @@
-#include "rApplication.hpp"
+#include "rApplicationBase.hpp"
 
-rApplication::rApplication(){
+rApplicationBase::rApplicationBase(){
+	m_module = NULL;
 	m_isRunning = false;
 	m_frameCount = 0;
 	m_targetFPS = 30;
 }
 
-void rApplication::Update(){
+void rApplicationBase::Update(){
 	m_module->BeforeUpdateScene(m_engine);
 		m_scene->Update(m_engine);
 	m_module->AfterUpdateScene(m_engine);
@@ -14,13 +15,7 @@ void rApplication::Update(){
 	m_overlayManager->Update(m_engine);
 }
 
-bool rApplication::LoadModule(const char* path){
-	m_module = m_moduleLoader.LoadModule(path);
-
-	return m_module != NULL;
-}
-
-void rApplication::Draw(){
+void rApplicationBase::Draw(){
 	m_graphicsDevice->Clear();
 
 	rViewportMap::iterator end = m_viewports.end();
@@ -58,14 +53,14 @@ void rApplication::Draw(){
 	m_frameCount++;
 }
 
-rApplication::~rApplication(){
+rApplicationBase::~rApplicationBase(){
 }
 
-bool rApplication::IsRunning() const{
+bool rApplicationBase::IsRunning() const{
 	return m_isRunning;
 }
 
-void rApplication::Tick(){
+void rApplicationBase::Tick(){
 	unsigned long time = GetTimeMiliseconds();
 
 	unsigned long delta = time - m_engine.time.LastUpdateTime();
@@ -78,15 +73,15 @@ void rApplication::Tick(){
 	}
 }
 
-size_t rApplication::TargetFPS() const{
+size_t rApplicationBase::TargetFPS() const{
 	return m_targetFPS;
 }
 
-void rApplication::SetTargetFPS(unsigned int targetFPS){
+void rApplicationBase::SetTargetFPS(unsigned int targetFPS){
 	m_targetFPS = targetFPS;
 }
 
-void rApplication::InitEngine(rGraphicsDevice* graphics, rContentManager* content, rInputManager* input){
+void rApplicationBase::InitEngine(rGraphicsDevice* graphics, rContentManager* content, rInputManager* input){
 	m_graphicsDevice = graphics; 
 
 	m_overlayManager = new ruiOverlayManager(&m_engine);
@@ -110,21 +105,23 @@ void rApplication::InitEngine(rGraphicsDevice* graphics, rContentManager* conten
 	m_engine.renderer->CreateRequiredMaterials();
 }
 
-void rApplication::InitModule(){
+void rApplicationBase::InitModule(){
+	m_module = CreateModule();
+	
 	m_module->Init(m_engine);
 	m_module->InitUI(*m_overlayManager, m_engine);
 	m_module->LoadScene("Default", m_engine);
 }
 
-void rApplication::SetDisplaySize(int width, int height){
+void rApplicationBase::SetDisplaySize(int width, int height){
 	m_displaySize.Set(width, height);
 }
 
-rSize rApplication::DisplaySize() const{
+rSize rApplicationBase::DisplaySize() const{
 	return m_displaySize;
 }
 
-rViewport* rApplication::CreateViewport(const rString& name){
+rViewport* rApplicationBase::CreateViewport(const rString& name){
 	if (m_viewports.count(name)){
 		return NULL;
 	}
@@ -135,7 +132,7 @@ rViewport* rApplication::CreateViewport(const rString& name){
 	}
 }
 
-rViewport* rApplication::GetViewport(const rString& name) const{
+rViewport* rApplicationBase::GetViewport(const rString& name) const{
 	rViewportMap::const_iterator it = m_viewports.find(name);
 
 	if (it != m_viewports.end()){
@@ -146,7 +143,7 @@ rViewport* rApplication::GetViewport(const rString& name) const{
 	}
 }
 
-void rApplication::DeleteViewport(const rString& name){
+void rApplicationBase::DeleteViewport(const rString& name){
 	rViewportMap::iterator it = m_viewports.find(name);
 
 	if (it != m_viewports.end()){
@@ -155,19 +152,19 @@ void rApplication::DeleteViewport(const rString& name){
 	}
 }
 
-size_t rApplication::NumViewports() const{
+size_t rApplicationBase::NumViewports() const{
 	return m_viewports.size();
 }
 
-size_t rApplication::FrameCount() const{
+size_t rApplicationBase::FrameCount() const{
 	return m_frameCount;
 }
 
-bool rApplication::Init(){
+bool rApplicationBase::Init(){
 	return true;
 }
 
-void rApplication::Uninit(){
+void rApplicationBase::Uninit(){
 	m_module->Uninit(m_engine);
 	rLog::Shutdown();
 }

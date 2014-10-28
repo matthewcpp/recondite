@@ -8,25 +8,23 @@
 #include "rGraphicsDevice.hpp"
 #include "rInputManager.hpp"
 #include "rScene.hpp"
-#include "rModuleLoader.hpp"
 
 #include "interface/riApplication.hpp"
 
-class RECONDITE_API rApplication : public riApplication{
+class RECONDITE_API rApplicationBase : public riApplication{
 public:
 	virtual unsigned long GetTimeMiliseconds() const = 0;
 	virtual void Update();
 	virtual void Draw();
 
 public:
-	rApplication();
-	virtual ~rApplication();
+	rApplicationBase();
+	virtual ~rApplicationBase();
 
 	virtual bool Init();
 	virtual void Uninit();
 
 	bool IsRunning() const;
-	bool LoadModule(const char* path);
 
 	virtual void Tick();
 
@@ -37,6 +35,9 @@ public:
 	virtual rSize DisplaySize() const;
 
 	virtual size_t FrameCount() const;
+
+public:
+	virtual rModule* CreateModule() = 0;
 
 public:
 
@@ -63,7 +64,6 @@ protected:
 
 	rGraphicsDevice* m_graphicsDevice;
 	ruiOverlayManager* m_overlayManager;
-	rModuleLoader m_moduleLoader;
 
 	rSize m_displaySize;
 

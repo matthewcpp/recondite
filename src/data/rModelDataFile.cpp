@@ -69,14 +69,14 @@ rContentError rModelDataWriter::WriteDependencies(const rString& dir, const rMod
 }
 
 rContentError rModelDataReader::LoadFromFile(const rString& path, rModelData& modelData){
-	std::ifstream file (path.c_str());
+	rIFileStream file (path.c_str());
 	rContentError error =  LoadFromStream(file, modelData);
 	modelData.SetPath(path);
 
 	return error;
 }
 
-rContentError rModelDataReader::LoadFromStream(std::istream& stream, rModelData& modelData){
+rContentError rModelDataReader::LoadFromStream(rIStream& stream, rModelData& modelData){
 	rAlignedBox3 boundingBox;
 	rXMLDocument document;
 

@@ -30,7 +30,7 @@ rXMLElement* rXMLDocument::CreateRoot(const rString& name){
 rXMLReaderError rXMLDocument::LoadFromFile(const rString& path){
 	Clear();
 	
-	std::ifstream stream(path.c_str());
+	rIFileStream stream(path);
 	
 	rXMLReaderError error = rXML_READER_NO_ERROR;
 	
@@ -39,11 +39,11 @@ rXMLReaderError rXMLDocument::LoadFromFile(const rString& path){
 	else
 		error = rXML_READER_FILE_NOT_FOUND;
 	
-	stream.close();
+	stream.Close();
 	return error;
 }
 
-rXMLReaderError rXMLDocument::LoadFromStream(std::istream& stream){
+rXMLReaderError rXMLDocument::LoadFromStream(rIStream& stream){
 	Clear();
 	
 	rXMLReaderError error = rXML_READER_NO_ERROR;

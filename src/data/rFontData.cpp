@@ -205,14 +205,14 @@ rContentError rFontData::WriteGlyphFile(const rString& path) const{
 }
 
 rContentError rFontData::LoadFontDataFromFile(const rString& path){
-	std::ifstream dataStream(path.c_str());
+	rIFileStream dataStream(path.c_str());
 	rContentError error =  LoadFontDataFromStream(dataStream);
 	m_path = path;
 
 	return error;
 }
 
-rContentError rFontData::ReadGlyphFile(std::istream& stream){
+rContentError rFontData::ReadGlyphFile(rIStream& stream){
 	rXMLDocument document;
 	rXMLReaderError error = document.LoadFromStream(stream);
 
@@ -305,7 +305,7 @@ rContentError rFontData::ParseGlyphs(rXMLDocument& document){
 }
 
 rContentError rFontData::LoadTextureFromFile(const rString& path){
-	std::ifstream file(path.c_str());
+	rIFileStream file(path.c_str());
 
 	if (file){
 		return LoadTextureFromStream(file);
@@ -315,14 +315,14 @@ rContentError rFontData::LoadTextureFromFile(const rString& path){
 	}
 }
 
-rContentError rFontData::LoadTextureFromStream(std::istream& stream){
+rContentError rFontData::LoadTextureFromStream(rIStream& stream){
 	rContentError error = m_textureData.LoadFromStream(stream);
 	m_textureGenerated = (error == rCONTENT_ERROR_NONE);
 
 	return error;
 }
 
-rContentError rFontData::LoadFontDataFromStream(std::istream& stream){
+rContentError rFontData::LoadFontDataFromStream(rIStream& stream){
 	Clear();
 	ReadGlyphFile(stream);
 	return rCONTENT_ERROR_NONE;

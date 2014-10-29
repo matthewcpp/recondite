@@ -12,6 +12,8 @@
 #include "rSize.hpp"
 #include "rColor.hpp"
 
+#include "stream/rIFileStream.hpp"
+
 enum rTexture2DCompressionType{
     rTexture2DCompressionNone = 0
 };
@@ -21,14 +23,14 @@ public:
     
     rTexture2DData();
     rTexture2DData(const rString& path);
-    rTexture2DData(std::istream& stream);
+	rTexture2DData(rIStream& stream);
     rTexture2DData(int width, int height, int bpp, unsigned char* data);
     ~rTexture2DData();
     
 public:
     
     rContentError LoadFromPath(const rString& path);
-    rContentError LoadFromStream(std::istream& stream);
+	rContentError LoadFromStream(rIStream& stream);
     
     rContentError WriteToPath(const rString& path) const;
     rContentError WriteToStream(std::ostream& stream) const;
@@ -67,8 +69,8 @@ public:
 
 private:
     
-    rContentError ReadFileHeader(std::istream& stream);
-    rContentError ReadNonCompressedData(std::istream& stream);
+	rContentError ReadFileHeader(rIStream& stream);
+	rContentError ReadNonCompressedData(rIStream& stream);
     
     rContentError WriteFileHeader(std::ostream& stream) const;
     rContentError WriteNonCompressedData(std::ostream& stream) const;

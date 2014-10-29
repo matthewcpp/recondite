@@ -10,7 +10,7 @@ rTexture2DData::rTexture2DData(const rString& path){
     LoadFromPath(path);
 }
 
-rTexture2DData::rTexture2DData(std::istream& stream){
+rTexture2DData::rTexture2DData(rIStream& stream){
     LoadFromStream(stream);
 }
 
@@ -35,7 +35,7 @@ void rTexture2DData::Clear(){
 rContentError rTexture2DData::LoadFromPath(const rString& path){
     Clear();
     
-    std::ifstream stream(path.c_str(), std::ios::binary);
+	rIFileStream stream(path);
     
     if (!stream)
 	m_error = rCONTENT_ERROR_FILE_NOT_FOUND;
@@ -44,12 +44,12 @@ rContentError rTexture2DData::LoadFromPath(const rString& path){
 
     SetPath(path);
     
-    stream.close();
+    stream.Close();
     
     return m_error;
 }
 
-rContentError rTexture2DData::LoadFromStream(std::istream& stream){
+rContentError rTexture2DData::LoadFromStream(rIStream& stream){
     Clear();
     
     if (stream){
@@ -62,22 +62,22 @@ rContentError rTexture2DData::LoadFromStream(std::istream& stream){
     return m_error;
 }
 
-rContentError rTexture2DData::ReadFileHeader(std::istream& stream){
+rContentError rTexture2DData::ReadFileHeader(rIStream& stream){
     int magic;
     
-    stream.read((char*)&magic, 4);
-    stream.read((char*)&m_size, 8);
-    stream.read((char*)&m_bpp, 4);
-    stream.read((char*)&m_compressionType, 4);
+    stream.Read((char*)&magic, 4);
+    stream.Read((char*)&m_size, 8);
+    stream.Read((char*)&m_bpp, 4);
+    stream.Read((char*)&m_compressionType, 4);
     
     return rCONTENT_ERROR_NONE;
 }
 
-rContentError rTexture2DData::ReadNonCompressedData(std::istream& stream){
+rContentError rTexture2DData::ReadNonCompressedData(rIStream& stream){
     int dataSize = m_size.x * m_size.y * m_bpp;
     m_data.resize(dataSize);
     
-    stream.read((char*)&m_data[0], dataSize);
+    stream.Read((char*)&m_data[0], dataSize);
     
     return rCONTENT_ERROR_NONE;
 }

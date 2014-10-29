@@ -9,6 +9,7 @@
 #include "rString.hpp"
 
 #include "xml/rXMLDocument.hpp"
+#include "stream/rIFileStream.hpp"
 
 struct RECONDITE_API rMaterialParameterData{
 	rMaterialParameterData(){}
@@ -30,12 +31,12 @@ class RECONDITE_API rMaterialData{
 public:
 	rMaterialData();
 	rMaterialData(const rString& path);
-	rMaterialData(std::istream& stream);
+	rMaterialData(rIStream& stream);
 	rMaterialData(const rString& shaderName, const rString& shaderPath, const rMaterialParameterDataMap& parameters);
 	~rMaterialData();
 	
 	rContentError LoadFromPath(const rString& path);
-	rContentError LoadFromStream(std::istream& stream);
+	rContentError LoadFromStream(rIStream& stream);
 	
 	rContentError WriteToPath(const rString& path);
 	rContentError WriteToStream(std::ostream& stream);

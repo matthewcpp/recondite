@@ -6,6 +6,8 @@
 #include <stack>
 
 #include "rTypes.hpp"
+#include "rString.hpp"
+#include "stream/rIFileStream.hpp"
 
 #include "xml/rXMLReaderDelegate.hpp"
 #include "xml/rXMLAttributeList.hpp"
@@ -80,8 +82,8 @@ class rXMLReader {
 public:
     rXMLReader(rXMLReaderDelegate* _delegate = NULL);
 
-	rXMLReaderError ParseFile(std::string fileName);
-    rXMLReaderError ParseStream(std::istream* stream);
+	rXMLReaderError ParseFile(const rString& fileName);
+	rXMLReaderError ParseStream(rIStream* stream);
 
     rXMLReaderError Error();
     unsigned int LineNumber();
@@ -92,13 +94,13 @@ public:
 
 private:
 
-    void Parse(std::istream* stream);
+	void Parse(rIStream* stream);
     void Clear();
 
 private:
 
     void LookForTag(char c);
-    void ParseTagType(char c,std::istream* stream);
+	void ParseTagType(char c, rIStream* stream);
     void ParseTagName(char c);
     void ParseElementValue(char c);
 
@@ -121,7 +123,7 @@ private:
     void ParseCDATAValue(char c);
 
     void Uncleanse(rString& text);
-    char NormalizeNewline(char c,std::istream* stream);
+	char NormalizeNewline(char c, rIStream* stream);
 
 private:
     void SetError(rXMLReaderError e);

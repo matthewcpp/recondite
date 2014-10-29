@@ -1,8 +1,6 @@
 #ifndef R_ASSETMANIFESTDATAFILE_HPP
 #define R_ASSETMANIFESTDATAFILE_HPP
 
-#include <fstream>
-
 #include "rBuild.hpp"
 #include "rString.hpp"
 
@@ -10,14 +8,15 @@
 #include "xml/rXMLElement.hpp"
 
 #include "data/rAssetManifestData.hpp"
+#include "stream/rIFileStream.hpp"
 
 class RECONDITE_API rAssetManifestDataReader{
 public:
 
 	rContentError ReadFromFile(const rString& path, rAssetManifestData& assetManifest);
-	rContentError ReadFromStream(std::istream& stream, rAssetManifestData& assetManifest);
+	rContentError ReadFromStream(rIStream& stream, rAssetManifestData& assetManifest);
 
-	rContentError ReadAssets(std::istream& stream, rAssetManifestData& assetManifest);
+	rContentError ReadAssets(rIStream& stream, rAssetManifestData& assetManifest);
 private:
 
 };

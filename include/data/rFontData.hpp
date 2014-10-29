@@ -18,6 +18,8 @@
 
 #include "rPath.hpp"
 
+#include "stream/rIFileStream.hpp"
+
 struct RECONDITE_API rGlyphData : public rFontGlyph{
 	rGlyphData();
 	rGlyphData(int s, short w, short h, short t, short l, short a, unsigned char* d);
@@ -47,10 +49,10 @@ public:
 	rContentError WriteToFile(const rString& dir);
 
 	rContentError LoadFontDataFromFile(const rString& path);
-	rContentError LoadFontDataFromStream(std::istream& stream);
+	rContentError LoadFontDataFromStream(rIStream& stream);
 
 	rContentError LoadTextureFromFile(const rString& path);
-	rContentError LoadTextureFromStream(std::istream& stream);
+	rContentError LoadTextureFromStream(rIStream& stream);
 	
 
 	int Size() const;
@@ -89,7 +91,7 @@ private:
 
 	rContentError WriteGlyphFile(const rString& path) const;
 
-	rContentError ReadGlyphFile(std::istream& stream);
+	rContentError ReadGlyphFile(rIStream& stream);
 	rContentError ParseGlyphs(rXMLDocument& document);
 
 private:

@@ -1,7 +1,7 @@
 #include "data/rAssetManifestDataFile.hpp"
 
 rContentError rAssetManifestDataReader::ReadFromFile(const rString& path, rAssetManifestData& assetManifest){
-	std::ifstream file(path.c_str());
+	rIFileStream file(path.c_str());
 	rContentError error = rCONTENT_ERROR_NONE;
 
 	if (!file){
@@ -15,7 +15,7 @@ rContentError rAssetManifestDataReader::ReadFromFile(const rString& path, rAsset
 	return error;
 }
 
-rContentError rAssetManifestDataReader::ReadFromStream(std::istream& stream, rAssetManifestData& assetManifest){
+rContentError rAssetManifestDataReader::ReadFromStream(rIStream& stream, rAssetManifestData& assetManifest){
 	assetManifest.Clear();
 	rContentError error = rCONTENT_ERROR_NONE;
 
@@ -30,7 +30,7 @@ rContentError rAssetManifestDataReader::ReadFromStream(std::istream& stream, rAs
 
 }
 
-rContentError rAssetManifestDataReader::ReadAssets(std::istream& stream, rAssetManifestData& assetManifest){
+rContentError rAssetManifestDataReader::ReadAssets(rIStream& stream, rAssetManifestData& assetManifest){
 	rXMLDocument document;
 	int error = document.LoadFromStream(stream);
 

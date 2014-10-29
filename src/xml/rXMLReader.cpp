@@ -6,7 +6,7 @@ rXMLReader::rXMLReader(rXMLReaderDelegate* _delegate)
     Clear();
 }
 
-void rXMLReader::Parse(std::istream* stream){
+void rXMLReader::Parse(rIStream* stream){
 
 	if (!stream){
 		SetError(rXML_READER_ERROR_CANNOT_READ_STREAM);
@@ -16,10 +16,9 @@ void rXMLReader::Parse(std::istream* stream){
     if (delegate)
         delegate->OnBeginParseDocument();
 
-    char character;
+    char character = 0;
 
-    while (stream->good() && stream->peek()!=EOF){
-        character = stream->get();
+	while (stream->Get(character)){
 
         if (character == rXML_CARRIAGE_RETURN)
             character = NormalizeNewline(character, stream);
@@ -119,13 +118,13 @@ void rXMLReader::LookForTag(char c){
 }
 
 //fires when we start reading a tag <
-void rXMLReader::ParseTagType(char c,std::istream* stream){
+void rXMLReader::ParseTagType(char c, rIStream* stream){
     if (c == rXML_UNESCAPED_INDICATOR){
 
         //! indicates either a comment or CDATA..need to know which
-        if (stream->peek() == rXML_COMMENT_INDICATOR)
+        if (stream->Peek() == rXML_COMMENT_INDICATOR)
             state = rXML_READER_STATE_COMMENT_TAG;
-        else if (stream->peek() == rXML_CDATA_INDICATOR)
+        else if (stream->Peek() == rXML_CDATA_INDICATOR)
             state = rXML_READER_STATE_CDATA_TAG;
         else{ //invalid character here...error out
             SetError(rXML_READER_ERROR_INVALID_MARKUP);
@@ -440,10 +439,13 @@ bool rXMLReader::CharIsQuote(char c){
     return (c == rXML_QUOTE || c == rXML_APOS);
 }
 
-char rXMLReader::NormalizeNewline(char c,std::istream* stream){
+char rXMLReader::NormalizeNewline(char c, rIStream* stream){
     //handle windoez CR + LF
-    if (stream->peek() == rXML_LINE_FEED)
-        return stream->get();
+    if (stream->Peek() == rXML_LINE_FEED){
+		char ch = 0;
+        stream->Get(ch);
+		return ch;
+	}
     else //handle case where only carriage return is used
         return rXML_LINE_FEED;
 }
@@ -466,23 +468,24 @@ void rXMLReader::SetDelegate(rXMLReaderDelegate* _delegate){
     delegate = _delegate;
 }
 
-rXMLReaderError rXMLReader::ParseStream(std::istream* stream){
+rXMLReaderError rXMLReader::ParseStream(rIStream* stream){
     Clear();
     Parse(stream);
     return error;
 }
 
-rXMLReaderError rXMLReader::ParseFile(std::string fileName){
+rXMLReaderError rXMLReader::ParseFile(const rString& fileName){
     Clear();
-    std::ifstream stream(fileName.c_str() , std::ios::binary);
+	rIFileStream stream(fileName);
+    //std::ifstream stream(fileName.c_str() , std::ios::binary);
 
-    if (!stream.good())
+	if (!stream.IsOk())
         error = rXML_READER_FILE_NOT_FOUND;
 
     if (!error)
         Parse(&stream);
 
-    stream.close();
+    stream.Close();
 
     return error;
 }

@@ -1,4 +1,5 @@
 #include "data/rMaterialData.hpp"
+
 rMaterialParameterData::rMaterialParameterData(rMaterialParameterType t, const rString& n, const rString& v, const rString& p){
 	Set(t,n,v,p);
 }
@@ -22,7 +23,7 @@ rMaterialData::rMaterialData(const rString& path){
 	LoadFromPath(path);
 }
 
-rMaterialData::rMaterialData(std::istream& stream){
+rMaterialData::rMaterialData(rIStream& stream){
 	LoadFromStream(stream);
 }
 
@@ -35,7 +36,7 @@ rMaterialData::~rMaterialData(){}
 rContentError rMaterialData::LoadFromPath(const rString& path){
 	m_error = rCONTENT_ERROR_NONE;
 	
-	std::ifstream stream(path.c_str());
+	rIFileStream stream(path.c_str());
 	
 	if (!stream)
 		m_error = rCONTENT_ERROR_FILE_NOT_FOUND;
@@ -43,7 +44,7 @@ rContentError rMaterialData::LoadFromPath(const rString& path){
 		m_error = LoadFromStream(stream);
 	
 	SetPath(path);
-	stream.close();
+	stream.Close();
 	
 	return m_error;
 }
@@ -133,7 +134,7 @@ rContentError rMaterialData::LoadParameters(const rXMLDocument& xml){
 	return rCONTENT_ERROR_NONE;
 }
 
-rContentError rMaterialData::LoadFromStream(std::istream& stream){
+rContentError rMaterialData::LoadFromStream(rIStream& stream){
 	Clear();
 	
 	if (!stream){

@@ -10,6 +10,8 @@
 #include "xml/rXMLReader.hpp"
 #include "xml/rXMLDocumentLoader.hpp"
 
+#include "stream/rIFileStream.hpp"
+
 class rXMLDocument{
 public:
 	rXMLDocument();
@@ -25,7 +27,7 @@ public:
 	int WriteToStream(std::ostream& stream) const;
 	
 	rXMLReaderError LoadFromFile(const rString& path);
-	rXMLReaderError LoadFromStream(std::istream& stream);
+	rXMLReaderError LoadFromStream(rIStream& stream);
 	
 private:
 	

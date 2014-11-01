@@ -29,6 +29,8 @@ public:
 	virtual rIStream& operator >> (unsigned short& s);
 	virtual rIStream& operator >> (int& i);
 	virtual rIStream& operator >> (unsigned int& i);
+	virtual rIStream& operator >> (long& l);
+	virtual rIStream& operator >> (unsigned long& l);
 	virtual rIStream& operator >> (float& f);
 	virtual rIStream& operator >> (rString& str);
 

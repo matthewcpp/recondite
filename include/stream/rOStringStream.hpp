@@ -29,6 +29,8 @@ public:
 	virtual rOStream& operator << (unsigned short s);
 	virtual rOStream& operator << (int i);
 	virtual rOStream& operator << (unsigned int i);
+	virtual rOStream& operator << (long l);
+	virtual rOStream& operator << (unsigned long l);
 	virtual rOStream& operator << (float f);
 	virtual rOStream& operator << (const rString& str);
 

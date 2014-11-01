@@ -22,6 +22,8 @@ public:
 	virtual rIStream& operator >> (unsigned short& s) = 0;
 	virtual rIStream& operator >> (int& i) = 0;
 	virtual rIStream& operator >> (unsigned int& i) = 0;
+	virtual rIStream& operator >> (long& l) = 0;
+	virtual rIStream& operator >> (unsigned long& l) = 0;
 	virtual rIStream& operator >> (float& f) = 0;
 
 	virtual operator bool() const = 0;

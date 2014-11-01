@@ -168,3 +168,10 @@ void rApplicationBase::Uninit(){
 	m_module->Uninit(m_engine);
 	rLog::Shutdown();
 }
+
+void rApplicationBase::LoadScene(const rString& name){
+	rIAssetStream stream = m_engine.content->LoadTextFromPath(name);
+	
+	if (stream)
+		m_scene->LoadScene(*stream);
+}

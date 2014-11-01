@@ -36,6 +36,8 @@ public:
 
 	virtual size_t FrameCount() const;
 
+	virtual void LoadScene(const rString& name);
+
 public:
 	virtual rModule* CreateModule() = 0;
 

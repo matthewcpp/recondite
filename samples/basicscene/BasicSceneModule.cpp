@@ -56,6 +56,7 @@ void BasicSceneModule::AfterRenderOverlay(rViewInfo& view, rEngine& engine){
 }
 
 #include "data/rLogContentListener.hpp"
+#include "primitive/rPrimitiveSerialization.hpp"
 
 void BasicSceneModule::Init(rEngine& engine){
 	rSize displaySize = engine.application->DisplaySize();
@@ -65,7 +66,7 @@ void BasicSceneModule::Init(rEngine& engine){
 	viewport->SetSize(displaySize);
 	viewport->SetViewportType(rVIEWPORT_PERSP);
 
-	viewport->SetCamera(new rViewCamera("camera", rVector3(0, 0, 3)));
+	viewport->SetCamera(new rViewCamera("camera", rVector3(0, 1.0f, 10.0f)));
 
 	rLogContentListener listener;
 
@@ -73,8 +74,9 @@ void BasicSceneModule::Init(rEngine& engine){
 	engine.content->LoadAssetManifestFromPath("content/basicscene/manifest.xml");
 	engine.content->RemoveListener(&listener);
 
-	engine.scene->AddActor(new rPrimitiveBox("box1", rAlignedBox3(0,0,0,1,1,1), rColor::Green));
-	engine.scene->AddActor(new rPrimitiveBox("box2", rAlignedBox3(-2,0,0,-1,1,1), rColor::Blue));
+	engine.scene->RegisterActorLoader("PrimitiveBox", new rPrimitiveBoxReader());
+	engine.application->LoadScene("content/basicscene/levels/world.rlvl");
+	
 }
 
 #include "ui/ruiPicker.hpp"
@@ -83,7 +85,7 @@ void BasicSceneModule::Init(rEngine& engine){
 void BasicSceneModule::ReloadCSS(){
 	rLog::Info("Reloading CSS");
 
-	rAssetStream stream = m_engine->content->LoadTextFromPath("content/basicscene/ui/basicscene.rss");
+	rIAssetStream stream = m_engine->content->LoadTextFromPath("content/basicscene/ui/basicscene.rss");
 	
 	if (stream)
 		m_engine->ui->Styles()->ParseStylesheet(*stream);

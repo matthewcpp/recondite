@@ -19,10 +19,11 @@ public:
 	virtual rVector3 Position() const;
 
 	inline void SetRotation(const rVector3& rotation);
-	inline void IncrementRotation(const rVector3& rotation);
 	inline rVector3 Rotation() const;
 
 	inline rString Name() const;
+
+	virtual rString ClassName() const = 0;
 
 	void MoveForward(float amount);
 	void MoveBackward(float amount);
@@ -61,10 +62,6 @@ void rActor3::SetRotation(const rVector3& rotation){
 
 rVector3 rActor3::Rotation() const{
 	return m_rotation;
-}
-
-void rActor3::IncrementRotation(const rVector3& rotation){
-	m_rotation += rotation;
 }
 
 #endif

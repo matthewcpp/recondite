@@ -47,7 +47,10 @@
 
 
 #include "stream/rIFileStream.hpp"
-typedef std::unique_ptr<rIStream> rAssetStream;
+#include "stream/rOFileStream.hpp"
+
+typedef std::unique_ptr<rIStream> rIAssetStream;
+typedef std::unique_ptr<rOStream> rOAssetStream;
 
 class RECONDITE_API rContentManager : public riContentManager{
 public:
@@ -118,7 +121,8 @@ public:
 
 //Text
 public:
-	rAssetStream LoadTextFromPath(const rString& path);
+	virtual rIAssetStream LoadTextFromPath(const rString& path);
+	virtual rOAssetStream GetWritableFileStream(const rString& path);
 
 //Asset Manifest
 public:

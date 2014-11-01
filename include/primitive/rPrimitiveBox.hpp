@@ -16,6 +16,9 @@ public:
 	void SetColor(const rColor& color);
 	rColor Color() const;
 
+	virtual rString ClassName() const;
+	rAlignedBox3 Box() const;
+
 private:
 	rAlignedBox3 m_box;
 	rColor m_color;

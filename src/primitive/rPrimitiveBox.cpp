@@ -25,3 +25,11 @@ void rPrimitiveBox::SetColor(const rColor& color){
 rColor rPrimitiveBox::Color() const{
 	return m_color;
 }
+
+rString rPrimitiveBox::ClassName() const{
+	return "PrimitiveBox";
+}
+
+rAlignedBox3 rPrimitiveBox::Box() const{
+	return m_box;
+}

@@ -731,9 +731,21 @@ rSkeleton* rContentManager::GetOrLoadSkeleton(const rString& name, const rString
 	return skeleton;
 }
 
-rAssetStream rContentManager::LoadTextFromPath(const rString& path){
+rIAssetStream rContentManager::LoadTextFromPath(const rString& path){
 	rIFileStream* fileStream = new rIFileStream(path);
-	rAssetStream streamPtr;
+	rIAssetStream streamPtr;
+
+	if (fileStream->IsOk())
+		streamPtr.reset(fileStream);
+	else
+		delete fileStream;
+
+	return streamPtr;
+}
+
+rOAssetStream rContentManager::GetWritableFileStream(const rString& path){
+	rOFileStream* fileStream = new rOFileStream(path);
+	rOAssetStream streamPtr;
 
 	if (fileStream->IsOk())
 		streamPtr.reset(fileStream);

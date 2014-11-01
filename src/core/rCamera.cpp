@@ -29,6 +29,10 @@ rVector3 rViewCamera::Target() const{
 	return m_position + forward;
 }
 
+rString rViewCamera::ClassName() const{
+	return "ViewCamera";
+}
+
 
 //------------------------------------------
 
@@ -44,4 +48,8 @@ rVector3 rTargetCamera::Target() const{
 
 void rTargetCamera::SetTarget(const rVector3& target){
 	m_target = target;
+}
+
+rString rTargetCamera::ClassName() const{
+	return "TargetCamera";
 }

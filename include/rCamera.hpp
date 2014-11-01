@@ -23,6 +23,7 @@ protected:
 class RECONDITE_API rViewCamera : public rCamera{
 public:
 	rViewCamera(const rString& name , const rVector3& position);
+	virtual rString ClassName() const;
 
 
 	virtual rVector3 Target() const;
@@ -34,6 +35,7 @@ public:
 	
 	virtual rVector3 Target() const;
 	virtual void SetTarget(const rVector3& target);
+	virtual rString ClassName() const;
 };
 
 #endif

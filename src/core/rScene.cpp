@@ -67,3 +67,45 @@ void rScene::Clear(){
 size_t rScene::NumActors () const{
 	return m_actors.size();
 }
+
+void rScene::RegisterActorLoader(const rString& className, riActorLoader* actorLoader){
+	UnregisterActorLoader(className);
+
+	m_actorLoaders[className] = actorLoader;
+}
+
+void rScene::UnregisterActorLoader(const rString& className){
+	rActorLoaderMap::iterator it = m_actorLoaders.find(className);
+
+	if (it != m_actorLoaders.end()){
+		delete it->second;
+		m_actorLoaders.erase(it);
+	}
+}
+
+bool rScene::LoadScene(rIStream& stream){
+	rXMLDocument document;
+	document.LoadFromStream(stream);
+
+	rXMLElement* sceneRoot = document.GetRoot();
+
+	if (!sceneRoot) return false;
+
+	for (size_t i = 0; i < sceneRoot->NumChildren(); i++){
+		rXMLElement* actorElement = sceneRoot->GetChild(i);
+
+		rString elementName = actorElement->Name();
+		rString id;
+		actorElement->GetAttribute<rString>("id", id);
+
+		if (m_actorLoaders.count(elementName)){
+			rActor3* actor = m_actorLoaders[elementName]->LoadActor(actorElement, id);
+			if (actor) AddActor(actor);
+		}
+		else{
+			rLog::Warning("Unable to Load Level element: " + elementName);
+		}
+	}
+
+	return true;
+}

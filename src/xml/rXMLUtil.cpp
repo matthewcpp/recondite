@@ -19,6 +19,17 @@ rXMLElement* rXMLUtil::CreateAlignedBox3Element(rXMLElement* parent, const rStri
 	return element;
 }
 
+rXMLElement* rXMLUtil::CreateColorElement(rXMLElement* parent, const rString& name, const rColor& c){
+	rXMLElement* element = parent->CreateChild(name);
+
+	element->AddAttribute("r", (int)c.red);
+	element->AddAttribute("g", (int)c.green);
+	element->AddAttribute("b", (int)c.blue);
+	element->AddAttribute("a", (int)c.alpha);
+
+	return element;
+}
+
 void rXMLUtil::ReadVector3FromElement(rXMLElement* element, rVector3& v){
 	if (element){
 		element->GetAttribute<float>("x", v.x);
@@ -31,5 +42,17 @@ void rXMLUtil::ReadAlignedBox3FromFromElement(rXMLElement* element, rAlignedBox3
 	if (element){
 		ReadVector3FromElement(element->GetFirstChildNamed("min"), box.min);
 		ReadVector3FromElement(element->GetFirstChildNamed("max"), box.max);
+	}
+}
+
+void rXMLUtil::ReadColorFromElement(rXMLElement* element, rColor& c){
+	if (element){
+		unsigned int r,g,b,a;
+		element->GetAttribute<unsigned int>("r", r);
+		element->GetAttribute<unsigned int>("g", g);
+		element->GetAttribute<unsigned int>("b", b);
+		element->GetAttribute<unsigned int>("a", a);
+
+		c.Set((unsigned char)r, (unsigned char)g, (unsigned char)b, (unsigned char)a);
 	}
 }

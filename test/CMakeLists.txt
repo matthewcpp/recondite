@@ -1,5 +1,3 @@
-find_package(GTest REQUIRED)
-
 set(recondite_tests)
 
 set(math_tests)

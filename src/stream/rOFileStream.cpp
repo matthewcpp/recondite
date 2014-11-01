@@ -67,6 +67,16 @@ rOStream& rOFileStream::operator << (unsigned int i){
 	return *this;
 }
 
+rOStream& rOFileStream::operator << (long l){
+	m_file << l;
+	return *this;
+}
+
+rOStream& rOFileStream::operator << (unsigned long l){
+	m_file << l;
+	return *this;
+}
+
 rOStream& rOFileStream::operator << (float f){
 	m_file << f;
 	return *this;

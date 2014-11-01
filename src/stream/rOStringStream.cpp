@@ -64,6 +64,16 @@ rOStream& rOStringStream::operator << (unsigned int i){
 	return *this;
 }
 
+rOStream& rOStringStream::operator << (long l){
+	m_stream << l;
+	return *this;
+}
+
+rOStream& rOStringStream::operator << (unsigned long l){
+	m_stream << l;
+	return *this;
+}
+
 rOStream& rOStringStream::operator << (float f){
 	m_stream << f;
 	return *this;

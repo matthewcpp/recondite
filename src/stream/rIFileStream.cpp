@@ -80,6 +80,16 @@ rIStream& rIFileStream::operator >> (float& f){
 	return *this;
 }
 
+rIStream& rIFileStream::operator >> (long& l){
+	m_file >> l;
+	return *this;
+}
+
+rIStream& rIFileStream::operator >> (unsigned long& l){
+	m_file >> l;
+	return *this;
+}
+
 rIFileStream::operator bool() const{
 	return IsOk();
 }

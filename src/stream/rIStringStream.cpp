@@ -70,6 +70,16 @@ rIStream& rIStringStream::operator >> (unsigned int& i){
 	return *this;
 }
 
+rIStream& rIStringStream::operator >> (long& l){
+	m_stream >> l;
+	return *this;
+}
+
+rIStream& rIStringStream::operator >> (unsigned long& l){
+	m_stream >> l;
+	return *this;
+}
+
 rIStream& rIStringStream::operator >> (float& f){
 	m_stream >> f;
 	return *this;

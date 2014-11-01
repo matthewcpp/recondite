@@ -10,6 +10,7 @@
 #include "rVector3.hpp"
 #include "rSphere.hpp"
 #include "rLine3.hpp"
+#include "rIntersection.hpp"
 
 
 enum rOctreeError{

@@ -6,18 +6,19 @@
 #include "rBuild.hpp"
 #include "rDefs.hpp"
 #include "rString.hpp"
+#include "rTypes.hpp"
 
 #include "data/rGeometryData.hpp"
+
+#define rGEOMETRY_MAGIC_NUMBER 1868916594 //rego
 
 struct rGeometryFileHeader{
 	int magicNumber;
 	int version;
-	size_t vertexCount;
-	size_t elementBufferCount;
-	size_t vertexBoneLinkCount;
+	ruInt vertexCount;
+	ruInt elementBufferCount;
+	ruInt vertexBoneLinkCount;
 };
-
-#define rGEOMETRY_MAGIC_NUMBER 1868916594 //rego
 
 class RECONDITE_API rGeometryDataReader{
 public:

@@ -17,17 +17,15 @@ public:
 	rElementBuffer(unsigned int buffer, size_t sz, rGeometryType t) : m_bufferId(buffer), m_size(sz), m_geometryType(t){}
 	
 	inline unsigned int BufferId() const {return m_bufferId;}
-	inline size_t Size() const {return m_size;}
+	inline ruInt Size() const {return m_size;}
 	inline rGeometryType GeometryType() const {return m_geometryType;}
 	
 private:
 	
 	unsigned int m_bufferId;
-	size_t m_size;
+	ruInt m_size;
 	rGeometryType m_geometryType;
 };
-
-typedef std::map<rString, rElementBuffer*> rElementBufferIdMap;
 
 class RECONDITE_API rGeometry : public rAsset{
 public:
@@ -37,7 +35,7 @@ public:
 	unsigned int VertexBufferId() const;
 	unsigned int VertexBoneLinkBufferId() const;
 	
-	size_t ElementBufferCount() const;
+	ruInt ElementBufferCount() const;
 	rElementBuffer* GetElementBuffer(const rString& name) const;
 	void GetElementBufferNames(rArrayString& names) const;
 	rElementBuffer* AddElementBuffer(const rString& name, unsigned int bufferId, size_t elementCount, rGeometryType geometryType);
@@ -46,6 +44,10 @@ public:
 	void SetVertexBoneLinks(const rVertexBoneLinkMap& links);
 
 	virtual rAssetType Type() const;
+private:
+    
+    typedef std::map<rString, rElementBuffer*> rElementBufferIdMap;
+    
 private:
 
 	unsigned int m_vertexBufferId; 

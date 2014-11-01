@@ -14,13 +14,13 @@ TEST(Geometry_rPlane, PointDistanceABCD){
 
 	float d1 = p1.DistanceToPoint(pt);
 
-	EXPECT_FLOAT_EQ(d1, 10.0f / std::sqrtf(6));
+	EXPECT_FLOAT_EQ(d1, 10.0f / std::sqrt(6.0f));
 
 	rPlane p2(0,2,0,-3);
 	p2.Normalize();
 
 	float d2 = p2.DistanceToPoint(pt);
-	EXPECT_FLOAT_EQ(std::fabsf(d2), 1.0f / 2.0f);
+	EXPECT_FLOAT_EQ(std::fabs(d2), 1.0f / 2.0f);
 }
 
 TEST(Geometry_rPlane, PointDistancePtNormal){

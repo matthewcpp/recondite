@@ -18,7 +18,7 @@ rAssetType rGeometry::Type() const{
 	return rASSET_GEOMETRY;
 }
 
-unsigned int rGeometry::ElementBufferCount() const{
+ruInt rGeometry::ElementBufferCount() const{
 	return m_elementBufferIds.size();
 }
 

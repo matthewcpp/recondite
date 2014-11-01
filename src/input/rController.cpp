@@ -8,15 +8,11 @@ void rController::Init(unsigned int buttonCount, unsigned int dPadCount, unsigne
 	m_buttons.resize(buttonCount);
 	m_dPads.resize(dPadCount);
 	
-	if (analogStickCount){
-		m_analogSticks.resize(analogStickCount);
-		memset(&m_analogSticks[0], sizeof (rVector2Array::value_type) * analogStickCount, 0);
-	}
+	if (analogStickCount)
+		m_analogSticks.resize(analogStickCount, rVector2::ZeroVector);
 	
-	if (triggerCount){
-		m_triggers.resize(triggerCount);
-		memset(&m_triggers[0], sizeof (rFloatArray::value_type) * triggerCount, 0);
-	}
+	if (triggerCount)
+		m_triggers.resize(triggerCount, 0.0f);
 }
 
 unsigned int rController::ButtonCount() const{

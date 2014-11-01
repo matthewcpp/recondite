@@ -13,7 +13,7 @@
 	#include <GL/glew.h>
 	#include <OpenGL/gl.h>
 	#include <OpenGL/glu.h>
-#elif WIN32 || LINUX
+#elif WIN32 || __linux__
 	#include <GL/glew.h>
 	#include <GL/gl.h>
 #else

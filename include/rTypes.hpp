@@ -8,6 +8,15 @@
 #include "rVector3.hpp"
 #include "rString.hpp"
 
+typedef char rByte;
+typedef unsigned char ruByte;
+
+typedef int rInt;
+typedef unsigned int ruInt;
+
+typedef long rLong;
+typedef unsigned long ruLong;
+
 typedef std::map<rString,rString> rStringStringMap;
 
 typedef std::vector<int> rIntArray;

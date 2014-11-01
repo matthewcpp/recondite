@@ -27,8 +27,10 @@ void ruiOverlay::Update(rEngine& engine){
 }
 
 void ruiOverlay::UpdateLayout(bool force){
-	if (m_layout)
-		m_layout->Layout(m_viewport->GetScreenRect());
+	if (m_layout){
+            rRect layoutRect = m_viewport->GetScreenRect();
+            m_layout->Layout(layoutRect);
+        }
 }
 
 void ruiOverlay::Draw(rEngine& engine){

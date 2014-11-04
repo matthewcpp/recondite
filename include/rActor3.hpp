@@ -13,8 +13,8 @@ public:
 	rActor3(const rString& id, rEngine* engine);
 	virtual ~rActor3(){}
 
-	virtual int Update(rEngine& engine) { return 0;}
-	virtual void Draw(rEngine& engine) {}
+	virtual int Update();
+	virtual void Draw();
 
 	virtual void SetPosition(const rVector3& position);
 	virtual void SetPosition(float x, float y, float z);

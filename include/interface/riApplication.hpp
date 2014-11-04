@@ -6,6 +6,8 @@
 #include "rSize.hpp"
 #include "rViewport.hpp"
 
+#include "riActorSerialization.hpp"
+
 class RECONDITE_API riApplication{
 public:
 	virtual rSize DisplaySize() const = 0; 
@@ -18,6 +20,9 @@ public:
 	virtual size_t NumViewports() const = 0;
 
 	virtual void LoadScene(const rString& name) = 0;
+
+	virtual void RegisterActorLoader(const rString& className, riActorLoader* actorLoader) = 0;
+	virtual void UnregisterActorLoader(const rString& className) = 0;
 };
 
 #endif

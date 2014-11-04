@@ -23,15 +23,15 @@ rAnimationPlayer* rPawn::AnimationPlayer(){
 	return &m_animationPlayer;
 }
 
-int rPawn::Update(rEngine& engine){
-	m_animationPlayer.Update(engine.time);
+int rPawn::Update(){
+	m_animationPlayer.Update(m_engine->time);
 
 	return 0;
 }
 
-void rPawn::Draw(rEngine& engine){
+void rPawn::Draw(){
 	if (m_model){
 		rMatrix4 transform;
-		engine.renderer->RenderModel(m_model, transform);
+		m_engine->renderer->RenderModel(m_model, transform);
 	}
 }

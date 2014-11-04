@@ -6,10 +6,11 @@
 #include "xml/rXMLElement.hpp"
 
 class rActor3;
+class rEngine;
 
 class RECONDITE_API riActorLoader{
 public:
-	virtual rActor3* LoadActor(rXMLElement* element, const rString& id) = 0;
+	virtual rActor3* LoadActor(rXMLElement* element, const rString& id, rEngine* engine) = 0;
 };
 
 class RECONDITE_API riActorSerializer{

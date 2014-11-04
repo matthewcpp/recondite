@@ -8,7 +8,7 @@ class RECONDITE_API rOrbitCamera : public rCamera {
 public:
 	rOrbitCamera(const rString& id , rEngine* engine);
 
-	virtual int Update(rEngine& engine);
+	virtual int Update();
 
 	void SetYaw(float yaw);
 	float Yaw() const;

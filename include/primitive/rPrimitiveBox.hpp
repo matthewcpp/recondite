@@ -10,7 +10,7 @@ public:
 	rPrimitiveBox(const rString& id, rEngine* engine);
 
 public:
-	virtual void Draw(rEngine& engine);
+	virtual void Draw();
 
 	void SetColor(const rColor& color);
 	rColor Color() const;

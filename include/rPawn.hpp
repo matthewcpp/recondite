@@ -16,8 +16,8 @@ public:
 	
 	rAnimationPlayer* AnimationPlayer();
 	
-	virtual int Update(rEngine& engine);
-	virtual void Draw(rEngine& engine);
+	virtual int Update();
+	virtual void Draw();
 	
 private:
 	rModel* m_model;

@@ -8,6 +8,13 @@ rActor3::rActor3(const rString& id, rEngine* engine)
 	m_scale = rVector3::OneVector;
 }
 
+int rActor3::Update(){
+	return 0;
+}
+
+void rActor3::Draw(){
+}
+
 void rActor3::MoveForward(float amount){
 	rVector3 forward = Forward();
 	forward *= amount;

@@ -62,7 +62,7 @@ rVector3 rOrbitCamera::Target() const{
 	return m_target;
 }
 
-int rOrbitCamera::Update(rEngine& engine){
+int rOrbitCamera::Update(){
 	if (m_needsUpdate)
 		UpdatePosition();
 

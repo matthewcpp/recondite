@@ -11,7 +11,6 @@ class RECONDITE_API rCamera : public rActor3, public riCamera{
 public:
 	rCamera(const rString& id , rEngine* engine);
 
-	virtual int Update(rEngine& engine);
 	virtual rVector3 Position() const;
 	virtual rVector3 Up() const;
 

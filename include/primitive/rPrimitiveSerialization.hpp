@@ -10,7 +10,7 @@
 
 class RECONDITE_API rPrimitiveBoxReader : public riActorLoader{
 public:
-	virtual rActor3* LoadActor(rXMLElement* element, const rString& id);
+	virtual rActor3* LoadActor(rXMLElement* element, const rString& id, rEngine* engine);
 };
 
 class RECONDITE_API rPrimitiveBoxWriter{

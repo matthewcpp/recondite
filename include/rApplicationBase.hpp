@@ -48,6 +48,15 @@ public:
 	virtual void DeleteViewport(const rString& name);
 	virtual size_t NumViewports() const;
 
+public:
+
+	virtual void RegisterActorLoader(const rString& className, riActorLoader* actorLoader);
+	virtual void UnregisterActorLoader(const rString& className);
+
+private:
+	typedef std::map<rString, riActorLoader*> rActorLoaderMap;
+	typedef std::map<rString, riActorSerializer*> rActorSerializerMap;
+
 protected:
 	void InitEngine(rGraphicsDevice* graphics, rContentManager* content, rInputManager* input);
 	void InitModule();
@@ -70,6 +79,10 @@ protected:
 	rSize m_displaySize;
 
 	rViewportMap m_viewports;
+
+private:
+	rActorLoaderMap m_actorLoaders;
+	rActorSerializerMap m_actorSerializers;
 };
 
 #endif

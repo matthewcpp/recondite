@@ -77,7 +77,7 @@ void BasicSceneModule::Init(rEngine& engine){
 	engine.content->LoadAssetManifestFromPath("content/basicscene/manifest.xml");
 	engine.content->RemoveListener(&listener);
 
-	engine.scene->RegisterActorLoader("PrimitiveBox", new rPrimitiveBoxReader());
+	engine.application->RegisterActorLoader("PrimitiveBox", new rPrimitiveBoxReader());
 	engine.application->LoadScene("content/basicscene/levels/world.rlvl");
 	
 }

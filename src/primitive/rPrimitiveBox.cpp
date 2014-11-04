@@ -8,8 +8,8 @@ rPrimitiveBox::rPrimitiveBox(const rString& id, rEngine* engine)
 }
 
 
-void rPrimitiveBox::Draw(rEngine& engine){
-	engine.renderer->RenderWireBox(m_box, m_color);
+void rPrimitiveBox::Draw(){
+	m_engine->renderer->RenderWireBox(m_box, m_color);
 }
 
 void rPrimitiveBox::SetColor(const rColor& color){

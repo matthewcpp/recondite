@@ -13,10 +13,6 @@ rVector3 rCamera::Up() const{
 	return rActor3::Up();
 }
 
-int rCamera::Update(rEngine& engine){
-	return 0;
-}
-
 //------------------------------------------
 
 rViewCamera::rViewCamera(const rString& id , rEngine* engine)

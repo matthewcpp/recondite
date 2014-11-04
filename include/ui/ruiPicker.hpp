@@ -30,7 +30,7 @@ public:
 	void ShowOptionsMenu();
 
 public:
-	virtual void Draw(rEngine& engine);
+	virtual void Draw();
 
 	virtual rString GetWidgetType() const;
 

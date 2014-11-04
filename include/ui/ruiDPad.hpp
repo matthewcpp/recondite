@@ -22,7 +22,7 @@ public:
 	virtual void OnTouchMove(const rTouch& touch);
 	virtual void OnTouchUp(const rTouch& touch);
 
-	virtual void Draw(rEngine& engine);
+	virtual void Draw();
 
 	virtual rString GetWidgetType() const;
 

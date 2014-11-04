@@ -10,6 +10,7 @@
 #define IMPLEMENT_MAIN(APPLICATION_TYPE) \
 	int main(int argc, char** argv) {	\
 		rLogChain* logChain = new rLogChain(new rLogFile("recondite.log"), new rLogStdOut());	\
+		rLog::SetLogTarget(logChain);	\
 		rLog::Info("SDL Application Start"); \
 		APPLICATION_TYPE app;	\
 		app.SetDisplaySize(1024, 768);	\

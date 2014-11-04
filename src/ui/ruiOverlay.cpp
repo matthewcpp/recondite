@@ -21,7 +21,7 @@ ruiWidget* ruiOverlay::GetWidget(const rString& id){
 
 void ruiOverlay::Update(rEngine& engine){
 	for (size_t i = 0; i < m_widgets.size(); i++)
-		m_widgets[i]->Update(engine);
+		m_widgets[i]->Update();
 
 	UpdateLayout();
 }
@@ -35,7 +35,7 @@ void ruiOverlay::UpdateLayout(bool force){
 
 void ruiOverlay::Draw(rEngine& engine){
 	for (size_t i = 0; i < m_widgets.size(); i++)
-		m_widgets[i]->Draw(engine);
+		m_widgets[i]->Draw();
 }
 
 void ruiOverlay::Clear(){

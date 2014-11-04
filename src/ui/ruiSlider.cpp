@@ -92,18 +92,18 @@ rSize ruiSlider::ComputeSize(){
 	return rSize(130,35);
 }
 
-void ruiSlider::Draw(rEngine& engine){
+void ruiSlider::Draw(){
 	rRect box = BoundingBox();
 	rRect handle = HandleRect();
 	ruiStyle* style = ComputedStyle();
 	
 	rColor color(200,200,200,255);
 	style->GetColor("background-color", color);
-	engine.renderer->RenderRect(box, color);
+	m_engine->renderer->RenderRect(box, color);
 
 	color.Set(255,255,255,255);
 	style->GetColor("color", color);
-	engine.renderer->RenderRect(handle, color);
+	m_engine->renderer->RenderRect(handle, color);
 }
 
 rString ruiSlider::GetWidgetType() const{

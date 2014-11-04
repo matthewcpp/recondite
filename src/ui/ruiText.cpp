@@ -20,14 +20,14 @@ void ruiText::SetText(const rString& text){
 	InvalidateSize();
 }
 
-void ruiText::Draw(rEngine& engine){
+void ruiText::Draw(){
 	ruiStyle* style = ComputedStyle();
 
 	rColor color(255,255,255,255);
 	rRect boundingBox = BoundingBox();
 
 	if (style->GetColor("background-color", color))
-		engine.renderer->RenderRect(boundingBox, color);
+		m_engine->renderer->RenderRect(boundingBox, color);
 
 	rFont* font = DetermineFont();
 	
@@ -35,7 +35,7 @@ void ruiText::Draw(rEngine& engine){
 		color.Set(255,255,255,255);
 		style->GetColor("color", color);
 
-		engine.renderer->RenderString(m_text, font, boundingBox, color);
+		m_engine->renderer->RenderString(m_text, font, boundingBox, color);
 	}
 }
 

@@ -17,7 +17,7 @@ public:
 	bool IsChecked () const;
 	void SetChecked(bool checked);
 	
-	virtual void Draw(rEngine& engine);
+	virtual void Draw();
 
 	rString GetWidgetType() const;
 

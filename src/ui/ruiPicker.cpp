@@ -50,14 +50,14 @@ rSize ruiPicker::ComputeSize(){
 	return computedSize;
 }
 
-void ruiPicker::Draw(rEngine& engine){
+void ruiPicker::Draw(){
 	rRect box = BoundingBox();
 	ruiStyle* style = ComputedStyle();
 
 	rColor color(200,200,200,255);
 	style->GetColor("background-color", color);
 
-	engine.renderer->RenderRect(box, color);
+	m_engine->renderer->RenderRect(box, color);
 	
 
 	rFont* font = DetermineFont();
@@ -68,7 +68,7 @@ void ruiPicker::Draw(rEngine& engine){
 		color.Set(0,0,0,255);
 		style->GetColor("color", color);
 		
-		engine.renderer->RenderString(text,font, box, color);
+		m_engine->renderer->RenderString(text,font, box, color);
 	}
 
 }

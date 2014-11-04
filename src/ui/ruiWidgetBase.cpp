@@ -64,10 +64,10 @@ void ruiWidgetBase::RecomputeStyle(){
 	m_style.ClearChanged();
 	InvalidateSize();
 }
-void ruiWidgetBase::Draw(rEngine& engine){}
+void ruiWidgetBase::Draw(){}
 
 
-void ruiWidgetBase::Update(rEngine& engine){
+void ruiWidgetBase::Update(){
 	if (m_style.HasChanged())
 		RecomputeStyle();
 

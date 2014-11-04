@@ -18,8 +18,8 @@ public:
 	virtual rSize Size();
 	virtual rPoint Position() const = 0;
 
-	virtual void Update(rEngine& engine);
-	virtual void Draw(rEngine& engine);
+	virtual void Update();
+	virtual void Draw();
 
 public:
 	virtual void AddClass(const rString& className);

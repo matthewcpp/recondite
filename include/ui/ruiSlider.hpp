@@ -21,7 +21,7 @@ public:
 	
 	rRect HandleRect();
 	
-	virtual void Draw(rEngine& engine);
+	virtual void Draw();
 	virtual rString GetWidgetType() const;
 
 protected:

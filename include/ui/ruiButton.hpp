@@ -15,7 +15,7 @@ public:
 	rString GetText() const;
 	void SetText(const rString& text);
 
-	virtual void Draw(rEngine& engine);
+	virtual void Draw();
 	rButtonState ButtonState() const;
 
 	virtual rString GetWidgetType() const;

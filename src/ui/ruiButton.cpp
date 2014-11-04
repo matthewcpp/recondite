@@ -18,7 +18,7 @@ void ruiButton::SetText(const rString& text){
 	InvalidateSize();
 }
 
-void ruiButton::Draw(rEngine& engine){
+void ruiButton::Draw(){
 	ruiStyle* style = ComputedStyle();
 	int padding[4] = {5,5,5,5};
 	style->GetInt("padding-top", padding[0]);
@@ -33,9 +33,9 @@ void ruiButton::Draw(rEngine& engine){
 	style->GetInt("border-radius", borderRadius);
 
 	if (borderRadius > 0)
-		engine.renderer->RenderRoundedRect(box, borderRadius, color);
+		m_engine->renderer->RenderRoundedRect(box, borderRadius, color);
 	else
-		engine.renderer->RenderRect(box, color);
+		m_engine->renderer->RenderRect(box, color);
 	
 	rFont* font = DetermineFont();
 	
@@ -44,7 +44,7 @@ void ruiButton::Draw(rEngine& engine){
 		style->GetColor("color", color);
 
 		rPoint textPos(m_position.x + padding[1], m_position.y + padding[0]);
-		engine.renderer->RenderString(m_text, font, textPos, color);
+		m_engine->renderer->RenderString(m_text, font, textPos, color);
 	}
 	
 }

@@ -66,7 +66,10 @@ void BasicSceneModule::Init(rEngine& engine){
 	viewport->SetSize(displaySize);
 	viewport->SetViewportType(rVIEWPORT_PERSP);
 
-	viewport->SetCamera(new rViewCamera("camera", rVector3(0, 1.0f, 10.0f)));
+	rViewCamera* camera = new rViewCamera("camera", &engine);
+	camera->SetPosition(0, 1.0f, 10.0f);
+
+	viewport->SetCamera(camera);
 
 	rLogContentListener listener;
 
@@ -82,17 +85,12 @@ void BasicSceneModule::Init(rEngine& engine){
 #include "ui/ruiPicker.hpp"
 #include "ui/ruiAbsoluteLayout.hpp"
 
-void BasicSceneModule::ReloadCSS(){
-	rLog::Info("Reloading CSS");
-
-	rIAssetStream stream = m_engine->content->LoadTextFromPath("content/basicscene/ui/basicscene.rss");
-	
-	if (stream)
-		m_engine->ui->Styles()->ParseStylesheet(*stream);
+void BasicSceneModule::ReloadLevel(){
+	m_engine->application->LoadScene("content/basicscene/levels/world.rlvl");
 }
 
 void BasicSceneModule::ReloadButtonClick(rEvent& event){
-	ReloadCSS();
+	ReloadLevel();
 }
 
 void BasicSceneModule::InitUI(ruiOverlayManager& manager, rEngine& engine){

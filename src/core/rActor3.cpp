@@ -1,9 +1,11 @@
 #include "rActor3.hpp"
 
-rActor3::rActor3(const rString& name , const rVector3& position){
-	m_name = name;
-	m_position = position;
+rActor3::rActor3(const rString& id, rEngine* engine)
+	:rObject(id, engine)
+{
+	m_position = rVector3::ZeroVector;
 	m_rotation = rVector3::ZeroVector;
+	m_scale = rVector3::OneVector;
 }
 
 void rActor3::MoveForward(float amount){
@@ -96,6 +98,34 @@ rVector3 rActor3::Down() const{
 	return down;
 }
 
+void rActor3::SetPosition(const rVector3& position){
+	m_position = position;
+}
+
+void rActor3::SetPosition(float x, float y, float z){
+	m_position.Set(x,y,z);
+}
+
 rVector3 rActor3::Position() const{
 	return m_position;
+}
+
+void rActor3::SetScale(const rVector3& scale){
+	m_scale = scale;
+}
+
+void rActor3::SetUniformScale(float k){
+	m_scale.Set(k, k, k);
+}
+
+rVector3 rActor3::Scale() const{
+	return m_scale;
+}
+
+void rActor3::SetRotation(const rVector3& rotation){
+	m_rotation = rotation;
+}
+
+rVector3 rActor3::Rotation() const{
+	return m_rotation;
 }

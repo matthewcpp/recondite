@@ -13,7 +13,7 @@ void rScene::Update(rEngine& engine){
 	}
 
 	for (size_t i = 0; i < actorsToDelete.size(); i++)
-		DeleteActor(actorsToDelete[i]->Name());
+		DeleteActor(actorsToDelete[i]->Id());
 }
 
 void rScene::Draw(rEngine& engine){
@@ -25,7 +25,7 @@ void rScene::Draw(rEngine& engine){
 }
 
 void rScene::AddActor(rActor3* actor){
-	rString name = actor->Name();
+	rString name = actor->Id();
 	
 	if (m_actors.count(name)){
 		DeleteActor(name);
@@ -84,6 +84,8 @@ void rScene::UnregisterActorLoader(const rString& className){
 }
 
 bool rScene::LoadScene(rIStream& stream){
+	Clear();
+
 	rXMLDocument document;
 	document.LoadFromStream(stream);
 

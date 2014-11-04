@@ -30,7 +30,7 @@ public:
 	virtual void DeleteActor(rActor3* actor);
 
 private:
-	void ReloadCSS();
+	void ReloadLevel();
 
 	void ReloadButtonClick(rEvent& event);
 

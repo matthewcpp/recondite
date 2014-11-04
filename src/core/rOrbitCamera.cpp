@@ -1,7 +1,7 @@
 #include "rOrbitCamera.hpp"
 
-rOrbitCamera::rOrbitCamera(const rString& name , const rVector3& position)
-	:rCamera(name, position)
+rOrbitCamera::rOrbitCamera(const rString& id , rEngine* engine)
+	:rCamera(id, engine)
 {
 	Reset(rVector3::ZeroVector, 1.0f, 0.0f, 0.0f);
 }

@@ -4,24 +4,28 @@
 #include "rBuild.hpp"
 #include "rVector3.hpp"
 #include "rQuaternion.hpp"
+#include "rObject.hpp"
 
 #include "rEngine.hpp"
 
-class RECONDITE_API rActor3{
+class RECONDITE_API rActor3 : public rObject{
 public:
-	rActor3(const rString& name , const rVector3& position);
+	rActor3(const rString& id, rEngine* engine);
 	virtual ~rActor3(){}
 
 	virtual int Update(rEngine& engine) { return 0;}
 	virtual void Draw(rEngine& engine) {}
 
-	inline void SetPosition(const rVector3& position);
+	virtual void SetPosition(const rVector3& position);
+	virtual void SetPosition(float x, float y, float z);
 	virtual rVector3 Position() const;
 
-	inline void SetRotation(const rVector3& rotation);
-	inline rVector3 Rotation() const;
+	virtual void SetRotation(const rVector3& rotation);
+	virtual rVector3 Rotation() const;
 
-	inline rString Name() const;
+	virtual void SetScale(const rVector3& scale);
+	virtual void SetUniformScale(float k);
+	virtual rVector3 Scale() const;
 
 	virtual rString ClassName() const = 0;
 
@@ -40,28 +44,10 @@ public:
 	rVector3 Down() const;
 
 protected:
-	rString m_name;
 
 	rVector3 m_position;
 	rVector3 m_rotation;
+	rVector3 m_scale;
 };
-
-void rActor3::SetPosition(const rVector3& position){
-	m_position = position;
-}
-
-
-
-rString rActor3::Name() const{
-	return m_name;
-}
-
-void rActor3::SetRotation(const rVector3& rotation){
-	m_rotation = rotation;
-}
-
-rVector3 rActor3::Rotation() const{
-	return m_rotation;
-}
 
 #endif

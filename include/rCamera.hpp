@@ -9,7 +9,7 @@
 
 class RECONDITE_API rCamera : public rActor3, public riCamera{
 public:
-	rCamera(const rString& name , const rVector3& position);
+	rCamera(const rString& id , rEngine* engine);
 
 	virtual int Update(rEngine& engine);
 	virtual rVector3 Position() const;
@@ -22,7 +22,7 @@ protected:
 
 class RECONDITE_API rViewCamera : public rCamera{
 public:
-	rViewCamera(const rString& name , const rVector3& position);
+	rViewCamera(const rString& id , rEngine* engine);
 	virtual rString ClassName() const;
 
 
@@ -31,7 +31,7 @@ public:
 
 class RECONDITE_API rTargetCamera : public rCamera{
 public: 
-	rTargetCamera(const rString& name , const rVector3& position);
+	rTargetCamera(const rString& id , rEngine* engine);
 	
 	virtual rVector3 Target() const;
 	virtual void SetTarget(const rVector3& target);

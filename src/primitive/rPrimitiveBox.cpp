@@ -1,18 +1,12 @@
 #include "primitive/rPrimitiveBox.hpp"
 
-rPrimitiveBox::rPrimitiveBox(const rString& name, const rAlignedBox3& box)
-	:rActor3(name, rVector3::ZeroVector)
+rPrimitiveBox::rPrimitiveBox(const rString& id, rEngine* engine)
+	:rActor3(id, engine)
 {
-	m_box = box;
+	m_box = rAlignedBox3::NullBox;
 	m_color = rColor::White;
 }
 
-rPrimitiveBox::rPrimitiveBox(const rString& name, const rAlignedBox3& box, const rColor& color)
-	:rActor3(name, rVector3::ZeroVector)
-{
-	m_box = box;
-	m_color = color;
-}
 
 void rPrimitiveBox::Draw(rEngine& engine){
 	engine.renderer->RenderWireBox(m_box, m_color);
@@ -32,4 +26,8 @@ rString rPrimitiveBox::ClassName() const{
 
 rAlignedBox3 rPrimitiveBox::Box() const{
 	return m_box;
+}
+
+void rPrimitiveBox::SetBox(const rAlignedBox3& box){
+	m_box = box;
 }

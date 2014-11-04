@@ -1,7 +1,7 @@
 #include "rPawn.hpp"
 
-rPawn::rPawn(rModel* model, const rString& name , const rVector3& position)
-:rActor3(name, position)
+rPawn::rPawn(rModel* model, const rString& id , rEngine* engine)
+:rActor3(id, engine)
 {
 	SetModel(model);
 }

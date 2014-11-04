@@ -6,7 +6,7 @@
 
 class RECONDITE_API rOrbitCamera : public rCamera {
 public:
-	rOrbitCamera(const rString& name , const rVector3& position);
+	rOrbitCamera(const rString& id , rEngine* engine);
 
 	virtual int Update(rEngine& engine);
 

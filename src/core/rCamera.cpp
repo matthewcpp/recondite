@@ -1,8 +1,8 @@
 #include "rCamera.hpp"
 
 
-rCamera::rCamera(const rString& name , const rVector3& position)
-	:rActor3(name , position)
+rCamera::rCamera(const rString& id , rEngine* engine)
+	:rActor3(id , engine)
 {}
 
 rVector3 rCamera::Position() const{
@@ -17,8 +17,10 @@ int rCamera::Update(rEngine& engine){
 	return 0;
 }
 
-rViewCamera::rViewCamera(const rString& name , const rVector3& position)
-	:rCamera(name , position)
+//------------------------------------------
+
+rViewCamera::rViewCamera(const rString& id , rEngine* engine)
+	:rCamera(id , engine)
 {
 
 }
@@ -36,8 +38,8 @@ rString rViewCamera::ClassName() const{
 
 //------------------------------------------
 
-rTargetCamera::rTargetCamera(const rString& name , const rVector3& position)
-	:rCamera(name , position)
+rTargetCamera::rTargetCamera(const rString& id , rEngine* engine)
+	:rCamera(id , engine)
 {
 
 }

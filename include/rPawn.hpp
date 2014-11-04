@@ -8,7 +8,7 @@
 
 class RECONDITE_API rPawn : public rActor3{
 public:
-	rPawn(rModel* model, const rString& name , const rVector3& position);
+	rPawn(rModel* model, const rString& id , rEngine* engine);
 	
 public:
 	rModel* Model() const;

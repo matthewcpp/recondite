@@ -7,8 +7,7 @@
 
 class RECONDITE_API rPrimitiveBox : public rActor3{
 public:
-	rPrimitiveBox(const rString& name, const rAlignedBox3& box);
-	rPrimitiveBox(const rString& name, const rAlignedBox3& box, const rColor& color);
+	rPrimitiveBox(const rString& id, rEngine* engine);
 
 public:
 	virtual void Draw(rEngine& engine);
@@ -18,6 +17,7 @@ public:
 
 	virtual rString ClassName() const;
 	rAlignedBox3 Box() const;
+	void SetBox(const rAlignedBox3& box);
 
 private:
 	rAlignedBox3 m_box;

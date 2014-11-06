@@ -17,11 +17,22 @@ public:
 
 	virtual rString ClassName() const;
 	rAlignedBox3 Box() const;
-	void SetBox(const rAlignedBox3& box);
+
+	float Width() const;
+	void SetWidth(float width);
+
+	float Height() const;
+	void SetHeight(float height);
+
+	float Depth() const;
+	void SetDepth(float depth);
 
 private:
-	rAlignedBox3 m_box;
 	rColor m_color;
+
+	float m_width;
+	float m_height;
+	float m_depth;
 };
 
 #endif

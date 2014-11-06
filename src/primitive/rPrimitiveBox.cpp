@@ -3,13 +3,17 @@
 rPrimitiveBox::rPrimitiveBox(const rString& id, rEngine* engine)
 	:rActor3(id, engine)
 {
-	m_box = rAlignedBox3::NullBox;
 	m_color = rColor::White;
+
+	m_width = 1.0f;
+	m_height = 1.0f;
+	m_depth = 1.0f;
 }
 
 
 void rPrimitiveBox::Draw(){
-	m_engine->renderer->RenderWireBox(m_box, m_color);
+	rAlignedBox3 box = Box();
+	m_engine->renderer->RenderWireBox(box, m_color);
 }
 
 void rPrimitiveBox::SetColor(const rColor& color){
@@ -25,9 +29,37 @@ rString rPrimitiveBox::ClassName() const{
 }
 
 rAlignedBox3 rPrimitiveBox::Box() const{
-	return m_box;
+	rAlignedBox3 box;
+
+	float halfWidth = m_width / 2.0f;
+	float halfDepth = m_depth / 2.0f;
+
+	box.min.Set( m_position.x - halfWidth, m_position.y, m_position.z - halfDepth);
+	box.max.Set(m_position.x + halfDepth, m_position.y + m_height, m_position.z + halfDepth);
+
+	return box;
 }
 
-void rPrimitiveBox::SetBox(const rAlignedBox3& box){
-	m_box = box;
+float rPrimitiveBox::Width() const{
+	return m_width;
+}
+
+void rPrimitiveBox::SetWidth(float width){
+	m_width = width;
+}
+
+float rPrimitiveBox::Height() const{
+	return m_height;
+}
+
+void rPrimitiveBox::SetHeight(float height){
+	m_height = height;
+}
+
+float rPrimitiveBox::Depth() const{
+	return m_depth;
+}
+
+void rPrimitiveBox::SetDepth(float depth){
+	m_depth = depth;
 }

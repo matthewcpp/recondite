@@ -1,9 +1,9 @@
 #include "primitive/rPrimitiveBox.hpp"
 
 rPrimitiveBox::rPrimitiveBox(const rString& id, rEngine* engine)
-	:rActor3(id, engine)
+	:rPrimitive(id, engine)
 {
-	m_color = rColor::White;
+	
 
 	m_width = 1.0f;
 	m_height = 1.0f;
@@ -16,13 +16,7 @@ void rPrimitiveBox::Draw(){
 	m_engine->renderer->RenderWireBox(box, m_color);
 }
 
-void rPrimitiveBox::SetColor(const rColor& color){
-	m_color = color;
-}
 
-rColor rPrimitiveBox::Color() const{
-	return m_color;
-}
 
 rString rPrimitiveBox::ClassName() const{
 	return "PrimitiveBox";

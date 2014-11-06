@@ -47,6 +47,7 @@ public:
 
 	void RenderModel(const rModel* model, const rMatrix4& transform);
 	void RenderBuffer(const rImmediateBuffer& buffer, rMaterial* material);
+	void Render3dBuffer(rImmediateBuffer& geometry, const rColor& color);
 
 	void RenderSkeleton(const rSkeleton* skeleton, const rMatrix4Vector& transformArray, const rColor& lineColor, const rColor& pointColor, float pointSize);
 

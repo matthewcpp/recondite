@@ -33,6 +33,15 @@ void rRenderer::RenderBuffer(const rImmediateBuffer& buffer, rMaterial* material
 	m_graphicsDevice->RenderImmediate(buffer, m_viewMatrix, material);
 }
 
+void rRenderer::Render3dBuffer(rImmediateBuffer& geometry, const rColor& color){
+	rMaterial* material = m_contentManager->GetMaterialAsset("immediate_color");
+
+	if (material){
+		material->SetColor("fragColor", color);
+		m_graphicsDevice->RenderImmediate(geometry, m_viewMatrix,  material);
+	}
+}
+
 void rRenderer::RenderModel(const rModel* model, const rMatrix4& transform){
 	rMatrix4 modelViewProjection = m_viewMatrix * transform;
 

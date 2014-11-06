@@ -2,18 +2,16 @@
 #define R_PRIMITIVEBOX_HPP
 
 #include "rBuild.hpp"
-#include "rActor3.hpp"
 #include "rAlignedBox3.hpp"
 
-class RECONDITE_API rPrimitiveBox : public rActor3{
+#include "primitive/rPrimitive.hpp"
+
+class RECONDITE_API rPrimitiveBox : public rPrimitive{
 public:
 	rPrimitiveBox(const rString& id, rEngine* engine);
 
 public:
 	virtual void Draw();
-
-	void SetColor(const rColor& color);
-	rColor Color() const;
 
 	virtual rString ClassName() const;
 	rAlignedBox3 Box() const;
@@ -28,7 +26,6 @@ public:
 	void SetDepth(float depth);
 
 private:
-	rColor m_color;
 
 	float m_width;
 	float m_height;

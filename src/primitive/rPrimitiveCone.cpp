@@ -5,6 +5,8 @@ rPrimitiveCone::rPrimitiveCone(const rString& id, rEngine* engine)
 {
 	m_height = 1.0f;
 	m_radius = 1.0f;
+	
+	m_segmentCount = 20;
 }
 
 float rPrimitiveCone::Radius() const{
@@ -32,10 +34,8 @@ void rPrimitiveCone::Draw(){
 
 	geometry.PushVertex(0, m_height, 0);
 
-	float segments = 20.0f;
 
-	float step = 360.0f / segments;
-	unsigned short index = 1;
+	float step = 360.0f / (float)m_segmentCount;
 
 	rVector3 vertex;
 	for (float angle = 0.0f; angle <= 360.0f; angle += step){
@@ -45,13 +45,6 @@ void rPrimitiveCone::Draw(){
 		vertex *= m_radius;
 		
 		geometry.PushVertex(vertex);
-		//geometry.PushIndex(index, 0);
-		
-		if (index > 1){
-			//geometry.PushIndex(index, index - 1);
-		}
-		
-		index++;
 	}
 
 	//generate wireframe indicies
@@ -66,4 +59,12 @@ void rPrimitiveCone::Draw(){
 
 	rMatrix4 transform = TransformMatrix();
 	m_engine->renderer->Render3dBuffer(geometry, transform, m_color);
+}
+
+int rPrimitiveCone::SegmentCount() const{
+	return m_segmentCount;
+}
+
+void rPrimitiveCone::SetSegmentCount(int segmentCount){
+	m_segmentCount = segmentCount;
 }

@@ -16,12 +16,19 @@ public:
 	float Height() const;
 	void SetHeight(float height);
 
+	int SegmentCount() const;
+	void SetSegmentCount(int segmentCount);
+
 	virtual rString ClassName() const;
 	virtual void Draw();
+
+
 
 private:
 	float m_radius;
 	float m_height;
+
+	int m_segmentCount;
 };
 
 #endif

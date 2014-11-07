@@ -39,6 +39,7 @@ rActor3* rPrimitiveBoxReader::LoadActor(rXMLElement* element, const rString& id,
  rActor3* rPrimitiveConeReader::LoadActor(rXMLElement* element, const rString& id, rEngine* engine){
 	 rColor color = rColor::White;
 	 float val = 1.0f;
+	 int intVal = 0;
 
 	rPrimitiveCone* primitiveCone = new rPrimitiveCone(id, engine);
 	LoadActorProperties(element, primitiveCone);
@@ -58,6 +59,12 @@ rActor3* rPrimitiveBoxReader::LoadActor(rXMLElement* element, const rString& id,
 		primitiveCone->SetHeight(val);
 	}
 
+	rXMLElement* segmentCount = element->GetFirstChildNamed("segmentCount");
+	if (segmentCount){
+		segmentCount->GetText<int>(intVal);
+		primitiveCone->SetSegmentCount(intVal);
+	}
+
 	 return primitiveCone;
  }
 
@@ -66,6 +73,7 @@ rActor3* rPrimitiveBoxReader::LoadActor(rXMLElement* element, const rString& id,
  rActor3* rPrimitiveCylinderReader::LoadActor(rXMLElement* element, const rString& id, rEngine* engine){
 	 rColor color = rColor::White;
 	 float val = 1.0f;
+	 int intVal = 0;
 
 	 rPrimitiveCylinder* primitiveCylinder = new rPrimitiveCylinder(id, engine);
 	 LoadActorProperties(element, primitiveCylinder);
@@ -83,6 +91,12 @@ rActor3* rPrimitiveBoxReader::LoadActor(rXMLElement* element, const rString& id,
 	if (height){
 		height->GetText<float>(val);
 		primitiveCylinder->SetHeight(val);
+	}
+
+	rXMLElement* segmentCount = element->GetFirstChildNamed("segmentCount");
+	if (segmentCount){
+		segmentCount->GetText<int>(intVal);
+		primitiveCylinder->SetSegmentCount(intVal);
 	}
 
 	 return primitiveCylinder;

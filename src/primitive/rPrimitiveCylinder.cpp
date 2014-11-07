@@ -5,6 +5,7 @@ rPrimitiveCylinder::rPrimitiveCylinder(const rString& id, rEngine* engine)
 {
 	m_radius = 1.0f;
 	m_height = 1.0f;
+	m_segmentCount = 20;
 }
 
 float rPrimitiveCylinder::Radius() const{
@@ -27,12 +28,18 @@ rString rPrimitiveCylinder::ClassName() const{
 	return "PrimitiveCylinder";
 }
 
+int rPrimitiveCylinder::SegmentCount() const{
+	return m_segmentCount;
+}
+
+void rPrimitiveCylinder::SetSegmentCount(int segmentCount){
+	m_segmentCount = segmentCount;
+}
+
 void rPrimitiveCylinder::Draw(){
 	rImmediateBuffer geometry(rGEOMETRY_LINES, 3, false);
 
-	float segments = 20.0f;
-
-	float step = 360.0f / segments;
+	float step = 360.0f / (float)m_segmentCount;
 
 	rVector3 vertex;
 	for (float angle = 0.0f; angle <= 360.0f; angle += step){
@@ -65,6 +72,9 @@ void rPrimitiveCylinder::Draw(){
 		}
 		
 	}
+
+	geometry.PushIndex(0, count -1);
+	geometry.PushIndex(count, count + count - 1);
 
 	rMatrix4 transform = TransformMatrix();
 	m_engine->renderer->Render3dBuffer(geometry, transform, m_color);

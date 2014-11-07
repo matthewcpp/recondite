@@ -14,7 +14,6 @@ public:
 	virtual void Draw();
 
 	virtual rString ClassName() const;
-	rAlignedBox3 Box() const;
 
 	float Width() const;
 	void SetWidth(float width);

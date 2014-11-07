@@ -4,13 +4,18 @@
 #include "rBuild.hpp"
 
 #include "xml/rXMLElement.hpp"
+#include "xml/rXMLUtil.hpp"
+#include "rActor3.hpp"
 
-class rActor3;
 class rEngine;
+class rActor3;
 
 class RECONDITE_API riActorLoader{
 public:
 	virtual rActor3* LoadActor(rXMLElement* element, const rString& id, rEngine* engine) = 0;
+
+protected:
+	void LoadActorProperties(rXMLElement* element, rActor3* actor);
 };
 
 class RECONDITE_API riActorSerializer{

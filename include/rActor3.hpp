@@ -29,6 +29,8 @@ public:
 
 	virtual rString ClassName() const = 0;
 
+	virtual rMatrix4 TransformMatrix() const;
+
 	void MoveForward(float amount);
 	void MoveBackward(float amount);
 	void MoveLeft(float amount);

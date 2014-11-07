@@ -6,7 +6,7 @@
 #include "rSize.hpp"
 #include "rViewport.hpp"
 
-#include "riActorSerialization.hpp"
+class riActorLoader;
 
 class RECONDITE_API riApplication{
 public:

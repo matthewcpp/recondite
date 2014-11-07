@@ -136,3 +136,16 @@ void rActor3::SetRotation(const rVector3& rotation){
 rVector3 rActor3::Rotation() const{
 	return m_rotation;
 }
+
+rMatrix4 rActor3::TransformMatrix() const{
+	rMatrix4 translate, rotate, scale;
+	translate.SetTranslate(m_position);
+
+	rQuaternion q(m_rotation);
+	rMatrixUtil::QuaterionToMatrix(q, rotate);
+
+	scale.SetScale(m_scale);
+
+	rMatrix4 result = translate * scale * rotate;
+	return result;
+}

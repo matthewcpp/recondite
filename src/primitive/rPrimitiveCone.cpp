@@ -45,14 +45,25 @@ void rPrimitiveCone::Draw(){
 		vertex *= m_radius;
 		
 		geometry.PushVertex(vertex);
-		geometry.PushIndex(index, 0);
+		//geometry.PushIndex(index, 0);
 		
 		if (index > 1){
-			geometry.PushIndex(index, index - 1);
+			//geometry.PushIndex(index, index - 1);
 		}
 		
 		index++;
 	}
 
-	m_engine->renderer->Render3dBuffer(geometry, m_color);
+	//generate wireframe indicies
+	size_t count = geometry.VertexCount();
+	for (size_t i = 1; i < count; i++){
+		if (i > 0)
+			geometry.PushIndex(0, i);
+		if (i > 1)
+			geometry.PushIndex(i, i - 1);
+	}
+
+
+	rMatrix4 transform = TransformMatrix();
+	m_engine->renderer->Render3dBuffer(geometry, transform, m_color);
 }

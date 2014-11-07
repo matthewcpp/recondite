@@ -3,11 +3,12 @@
 
 #include "rBuild.hpp"
 
-#include "interface/riActorSerialization.hpp"
+#include "rActorSerialization.hpp"
 #include "xml/rXMLUtil.hpp"
 
-#include "rPrimitiveBox.hpp"
-#include "rPrimitiveCone.hpp"
+#include "primitive/rPrimitiveBox.hpp"
+#include "primitive/rPrimitiveCone.hpp"
+#include "primitive/rPrimitiveCylinder.hpp"
 
 //---------- Box ----------
 
@@ -16,14 +17,16 @@ public:
 	virtual rActor3* LoadActor(rXMLElement* element, const rString& id, rEngine* engine);
 };
 
-class RECONDITE_API rPrimitiveBoxWriter{
-private:
-	virtual bool SerializeActor(rActor3* actor, rXMLElement* element);
-};
-
 //---------- Cone ----------
 
 class RECONDITE_API rPrimitiveConeReader : public riActorLoader{
+public:
+	virtual rActor3* LoadActor(rXMLElement* element, const rString& id, rEngine* engine);
+};
+
+//---------- Cylinder ----------
+
+class RECONDITE_API rPrimitiveCylinderReader : public riActorLoader{
 public:
 	virtual rActor3* LoadActor(rXMLElement* element, const rString& id, rEngine* engine);
 };

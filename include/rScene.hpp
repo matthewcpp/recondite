@@ -7,7 +7,7 @@
 #include "rBuild.hpp"
 
 #include "interface/riScene.hpp"
-#include "interface/riActorSerialization.hpp"
+#include "rActorSerialization.hpp"
 
 #include "stream/rIStream.hpp"
 #include "xml/rXMLDocument.hpp"

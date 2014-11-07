@@ -5,7 +5,7 @@
 
 #include "primitive/rPrimitive.hpp"
 
-class rPrimitiveCone : public rPrimitive{
+class RECONDITE_API rPrimitiveCone : public rPrimitive{
 public:
 	rPrimitiveCone(const rString& id, rEngine* engine);
 

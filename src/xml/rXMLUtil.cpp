@@ -30,12 +30,15 @@ rXMLElement* rXMLUtil::CreateColorElement(rXMLElement* parent, const rString& na
 	return element;
 }
 
-void rXMLUtil::ReadVector3FromElement(rXMLElement* element, rVector3& v){
+bool rXMLUtil::ReadVector3FromElement(rXMLElement* element, rVector3& v){
 	if (element){
 		element->GetAttribute<float>("x", v.x);
 		element->GetAttribute<float>("y", v.y);
 		element->GetAttribute<float>("z", v.z);
+		return true;
 	}
+
+	return false;
 }
 
 void rXMLUtil::ReadAlignedBox3FromFromElement(rXMLElement* element, rAlignedBox3& box){

@@ -1,6 +1,7 @@
 set(core_files)
 
 add_rec_src(core_files "rActor3")
+add_rec_src(core_files "rActorSerialization")
 add_rec_src(core_files "rAnimation")
 add_rec_src(core_files "rAnimationPlayer")
 add_rec_src(core_files "rAnimationTrack")

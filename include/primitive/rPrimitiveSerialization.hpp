@@ -10,6 +10,7 @@
 #include "primitive/rPrimitiveCone.hpp"
 #include "primitive/rPrimitiveCylinder.hpp"
 #include "primitive/rPrimitiveSphere.hpp"
+#include "primitive/rPrimitiveGrid.hpp"
 
 //---------- Primitive ----------
 
@@ -41,6 +42,13 @@ public:
 
 //---------- Sphere ----------
 class RECONDITE_API rPrimitiveSphereReader : public rPrimitiveReader{
+public:
+	virtual rActor3* LoadActor(rXMLElement* element, const rString& id, rEngine* engine);
+};
+
+//---------- Grid ----------
+
+class RECONDITE_API rPrimitiveGridReader : public rPrimitiveReader{
 public:
 	virtual rActor3* LoadActor(rXMLElement* element, const rString& id, rEngine* engine);
 };

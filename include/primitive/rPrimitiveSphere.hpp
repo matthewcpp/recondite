@@ -28,8 +28,8 @@ public:
 	virtual void Draw();
 
 
-private:
-	void CreateSphereVerts();
+protected:
+	void CreateGeometry();
 
 private:
 	float m_radius;

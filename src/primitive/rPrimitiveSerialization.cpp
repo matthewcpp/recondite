@@ -133,3 +133,40 @@ rActor3* rPrimitiveBoxReader::LoadActor(rXMLElement* element, const rString& id,
 
 	 return primitiveSphere;
  }
+
+ //---------- Grid ----------
+
+ rActor3* rPrimitiveGridReader::LoadActor(rXMLElement* element, const rString& id, rEngine* engine){
+	float fVal = 1.0f;
+	int iVal = 0;
+
+	rPrimitiveGrid* primitiveGrid = new rPrimitiveGrid(id, engine);
+	LoadActorProperties(element, primitiveGrid);
+	LoadPrimitiveProperties(element, primitiveGrid);
+
+	rXMLElement* node = element->GetFirstChildNamed("width");
+	if (node){
+		node->GetText<float>(fVal);
+		primitiveGrid->SetWidth(fVal);
+	}
+
+	node = element->GetFirstChildNamed("depth");
+	if (node){
+		node->GetText<float>(fVal);
+		primitiveGrid->SetDepth(fVal);
+	}
+
+	node = element->GetFirstChildNamed("rows");
+	if (node){
+		node->GetText<int>(iVal);
+		primitiveGrid->SetRows(iVal);
+	}
+
+	node = element->GetFirstChildNamed("columns");
+	if (node){
+		node->GetText<int>(iVal);
+		primitiveGrid->SetColumns(iVal);
+	}
+
+	return primitiveGrid;
+ }

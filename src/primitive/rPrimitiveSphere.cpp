@@ -38,14 +38,14 @@ rString rPrimitiveSphere::ClassName() const{
 
 void rPrimitiveSphere::Draw(){
 	if (geometry.VertexCount() == 0)
-		CreateSphereVerts();
+		CreateGeometry();
 
 	rMatrix4 transform = TransformMatrix();
 	m_engine->renderer->Render3dBuffer(geometry, transform, m_color);
 }
 
-void rPrimitiveSphere::CreateSphereVerts(){
-
+void rPrimitiveSphere::CreateGeometry(){
+	geometry.Reset(rGEOMETRY_LINES, 3, false);
 
 	float R = 1.0f / (float)(m_rings-1);
     float S = 1.0f / (float)(m_sectors-1);

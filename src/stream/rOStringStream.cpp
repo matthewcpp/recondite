@@ -3,8 +3,8 @@
 rOStringStream::rOStringStream(){
 }
 
-rOStringStream::rOStringStream(const rString& path){
-
+rOStringStream::rOStringStream(const rString& str){
+	m_stream << str.c_str();
 }
 
 rOStream& rOStringStream::Write(const char* buffer, size_t size){

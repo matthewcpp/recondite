@@ -8,10 +8,10 @@ endif()
 
 project(recondite C CXX)
 
-FIND_PACKAGE ( Threads REQUIRED )
-find_package(OpenGL REQUIRED)
+set (CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-set(GLEW_INCLUDE_DIR ${GLEW_DIR}/include)
+find_package(Threads REQUIRED)
+find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(SDL REQUIRED)
 find_package(GTest REQUIRED)
@@ -22,7 +22,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/platform)
 include_directories( ${OPENGL_INCLUDE_DIRS} ${GLEW_INCLUDE_PATH} ${CMAKE_CURRENT_SOURCE_DIR})
 include_directories( ${SDL_INCLUDE_DIR} )
 
-set (CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include (recondite)
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)

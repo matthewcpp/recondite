@@ -4,16 +4,9 @@
 #include <algorithm>
 
 #include "rBuild.hpp"
-#include "rRectangle2.hpp"
-#include "rCircle2.hpp"
-#include "rMatrix3.hpp"
-#include "rLine2.hpp"
 
-#include "rVector3.hpp"
-
-#ifndef M_PI
-	#define M_PI 3.141592653589793238462643f
-#endif
+#define _USE_MATH_DEFINES
+#include <math.h>
 
 #define rMATH_ZERO_TOLERANCE 1e-06f
 

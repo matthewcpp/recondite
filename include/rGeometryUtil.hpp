@@ -15,6 +15,7 @@
 #include "rSkeleton.hpp"
 
 #include "rMathUtil.hpp"
+#include "rCircle2.hpp"
 
 namespace rGeometryUtil{
 	void CreateRoundedRectVerticies(const rRect& rect, float radius, int detail, rImmediateBuffer& geometry);

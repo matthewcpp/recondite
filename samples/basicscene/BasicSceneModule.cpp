@@ -80,6 +80,7 @@ void BasicSceneModule::Init(rEngine& engine){
 	engine.application->RegisterActorLoader("PrimitiveBox", new rPrimitiveBoxReader());
 	engine.application->RegisterActorLoader("PrimitiveCone", new rPrimitiveConeReader());
 	engine.application->RegisterActorLoader("PrimitiveCylinder", new rPrimitiveCylinderReader());
+	engine.application->RegisterActorLoader("PrimitiveSphere", new rPrimitiveSphereReader());
 
 	engine.application->LoadScene("content/basicscene/levels/world.rlvl");
 	

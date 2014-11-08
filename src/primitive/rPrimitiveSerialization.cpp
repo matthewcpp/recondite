@@ -1,34 +1,40 @@
 #include "primitive/rPrimitiveSerialization.hpp"
 
+//---------- Primitive ----------
+
+void rPrimitiveReader::LoadPrimitiveProperties(rXMLElement* element, rPrimitive* primitive){
+	rColor color = rColor::White;
+
+	rXMLUtil::ReadColorFromElement(element->GetFirstChildNamed("color"), color);
+	primitive->SetColor(color);
+}
+
 //---------- Box ----------
 
 rActor3* rPrimitiveBoxReader::LoadActor(rXMLElement* element, const rString& id, rEngine* engine){
-	rColor color = rColor::White;
 	rVector3 vec = rVector3::ZeroVector;
-	float val = 1.0f;
+	float fVal = 1.0f;
 
 	rPrimitiveBox* primitiveBox = new rPrimitiveBox(id, engine);
 	LoadActorProperties(element, primitiveBox);
+	LoadPrimitiveProperties(element, primitiveBox);
 
-	rXMLUtil::ReadColorFromElement(element->GetFirstChildNamed("color"), color);
-	primitiveBox->SetColor(color);
-
-	rXMLElement* width = element->GetFirstChildNamed("width");
-	if (width){
-		width->GetText<float>(val);
-		primitiveBox->SetWidth(val);
+	rXMLElement* node = element->GetFirstChildNamed("width");
+	if (node){
+		node->GetText<float>(fVal);
+		primitiveBox->SetWidth(fVal);
 	}
 
-	rXMLElement* height = element->GetFirstChildNamed("height");
-	if (height){
-		height->GetText<float>(val);
-		primitiveBox->SetHeight(val);
+	node = element->GetFirstChildNamed("height");
+	if (node){
+		node->GetText<float>(fVal);
+		primitiveBox->SetHeight(fVal);
 	}
 
-	rXMLElement* depth = element->GetFirstChildNamed("depth");
-	if (depth){
-		depth->GetText<float>(val);
-		primitiveBox->SetDepth(val);
+	node = element->GetFirstChildNamed("depth");
+	if (node){
+		node->GetText<float>(fVal);
+		primitiveBox->SetDepth(fVal);
 	}
 
 	return primitiveBox;
@@ -37,32 +43,30 @@ rActor3* rPrimitiveBoxReader::LoadActor(rXMLElement* element, const rString& id,
  //---------- Cone ----------
 
  rActor3* rPrimitiveConeReader::LoadActor(rXMLElement* element, const rString& id, rEngine* engine){
-	 rColor color = rColor::White;
-	 float val = 1.0f;
-	 int intVal = 0;
+	 float fVal = 1.0f;
+	 int iVal = 0;
 
 	rPrimitiveCone* primitiveCone = new rPrimitiveCone(id, engine);
 	LoadActorProperties(element, primitiveCone);
+	LoadPrimitiveProperties(element, primitiveCone);
 	
-	rXMLUtil::ReadColorFromElement(element->GetFirstChildNamed("color"), color);
-	primitiveCone->SetColor(color);
 
-	rXMLElement* width = element->GetFirstChildNamed("radius");
-	if (width){
-		width->GetText<float>(val);
-		primitiveCone->SetRadius(val);
+	rXMLElement* node = element->GetFirstChildNamed("radius");
+	if (node){
+		node->GetText<float>(fVal);
+		primitiveCone->SetRadius(fVal);
 	}
 
-	rXMLElement* height = element->GetFirstChildNamed("height");
-	if (height){
-		height->GetText<float>(val);
-		primitiveCone->SetHeight(val);
+	node = element->GetFirstChildNamed("height");
+	if (node){
+		node->GetText<float>(fVal);
+		primitiveCone->SetHeight(fVal);
 	}
 
-	rXMLElement* segmentCount = element->GetFirstChildNamed("segmentCount");
-	if (segmentCount){
-		segmentCount->GetText<int>(intVal);
-		primitiveCone->SetSegmentCount(intVal);
+	node = element->GetFirstChildNamed("segmentCount");
+	if (node){
+		node->GetText<int>(iVal);
+		primitiveCone->SetSegmentCount(iVal);
 	}
 
 	 return primitiveCone;
@@ -71,33 +75,61 @@ rActor3* rPrimitiveBoxReader::LoadActor(rXMLElement* element, const rString& id,
  //---------- Cylinder ----------
 
  rActor3* rPrimitiveCylinderReader::LoadActor(rXMLElement* element, const rString& id, rEngine* engine){
-	 rColor color = rColor::White;
-	 float val = 1.0f;
-	 int intVal = 0;
+	 float fVal = 1.0f;
+	 int iVal = 0;
 
 	 rPrimitiveCylinder* primitiveCylinder = new rPrimitiveCylinder(id, engine);
 	 LoadActorProperties(element, primitiveCylinder);
+	 LoadPrimitiveProperties(element, primitiveCylinder);
 
-	rXMLUtil::ReadColorFromElement(element->GetFirstChildNamed("color"), color);
-	primitiveCylinder->SetColor(color);
 
-	rXMLElement* width = element->GetFirstChildNamed("radius");
-	if (width){
-		width->GetText<float>(val);
-		primitiveCylinder->SetRadius(val);
+	rXMLElement* node = element->GetFirstChildNamed("radius");
+	if (node){
+		node->GetText<float>(fVal);
+		primitiveCylinder->SetRadius(fVal);
 	}
 
-	rXMLElement* height = element->GetFirstChildNamed("height");
-	if (height){
-		height->GetText<float>(val);
-		primitiveCylinder->SetHeight(val);
+	node = element->GetFirstChildNamed("height");
+	if (node){
+		node->GetText<float>(fVal);
+		primitiveCylinder->SetHeight(fVal);
 	}
 
-	rXMLElement* segmentCount = element->GetFirstChildNamed("segmentCount");
-	if (segmentCount){
-		segmentCount->GetText<int>(intVal);
-		primitiveCylinder->SetSegmentCount(intVal);
+	node = element->GetFirstChildNamed("segmentCount");
+	if (node){
+		node->GetText<int>(iVal);
+		primitiveCylinder->SetSegmentCount(iVal);
 	}
 
 	 return primitiveCylinder;
+ }
+
+ //---------- Sphere ----------
+ rActor3* rPrimitiveSphereReader::LoadActor(rXMLElement* element, const rString& id, rEngine* engine){
+	float fVal = 1.0f;
+	int iVal = 0;
+
+	rPrimitiveSphere* primitiveSphere = new rPrimitiveSphere(id, engine);
+	LoadActorProperties(element, primitiveSphere);
+	LoadPrimitiveProperties(element, primitiveSphere);
+
+	rXMLElement* node = element->GetFirstChildNamed("radius");
+	if (node){
+		node->GetText<float>(fVal);
+		primitiveSphere->SetRadius(fVal);
+	}
+
+	node = element->GetFirstChildNamed("rings");
+	if (node){
+		node->GetText<int>(iVal);
+		primitiveSphere->SetRings(iVal);
+	}
+
+	node = element->GetFirstChildNamed("sectors");
+	if (node){
+		node->GetText<int>(iVal);
+		primitiveSphere->SetSectors(iVal);
+	}
+
+	 return primitiveSphere;
  }

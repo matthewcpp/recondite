@@ -9,7 +9,7 @@
 #include "interface/riScene.hpp"
 #include "rActorSerialization.hpp"
 
-#include "stream/rIStream.hpp"
+#include "stream/rOStringStream.hpp"
 #include "xml/rXMLDocument.hpp"
 
 #include "rActor3.hpp"
@@ -24,6 +24,8 @@ public:
 	virtual size_t NumActors () const;
 
 	virtual void DeleteActor(const rString& name);
+
+	rString GetDefaultActorId(const rString& prefix);
 
 	void Clear();
 

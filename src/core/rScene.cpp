@@ -67,3 +67,17 @@ void rScene::Clear(){
 size_t rScene::NumActors () const{
 	return m_actors.size();
 }
+
+rString rScene::GetDefaultActorId(const rString& prefix){
+	rString defaultActorId;
+	int count = 0;
+
+	do {
+		rOStringStream str(prefix);
+		str << count;
+		defaultActorId = str.Str();
+		count += 1;
+	}while(m_actors.count(defaultActorId) == 1);
+
+	return defaultActorId;
+}

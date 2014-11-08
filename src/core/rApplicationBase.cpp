@@ -187,7 +187,8 @@ void rApplicationBase::LoadScene(const rString& name){
 
 			rString elementName = actorElement->Name();
 			rString id;
-			actorElement->GetAttribute<rString>("id", id);
+			if (!actorElement->GetAttribute<rString>("id", id))
+				id = m_scene->GetDefaultActorId(elementName);
 
 			if (m_actorLoaders.count(elementName)){
 				rActor3* actor = m_actorLoaders[elementName]->LoadActor(actorElement, id, &m_engine);

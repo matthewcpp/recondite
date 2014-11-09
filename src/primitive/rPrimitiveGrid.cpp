@@ -63,6 +63,7 @@ float rPrimitiveGrid::Width() const{
 
 void rPrimitiveGrid::SetWidth(float width){
 	m_width = width;
+	InvalidateGeometry();
 }
 
 float rPrimitiveGrid::Depth() const{
@@ -71,6 +72,7 @@ float rPrimitiveGrid::Depth() const{
 
 void rPrimitiveGrid::SetDepth(float depth){
 	m_depth = depth;
+	InvalidateGeometry();
 }
 
 int rPrimitiveGrid::Rows() const{
@@ -79,6 +81,7 @@ int rPrimitiveGrid::Rows() const{
 
 void rPrimitiveGrid::SetRows(int rows){
 	m_rows = std::max(rows, 1);
+	InvalidateGeometry();
 }
 
 int rPrimitiveGrid::Colums() const{
@@ -87,4 +90,5 @@ int rPrimitiveGrid::Colums() const{
 
 void rPrimitiveGrid::SetColumns( int columns){
 	m_columns = std::max(columns, 1);
+	InvalidateGeometry();
 }

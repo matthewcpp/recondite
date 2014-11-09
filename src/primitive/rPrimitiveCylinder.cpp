@@ -14,6 +14,7 @@ float rPrimitiveCylinder::Radius() const{
 
 void rPrimitiveCylinder::SetRadius(float radius){
 	m_radius = radius;
+	InvalidateGeometry();
 }
 
 float rPrimitiveCylinder::Height() const{
@@ -22,6 +23,7 @@ float rPrimitiveCylinder::Height() const{
 
 void rPrimitiveCylinder::SetHeight(float height){
 	m_height = height;
+	InvalidateGeometry();
 }
 
 rString rPrimitiveCylinder::ClassName() const{
@@ -34,6 +36,7 @@ int rPrimitiveCylinder::SegmentCount() const{
 
 void rPrimitiveCylinder::SetSegmentCount(int segmentCount){
 	m_segmentCount = segmentCount;
+	InvalidateGeometry();
 }
 
 void rPrimitiveCylinder::CreateGeometry(){

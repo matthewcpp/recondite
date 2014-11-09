@@ -14,6 +14,7 @@ float rPrimitiveSphere::Radius() const{
 
 void rPrimitiveSphere::SetRadius(float radius){
 	m_radius = radius;
+	InvalidateGeometry();
 }
 
 int rPrimitiveSphere::Rings() const{
@@ -22,6 +23,7 @@ int rPrimitiveSphere::Rings() const{
 
 void rPrimitiveSphere::SetRings(int rings){
 	m_rings = rings;
+	InvalidateGeometry();
 }
 
 int rPrimitiveSphere::Sectors() const{
@@ -30,6 +32,7 @@ int rPrimitiveSphere::Sectors() const{
 
 void rPrimitiveSphere::SetSectors(int sectors){
 	m_sectors = sectors;
+	InvalidateGeometry();
 }
 
 rString rPrimitiveSphere::ClassName() const{

@@ -41,6 +41,7 @@ float rPrimitiveBox::Width() const{
 
 void rPrimitiveBox::SetWidth(float width){
 	m_width = width;
+	InvalidateGeometry();
 }
 
 float rPrimitiveBox::Height() const{
@@ -49,6 +50,7 @@ float rPrimitiveBox::Height() const{
 
 void rPrimitiveBox::SetHeight(float height){
 	m_height = height;
+	InvalidateGeometry();
 }
 
 float rPrimitiveBox::Depth() const{
@@ -57,4 +59,5 @@ float rPrimitiveBox::Depth() const{
 
 void rPrimitiveBox::SetDepth(float depth){
 	m_depth = depth;
+	InvalidateGeometry();
 }

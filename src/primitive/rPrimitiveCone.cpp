@@ -15,6 +15,7 @@ float rPrimitiveCone::Radius() const{
 
 void rPrimitiveCone::SetRadius(float radius){
 	m_radius = radius;
+	InvalidateGeometry();
 }
 
 float rPrimitiveCone::Height() const{
@@ -23,6 +24,7 @@ float rPrimitiveCone::Height() const{
 
 void rPrimitiveCone::SetHeight(float height){
 	m_height = height;
+	InvalidateGeometry();
 }
 
 rString rPrimitiveCone::ClassName() const{
@@ -63,4 +65,5 @@ int rPrimitiveCone::SegmentCount() const{
 
 void rPrimitiveCone::SetSegmentCount(int segmentCount){
 	m_segmentCount = segmentCount;
+	InvalidateGeometry();
 }

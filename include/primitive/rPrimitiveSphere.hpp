@@ -25,19 +25,15 @@ public:
 	void SetSectors(int sectors);
 
 	virtual rString ClassName() const;
-	virtual void Draw();
 
 
 protected:
-	void CreateGeometry();
+	virtual void CreateGeometry();
 
 private:
 	float m_radius;
 	int m_rings;
 	int m_sectors;
-
-	//temp
-	rImmediateBuffer geometry;
 };
 
 #endif

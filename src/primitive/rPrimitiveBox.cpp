@@ -9,8 +9,8 @@ rPrimitiveBox::rPrimitiveBox(const rString& id, rEngine* engine)
 }
 
 
-void rPrimitiveBox::Draw(){
-	rImmediateBuffer geometry(rGEOMETRY_LINES, 3, false);
+void rPrimitiveBox::CreateGeometry(){
+	geometry.Reset(rGEOMETRY_LINES, 3, false);
 
 	unsigned short indicies[] = { 0,1,1,2,2,3,3,0,4,5,5,6,6,7,7,4,0,4,1,5,2,6,3,7 };
 	geometry.SetIndexBuffer(indicies, 24);
@@ -27,9 +27,6 @@ void rPrimitiveBox::Draw(){
 	geometry.PushVertex(halfWidth, m_height, -halfDepth);
 	geometry.PushVertex(halfWidth, 0.0f, -halfDepth);
 	geometry.PushVertex(-halfWidth, 0.0f, -halfDepth);
-
-	rMatrix4 transform = TransformMatrix();
-	m_engine->renderer->Render3dBuffer(geometry, transform, m_color);
 }
 
 

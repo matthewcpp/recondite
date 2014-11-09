@@ -57,14 +57,6 @@ void rPrimitiveGrid::CreateGeometry(){
 	}
 }
 
-void rPrimitiveGrid::Draw(){
-	if (geometry.VertexCount() == 0)
-		CreateGeometry();
-
-	rMatrix4 transform = TransformMatrix();
-	m_engine->renderer->Render3dBuffer(geometry, transform, m_color);
-}
-
 float rPrimitiveGrid::Width() const{
 	return m_width;
 }

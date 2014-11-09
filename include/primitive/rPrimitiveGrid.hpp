@@ -11,7 +11,6 @@ public:
 
 public:
 	virtual rString ClassName() const;
-	virtual void Draw();
 
 	float Width() const;
 	void SetWidth(float width);
@@ -35,9 +34,6 @@ private:
 
 	int m_rows;
 	int m_columns;
-
-	//temp
-	rImmediateBuffer geometry;
 };
 
 #endif

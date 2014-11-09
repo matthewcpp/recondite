@@ -19,7 +19,9 @@ public:
 	void SetSegmentCount(int segmentCount);
 
 	virtual rString ClassName() const;
-	virtual void Draw();
+
+protected:
+	virtual void CreateGeometry();
 
 private:
 	float m_height;

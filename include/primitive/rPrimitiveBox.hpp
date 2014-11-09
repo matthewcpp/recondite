@@ -11,7 +11,6 @@ public:
 	rPrimitiveBox(const rString& id, rEngine* engine);
 
 public:
-	virtual void Draw();
 
 	virtual rString ClassName() const;
 
@@ -23,6 +22,9 @@ public:
 
 	float Depth() const;
 	void SetDepth(float depth);
+
+protected:
+	virtual void CreateGeometry();
 
 private:
 

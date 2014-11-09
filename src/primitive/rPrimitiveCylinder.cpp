@@ -36,8 +36,8 @@ void rPrimitiveCylinder::SetSegmentCount(int segmentCount){
 	m_segmentCount = segmentCount;
 }
 
-void rPrimitiveCylinder::Draw(){
-	rImmediateBuffer geometry(rGEOMETRY_LINES, 3, false);
+void rPrimitiveCylinder::CreateGeometry(){
+	geometry.Reset(rGEOMETRY_LINES, 3, false);
 
 	float step = 360.0f / (float)m_segmentCount;
 
@@ -75,7 +75,4 @@ void rPrimitiveCylinder::Draw(){
 
 	geometry.PushIndex(0, count -1);
 	geometry.PushIndex(count, count + count - 1);
-
-	rMatrix4 transform = TransformMatrix();
-	m_engine->renderer->Render3dBuffer(geometry, transform, m_color);
 }

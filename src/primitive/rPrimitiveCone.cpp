@@ -29,8 +29,8 @@ rString rPrimitiveCone::ClassName() const{
 	return "PrimitiveCone";
 }
 
-void rPrimitiveCone::Draw(){
-	rImmediateBuffer geometry(rGEOMETRY_LINES, 3, false);
+void rPrimitiveCone::CreateGeometry(){
+	geometry.Reset(rGEOMETRY_LINES, 3, false);
 
 	geometry.PushVertex(0, m_height, 0);
 
@@ -55,10 +55,6 @@ void rPrimitiveCone::Draw(){
 		if (i > 1)
 			geometry.PushIndex(i, i - 1);
 	}
-
-
-	rMatrix4 transform = TransformMatrix();
-	m_engine->renderer->Render3dBuffer(geometry, transform, m_color);
 }
 
 int rPrimitiveCone::SegmentCount() const{

@@ -36,14 +36,6 @@ rString rPrimitiveSphere::ClassName() const{
 	return "PrimitiveSphere";
 }
 
-void rPrimitiveSphere::Draw(){
-	if (geometry.VertexCount() == 0)
-		CreateGeometry();
-
-	rMatrix4 transform = TransformMatrix();
-	m_engine->renderer->Render3dBuffer(geometry, transform, m_color);
-}
-
 void rPrimitiveSphere::CreateGeometry(){
 	geometry.Reset(rGEOMETRY_LINES, 3, false);
 

@@ -47,6 +47,11 @@ void rElementBufferData::Push(unsigned short v1, unsigned short v2, unsigned sho
 	m_elementData.push_back(v3);
 }
 
+void rElementBufferData::Push(unsigned short v1, unsigned short v2){
+	m_elementData.push_back(v1);
+	m_elementData.push_back(v2);
+}
+
 rGeometryType rElementBufferData::GeometryType() const{
 	return m_geometryType;
 

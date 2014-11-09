@@ -42,6 +42,7 @@ public:
 	size_t ElementCount() const;
 	
 	void Push(unsigned short v1, unsigned short v2, unsigned short v3);
+	void Push(unsigned short v1, unsigned short v2);
 	
 	void Clear();
 	

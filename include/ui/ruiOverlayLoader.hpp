@@ -14,6 +14,7 @@
 
 #include "ui/ruiOverlay.hpp"
 #include "ui/ruiAbsoluteLayout.hpp"
+#include "ui/ruiLinearLayout.hpp"
 #include "ui/ruiText.hpp"
 #include "ui/ruiPicker.hpp"
 #include "ui/ruiCheckbox.hpp"
@@ -38,6 +39,7 @@ private:
 	void ParseChildItems(rXMLElement* parent);
 	void ParseStylesheetItem(rXMLElement* element);
 	void ParseAbsoluteLayoutItem(rXMLElement* element);
+	void ParseLinearLayoutItem(rXMLElement* element);
 	void ParseTextItem(rXMLElement* element);
 	void ParsePickerItem(rXMLElement* element);
 	void ParseCheckboxItem(rXMLElement* element);

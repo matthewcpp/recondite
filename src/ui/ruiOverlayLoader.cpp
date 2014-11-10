@@ -13,6 +13,7 @@ void ruiOverlayLoader::InitParseItemMap(){
 
 	s_parseItemMap["stylesheet"] = &ruiOverlayLoader::ParseStylesheetItem;
 	s_parseItemMap["absolutelayout"] = &ruiOverlayLoader::ParseAbsoluteLayoutItem;
+	s_parseItemMap["linearlayout"] = &ruiOverlayLoader::ParseLinearLayoutItem;
 	s_parseItemMap["text"] = &ruiOverlayLoader::ParseTextItem;
 	s_parseItemMap["picker"] = &ruiOverlayLoader::ParsePickerItem;
 	s_parseItemMap["checkbox"] = &ruiOverlayLoader::ParseCheckboxItem;
@@ -172,4 +173,25 @@ void ruiOverlayLoader::ParseClassList(rXMLElement* element, ruiWidget* widget){
 				widget->AddClass(currentClass);
 		}
 	}
+}
+
+void ruiOverlayLoader::ParseLinearLayoutItem(rXMLElement* element){
+	ruiLayoutDirection layoutDirection = ruiLAYOUT_HORIZONTAL;
+
+	rString direction;
+	if (element->GetAttribute<rString>("direction", direction)){
+		if (direction == "vertical")
+			layoutDirection = ruiLAYOUT_VERTICAL;
+	}
+
+	ruiLinearLayout* linearLayout = new ruiLinearLayout(layoutDirection);
+
+	if (m_layoutStack.size() == 0)
+		m_currentOverlay->SetLayout(linearLayout);
+
+	m_layoutStack.push_back(linearLayout);
+
+	ParseChildItems(element);
+
+	m_layoutStack.pop_back();
 }

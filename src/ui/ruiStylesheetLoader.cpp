@@ -69,6 +69,16 @@ void ruiStylesheetLoader::ParseStringProperty(const rString& name, const rString
 	m_currentStyle->SetString(name, value);
 }
 
+void ruiStylesheetLoader::ParseMarginProperty(const rString& name, const rString& value){
+	int marginVal;
+	if (rString::ToInt(value, marginVal)){
+		m_currentStyle->SetInt("margin-top", marginVal);
+		m_currentStyle->SetInt("margin-bottom", marginVal);
+		m_currentStyle->SetInt("margin-left", marginVal);
+		m_currentStyle->SetInt("margin-right", marginVal);
+	}
+}
+
 void ruiStylesheetLoader::InitParseStyleMap(){
 	if (s_parseStyleMap.size() >0)
 		return;
@@ -83,6 +93,13 @@ void ruiStylesheetLoader::InitParseStyleMap(){
 	s_parseStyleMap["padding-bottom"] = &ruiStylesheetLoader::ParseIntProperty;
 	s_parseStyleMap["padding-left"] = &ruiStylesheetLoader::ParseIntProperty;
 	s_parseStyleMap["padding-right"] = &ruiStylesheetLoader::ParseIntProperty;
+
+	s_parseStyleMap["margin-top"] = &ruiStylesheetLoader::ParseIntProperty;
+	s_parseStyleMap["margin-bottom"] = &ruiStylesheetLoader::ParseIntProperty;
+	s_parseStyleMap["margin-left"] = &ruiStylesheetLoader::ParseIntProperty;
+	s_parseStyleMap["margin-right"] = &ruiStylesheetLoader::ParseIntProperty;
+
+	s_parseStyleMap["margin"] = &ruiStylesheetLoader::ParseMarginProperty;
 
 	s_parseStyleMap["border-radius"] = &ruiStylesheetLoader::ParseIntProperty;
 

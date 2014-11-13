@@ -145,6 +145,23 @@ void rPropertyCollection::Clear(){
 	m_properties.clear();
 }
 
+rPropertyType rPropertyCollection::GetType(const rString& key) const{
+	rPropertyMap::const_iterator result = m_properties.find(key);
+
+	if (result == m_properties.end())
+		return rPROPERTY_TYPE_UNKNOWN;
+	else
+		return result->second->type;
+}
+
+void rPropertyCollection::GetKeys(rArrayString& keys) const{
+	keys.clear();
+
+	rPropertyMap::const_iterator end = m_properties.end();
+	for (rPropertyMap::const_iterator it = m_properties.begin(); it != end; ++it)
+		keys.push_back(it->first);
+}
+
 //------------------------
 rProperty::rProperty(bool b){
 	type = rPROPERTY_TYPE_BOOL;

@@ -26,10 +26,10 @@ void rOpenGLContentManager::InitDefaultAssets(){
 
     rMaterialData materialData;
     materialData.SetShader("default_colored", "");
-    materialData.SetParameter( rMATERIAL_PARAMETER_COLOR , "fragColor", "255 255 255 255");
+	materialData.SetParameter(rPROPERTY_TYPE_COLOR, "fragColor", "255 255 255 255");
 	LoadMaterial(materialData, "default_colored");
 
 	materialData.SetShader("default_points", "");
-	materialData.SetParameter( rMATERIAL_PARAMETER_FLOAT , "recPointSize", "1");
+	materialData.SetParameter(rPROPERTY_TYPE_FLOAT, "recPointSize", "1");
 	LoadMaterial(materialData, "default_points");
 }

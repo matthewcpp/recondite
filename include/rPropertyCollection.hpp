@@ -3,6 +3,9 @@
 
 #include <map>
 
+#include "rBuild.hpp"
+#include "rTypes.hpp"
+
 #include "rString.hpp"
 #include "rColor.hpp"
 #include "rFont.hpp"
@@ -16,6 +19,7 @@ enum rPropertyType{
 	rPROPERTY_TYPE_COLOR,
 	rPROPERTY_TYPE_FONT,
 	rPROPERTY_TYPE_TEXTURE,
+	rPROPERTY_TYPE_UNKNOWN
 };
 
 union rPropertyValue{
@@ -70,6 +74,10 @@ public:
 
 	void DeleteProperty(const rString& key);
 	size_t NumProperties() const;
+
+	rPropertyType GetType(const rString& key) const;
+	void GetKeys(rArrayString& keys) const;
+
 	void Clear();
 
 protected:

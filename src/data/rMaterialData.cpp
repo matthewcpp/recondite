@@ -1,6 +1,6 @@
 #include "data/rMaterialData.hpp"
 
-rMaterialParameterData::rMaterialParameterData(rMaterialParameterType t, const rString& n, const rString& v, const rString& p){
+rMaterialParameterData::rMaterialParameterData(rPropertyType t, const rString& n, const rString& v, const rString& p){
 	Set(t,n,v,p);
 }
 
@@ -8,7 +8,7 @@ rMaterialParameterData::rMaterialParameterData(const rMaterialParameterData& dat
 	Set(data.type, data.name, data.value, data.path);
 }
 
-void rMaterialParameterData::Set(rMaterialParameterType t, const rString& n, const rString& v, const rString& p){
+void rMaterialParameterData::Set(rPropertyType t, const rString& n, const rString& v, const rString& p){
 	type = t;
 	name = n;
 	value = v;
@@ -72,20 +72,20 @@ rContentError rMaterialData::LoadShaderData(const rXMLDocument& xml){
 	return rCONTENT_ERROR_NONE;
 }
 
-rMaterialParameterType rMaterialData::GetParameterType(const rString& type){
+rPropertyType rMaterialData::GetParameterType(const rString& type){
 	if (type == "texture2D")
-		return rMATERIAL_PARAMETER_TEXTURE2D;
+		return rPROPERTY_TYPE_TEXTURE;
 	else if (type == "color")
-		return rMATERIAL_PARAMETER_COLOR;
+		return rPROPERTY_TYPE_COLOR;
 	else
-		return rMATERIAL_PARAMETER_UNKNOWN;
+		return rPROPERTY_TYPE_UNKNOWN;
 }
 
-rString rMaterialData::GetParamterTypeName(rMaterialParameterType type){
+rString rMaterialData::GetParamterTypeName(rPropertyType type){
 	switch(type){
-		case rMATERIAL_PARAMETER_TEXTURE2D:
+	case rPROPERTY_TYPE_TEXTURE:
 			return "texture2D";
-		case rMATERIAL_PARAMETER_COLOR:
+	case rPROPERTY_TYPE_COLOR:
 			return "color";
 		default:
 			return "unknown";
@@ -229,11 +229,11 @@ rString rMaterialData::GetShaderName() const{
 	return m_shaderName;
 }
 
-void rMaterialData::SetParameter(rMaterialParameterType type, const rString& name, const rString& value){
+void rMaterialData::SetParameter(rPropertyType type, const rString& name, const rString& value){
 	SetParameter(type, name, value, "");
 }
 
-void rMaterialData::SetParameter(rMaterialParameterType type, const rString& name, const rString& value, const rString& path){
+void rMaterialData::SetParameter(rPropertyType type, const rString& name, const rString& value, const rString& path){
 	m_parameters[name] = rMaterialParameterData (type, name, value, path);
 }
 
@@ -263,7 +263,7 @@ void rMaterialData::GetParameterNames(rArrayString& names) const{
 		names.push_back(it->first);
 }
 
-void rMaterialData::GetParameterNamesForType(rArrayString& names, rMaterialParameterType type) const{
+void rMaterialData::GetParameterNamesForType(rArrayString& names, rPropertyType type) const{
 	names.clear();
 	
 	for (rMaterialParameterDataConstItr it = m_parameters.begin(); it != m_parameters.end(); ++it){

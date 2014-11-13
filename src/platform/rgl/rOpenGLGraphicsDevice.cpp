@@ -141,28 +141,30 @@ void rOpenGLGraphicsDevice::SetViewport(int x , int y, int width, int height) {
 }
 
 void rOpenGLGraphicsDevice::SetActiveMaterial(rMaterial* material){
+	const rPropertyCollection& materialParameters = material->Parameters();
 	int textureIndex = 0;
 	GLint programId = material->Shader()->ProgramId();
 	rArrayString paramNames;
-	rMaterialParameter parameter;
 	material->GetParameterNames(paramNames);
 	
 	glUseProgram(programId);
 	
 	for (size_t i = 0; i < paramNames.size(); i++){
-		material->GetParameter(paramNames[i], parameter);
+		rString paramName = paramNames[i];
+		rPropertyType paramType = materialParameters.GetType(paramName);
 		GLint uniformHandle = glGetUniformLocation ( programId, paramNames[i].c_str() );
 		
-		switch (parameter.m_type){
-			case rMATERIAL_PARAMETER_COLOR:{
+		switch (paramType){
+			case rPROPERTY_TYPE_COLOR:{
 				rColor color;
-				parameter.GetColor(color);
+				materialParameters.GetColor(paramName, color);
 				glUniform4f(uniformHandle, color.red / 255.0f, color.green / 255.0f, color.blue / 255.0f , color.alpha / 255.0f);
 			}
 			break;
 
-			case rMATERIAL_PARAMETER_TEXTURE2D:{
-				rTexture2D* texture = parameter.GetTexture();
+			case rPROPERTY_TYPE_TEXTURE:{
+				rTexture2D* texture = NULL;
+				materialParameters.GetTexture(paramName, texture);
 				glActiveTexture ( GL_TEXTURE0 + textureIndex);
 				glBindTexture ( GL_TEXTURE_2D, texture->GraphicsDeviceID() );
 				glUniform1i ( uniformHandle, textureIndex );
@@ -179,8 +181,9 @@ void rOpenGLGraphicsDevice::SetActiveMaterial(rMaterial* material){
 			}
 			break;
 
-			case rMATERIAL_PARAMETER_FLOAT:{
-				float f = parameter.GetFloat();
+			case rPROPERTY_TYPE_FLOAT:{
+				float f = 0.0f;
+				materialParameters.GetFloat(paramName, f);
 				glUniform1f(uniformHandle, f);
 			}
 			break;

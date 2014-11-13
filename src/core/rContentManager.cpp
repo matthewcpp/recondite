@@ -276,7 +276,7 @@ bool rContentManager::LoadMaterialDependencies(const rMaterialData& materialData
 		materialData.GetParameterData(materialParams[i], paramData);
 		
 		switch (paramData.type){
-			case rMATERIAL_PARAMETER_TEXTURE2D:{
+			case rPROPERTY_TYPE_TEXTURE:{
 				rTexture2D* texture = GetOrLoadTexture(paramData.value, rPath::Combine(materialDirectory, paramData.path));
 				
 				if (texture){
@@ -294,7 +294,7 @@ bool rContentManager::LoadMaterialDependencies(const rMaterialData& materialData
 			}
 			break;
 			
-			case rMATERIAL_PARAMETER_COLOR:{
+			case rPROPERTY_TYPE_COLOR:{
 				std::stringstream stream(paramData.value.c_str());
 				unsigned int c[4];
 				stream >> c[0] >> c[1] >> c[2] >> c[3];
@@ -373,14 +373,18 @@ rContentError rContentManager::RemoveMaterialAsset(const rString& name){
 	
 	rMaterial* material = result->second;
 	if (material->RetainCount() == 0){
+		const rPropertyCollection& parameters = material->Parameters();
 		rArrayString parameterNames;
-		rMaterialParameter parameter;
 		material->GetParameterNames(parameterNames);
 		
 		for (size_t i = 0; i < parameterNames.size(); i++){
-			material->GetParameter(parameterNames[i], parameter);
-			if (parameter.m_type == rMATERIAL_PARAMETER_TEXTURE2D)
-				ReleaseAsset(parameter.GetTexture());
+			rString paramName = parameterNames[i];
+			rPropertyType paramType = parameters.GetType(paramName);
+			if (parameters.GetType(paramName) == rPROPERTY_TYPE_TEXTURE){
+				rTexture2D* texture = NULL;
+				parameters.GetTexture(paramName, texture);
+				ReleaseAsset(texture);
+			}
 		}
 			
 		delete material;

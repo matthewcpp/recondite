@@ -13,25 +13,7 @@
 #include "rMatrix4.hpp"
 #include "rShader.hpp"
 
-union rMaterialParameterValue{
-	rTexture2D* m_texture2d;
-	char m_color[4];
-	float m_float;
-};
-
-struct RECONDITE_API rMaterialParameter{
-	rMaterialParameterType m_type;
-	rMaterialParameterValue m_value;
-	
-	bool GetColor(rColor& color);
-	rTexture2D* GetTexture();
-	float GetFloat();
-};
-
-typedef std::map<rString, rMaterialParameter> rMaterialParameterMap;
-typedef rMaterialParameterMap::iterator rMaterialParameterItr;
-typedef rMaterialParameterMap::const_iterator rMaterialParameterConstItr;
-typedef std::pair<rString, rMaterialParameter> rMaterialParameterEntry;
+#include "rPropertyCollection.hpp"
 
 class RECONDITE_API rMaterial : public rAsset{
 public:
@@ -42,14 +24,15 @@ public:
 	void SetFloat(const rString& name, float value);
 	
 	void GetParameterNames(rArrayString& names) const;
-	bool GetParameter(const rString& name, rMaterialParameter& param);
 	
 	rShader* Shader() const;
 	
 	virtual rAssetType Type() const;
+
+	const rPropertyCollection& Parameters() const;
 	
 private:
-	rMaterialParameterMap m_parameters;
+	rPropertyCollection m_parameters;
 	
 	rShader* m_shader;
 };

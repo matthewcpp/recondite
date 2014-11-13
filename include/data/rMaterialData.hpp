@@ -5,20 +5,22 @@
 #include <fstream>
 
 #include "rBuild.hpp"
-#include "rDefs.hpp"
+#include "rTypes.hpp"
 #include "rString.hpp"
 
 #include "xml/rXMLDocument.hpp"
 #include "stream/rIFileStream.hpp"
 
+#include "rPropertyCollection.hpp"
+
 struct RECONDITE_API rMaterialParameterData{
 	rMaterialParameterData(){}
-	rMaterialParameterData(rMaterialParameterType t, const rString& n, const rString& v, const rString& p);
+	rMaterialParameterData(rPropertyType t, const rString& n, const rString& v, const rString& p);
 	
 	rMaterialParameterData(const rMaterialParameterData& data);
-	void Set(rMaterialParameterType t, const rString& n, const rString& v, const rString& p);
+	void Set(rPropertyType t, const rString& n, const rString& v, const rString& p);
 
-	rMaterialParameterType type;
+	rPropertyType type;
 	rString name;
 	rString value;
 	rString path;
@@ -50,8 +52,8 @@ public:
 	void SetPath(const rString& path);
 
 	void SetShader(const rString& shaderName, const rString& shaderPath);
-	void SetParameter(rMaterialParameterType type, const rString& name, const rString& value);
-	void SetParameter(rMaterialParameterType type, const rString& name, const rString& value, const rString& path);
+	void SetParameter(rPropertyType type, const rString& name, const rString& value);
+	void SetParameter(rPropertyType type, const rString& name, const rString& value, const rString& path);
 	
 	rString GetShaderName() const;
 	rString GetShaderPath() const;
@@ -59,7 +61,7 @@ public:
 	size_t GetParameterCount() const;
 	bool GetParameterData(const rString& name, rMaterialParameterData& data) const;
 	void GetParameterNames(rArrayString& names) const;
-	void GetParameterNamesForType(rArrayString& names, rMaterialParameterType type) const;
+	void GetParameterNamesForType(rArrayString& names, rPropertyType type) const;
 	
 	rContentError GetError() const;
 	
@@ -68,8 +70,8 @@ private :
 	rContentError LoadShaderData(const rXMLDocument& xml);
 	rContentError LoadParameters(const rXMLDocument& xml);
 	
-	static rMaterialParameterType GetParameterType(const rString& type);
-	static rString GetParamterTypeName(rMaterialParameterType type);
+	static rPropertyType GetParameterType(const rString& type);
+	static rString GetParamterTypeName(rPropertyType type);
 	
 private:
 	rString m_shaderName;

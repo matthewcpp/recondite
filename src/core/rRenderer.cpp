@@ -136,13 +136,13 @@ void rRenderer::RenderWireBox(const rAlignedBox3& box, const rColor color){
 void rRenderer::CreateRequiredMaterials(){
 	rMaterialData materialData;
 	materialData.SetShader("default_colored", "");
-	materialData.SetParameter( rMATERIAL_PARAMETER_COLOR , "fragColor", "255 255 255 255");
+	materialData.SetParameter(rPROPERTY_TYPE_COLOR, "fragColor", "255 255 255 255");
 	
 	m_contentManager->LoadMaterial(materialData, "immediate_color");
 	
 	rMaterialData texMaterial;
 	texMaterial.SetShader("default_textured", "");
-	texMaterial.SetParameter( rMATERIAL_PARAMETER_COLOR , "fragColor", "255 255 255 255");
+	texMaterial.SetParameter(rPROPERTY_TYPE_COLOR, "fragColor", "255 255 255 255");
 
 	m_contentManager->LoadMaterial(texMaterial, "immediate_texture");
 	m_contentManager->LoadMaterial(texMaterial, "immediate_text");

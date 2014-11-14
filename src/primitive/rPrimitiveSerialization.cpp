@@ -14,6 +14,7 @@ void rPrimitiveReader::LoadPrimitiveProperties(rXMLElement* element, rPrimitive*
 rActor3* rPrimitiveBoxReader::LoadActor(rXMLElement* element, const rString& id, rEngine* engine){
 	rVector3 vec = rVector3::ZeroVector;
 	float fVal = 1.0f;
+	int iVal;
 
 	rPrimitiveBox* primitiveBox = new rPrimitiveBox(id, engine);
 	LoadActorProperties(element, primitiveBox);
@@ -35,6 +36,24 @@ rActor3* rPrimitiveBoxReader::LoadActor(rXMLElement* element, const rString& id,
 	if (node){
 		node->GetText<float>(fVal);
 		primitiveBox->SetDepth(fVal);
+	}
+
+	node = element->GetFirstChildNamed("widthSegments");
+	if (node){
+		node->GetText<int>(iVal);
+		primitiveBox->SetWidthSegments(iVal);
+	}
+
+	node = element->GetFirstChildNamed("heightSegments");
+	if (node){
+		node->GetText<int>(iVal);
+		primitiveBox->SetHeightSegments(iVal);
+	}
+
+	node = element->GetFirstChildNamed("depthSegments");
+	if (node){
+		node->GetText<int>(iVal);
+		primitiveBox->SetDepthSegments(iVal);
 	}
 
 	return primitiveBox;

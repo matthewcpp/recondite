@@ -17,20 +17,37 @@ public:
 	float Width() const;
 	void SetWidth(float width);
 
+	int WidthSegments() const;
+	void SetWidthSegments(int widthSegments);
+
 	float Height() const;
 	void SetHeight(float height);
+
+	int HeightSegments() const;
+	void SetHeightSegments(int heightSegments);
 
 	float Depth() const;
 	void SetDepth(float depth);
 
+	int DepthSegments() const;
+	void SetDepthSegments(int depthSegments);
+
 protected:
 	virtual void CreateGeometry();
+
+	void GenerateFrontBack(float z);
+	void GenerateTopBottom(float y);
+	void GenerateLeftRight(float x);
 
 private:
 
 	float m_width;
 	float m_height;
 	float m_depth;
+
+	int m_widthSegments;
+	int m_heightSegments;
+	int m_depthSegments;
 };
 
 #endif

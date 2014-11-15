@@ -76,10 +76,11 @@ void rGeometryDataReader::ReadElementBufferData(std::istream& stream){
 		charBuffer.resize(nameLength);
 		stream.read(&charBuffer[0], nameLength);
 		rString name(&charBuffer[0], nameLength);
-		
-		rElementBufferData* bufferData = m_geometryData->CreateElementBuffer(name);
-		
 		stream.read((char*)&type, 4);
+
+		rElementBufferData* bufferData = m_geometryData->CreateElementBuffer(name, type);
+		
+		
 		stream.read((char*)&elementCount, 4);
 		
 		bufferData->SetGeometryType(type);

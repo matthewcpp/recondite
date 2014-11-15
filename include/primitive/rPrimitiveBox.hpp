@@ -33,11 +33,11 @@ public:
 	void SetDepthSegments(int depthSegments);
 
 protected:
-	virtual void CreateGeometry();
+	virtual void CreateGeometry(rGeometryData& geometry);
 
-	void GenerateFrontBack(float z);
-	void GenerateTopBottom(float y);
-	void GenerateLeftRight(float x);
+	void GenerateFrontBack(rGeometryData& geometry, float z, const rVector3& normal);
+	void GenerateTopBottom(rGeometryData& geometry, float y, const rVector3& normal);
+	void GenerateLeftRight(rGeometryData& geometry, float x, const rVector3& nomral);
 
 private:
 

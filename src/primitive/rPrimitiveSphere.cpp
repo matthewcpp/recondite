@@ -39,8 +39,13 @@ rString rPrimitiveSphere::ClassName() const{
 	return "PrimitiveSphere";
 }
 
-void rPrimitiveSphere::CreateGeometry(){
-	geometry.Reset(rGEOMETRY_LINES, 3, false);
+void rPrimitiveSphere::CreateGeometry(rGeometryData& geometry){
+	rElementBufferData* wireframe = geometry.CreateElementBuffer("wire", rGEOMETRY_LINES);
+	rElementBufferData* shaded = geometry.CreateElementBuffer("shaded", rGEOMETRY_TRIANGLES);
+
+	rVector3 position = rVector3::ZeroVector;
+	rVector3 normal = rVector3::ZeroVector;
+	rVector2 texCoord = rVector2::ZeroVector;
 
 	float R = 1.0f / (float)(m_rings-1);
     float S = 1.0f / (float)(m_sectors-1);
@@ -52,7 +57,8 @@ void rPrimitiveSphere::CreateGeometry(){
 			float x = std::cos(2*M_PI * s * S) * std::sin( M_PI * r * R );
 			float z = std::sin(2*M_PI * s * S) * std::sin( M_PI * r * R );
 
-			geometry.PushVertex(x * m_radius , (y * m_radius) + m_radius,z * m_radius);
+			position.Set(x * m_radius, (y * m_radius) + m_radius, z * m_radius);
+			geometry.PushVertex(position, normal, texCoord);
 		}
 	}
 
@@ -65,10 +71,10 @@ void rPrimitiveSphere::CreateGeometry(){
                 int p4 = (r+1) * m_sectors + s;
 
 				//lines
-				geometry.PushIndex(p1,p2);
-				geometry.PushIndex(p2,p3);
-				geometry.PushIndex(p3,p4);
-				geometry.PushIndex(p4,p1);
+				wireframe->Push(p1,p2);
+				wireframe->Push(p2,p3);
+				wireframe->Push(p3,p4);
+				wireframe->Push(p4,p1);
 		}
 	}
 }

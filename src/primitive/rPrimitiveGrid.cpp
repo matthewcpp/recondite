@@ -14,8 +14,13 @@ rString rPrimitiveGrid::ClassName() const{
 	return "PrimitiveGrid";
 }
 
-void rPrimitiveGrid::CreateGeometry(){
-	geometry.Reset(rGEOMETRY_LINES, 3, false);
+void rPrimitiveGrid::CreateGeometry(rGeometryData& geometry){
+	rElementBufferData* wireframe = geometry.CreateElementBuffer("wire", rGEOMETRY_LINES);
+	rElementBufferData* shaded = geometry.CreateElementBuffer("shaded", rGEOMETRY_TRIANGLES);
+
+	rVector3 position = rVector3::ZeroVector;
+	rVector3 normal = rVector3::UpVector;
+	rVector2 texCoord = rVector2::ZeroVector;
 
 	float startZ = -m_depth / 2.0f;
 	float startX = -m_width / 2.0f;
@@ -31,25 +36,35 @@ void rPrimitiveGrid::CreateGeometry(){
 			size_t index = geometry.VertexCount();
 
 			if (c == 0){
-				geometry.PushVertex(currentX, 0.0f, currentZ);
-				geometry.PushVertex(currentX, 0.0f, currentZ + rowHeight);
-				geometry.PushVertex(currentX + columnWidth, 0.0f, currentZ);
-				geometry.PushVertex(currentX + columnWidth, 0.0f, currentZ + rowHeight);
+				position.Set(currentX, 0.0f, currentZ);
+				geometry.PushVertex(position, normal, texCoord);
+
+				position.Set(currentX, 0.0f, currentZ + rowHeight);
+				geometry.PushVertex(position, normal, texCoord);
+
+				position.Set(currentX + columnWidth, 0.0f, currentZ);
+				geometry.PushVertex(position, normal, texCoord);
+
+				position.Set(currentX + columnWidth, 0.0f, currentZ + rowHeight);
+				geometry.PushVertex(position, normal, texCoord);
 
 				//wire indicies
-				geometry.PushIndex(index, index + 2);
-				geometry.PushIndex(index + 2, index + 3);
-				geometry.PushIndex(index + 3, index + 1);
-				geometry.PushIndex(index + 1, index);
+				wireframe->Push(index, index + 2);
+				wireframe->Push(index + 2, index + 3);
+				wireframe->Push(index + 3, index + 1);
+				wireframe->Push(index + 1, index);
 			}
 			else{
-				geometry.PushVertex(currentX + columnWidth, 0.0f, currentZ);
-				geometry.PushVertex(currentX + columnWidth, 0.0f, currentZ + rowHeight);
+				position.Set(currentX + columnWidth, 0.0f, currentZ);
+				geometry.PushVertex(position, normal, texCoord);
+
+				position.Set(currentX + columnWidth, 0.0f, currentZ + rowHeight);
+				geometry.PushVertex(position, normal, texCoord);
 
 				//wire indicies
-				geometry.PushIndex(index -2, index );
-				geometry.PushIndex(index, index + 1);
-				geometry.PushIndex(index - 1, index + 1);
+				wireframe->Push(index -2, index );
+				wireframe->Push(index, index + 1);
+				wireframe->Push(index - 1, index + 1);
 			}
 
 			currentX += columnWidth;

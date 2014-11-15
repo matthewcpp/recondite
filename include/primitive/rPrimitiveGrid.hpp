@@ -25,7 +25,7 @@ public:
 	void SetColumns( int columns);
 
 protected:
-	virtual void CreateGeometry();
+	virtual void CreateGeometry(rGeometryData& geometry);
 
 
 private:

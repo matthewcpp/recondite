@@ -28,7 +28,7 @@ public:
 
 
 protected:
-	virtual void CreateGeometry();
+	virtual void CreateGeometry(rGeometryData& geometry);
 
 private:
 	float m_radius;

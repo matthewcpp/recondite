@@ -29,7 +29,7 @@ struct RECONDITE_API rModelVertex{
 
 class RECONDITE_API rElementBufferData{
 public:
-	rElementBufferData();
+	rElementBufferData(rGeometryType geometryType);
 	rElementBufferData(unsigned short* elements, size_t elementCount, rGeometryType type);
 	
 public:
@@ -79,7 +79,7 @@ public:
 
 public:
 	
-	rElementBufferData* CreateElementBuffer(const rString& name);
+	rElementBufferData* CreateElementBuffer(const rString& name, rGeometryType geometryType);
 	rElementBufferData* CreateElementBuffer(const rString& name, unsigned short* elements, size_t elementCount, rGeometryType type);
 	
 	size_t ElementBufferCount() const;

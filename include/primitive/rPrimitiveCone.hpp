@@ -21,7 +21,7 @@ public:
 	virtual rString ClassName() const;
 
 protected:
-	virtual void CreateGeometry();
+	virtual void CreateGeometry(rGeometryData& geometry);
 
 private:
 	float m_height;

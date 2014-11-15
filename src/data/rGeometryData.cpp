@@ -1,7 +1,9 @@
 #include "data/rGeometryData.hpp"
 
-rElementBufferData::rElementBufferData(){
+rElementBufferData::rElementBufferData(rGeometryType geometryType){
 	Clear();
+
+	m_geometryType = geometryType;
 }
 
 rElementBufferData::rElementBufferData(unsigned short* elements, size_t elementCount, rGeometryType type){
@@ -189,13 +191,13 @@ void rGeometryData::CreateVetexBoneDataArray(rVertexBoneDataArray& vertexBoneDat
 	}
 }
 
-rElementBufferData* rGeometryData::CreateElementBuffer(const rString& name){
+rElementBufferData* rGeometryData::CreateElementBuffer(const rString& name, rGeometryType geometryType){
 	rElementBufferData* buffer = NULL;
 	
 	rElementBufferDataMap::iterator result = m_elementBuffers.find(name);
 	
 	if (result == m_elementBuffers.end()){
-		buffer = new rElementBufferData();
+		buffer = new rElementBufferData(geometryType);
 		m_elementBuffers[name] = buffer;
 	}
 	
@@ -203,7 +205,7 @@ rElementBufferData* rGeometryData::CreateElementBuffer(const rString& name){
 }
 
 rElementBufferData* rGeometryData::CreateElementBuffer(const rString& name, unsigned short* elements, size_t elementCount, rGeometryType type){
-	rElementBufferData* buffer = CreateElementBuffer(name);
+	rElementBufferData* buffer = CreateElementBuffer(name, type);
 	
 	if (buffer){
 		buffer->SetElementData(elements, elementCount, type);

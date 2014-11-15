@@ -14,9 +14,15 @@ rPrimitiveBox::rPrimitiveBox(const rString& id, rEngine* engine)
 
 }
 
-void rPrimitiveBox::GenerateFrontBack(float z){
+void rPrimitiveBox::GenerateFrontBack(rGeometryData& geometry, float z, const rVector3& normal){
 	float stepX = m_width / (float)m_widthSegments;
 	float stepY = m_height / (float)m_heightSegments;
+
+	rVector3 vertex;
+	rVector2 texCoord = rVector2::ZeroVector;
+
+	rElementBufferData* wireframe = geometry.GetElementBuffer("wire");
+	rElementBufferData* shaded = geometry.GetElementBuffer("shaded");
 
 	float halfWidth = m_width / 2.0f;
 	float halfDepth = m_depth / 2.0f;
@@ -35,14 +41,15 @@ void rPrimitiveBox::GenerateFrontBack(float z){
 		for (int c = 0; c < widthCount; c++){
 			int index = baseIndex + (r * widthCount) + c;
 
-			geometry.PushVertex(currentX, currentY, z);
+			vertex.Set(currentX, currentY, z);
+			geometry.PushVertex(vertex, normal, texCoord);
 
 			if (c < m_widthSegments){
-				geometry.PushIndex(index); geometry.PushIndex(index + 1);
+				wireframe->Push(index, index + 1);
 			}
 
 			if (r < m_heightSegments){
-				geometry.PushIndex(index); geometry.PushIndex(index + widthCount);
+				wireframe->Push(index, index + widthCount);
 			}
 
 			currentX += stepX;
@@ -50,9 +57,15 @@ void rPrimitiveBox::GenerateFrontBack(float z){
 	}
 }
 
-void rPrimitiveBox::GenerateTopBottom(float y){
+void rPrimitiveBox::GenerateTopBottom(rGeometryData& geometry, float y, const rVector3& normal){
 	float stepX = m_width / (float)m_widthSegments;
 	float stepZ = m_depth / (float)m_depthSegments;
+
+	rVector3 vertex;
+	rVector2 texCoord = rVector2::ZeroVector;
+
+	rElementBufferData* wireframe = geometry.GetElementBuffer("wire");
+	rElementBufferData* shaded = geometry.GetElementBuffer("shaded");
 
 	float halfWidth = m_width / 2.0f;
 	float halfDepth = m_depth / 2.0f;
@@ -71,14 +84,15 @@ void rPrimitiveBox::GenerateTopBottom(float y){
 		for (int c = 0; c < widthCount; c++){
 			int index = baseIndex + (r * widthCount) + c;
 
-			geometry.PushVertex(currentX, y, currentZ);
+			vertex.Set(currentX, y, currentZ);
+			geometry.PushVertex(vertex, normal, texCoord);
 
 			if (c < m_widthSegments){
-				geometry.PushIndex(index); geometry.PushIndex(index + 1);
+				wireframe->Push(index, index + 1);
 			}
 
 			if (r < m_depthSegments){
-				geometry.PushIndex(index); geometry.PushIndex(index + widthCount);
+				wireframe->Push(index, index + widthCount);
 			}
 
 			currentX += stepX;
@@ -86,9 +100,15 @@ void rPrimitiveBox::GenerateTopBottom(float y){
 	}
 }
 
-void rPrimitiveBox::GenerateLeftRight(float x){
+void rPrimitiveBox::GenerateLeftRight(rGeometryData& geometry, float x, const rVector3& normal){
 	float stepY = m_height / (float)m_heightSegments;
 	float stepZ = m_depth / (float)m_depthSegments;
+
+	rVector3 vertex;
+	rVector2 texCoord = rVector2::ZeroVector;
+
+	rElementBufferData* wireframe = geometry.GetElementBuffer("wire");
+	rElementBufferData* shaded = geometry.GetElementBuffer("shaded");
 
 	float halfDepth = m_depth / 2.0f;
 
@@ -107,14 +127,15 @@ void rPrimitiveBox::GenerateLeftRight(float x){
 		for (int c = 0; c < depthCount; c++){
 			int index = baseIndex + (r * depthCount) + c;
 
-			geometry.PushVertex(x, currentY, currentZ);
+			vertex.Set(x, currentY, currentZ);
+			geometry.PushVertex(vertex, normal, texCoord);
 
 			if (c < m_depthSegments){
-				geometry.PushIndex(index); geometry.PushIndex(index + 1);
+				wireframe->Push(index, index + 1);
 			}
 
 			if (r < m_heightSegments){
-				geometry.PushIndex(index); geometry.PushIndex(index + depthCount);
+				wireframe->Push(index, index + depthCount);
 			}
 
 			currentZ += stepZ;
@@ -122,24 +143,23 @@ void rPrimitiveBox::GenerateLeftRight(float x){
 	}
 }
 
-void rPrimitiveBox::CreateGeometry(){
-	geometry.Reset(rGEOMETRY_LINES, 3, false);
+void rPrimitiveBox::CreateGeometry(rGeometryData& geometry){
+	geometry.CreateElementBuffer("wire", rGEOMETRY_LINES);
+	geometry.CreateElementBuffer("shaded", rGEOMETRY_TRIANGLES);
 
 	float halfWidth = m_width / 2.0f;
 	float halfDepth = m_depth / 2.0f;
 
 	
-	GenerateFrontBack(m_position.z - halfDepth);	//generate back
-	GenerateFrontBack(m_position.z + halfDepth);	//generate front
+	GenerateFrontBack(geometry, m_position.z - halfDepth, rVector3::BackwardVector);	//generate back
+	GenerateFrontBack(geometry, m_position.z + halfDepth, rVector3::ForwardVector);	//generate front
 
-	GenerateTopBottom(m_position.y);				//generate bottom
-	GenerateTopBottom(m_position.y + m_height);		//generate top
+	GenerateTopBottom(geometry, m_position.y, rVector3::DownVector);				//generate bottom
+	GenerateTopBottom(geometry, m_position.y + m_height, rVector3::UpVector);		//generate top
 
-	GenerateLeftRight(m_position.x - halfWidth);	//generate left
-	GenerateLeftRight(m_position.x + halfWidth);	//generate right
+	GenerateLeftRight(geometry, m_position.x - halfWidth, rVector3::LeftVector);	//generate left
+	GenerateLeftRight(geometry, m_position.x + halfWidth, rVector3::RightVector);	//generate right
 }
-
-
 
 rString rPrimitiveBox::ClassName() const{
 	return "PrimitiveBox";

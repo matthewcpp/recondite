@@ -18,58 +18,45 @@ void rPrimitiveGrid::CreateGeometry(rGeometryData& geometry){
 	rElementBufferData* wireframe = geometry.CreateElementBuffer("wire", rGEOMETRY_LINES);
 	rElementBufferData* shaded = geometry.CreateElementBuffer("shaded", rGEOMETRY_TRIANGLES);
 
-	rVector3 position = rVector3::ZeroVector;
-	rVector3 normal = rVector3::UpVector;
+	float stepX = m_width / (float)m_columns;
+	float stepZ = m_depth / (float)m_rows;
+
+	rVector3 vertex;
 	rVector2 texCoord = rVector2::ZeroVector;
+	rVector3 normal = rVector3::UpVector;
 
-	float startZ = -m_depth / 2.0f;
-	float startX = -m_width / 2.0f;
+	float halfWidth = m_width / 2.0f;
+	float halfDepth = m_depth / 2.0f;
 
-	float columnWidth = m_width / (float)m_columns;
-	float rowHeight = m_depth / (float)m_rows;
+	float startX, startZ;
+	int widthCount = m_columns + 1;
+	int depthCount = m_rows + 1;
+	size_t baseIndex = geometry.VertexCount();
+	startX = m_position.x - halfWidth;
+	startZ = m_position.z - halfDepth;
 
-	for (int r = 0; r < m_rows; r++){
-		float currentZ = startZ + ( rowHeight * (float)r );
+	for (int r = 0; r < depthCount; r++){
 		float currentX = startX;
+		float currentZ = startZ + ((float)r * stepZ);
 
-		for (int c = 0; c < m_columns; c++){
-			size_t index = geometry.VertexCount();
+		for (int c = 0; c < widthCount; c++){
+			int index = baseIndex + (r * widthCount) + c;
 
-			if (c == 0){
-				position.Set(currentX, 0.0f, currentZ);
-				geometry.PushVertex(position, normal, texCoord);
+			vertex.Set(currentX, 0.0f, currentZ);
+			geometry.PushVertex(vertex, normal, texCoord);
 
-				position.Set(currentX, 0.0f, currentZ + rowHeight);
-				geometry.PushVertex(position, normal, texCoord);
-
-				position.Set(currentX + columnWidth, 0.0f, currentZ);
-				geometry.PushVertex(position, normal, texCoord);
-
-				position.Set(currentX + columnWidth, 0.0f, currentZ + rowHeight);
-				geometry.PushVertex(position, normal, texCoord);
-
-				//wire indicies
-				wireframe->Push(index, index + 2);
-				wireframe->Push(index + 2, index + 3);
-				wireframe->Push(index + 3, index + 1);
-				wireframe->Push(index + 1, index);
-			}
-			else{
-				position.Set(currentX + columnWidth, 0.0f, currentZ);
-				geometry.PushVertex(position, normal, texCoord);
-
-				position.Set(currentX + columnWidth, 0.0f, currentZ + rowHeight);
-				geometry.PushVertex(position, normal, texCoord);
-
-				//wire indicies
-				wireframe->Push(index -2, index );
+			if (c < m_columns)
 				wireframe->Push(index, index + 1);
-				wireframe->Push(index - 1, index + 1);
-			}
 
-			currentX += columnWidth;
+			if (r < m_rows)
+				wireframe->Push(index, index + widthCount);
+
+			currentX += stepX;
 		}
 	}
+
+	shaded->Push(0, m_columns, m_rows * widthCount);
+	shaded->Push(m_columns, m_rows * widthCount, geometry.VertexCount() - 1);
 }
 
 float rPrimitiveGrid::Width() const{

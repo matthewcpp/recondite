@@ -10,8 +10,6 @@ rPrimitiveBox::rPrimitiveBox(const rString& id, rEngine* engine)
 	m_widthSegments = 3;
 	m_heightSegments = 3;
 	m_depthSegments = 3;
-
-
 }
 
 void rPrimitiveBox::GenerateFrontBack(rGeometryData& geometry, float z, const rVector3& normal){
@@ -55,6 +53,9 @@ void rPrimitiveBox::GenerateFrontBack(rGeometryData& geometry, float z, const rV
 			currentX += stepX;
 		}
 	}
+
+	shaded->Push(baseIndex, baseIndex + m_widthSegments, baseIndex + m_heightSegments * widthCount);
+	shaded->Push(baseIndex + m_widthSegments, baseIndex + m_heightSegments * widthCount, geometry.VertexCount() - 1);
 }
 
 void rPrimitiveBox::GenerateTopBottom(rGeometryData& geometry, float y, const rVector3& normal){
@@ -98,6 +99,9 @@ void rPrimitiveBox::GenerateTopBottom(rGeometryData& geometry, float y, const rV
 			currentX += stepX;
 		}
 	}
+
+	shaded->Push(baseIndex, baseIndex + m_widthSegments, baseIndex + m_depthSegments * widthCount);
+	shaded->Push(baseIndex + m_widthSegments, baseIndex + m_depthSegments * widthCount, geometry.VertexCount() - 1);
 }
 
 void rPrimitiveBox::GenerateLeftRight(rGeometryData& geometry, float x, const rVector3& normal){
@@ -141,6 +145,9 @@ void rPrimitiveBox::GenerateLeftRight(rGeometryData& geometry, float x, const rV
 			currentZ += stepZ;
 		}
 	}
+
+	shaded->Push(baseIndex, baseIndex + m_depthSegments, baseIndex + m_heightSegments * depthCount);
+	shaded->Push(baseIndex + m_depthSegments, baseIndex + m_heightSegments * depthCount, geometry.VertexCount() - 1);
 }
 
 void rPrimitiveBox::CreateGeometry(rGeometryData& geometry){

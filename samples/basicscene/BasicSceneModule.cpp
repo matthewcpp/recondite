@@ -27,6 +27,17 @@ void BasicSceneModule::BeforeUpdateScene(rEngine& engine){
 	else if (keyboard->GetKeyState('f') == rKEY_DOWN){
 		camera->MoveDown(distance);
 	}
+
+	if (keyboard->GetKeyState('e') == rKEY_DOWN){
+		rVector3 rot = camera->Rotation();
+		rot.y -= distance;
+		camera->SetRotation(rot);
+	}
+	else if (keyboard->GetKeyState('q') == rKEY_DOWN){
+		rVector3 rot = camera->Rotation();
+		rot.y += distance;
+		camera->SetRotation(rot);
+	}
 }
 
 void BasicSceneModule::AfterUpdateScene(rEngine& engine){

@@ -43,6 +43,7 @@ void rPrimitiveSphere::CreateGeometry(rGeometryData& geometry){
 	rElementBufferData* wireframe = geometry.CreateElementBuffer("wire", rGEOMETRY_LINES);
 	rElementBufferData* shaded = geometry.CreateElementBuffer("shaded", rGEOMETRY_TRIANGLES);
 
+	rVector3 center(m_position.x, m_position.y + m_radius, m_position.z);
 	rVector3 position = rVector3::ZeroVector;
 	rVector3 normal = rVector3::ZeroVector;
 	rVector2 texCoord = rVector2::ZeroVector;
@@ -57,7 +58,11 @@ void rPrimitiveSphere::CreateGeometry(rGeometryData& geometry){
 			float x = std::cos(2*M_PI * s * S) * std::sin( M_PI * r * R );
 			float z = std::sin(2*M_PI * s * S) * std::sin( M_PI * r * R );
 
-			position.Set(x * m_radius, (y * m_radius) + m_radius, z * m_radius);
+			position.Set(x, y + m_radius, z);
+			normal = position - center;
+			normal.Normalize();
+			position *= m_radius;
+
 			geometry.PushVertex(position, normal, texCoord);
 		}
 	}
@@ -75,6 +80,10 @@ void rPrimitiveSphere::CreateGeometry(rGeometryData& geometry){
 				wireframe->Push(p2,p3);
 				wireframe->Push(p3,p4);
 				wireframe->Push(p4,p1);
+
+				//faces
+				shaded->Push(p1, p2, p4);
+				shaded->Push(p2, p4, p3);
 		}
 	}
 }

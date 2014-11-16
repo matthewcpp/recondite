@@ -9,9 +9,11 @@
 class RECONDITE_API rPrimitive : public rActor3{
 public:
 	rPrimitive(const rString& id, rEngine* engine);
+	~rPrimitive();
 
 	void SetColor(const rColor& color);
-	rColor Color() const;
+	void SetEdgeColor(const rColor& color);
+	void SetFaceColor(const rColor& color);
 
 	virtual void Draw();
 
@@ -23,7 +25,8 @@ private:
 	void RecreateGeometry();
 
 private:
-	rColor m_color;
+	rColor m_edgeColor;
+	rColor m_faceColor;
 	bool m_geometryInvalid;
 
 	rGeometry* m_geometry;

@@ -31,7 +31,8 @@ public:
 	size_t ObjectsRendered() const;
 	
 	void RenderGeometry(rGeometry* geometry, const rMatrix4& transform, const rString& elementBufferName, rMaterial* material);
-	
+	void RenderShadedWithEdges(rGeometry* geometry, const rMatrix4& transform, rMaterial* material, const rColor& edgeColor);
+
 	void RenderRect(const rRect& rect, const rColor& color);
 	void RenderWireRect(const rRect& rect, const rColor& color);
 	void RenderRect(const rRect& rect, rTexture2D* texture);

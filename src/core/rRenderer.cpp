@@ -29,6 +29,17 @@ void rRenderer::RenderGeometry(rGeometry* geometry, const rMatrix4& transform, c
 	m_graphicsDevice->RenderGeometry(geometry, modelViewProjection, elementBufferName, material);
 }
 
+void rRenderer::RenderShadedWithEdges(rGeometry* geometry, const rMatrix4& transform, rMaterial* material, const rColor& edgeColor){
+	m_graphicsDevice->EnablePolygonFillOffset(true);
+		RenderGeometry(geometry, transform, "shaded", material);
+		
+	m_graphicsDevice->EnablePolygonFillOffset(false);
+
+	rMaterial* edgeMaterial = m_contentManager->GetMaterialAsset("default_colored");
+	edgeMaterial->SetColor("fragColor", edgeColor);
+	RenderGeometry(geometry, transform, "wire", edgeMaterial);
+}
+
 void rRenderer::RenderBuffer(const rImmediateBuffer& buffer, rMaterial* material){
 	m_graphicsDevice->RenderImmediate(buffer, m_viewMatrix, material);
 }

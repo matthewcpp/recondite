@@ -51,6 +51,7 @@ public:
 	virtual void Clear();
 	
 	virtual void EnableDepthTesting(bool enable);
+	virtual void EnablePolygonFillOffset(bool enable);
 
 	virtual unsigned int CreateTexture(int width, int height, int bpp , const unsigned char* data);
 	virtual void UnregisterTexture(int textureID);

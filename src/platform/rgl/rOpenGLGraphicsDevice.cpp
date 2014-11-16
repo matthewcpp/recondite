@@ -35,6 +35,17 @@ void rOpenGLGraphicsDevice::EnableDepthTesting(bool enable){
 	}
 }
 
+void rOpenGLGraphicsDevice::EnablePolygonFillOffset(bool enable){
+	if (enable){
+		glEnable(GL_POLYGON_OFFSET_FILL);
+		glPolygonOffset(1.0f, 1.0f);
+	}
+	else{
+		glDisable(GL_POLYGON_OFFSET_FILL);
+		glPolygonOffset(0.0f, 1.0f);
+	}
+}
+
 void rOpenGLGraphicsDevice::SetClearColor(const rColor& color){
 	SetClearColor(float(color.red) / 255.0f, float(color.green) / 255.0f, float(color.blue) / 255.0f, float(color.alpha) / 255.0f);
 }

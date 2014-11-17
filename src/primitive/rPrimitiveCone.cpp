@@ -35,31 +35,45 @@ void rPrimitiveCone::CreateGeometry(rGeometryData& geometry){
 	rElementBufferData* wireframe = geometry.CreateElementBuffer("wire", rGEOMETRY_LINES);
 	rElementBufferData* shaded = geometry.CreateElementBuffer("shaded", rGEOMETRY_TRIANGLES);
 
-	rVector3 position(0, m_height, 0);
-	rVector3 normal = rVector3::ZeroVector;
-	rVector2 texCoord = rVector2::ZeroVector;
+	CreateCircle3d(geometry, rVector3::ZeroVector, m_radius, rVector3::DownVector, m_segmentCount);
+	
 
-	geometry.PushVertex(position, normal, texCoord);
-
-	float step = 360.0f / (float)m_segmentCount;
-
-	for (float angle = 0.0f; angle <= 360.0f; angle += step){
-		float radians = rMath::DegreeToRad(angle);
-		
-		position.Set(std::cos(radians), 0.0f, std::sin(radians));
-		position *= m_radius;
-		
-		geometry.PushVertex(position, normal, texCoord);
+	for (int i = 0; i < m_segmentCount; i++){
+		CreateConeFace(geometry, i + 1, i + 2);
 	}
 
-	//generate wireframe indicies
-	size_t count = geometry.VertexCount();
-	for (size_t i = 1; i < count; i++){
-		if (i > 0)
-			wireframe->Push(0, i);
-		if (i > 1)
-			wireframe->Push(i, i - 1);
-	}
+	CreateConeFace(geometry, m_segmentCount, 1);
+
+	
+}
+
+void rPrimitiveCone::CreateConeFace(rGeometryData& geometry, size_t v1, size_t v2){
+	rElementBufferData* wireframe = geometry.GetElementBuffer("wire");
+	rElementBufferData* shaded = geometry.GetElementBuffer("shaded");
+
+	float coneAngle = std::atan(m_radius / m_height);
+
+	rVector3 tip = rVector3::UpVector * m_height;
+	rVector3 p1, p2, n1, n2;
+
+	geometry.GetVertex(v1, &p1, NULL, NULL);
+	n1 = p1.GetNormalized();
+	n1 *= std::cos(coneAngle);
+	n1.y = std::sin(coneAngle);
+
+	geometry.GetVertex(v2, &p2, NULL, NULL);
+	n2 = p1.GetNormalized();
+	n2 *= std::cos(coneAngle);
+	n2.y = std::sin(coneAngle);
+
+	size_t baseIndex = geometry.VertexCount();
+	geometry.PushVertex(tip, n1, rVector2::ZeroVector);
+	geometry.PushVertex(p1, n1, rVector2::ZeroVector);
+	geometry.PushVertex(p2, n2, rVector2::ZeroVector);
+	shaded->Push(baseIndex, baseIndex + 1, baseIndex + 2);
+
+	wireframe->Push(baseIndex, baseIndex + 1);
+	wireframe->Push(baseIndex, baseIndex + 2);
 }
 
 int rPrimitiveCone::SegmentCount() const{

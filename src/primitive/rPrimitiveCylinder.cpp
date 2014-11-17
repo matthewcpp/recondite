@@ -39,44 +39,12 @@ void rPrimitiveCylinder::SetSegmentCount(int segmentCount){
 	InvalidateGeometry();
 }
 
-void rPrimitiveCylinder::CreateCircle3d(rGeometryData& geometry, const rVector3& normal, const rVector3& center){
-	rElementBufferData* wireframe = geometry.GetElementBuffer("wire");
-	rElementBufferData* shaded = geometry.GetElementBuffer("shaded");
-
-	float step = 360.0f / (float)m_segmentCount;
-
-	rVector3 position;
-	rVector2 texCoord = rVector2::ZeroVector;
-
-	size_t baseIndex = geometry.VertexCount();
-	geometry.PushVertex(center, normal, texCoord);
-
-	for (int i = 0; i < m_segmentCount; i++){
-		float angle = float(i) * step;
-		float radians = rMath::DegreeToRad(angle);
-		
-		position.Set(std::cos(radians), 0.0f, std::sin(radians));
-		position *= m_radius;
-		position += center;
-		
-		geometry.PushVertex(position, normal, texCoord);
-
-		if (i > 0){
-			wireframe->Push(baseIndex + i, baseIndex + i + 1);
-			shaded->Push(baseIndex, baseIndex + i,  baseIndex + i + 1);
-		}
-	}
-
-	wireframe->Push(baseIndex + m_segmentCount, baseIndex + 1);
-	shaded->Push(baseIndex, baseIndex + m_segmentCount,  baseIndex + 1);
-}
-
 void rPrimitiveCylinder::CreateGeometry(rGeometryData& geometry){
 	rElementBufferData* wireframe = geometry.CreateElementBuffer("wire", rGEOMETRY_LINES);
 	rElementBufferData* shaded = geometry.CreateElementBuffer("shaded", rGEOMETRY_TRIANGLES);
 
-	CreateCircle3d(geometry, rVector3::UpVector, rVector3::ZeroVector);
-	CreateCircle3d(geometry, rVector3::UpVector, rVector3::UpVector * m_height);
+	CreateCircle3d(geometry, rVector3::ZeroVector, m_radius, rVector3::DownVector, m_segmentCount);
+	CreateCircle3d(geometry, rVector3::UpVector * m_height, m_radius, rVector3::UpVector, m_segmentCount);
 
 	for (int i = 1; i <= m_segmentCount; i++){
 		wireframe->Push(i , i + m_segmentCount + 1);

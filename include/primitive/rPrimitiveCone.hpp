@@ -24,6 +24,9 @@ protected:
 	virtual void CreateGeometry(rGeometryData& geometry);
 
 private:
+	void CreateConeFace(rGeometryData& geometry, size_t v1, size_t v2);
+
+private:
 	float m_height;
 	float m_radius;
 

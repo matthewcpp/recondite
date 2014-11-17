@@ -25,7 +25,6 @@ protected:
 	virtual void CreateGeometry(rGeometryData& geometry);
 
 private:
-	void CreateCircle3d(rGeometryData& geometry, const rVector3& normal, const rVector3& center);
 	void CreateShellFace(rGeometryData& geometry, int i1, int i2, int i3, int i4);
 
 private:

@@ -21,6 +21,8 @@ protected:
 	virtual void CreateGeometry(rGeometryData& geometry) = 0;
 	void InvalidateGeometry();
 
+	static void CreateCircle3d(rGeometryData& geometry, const rVector3& center, float radius, const rVector3& normal, int segmentCount);
+
 private:
 	void RecreateGeometry();
 

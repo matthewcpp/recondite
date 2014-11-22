@@ -31,22 +31,22 @@ void rViewport::SetClipping(float near, float far){
 }
 
 int rViewport::GetSelectionRay(const rPoint& pos , rRay3& selectionRay) const{
-    rMatrix4 projection, model;
+    rMatrix4 projection, view;
     GetProjectionMatrix(projection);
-    GetViewMatrix(model);
+    GetViewMatrix(view);
     
     rVector3 nearPoint , farPoint;
     int result;
     
 
     rVector3 source((float)pos.x , (float)pos.y , 0.0f);
-    result = rMatrixUtil::Unproject(source, model, projection, m_rect, nearPoint);
+    result = rMatrixUtil::Unproject(source, view, projection, m_rect, nearPoint);
 	
 	if (result == false)
 		return false;
 
     source.z = 1.0;
-    rMatrixUtil::Unproject(source, model, projection, m_rect, farPoint);
+    result = rMatrixUtil::Unproject(source, view, projection, m_rect, farPoint);
 	
 	if (result == false)
 		return false;
@@ -74,17 +74,17 @@ void rViewport::GetProjectionMatrix(rMatrix4& matrix) const{
 	};
 }
 
-void rViewport::GetCameraMatrix(rMatrix4& matrix) const{
+void rViewport::GetViewMatrix(rMatrix4& matrix) const{
 	if (m_camera)
 		rMatrixUtil::LookAt(m_camera->Position(), m_camera->Target(), m_camera->Up(), matrix);
 }
 
-void rViewport::GetViewMatrix(rMatrix4& matrix) const{
-	rMatrix4 projection, camera;
+void rViewport::GetViewProjectionMatrix(rMatrix4& matrix) const{
+	rMatrix4 projection, view;
 	GetProjectionMatrix(projection);
-	GetCameraMatrix(camera);
+	GetViewMatrix(view);
 
-	matrix = projection * camera;
+	matrix = projection * view;
 }
 
 riCamera* rViewport::Camera() const{
@@ -134,7 +134,7 @@ void rViewport::SetScreenRect(int x, int y, int width, int height){
 
 void rViewport::GetViewFrustrum(rFrustrum& frustrum) const{
 	rMatrix4 view;
-	GetViewMatrix(view);
+	GetViewProjectionMatrix(view);
 
 	rMatrixUtil::ExtractViewFrustrum(view, frustrum);
 }

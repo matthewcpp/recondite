@@ -61,7 +61,10 @@ private:
 		rContentManager* m_contentManager;
 
 		rViewport* m_activeViewport;
+
 		rMatrix4 m_viewMatrix;
+		rMatrix4 m_viewProjectionMatrix;
+
 
 		size_t m_objectsRendered;
 };

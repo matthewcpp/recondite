@@ -46,8 +46,8 @@ public:
 	void SetScreenRect(int x, int y, int width, int height);
 	
 	void GetProjectionMatrix(rMatrix4& matrix) const;
-	void GetCameraMatrix(rMatrix4& matrix) const;
 	void GetViewMatrix(rMatrix4& matrix) const;
+	void GetViewProjectionMatrix(rMatrix4& matrix) const;
 	
 	void SetNearClip(float nearClip);
 	float NearClip() const;

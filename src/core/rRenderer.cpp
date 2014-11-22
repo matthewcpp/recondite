@@ -14,6 +14,7 @@ void rRenderer::BeginRenderView (rViewport& viewport){
 	rRect window = viewport.GetScreenRect();
 	m_graphicsDevice->SetViewport(window.x, window.y, window.width, window.height);
 
+	viewport.GetViewProjectionMatrix(m_viewProjectionMatrix);
 	viewport.GetViewMatrix(m_viewMatrix);
 }
 
@@ -25,7 +26,7 @@ size_t rRenderer::ObjectsRendered() const{
 }
 
 void rRenderer::RenderGeometry(rGeometry* geometry, const rMatrix4& transform, const rString& elementBufferName, rMaterial* material){
-	rMatrix4 modelViewProjection = m_viewMatrix * transform;
+	rMatrix4 modelViewProjection = m_viewProjectionMatrix * transform;
 	m_graphicsDevice->RenderGeometry(geometry, modelViewProjection, elementBufferName, material);
 }
 
@@ -41,11 +42,11 @@ void rRenderer::RenderShadedWithEdges(rGeometry* geometry, const rMatrix4& trans
 }
 
 void rRenderer::RenderBuffer(const rImmediateBuffer& buffer, rMaterial* material){
-	m_graphicsDevice->RenderImmediate(buffer, m_viewMatrix, material);
+	m_graphicsDevice->RenderImmediate(buffer, m_viewProjectionMatrix, material);
 }
 
 void rRenderer::Render3dBuffer(rImmediateBuffer& geometry, const rMatrix4& transform, const rColor& color){
-	rMatrix4 modelViewProjection = m_viewMatrix * transform;
+	rMatrix4 modelViewProjection = m_viewProjectionMatrix * transform;
 	rMaterial* material = m_contentManager->GetMaterialAsset("immediate_color");
 
 	if (material){
@@ -55,7 +56,7 @@ void rRenderer::Render3dBuffer(rImmediateBuffer& geometry, const rMatrix4& trans
 }
 
 void rRenderer::RenderModel(const rModel* model, const rMatrix4& transform){
-	rMatrix4 modelViewProjection = m_viewMatrix * transform;
+	rMatrix4 modelViewProjection = m_viewProjectionMatrix * transform;
 
 	rGeometry* geometry = model->Geometry();
 	rArrayString meshNames;
@@ -140,7 +141,7 @@ void rRenderer::RenderWireBox(const rAlignedBox3& box, const rColor color){
 
 	if (material){
 		material->SetColor("fragColor", color);
-		m_graphicsDevice->RenderImmediate(geometry, m_viewMatrix,  material);
+		m_graphicsDevice->RenderImmediate(geometry, m_viewProjectionMatrix,  material);
 	}
 }
 
@@ -205,14 +206,14 @@ void rRenderer::RenderSkeleton(const rSkeleton* skeleton, const rMatrix4Vector& 
 
 		m_graphicsDevice->EnableDepthTesting(false);
 
-		m_graphicsDevice->RenderImmediate(lineData, m_viewMatrix, material);
+		m_graphicsDevice->RenderImmediate(lineData, m_viewProjectionMatrix, material);
 
 		material = m_contentManager->GetMaterialAsset("default_points");
 		material->SetColor("fragColor", pointColor);
 		material->SetFloat("recPointSize", pointSize);
 
 
-		m_graphicsDevice->RenderImmediate(pointData, m_viewMatrix, material);
+		m_graphicsDevice->RenderImmediate(pointData, m_viewProjectionMatrix, material);
 		m_graphicsDevice->EnableDepthTesting(true);
 	}
 }

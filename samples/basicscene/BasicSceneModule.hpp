@@ -37,6 +37,9 @@ private:
 private:
 	ruiOverlayManager* m_overlayManager;
 	rEngine* m_engine;
+
+	rRay3 m_ray;
+	bool m_drawRay;
 };
 
 #endif

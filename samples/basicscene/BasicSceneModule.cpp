@@ -1,7 +1,9 @@
 #include "BasicSceneModule.hpp"
+#include "rLog.hpp"
 
 void BasicSceneModule::BeforeUpdateScene(rEngine& engine){
-	rCamera* camera = (rCamera*)engine.application->GetViewport("main")->Camera();
+	rViewport* viewport = engine.application->GetViewport("main");
+	rCamera* camera = (rCamera*)viewport->Camera();
 
 	float distance = 10 * engine.time.TimeDeltaSeconds();
 
@@ -38,6 +40,14 @@ void BasicSceneModule::BeforeUpdateScene(rEngine& engine){
 		rot.y += distance;
 		camera->SetRotation(rot);
 	}
+
+	const rMouseState* mouseState = engine.input->GetMouseState();
+	if (mouseState->Button(rMOUSE_BUTTON_LEFT).Pressed()){
+		m_drawRay = true;
+		rPoint mousePos = mouseState->Position();
+		rLog::Info("raycast select: %d, %d", mousePos.x, mousePos.y);
+		viewport->GetSelectionRay(mousePos, m_ray);
+	}
 }
 
 void BasicSceneModule::AfterUpdateScene(rEngine& engine){
@@ -47,7 +57,16 @@ void BasicSceneModule::BeforeRenderScene(rViewInfo& view, rEngine& engine){
 }
 
 void BasicSceneModule::AfterRenderScene(rViewInfo& view, rEngine& engine){
+	if (m_drawRay){
+		rImmediateBuffer buffer(rGEOMETRY_LINES,3,false);
+		buffer.PushVertex(m_ray.origin);
+		buffer.PushVertex(m_ray.direction * 50.0f);
 
+		buffer.PushIndex(0,1);
+
+		rMatrix4 ident;
+		engine.renderer->Render3dBuffer(buffer, ident, rColor(255,176,250,255));
+	}
 }
 
 void BasicSceneModule::BeforeRenderOverlay(rViewInfo& view, rEngine& engine){
@@ -96,6 +115,7 @@ void BasicSceneModule::Init(rEngine& engine){
 
 	engine.application->LoadScene("content/basicscene/levels/world.rlvl");
 	
+	m_drawRay = false;
 }
 
 #include "ui/ruiPicker.hpp"

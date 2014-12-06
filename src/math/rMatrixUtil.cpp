@@ -80,7 +80,7 @@ void rMatrixUtil::Ortho(float left, float right, float bottom, float top, float 
 }
 
 bool rMatrixUtil::Unproject(const rVector3& point, const rMatrix4& modelMatrix, const rMatrix4& projectionMatrix, const rRect& viewport, rVector3& out){
-	rMatrix4 finalMatrix = modelMatrix * projectionMatrix;
+	rMatrix4 finalMatrix = projectionMatrix * modelMatrix ;
 	
 	if (!finalMatrix.Invert())
 		return false;

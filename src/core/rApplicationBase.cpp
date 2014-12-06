@@ -13,6 +13,8 @@ void rApplicationBase::Update(){
 	m_module->AfterUpdateScene(m_engine);
 
 	m_overlayManager->Update(m_engine);
+
+	m_engine.input->PostUpdate();
 }
 
 void rApplicationBase::Draw(){

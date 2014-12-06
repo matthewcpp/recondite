@@ -48,6 +48,7 @@ public:
 	virtual rController* GetController(size_t index) const;
 	
 	virtual const riGestureTracker* Gestures() const;
+	virtual void PostUpdate();
 
 private:
 

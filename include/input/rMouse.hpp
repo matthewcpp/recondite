@@ -25,6 +25,7 @@ public:
 	virtual rPoint PreviousPosition() const = 0;
 
 	virtual rButtonState GetButtonState(rMouseButton button) const = 0;
+	virtual const rInputButton& Button(rMouseButton button) const = 0;
 	virtual int GetWheelValue() const = 0;
 };
 
@@ -38,16 +39,20 @@ public:
 	virtual rPoint PreviousPosition() const;
 
 	virtual rButtonState GetButtonState(rMouseButton button) const;
+	virtual const rInputButton& Button(rMouseButton button) const;
+
 	void SetButtonState (rMouseButton button, rButtonState state);
 
 	void UpdateWheelValue(rMouseWheelDirection direction);
 	virtual int GetWheelValue() const;
 
+	void PostUpdate();
+
 private:
 	rPoint m_position;
 	rPoint m_previousPosition;
 	int m_wheelValue;
-	rInputButton m_buttons[3];
+	rInputButton m_buttons[4];
 };
 
 #endif

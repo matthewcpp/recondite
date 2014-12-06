@@ -29,6 +29,10 @@ rButtonState rMouse::GetButtonState(rMouseButton button) const{
 	return m_buttons[button].State();
 }
 
+const rInputButton& rMouse::Button(rMouseButton button) const{
+	return m_buttons[button];
+}
+
 void rMouse::SetButtonState(rMouseButton button, rButtonState state){
 	m_buttons[button].SetButtonState(state);
 }
@@ -43,4 +47,10 @@ void rMouse::UpdateWheelValue(rMouseWheelDirection direction){
 
 int rMouse::GetWheelValue() const{
 	return m_wheelValue;
+}
+
+void rMouse::PostUpdate(){
+	for (int button = rMOUSE_BUTTON_LEFT; button < rMOUSE_BUTTON_RIGHT; button++){
+		m_buttons[button].SetButtonState(m_buttons[button].State());
+	}
 }

@@ -130,3 +130,7 @@ const rMouseState* rInputManager::GetMouseState() const{
 const riGestureTracker* rInputManager::Gestures() const{
 	return &m_gestures;
 }
+
+void rInputManager::PostUpdate(){
+	m_mouse.PostUpdate();
+}

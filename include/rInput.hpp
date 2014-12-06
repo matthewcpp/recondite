@@ -42,6 +42,8 @@ public:
 	virtual const rKeyboardState* Keyboard() const = 0;
 
 	virtual const riGestureTracker* Gestures() const = 0;
+
+	virtual void PostUpdate() = 0;
 };
 
 #endif

@@ -3,6 +3,7 @@
 
 #include <map>
 #include <vector>
+#include <cfloat>
 
 #include "rBuild.hpp"
 
@@ -26,6 +27,8 @@ public:
 	virtual void DeleteActor(const rString& name);
 
 	rString GetDefaultActorId(const rString& prefix);
+
+	virtual rActor3* RayPick(const rRay3& ray);
 
 	void Clear();
 

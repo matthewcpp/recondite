@@ -34,6 +34,8 @@ public:
 
 protected:
 	virtual void CreateGeometry(rGeometryData& geometry);
+	virtual void DoRecalculateBoundingVolume();
+	virtual riBoundingVolume* DoGetBoundingVolume();
 
 	void GenerateFrontBack(rGeometryData& geometry, float z, const rVector3& normal);
 	void GenerateTopBottom(rGeometryData& geometry, float y, const rVector3& normal);
@@ -48,6 +50,8 @@ private:
 	int m_widthSegments;
 	int m_heightSegments;
 	int m_depthSegments;
+
+	rAlignedBoxBoundingVolume m_boundingVolume;
 };
 
 #endif

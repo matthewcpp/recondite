@@ -4,8 +4,10 @@
 #include "rBuild.hpp"
 
 #include "rString.hpp"
+#include "rLine3.hpp"
 
 class rActor3;
+
 
 class RECONDITE_API  riScene{
 public:
@@ -14,6 +16,7 @@ public:
 	virtual size_t NumActors () const = 0;
 
 	virtual void DeleteActor(const rString& name) = 0;
+	virtual rActor3* RayPick(const rRay3& ray) = 0;
 };
 
 #endif

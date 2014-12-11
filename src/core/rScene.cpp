@@ -81,3 +81,26 @@ rString rScene::GetDefaultActorId(const rString& prefix){
 
 	return defaultActorId;
 }
+
+rActor3* rScene::RayPick(const rRay3& ray){
+	rActor3* selectedActor = NULL;
+	float selectedActorDistance = FLT_MAX;
+	rVector3 selectionPoint;
+	
+
+	rActorMap::iterator end = m_actors.end();
+	for (rActorMap::iterator it = m_actors.begin(); it != end; ++it){
+		rActor3* currentActor = it->second;
+		riBoundingVolume* boundingVolume = currentActor->BoundingVolume();
+
+		if (boundingVolume && boundingVolume->IntersectsRay(ray, &selectionPoint)){
+			float currentActorDistance = ray.origin.Distance(selectionPoint);
+			if (currentActorDistance < selectedActorDistance){
+				selectedActor = currentActor;
+				selectedActorDistance = currentActorDistance;
+			}
+		}
+	}
+
+	return selectedActor;
+}

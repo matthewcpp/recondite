@@ -225,3 +225,51 @@ void rPrimitiveBox::SetDepthSegments(int depthSegments){
 	m_depthSegments = depthSegments;
 	InvalidateGeometry();
 }
+
+riBoundingVolume* rPrimitiveBox::DoGetBoundingVolume(){
+	return &m_boundingVolume;
+}
+
+void rPrimitiveBox::DoRecalculateBoundingVolume(){
+	rMatrix4 transform = TransformMatrix();
+
+	float halfWidth = m_width / 2.0f;
+	float halfDepth = m_depth / 2.0f;
+	
+	rVector3 pt;
+	rAlignedBox3 b;
+
+	pt.Set(-halfWidth, m_height, halfDepth);
+	transform.TransformVector3(pt);
+	b.min = pt;	b.max = pt;
+
+	pt.Set(halfWidth, m_height, halfDepth);
+	transform.TransformVector3(pt);
+	b.AddPoint(pt);
+
+	pt.Set(halfWidth, 0, halfDepth);
+	transform.TransformVector3(pt);
+	b.AddPoint(pt);
+
+	pt.Set(-halfWidth, 0, halfDepth);
+	transform.TransformVector3(pt);
+	b.AddPoint(pt);
+
+	pt.Set(-halfWidth, m_height, -halfDepth);
+	transform.TransformVector3(pt);
+	b.AddPoint(pt);
+
+	pt.Set(halfWidth, m_height, -halfDepth);
+	transform.TransformVector3(pt);
+	b.AddPoint(pt);
+
+	pt.Set(halfWidth, 0, -halfDepth);
+	transform.TransformVector3(pt);
+	b.AddPoint(pt);
+
+	pt.Set(-halfWidth, 0, -halfDepth);
+	transform.TransformVector3(pt);
+	b.AddPoint(pt);
+
+	m_boundingVolume.SetBox(b);
+}

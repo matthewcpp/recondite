@@ -8,6 +8,8 @@
 
 #include "rEngine.hpp"
 
+#include "rAlignedBoxBoundingVolume.hpp"
+
 class RECONDITE_API rActor3 : public rObject{
 public:
 	rActor3(const rString& id, rEngine* engine);
@@ -29,7 +31,8 @@ public:
 
 	virtual rString ClassName() const = 0;
 
-	virtual rMatrix4 TransformMatrix() const;
+	virtual rMatrix4& TransformMatrix();
+	virtual riBoundingVolume* BoundingVolume();
 
 	void MoveForward(float amount);
 	void MoveBackward(float amount);
@@ -47,9 +50,24 @@ public:
 
 protected:
 
+	void SetTransformed(bool transformed = true);
+
+	void RecalculateTransform();
+
+	virtual void DoRecalculateBoundingVolume();
+	virtual riBoundingVolume* DoGetBoundingVolume();
+
+protected:
+
 	rVector3 m_position;
 	rVector3 m_rotation;
 	rVector3 m_scale;
+
+	rMatrix4 m_transform;
+
+private:
+
+	bool m_hasTransformed;
 };
 
 #endif

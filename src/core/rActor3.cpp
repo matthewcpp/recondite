@@ -6,6 +6,8 @@ rActor3::rActor3(const rString& id, rEngine* engine)
 	m_position = rVector3::ZeroVector;
 	m_rotation = rVector3::ZeroVector;
 	m_scale = rVector3::OneVector;
+
+	SetTransformed(true);
 }
 
 int rActor3::Update(){
@@ -19,36 +21,42 @@ void rActor3::MoveForward(float amount){
 	rVector3 forward = Forward();
 	forward *= amount;
 	m_position += forward;
+	SetTransformed(true);
 }
 
 void rActor3::MoveBackward(float amount){
 	rVector3 backward = Backward();
 	backward *= amount;
 	m_position += backward;
+	SetTransformed(true);
 }
 
 void rActor3::MoveLeft(float amount){
 	rVector3 left = Left();
 	left *= amount;
 	m_position += left;
+	SetTransformed(true);
 }
 
 void rActor3::MoveRight(float amount){
 	rVector3 right = Right();
 	right *= amount;
 	m_position += right;
+	SetTransformed(true);
 }
 
 void rActor3::MoveUp(float amount){
 	rVector3 up = Up();
 	up *= amount;
 	m_position += up;
+	SetTransformed(true);
 }
 
 void rActor3::MoveDown(float amount){
 	rVector3 down = Down();
 	down *= amount;
 	m_position += down;
+	SetTransformed(true);
 }
 
 rVector3 rActor3::Forward() const{
@@ -107,10 +115,12 @@ rVector3 rActor3::Down() const{
 
 void rActor3::SetPosition(const rVector3& position){
 	m_position = position;
+	SetTransformed(true);
 }
 
 void rActor3::SetPosition(float x, float y, float z){
 	m_position.Set(x,y,z);
+	SetTransformed(true);
 }
 
 rVector3 rActor3::Position() const{
@@ -119,10 +129,12 @@ rVector3 rActor3::Position() const{
 
 void rActor3::SetScale(const rVector3& scale){
 	m_scale = scale;
+	SetTransformed(true);
 }
 
 void rActor3::SetUniformScale(float k){
 	m_scale.Set(k, k, k);
+	SetTransformed(true);
 }
 
 rVector3 rActor3::Scale() const{
@@ -131,21 +143,47 @@ rVector3 rActor3::Scale() const{
 
 void rActor3::SetRotation(const rVector3& rotation){
 	m_rotation = rotation;
+	SetTransformed(true);
 }
 
 rVector3 rActor3::Rotation() const{
 	return m_rotation;
 }
 
-rMatrix4 rActor3::TransformMatrix() const{
-	rMatrix4 translate, rotate, scale;
-	translate.SetTranslate(m_position);
+void rActor3::RecalculateTransform(){
+	if (m_hasTransformed){
+		//recalculate transform matrix
+		rMatrix4 translate, rotate, scale;
+		translate.SetTranslate(m_position);
+		scale.SetScale(m_scale);
 
-	rQuaternion q(m_rotation);
-	rMatrixUtil::QuaterionToMatrix(q, rotate);
+		rQuaternion q(m_rotation);
+		rMatrixUtil::QuaterionToMatrix(q, rotate);
 
-	scale.SetScale(m_scale);
+		m_transform = translate * scale * rotate;
 
-	rMatrix4 result = translate * scale * rotate;
-	return result;
+		m_hasTransformed = false;
+
+		DoRecalculateBoundingVolume();
+	}
+}
+
+rMatrix4& rActor3::TransformMatrix(){
+	RecalculateTransform();
+	return m_transform;
+}
+
+riBoundingVolume* rActor3::BoundingVolume(){
+	RecalculateTransform();
+	return DoGetBoundingVolume();
+}
+
+void rActor3::DoRecalculateBoundingVolume(){}
+
+riBoundingVolume* rActor3::DoGetBoundingVolume(){
+	return NULL;
+}
+
+void rActor3::SetTransformed(bool transformed){
+	m_hasTransformed = transformed;
 }

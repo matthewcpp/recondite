@@ -32,12 +32,12 @@ void BasicSceneModule::BeforeUpdateScene(rEngine& engine){
 
 	if (keyboard->GetKeyState('e') == rKEY_DOWN){
 		rVector3 rot = camera->Rotation();
-		rot.y -= distance;
+		rot.y -= 90 * engine.time.TimeDeltaSeconds();
 		camera->SetRotation(rot);
 	}
 	else if (keyboard->GetKeyState('q') == rKEY_DOWN){
 		rVector3 rot = camera->Rotation();
-		rot.y += distance;
+		rot.y += 90 * engine.time.TimeDeltaSeconds();
 		camera->SetRotation(rot);
 	}
 
@@ -47,6 +47,11 @@ void BasicSceneModule::BeforeUpdateScene(rEngine& engine){
 		rPoint mousePos = mouseState->Position();
 		rLog::Info("raycast select: %d, %d", mousePos.x, mousePos.y);
 		viewport->GetSelectionRay(mousePos, m_ray);
+		rActor3* actor = engine.scene->RayPick(m_ray);
+
+		if (actor){
+			rLog::Info("Selected Actor: %s", actor->Id().c_str());
+		}
 	}
 }
 
@@ -67,6 +72,10 @@ void BasicSceneModule::AfterRenderScene(rViewInfo& view, rEngine& engine){
 		rMatrix4 ident;
 		engine.renderer->Render3dBuffer(buffer, ident, rColor(255,176,250,255));
 	}
+
+			rActor3* box = m_engine->scene->GetActor("box01");
+		riBoundingVolume* boundingVolume = box->BoundingVolume();
+		engine.renderer->RenderWireBox(boundingVolume->FitBox(), rColor::Green);
 }
 
 void BasicSceneModule::BeforeRenderOverlay(rViewInfo& view, rEngine& engine){

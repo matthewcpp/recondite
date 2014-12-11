@@ -54,3 +54,19 @@ TEST(Geometry_rIntersection, RayBoxIntersection){
 
 	EXPECT_TRUE(rIntersection::RayIntersectsAlignedBox(ray, box));
 }
+
+TEST(Geometry_rIntersection, RayBoxIntersectionWithPosition){
+	rRay3 ray(rVector3(70, 0 , 101), rVector3::ForwardVector);
+	rAlignedBox3 box(rVector3::OneVector * 100 , rVector3::OneVector * -100);
+	rVector3 intersectionPoint = rVector3::ZeroVector;
+
+	EXPECT_TRUE(rIntersection::RayIntersectsAlignedBox(ray, box, &intersectionPoint));
+	ray.direction.Set(0,0,-1);
+	ray.direction.Normalize();
+
+	EXPECT_FLOAT_EQ(70.0f, intersectionPoint.x);
+	EXPECT_FLOAT_EQ(0.0f, intersectionPoint.y);
+	EXPECT_FLOAT_EQ(100.0f, intersectionPoint.z);
+
+	EXPECT_TRUE(rIntersection::RayIntersectsAlignedBox(ray, box));
+}

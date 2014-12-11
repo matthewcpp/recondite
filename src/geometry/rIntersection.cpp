@@ -144,7 +144,7 @@ bool rIntersection::FrustrumIntersectsSphere(const rFrustrum& frustrum, const rS
 	return FrustrumSphereTest(frustrum, sphere) > 0;
 }
 
-bool rIntersection::RayIntersectsAlignedBox(const rRay3& ray, const rAlignedBox3& box){
+bool rIntersection::RayIntersectsAlignedBox(const rRay3& ray, const rAlignedBox3& box, rVector3* intersectionPoint){
 	float t0 = 0.0f;
 	float t1 = 10000.0f;
 
@@ -194,6 +194,6 @@ bool rIntersection::RayIntersectsAlignedBox(const rRay3& ray, const rAlignedBox3
 	if (tzmax < tmax)
 		tmax = tzmax;
 
-	return ( (tmin < t1) && (tmax > t0) );
-
+	if ( (tmin < t1) && (tmax > t0) ){		if (intersectionPoint) *intersectionPoint = ray.origin + (ray.direction * tmin);		return true;	}
+	return false;
 }

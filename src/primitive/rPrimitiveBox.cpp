@@ -29,8 +29,8 @@ void rPrimitiveBox::GenerateFrontBack(rGeometryData& geometry, float z, const rV
 	int widthCount = m_widthSegments + 1;
 	int heightCount = m_heightSegments + 1;
 	size_t baseIndex = geometry.VertexCount();
-	startX = m_position.x - halfWidth;
-	startY = m_position.y;
+	startX = -halfWidth;
+	startY = 0.0f;
 
 	for (int r = 0; r < heightCount; r++){
 		float currentX = startX;
@@ -75,8 +75,8 @@ void rPrimitiveBox::GenerateTopBottom(rGeometryData& geometry, float y, const rV
 	int widthCount = m_widthSegments + 1;
 	int depthCount = m_depthSegments + 1;
 	size_t baseIndex = geometry.VertexCount();
-	startX = m_position.x - halfWidth;
-	startZ = m_position.z - halfDepth;
+	startX = -halfWidth;
+	startZ = -halfDepth;
 
 	for (int r = 0; r < depthCount; r++){
 		float currentX = startX;
@@ -120,8 +120,8 @@ void rPrimitiveBox::GenerateLeftRight(rGeometryData& geometry, float x, const rV
 	int depthCount = m_depthSegments + 1;
 	int heightCount = m_heightSegments + 1;
 	size_t baseIndex = geometry.VertexCount();
-	startY = m_position.y + m_height;
-	startZ = m_position.z - halfDepth;
+	startY = m_height;
+	startZ = -halfDepth;
 	
 
 	for (int r = 0; r < heightCount; r++){
@@ -158,14 +158,14 @@ void rPrimitiveBox::CreateGeometry(rGeometryData& geometry){
 	float halfDepth = m_depth / 2.0f;
 
 	
-	GenerateFrontBack(geometry, m_position.z - halfDepth, rVector3::BackwardVector);	//generate back
-	GenerateFrontBack(geometry, m_position.z + halfDepth, rVector3::ForwardVector);	//generate front
+	GenerateFrontBack(geometry, -halfDepth, rVector3::BackwardVector);	//generate back
+	GenerateFrontBack(geometry, halfDepth, rVector3::ForwardVector);	//generate front
 
-	GenerateTopBottom(geometry, m_position.y, rVector3::DownVector);				//generate bottom
-	GenerateTopBottom(geometry, m_position.y + m_height, rVector3::UpVector);		//generate top
+	GenerateTopBottom(geometry, 0.0f, rVector3::DownVector);				//generate bottom
+	GenerateTopBottom(geometry, m_height, rVector3::UpVector);		//generate top
 
-	GenerateLeftRight(geometry, m_position.x - halfWidth, rVector3::LeftVector);	//generate left
-	GenerateLeftRight(geometry, m_position.x + halfWidth, rVector3::RightVector);	//generate right
+	GenerateLeftRight(geometry, -halfWidth, rVector3::LeftVector);	//generate left
+	GenerateLeftRight(geometry, halfWidth, rVector3::RightVector);	//generate right
 }
 
 rString rPrimitiveBox::ClassName() const{

@@ -32,8 +32,8 @@ void rPrimitiveGrid::CreateGeometry(rGeometryData& geometry){
 	int widthCount = m_columns + 1;
 	int depthCount = m_rows + 1;
 	size_t baseIndex = geometry.VertexCount();
-	startX = m_position.x - halfWidth;
-	startZ = m_position.z - halfDepth;
+	startX = -halfWidth;
+	startZ = -halfDepth;
 
 	for (int r = 0; r < depthCount; r++){
 		float currentX = startX;

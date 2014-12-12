@@ -21,13 +21,12 @@ public:
 
 	virtual bool Init() = 0;
 	virtual bool IsInit() const = 0;
-	virtual void Uninit()  = 0;
+	virtual void Uninit() = 0;
 	
 	virtual void SwapBuffers() = 0;
 	
 	virtual void SetClearColor(const rColor& color) = 0;
-	virtual void SetClearColor(float r, float g, float b, float a) = 0;
-	virtual void Clear()  = 0;
+	virtual void Clear() = 0;
 	
 	virtual void EnableDepthTesting(bool enable) = 0;
 	virtual void EnablePolygonFillOffset(bool enable) = 0;
@@ -47,6 +46,10 @@ public:
 	
 	virtual void SetViewport(int x , int y, int width, int height) = 0;
 	virtual void SetActiveMaterial(rMaterial* material) = 0;
+
+	virtual unsigned int CreateRenderbuffer(int width, int height) = 0;
+	virtual void DeleteRenderbuffer(unsigned int id) = 0;
+	virtual unsigned int ReadRenderbufferPixel(unsigned int x, unsigned int y) = 0;
 };
 
 #endif

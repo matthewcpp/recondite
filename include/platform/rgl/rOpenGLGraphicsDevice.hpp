@@ -3,6 +3,7 @@
 
 #include <istream>
 #include <sstream>
+#include <map>
 
 #ifdef WIN32
 	#define WIN32_LEAN_AND_MEAN
@@ -47,7 +48,6 @@ public:
 	virtual void Uninit();
 	
 	virtual void SetClearColor(const rColor& color);
-	virtual void SetClearColor(float r, float g, float b, float a);
 	virtual void Clear();
 	
 	virtual void EnableDepthTesting(bool enable);
@@ -68,6 +68,11 @@ public:
 
 	virtual void RenderGeometry(const rGeometry* geometry, const rMatrix4& transform, const rString& elementBuffer, rMaterial* material);
 	virtual void RenderImmediate(const rImmediateBuffer& geometry, const rMatrix4& transform, rMaterial* material);
+
+	virtual unsigned int CreateRenderbuffer(int width, int height);
+	virtual void DeleteRenderbuffer(unsigned int id);
+	virtual unsigned int ReadRenderbufferPixel(unsigned int x, unsigned int y);
+
 protected:
 	
 	GLuint CompileShader(GLenum type, const char* program);
@@ -77,6 +82,27 @@ protected:
 
 	bool m_isInit;
 	rString m_lastError;
+
+private:
+	struct rglRenderbuffer{
+		GLuint framebufferId;
+		GLuint renderbufferId;
+		GLuint depthBufferId;
+
+		int width;
+		int height;
+	};
+
+	typedef std::map<unsigned int, rglRenderbuffer> rglRenderbufferMap;
+
+private:
+	rglRenderbufferMap m_renderBuffers;
+	GLint m_defaultFramebuffer;
+
+	unsigned int m_nextRenderbufferId;
+	unsigned int m_activeRenderBufferId;
+
+	rColor m_clearColor;
 };
 
 #endif

@@ -1,8 +1,12 @@
 #include "rgl/rOpenGLGraphicsDevice.hpp"
 
-rOpenGLGraphicsDevice::rOpenGLGraphicsDevice()
-{
+rOpenGLGraphicsDevice::rOpenGLGraphicsDevice(){
 	m_isInit = false;
+	m_nextRenderbufferId = 0;
+	m_defaultFramebuffer = 0;
+	m_activeRenderBufferId = 0;
+
+	m_clearColor = rColor::Black;
 }
 
 bool rOpenGLGraphicsDevice::IsInit() const {
@@ -10,9 +14,11 @@ bool rOpenGLGraphicsDevice::IsInit() const {
 }
 
 bool rOpenGLGraphicsDevice::Init(){
-	SetClearColor(0,0,0,1);
+	SetClearColor(rColor::Black);
 	
 	glEnable(GL_DEPTH_TEST);
+
+	glGetIntegerv(GL_FRAMEBUFFER_BINDING, &m_defaultFramebuffer);
 
 	m_isInit = true;
     return m_isInit;
@@ -47,11 +53,9 @@ void rOpenGLGraphicsDevice::EnablePolygonFillOffset(bool enable){
 }
 
 void rOpenGLGraphicsDevice::SetClearColor(const rColor& color){
-	SetClearColor(float(color.red) / 255.0f, float(color.green) / 255.0f, float(color.blue) / 255.0f, float(color.alpha) / 255.0f);
-}
+	m_clearColor = color;
 
-void rOpenGLGraphicsDevice::SetClearColor(float r, float g, float b, float a){
-	glClearColor(r, g, b, a);
+	glClearColor(float(color.red) / 255.0f, float(color.green) / 255.0f, float(color.blue) / 255.0f, float(color.alpha) / 255.0f);
 }
 
 unsigned int rOpenGLGraphicsDevice::CreateShaderProgram(const rString& vertex, const rString& fragment){
@@ -354,4 +358,62 @@ GLenum rOpenGLGraphicsDevice::GLGeometryType(rGeometryType type) const{
 	default:
 		return GL_TRIANGLES;
 	}
+}
+
+unsigned int rOpenGLGraphicsDevice::CreateRenderbuffer(int width, int height){
+	rglRenderbuffer renderbuffer;
+	renderbuffer.width = width;
+	renderbuffer.height = height;
+	
+	glGenFramebuffers(1, &renderbuffer.framebufferId);
+	glGenRenderbuffers(1, &renderbuffer.renderbufferId);
+	glGenRenderbuffers(1, &renderbuffer.depthBufferId);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, renderbuffer.framebufferId);
+	
+
+	//todo: opengl es: GL_RGBA8_OES, GL_COLOR_ATTACHMENT0_OES? etc...
+	glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer.renderbufferId);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, width, height);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, renderbuffer.renderbufferId);
+
+	glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer.depthBufferId);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, width, height);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, renderbuffer.depthBufferId);
+
+	GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    if (status == GL_FRAMEBUFFER_COMPLETE) {
+		unsigned int targetId = ++m_nextRenderbufferId;
+
+		m_renderBuffers[targetId] = renderbuffer;
+		m_activeRenderBufferId = targetId;
+		return targetId;
+    }
+	else{
+		rLog::Error("Error Creating Offscreen Renderbuffer: %d", status);
+        return 0;
+	}
+}
+
+void rOpenGLGraphicsDevice::DeleteRenderbuffer(unsigned int id){
+	if (m_renderBuffers.count(id)){
+		rglRenderbuffer& renderbuffer = m_renderBuffers[id];
+
+		glDeleteRenderbuffers(1, &renderbuffer.renderbufferId);
+		glDeleteRenderbuffers(1, &renderbuffer.depthBufferId);
+		glDeleteFramebuffers(1, &renderbuffer.framebufferId);
+		
+
+		glBindFramebuffer(GL_FRAMEBUFFER, m_defaultFramebuffer);
+		m_activeRenderBufferId = 0;
+	}
+}
+
+unsigned int rOpenGLGraphicsDevice::ReadRenderbufferPixel(unsigned int x, unsigned int y){
+	rglRenderbuffer& renderbuffer = m_renderBuffers[m_activeRenderBufferId];
+	y = renderbuffer.height - y;
+
+	unsigned char color[4] = {255,255,255,255};
+	glReadPixels(x, y, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, color);
+	return 0;
 }

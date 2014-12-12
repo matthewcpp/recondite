@@ -70,3 +70,38 @@ TEST(Geometry_rIntersection, RayBoxIntersectionWithPosition){
 
 	EXPECT_TRUE(rIntersection::RayIntersectsAlignedBox(ray, box));
 }
+
+TEST(Geometry_rIntersection, RaySphereIntersection){
+	rRay3 ray(rVector3(0, 4 , -10), rVector3::BackwardVector);
+	rSphere sphere(0,0,0,5);
+
+	EXPECT_TRUE(rIntersection::RayIntersectsSphere(ray, sphere));
+
+	ray.direction = rVector3::ForwardVector;
+	EXPECT_FALSE(rIntersection::RayIntersectsSphere(ray, sphere));
+
+	sphere.center.Set(1,1,1);
+	ray.origin.Set(-3,4,10);
+	ray.direction = rVector3::ForwardVector;
+
+	EXPECT_TRUE(rIntersection::RayIntersectsSphere(ray, sphere));
+}
+
+TEST(Geometry_rIntersection, RaySphereIntersectionWithPosition){
+	rRay3 ray(rVector3(0, 0 , -10), rVector3::BackwardVector);
+	rSphere sphere(0,0,0,5);
+	rVector3 intersectionPoint = rVector3::ZeroVector;
+
+	EXPECT_TRUE(rIntersection::RayIntersectsSphere(ray, sphere, &intersectionPoint));
+
+	EXPECT_FLOAT_EQ(0.0f, intersectionPoint.x);
+	EXPECT_FLOAT_EQ(0.0f, intersectionPoint.y);
+	EXPECT_FLOAT_EQ(-5.0f, intersectionPoint.z);
+
+	ray.direction = rVector3::ForwardVector;
+	intersectionPoint = rVector3::ZeroVector;
+
+	EXPECT_FALSE(rIntersection::RayIntersectsSphere(ray, sphere, &intersectionPoint));
+
+	EXPECT_EQ(rVector3::ZeroVector, intersectionPoint);
+}

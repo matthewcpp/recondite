@@ -19,7 +19,7 @@ namespace rIntersection{
 
 	bool RECONDITE_API RayIntersectsAlignedBox(const rRay3& ray,const rAlignedBox3& box, rVector3* intersectionPoint = NULL );
 	bool RECONDITE_API RayIntersectsPlane(const rRay3& ray , const rPlane& plane, rVector3* point = 0);
-	bool RECONDITE_API RayIntersectsSphere(const rRay3& ray , const rSphere& sphere);
+	bool RECONDITE_API RayIntersectsSphere(const rRay3& ray , const rSphere& sphere, rVector3* intersectionPoint = NULL );
 
 	bool RECONDITE_API FrustrumContainsSphere(const rFrustrum& frustrum, const rSphere& sphere);
 	bool RECONDITE_API FrustrumIntersectsSphere(const rFrustrum& frustrum, const rSphere& sphere);

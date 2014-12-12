@@ -69,22 +69,41 @@ bool rIntersection::RayIntersectsPlane(const rRay3& ray , const rPlane& plane, r
 	return false;
 }
 
-bool rIntersection::RayIntersectsSphere(const rRay3& ray , const rSphere& sphere){
-	if (sphere.ContainsPoint(ray.origin))
-		return true;
+bool rIntersection::RayIntersectsSphere(const rRay3& ray , const rSphere& sphere, rVector3* intersectionPoint ){
+        // Adjust ray origin relative to sphere center
+        const rVector3& rayorig = ray.origin - sphere.center;
 
-	rVector3 org_center = ray.origin - sphere.center;
+		if (rayorig.LengthSquared() <= sphere.radius* sphere.radius) {
+            return false;
+        }
 
-	float a = ray.direction.Dot(ray.direction);
-	float b = 2 * (ray.direction.Dot(org_center));
-	float c = org_center.Dot(org_center) - std::pow(sphere.radius, 2.0f);
+        // Build coeffs which can be used with std quadratic solver
+        // ie t = (-b +/- sqrt(b*b + 4ac)) / 2a
+		float a = ray.direction.Dot(ray.direction);
+		float b = 2 * rayorig.Dot(ray.direction);
+        float c = rayorig.Dot(rayorig) - sphere.radius * sphere.radius;
 
-	float discriminant = b * b - (4.0f * a * c);
+        // Calc determinant
+        float d = (b*b) - (4 * a * c);
 
-	if (discriminant < 0.0f)
-		return false;
+        if (d < 0.0f) {// No intersection
+            return false;
+        }
+        else
+        {
+			float t = ( -b - std::sqrt(d) ) / (2 * a);
 
-	return true;
+			if (t < 0){// We only want the intersection in the direction of the ray : else t = ( -b + std::sqrt(d) ) / (2 * a);
+				return false;
+			}
+			else{
+				if (intersectionPoint){
+					*intersectionPoint = ray.origin + (ray.direction * t);					
+				}
+
+				return true;
+			}
+        }
 }
 
 bool FrustrumPlaneSphereCheck(const rPlane& plane, const rSphere& sphere, int& planeCount){

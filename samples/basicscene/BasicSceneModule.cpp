@@ -45,8 +45,14 @@ void BasicSceneModule::BeforeUpdateScene(rEngine& engine){
 	if (mouseState->Button(rMOUSE_BUTTON_LEFT).Pressed()){
 		m_drawRay = true;
 		rPoint mousePos = mouseState->Position();
+		/*
 		rLog::Info("raycast select: %d, %d", mousePos.x, mousePos.y);
 		viewport->GetSelectionRay(mousePos, m_ray);
+		*/
+
+		rLog::Info("viewport select: %d, %d", mousePos.x, mousePos.y);
+		m_engine->scene->ViewportPick("main", mousePos.x, mousePos.y);
+
 		rActor3* actor = engine.scene->RayPick(m_ray);
 
 		if (actor){

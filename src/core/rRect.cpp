@@ -41,6 +41,10 @@ void rRect::SetSize(int wwidth, int hheight){
 	height = hheight;
 }
 
+rSize rRect::Size() const{
+	return rSize(width, height);
+}
+
 bool rRect::ContainsPoint(const rPoint& point){
 	return 	point.x >= x && point.x <= x + width &&
 			point.y >= y && point.y <= y + height;

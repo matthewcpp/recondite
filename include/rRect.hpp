@@ -18,6 +18,7 @@ struct RECONDITE_API rRect{
 	
 	void SetSize(const rSize& size);
 	void SetSize(int wwidth, int hheight);
+	rSize Size() const;
 	
 	bool ContainsPoint(const rPoint& point);
 	

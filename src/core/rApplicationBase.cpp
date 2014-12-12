@@ -9,7 +9,7 @@ rApplicationBase::rApplicationBase(){
 
 void rApplicationBase::Update(){
 	m_module->BeforeUpdateScene(m_engine);
-		m_scene->Update(m_engine);
+		m_scene->Update();
 	m_module->AfterUpdateScene(m_engine);
 
 	m_overlayManager->Update(m_engine);
@@ -31,7 +31,7 @@ void rApplicationBase::Draw(){
 
 		m_engine.renderer->BeginRenderView(*view.viewport);
 		m_module->BeforeRenderScene(view, m_engine);
-		m_scene->Draw(m_engine);
+		m_scene->Draw();
 		m_module->AfterRenderScene(view, m_engine);
 		m_engine.renderer->EndRenderView();
 	}
@@ -97,7 +97,7 @@ void rApplicationBase::InitEngine(rGraphicsDevice* graphics, rContentManager* co
 	m_engine.renderer = new rRenderer(graphics, content);
 	m_engine.time.Start(GetTimeMiliseconds());
 
-	m_scene = new rScene();
+	m_scene = new rScene(this, m_graphicsDevice);
 	m_engine.scene = m_scene;
 
 	m_isRunning = true;

@@ -17,8 +17,12 @@
 
 class RECONDITE_API rScene : public riScene{
 public:
-	void Update(rEngine& engine);
-	void Draw(rEngine& engine);
+	rScene(riApplication* application, rGraphicsDevice* graphicsDevice);
+	~rScene();
+
+public:
+	void Update();
+	void Draw();
 
 	virtual void AddActor(rActor3* actor);
 	virtual rActor3* GetActor(const rString& name) const;
@@ -29,6 +33,7 @@ public:
 	rString GetDefaultActorId(const rString& prefix);
 
 	virtual rActor3* RayPick(const rRay3& ray);
+	virtual rActor3* ViewportPick(const rString& viewportName, int x, int y);
 
 	void Clear();
 
@@ -39,6 +44,9 @@ private:
 
 private:
 	rActorMap m_actors;
+
+	riApplication* m_application;
+	rGraphicsDevice* m_graphicsDevice;
 };
 
 #endif

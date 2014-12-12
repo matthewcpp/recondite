@@ -1,6 +1,15 @@
 #include "rScene.hpp"
 
-void rScene::Update(rEngine& engine){
+rScene::rScene(riApplication* application, rGraphicsDevice* graphicsDevice){
+	m_application = application;
+	m_graphicsDevice = graphicsDevice;
+}
+
+rScene::~rScene(){
+	Clear();
+}
+
+void rScene::Update(){
 	rActorArray actorsToDelete;
 	rActorMap::iterator end = m_actors.end();
 	int remove;
@@ -16,7 +25,7 @@ void rScene::Update(rEngine& engine){
 		DeleteActor(actorsToDelete[i]->Id());
 }
 
-void rScene::Draw(rEngine& engine){
+void rScene::Draw(){
 	//todo: view frustrum culling
 	rActorMap::iterator end = m_actors.end();
 
@@ -101,6 +110,23 @@ rActor3* rScene::RayPick(const rRay3& ray){
 			}
 		}
 	}
+
+	return selectedActor;
+}
+
+rActor3* rScene::ViewportPick(const rString& viewportName, int x, int y){
+	rActor3* selectedActor = NULL;
+
+	rViewport* viewport = m_application->GetViewport("main");
+	rSize size = viewport->Size();
+
+	unsigned int renderBufferId = m_graphicsDevice->CreateRenderbuffer(size.x, size.y);
+
+	//render for selection
+	m_graphicsDevice->Clear();
+	int pixelColor = m_graphicsDevice->ReadRenderbufferPixel(1,1);
+
+	m_graphicsDevice->DeleteRenderbuffer(renderBufferId);
 
 	return selectedActor;
 }

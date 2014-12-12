@@ -112,6 +112,10 @@ void rViewport::SetSize(const rSize& size){
 	m_rect.SetSize(size);
 }
 
+rSize rViewport::Size() const{
+	return m_rect.Size();
+}
+
 void rViewport::SetPosition(int x, int y){
 	m_rect.SetPosition(x,y);
 }

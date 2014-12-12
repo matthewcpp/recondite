@@ -37,6 +37,7 @@ public:
 
 	void SetSize(int width , int height);
 	void SetSize(const rSize& size);
+	rSize Size() const;
 	
 	void SetPosition(int x, int y);
 	void SetPosition(const rPoint& point);

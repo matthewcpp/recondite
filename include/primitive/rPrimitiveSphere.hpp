@@ -8,6 +8,7 @@
 #include "rMathUtil.hpp"
 
 #include "primitive/rPrimitive.hpp"
+#include "rSphereBoundingVolume.hpp"
 
 class RECONDITE_API rPrimitiveSphere : public rPrimitive{
 public:
@@ -29,11 +30,15 @@ public:
 
 protected:
 	virtual void CreateGeometry(rGeometryData& geometry);
+	virtual void DoRecalculateBoundingVolume();
+	virtual riBoundingVolume* DoGetBoundingVolume();
 
 private:
 	float m_radius;
 	int m_rings;
 	int m_sectors;
+
+	rSphereBoundingVolume m_boundingVolume;
 };
 
 #endif

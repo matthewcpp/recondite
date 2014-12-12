@@ -87,3 +87,17 @@ void rPrimitiveSphere::CreateGeometry(rGeometryData& geometry){
 		}
 	}
 }
+
+riBoundingVolume* rPrimitiveSphere::DoGetBoundingVolume(){
+	return &m_boundingVolume;
+}
+
+void rPrimitiveSphere::DoRecalculateBoundingVolume(){
+	rMatrix4 transform = TransformMatrix();
+
+	//todo: handle non uniform scale for sphere?
+	float sphereRadius = m_scale.x * m_radius;
+	rSphere s(m_position.x, m_position.y + sphereRadius, m_position.z, sphereRadius);
+
+	m_boundingVolume.SetSphere(s);
+}

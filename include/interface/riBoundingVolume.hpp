@@ -4,6 +4,7 @@
 #include "rBuild.hpp"
 
 #include "rLine3.hpp"
+#include "rAlignedBox3.hpp"
 
 class RECONDITE_API riBoundingVolume {
 public:

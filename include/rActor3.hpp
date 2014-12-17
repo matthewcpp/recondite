@@ -8,12 +8,15 @@
 
 #include "rEngine.hpp"
 
+#include "rDrawable.hpp"
+
 #include "rAlignedBoxBoundingVolume.hpp"
+#include "rPropertyCollection.hpp"
 
 class RECONDITE_API rActor3 : public rObject{
 public:
 	rActor3(const rString& id, rEngine* engine);
-	virtual ~rActor3(){}
+	virtual ~rActor3();
 
 	virtual int Update();
 	virtual void Draw();
@@ -33,6 +36,11 @@ public:
 
 	virtual rMatrix4& TransformMatrix();
 	virtual riBoundingVolume* BoundingVolume();
+
+	rDrawable* Drawable();
+	rDrawable* CreateDrawable();
+
+	rPropertyCollection& CustomProperties();
 
 	void MoveForward(float amount);
 	void MoveBackward(float amount);
@@ -64,6 +72,8 @@ protected:
 	rVector3 m_scale;
 
 	rMatrix4 m_transform;
+	rDrawable* m_drawable;
+	rPropertyCollection m_customProperties;
 
 private:
 

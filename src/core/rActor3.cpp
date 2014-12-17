@@ -7,7 +7,14 @@ rActor3::rActor3(const rString& id, rEngine* engine)
 	m_rotation = rVector3::ZeroVector;
 	m_scale = rVector3::OneVector;
 
+	m_drawable = NULL;
+
 	SetTransformed(true);
+}
+
+rActor3::~rActor3(){
+	if (m_drawable)
+		delete m_drawable;
 }
 
 int rActor3::Update(){
@@ -186,4 +193,22 @@ riBoundingVolume* rActor3::DoGetBoundingVolume(){
 
 void rActor3::SetTransformed(bool transformed){
 	m_hasTransformed = transformed;
+}
+
+rDrawable* rActor3::Drawable(){
+	return m_drawable;
+}
+
+rDrawable* rActor3::CreateDrawable(){
+	if (m_drawable == NULL){
+		m_drawable = new rDrawable();
+		return m_drawable;
+	}
+	else{
+		return NULL;
+	}
+}
+
+rPropertyCollection& rActor3::CustomProperties(){
+	return m_customProperties;
 }

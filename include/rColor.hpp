@@ -1,6 +1,8 @@
 #ifndef R_COLOR_HPP
 #define R_COLOR_HPP
 
+#include <stdint.h>
+
 #include "rBuild.hpp"
 
 struct RECONDITE_API rColor{
@@ -13,13 +15,41 @@ struct RECONDITE_API rColor{
 
 	void ToArray(unsigned char* color) const;
 	
-	unsigned char red, green, blue, alpha;
+	uint8_t red, green, blue, alpha;
 
 	static const rColor White;
 	static const rColor Red;
 	static const rColor Green;
 	static const rColor Blue;
 	static const rColor Black;
+};
+
+class rColorComparator{
+public:
+	//returns true if c1 < c2
+	bool operator()(const rColor& c1, const rColor& c2){
+		if (c1.red < c2.red)
+			return true;
+		if (c1.red > c2.red)
+			return false;
+
+		if (c1.green < c2.green)
+			return true;
+		if (c1.green > c2.green)
+			return false;
+
+		if (c1.blue < c2.blue)
+			return true;
+		if (c1.blue > c2.blue)
+			return false;
+
+		if (c1.alpha < c2.alpha)
+			return true;
+		if (c1.alpha > c2.alpha)
+			return false;
+
+		return false;
+	}
 };
 
 #endif

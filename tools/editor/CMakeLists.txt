@@ -4,6 +4,7 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 #WIN32 specifies to use the "windows" subsystem, ie. win32 app.  wxWidgets GUI needs this project type
 add_executable(editor WIN32 ${editor_sources})
+set_target_properties(editor PROPERTIES FOLDER Tools)
 
 include(${wxWidgets_USE_FILE})
 

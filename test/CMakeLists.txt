@@ -17,6 +17,7 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/ui)
 source_group (ui FILES ${ui_tests})
 
 add_executable(recondite_test ${recondite_tests})
+set_target_properties(recondite_test PROPERTIES FOLDER Recondite)
 
 include_directories(${GTEST_INCLUDE_DIRS})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/testcommon)

@@ -45,4 +45,5 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/primitive)
 source_group (primitive FILES ${primitive_sources})
 
 add_library( recondite SHARED ${recondite_files})
+set_target_properties(recondite PROPERTIES FOLDER Recondite)
 add_definitions(-DRECONDITE_BUILD_SHARED)

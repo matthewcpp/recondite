@@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 2.8)
 
 project(recondite C CXX)
 
+#Use solution folders.
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
 set (CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 #compiler specific configuration settings

@@ -6,7 +6,7 @@ rOpenGLGraphicsDevice::rOpenGLGraphicsDevice(){
 	m_defaultFramebuffer = 0;
 	m_activeRenderBufferId = 0;
 
-	m_clearColor = rColor::Black;
+	m_clearColor.Set(0, 0, 0, 255);
 }
 
 bool rOpenGLGraphicsDevice::IsInit() const {
@@ -14,7 +14,8 @@ bool rOpenGLGraphicsDevice::IsInit() const {
 }
 
 bool rOpenGLGraphicsDevice::Init(){
-	SetClearColor(rColor::Black);
+	rColor c(0, 0, 0, 255);
+	SetClearColor(c);
 	
 	glEnable(GL_DEPTH_TEST);
 

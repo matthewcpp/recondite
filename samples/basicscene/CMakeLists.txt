@@ -8,4 +8,6 @@ list(APPEND basicscene_files ${CMAKE_CURRENT_SOURCE_DIR}/BasicSceneModule.cpp)
 add_executable(basicscene ${basicscene_files})
 
 include_directories(${SDL_INCLUDE_DIR})
-target_link_libraries (basicscene recondite) 
+
+target_link_libraries(basicscene recondite rsdl rgl) 
+

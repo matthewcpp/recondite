@@ -18,10 +18,12 @@ c++ framework for creating graphics applications
 [wxWidgets](http://www.wxwidgets.org/)
 
 **Building on Windows**
+
 1.  Set environment variables:
     - GLEW_ROOT
     - SDL_ROOT
     - GTEST_ROOT
+    - WX_ROOT
 
 **Building on Linux**
 

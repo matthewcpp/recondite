@@ -2,7 +2,7 @@
 #include "rLog.hpp"
 
 void BasicSceneModule::BeforeUpdateScene(rEngine& engine){
-	rViewport* viewport = engine.application->GetViewport("main");
+	rViewport* viewport = engine.component->GetViewport("main");
 	rCamera* camera = (rCamera*)viewport->Camera();
 
 	float distance = 10 * engine.time.TimeDeltaSeconds();
@@ -104,9 +104,9 @@ void BasicSceneModule::AfterRenderOverlay(rViewInfo& view, rEngine& engine){
 #include "primitive/rPrimitiveSerialization.hpp"
 
 void BasicSceneModule::Init(rEngine& engine){
-	rSize displaySize = engine.application->DisplaySize();
+	rSize displaySize = engine.component->DisplaySize();
 
-	rViewport* viewport = engine.application->CreateViewport("main");
+	rViewport* viewport = engine.component->CreateViewport("main");
 	viewport->SetClipping(0.5,1000);
 	viewport->SetSize(displaySize);
 	viewport->SetViewportType(rVIEWPORT_PERSP);
@@ -122,13 +122,13 @@ void BasicSceneModule::Init(rEngine& engine){
 	engine.content->LoadAssetManifestFromPath("content/basicscene/manifest.xml");
 	engine.content->RemoveListener(&listener);
 
-	engine.application->RegisterActorLoader("PrimitiveBox", new rPrimitiveBoxReader());
-	engine.application->RegisterActorLoader("PrimitiveCone", new rPrimitiveConeReader());
-	engine.application->RegisterActorLoader("PrimitiveCylinder", new rPrimitiveCylinderReader());
-	engine.application->RegisterActorLoader("PrimitiveSphere", new rPrimitiveSphereReader());
-	engine.application->RegisterActorLoader("PrimitiveGrid", new rPrimitiveGridReader());
+	engine.component->RegisterActorLoader("PrimitiveBox", new rPrimitiveBoxReader());
+	engine.component->RegisterActorLoader("PrimitiveCone", new rPrimitiveConeReader());
+	engine.component->RegisterActorLoader("PrimitiveCylinder", new rPrimitiveCylinderReader());
+	engine.component->RegisterActorLoader("PrimitiveSphere", new rPrimitiveSphereReader());
+	engine.component->RegisterActorLoader("PrimitiveGrid", new rPrimitiveGridReader());
 
-	engine.application->LoadScene("content/basicscene/levels/world.rlvl");
+	engine.component->LoadScene("content/basicscene/levels/world.rlvl");
 	
 	m_drawRay = false;
 }
@@ -137,7 +137,7 @@ void BasicSceneModule::Init(rEngine& engine){
 #include "ui/ruiAbsoluteLayout.hpp"
 
 void BasicSceneModule::ReloadLevel(){
-	m_engine->application->LoadScene("content/basicscene/levels/world.rlvl");
+	m_engine->component->LoadScene("content/basicscene/levels/world.rlvl");
 }
 
 void BasicSceneModule::ReloadButtonClick(rEvent& event){
@@ -148,7 +148,7 @@ void BasicSceneModule::InitUI(ruiOverlayManager& manager, rEngine& engine){
 	m_overlayManager = &manager;
 	m_engine = &engine;
 
-	ruiOverlay* overlay = m_overlayManager->CreateOverlay("content/basicscene/ui/basicscene.rtml", m_engine->application->GetViewport("main"));
+	ruiOverlay* overlay = m_overlayManager->CreateOverlay("content/basicscene/ui/basicscene.rtml", m_engine->component->GetViewport("main"));
 
 	ruiWidget* reloadButton = overlay->GetWidget("reload-button");
 	reloadButton->Bind(ruiEVENT_BUTTON_CLICK, this, &BasicSceneModule::ReloadButtonClick);

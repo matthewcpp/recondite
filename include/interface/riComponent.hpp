@@ -8,12 +8,8 @@
 
 class riActorLoader;
 
-class RECONDITE_API riApplication{
+class RECONDITE_API riComponent{
 public:
-	virtual rSize DisplaySize() const = 0; 
-	virtual size_t TargetFPS() const = 0;
-	virtual size_t FrameCount() const = 0;
-
 	virtual rViewport* CreateViewport(const rString& name) = 0;
 	virtual rViewport* GetViewport(const rString& name) const = 0;
 	virtual void DeleteViewport(const rString& name) = 0;
@@ -23,6 +19,10 @@ public:
 
 	virtual void RegisterActorLoader(const rString& className, riActorLoader* actorLoader) = 0;
 	virtual void UnregisterActorLoader(const rString& className) = 0;
+
+	//temporary
+	//TODO: handle multiple display?
+	virtual rSize DisplaySize() const = 0;
 };
 
 #endif

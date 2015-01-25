@@ -83,30 +83,6 @@ void rApplicationBase::SetTargetFPS(unsigned int targetFPS){
 	m_targetFPS = targetFPS;
 }
 
-void rApplicationBase::InitEngine(rGraphicsDevice* graphics, rContentManager* content, rInputManager* input){
-	m_graphicsDevice = graphics; 
-
-	m_overlayManager = new ruiOverlayManager(&m_engine);
-	input->SetUI(m_overlayManager);
-
-	m_engine.application = this;
-
-	m_engine.ui = m_overlayManager;
-	m_engine.content = content;
-	m_engine.input = input;
-	m_engine.renderer = new rRenderer(graphics, content);
-	m_engine.time.Start(GetTimeMiliseconds());
-
-	m_scene = new rScene(this, m_graphicsDevice);
-	m_engine.scene = m_scene;
-
-	m_isRunning = true;
-
-	m_graphicsDevice->Init();
-	m_engine.content->InitDefaultAssets();
-	m_engine.renderer->CreateRequiredMaterials();
-}
-
 void rApplicationBase::InitModule(){
 	m_module = CreateModule();
 	
@@ -123,97 +99,18 @@ rSize rApplicationBase::DisplaySize() const{
 	return m_displaySize;
 }
 
-rViewport* rApplicationBase::CreateViewport(const rString& name){
-	if (m_viewports.count(name)){
-		return NULL;
-	}
-	else {
-		rViewport* viewport = new rViewport(name);
-		m_viewports[name] = viewport;
-		return viewport;
-	}
-}
-
-rViewport* rApplicationBase::GetViewport(const rString& name) const{
-	rViewportMap::const_iterator it = m_viewports.find(name);
-
-	if (it != m_viewports.end()){
-		return it->second;
-	}
-	else{
-		return NULL;
-	}
-}
-
-void rApplicationBase::DeleteViewport(const rString& name){
-	rViewportMap::iterator it = m_viewports.find(name);
-
-	if (it != m_viewports.end()){
-		delete it->second;
-		m_viewports.erase(it);
-	}
-}
-
-size_t rApplicationBase::NumViewports() const{
-	return m_viewports.size();
-}
-
 size_t rApplicationBase::FrameCount() const{
 	return m_frameCount;
 }
 
-bool rApplicationBase::Init(){
-	return true;
+void rApplicationBase::InitEngine(rGraphicsDevice* graphics, rContentManager* content, rInputManager* input){
+	rComponent::InitEngine(graphics, content, input);
+	m_isRunning = true;
 }
+
 
 void rApplicationBase::Uninit(){
 	m_module->Uninit(m_engine);
-	rLog::Shutdown();
-}
 
-void rApplicationBase::LoadScene(const rString& name){
-	rIAssetStream stream = m_engine.content->LoadTextFromPath(name);
-	
-	if (stream){
-		m_scene->Clear();
-
-		rXMLDocument document;
-		document.LoadFromStream(*stream);
-
-		rXMLElement* sceneRoot = document.GetRoot();
-
-		if (!sceneRoot) return;
-
-		for (size_t i = 0; i < sceneRoot->NumChildren(); i++){
-			rXMLElement* actorElement = sceneRoot->GetChild(i);
-
-			rString elementName = actorElement->Name();
-			rString id;
-			if (!actorElement->GetAttribute<rString>("id", id))
-				id = m_scene->GetDefaultActorId(elementName);
-
-			if (m_actorLoaders.count(elementName)){
-				rActor3* actor = m_actorLoaders[elementName]->LoadActor(actorElement, id, &m_engine);
-				if (actor) m_scene->AddActor(actor);
-			}
-			else{
-				rLog::Warning("Unable to Load Level element: " + elementName);
-			}
-		}
-	}
-}
-
-void rApplicationBase::RegisterActorLoader(const rString& className, riActorLoader* actorLoader){
-	UnregisterActorLoader(className);
-
-	m_actorLoaders[className] = actorLoader;
-}
-
-void rApplicationBase::UnregisterActorLoader(const rString& className){
-	rActorLoaderMap::iterator it = m_actorLoaders.find(className);
-
-	if (it != m_actorLoaders.end()){
-		delete it->second;
-		m_actorLoaders.erase(it);
-	}
+	rComponent::Uninit();
 }

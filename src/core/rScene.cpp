@@ -1,7 +1,7 @@
 #include "rScene.hpp"
 
-rScene::rScene(riApplication* application, rGraphicsDevice* graphicsDevice){
-	m_application = application;
+rScene::rScene(riComponent* component, rGraphicsDevice* graphicsDevice){
+	m_component = component;
 	m_graphicsDevice = graphicsDevice;
 }
 
@@ -117,7 +117,7 @@ rActor3* rScene::RayPick(const rRay3& ray){
 rActor3* rScene::ViewportPick(const rString& viewportName, int x, int y){
 	rActor3* selectedActor = NULL;
 
-	rViewport* viewport = m_application->GetViewport("main");
+	rViewport* viewport = m_component->GetViewport("main");
 	rSize size = viewport->Size();
 
 	unsigned int renderBufferId = m_graphicsDevice->CreateRenderbuffer(size.x, size.y);

@@ -17,7 +17,7 @@
 
 class RECONDITE_API rScene : public riScene{
 public:
-	rScene(riApplication* application, rGraphicsDevice* graphicsDevice);
+	rScene(riComponent* component, rGraphicsDevice* graphicsDevice);
 	~rScene();
 
 public:
@@ -45,7 +45,7 @@ private:
 private:
 	rActorMap m_actors;
 
-	riApplication* m_application;
+	riComponent* m_component;
 	rGraphicsDevice* m_graphicsDevice;
 };
 

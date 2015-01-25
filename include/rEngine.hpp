@@ -9,7 +9,7 @@
 #include "rTime.hpp"
 #include "rInput.hpp"
 
-#include "interface/riApplication.hpp"
+#include "interface/riComponent.hpp"
 #include "interface/riScene.hpp"
 #include "ui/ruiInterface.hpp"
 
@@ -19,7 +19,7 @@ public:
 	rRenderer* renderer;
 	rInput* input;
 	rTime time;
-	riApplication* application;
+	riComponent* component;
 	riScene* scene;
 	ruiIManager* ui;
 };

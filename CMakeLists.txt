@@ -49,7 +49,7 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/platform)
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/test)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/samples)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/tools/editor)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/tools)
 
 
 

@@ -12,6 +12,8 @@
 	#else
 		#define RECONDITE_API __declspec(dllimport)
 	#endif
+	
+	#define RECONDITE_RWX_CLASS RECONDITE_API
 #else
 	#define RECONDITE_API
 #endif

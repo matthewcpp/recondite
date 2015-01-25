@@ -7,7 +7,9 @@ add_executable(editor WIN32 ${editor_sources})
 set_target_properties(editor PROPERTIES FOLDER Tools)
 
 include(${wxWidgets_USE_FILE})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../rwx)
 
-target_link_libraries (editor recondite rgl) 
+target_link_libraries (editor recondite rgl rwx) 
 target_link_libraries(editor ${wxWidgets_LIBRARIES})
+
 add_definitions(-DWXUSINGDLL)

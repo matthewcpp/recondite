@@ -2,7 +2,6 @@
 
 rApplicationBase::rApplicationBase(){
 	m_module = NULL;
-	m_isRunning = false;
 	m_frameCount = 0;
 	m_targetFPS = 30;
 }
@@ -58,10 +57,6 @@ void rApplicationBase::Draw(){
 rApplicationBase::~rApplicationBase(){
 }
 
-bool rApplicationBase::IsRunning() const{
-	return m_isRunning;
-}
-
 void rApplicationBase::Tick(){
 	unsigned long time = GetTimeMiliseconds();
 
@@ -105,7 +100,6 @@ size_t rApplicationBase::FrameCount() const{
 
 void rApplicationBase::InitEngine(rGraphicsDevice* graphics, rContentManager* content, rInputManager* input){
 	rComponent::InitEngine(graphics, content, input);
-	m_isRunning = true;
 }
 
 

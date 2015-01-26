@@ -1,12 +1,18 @@
 set(rwx_files)
 
+list(APPEND rwx_files ${CMAKE_CURRENT_SOURCE_DIR}/rwxComponent.hpp)
+list(APPEND rwx_files ${CMAKE_CURRENT_SOURCE_DIR}/rwxComponent.cpp)
+
 list(APPEND rwx_files ${CMAKE_CURRENT_SOURCE_DIR}/rwxGLCanvas.hpp)
 list(APPEND rwx_files ${CMAKE_CURRENT_SOURCE_DIR}/rwxGLCanvas.cpp)
+
+list(APPEND rwx_files ${CMAKE_CURRENT_SOURCE_DIR}/rwxOpenGLGraphicsDevice.hpp)
+list(APPEND rwx_files ${CMAKE_CURRENT_SOURCE_DIR}/rwxOpenGLGraphicsDevice.cpp)
 
 add_library( rwx SHARED ${rwx_files})
 
 add_definitions(-DWXUSINGDLL)
-add_definitions(-DRECONDITE_BUILD_SHARED)
+add_definitions(-DRECONDITE_WX_BUILD_SHARED)
 
 set_target_properties(rwx PROPERTIES FOLDER Tools)
 

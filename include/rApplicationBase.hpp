@@ -22,8 +22,6 @@ public:
 
 	virtual void Uninit();
 
-	bool IsRunning() const;
-
 	virtual void Tick();
 
 	virtual size_t TargetFPS() const;
@@ -44,7 +42,6 @@ protected:
 	void InitModule();
 
 protected:
-	bool m_isRunning;
 	unsigned int m_targetFPS;
 	size_t m_frameCount;
 

@@ -16,7 +16,7 @@
 		app.SetDisplaySize(1024, 768);	\
 		app.Init();		\
 		SDL_Event event;	\
-		while (app.IsRunning()){	\
+		while (app.IsReady()){	\
 			while (SDL_PollEvent(&event)){	\
 				app.ProcessEvent(event);	\
 			}	\

@@ -13,10 +13,13 @@
 
 class RECONDITE_API rComponent : public riComponent{
 public:
+	rComponent();
 	virtual unsigned long GetTimeMiliseconds() const = 0;
 
 	virtual bool Init();
 	virtual void Uninit();
+
+	bool IsReady() const;
 
 	virtual void LoadScene(const rString& name);
 
@@ -48,9 +51,13 @@ protected:
 
 	rViewportMap m_viewports;
 
+	bool m_isReady;
+
 private:
 	rActorLoaderMap m_actorLoaders;
 	rActorSerializerMap m_actorSerializers;
+
+	
 };
 
 #endif

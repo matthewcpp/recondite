@@ -43,7 +43,7 @@ class RECONDITE_API rOpenGLGraphicsDevice : public rGraphicsDevice{
 public:
 	rOpenGLGraphicsDevice();
 	
-	virtual bool Init() = 0;
+	virtual bool Init();
 	virtual bool IsInit() const;
 	virtual void Uninit();
 	

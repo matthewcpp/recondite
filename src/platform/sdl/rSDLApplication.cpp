@@ -38,7 +38,7 @@ void rApplication::Uninit(){
 
 void rApplication::ProcessEvent(SDL_Event& event){
 	if (event.type == SDL_QUIT)
-		m_isRunning = false;
+		m_isReady = false;
 
 	m_inputManager->ProcessInputEvent(event);
 }

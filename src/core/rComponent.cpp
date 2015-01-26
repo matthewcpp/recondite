@@ -1,5 +1,9 @@
 #include "rComponent.hpp"
 
+rComponent::rComponent(){
+	m_isReady = false;
+}
+
 bool rComponent::Init(){
 	return true;
 }
@@ -75,6 +79,8 @@ void rComponent::InitEngine(rGraphicsDevice* graphics, rContentManager* content,
 	m_graphicsDevice->Init();
 	m_engine.content->InitDefaultAssets();
 	m_engine.renderer->CreateRequiredMaterials();
+
+	m_isReady = true;
 }
 
 rViewport* rComponent::CreateViewport(const rString& name){
@@ -110,4 +116,8 @@ void rComponent::DeleteViewport(const rString& name){
 
 size_t rComponent::NumViewports() const{
 	return m_viewports.size();
+}
+
+bool rComponent::IsReady() const{
+	return m_isReady;
 }

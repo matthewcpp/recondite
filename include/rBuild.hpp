@@ -12,10 +12,16 @@
 	#else
 		#define RECONDITE_API __declspec(dllimport)
 	#endif
+
+	#ifdef RECONDITE_WX_BUILD_SHARED
+		#define RECONDITE_RWX_CLASS __declspec(dllexport)
+	#else
+		#define RECONDITE_RWX_CLASS __declspec(dllimport)
+	#endif
 	
-	#define RECONDITE_RWX_CLASS RECONDITE_API
 #else
 	#define RECONDITE_API
+	#define RECONDITE_RWX_CLASS
 #endif
 
 #endif

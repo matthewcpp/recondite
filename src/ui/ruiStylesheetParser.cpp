@@ -216,6 +216,7 @@ bool ruiStylesheetParser::ParseNextProperty(int ch){
 		TriggerEndStyle();
 
 		m_state = PARSING_SELECTOR;
+		return true;
 	}
 	else if (isalpha(ch)){
 		m_state = PARSING_PROPNAME;

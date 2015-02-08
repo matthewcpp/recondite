@@ -22,6 +22,8 @@ public:
 	rOpenGLContentManager* ContentManager();
 	rInputManager* InputManager();
 
+	wxGLContext* GetContext();
+
 public:
 	virtual bool Init(wxGLCanvas* canvas);
 

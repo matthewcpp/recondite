@@ -15,4 +15,8 @@ bool rwxOpenGLGraphicsDevice::Init(wxGLCanvas* canvas){
 	return rOpenGLGraphicsDevice::Init();
 }
 
+wxGLContext* rwxOpenGLGraphicsDevice::GetContext(){
+	return m_wxGLContext;
+}
+
 void rwxOpenGLGraphicsDevice::SwapBuffers(){}

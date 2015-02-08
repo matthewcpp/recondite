@@ -15,6 +15,7 @@ public:
 public:
 	virtual bool Init(wxGLCanvas* canvas);
 	virtual void SwapBuffers();
+	wxGLContext* GetContext();
 
 private:
 	wxGLContext* m_wxGLContext;

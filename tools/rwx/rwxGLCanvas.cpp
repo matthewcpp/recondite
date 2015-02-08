@@ -14,11 +14,11 @@ void rwxGLCanvas::OnPaint(wxPaintEvent& event){
 		m_component->Init(this);
 	}
 	
+	SetCurrent(*m_component->GetContext());
 
 	const wxSize ClientSize = GetClientSize();
 	glViewport(0, 0, ClientSize.x, ClientSize.y);
-	m_component->GraphicsDevice()->SetClearColor(rColor::Red);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	m_component->GraphicsDevice()->Clear();
 
 	SwapBuffers();
 }

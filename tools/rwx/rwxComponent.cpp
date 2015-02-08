@@ -39,3 +39,7 @@ rOpenGLContentManager* rwxComponent::ContentManager(){
 rInputManager* rwxComponent::InputManager(){
 	return m_rInputManager;
 }
+
+wxGLContext* rwxComponent::GetContext(){
+	return m_rwxGraphicsDevice->GetContext();
+}

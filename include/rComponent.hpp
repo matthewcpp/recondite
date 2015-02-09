@@ -27,6 +27,7 @@ public:
 public:
 	virtual rViewport* CreateViewport(const rString& name);
 	virtual rViewport* GetViewport(const rString& name) const;
+	virtual void GetViewportNames(rArrayString& names) const;
 	virtual void DeleteViewport(const rString& name);
 	virtual size_t NumViewports() const;
 

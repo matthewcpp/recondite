@@ -12,6 +12,9 @@ class reViewportDisplay : public wxPanel{
 public:
 	reViewportDisplay(rwxComponent* component, wxWindow* parent, wxWindowID id =wxID_ANY);
 
+public:
+	reViewport* GetViewport(const wxString& name);
+
 private:
 	void CreateViewportDisplay();
 

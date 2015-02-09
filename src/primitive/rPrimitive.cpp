@@ -90,3 +90,11 @@ void rPrimitive::CreateCircle3d(rGeometryData& geometry, const rVector3& center,
 	wireframe->Push(baseIndex + segmentCount, baseIndex + 1);
 	shaded->Push(baseIndex, baseIndex + segmentCount,  baseIndex + 1);
 }
+
+rColor rPrimitive::EdgeColor() const{
+	return m_edgeColor;
+}
+
+rColor rPrimitive::FaceColor() const{
+	return m_faceColor;
+}

@@ -4,13 +4,13 @@ reViewport::reViewport(rwxComponent* component, const wxString& name, wxWindow *
 	:wxPanel(parent, id)
 {
 	m_component = component;
-	m_name = name;
+	m_viewportName = name;
 
 	CreateViewportElements();
 }
 
 void reViewport::CreateViewportElements(){
-	m_glCanvas = new rwxGLCanvas(m_component, m_name, this);
+	m_glCanvas = new rwxGLCanvas(m_component, m_viewportName, this);
 
 	m_viewMenuText = new wxStaticText(this, reViewportViewMenuId, "View");
 	m_viewMenuText->Bind(wxEVT_LEFT_DOWN, &reViewport::OnViewMenuClick, this);
@@ -42,4 +42,8 @@ void reViewport::OnViewMenuClick(wxMouseEvent& event){
 
 void reViewport::OnShadingMenuClick(wxMouseEvent& event){
 	m_shadingMenuText->GetPopupMenuSelectionFromUser(m_shadingMenu);
+}
+
+wxString reViewport::GetViewportName(){
+	return m_viewportName;
 }

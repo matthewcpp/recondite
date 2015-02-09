@@ -7,9 +7,9 @@ reMainFrame::reMainFrame(rwxComponent* component, const wxString& title, const w
 	m_wxAuiManager.SetManagedWindow(this);
 
 	m_viewportDisplay = new reViewportDisplay(m_component, this);
-	m_propertyInspector = new rePropertyInspector(m_component, this);
+	m_propertyInspector = new rePropertyInspector(m_component, m_viewportDisplay, this);
 	m_projectExplorer = new reProjectExplorer(m_component, this);
-	m_outliner = new reOutliner(m_component, this);
+	m_outliner = new reOutliner(m_component, m_propertyInspector, this);
 	
 	SetMenuBar(CreateEditorMenuBar());
 	CreateStatusBar();
@@ -109,4 +109,5 @@ void reMainFrame::OnPopulate(wxCommandEvent& event){
 	rPrimitiveBox* box = new rPrimitiveBox("box01", engine);
 	engine->scene->AddActor(box);
 	m_viewportDisplay->Refresh();
+	m_outliner->UpdateLevel();
 }

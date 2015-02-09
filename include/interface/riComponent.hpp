@@ -12,6 +12,7 @@ class RECONDITE_API riComponent{
 public:
 	virtual rViewport* CreateViewport(const rString& name) = 0;
 	virtual rViewport* GetViewport(const rString& name) const = 0;
+	virtual void GetViewportNames(rArrayString& names) const = 0;
 	virtual void DeleteViewport(const rString& name) = 0;
 	virtual size_t NumViewports() const = 0;
 

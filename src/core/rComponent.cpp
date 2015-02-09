@@ -105,8 +105,14 @@ rViewport* rComponent::GetViewport(const rString& name) const{
 	}
 }
 
+void rComponent::GetViewportNames(rArrayString& names) const{
+	for (auto& entry : m_viewports){
+		names.push_back(entry.first);
+	}
+}
+
 void rComponent::DeleteViewport(const rString& name){
-	rViewportMap::iterator it = m_viewports.find(name);
+	auto it = m_viewports.find(name);
 
 	if (it != m_viewports.end()){
 		delete it->second;

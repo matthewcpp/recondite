@@ -15,6 +15,9 @@ public:
 	void SetEdgeColor(const rColor& color);
 	void SetFaceColor(const rColor& color);
 
+	rColor EdgeColor() const;
+	rColor FaceColor() const;
+
 	virtual void Draw();
 
 protected:

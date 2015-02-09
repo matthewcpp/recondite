@@ -26,7 +26,8 @@ reMainFrame::reMainFrame(rwxComponent* component, const wxString& title, const w
 		.Dockable(true)
 		.Floatable(true)
 		.MinimizeButton(true)
-		.BestSize(250, 450));
+		.BestSize(250, 450)
+		.MinSize(250, 100));
 
 	m_wxAuiManager.AddPane(m_projectExplorer, wxAuiPaneInfo()
 		.Left()
@@ -35,7 +36,8 @@ reMainFrame::reMainFrame(rwxComponent* component, const wxString& title, const w
 		.Dockable(true)
 		.Floatable(true)
 		.MinimizeButton(true)
-		.BestSize(250, 250));
+		.BestSize(250, 250)
+		.MinSize(250, 100));
 
 	m_wxAuiManager.AddPane(m_outliner, wxAuiPaneInfo()
 		.Left()
@@ -44,7 +46,8 @@ reMainFrame::reMainFrame(rwxComponent* component, const wxString& title, const w
 		.Dockable(true)
 		.Floatable(true)
 		.MinimizeButton(true)
-		.BestSize(250, 450));
+		.BestSize(250, 450)
+		.MinSize(250, 100));
 
 	m_wxAuiManager.Update();
 }

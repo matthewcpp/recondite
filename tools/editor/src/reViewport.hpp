@@ -8,7 +8,7 @@
 
 class reViewport : public wxPanel{
 public:
-	reViewport(rwxComponent* component, wxWindow *parent, wxWindowID id = wxID_ANY);
+	reViewport(rwxComponent* component, const wxString& name, wxWindow *parent, wxWindowID id = wxID_ANY);
 
 private:
 	void CreateViewportElements();
@@ -33,6 +33,8 @@ private:
 
 	wxStaticText* m_shadingMenuText;
 	wxMenu m_shadingMenu;
+
+	wxString m_name;
 };
 
 #endif

@@ -24,6 +24,8 @@ public:
 
 	wxGLContext* GetContext();
 
+	void RenderScene(rViewport* viewport);
+
 public:
 	virtual bool Init(wxGLCanvas* canvas);
 

@@ -1,15 +1,16 @@
 #include "reViewport.hpp"
 
-reViewport::reViewport(rwxComponent* component, wxWindow *parent, wxWindowID id)
+reViewport::reViewport(rwxComponent* component, const wxString& name, wxWindow *parent, wxWindowID id)
 	:wxPanel(parent, id)
 {
 	m_component = component;
+	m_name = name;
 
 	CreateViewportElements();
 }
 
 void reViewport::CreateViewportElements(){
-	m_glCanvas = new rwxGLCanvas(m_component, this);
+	m_glCanvas = new rwxGLCanvas(m_component, m_name, this);
 
 	m_viewMenuText = new wxStaticText(this, reViewportViewMenuId, "View");
 	m_viewMenuText->Bind(wxEVT_LEFT_DOWN, &reViewport::OnViewMenuClick, this);

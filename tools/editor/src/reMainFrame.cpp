@@ -57,6 +57,8 @@ wxMenuBar* reMainFrame::CreateEditorMenuBar(){
 	wxMenuBar* menuBar = new wxMenuBar();
 
 	wxMenu* fileMenu = new wxMenu();
+	fileMenu->Append(reMainFramePopulate, "Populate");
+	fileMenu->AppendSeparator();
 	fileMenu->Append(wxID_EXIT, "Exit\tAlt+F4");
 	menuBar->Append(fileMenu, "&File");
 
@@ -68,6 +70,7 @@ wxMenuBar* reMainFrame::CreateEditorMenuBar(){
 
 	Bind(wxEVT_MENU, &reMainFrame::OnFileExit, this, wxID_EXIT);
 	Bind(wxEVT_MENU, &reMainFrame::OnViewWindowSelection, this, reMainFrame_IdUIBegin, reMainFrame_IdUIEnd);
+	Bind(wxEVT_MENU, &reMainFrame::OnPopulate, this, reMainFramePopulate);
 
 	return menuBar;
 }
@@ -96,4 +99,14 @@ void reMainFrame::OnFileExit(wxCommandEvent& event){
 
 void reMainFrame::CloseFrame(){
 	Close();
+}
+
+#include "primitive/rPrimitiveBox.hpp"
+
+void reMainFrame::OnPopulate(wxCommandEvent& event){
+	rEngine* engine = m_component->GetEngine();
+
+	rPrimitiveBox* box = new rPrimitiveBox("box01", engine);
+	engine->scene->AddActor(box);
+	m_viewportDisplay->Refresh();
 }

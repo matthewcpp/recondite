@@ -20,6 +20,14 @@ bool rwxComponent::Init(wxGLCanvas* canvas){
 	return true;
 }
 
+void rwxComponent::RenderScene(rViewport* viewport){
+	m_graphicsDevice->Clear();
+
+	m_engine.renderer->BeginRenderView(*viewport);
+	m_scene->Draw();
+	m_engine.renderer->EndRenderView();
+}
+
 rSize rwxComponent::DisplaySize() const{
 	return rSize(0, 0);
 }

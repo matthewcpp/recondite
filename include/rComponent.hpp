@@ -22,6 +22,7 @@ public:
 	bool IsReady() const;
 
 	virtual void LoadScene(const rString& name);
+	rEngine* GetEngine();
 
 public:
 	virtual rViewport* CreateViewport(const rString& name);

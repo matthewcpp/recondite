@@ -121,3 +121,7 @@ size_t rComponent::NumViewports() const{
 bool rComponent::IsReady() const{
 	return m_isReady;
 }
+
+rEngine* rComponent::GetEngine(){
+	return &m_engine;
+}

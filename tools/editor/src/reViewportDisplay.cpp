@@ -15,15 +15,15 @@ void reViewportDisplay::CreateViewportDisplay(){
 	m_leftSplitter = new wxSplitterWindow(m_mainSplitter, wxID_ANY);
 	m_leftSplitter->SetSashGravity(0.5);
 
-	m_topLeftViewport = new reViewport(m_component, m_leftSplitter);
-	m_bottomLeftViewport = new reViewport(m_component, m_leftSplitter);
+	m_topLeftViewport = new reViewport(m_component, "topleft", m_leftSplitter);
+	m_bottomLeftViewport = new reViewport(m_component, "bottomleft", m_leftSplitter);
 	m_leftSplitter->SplitHorizontally(m_topLeftViewport, m_bottomLeftViewport);
 
 	m_rightSplitter = new wxSplitterWindow(m_mainSplitter, wxID_ANY);
 	m_rightSplitter->SetSashGravity(0.5);
 
-	m_topRightViewport = new reViewport(m_component, m_rightSplitter);
-	m_bottomRightViewport = new reViewport(m_component, m_rightSplitter);
+	m_topRightViewport = new reViewport(m_component, "topright", m_rightSplitter);
+	m_bottomRightViewport = new reViewport(m_component, "bottomright", m_rightSplitter);
 	m_rightSplitter->SplitHorizontally(m_topRightViewport, m_bottomRightViewport);
 
 	m_mainSplitter->SplitVertically(m_leftSplitter, m_rightSplitter);

@@ -30,7 +30,7 @@ find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(SDL REQUIRED)
 find_package(GTest REQUIRED)
-find_package(wxWidgets COMPONENTS gl aui adv core base REQUIRED)
+find_package(wxWidgets COMPONENTS gl aui adv core base propgrid REQUIRED)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/platform)

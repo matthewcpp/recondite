@@ -6,6 +6,15 @@ list(APPEND editor_files ${CMAKE_CURRENT_SOURCE_DIR}/reApplication.cpp)
 list(APPEND editor_files ${CMAKE_CURRENT_SOURCE_DIR}/reMainFrame.hpp)
 list(APPEND editor_files ${CMAKE_CURRENT_SOURCE_DIR}/reMainFrame.cpp)
 
+list(APPEND editor_files ${CMAKE_CURRENT_SOURCE_DIR}/reOutliner.hpp)
+list(APPEND editor_files ${CMAKE_CURRENT_SOURCE_DIR}/reOutliner.cpp)
+
+list(APPEND editor_files ${CMAKE_CURRENT_SOURCE_DIR}/reProjectExplorer.hpp)
+list(APPEND editor_files ${CMAKE_CURRENT_SOURCE_DIR}/reProjectExplorer.cpp)
+
+list(APPEND editor_files ${CMAKE_CURRENT_SOURCE_DIR}/rePropertyInspector.hpp)
+list(APPEND editor_files ${CMAKE_CURRENT_SOURCE_DIR}/rePropertyInspector.cpp)
+
 list(APPEND editor_files ${CMAKE_CURRENT_SOURCE_DIR}/reViewport.hpp)
 list(APPEND editor_files ${CMAKE_CURRENT_SOURCE_DIR}/reViewport.cpp)
 

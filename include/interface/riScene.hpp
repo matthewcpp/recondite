@@ -14,6 +14,8 @@ public:
 	virtual rActor3* GetActor(const rString& name) const = 0;
 	virtual size_t NumActors () const = 0;
 
+	virtual rString GetDefaultActorId(const rString& prefix) = 0;
+
 	virtual void DeleteActor(const rString& name) = 0;
 	virtual rActor3* RayPick(const rRay3& ray) = 0;
 	virtual rActor3* ViewportPick(const rString& viewportName, int x, int y) = 0;

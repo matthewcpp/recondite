@@ -30,7 +30,7 @@ public:
 
 	virtual void DeleteActor(const rString& name);
 
-	rString GetDefaultActorId(const rString& prefix);
+	virtual rString GetDefaultActorId(const rString& prefix);
 
 	virtual rActor3* RayPick(const rRay3& ray);
 	virtual rActor3* ViewportPick(const rString& viewportName, int x, int y);

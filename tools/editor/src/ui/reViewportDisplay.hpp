@@ -8,9 +8,11 @@
 #include <wx/wx.h>
 #include <wx/splitter.h>
 
+#include "tools/reToolManager.hpp"
+
 class reViewportDisplay : public wxPanel{
 public:
-	reViewportDisplay(rwxComponent* component, wxWindow* parent, wxWindowID id =wxID_ANY);
+	reViewportDisplay(rwxComponent* component, reToolManager* toolManager, wxWindow* parent, wxWindowID id = wxID_ANY);
 
 public:
 	reViewport* GetViewport(const wxString& name);
@@ -20,6 +22,7 @@ private:
 
 private:
 	rwxComponent* m_component;
+	reToolManager* m_toolManager;
 
 	reViewport* m_topLeftViewport;
 	reViewport* m_topRightViewport;

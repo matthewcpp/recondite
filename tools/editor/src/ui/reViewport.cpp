@@ -1,9 +1,10 @@
 #include "reViewport.hpp"
 
-reViewport::reViewport(rwxComponent* component, const wxString& name, wxWindow *parent, wxWindowID id)
+reViewport::reViewport(rwxComponent* component, reToolManager* toolManager, const wxString& name, wxWindow *parent, wxWindowID id)
 	:wxPanel(parent, id)
 {
 	m_component = component;
+	m_toolManager = toolManager;
 	m_viewportName = name;
 
 	CreateViewportElements();
@@ -11,6 +12,10 @@ reViewport::reViewport(rwxComponent* component, const wxString& name, wxWindow *
 
 void reViewport::CreateViewportElements(){
 	m_glCanvas = new rwxGLCanvas(m_component, m_viewportName, this);
+
+	m_glCanvas->Bind(wxEVT_LEFT_DOWN, &reViewport::OnCanvasMouseDown, this);
+	m_glCanvas->Bind(wxEVT_LEFT_UP, &reViewport::OnCanvasMouseUp, this);
+	m_glCanvas->Bind(wxEVT_MOTION, &reViewport::OnCanvasMouseMotion, this);
 
 	m_viewMenuText = new wxStaticText(this, reViewportViewMenuId, "View");
 	m_viewMenuText->Bind(wxEVT_LEFT_DOWN, &reViewport::OnViewMenuClick, this);
@@ -36,6 +41,10 @@ void reViewport::CreateViewportElements(){
 	SetSizer(mainSizer);
 }
 
+rwxGLCanvas* reViewport::GetCanvas(){
+	return m_glCanvas;
+}
+
 void reViewport::OnViewMenuClick(wxMouseEvent& event){
 	m_viewMenuText->GetPopupMenuSelectionFromUser(m_viewMenu);
 }
@@ -46,4 +55,16 @@ void reViewport::OnShadingMenuClick(wxMouseEvent& event){
 
 wxString reViewport::GetViewportName(){
 	return m_viewportName;
+}
+
+void reViewport::OnCanvasMouseDown(wxMouseEvent& event){
+	m_toolManager->OnMouseDown(event, m_glCanvas);
+}
+
+void reViewport::OnCanvasMouseUp(wxMouseEvent& event){
+	m_toolManager->OnMouseUp(event, m_glCanvas);
+}
+
+void reViewport::OnCanvasMouseMotion(wxMouseEvent& event){
+	m_toolManager->OnMouseMotion(event, m_glCanvas);
 }

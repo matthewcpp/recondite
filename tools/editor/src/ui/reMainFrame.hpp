@@ -11,6 +11,8 @@
 #include "reProjectExplorer.hpp"
 #include "reOutliner.hpp"
 
+#include "tools/reToolManager.hpp"
+
 
 class reMainFrame : public wxFrame{
 public:
@@ -45,6 +47,7 @@ private:
 	rePropertyInspector* m_propertyInspector;
 	reProjectExplorer* m_projectExplorer;
 	reOutliner* m_outliner;
+	reToolManager* m_toolManager;
 
 	wxAuiManager m_wxAuiManager;
 };

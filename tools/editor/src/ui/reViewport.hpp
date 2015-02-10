@@ -6,12 +6,15 @@
 #include "rwxGLCanvas.hpp"
 #include "wx/wx.h"
 
+#include "tools/reToolManager.hpp"
+
 class reViewport : public wxPanel{
 public:
-	reViewport(rwxComponent* component, const wxString& name, wxWindow *parent, wxWindowID id = wxID_ANY);
+	reViewport(rwxComponent* component, reToolManager* toolManager, const wxString& name, wxWindow *parent, wxWindowID id = wxID_ANY);
 
 public:
 	wxString GetViewportName();
+	rwxGLCanvas* GetCanvas();
 
 private:
 	void CreateViewportElements();
@@ -19,6 +22,10 @@ private:
 private:
 	void OnViewMenuClick(wxMouseEvent& event);
 	void OnShadingMenuClick(wxMouseEvent& event);
+
+	void OnCanvasMouseDown(wxMouseEvent& event);
+	void OnCanvasMouseUp(wxMouseEvent& event);
+	void OnCanvasMouseMotion(wxMouseEvent& event);
 
 private:
 
@@ -30,6 +37,7 @@ private:
 private:
 	rwxGLCanvas* m_glCanvas;
 	rwxComponent* m_component;
+	reToolManager* m_toolManager;
 
 	wxStaticText* m_viewMenuText;
 	wxMenu m_viewMenu;

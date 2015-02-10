@@ -1,9 +1,10 @@
 #include "reViewportDisplay.hpp"
 
-reViewportDisplay::reViewportDisplay(rwxComponent* component, wxWindow* parent, wxWindowID id)
+reViewportDisplay::reViewportDisplay(rwxComponent* component, reToolManager* toolManager, wxWindow* parent, wxWindowID id)
 	:wxPanel(parent, id)
 {
 	m_component = component;
+	m_toolManager = toolManager;
 
 	CreateViewportDisplay();
 }
@@ -15,15 +16,15 @@ void reViewportDisplay::CreateViewportDisplay(){
 	m_leftSplitter = new wxSplitterWindow(m_mainSplitter, wxID_ANY);
 	m_leftSplitter->SetSashGravity(0.5);
 
-	m_topLeftViewport = new reViewport(m_component, "Viewport 1", m_leftSplitter);
-	m_bottomLeftViewport = new reViewport(m_component, "Viewport 2", m_leftSplitter);
+	m_topLeftViewport = new reViewport(m_component, m_toolManager, "Viewport 1", m_leftSplitter);
+	m_bottomLeftViewport = new reViewport(m_component, m_toolManager, "Viewport 2", m_leftSplitter);
 	m_leftSplitter->SplitHorizontally(m_topLeftViewport, m_bottomLeftViewport);
 
 	m_rightSplitter = new wxSplitterWindow(m_mainSplitter, wxID_ANY);
 	m_rightSplitter->SetSashGravity(0.5);
 
-	m_topRightViewport = new reViewport(m_component, "Viewport 3", m_rightSplitter);
-	m_bottomRightViewport = new reViewport(m_component, "Viewport 4", m_rightSplitter);
+	m_topRightViewport = new reViewport(m_component, m_toolManager, "Viewport 3", m_rightSplitter);
+	m_bottomRightViewport = new reViewport(m_component, m_toolManager, "Viewport 4", m_rightSplitter);
 	m_rightSplitter->SplitHorizontally(m_topRightViewport, m_bottomRightViewport);
 
 	m_mainSplitter->SplitVertically(m_leftSplitter, m_rightSplitter);

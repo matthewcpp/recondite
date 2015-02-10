@@ -5,6 +5,11 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/ui)
 source_group (UI FILES ${ui_sources})
 set(editor_files ${editor_files} ${ui_sources})
 
+set(tool_sources)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/tools)
+source_group (Tools FILES ${tool_sources})
+set(editor_files ${editor_files} ${tool_sources})
+
 set(property_sources)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/properties)
 source_group (PropertyConnectors FILES ${property_sources})

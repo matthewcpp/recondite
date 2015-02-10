@@ -1,8 +1,8 @@
 #include "rePrimitiveBoxTool.hpp"
 
-rePrimitiveBoxTool::rePrimitiveBoxTool(rwxComponent* component, wxFrame* owner){
-	m_owner = owner;
-	m_component = component;
+rePrimitiveBoxTool::rePrimitiveBoxTool(rwxComponent* component, wxFrame* owner)
+	:reTool(component, owner)
+{
 }
 
 bool rePrimitiveBoxTool::OnMouseDown(wxMouseEvent& event, rwxGLCanvas* canvas){

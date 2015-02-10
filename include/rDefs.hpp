@@ -58,4 +58,17 @@ enum rButtonState {
 	rBUTTON_STATE_NONE
 };
 
+#if __cplusplus <= 199711L
+	#define rNO_COPY_CLASS(classname)				\
+		private:                                    \
+			classname(const classname&);            \
+			classname& operator=(const classname&);
+
+#else
+	#define rNO_COPY_CLASS(classname)							\
+		public:													\
+			classname(const classname&) = delete;				\
+			classname& operator=(const classname&) = delete;
+#endif
+
 #endif

@@ -4,6 +4,7 @@
 #include "rBuild.hpp"
 #include "rString.hpp"
 #include "rEngine.hpp"
+#include "rDefs.hpp"
 
 class RECONDITE_API rObject {
 public:
@@ -18,6 +19,8 @@ protected:
 
 private:
 	rString m_id;
+
+rNO_COPY_CLASS(rObject)
 };
 
 #endif

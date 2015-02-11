@@ -13,8 +13,6 @@ public:
 	rePropertyInspector(rwxComponent* component, wxWindow* display, wxWindow* parent, wxWindowID id = wxID_ANY);
 
 public:
-
-	void InspectViewport(rViewport* viewport);
 	void Inspect(const wxString& actorName);
 
 private:

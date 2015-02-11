@@ -99,3 +99,7 @@ bool rPrimitiveBoxPropertyConnector::SetIntProperty(const wxString& name, int va
 
 	return refresh;
 }
+
+wxString rPrimitiveBoxPropertyConnector::GetConnectionClass(){
+	return m_box->ClassName().c_str();
+}

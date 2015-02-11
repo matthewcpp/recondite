@@ -29,6 +29,7 @@ public:
 
 public:
 	virtual bool SetIntProperty(const wxString& name, int val);
+	virtual wxString GetConnectionClass();
 
 protected:
 	virtual void SetClassPGProperties(wxPropertyGrid* grid);

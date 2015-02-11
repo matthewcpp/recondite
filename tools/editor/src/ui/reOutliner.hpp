@@ -8,19 +8,24 @@
 
 #include "rePropertyInspector.hpp"
 
+#include "rEvents.hpp"
+
 class reOutliner : public wxDataViewTreeCtrl{
 public:
 	reOutliner(rwxComponent* component, rePropertyInspector* propertyInspector, wxWindow* parent, wxWindowID id = wxID_ANY);
 
-	void UpdateLevel();
-
 private:
 	void OnItemSelected(wxDataViewEvent& event);
+
+	void OnActorAddedToScene(rEvent& event);
+	void OnComponentInitialized(rEvent& event);
 
 private:
 	rwxComponent* m_component;
 
 	rePropertyInspector* m_propertyInspector;
+
+	wxDataViewItem m_actorRoot;
 };
 
 #endif

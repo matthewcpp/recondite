@@ -10,20 +10,6 @@ rePropertyInspector::rePropertyInspector(rwxComponent* component, wxWindow* disp
 	Bind(wxEVT_PG_CHANGED, &rePropertyInspector::OnPropertyValueChanged, this);
 }
 
-void rePropertyInspector::InspectViewport(rViewport* viewport){
-	Clear();
-
-	if (m_connector)
-		delete m_connector;
-
-	wxPGProperty* name = new wxStringProperty("Name", wxPG_LABEL, viewport->Name().c_str());
-	wxPGProperty* classProp = new wxStringProperty("Class", wxPG_LABEL, "Viewport");
-	m_connector = new reCameraPropertyConnector((rCamera*)viewport->Camera());
-
-	m_connector->SetPGProperties(this);
-	FitColumns();
-}
-
 void rePropertyInspector::OnPropertyValueChanged(wxPropertyGridEvent& event){
 	wxPGProperty* property = event.GetProperty();
 	wxString propertyClass = property->GetValueType();
@@ -55,12 +41,24 @@ void rePropertyInspector::Inspect(const wxString& actorName){
 
 	rActor3* actor = engine->scene->GetActor(rstr);
 
-	if (m_connector)
-		delete m_connector;
+	wxString oldClass;
 
-	if (actor)
+	if (m_connector){
+		oldClass = m_connector->GetConnectionClass();
+		delete m_connector;
+	}
+		
+
+	if (actor){
+		wxString newClass = actor->ClassName().c_str();
 		m_connector = new rPrimitiveBoxPropertyConnector((rPrimitiveBox*)actor);
 
-	m_connector->SetPGProperties(this);
-	FitColumns();
+		if (newClass == oldClass){
+			m_connector->RefreshPGProperties(this);
+		}
+		else{
+			m_connector->SetPGProperties(this);
+			FitColumns();
+		}
+	}
 }

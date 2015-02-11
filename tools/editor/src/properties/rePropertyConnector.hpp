@@ -18,6 +18,7 @@ public:
 public:
 	virtual void SetPGProperties(wxPropertyGrid* grid) = 0;
 	virtual void RefreshPGProperties(wxPropertyGrid* grid) = 0;
+	virtual wxString GetConnectionClass() = 0;
 
 	virtual bool SetBoolProperty(const wxString& name, bool val) { return false; }
 	virtual bool SetDoubleProperty(const wxString& name, double val) { return false; }

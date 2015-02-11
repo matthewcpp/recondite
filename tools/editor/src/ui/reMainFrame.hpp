@@ -27,12 +27,8 @@ private:
 	void OnViewWindowSelection(wxCommandEvent& event);
 	void OnFileExit(wxCommandEvent& event);
 
-	//temp
-	void OnPopulate(wxCommandEvent& event);
-
 	enum reMainFrameId{
 		reMainFrameIdBegin = 10000,
-		reMainFramePopulate,
 		reMainFrame_IdUIBegin,
 		reMainFrame_ViewPropertyInspector,
 		reMainFrame_ViewProjectExplorer,

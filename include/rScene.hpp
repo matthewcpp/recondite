@@ -14,8 +14,11 @@
 #include "xml/rXMLDocument.hpp"
 
 #include "rActor3.hpp"
+#include "rEventHandler.hpp"
 
-class RECONDITE_API rScene : public riScene{
+#include "rEvents.hpp"
+
+class RECONDITE_API rScene : public rEventHandler, public riScene{
 public:
 	rScene(riComponent* component, rGraphicsDevice* graphicsDevice);
 	~rScene();

@@ -131,3 +131,7 @@ bool rComponent::IsReady() const{
 rEngine* rComponent::GetEngine(){
 	return &m_engine;
 }
+
+rScene* rComponent::GetScene(){
+	return m_scene;
+}

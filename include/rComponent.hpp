@@ -10,8 +10,10 @@
 #include "ui/ruiOverlayManager.hpp"
 
 #include "interface/riComponent.hpp"
+#include "rEventHandler.hpp"
+#include "rEvents.hpp"
 
-class RECONDITE_API rComponent : public riComponent{
+class RECONDITE_API rComponent : public rEventHandler, public riComponent{
 public:
 	rComponent();
 	virtual unsigned long GetTimeMiliseconds() const = 0;
@@ -23,6 +25,7 @@ public:
 
 	virtual void LoadScene(const rString& name);
 	rEngine* GetEngine();
+	rScene* GetScene();
 
 public:
 	virtual rViewport* CreateViewport(const rString& name);

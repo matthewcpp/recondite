@@ -17,6 +17,9 @@ bool rwxComponent::Init(wxGLCanvas* canvas){
 
 	rComponent::Init();
 
+	rEvent event;
+	Trigger(rEVT_COMPONENT_INITIALIZED, event);
+
 	return true;
 }
 

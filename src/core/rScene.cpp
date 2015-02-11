@@ -42,6 +42,8 @@ void rScene::AddActor(rActor3* actor){
 
 	m_actors[name] = actor;
 
+	rActor3Event event(actor);
+	Trigger(rEVT_SCENE_ACTOR_ADDED, event);
 }
 
 rActor3* rScene::GetActor(const rString& name) const{
@@ -59,6 +61,9 @@ void rScene::DeleteActor(const rString& name){
 	rActorMap::iterator result = m_actors.find(name);
 
 	if (result != m_actors.end()){
+		rActor3Event event(result->second);
+		Trigger(rEVT_SCENE_ACTOR_REMOVED, event);
+
 		delete result->second;
 		m_actors.erase(result);
 	}

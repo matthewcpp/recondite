@@ -7,6 +7,8 @@ reViewportDisplay::reViewportDisplay(rwxComponent* component, reToolManager* too
 	m_toolManager = toolManager;
 
 	CreateViewportDisplay();
+
+	m_component->Bind(rEVT_COMPONENT_INITIALIZED, this, &reViewportDisplay::OnComponentInitialized);
 }
 
 void reViewportDisplay::CreateViewportDisplay(){
@@ -45,4 +47,22 @@ reViewport* reViewportDisplay::GetViewport(const wxString& name){
 		return m_bottomRightViewport;
 	else
 		return nullptr;
+}
+
+void reViewportDisplay::OnComponentInitialized(rEvent& event){
+	rScene* scene = m_component->GetScene();
+
+	scene->Bind(rEVT_SCENE_ACTOR_ADDED, this, &reViewportDisplay::OnDisplayShouldUpdate);
+	scene->Bind(rEVT_SCENE_ACTOR_REMOVED, this, &reViewportDisplay::OnDisplayShouldUpdate);
+}
+
+void reViewportDisplay::UpdateDisplay(){
+	m_topLeftViewport->GetCanvas()->Refresh();
+	m_topRightViewport->GetCanvas()->Refresh();
+	m_bottomLeftViewport->GetCanvas()->Refresh();
+	m_bottomRightViewport->GetCanvas()->Refresh();
+}
+
+void reViewportDisplay::OnDisplayShouldUpdate(rEvent& event){
+	UpdateDisplay();
 }

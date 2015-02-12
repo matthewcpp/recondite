@@ -1,6 +1,6 @@
 #include "rePropertyInspector.hpp"
 
-rePropertyInspector::rePropertyInspector(rwxComponent* component, wxWindow* display, wxWindow* parent, wxWindowID id)
+rePropertyInspector::rePropertyInspector(rwxComponent* component, reViewportDisplay* display, wxWindow* parent, wxWindowID id)
 	:wxPropertyGrid(parent, id)
 {
 	m_component = component;
@@ -32,7 +32,7 @@ void rePropertyInspector::OnPropertyValueChanged(wxPropertyGridEvent& event){
 		m_connector->RefreshPGProperties(this);
 		Thaw();
 
-		m_display->Refresh();
+		m_display->UpdateDisplay();
 	}
 }
 void rePropertyInspector::Inspect(const wxString& actorName){

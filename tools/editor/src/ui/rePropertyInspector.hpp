@@ -8,9 +8,11 @@
 
 #include "properties/rePropertyConnectors.hpp"
 
+#include "reViewportDisplay.hpp"
+
 class rePropertyInspector : public wxPropertyGrid{
 public:
-	rePropertyInspector(rwxComponent* component, wxWindow* display, wxWindow* parent, wxWindowID id = wxID_ANY);
+	rePropertyInspector(rwxComponent* component, reViewportDisplay* display, wxWindow* parent, wxWindowID id = wxID_ANY);
 
 public:
 	void Inspect(const wxString& actorName);
@@ -20,7 +22,7 @@ private:
 
 private:
 	rwxComponent* m_component;
-	wxWindow* m_display;
+	reViewportDisplay* m_display;
 
 	rePropertyConnector* m_connector;
 };

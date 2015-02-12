@@ -17,6 +17,12 @@ public:
 public:
 	reViewport* GetViewport(const wxString& name);
 
+	virtual void UpdateDisplay();
+
+private:
+	void OnComponentInitialized(rEvent& event);
+	void OnDisplayShouldUpdate(rEvent& event);
+
 private:
 	void CreateViewportDisplay();
 

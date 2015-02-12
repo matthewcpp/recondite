@@ -12,7 +12,7 @@ void reProject::Create(const wxString& directory, const wxString& name){
 	m_projectDir.AssignDir(directory);
 	m_projectDir.AppendDir(name);
 
-	wxMkDir(m_projectDir.GetPath());
+	wxMkDir(m_projectDir.GetPath(), wxS_DIR_DEFAULT);
 
 	SaveProjectFile();
 }

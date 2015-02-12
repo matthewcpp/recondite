@@ -13,6 +13,12 @@ void reProjectExplorer::ShowProject(){
 	m_projectRoot = AppendContainer(wxDataViewItem(0), m_project->Name());
 	m_levelsRoot = AppendContainer(m_projectRoot, "Levels");
 	Expand(m_projectRoot);
+
+	const wxArrayString& levels = m_project->Levels();
+
+	for (auto& level : levels){
+		AppendItem(m_levelsRoot, level);
+	}
 }
 
 void reProjectExplorer::AddLevel(const wxString& name){

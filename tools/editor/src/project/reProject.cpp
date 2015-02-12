@@ -31,6 +31,16 @@ bool reProject::Open(const wxString& path){
 		if (child->GetName() == "name") {
 			m_name = child->GetNodeContent();
 		}
+		if (child->GetName() == "levels") {
+			wxXmlNode* level = child->GetChildren();
+
+			if (level){
+				while (level){
+					m_levels.push_back(level->GetNodeContent());
+					level = level->GetNext();
+				}
+			}
+		}
 
 		child = child->GetNext();
 	}
@@ -46,6 +56,7 @@ void reProject::Close(){
 
 	m_projectDir.Clear();
 	m_name.Clear();
+	m_levels.Clear();
 
 	m_component->GetScene()->Clear();
 }
@@ -54,6 +65,12 @@ void reProject::SaveProjectFile(){
 	wxXmlNode* root = new wxXmlNode(wxXML_ELEMENT_NODE, "project");
 	wxXmlNode* nameElement = new wxXmlNode(root, wxXML_ELEMENT_NODE, "name");
 	wxXmlNode* nameNode = new wxXmlNode(nameElement, wxXML_TEXT_NODE, "name", m_name);
+
+	wxXmlNode* levelsElement = new wxXmlNode(root, wxXML_ELEMENT_NODE, "levels");
+	for (auto& levelname : m_levels){
+		wxXmlNode* levelElement = new wxXmlNode(levelsElement, wxXML_ELEMENT_NODE, "level");
+		wxXmlNode* nameNode = new wxXmlNode(levelElement, wxXML_TEXT_NODE, "level", levelname);
+	}
 
 	wxXmlDocument document;
 	document.SetRoot(root);

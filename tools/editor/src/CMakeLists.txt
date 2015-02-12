@@ -1,5 +1,10 @@
 set(editor_files)
 
+set(project_sources)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/project)
+source_group (Project FILES ${project_sources})
+set(editor_files ${editor_files} ${project_sources})
+
 set(ui_sources)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/ui)
 source_group (UI FILES ${ui_sources})
@@ -14,6 +19,11 @@ set(property_sources)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/properties)
 source_group (PropertyConnectors FILES ${property_sources})
 set(editor_files ${editor_files} ${property_sources})
+
+set(dialog_sources)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/dialogs)
+source_group (Dialogs FILES ${dialog_sources})
+set(editor_files ${editor_files} ${dialog_sources})
 
 #WIN32 specifies to use the "windows" subsystem, ie. win32 app.  wxWidgets GUI needs this project type
 add_executable(editor WIN32 ${editor_files})

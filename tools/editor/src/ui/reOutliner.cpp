@@ -8,9 +8,6 @@ reOutliner::reOutliner(rwxComponent* component, rePropertyInspector* propertyIns
 
 	Bind(wxEVT_DATAVIEW_SELECTION_CHANGED, &reOutliner::OnItemSelected, this);
 
-	m_actorRoot = AppendContainer(wxDataViewItem(0), "Actors");
-	Expand(m_actorRoot);
-
 	m_component->Bind(rEVT_COMPONENT_INITIALIZED, this, &reOutliner::OnComponentInitialized);
 }
 
@@ -21,11 +18,15 @@ void reOutliner::OnItemSelected(wxDataViewEvent& event){
 
 void reOutliner::OnActorAddedToScene(rEvent& event){
 	rActor3Event& actorEvent = static_cast<rActor3Event&> (event);
-	AppendItem(m_actorRoot, actorEvent.Actor()->Id().c_str());
+	AppendItem(wxDataViewItem(0), actorEvent.Actor()->Id().c_str());
 }
 
 void reOutliner::OnComponentInitialized(rEvent& event){
 	rScene* scene = m_component->GetScene();
 
 	scene->Bind(rEVT_SCENE_ACTOR_ADDED, this, &reOutliner::OnActorAddedToScene);
+}
+
+void reOutliner::OutlineLevel(){
+
 }

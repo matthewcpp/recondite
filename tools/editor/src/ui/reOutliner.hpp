@@ -14,6 +14,9 @@ class reOutliner : public wxDataViewTreeCtrl{
 public:
 	reOutliner(rwxComponent* component, rePropertyInspector* propertyInspector, wxWindow* parent, wxWindowID id = wxID_ANY);
 
+public:
+	void OutlineLevel();
+
 private:
 	void OnItemSelected(wxDataViewEvent& event);
 
@@ -24,8 +27,6 @@ private:
 	rwxComponent* m_component;
 
 	rePropertyInspector* m_propertyInspector;
-
-	wxDataViewItem m_actorRoot;
 };
 
 #endif

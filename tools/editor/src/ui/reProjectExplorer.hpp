@@ -13,6 +13,7 @@ public:
 	reProjectExplorer(rwxComponent* component, reProject* project, wxWindow* parent, wxWindowID id = wxID_ANY);
 
 	void ShowProject();
+	void AddLevel(const wxString& name);
 
 private:
 	rwxComponent* m_component;

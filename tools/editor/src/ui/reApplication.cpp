@@ -2,7 +2,7 @@
 
 bool reApplication::OnInit(){
 	m_rwxComponent = new rwxComponent();
-	m_project = new reProject();
+	m_project = new reProject(m_rwxComponent);
 
 	reMainFrame* mainFrame = new reMainFrame(m_rwxComponent, m_project, "Recondite Editor");
 	mainFrame->Show(true);

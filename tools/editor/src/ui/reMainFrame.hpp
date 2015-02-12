@@ -4,6 +4,7 @@
 #include <wx/wx.h>
 #include <wx/aui/aui.h>
 #include <wx/filedlg.h>
+#include <wx/textdlg.h>
 
 #include "rwxComponent.hpp"
 
@@ -30,6 +31,7 @@ private:
 	wxMenuBar* CreateEditorMenuBar();
 
 private:
+	void EnsureViewportDisplayVisible(const wxString& capption = wxEmptyString);
 	void ProcessProjectOpen();
 
 private:
@@ -38,6 +40,7 @@ private:
 	void OnFileExit(wxCommandEvent& event);
 
 	void OnNewProject(wxCommandEvent& event);
+	void OnNewLevel(wxCommandEvent& event);
 	void OnOpenProject(wxCommandEvent& event);
 	void OnCloseProject(wxCommandEvent& event);
 

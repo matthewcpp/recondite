@@ -14,3 +14,9 @@ void reProjectExplorer::ShowProject(){
 	m_levelsRoot = AppendContainer(m_projectRoot, "Levels");
 	Expand(m_projectRoot);
 }
+
+void reProjectExplorer::AddLevel(const wxString& name){
+	wxDataViewItem item = AppendItem(m_levelsRoot, name);
+	Select(item);
+	
+}

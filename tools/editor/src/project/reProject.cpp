@@ -1,5 +1,9 @@
 #include "reProject.hpp"
 
+reProject::reProject(rwxComponent* component){
+	m_component = component;
+}
+
 void reProject::Create(const wxString& directory, const wxString& name){
 	Close();
 
@@ -42,6 +46,8 @@ void reProject::Close(){
 
 	m_projectDir.Clear();
 	m_name.Clear();
+
+	m_component->GetScene()->Clear();
 }
 
 void reProject::SaveProjectFile(){
@@ -68,6 +74,38 @@ wxString reProject::ProjectFilePath() const{
 	return m_projectDir.GetPathWithSep() + m_name + ".rprj";
 }
 
+wxString reProject::LevelDirPath() const{
+	return m_projectDir.GetPathWithSep() + "levels";
+}
+
 bool reProject::IsOpen() const{
 	return !m_name.IsEmpty();
+}
+
+const wxArrayString& reProject::Levels() const{
+	return m_levels;
+}
+
+bool reProject::CreateLevel(const wxString& name){
+	for (auto& level: m_levels){
+		if (level == name)
+			return false;
+	}
+
+	m_levels.push_back(name);
+	m_activeLevel = name;
+
+	rScene* scene = m_component->GetScene();
+	if (scene) scene->Clear();
+
+	SaveProjectFile();
+	return true;
+}
+
+bool reProject::ActivateLevel(const wxString& name){
+	return false;
+}
+
+void reProject::SaveActiveLevel(){
+	
 }

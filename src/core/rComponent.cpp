@@ -2,6 +2,7 @@
 
 rComponent::rComponent(){
 	m_isReady = false;
+	m_scene = nullptr;
 }
 
 bool rComponent::Init(){

@@ -22,7 +22,7 @@ reMainFrame::reMainFrame(rwxComponent* component, reProject* project, const wxSt
 		.Center()
 		.Caption("Level View")
 		.CloseButton(false)
-		.Hide());
+		.Show(false));
 
 	m_wxAuiManager.AddPane(m_propertyInspector, wxAuiPaneInfo()
 		.Right()
@@ -88,6 +88,9 @@ wxMenuBar* reMainFrame::CreateEditorMenuBar(){
 	Bind(wxEVT_MENU, &reMainFrame::OnFileExit, this, wxID_EXIT);
 	Bind(wxEVT_MENU, &reMainFrame::OnNewProject, this, reMainFrame_MenuNewProject);
 	Bind(wxEVT_MENU, &reMainFrame::OnOpenProject, this, reMainFrame_MenuOpenProject);
+
+	Bind(wxEVT_MENU, &reMainFrame::OnNewLevel, this, reMainFrame_MenuNewLevel);
+
 	Bind(wxEVT_MENU, &reMainFrame::OnViewWindowSelection, this, reMainFrame_IdUIBegin, reMainFrame_IdUIEnd);
 
 	return menuBar;
@@ -119,13 +122,17 @@ void reMainFrame::CloseFrame(){
 	Close();
 }
 
-void reMainFrame::ProcessProjectOpen(){
-	wxAuiPaneInfo panel = m_wxAuiManager.GetPane(m_viewportDisplay);
+void reMainFrame::EnsureViewportDisplayVisible(const wxString& caption){
+	wxString str = "Level View";
+	if (!caption.IsEmpty())
+		str = str + " - " + caption;
 
-	if (!panel.IsShown()){
-		panel.Show(true);
-		m_wxAuiManager.Update();
-	}
+
+	m_wxAuiManager.GetPane(m_viewportDisplay).Show(true).Caption(str);
+	m_wxAuiManager.Update();
+}
+
+void reMainFrame::ProcessProjectOpen(){
 	m_projectExplorer->ShowProject();
 	SetTitle("Recondite Editor - " + m_project->Name());
 }
@@ -161,4 +168,19 @@ void reMainFrame::OnCloseProject(wxCommandEvent& event){
 
 	m_wxAuiManager.GetPane(m_viewportDisplay).Hide();
 	m_wxAuiManager.Update();
+}
+
+void reMainFrame::OnNewLevel(wxCommandEvent& event){
+	wxTextEntryDialog dialog(nullptr, "Name:", "Create a New Level");
+
+	if (dialog.ShowModal() == wxID_OK){
+		wxString levelName = dialog.GetValue();
+		bool created = m_project->CreateLevel(levelName);
+
+		if (created){
+			m_projectExplorer->AddLevel(levelName);
+			EnsureViewportDisplayVisible();
+			m_viewportDisplay->UpdateDisplay();
+		}
+	}
 }

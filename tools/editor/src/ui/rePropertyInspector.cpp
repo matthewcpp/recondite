@@ -57,8 +57,21 @@ void rePropertyInspector::Inspect(const wxString& actorName){
 			m_connector->RefreshPGProperties(this);
 		}
 		else{
+			Clear();
 			m_connector->SetPGProperties(this);
 			FitColumns();
 		}
 	}
+	else {
+		Clear();
+	}
+}
+
+void rePropertyInspector::StopInspecting(){
+	if (m_connector){
+		delete m_connector;
+		m_connector = nullptr;
+	}
+
+	Clear();
 }

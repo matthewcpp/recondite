@@ -72,6 +72,7 @@ wxMenuBar* reMainFrame::CreateEditorMenuBar(){
 	fileMenu->AppendSubMenu(newMenu, "New");
 
 	fileMenu->Append(reMainFrame_MenuOpenProject, "Open Project...");
+	fileMenu->Append(reMainFrame_MenuCloseProject, "Close");
 
 	fileMenu->AppendSeparator();
 	fileMenu->Append(wxID_EXIT, "Exit\tAlt+F4");
@@ -88,6 +89,7 @@ wxMenuBar* reMainFrame::CreateEditorMenuBar(){
 	Bind(wxEVT_MENU, &reMainFrame::OnFileExit, this, wxID_EXIT);
 	Bind(wxEVT_MENU, &reMainFrame::OnNewProject, this, reMainFrame_MenuNewProject);
 	Bind(wxEVT_MENU, &reMainFrame::OnOpenProject, this, reMainFrame_MenuOpenProject);
+	Bind(wxEVT_MENU, &reMainFrame::OnCloseProject, this, reMainFrame_MenuCloseProject);
 
 	Bind(wxEVT_MENU, &reMainFrame::OnNewLevel, this, reMainFrame_MenuNewLevel);
 
@@ -163,6 +165,7 @@ void reMainFrame::OnCloseProject(wxCommandEvent& event){
 
 	m_projectExplorer->DeleteAllItems();
 	m_outliner->DeleteAllItems();
+	m_propertyInspector->StopInspecting();
 
 	SetTitle("Recondite Editor");
 
@@ -178,6 +181,9 @@ void reMainFrame::OnNewLevel(wxCommandEvent& event){
 		bool created = m_project->CreateLevel(levelName);
 
 		if (created){
+			m_propertyInspector->StopInspecting();
+			m_outliner->DeleteAllItems();
+
 			m_projectExplorer->AddLevel(levelName);
 			EnsureViewportDisplayVisible();
 			m_viewportDisplay->UpdateDisplay();

@@ -16,6 +16,7 @@ public:
 
 public:
 	void Inspect(const wxString& actorName);
+	void StopInspecting();
 
 private:
 	void OnPropertyValueChanged(wxPropertyGridEvent& event);

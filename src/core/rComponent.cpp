@@ -2,7 +2,7 @@
 
 rComponent::rComponent(){
 	m_isReady = false;
-	m_scene = nullptr;
+	m_scene = new rScene(this);
 }
 
 bool rComponent::Init(){
@@ -45,6 +45,19 @@ void rComponent::LoadScene(const rString& name){
 	}
 }
 
+bool rComponent::SaveScene(const rString& path){
+	rXMLDocument doc;
+	rXMLElement* element = doc.CreateRoot("level");
+
+	riSerializationTarget* target = new rXMLSerializationTarget(element);
+	m_scene->Serialize(target);
+
+	doc.WriteToFile(path);
+	delete target;
+
+	return true;
+}
+
 void rComponent::RegisterActorLoader(const rString& className, riActorLoader* actorLoader){
 	UnregisterActorLoader(className);
 
@@ -74,7 +87,6 @@ void rComponent::InitEngine(rGraphicsDevice* graphics, rContentManager* content,
 	m_engine.renderer = new rRenderer(graphics, content);
 	m_engine.time.Start(GetTimeMiliseconds());
 
-	m_scene = new rScene(this, m_graphicsDevice);
 	m_engine.scene = m_scene;
 
 	m_graphicsDevice->Init();

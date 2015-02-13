@@ -6,6 +6,7 @@
 #include "xml/rXMLElement.hpp"
 #include "xml/rXMLUtil.hpp"
 #include "rActor3.hpp"
+#include "interface/riSerialization.hpp"
 
 class rEngine;
 class rActor3;
@@ -20,7 +21,8 @@ protected:
 
 class RECONDITE_API riActorSerializer{
 public:
-	virtual bool SerializeActor(rActor3* actor, rXMLElement* element) = 0;
+	virtual bool SerializeActor(rActor3* actor, riSerializationTarget* target) = 0;
+
 };
 
 #endif

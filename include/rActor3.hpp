@@ -13,6 +13,8 @@
 #include "rAlignedBoxBoundingVolume.hpp"
 #include "rPropertyCollection.hpp"
 
+#include "interface/riSerialization.hpp"
+
 class RECONDITE_API rActor3 : public rObject{
 public:
 	rActor3(const rString& id, rEngine* engine);
@@ -38,7 +40,9 @@ public:
 	virtual riBoundingVolume* BoundingVolume();
 
 	rDrawable* Drawable();
-	rDrawable* CreateDrawable();
+	virtual rDrawable* CreateDrawable();
+
+	bool Serialize(riSerializationTarget* target);
 
 	rPropertyCollection& CustomProperties();
 
@@ -57,6 +61,8 @@ public:
 	rVector3 Down() const;
 
 protected:
+
+	virtual bool SerializeData(riSerializationTarget* target);
 
 	void SetTransformed(bool transformed = true);
 

@@ -10,8 +10,13 @@
 #include "ui/ruiOverlayManager.hpp"
 
 #include "interface/riComponent.hpp"
+#include "interface/riSerialization.hpp"
+
 #include "rEventHandler.hpp"
 #include "rEvents.hpp"
+
+#include "xml/rXMLDocument.hpp"
+#include "xml/rXMLSerialization.hpp"
 
 class RECONDITE_API rComponent : public rEventHandler, public riComponent{
 public:
@@ -24,6 +29,8 @@ public:
 	bool IsReady() const;
 
 	virtual void LoadScene(const rString& name);
+	virtual bool SaveScene(const rString& path);
+
 	rEngine* GetEngine();
 	rScene* GetScene();
 

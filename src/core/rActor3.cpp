@@ -212,3 +212,18 @@ rDrawable* rActor3::CreateDrawable(){
 rPropertyCollection& rActor3::CustomProperties(){
 	return m_customProperties;
 }
+
+bool rActor3::Serialize(riSerializationTarget* target){
+	riSerializationTarget* classTarget = target->CreateChildObject(ClassName());
+
+	return SerializeData(classTarget);
+}
+
+bool rActor3::SerializeData(riSerializationTarget* target){
+	target->SetStringProperty("id", Id());
+	target->SetVector3Property("position", m_position);
+	target->SetVector3Property("rotation", m_rotation);
+	target->SetVector3Property("scale", m_scale);
+
+	return true;
+}

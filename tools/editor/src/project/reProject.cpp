@@ -13,6 +13,7 @@ void reProject::Create(const wxString& directory, const wxString& name){
 	m_projectDir.AppendDir(name);
 
 	wxMkDir(m_projectDir.GetPath(), wxS_DIR_DEFAULT);
+	wxMkDir(LevelDirPath(), wxS_DIR_DEFAULT);
 
 	SaveProjectFile();
 }
@@ -52,6 +53,7 @@ void reProject::Close(){
 	if (!IsOpen())
 		return;
 
+	SaveActiveLevel();
 	SaveProjectFile();
 
 	m_projectDir.Clear();
@@ -113,9 +115,12 @@ bool reProject::CreateLevel(const wxString& name){
 	m_activeLevel = name;
 
 	rScene* scene = m_component->GetScene();
-	if (scene) scene->Clear();
+	if (scene) 
+		scene->Clear();
 
+	SaveActiveLevel();
 	SaveProjectFile();
+
 	return true;
 }
 
@@ -124,5 +129,8 @@ bool reProject::ActivateLevel(const wxString& name){
 }
 
 void reProject::SaveActiveLevel(){
-	
+	if (!m_activeLevel.IsEmpty()){
+		wxString levelPath = LevelDirPath() + '/' + m_activeLevel + ".rlvl";
+		m_component->SaveScene(levelPath.c_str().AsChar());
+	}
 }

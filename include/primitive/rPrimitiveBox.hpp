@@ -33,6 +33,8 @@ public:
 	void SetDepthSegments(int depthSegments);
 
 protected:
+	virtual bool DoSerialize(riSerializationTarget* target);
+
 	virtual void CreateGeometry(rGeometryData& geometry);
 	virtual void DoRecalculateBoundingVolume();
 	virtual riBoundingVolume* DoGetBoundingVolume();

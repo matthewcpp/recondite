@@ -62,7 +62,7 @@ public:
 
 protected:
 
-	virtual bool SerializeData(riSerializationTarget* target);
+	virtual bool DoSerialize(riSerializationTarget* target);
 
 	void SetTransformed(bool transformed = true);
 

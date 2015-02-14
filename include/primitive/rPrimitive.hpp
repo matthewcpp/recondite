@@ -21,6 +21,8 @@ public:
 	virtual void Draw();
 
 protected:
+	virtual bool DoSerialize(riSerializationTarget* target);
+
 	virtual void CreateGeometry(rGeometryData& geometry) = 0;
 	void InvalidateGeometry();
 

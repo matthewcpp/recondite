@@ -6,6 +6,10 @@ reMainFrame::reMainFrame(rwxComponent* component, reProject* project, const wxSt
 	m_component = component;
 	m_project = project;
 
+	CreateUIElements();
+}
+
+void reMainFrame::CreateUIElements(){
 	m_wxAuiManager.SetManagedWindow(this);
 
 	m_toolManager = new reToolManager(m_component, this, &m_wxAuiManager);
@@ -14,9 +18,23 @@ reMainFrame::reMainFrame(rwxComponent* component, reProject* project, const wxSt
 	m_projectExplorer = new reProjectExplorer(m_component, m_project, this);
 	m_outliner = new reOutliner(m_component, m_propertyInspector, this);
 
-	
+
 	SetMenuBar(CreateEditorMenuBar());
 	CreateStatusBar();
+
+	wxAuiToolBar* projectToolbar = new wxAuiToolBar(this);
+	projectToolbar->SetToolBitmapSize(wxSize(16, 16));
+	projectToolbar->AddTool(reMainFrame_NewProject, "New Project", wxBitmap("assets/action-newproject.png", wxBITMAP_TYPE_PNG));
+	projectToolbar->AddTool(reMainFrame_OpenProject, "Open Project", wxBitmap("assets/action-openproject.png", wxBITMAP_TYPE_PNG));
+	projectToolbar->AddTool(reMainFrame_CloseProject, "Close Project", wxBitmap("assets/action-closeproject.png", wxBITMAP_TYPE_PNG));
+	projectToolbar->AddTool(reMainFrame_SaveProject, "Save Project", wxBitmap("assets/action-save.png", wxBITMAP_TYPE_PNG));
+	projectToolbar->Realize();
+
+	m_wxAuiManager.AddPane(projectToolbar, wxAuiPaneInfo()
+		.Name("Project Tools")
+		.Caption("Project Tools")
+		.ToolbarPane()
+		.Top());
 
 	m_wxAuiManager.AddPane(m_viewportDisplay, wxAuiPaneInfo()
 		.Center()
@@ -54,7 +72,29 @@ reMainFrame::reMainFrame(rwxComponent* component, reProject* project, const wxSt
 		.BestSize(250, 450)
 		.MinSize(250, 100));
 
+	m_toolManager->CreateToolbars();
+
 	m_wxAuiManager.Update();
+}
+
+void reMainFrame::OnProjectAction(wxCommandEvent& event){
+	switch (event.GetId()){
+	case reMainFrame_NewProject:
+		NewProject();
+		break;
+
+	case reMainFrame_OpenProject:
+		OpenProject();
+		break;
+
+	case reMainFrame_CloseProject:
+		CloseProject();
+		break;
+
+	case reMainFrame_SaveProject:
+		SaveProject();
+		break;
+	};
 }
 
 reMainFrame::~reMainFrame(){
@@ -67,12 +107,12 @@ wxMenuBar* reMainFrame::CreateEditorMenuBar(){
 	wxMenu* fileMenu = new wxMenu();
 
 	wxMenu* newMenu = new wxMenu();
-	newMenu->Append(reMainFrame_MenuNewProject, "Project...");
-	newMenu->Append(reMainFrame_MenuNewLevel, "Level...");
+	newMenu->Append(reMainFrame_NewProject, "Project...");
+	newMenu->Append(reMainFrame_NewLevel, "Level...");
 	fileMenu->AppendSubMenu(newMenu, "New");
 
-	fileMenu->Append(reMainFrame_MenuOpenProject, "Open Project...");
-	fileMenu->Append(reMainFrame_MenuCloseProject, "Close");
+	fileMenu->Append(reMainFrame_OpenProject, "Open Project...");
+	fileMenu->Append(reMainFrame_CloseProject, "Close");
 
 	fileMenu->AppendSeparator();
 	fileMenu->Append(wxID_EXIT, "Exit\tAlt+F4");
@@ -87,12 +127,7 @@ wxMenuBar* reMainFrame::CreateEditorMenuBar(){
 	menuBar->Append(viewMenu, "&View");
 
 	Bind(wxEVT_MENU, &reMainFrame::OnFileExit, this, wxID_EXIT);
-	Bind(wxEVT_MENU, &reMainFrame::OnNewProject, this, reMainFrame_MenuNewProject);
-	Bind(wxEVT_MENU, &reMainFrame::OnOpenProject, this, reMainFrame_MenuOpenProject);
-	Bind(wxEVT_MENU, &reMainFrame::OnCloseProject, this, reMainFrame_MenuCloseProject);
-
-	Bind(wxEVT_MENU, &reMainFrame::OnNewLevel, this, reMainFrame_MenuNewLevel);
-
+	Bind(wxEVT_MENU, &reMainFrame::OnProjectAction, this, reMainFrame_ProjectBegin, reMainFrame_ProjectEnd);
 	Bind(wxEVT_MENU, &reMainFrame::OnViewWindowSelection, this, reMainFrame_IdUIBegin, reMainFrame_IdUIEnd);
 
 	return menuBar;
@@ -139,7 +174,7 @@ void reMainFrame::ProcessProjectOpen(){
 	SetTitle("Recondite Editor - " + m_project->Name());
 }
 
-void reMainFrame::OnNewProject(wxCommandEvent& event){
+void reMainFrame::NewProject(){
 	reNewProjectDialog dialog;
 
 	if (dialog.ShowModal() == wxID_OK){
@@ -148,7 +183,7 @@ void reMainFrame::OnNewProject(wxCommandEvent& event){
 	}
 }
 
-void reMainFrame::OnOpenProject(wxCommandEvent& event){
+void reMainFrame::OpenProject(){
 	wxFileDialog projectDialog(this, "Open Project", wxEmptyString, wxEmptyString, "Recondite Projects (*.rprj)|*.rprj", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
 
 	if (projectDialog.ShowModal() == wxID_OK){
@@ -160,7 +195,7 @@ void reMainFrame::OnOpenProject(wxCommandEvent& event){
 	}
 }
 
-void reMainFrame::OnCloseProject(wxCommandEvent& event){
+void reMainFrame::CloseProject(){
 	m_project->Close();
 
 	m_projectExplorer->DeleteAllItems();
@@ -173,7 +208,7 @@ void reMainFrame::OnCloseProject(wxCommandEvent& event){
 	m_wxAuiManager.Update();
 }
 
-void reMainFrame::OnNewLevel(wxCommandEvent& event){
+void reMainFrame::NewLevel(){
 	wxTextEntryDialog dialog(nullptr, "Name:", "Create a New Level");
 
 	if (dialog.ShowModal() == wxID_OK){
@@ -189,4 +224,8 @@ void reMainFrame::OnNewLevel(wxCommandEvent& event){
 			m_viewportDisplay->UpdateDisplay();
 		}
 	}
+}
+
+void reMainFrame::SaveProject(){
+	m_project->SaveActiveLevel();
 }

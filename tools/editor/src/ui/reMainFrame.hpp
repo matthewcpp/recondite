@@ -29,6 +29,7 @@ public:
 
 private:
 	wxMenuBar* CreateEditorMenuBar();
+	void CreateUIElements();
 
 private:
 	void EnsureViewportDisplayVisible(const wxString& capption = wxEmptyString);
@@ -39,19 +40,25 @@ private:
 
 	void OnFileExit(wxCommandEvent& event);
 
-	void OnNewProject(wxCommandEvent& event);
-	void OnNewLevel(wxCommandEvent& event);
-	void OnOpenProject(wxCommandEvent& event);
-	void OnCloseProject(wxCommandEvent& event);
+	void NewProject();
+	void OpenProject();
+	void CloseProject();
+	void NewLevel();
+	void SaveProject();
+
+	void OnProjectAction(wxCommandEvent& event);
 
 	enum reMainFrameId{
 		reMainFrameIdBegin = 20000,
 
-		reMainFrame_MenuNewProject,
-		reMainFrame_MenuOpenProject,
-		reMainFrame_MenuCloseProject,
+		reMainFrame_ProjectBegin,
+		reMainFrame_NewProject,
+		reMainFrame_OpenProject,
+		reMainFrame_CloseProject,
+		reMainFrame_SaveProject,
 
-		reMainFrame_MenuNewLevel,
+		reMainFrame_NewLevel,
+		reMainFrame_ProjectEnd,
 
 		reMainFrame_IdUIBegin,
 		reMainFrame_ViewPropertyInspector,

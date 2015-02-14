@@ -20,6 +20,8 @@ public:
 	reToolManager(rwxComponent* component, wxFrame* owner, wxAuiManager* manager);
 	~reToolManager();
 
+	void CreateToolbars();
+
 public:
 	void OnMouseDown(wxMouseEvent& event, rwxGLCanvas* canvas);
 	void OnMouseUp(wxMouseEvent& event, rwxGLCanvas* canvas);
@@ -32,7 +34,7 @@ private:
 	void ActivateTool(reToolId toolId);
 
 	void InitTools();
-	void CreateToolbars();
+	
 	void Destroy();
 
 	typedef std::map<reToolId, reTool*> reToolMap;
@@ -47,6 +49,7 @@ private:
 	reTool* m_activeTool;
 
 	wxAuiToolBar* m_PrimitiveToolbar;
+	wxAuiToolBar* m_TransformToolbar;
 };
 
 #endif

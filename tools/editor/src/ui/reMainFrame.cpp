@@ -28,6 +28,7 @@ void reMainFrame::CreateUIElements(){
 	projectToolbar->AddTool(reMainFrame_OpenProject, "Open Project", wxBitmap("assets/action-openproject.png", wxBITMAP_TYPE_PNG));
 	projectToolbar->AddTool(reMainFrame_CloseProject, "Close Project", wxBitmap("assets/action-closeproject.png", wxBITMAP_TYPE_PNG));
 	projectToolbar->AddTool(reMainFrame_SaveProject, "Save Project", wxBitmap("assets/action-save.png", wxBITMAP_TYPE_PNG));
+	projectToolbar->AddTool(reMainFrame_NewLevel, "New Level", wxBitmap("assets/action-newlevel.png", wxBITMAP_TYPE_PNG));
 	projectToolbar->Realize();
 
 	m_wxAuiManager.AddPane(projectToolbar, wxAuiPaneInfo()
@@ -93,6 +94,9 @@ void reMainFrame::OnProjectAction(wxCommandEvent& event){
 
 	case reMainFrame_SaveProject:
 		SaveProject();
+		break;
+	case reMainFrame_NewLevel:
+		NewLevel();
 		break;
 	};
 }

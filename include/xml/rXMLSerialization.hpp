@@ -14,14 +14,15 @@ public:
 	rXMLSerializationTarget(rXMLElement* element);
 	~rXMLSerializationTarget();
 
-	virtual bool SetBoolProperty(const rString& name, bool& val);
-	virtual bool SetIntProperty(const rString& name, int& val);
-	virtual bool SetFloatProperty(const rString& name, float& val);
-	virtual bool SetStringProperty(const rString& name, const rString& val);
-	virtual bool SetVector3Property(const rString& name, const rVector3& val);
-	virtual bool SetColorProperty(const rString& name, const rColor& val);
+	virtual bool Bool(const rString& name, bool& val);
+	virtual bool Int(const rString& name, int& val);
+	virtual bool Float(const rString& name, float& val);
+	virtual bool String(const rString& name, rString& val);
+	virtual bool Vector3(const rString& name, rVector3& val);
+	virtual bool Color(const rString& name, rColor& val);
 
-	virtual rXMLSerializationTarget* CreateChildObject(const rString& name);
+	virtual rXMLSerializationTarget* SubObject(const rString& name);
+	virtual riSerializationTarget* GetNextObject();
 
 private:
 	rXMLElement* m_element;
@@ -32,19 +33,20 @@ private:
 };
 
 
-class RECONDITE_API rXMLSerializationSource : public riSerializationSource{
+class RECONDITE_API rXMLSerializationSource : public riSerializationTarget{
 public:
 	rXMLSerializationSource(rXMLElement* element);
 	~rXMLSerializationSource();
 
-	virtual bool GetBoolProperty(const rString& name, bool& val) const ;
-	virtual bool GetIntProperty(const rString& name, int& val) const;
-	virtual bool GetFloatProperty(const rString& name, float& val) const;
-	virtual bool GetStringProperty(const rString& name, rString& val) const;
-	virtual bool GetVector3Property(const rString& name, rVector3& val) const;
-	virtual bool GetColorProperty(const rString& name, rColor& color) const;
+	virtual bool Bool(const rString& name, bool& val);
+	virtual bool Int(const rString& name, int& val);
+	virtual bool Float(const rString& name, float& val);
+	virtual bool String(const rString& name, rString& val);
+	virtual bool Vector3(const rString& name, rVector3& val);
+	virtual bool Color(const rString& name, rColor& color);
 
-	virtual riSerializationSource* GetChildObject(const rString& name);
+	virtual riSerializationTarget* SubObject(const rString& name);
+	virtual riSerializationTarget* GetNextObject();
 
 private:
 	rXMLElement* m_element;

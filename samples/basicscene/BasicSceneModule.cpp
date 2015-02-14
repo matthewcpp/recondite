@@ -101,7 +101,6 @@ void BasicSceneModule::AfterRenderOverlay(rViewInfo& view, rEngine& engine){
 }
 
 #include "data/rLogContentListener.hpp"
-#include "primitive/rPrimitiveSerialization.hpp"
 
 void BasicSceneModule::Init(rEngine& engine){
 	rSize displaySize = engine.component->DisplaySize();
@@ -121,12 +120,6 @@ void BasicSceneModule::Init(rEngine& engine){
 	engine.content->AddListener(&listener);
 	engine.content->LoadAssetManifestFromPath("content/basicscene/manifest.xml");
 	engine.content->RemoveListener(&listener);
-
-	engine.component->RegisterActorLoader("PrimitiveBox", new rPrimitiveBoxReader());
-	engine.component->RegisterActorLoader("PrimitiveCone", new rPrimitiveConeReader());
-	engine.component->RegisterActorLoader("PrimitiveCylinder", new rPrimitiveCylinderReader());
-	engine.component->RegisterActorLoader("PrimitiveSphere", new rPrimitiveSphereReader());
-	engine.component->RegisterActorLoader("PrimitiveGrid", new rPrimitiveGridReader());
 
 	engine.component->LoadScene("content/basicscene/levels/world.rlvl");
 	

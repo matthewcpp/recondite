@@ -8,7 +8,7 @@
 #include "rBuild.hpp"
 
 #include "interface/riScene.hpp"
-#include "rActorSerialization.hpp"
+#include "rActorFactory.hpp"
 
 #include "stream/rOStringStream.hpp"
 #include "xml/rXMLDocument.hpp"
@@ -20,9 +20,9 @@
 
 #include "interface/riSerialization.hpp"
 
-class RECONDITE_API rScene : public rEventHandler, public riScene{
+class RECONDITE_API rScene : public rEventHandler, public riScene, public riSerializable{
 public:
-	rScene(riComponent* component);
+	rScene(rActorFactory* actorFactory);
 	~rScene();
 
 public:
@@ -42,7 +42,7 @@ public:
 
 	void Clear();
 
-	bool Serialize(riSerializationTarget* target);
+	virtual bool Serialize(riSerializationTarget* target);
 
 private:
 
@@ -51,9 +51,7 @@ private:
 
 private:
 	rActorMap m_actors;
-
-	riComponent* m_component;
-	rGraphicsDevice* m_graphicsDevice;
+	rActorFactory* m_actorFactory;
 };
 
 #endif

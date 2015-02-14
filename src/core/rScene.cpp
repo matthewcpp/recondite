@@ -1,8 +1,7 @@
 #include "rScene.hpp"
 
-rScene::rScene(riComponent* component){
-	m_component = component;
-	m_graphicsDevice = nullptr;
+rScene::rScene(rActorFactory* actorFactory){
+	m_actorFactory = actorFactory;
 }
 
 rScene::~rScene(){
@@ -120,6 +119,7 @@ rActor3* rScene::RayPick(const rRay3& ray){
 }
 
 rActor3* rScene::ViewportPick(const rString& viewportName, int x, int y){
+	/*
 	rActor3* selectedActor = NULL;
 
 	rViewport* viewport = m_component->GetViewport("main");
@@ -134,10 +134,13 @@ rActor3* rScene::ViewportPick(const rString& viewportName, int x, int y){
 	m_graphicsDevice->DeleteRenderbuffer(renderBufferId);
 
 	return selectedActor;
+	*/
+
+	return nullptr;
 }
 
 bool rScene::Serialize(riSerializationTarget* target){
-	riSerializationTarget* actorTarget = target->CreateChildObject("actors");
+	riSerializationTarget* actorTarget = target->SubObject("actors");
 
 	for (auto& actor : m_actors)
 		actor.second->Serialize(actorTarget);

@@ -9,27 +9,27 @@ rXMLSerializationTarget::~rXMLSerializationTarget(){
 		delete target;
 }
 
-bool rXMLSerializationTarget::SetBoolProperty(const rString& name, bool& val){
+bool rXMLSerializationTarget::Bool(const rString& name, bool& val){
 	m_element->CreateChild(name, val);
 	return true;
 }
 
-bool rXMLSerializationTarget::SetIntProperty(const rString& name, int& val){
+bool rXMLSerializationTarget::Int(const rString& name, int& val){
 	m_element->CreateChild(name, val);
 	return true;
 }
 
-bool rXMLSerializationTarget::SetFloatProperty(const rString& name, float& val){
+bool rXMLSerializationTarget::Float(const rString& name, float& val){
 	m_element->CreateChild(name, val);
 	return true;
 }
 
-bool rXMLSerializationTarget::SetStringProperty(const rString& name, const rString& val){
+bool rXMLSerializationTarget::String(const rString& name, rString& val){
 	m_element->CreateChild(name, val);
 	return true;
 }
 
-bool rXMLSerializationTarget::SetVector3Property(const rString& name, const rVector3& val){
+bool rXMLSerializationTarget::Vector3(const rString& name, rVector3& val){
 	rXMLElement* element = m_element->CreateChild(name);
 
 	element->AddAttribute("x", val.x);
@@ -39,7 +39,7 @@ bool rXMLSerializationTarget::SetVector3Property(const rString& name, const rVec
 	return true;
 }
 
-bool rXMLSerializationTarget::SetColorProperty(const rString& name, const rColor& val){
+bool rXMLSerializationTarget::Color(const rString& name, rColor& val){
 	rXMLElement* element = m_element->CreateChild(name);
 
 	element->AddAttribute("r", (int)val.red);
@@ -50,12 +50,16 @@ bool rXMLSerializationTarget::SetColorProperty(const rString& name, const rColor
 	return true;
 }
 
-rXMLSerializationTarget* rXMLSerializationTarget::CreateChildObject(const rString& name){
+rXMLSerializationTarget* rXMLSerializationTarget::SubObject(const rString& name){
 	rXMLElement* child = m_element->CreateChild(name);
 	rXMLSerializationTarget* newTarget = new rXMLSerializationTarget(child);
 	m_targets.push_back(newTarget);
 
 	return newTarget;
+}
+
+riSerializationTarget* rXMLSerializationTarget::GetNextObject(){
+	return nullptr;
 }
 
 
@@ -71,7 +75,7 @@ rXMLSerializationSource::~rXMLSerializationSource(){
 		delete source;
 }
 
-bool rXMLSerializationSource::GetBoolProperty(const rString& name, bool& val) const{
+bool rXMLSerializationSource::Bool(const rString& name, bool& val){
 	rXMLElement* element = m_element->GetFirstChildNamed(name);
 
 	if (element){
@@ -84,7 +88,7 @@ bool rXMLSerializationSource::GetBoolProperty(const rString& name, bool& val) co
 	return false;
 }
 
-bool rXMLSerializationSource::GetIntProperty(const rString& name, int& val) const{
+bool rXMLSerializationSource::Int(const rString& name, int& val){
 	rXMLElement* element = m_element->GetFirstChildNamed(name);
 
 	if (element){
@@ -95,7 +99,7 @@ bool rXMLSerializationSource::GetIntProperty(const rString& name, int& val) cons
 	return false;
 }
 
-bool rXMLSerializationSource::GetFloatProperty(const rString& name, float& val) const{
+bool rXMLSerializationSource::Float(const rString& name, float& val){
 	rXMLElement* element = m_element->GetFirstChildNamed(name);
 
 	if (element){
@@ -106,7 +110,7 @@ bool rXMLSerializationSource::GetFloatProperty(const rString& name, float& val) 
 	return false;
 }
 
-bool rXMLSerializationSource::GetStringProperty(const rString& name, rString& val) const{
+bool rXMLSerializationSource::String(const rString& name, rString& val){
 	rXMLElement* element = m_element->GetFirstChildNamed(name);
 
 	if (element){
@@ -117,7 +121,7 @@ bool rXMLSerializationSource::GetStringProperty(const rString& name, rString& va
 	return false;
 }
 
-bool rXMLSerializationSource::GetVector3Property(const rString& name, rVector3& val) const{
+bool rXMLSerializationSource::Vector3(const rString& name, rVector3& val){
 	rXMLElement* element = m_element->GetFirstChildNamed(name);
 
 	if (element){
@@ -130,7 +134,7 @@ bool rXMLSerializationSource::GetVector3Property(const rString& name, rVector3& 
 	return false;
 }
 
-bool rXMLSerializationSource::GetColorProperty(const rString& name, rColor& val) const{
+bool rXMLSerializationSource::Color(const rString& name, rColor& val){
 	rXMLElement* element = m_element->GetFirstChildNamed(name);
 
 	if (element){
@@ -148,10 +152,14 @@ bool rXMLSerializationSource::GetColorProperty(const rString& name, rColor& val)
 	return false;
 }
 
-riSerializationSource* rXMLSerializationSource::GetChildObject(const rString& name){
+riSerializationTarget* rXMLSerializationSource::SubObject(const rString& name){
 	rXMLElement* child = m_element->GetFirstChildNamed(name);
 	rXMLSerializationSource* childSource = new rXMLSerializationSource(child);
 	m_sources.push_back(childSource);
 
 	return childSource;
+}
+
+riSerializationTarget* rXMLSerializationSource::GetNextObject(){
+	return nullptr;
 }

@@ -2,7 +2,7 @@
 
 rComponent::rComponent(){
 	m_isReady = false;
-	m_scene = new rScene(this);
+	m_scene = new rScene(&m_actorFactory);
 }
 
 bool rComponent::Init(){
@@ -17,31 +17,7 @@ void rComponent::LoadScene(const rString& name){
 	rIAssetStream stream = m_engine.content->LoadTextFromPath(name);
 
 	if (stream){
-		m_scene->Clear();
 
-		rXMLDocument document;
-		document.LoadFromStream(*stream);
-
-		rXMLElement* sceneRoot = document.GetRoot();
-
-		if (!sceneRoot) return;
-
-		for (size_t i = 0; i < sceneRoot->NumChildren(); i++){
-			rXMLElement* actorElement = sceneRoot->GetChild(i);
-
-			rString elementName = actorElement->Name();
-			rString id;
-			if (!actorElement->GetAttribute<rString>("id", id))
-				id = m_scene->GetDefaultActorId(elementName);
-
-			if (m_actorLoaders.count(elementName)){
-				rActor3* actor = m_actorLoaders[elementName]->LoadActor(actorElement, id, &m_engine);
-				if (actor) m_scene->AddActor(actor);
-			}
-			else{
-				rLog::Warning("Unable to Load Level element: " + elementName);
-			}
-		}
 	}
 }
 
@@ -56,21 +32,6 @@ bool rComponent::SaveScene(const rString& path){
 	delete target;
 
 	return true;
-}
-
-void rComponent::RegisterActorLoader(const rString& className, riActorLoader* actorLoader){
-	UnregisterActorLoader(className);
-
-	m_actorLoaders[className] = actorLoader;
-}
-
-void rComponent::UnregisterActorLoader(const rString& className){
-	rActorLoaderMap::iterator it = m_actorLoaders.find(className);
-
-	if (it != m_actorLoaders.end()){
-		delete it->second;
-		m_actorLoaders.erase(it);
-	}
 }
 
 void rComponent::InitEngine(rGraphicsDevice* graphics, rContentManager* content, rInputManager* input){
@@ -147,4 +108,8 @@ rEngine* rComponent::GetEngine(){
 
 rScene* rComponent::GetScene(){
 	return m_scene;
+}
+
+void rComponent::AddActorClass(const rString& name, rActorFactory::ActorFunction func){
+	m_actorFactory.AddActorClass(name, func);
 }

@@ -22,7 +22,7 @@ bool reProject::Open(const wxString& path){
 	Close();
 
 	wxFileName projPath(path);
-	wxString projectDir = projPath.GetPath();
+	m_projectDir.AssignDir(projPath.GetPath());
 
 	wxXmlDocument doc(path);
 

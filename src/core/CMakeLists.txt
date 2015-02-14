@@ -1,7 +1,7 @@
 set(core_files)
 
 add_rec_src(core_files "rActor3")
-add_rec_src(core_files "rActorSerialization")
+add_rec_src(core_files "rActorFactory")
 add_rec_src(core_files "rAlignedBoxBoundingVolume")
 add_rec_src(core_files "rSphereBoundingVolume")
 add_rec_src(core_files "rAnimation")

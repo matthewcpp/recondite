@@ -10,26 +10,19 @@
 
 class RECONDITE_API riSerializationTarget{
 public:
-	virtual bool SetBoolProperty(const rString& name, bool& val) = 0;
-	virtual bool SetIntProperty(const rString& name, int& val) = 0;
-	virtual bool SetFloatProperty(const rString& name, float& val) = 0;
-	virtual bool SetStringProperty(const rString& name, const rString& val) = 0;
-	virtual bool SetVector3Property(const rString& name, const rVector3& val) = 0;
-	virtual bool SetColorProperty(const rString& name, const rColor& color) = 0;
+	virtual bool Bool(const rString& name, bool& val) = 0;
+	virtual bool Int(const rString& name, int& val) = 0;
+	virtual bool Float(const rString& name, float& val) = 0;
+	virtual bool String(const rString& name, rString& val) = 0;
+	virtual bool Vector3(const rString& name, rVector3& val) = 0;
+	virtual bool Color(const rString& name, rColor& color) = 0;
 
-	virtual riSerializationTarget* CreateChildObject(const rString& name) = 0;
+	virtual riSerializationTarget* SubObject(const rString& name) = 0;
+	virtual riSerializationTarget* GetNextObject() = 0;
 };
 
-class RECONDITE_API riSerializationSource{
+class RECONDITE_API riSerializable{
 public:
-	virtual bool GetBoolProperty(const rString& name, bool& val) const = 0;
-	virtual bool GetIntProperty(const rString& name, int& val) const = 0;
-	virtual bool GetFloatProperty(const rString& name, float& val) const = 0;
-	virtual bool GetStringProperty(const rString& name, rString& val) const = 0;
-	virtual bool GetVector3Property(const rString& name, rVector3& val) const = 0;
-	virtual bool GetColorProperty(const rString& name, rColor& color) const = 0;
-
-	virtual riSerializationSource* GetChildObject(const rString& name) = 0;
-	
+	virtual bool Serialize(riSerializationTarget* target) = 0;
 };
 #endif

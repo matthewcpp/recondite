@@ -214,16 +214,16 @@ rPropertyCollection& rActor3::CustomProperties(){
 }
 
 bool rActor3::Serialize(riSerializationTarget* target){
-	riSerializationTarget* classTarget = target->CreateChildObject(ClassName());
+	riSerializationTarget* classTarget = target->SubObject(ClassName());
 
 	return DoSerialize(classTarget);
 }
 
 bool rActor3::DoSerialize(riSerializationTarget* target){
-	target->SetStringProperty("id", Id());
-	target->SetVector3Property("position", m_position);
-	target->SetVector3Property("rotation", m_rotation);
-	target->SetVector3Property("scale", m_scale);
+	target->String("id", Id());
+	target->Vector3("position", m_position);
+	target->Vector3("rotation", m_rotation);
+	target->Vector3("scale", m_scale);
 
 	return true;
 }

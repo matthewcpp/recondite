@@ -8,6 +8,7 @@
 #include "rScene.hpp"
 #include "rInputManager.hpp"
 #include "ui/ruiOverlayManager.hpp"
+#include "rActorFactory.hpp"
 
 #include "interface/riComponent.hpp"
 #include "interface/riSerialization.hpp"
@@ -42,15 +43,12 @@ public:
 	virtual size_t NumViewports() const;
 
 public:
-	virtual void RegisterActorLoader(const rString& className, riActorLoader* actorLoader);
-	virtual void UnregisterActorLoader(const rString& className);
+	virtual void AddActorClass(const rString& name, rActorFactory::ActorFunction func);
 
 protected:
 	virtual void InitEngine(rGraphicsDevice* graphics, rContentManager* content, rInputManager* input);
 
 protected:
-	typedef std::map<rString, riActorLoader*> rActorLoaderMap;
-	typedef std::map<rString, riActorSerializer*> rActorSerializerMap;
 	typedef std::map<rString, rViewport*> rViewportMap;
 
 protected:
@@ -66,10 +64,7 @@ protected:
 	bool m_isReady;
 
 private:
-	rActorLoaderMap m_actorLoaders;
-	rActorSerializerMap m_actorSerializers;
-
-	
+	rActorFactory m_actorFactory;
 };
 
 #endif

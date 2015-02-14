@@ -275,13 +275,13 @@ void rPrimitiveBox::DoRecalculateBoundingVolume(){
 }
 
 bool rPrimitiveBox::DoSerialize(riSerializationTarget* target){
-	target->SetFloatProperty("width", m_width);
-	target->SetFloatProperty("height", m_height);
-	target->SetFloatProperty("depth", m_depth);
+	target->Float("width", m_width);
+	target->Float("height", m_height);
+	target->Float("depth", m_depth);
 
-	target->SetIntProperty("widthSegments", m_widthSegments);
-	target->SetIntProperty("heightSegments", m_heightSegments);
-	target->SetIntProperty("depthSegments", m_depthSegments);
+	target->Int("widthSegments", m_widthSegments);
+	target->Int("heightSegments", m_heightSegments);
+	target->Int("depthSegments", m_depthSegments);
 
 	return rPrimitive::DoSerialize(target);
 }

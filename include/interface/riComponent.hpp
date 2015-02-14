@@ -18,9 +18,6 @@ public:
 
 	virtual void LoadScene(const rString& name) = 0;
 
-	virtual void RegisterActorLoader(const rString& className, riActorLoader* actorLoader) = 0;
-	virtual void UnregisterActorLoader(const rString& className) = 0;
-
 	//temporary
 	//TODO: handle multiple display?
 	virtual rSize DisplaySize() const = 0;

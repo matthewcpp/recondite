@@ -47,7 +47,7 @@ public:
 
 protected:
 	virtual void InitEngine(rGraphicsDevice* graphics, rContentManager* content, rInputManager* input);
-
+	virtual void InitDefaultActorClasses();
 protected:
 	typedef std::map<rString, rViewport*> rViewportMap;
 

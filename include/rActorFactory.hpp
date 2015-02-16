@@ -5,8 +5,9 @@
 #include <map>
 
 #include "rString.hpp"
-#include "rActor3.hpp"
-#include "rEngine.hpp"
+
+class rEngine;
+class rActor3;
 
 class rActorFactory{
 public:

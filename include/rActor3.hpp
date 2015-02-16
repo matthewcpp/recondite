@@ -42,7 +42,8 @@ public:
 	rDrawable* Drawable();
 	virtual rDrawable* CreateDrawable();
 
-	bool Serialize(riSerializationTarget* target);
+	virtual bool Save(riSerializationTarget* target) final;
+	virtual bool Load(riSerializationTarget* target) final;
 
 	rPropertyCollection& CustomProperties();
 
@@ -61,7 +62,6 @@ public:
 	rVector3 Down() const;
 
 protected:
-
 	virtual bool DoSerialize(riSerializationTarget* target);
 
 	void SetTransformed(bool transformed = true);

@@ -58,8 +58,8 @@ rXMLSerializationTarget* rXMLSerializationTarget::SubObject(const rString& name)
 	return newTarget;
 }
 
-riSerializationTarget* rXMLSerializationTarget::GetNextObject(){
-	return nullptr;
+bool rXMLSerializationTarget::Next(){
+	return false;
 }
 
 
@@ -160,6 +160,15 @@ riSerializationTarget* rXMLSerializationSource::SubObject(const rString& name){
 	return childSource;
 }
 
-riSerializationTarget* rXMLSerializationSource::GetNextObject(){
+bool rXMLSerializationSource::Next(){
+	rXMLElement* parent = m_element->Parent();
+
+	if (parent){
+		m_index++;
+		if (m_index < parent->NumChildren()){
+			m_element = parent->GetChild(m_index);
+			return true;
+		}
+	}
 	return nullptr;
 }

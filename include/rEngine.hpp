@@ -8,6 +8,7 @@
 #include "rContentManager.hpp"
 #include "rTime.hpp"
 #include "rInput.hpp"
+#include "rActorFactory.hpp"
 
 #include "interface/riComponent.hpp"
 #include "interface/riScene.hpp"
@@ -16,6 +17,7 @@
 class rEngine{
 public:
 	rContentManager* content;
+	rActorFactory* actors;
 	rRenderer* renderer;
 	rInput* input;
 	rTime time;

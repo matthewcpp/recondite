@@ -213,14 +213,20 @@ rPropertyCollection& rActor3::CustomProperties(){
 	return m_customProperties;
 }
 
-bool rActor3::Serialize(riSerializationTarget* target){
-	riSerializationTarget* classTarget = target->SubObject(ClassName());
+bool rActor3::Save(riSerializationTarget* target){
+	riSerializationTarget* classTarget = target->SubObject("actor");
+	classTarget->String("class", ClassName());
+	classTarget->String("id", Id());
+	
 
 	return DoSerialize(classTarget);
 }
 
+bool rActor3::Load(riSerializationTarget* target){
+	return DoSerialize(target);
+}
+
 bool rActor3::DoSerialize(riSerializationTarget* target){
-	target->String("id", Id());
 	target->Vector3("position", m_position);
 	target->Vector3("rotation", m_rotation);
 	target->Vector3("scale", m_scale);

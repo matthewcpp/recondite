@@ -125,7 +125,14 @@ bool reProject::CreateLevel(const wxString& name){
 }
 
 bool reProject::ActivateLevel(const wxString& name){
-	return false;
+	SaveActiveLevel();
+
+	m_activeLevel = name;
+	wxString levelPath = LevelDirPath() + '/' + m_activeLevel + ".rlvl";
+
+	m_component->LoadScene(levelPath.c_str().AsChar());
+
+	return true;
 }
 
 void reProject::SaveActiveLevel(){

@@ -22,7 +22,7 @@ public:
 	virtual bool Color(const rString& name, rColor& val);
 
 	virtual rXMLSerializationTarget* SubObject(const rString& name);
-	virtual riSerializationTarget* GetNextObject();
+	virtual bool Next();
 
 private:
 	rXMLElement* m_element;
@@ -46,10 +46,11 @@ public:
 	virtual bool Color(const rString& name, rColor& color);
 
 	virtual riSerializationTarget* SubObject(const rString& name);
-	virtual riSerializationTarget* GetNextObject();
+	virtual bool Next();
 
 private:
 	rXMLElement* m_element;
+	size_t m_index = 0;
 
 	std::vector<rXMLSerializationSource*> m_sources;
 

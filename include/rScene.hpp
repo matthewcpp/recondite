@@ -22,7 +22,7 @@
 
 class RECONDITE_API rScene : public rEventHandler, public riScene, public riSerializable{
 public:
-	rScene(rActorFactory* actorFactory);
+	rScene(rEngine* engine);
 	~rScene();
 
 public:
@@ -42,7 +42,8 @@ public:
 
 	void Clear();
 
-	virtual bool Serialize(riSerializationTarget* target);
+	virtual bool Save(riSerializationTarget* target);
+	virtual bool Load(riSerializationTarget* target);
 
 private:
 
@@ -51,7 +52,7 @@ private:
 
 private:
 	rActorMap m_actors;
-	rActorFactory* m_actorFactory;
+	rEngine* m_engine;
 };
 
 #endif

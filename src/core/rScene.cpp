@@ -1,7 +1,7 @@
 #include "rScene.hpp"
 
-rScene::rScene(rActorFactory* actorFactory){
-	m_actorFactory = actorFactory;
+rScene::rScene(rEngine* engine){
+	m_engine = engine;
 }
 
 rScene::~rScene(){
@@ -139,11 +139,31 @@ rActor3* rScene::ViewportPick(const rString& viewportName, int x, int y){
 	return nullptr;
 }
 
-bool rScene::Serialize(riSerializationTarget* target){
+bool rScene::Save(riSerializationTarget* target){
 	riSerializationTarget* actorTarget = target->SubObject("actors");
 
 	for (auto& actor : m_actors)
-		actor.second->Serialize(actorTarget);
+		actor.second->Save(actorTarget);
 
+	return true;
+}
+
+bool rScene::Load(riSerializationTarget* target){
+	Clear();
+
+	riSerializationTarget* actorsTarget = target->SubObject("actors");
+	riSerializationTarget* actorTarget = actorsTarget->SubObject("actor");
+	
+	if (actorTarget){
+		rString className, id;
+
+		do{
+			actorTarget->String("class", className);
+			actorTarget->String("id", id);
+
+			rActor3* actor = m_engine->actors->GetActorClass(className, m_engine, id);
+			actor->Load(actorTarget);
+		} while (actorTarget->Next());
+	}
 	return true;
 }

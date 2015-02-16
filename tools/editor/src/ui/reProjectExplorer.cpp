@@ -5,6 +5,8 @@ reProjectExplorer::reProjectExplorer(rwxComponent* component, reProject* project
 {
 	m_component = component;
 	m_project = project;
+
+	Bind(wxEVT_DATAVIEW_ITEM_ACTIVATED, &reProjectExplorer::OnItemActivated, this);
 }
 
 void reProjectExplorer::ShowProject(){
@@ -25,4 +27,13 @@ void reProjectExplorer::AddLevel(const wxString& name){
 	wxDataViewItem item = AppendItem(m_levelsRoot, name);
 	Select(item);
 	
+}
+
+void reProjectExplorer::OnItemActivated(wxDataViewEvent& event){
+	wxDataViewItem target = event.GetItem();
+	wxDataViewItem parent = GetModel()->GetParent(target);
+
+	if (parent == m_levelsRoot){
+		m_project->ActivateLevel(GetItemText(target));
+	}
 }

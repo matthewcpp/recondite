@@ -2,10 +2,14 @@
 
 rComponent::rComponent(){
 	m_isReady = false;
-	m_scene = new rScene(&m_actorFactory);
+	m_scene = new rScene(&m_engine);
+	InitDefaultActorClasses();
 }
 
+#include "primitive/rPrimitiveBox.hpp"
 bool rComponent::Init(){
+
+
 	return true;
 }
 
@@ -15,9 +19,14 @@ void rComponent::Uninit(){
 
 void rComponent::LoadScene(const rString& name){
 	rIAssetStream stream = m_engine.content->LoadTextFromPath(name);
-
 	if (stream){
+		rXMLDocument doc;
+		doc.LoadFromStream(*stream);
 
+		rXMLElement* element = doc.GetRoot();
+		rXMLSerializationSource* source = new rXMLSerializationSource(element);
+		m_scene->Load(source);
+		delete source;
 	}
 }
 
@@ -26,7 +35,7 @@ bool rComponent::SaveScene(const rString& path){
 	rXMLElement* element = doc.CreateRoot("level");
 
 	riSerializationTarget* target = new rXMLSerializationTarget(element);
-	m_scene->Serialize(target);
+	m_scene->Save(target);
 
 	doc.WriteToFile(path);
 	delete target;
@@ -53,6 +62,8 @@ void rComponent::InitEngine(rGraphicsDevice* graphics, rContentManager* content,
 	m_graphicsDevice->Init();
 	m_engine.content->InitDefaultAssets();
 	m_engine.renderer->CreateRequiredMaterials();
+
+	Init();
 
 	m_isReady = true;
 }
@@ -112,4 +123,14 @@ rScene* rComponent::GetScene(){
 
 void rComponent::AddActorClass(const rString& name, rActorFactory::ActorFunction func){
 	m_actorFactory.AddActorClass(name, func);
+}
+
+//TODO: find a better place to put this?
+#include "primitive/rPrimitiveBox.hpp"
+
+void rComponent::InitDefaultActorClasses(){
+	m_actorFactory.AddActorClass("PrimitiveBox",
+		[](rEngine* engine, const rString& id)->rActor3*{
+		return new rPrimitiveBox(id, engine);
+	});
 }

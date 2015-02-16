@@ -16,6 +16,9 @@ public:
 	void AddLevel(const wxString& name);
 
 private:
+	void OnItemActivated(wxDataViewEvent& event);
+
+private:
 	rwxComponent* m_component;
 	reProject* m_project;
 

@@ -154,8 +154,12 @@ bool rXMLSerializationSource::Color(const rString& name, rColor& val){
 
 riSerializationTarget* rXMLSerializationSource::SubObject(const rString& name){
 	rXMLElement* child = m_element->GetFirstChildNamed(name);
-	rXMLSerializationSource* childSource = new rXMLSerializationSource(child);
-	m_sources.push_back(childSource);
+	rXMLSerializationSource* childSource = nullptr;
+
+	if (child){
+		childSource = new rXMLSerializationSource(child);
+		m_sources.push_back(childSource);
+	}
 
 	return childSource;
 }

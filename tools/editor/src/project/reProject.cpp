@@ -125,8 +125,6 @@ bool reProject::CreateLevel(const wxString& name){
 }
 
 bool reProject::ActivateLevel(const wxString& name){
-	SaveActiveLevel();
-
 	m_activeLevel = name;
 	wxString levelPath = LevelDirPath() + '/' + m_activeLevel + ".rlvl";
 

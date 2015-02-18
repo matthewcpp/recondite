@@ -45,6 +45,8 @@ public:
 	virtual bool Save(riSerializationTarget* target);
 	virtual bool Load(riSerializationTarget* target);
 
+	bool IsLoading() const;
+
 private:
 
 	typedef std::map<rString, rActor3*> rActorMap;
@@ -53,6 +55,8 @@ private:
 private:
 	rActorMap m_actors;
 	rEngine* m_engine;
+
+	bool m_isLoading;
 };
 
 #endif

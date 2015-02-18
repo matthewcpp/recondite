@@ -1,6 +1,8 @@
 #include "rScene.hpp"
 
 rScene::rScene(rEngine* engine){
+	m_isLoading = false;
+
 	m_engine = engine;
 }
 
@@ -41,8 +43,11 @@ void rScene::AddActor(rActor3* actor){
 
 	m_actors[name] = actor;
 
-	rActor3Event event(actor);
-	Trigger(rEVT_SCENE_ACTOR_ADDED, event);
+	if (!m_isLoading){
+		rActor3Event event(actor);
+		Trigger(rEVT_SCENE_ACTOR_ADDED, event);
+	}
+
 }
 
 rActor3* rScene::GetActor(const rString& name) const{
@@ -151,6 +156,10 @@ bool rScene::Save(riSerializationTarget* target){
 bool rScene::Load(riSerializationTarget* target){
 	Clear();
 
+	m_isLoading = true;
+	rEvent event;
+	Trigger(rEVT_SCENE_LOAD_BEGIN, event);
+
 	riSerializationTarget* actorsTarget = target->SubObject("actors");
 	riSerializationTarget* actorTarget = actorsTarget->SubObject("actor");
 	
@@ -163,7 +172,16 @@ bool rScene::Load(riSerializationTarget* target){
 
 			rActor3* actor = m_engine->actors->GetActorClass(className, m_engine, id);
 			actor->Load(actorTarget);
+			AddActor(actor);
 		} while (actorTarget->Next());
 	}
+
+	m_isLoading = false;
+	Trigger(rEVT_SCENE_LOAD_END, event);
+
 	return true;
+}
+
+bool rScene::IsLoading() const{
+	return m_isLoading;
 }

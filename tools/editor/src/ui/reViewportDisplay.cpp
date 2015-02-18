@@ -54,6 +54,7 @@ void reViewportDisplay::OnComponentInitialized(rEvent& event){
 
 	scene->Bind(rEVT_SCENE_ACTOR_ADDED, this, &reViewportDisplay::OnDisplayShouldUpdate);
 	scene->Bind(rEVT_SCENE_ACTOR_REMOVED, this, &reViewportDisplay::OnDisplayShouldUpdate);
+	scene->Bind(rEVT_SCENE_LOAD_END, this, &reViewportDisplay::OnDisplayShouldUpdate);
 }
 
 void reViewportDisplay::UpdateDisplay(){

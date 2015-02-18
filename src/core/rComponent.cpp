@@ -2,7 +2,11 @@
 
 rComponent::rComponent(){
 	m_isReady = false;
+
 	m_scene = new rScene(&m_engine);
+	m_engine.actors = &m_actorFactory;
+	m_engine.scene = m_scene;
+
 	InitDefaultActorClasses();
 }
 

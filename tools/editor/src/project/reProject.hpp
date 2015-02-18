@@ -21,6 +21,7 @@ public:
 	bool CreateLevel(const wxString& name);
 	bool ActivateLevel(const wxString& name);
 	void SaveActiveLevel();
+	bool HasLevelNamed(const wxString& name);
 
 	wxString Directory() const;
 	wxString Name() const;

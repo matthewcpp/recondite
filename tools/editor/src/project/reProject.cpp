@@ -139,3 +139,12 @@ void reProject::SaveActiveLevel(){
 		m_component->SaveScene(levelPath.c_str().AsChar());
 	}
 }
+
+bool reProject::HasLevelNamed(const wxString& name){
+	for (auto& levelName : m_levels){
+		if (levelName == name)
+			return true;
+	}
+
+	return false;
+}

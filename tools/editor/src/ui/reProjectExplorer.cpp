@@ -7,6 +7,7 @@ reProjectExplorer::reProjectExplorer(rwxComponent* component, reProject* project
 	m_project = project;
 
 	Bind(wxEVT_DATAVIEW_ITEM_ACTIVATED, &reProjectExplorer::OnItemActivated, this);
+	Bind(wxEVT_DATAVIEW_ITEM_CONTEXT_MENU, &reProjectExplorer::OnContext, this);
 }
 
 void reProjectExplorer::ShowProject(){
@@ -36,4 +37,40 @@ void reProjectExplorer::OnItemActivated(wxDataViewEvent& event){
 	if (parent == m_levelsRoot){
 		m_project->ActivateLevel(GetItemText(target));
 	}
+}
+
+void reProjectExplorer::OnContext(wxDataViewEvent& event){
+	wxDataViewItem target = event.GetItem();
+	wxDataViewItem parent = GetModel()->GetParent(target);
+
+	if (parent == m_levelsRoot){
+		LevelContextMenu(target);
+	}
+}
+
+void reProjectExplorer::LevelContextMenu(wxDataViewItem target){
+	wxMenu levelContextMenu;
+	levelContextMenu.Append(reProjectExplorerRenameLevel, "Rename level...");
+	levelContextMenu.Append(reProjectExplorerDeleteLevel, "Delete level...");
+
+	int selection = GetPopupMenuSelectionFromUser(levelContextMenu);
+
+	switch (selection){
+		case reProjectExplorerRenameLevel:
+			RenameLevel(target);
+			break;
+
+		case reProjectExplorerDeleteLevel:
+			break;
+	}
+}
+
+void reProjectExplorer::RenameLevel(wxDataViewItem target){
+	wxString oldName = GetItemText(target);
+	wxString newName = wxGetTextFromUser("Enter new name:", "Rename " + oldName);
+
+	if (m_project->RenameLevel(oldName, newName)){
+		SetItemText(target, newName);
+	}
+
 }

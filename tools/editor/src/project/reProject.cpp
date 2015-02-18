@@ -105,11 +105,17 @@ const wxArrayString& reProject::Levels() const{
 	return m_levels;
 }
 
-bool reProject::CreateLevel(const wxString& name){
-	for (auto& level: m_levels){
-		if (level == name)
-			return false;
+bool reProject::CheckForValidNewLevelName(const wxString& name){
+	if (HasLevelNamed(name)){
+		wxMessageBox("A level with that name already exists.", "Unable To Create New Level", wxOK | wxICON_ERROR);
+		return false;
 	}
+
+	return true;
+}
+
+bool reProject::CreateLevel(const wxString& name){
+	if (!CheckForValidNewLevelName(name)) return false;
 
 	m_levels.push_back(name);
 	m_activeLevel = name;
@@ -124,9 +130,34 @@ bool reProject::CreateLevel(const wxString& name){
 	return true;
 }
 
+bool reProject::RenameLevel(const wxString& oldName, const wxString& newName){
+	if (!CheckForValidNewLevelName(newName)) return false;
+
+	for (auto& level : m_levels){
+		if (level == oldName){
+			wxString oldLevelPath = LevelFilePath(oldName);
+			wxString newLevelPath = LevelFilePath(newName);
+
+			bool result = wxRenameFile(oldLevelPath, newLevelPath);
+			if (result){
+				level = newName;
+				SaveProjectFile();
+			}
+			
+			return result;
+		}
+	}
+
+	return false;
+}
+
+wxString reProject::LevelFilePath(const wxString& levelName) const{
+	return LevelDirPath() + '/' + levelName + ".rlvl";
+}
+
 bool reProject::ActivateLevel(const wxString& name){
 	m_activeLevel = name;
-	wxString levelPath = LevelDirPath() + '/' + m_activeLevel + ".rlvl";
+	wxString levelPath = LevelFilePath(m_activeLevel);
 
 	m_component->LoadScene(levelPath.c_str().AsChar());
 
@@ -135,7 +166,7 @@ bool reProject::ActivateLevel(const wxString& name){
 
 void reProject::SaveActiveLevel(){
 	if (!m_activeLevel.IsEmpty()){
-		wxString levelPath = LevelDirPath() + '/' + m_activeLevel + ".rlvl";
+		wxString levelPath = LevelFilePath(m_activeLevel);
 		m_component->SaveScene(levelPath.c_str().AsChar());
 	}
 }

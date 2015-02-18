@@ -19,6 +19,7 @@ public:
 	void SaveProjectFile();
 
 	bool CreateLevel(const wxString& name);
+	bool RenameLevel(const wxString& oldName, const wxString& newName);
 	bool ActivateLevel(const wxString& name);
 	void SaveActiveLevel();
 	bool HasLevelNamed(const wxString& name);
@@ -27,10 +28,14 @@ public:
 	wxString Name() const;
 	wxString ProjectFilePath() const;
 	wxString LevelDirPath() const;
+	wxString LevelFilePath(const wxString& levelName) const;
 
 	bool IsOpen() const;
 
 	const wxArrayString& Levels() const;
+
+private:
+	bool CheckForValidNewLevelName(const wxString& name);
 
 private:
 	wxFileName m_projectDir;

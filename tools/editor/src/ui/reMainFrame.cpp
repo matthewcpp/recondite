@@ -218,10 +218,6 @@ void reMainFrame::NewLevel(){
 	if (dialog.ShowModal() == wxID_OK){
 		wxString levelName = dialog.GetValue();
 
-		if (m_project->HasLevelNamed(levelName)){
-			wxMessageBox("A level with that name already exists.", "Unable To Create New Level", wxOK | wxICON_ERROR);
-		}
-
 		bool created = m_project->CreateLevel(levelName);
 
 		if (created){

@@ -17,6 +17,16 @@ public:
 
 private:
 	void OnItemActivated(wxDataViewEvent& event);
+	void OnContext(wxDataViewEvent& event);
+
+private:
+	enum reProjectExplorerId{
+		reProjectExplorerRenameLevel = 6000,
+		reProjectExplorerDeleteLevel
+	};
+
+	void LevelContextMenu(wxDataViewItem target);
+	void RenameLevel(wxDataViewItem target);
 
 private:
 	rwxComponent* m_component;

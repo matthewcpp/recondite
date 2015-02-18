@@ -23,6 +23,9 @@ private:
 	void OnActorAddedToScene(rEvent& event);
 	void OnComponentInitialized(rEvent& event);
 
+	void OnLevelBeginLoad(rEvent& event);
+	void OnLevelEndLoad(rEvent& event);
+
 private:
 	rwxComponent* m_component;
 

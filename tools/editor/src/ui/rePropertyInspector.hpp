@@ -21,6 +21,8 @@ public:
 private:
 	void OnPropertyValueChanged(wxPropertyGridEvent& event);
 
+	void OnLevelBeginLoad(rEvent& event);
+
 private:
 	rwxComponent* m_component;
 	reViewportDisplay* m_display;

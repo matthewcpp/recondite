@@ -40,8 +40,7 @@ void reMainFrame::CreateUIElements(){
 	m_wxAuiManager.AddPane(m_viewportDisplay, wxAuiPaneInfo()
 		.Center()
 		.Caption("Level View")
-		.CloseButton(false)
-		.Show(false));
+		.CloseButton(false));
 
 	m_wxAuiManager.AddPane(m_propertyInspector, wxAuiPaneInfo()
 		.Right()

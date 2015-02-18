@@ -25,8 +25,17 @@ void reOutliner::OnComponentInitialized(rEvent& event){
 	rScene* scene = m_component->GetScene();
 
 	scene->Bind(rEVT_SCENE_ACTOR_ADDED, this, &reOutliner::OnActorAddedToScene);
+	scene->Bind(rEVT_SCENE_LOAD_BEGIN, this, &reOutliner::OnLevelBeginLoad);
 }
 
 void reOutliner::OutlineLevel(){
+
+}
+
+void reOutliner::OnLevelBeginLoad(rEvent& event){
+	DeleteAllItems();
+}
+
+void reOutliner::OnLevelEndLoad(rEvent& event){
 
 }

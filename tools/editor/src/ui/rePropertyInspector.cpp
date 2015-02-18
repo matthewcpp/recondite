@@ -8,6 +8,9 @@ rePropertyInspector::rePropertyInspector(rwxComponent* component, reViewportDisp
 	m_display = display;
 
 	Bind(wxEVT_PG_CHANGED, &rePropertyInspector::OnPropertyValueChanged, this);
+
+	rScene* scene = m_component->GetScene();
+	scene->Bind(rEVT_SCENE_LOAD_BEGIN, this, &rePropertyInspector::OnLevelBeginLoad);
 }
 
 void rePropertyInspector::OnPropertyValueChanged(wxPropertyGridEvent& event){
@@ -73,5 +76,9 @@ void rePropertyInspector::StopInspecting(){
 		m_connector = nullptr;
 	}
 
+	Clear();
+}
+
+void rePropertyInspector::OnLevelBeginLoad(rEvent& event){
 	Clear();
 }

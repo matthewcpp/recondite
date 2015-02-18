@@ -61,6 +61,7 @@ void reProjectExplorer::LevelContextMenu(wxDataViewItem target){
 			break;
 
 		case reProjectExplorerDeleteLevel:
+			DeleteLevel(target);
 			break;
 	}
 }
@@ -72,5 +73,15 @@ void reProjectExplorer::RenameLevel(wxDataViewItem target){
 	if (m_project->RenameLevel(oldName, newName)){
 		SetItemText(target, newName);
 	}
+}
 
+void reProjectExplorer::DeleteLevel(wxDataViewItem target){
+	wxString levelName = GetItemText(target);
+
+	int choice = wxMessageBox("Really delete " + levelName + "?", "Delete " + levelName, wxOK | wxCANCEL | wxICON_QUESTION | wxCENTRE);
+	if (choice != wxOK) return;
+
+	bool result = m_project->DeleteLevel(levelName);
+	if (result) DeleteItem(target);
+	
 }

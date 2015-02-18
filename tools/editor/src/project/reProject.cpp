@@ -151,6 +151,24 @@ bool reProject::RenameLevel(const wxString& oldName, const wxString& newName){
 	return false;
 }
 
+bool reProject::DeleteLevel(const wxString& name){
+	auto end = m_levels.end();
+	for (auto it = m_levels.begin(); it != end; ++it){
+		if (name == *it){
+			wxString levelPath = LevelFilePath(name);
+			bool result = wxRemoveFile(levelPath);
+
+			if (result){
+				m_levels.erase(it);
+				SaveProjectFile();
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
 wxString reProject::LevelFilePath(const wxString& levelName) const{
 	return LevelDirPath() + '/' + levelName + ".rlvl";
 }

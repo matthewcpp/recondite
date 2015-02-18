@@ -27,6 +27,7 @@ private:
 
 	void LevelContextMenu(wxDataViewItem target);
 	void RenameLevel(wxDataViewItem target);
+	void DeleteLevel(wxDataViewItem target);
 
 private:
 	rwxComponent* m_component;

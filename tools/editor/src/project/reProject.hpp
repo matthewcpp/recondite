@@ -20,6 +20,7 @@ public:
 
 	bool CreateLevel(const wxString& name);
 	bool RenameLevel(const wxString& oldName, const wxString& newName);
+	bool DeleteLevel(const wxString& name);
 	bool ActivateLevel(const wxString& name);
 	void SaveActiveLevel();
 	bool HasLevelNamed(const wxString& name);

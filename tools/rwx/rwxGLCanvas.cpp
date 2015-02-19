@@ -6,6 +6,11 @@ rwxGLCanvas::rwxGLCanvas(rwxComponent* component, const wxString& name, wxWindow
 	m_component = component;
 	m_name = name;
 	m_viewport = nullptr;
+
+	wxString cameraName = m_name + "_camera";
+	m_camera = new rViewCamera(m_name.c_str().AsChar(), m_component->GetEngine());
+	m_camera->SetPosition(0, 0, 10);
+
 	Bind(wxEVT_PAINT, &rwxGLCanvas::OnPaint, this);
 }
 
@@ -32,12 +37,15 @@ void rwxGLCanvas::OnPaint(wxPaintEvent& event){
 void rwxGLCanvas::CreateViewport(){
 	m_viewport = m_component->CreateViewport(m_name.c_str().AsChar());
 
-	wxString cameraName = m_name + "_camera";
-	rViewCamera* camera = new rViewCamera(m_name.c_str().AsChar(), m_component->GetEngine());
-	m_viewport->SetCamera(camera);
-	camera->SetPosition(0, 0, 10);
+
+	m_viewport->SetCamera(m_camera);
+	
 }
 
 rViewport* rwxGLCanvas::GetViewport(){
 	return m_viewport;
+}
+
+rCamera* rwxGLCanvas::GetCamera(){
+	return m_camera;
 }

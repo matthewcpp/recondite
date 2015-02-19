@@ -4,9 +4,11 @@
 #include "rwxComponent.hpp"
 
 #include "rwxGLCanvas.hpp"
-#include "wx/wx.h"
+#include <wx/wx.h>
+#include <wx/timer.h>
 
 #include "tools/reToolManager.hpp"
+#include "rwxViewCameraInteraction.hpp"
 
 class reViewport : public wxPanel{
 public:
@@ -18,14 +20,16 @@ public:
 
 private:
 	void CreateViewportElements();
+	void BindEvents();
 
 private:
 	void OnViewMenuClick(wxMouseEvent& event);
 	void OnShadingMenuClick(wxMouseEvent& event);
 
-	void OnCanvasMouseDown(wxMouseEvent& event);
-	void OnCanvasMouseUp(wxMouseEvent& event);
-	void OnCanvasMouseMotion(wxMouseEvent& event);
+	void OnCanvasMouseEvent(wxMouseEvent& event);
+
+	void OnEnterCanvas(wxMouseEvent& event);
+	void OnTimer(wxTimerEvent& event);
 
 private:
 
@@ -46,6 +50,10 @@ private:
 	wxMenu m_shadingMenu;
 
 	wxString m_viewportName;
+
+	static wxTimer* s_inputTimer;
+
+	std::unique_ptr<rwxViewCameraInteraction> m_interaction;
 };
 
 #endif

@@ -7,15 +7,14 @@ reViewport::reViewport(rwxComponent* component, reToolManager* toolManager, cons
 	m_toolManager = toolManager;
 	m_viewportName = name;
 
+	if (!s_inputTimer) s_inputTimer = new wxTimer();
+
 	CreateViewportElements();
+	BindEvents();
 }
 
 void reViewport::CreateViewportElements(){
 	m_glCanvas = new rwxGLCanvas(m_component, m_viewportName, this);
-
-	m_glCanvas->Bind(wxEVT_LEFT_DOWN, &reViewport::OnCanvasMouseDown, this);
-	m_glCanvas->Bind(wxEVT_LEFT_UP, &reViewport::OnCanvasMouseUp, this);
-	m_glCanvas->Bind(wxEVT_MOTION, &reViewport::OnCanvasMouseMotion, this);
 
 	m_viewMenuText = new wxStaticText(this, reViewportViewMenuId, "View");
 	m_viewMenuText->Bind(wxEVT_LEFT_DOWN, &reViewport::OnViewMenuClick, this);
@@ -41,6 +40,37 @@ void reViewport::CreateViewportElements(){
 	SetSizer(mainSizer);
 }
 
+void reViewport::BindEvents(){
+	m_interaction.reset(new rwxViewCameraInteraction(m_glCanvas->GetCamera()));
+
+	m_glCanvas->Bind(wxEVT_LEFT_DOWN, &reViewport::OnCanvasMouseEvent, this);
+	m_glCanvas->Bind(wxEVT_LEFT_UP, &reViewport::OnCanvasMouseEvent, this);
+	m_glCanvas->Bind(wxEVT_MIDDLE_DOWN, &reViewport::OnCanvasMouseEvent, this);
+	m_glCanvas->Bind(wxEVT_MIDDLE_UP, &reViewport::OnCanvasMouseEvent, this);
+	m_glCanvas->Bind(wxEVT_RIGHT_DOWN, &reViewport::OnCanvasMouseEvent, this);
+	m_glCanvas->Bind(wxEVT_RIGHT_UP, &reViewport::OnCanvasMouseEvent, this);
+
+	m_glCanvas->Bind(wxEVT_MOTION, &reViewport::OnCanvasMouseEvent, this);
+
+	m_glCanvas->Bind(wxEVT_ENTER_WINDOW, &reViewport::OnEnterCanvas, this);
+
+	Bind(wxEVT_TIMER, &reViewport::OnTimer, this);
+}
+
+void reViewport::OnCanvasMouseEvent(wxMouseEvent& event){
+	wxEventType eventType = event.GetEventType();
+
+	if (eventType == wxEVT_LEFT_DOWN){
+		m_toolManager->OnMouseDown(event, m_glCanvas);
+	}
+	else if (eventType == wxEVT_LEFT_UP){
+		m_toolManager->OnMouseUp(event, m_glCanvas);
+	}
+	else if (eventType == wxEVT_MOTION){
+		m_toolManager->OnMouseMotion(event, m_glCanvas);
+	}
+}
+
 rwxGLCanvas* reViewport::GetCanvas(){
 	return m_glCanvas;
 }
@@ -57,14 +87,14 @@ wxString reViewport::GetViewportName(){
 	return m_viewportName;
 }
 
-void reViewport::OnCanvasMouseDown(wxMouseEvent& event){
-	m_toolManager->OnMouseDown(event, m_glCanvas);
+void reViewport::OnTimer(wxTimerEvent& event){
+	if (m_interaction->UpdateKeyboardInteraction())
+		m_glCanvas->Refresh();
 }
 
-void reViewport::OnCanvasMouseUp(wxMouseEvent& event){
-	m_toolManager->OnMouseUp(event, m_glCanvas);
+void reViewport::OnEnterCanvas(wxMouseEvent& event){
+	s_inputTimer->SetOwner(this);
+	s_inputTimer->Start(25);
 }
 
-void reViewport::OnCanvasMouseMotion(wxMouseEvent& event){
-	m_toolManager->OnMouseMotion(event, m_glCanvas);
-}
+wxTimer* reViewport::s_inputTimer = nullptr;

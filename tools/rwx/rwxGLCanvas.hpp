@@ -15,6 +15,7 @@ public:
 	void OnPaint(wxPaintEvent& event);
 
 	rViewport* GetViewport();
+	rCamera* GetCamera();
 
 private:
 	void CreateViewport();
@@ -24,6 +25,7 @@ private:
 
 	wxString m_name;
 	rViewport* m_viewport;
+	rCamera* m_camera;
 };
 
 #endif

@@ -14,7 +14,7 @@ public:
 	rXMLSerializationTarget(rXMLElement* element);
 	~rXMLSerializationTarget();
 
-	virtual bool Bool(const rString& name, bool& val);
+	virtual bool Boolean(const rString& name, bool& val);
 	virtual bool Int(const rString& name, int& val);
 	virtual bool Float(const rString& name, float& val);
 	virtual bool String(const rString& name, rString& val);
@@ -38,7 +38,7 @@ public:
 	rXMLSerializationSource(rXMLElement* element);
 	~rXMLSerializationSource();
 
-	virtual bool Bool(const rString& name, bool& val);
+	virtual bool Boolean(const rString& name, bool& val);
 	virtual bool Int(const rString& name, int& val);
 	virtual bool Float(const rString& name, float& val);
 	virtual bool String(const rString& name, rString& val);

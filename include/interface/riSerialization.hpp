@@ -10,7 +10,7 @@
 
 class RECONDITE_API riSerializationTarget{
 public:
-	virtual bool Bool(const rString& name, bool& val) = 0;
+	virtual bool Boolean(const rString& name, bool& val) = 0;
 	virtual bool Int(const rString& name, int& val) = 0;
 	virtual bool Float(const rString& name, float& val) = 0;
 	virtual bool String(const rString& name, rString& val) = 0;

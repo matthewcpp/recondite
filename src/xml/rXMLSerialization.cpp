@@ -9,7 +9,7 @@ rXMLSerializationTarget::~rXMLSerializationTarget(){
 		delete target;
 }
 
-bool rXMLSerializationTarget::Bool(const rString& name, bool& val){
+bool rXMLSerializationTarget::Boolean(const rString& name, bool& val){
 	m_element->CreateChild(name, val);
 	return true;
 }
@@ -75,7 +75,7 @@ rXMLSerializationSource::~rXMLSerializationSource(){
 		delete source;
 }
 
-bool rXMLSerializationSource::Bool(const rString& name, bool& val){
+bool rXMLSerializationSource::Boolean(const rString& name, bool& val){
 	rXMLElement* element = m_element->GetFirstChildNamed(name);
 
 	if (element){

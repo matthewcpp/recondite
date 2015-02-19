@@ -215,8 +215,12 @@ rPropertyCollection& rActor3::CustomProperties(){
 
 bool rActor3::Save(riSerializationTarget* target){
 	riSerializationTarget* classTarget = target->SubObject("actor");
-	classTarget->String("class", ClassName());
-	classTarget->String("id", Id());
+        
+        rString className = ClassName();
+        rString id = Id();
+        
+	classTarget->String("class", className);
+	classTarget->String("id", id);
 	
 
 	return DoSerialize(classTarget);

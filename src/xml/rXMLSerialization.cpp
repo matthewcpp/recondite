@@ -68,6 +68,7 @@ bool rXMLSerializationTarget::Next(){
 
 rXMLSerializationSource::rXMLSerializationSource(rXMLElement* element){
 	m_element = element;
+	m_index = 0;
 }
 
 rXMLSerializationSource::~rXMLSerializationSource(){

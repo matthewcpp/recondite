@@ -50,7 +50,7 @@ public:
 
 private:
 	rXMLElement* m_element;
-	size_t m_index = 0;
+	size_t m_index;
 
 	std::vector<rXMLSerializationSource*> m_sources;
 

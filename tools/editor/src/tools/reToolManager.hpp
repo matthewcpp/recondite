@@ -23,9 +23,9 @@ public:
 	void CreateToolbars();
 
 public:
-	void OnMouseDown(wxMouseEvent& event, rwxGLCanvas* canvas);
-	void OnMouseUp(wxMouseEvent& event, rwxGLCanvas* canvas);
-	void OnMouseMotion(wxMouseEvent& event, rwxGLCanvas* canvas);
+	bool OnMouseDown(wxMouseEvent& event, rwxGLCanvas* canvas);
+	bool OnMouseUp(wxMouseEvent& event, rwxGLCanvas* canvas);
+	bool OnMouseMotion(wxMouseEvent& event, rwxGLCanvas* canvas);
 
 private:
 

@@ -110,7 +110,7 @@ void BasicSceneModule::Init(rEngine& engine){
 	viewport->SetSize(displaySize);
 	viewport->SetViewportType(rVIEWPORT_PERSP);
 
-	rViewCamera* camera = new rViewCamera("camera", &engine);
+	rCamera* camera = new rCamera("camera", &engine);
 	camera->SetPosition(0, 1.0f, 10.0f);
 
 	viewport->SetCamera(camera);

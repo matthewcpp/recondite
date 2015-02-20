@@ -49,6 +49,7 @@ void reViewport::BindEvents(){
 	m_glCanvas->Bind(wxEVT_MIDDLE_UP, &reViewport::OnCanvasMouseEvent, this);
 	m_glCanvas->Bind(wxEVT_RIGHT_DOWN, &reViewport::OnCanvasMouseEvent, this);
 	m_glCanvas->Bind(wxEVT_RIGHT_UP, &reViewport::OnCanvasMouseEvent, this);
+	m_glCanvas->Bind(wxEVT_MOUSEWHEEL, &reViewport::OnCanvasMouseEvent, this);
 
 	m_glCanvas->Bind(wxEVT_MOTION, &reViewport::OnCanvasMouseEvent, this);
 
@@ -67,7 +68,32 @@ void reViewport::OnCanvasMouseEvent(wxMouseEvent& event){
 		m_toolManager->OnMouseUp(event, m_glCanvas);
 	}
 	else if (eventType == wxEVT_MOTION){
-		m_toolManager->OnMouseMotion(event, m_glCanvas);
+		bool result = m_toolManager->OnMouseMotion(event, m_glCanvas);
+
+		if (!result){
+			if (m_interaction->OnMouseMotion(event))
+				m_glCanvas->Refresh();
+		}
+	}
+	else if (eventType == wxEVT_MIDDLE_DOWN){
+		if (m_interaction->OnMiddleDown(event))
+			m_glCanvas->Refresh();
+	}
+	else if (eventType == wxEVT_MIDDLE_UP){
+		if (m_interaction->OnMiddleUp(event))
+			m_glCanvas->Refresh();
+	}
+	else if (eventType == wxEVT_RIGHT_DOWN){
+		if (m_interaction->OnRightDown(event))
+			m_glCanvas->Refresh();
+	}
+	else if (eventType == wxEVT_RIGHT_UP){
+		if (m_interaction->OnRightUp(event))
+			m_glCanvas->Refresh();
+	}
+	else if (eventType == wxEVT_MOUSEWHEEL){
+		if (m_interaction->OnMousewheel(event))
+			m_glCanvas->Refresh();
 	}
 }
 

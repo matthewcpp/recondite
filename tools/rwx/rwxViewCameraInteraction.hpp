@@ -14,13 +14,29 @@ public:
 
 public:
 
+	bool OnMouseMotion(wxMouseEvent& event);
+	bool OnMiddleDown(wxMouseEvent& event);
+	bool OnMiddleUp(wxMouseEvent& event);
+	bool OnRightDown(wxMouseEvent& event);
+	bool OnRightUp(wxMouseEvent& event);
+	bool OnMousewheel(wxMouseEvent& event);
+
+
 	bool UpdateKeyboardInteraction();
+
+private:
+	void SetCameraTarget();
 
 private:
 	rCamera* m_camera;
 
 	float m_cameraRotateSpeed;
 	float m_cameraMoveSpeed;
+
+	rVector3 m_cameraRotation;
+
+	rMouseButton m_activeButton;
+	wxPoint m_previousPt;
 };
 
 #endif

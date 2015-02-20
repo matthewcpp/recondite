@@ -8,7 +8,7 @@ rwxGLCanvas::rwxGLCanvas(rwxComponent* component, const wxString& name, wxWindow
 	m_viewport = nullptr;
 
 	wxString cameraName = m_name + "_camera";
-	m_camera = new rViewCamera(m_name.c_str().AsChar(), m_component->GetEngine());
+	m_camera = new rCamera(m_name.c_str().AsChar(), m_component->GetEngine());
 	m_camera->SetPosition(0, 0, 10);
 
 	Bind(wxEVT_PAINT, &rwxGLCanvas::OnPaint, this);

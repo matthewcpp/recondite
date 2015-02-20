@@ -19,8 +19,9 @@ reToolManager::~reToolManager(){
 
 void reToolManager::InitTools(){
 	m_tools[reTOOL_PRIMITIVE_BOX] = new rePrimitiveBoxTool(m_component, m_owner);
+	m_tools[reTOOL_SELECT] = new reSelectionTool(m_component, m_owner);
 
-	ActivateTool(reTOOL_PRIMITIVE_BOX);
+	ActivateTool(reTOOL_SELECT);
 }
 
 void reToolManager::Destroy(){
@@ -63,12 +64,16 @@ bool reToolManager::OnMouseMotion(wxMouseEvent& event, rwxGLCanvas* canvas){
 void reToolManager::CreateToolbars(){
 	m_TransformToolbar = new wxAuiToolBar(m_owner);
 	m_TransformToolbar->SetToolBitmapSize(wxSize(16, 16));
-	m_TransformToolbar->AddTool(reTOOL_SELECT, "Select", wxBitmap("assets/tool-select.png", wxBITMAP_TYPE_PNG))->SetKind(wxITEM_RADIO);
+	wxAuiToolBarItem* item = m_TransformToolbar->AddTool(reTOOL_SELECT, "Select", wxBitmap("assets/tool-select.png", wxBITMAP_TYPE_PNG));
+	item->SetKind(wxITEM_RADIO);
+	item->SetState(wxAUI_BUTTON_STATE_CHECKED);
+
 	m_TransformToolbar->AddTool(reTOOL_TRANSLATE, "Translate", wxBitmap("assets/tool-translate.png", wxBITMAP_TYPE_PNG))->SetKind(wxITEM_RADIO);
 	m_TransformToolbar->AddTool(reTOOL_ROTATE, "Rotate", wxBitmap("assets/tool-rotate.png", wxBITMAP_TYPE_PNG))->SetKind(wxITEM_RADIO);
 	m_TransformToolbar->AddTool(reTOOL_SCALE, "Scale", wxBitmap("assets/tool-scale.png", wxBITMAP_TYPE_PNG))->SetKind(wxITEM_RADIO);
 	m_TransformToolbar->Realize();
 	m_TransformToolbar->Bind(wxEVT_MENU, &reToolManager::OnToolbarToolClick, this);
+	
 
 	m_manager->AddPane(m_TransformToolbar, wxAuiPaneInfo()
 		.Name("Transform Tools")

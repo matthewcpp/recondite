@@ -12,4 +12,7 @@ list(APPEND tool_files ${CMAKE_CURRENT_SOURCE_DIR}/reToolBase.cpp)
 list(APPEND tool_files ${CMAKE_CURRENT_SOURCE_DIR}/rePrimitiveBoxTool.hpp)
 list(APPEND tool_files ${CMAKE_CURRENT_SOURCE_DIR}/rePrimitiveBoxTool.cpp)
 
+list(APPEND tool_files ${CMAKE_CURRENT_SOURCE_DIR}/reSelectionTool.hpp)
+list(APPEND tool_files ${CMAKE_CURRENT_SOURCE_DIR}/reSelectionTool.cpp)
+
 set(tool_sources ${tool_files} PARENT_SCOPE)

@@ -62,15 +62,20 @@ void reViewport::OnCanvasMouseEvent(wxMouseEvent& event){
 	wxEventType eventType = event.GetEventType();
 
 	if (eventType == wxEVT_LEFT_DOWN){
-		m_toolManager->OnMouseDown(event, m_glCanvas);
+		if(m_toolManager->OnMouseDown(event, m_glCanvas))
+			m_glCanvas->Refresh();
 	}
 	else if (eventType == wxEVT_LEFT_UP){
-		m_toolManager->OnMouseUp(event, m_glCanvas);
+		if(m_toolManager->OnMouseUp(event, m_glCanvas))
+			m_glCanvas->Refresh();
 	}
 	else if (eventType == wxEVT_MOTION){
 		bool result = m_toolManager->OnMouseMotion(event, m_glCanvas);
 
-		if (!result){
+		if (result){
+			m_glCanvas->Refresh();
+		}
+		else{
 			if (m_interaction->OnMouseMotion(event))
 				m_glCanvas->Refresh();
 		}

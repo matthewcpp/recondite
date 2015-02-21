@@ -32,6 +32,7 @@ public:
 	virtual void AddActor(rActor3* actor);
 	virtual rActor3* GetActor(const rString& name) const;
 	virtual size_t NumActors () const;
+	virtual void GetActors(rArrayString& names) const;
 
 	virtual void DeleteActor(const rString& name);
 

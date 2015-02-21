@@ -185,3 +185,8 @@ bool rScene::Load(riSerializationTarget* target){
 bool rScene::IsLoading() const{
 	return m_isLoading;
 }
+
+void rScene::GetActors(rArrayString& names) const{
+	for (auto& entry : m_actors)
+		names.push_back(entry.first);
+}

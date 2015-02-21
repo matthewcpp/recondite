@@ -4,6 +4,7 @@
 #include "rBuild.hpp"
 
 #include "rString.hpp"
+#include "rTypes.hpp"
 #include "rLine3.hpp"
 
 class rActor3;
@@ -13,6 +14,7 @@ public:
 	virtual void AddActor(rActor3* actor) = 0;
 	virtual rActor3* GetActor(const rString& name) const = 0;
 	virtual size_t NumActors () const = 0;
+	virtual void GetActors(rArrayString& actors) const = 0;
 
 	virtual rString GetDefaultActorId(const rString& prefix) = 0;
 

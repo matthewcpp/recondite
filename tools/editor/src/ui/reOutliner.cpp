@@ -26,6 +26,7 @@ void reOutliner::OnComponentInitialized(rEvent& event){
 
 	scene->Bind(rEVT_SCENE_ACTOR_ADDED, this, &reOutliner::OnActorAddedToScene);
 	scene->Bind(rEVT_SCENE_LOAD_BEGIN, this, &reOutliner::OnLevelBeginLoad);
+	scene->Bind(rEVT_SCENE_LOAD_END, this, &reOutliner::OnLevelEndLoad);
 }
 
 void reOutliner::OutlineLevel(){
@@ -37,5 +38,10 @@ void reOutliner::OnLevelBeginLoad(rEvent& event){
 }
 
 void reOutliner::OnLevelEndLoad(rEvent& event){
+	rArrayString actorNames;
+	m_component->GetScene()->GetActors(actorNames);
 
+	for (auto& actorId : actorNames){
+		AppendItem(wxDataViewItem(0), actorId.c_str());
+	}
 }

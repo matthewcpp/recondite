@@ -1,13 +1,15 @@
 #ifndef RE_TOOL_HPP
 #define RE_TOOL_HPP
 
+#include "project/reComponent.hpp"
+
 #include "rwxGLCanvas.hpp"
 
 #include <wx/wx.h>
 
 class reTool{
 public:
-	reTool(rwxComponent* component, wxFrame* owner) :m_owner(owner), m_component(component) {}
+	reTool(reComponent* component, wxFrame* owner) :m_owner(owner), m_component(component) {}
 
 public:
 	virtual bool OnMouseDown(wxMouseEvent& event, rwxGLCanvas* canvas) { return false; }
@@ -19,7 +21,7 @@ public:
 
 protected:
 	wxFrame* m_owner;
-	rwxComponent* m_component;
+	reComponent* m_component;
 
 rNO_COPY_CLASS(reTool)
 };

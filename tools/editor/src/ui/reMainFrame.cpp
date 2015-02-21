@@ -1,10 +1,9 @@
 #include "reMainFrame.hpp"
 
-reMainFrame::reMainFrame(rwxComponent* component, reProject* project, const wxString& title, const wxPoint& pos, const wxSize& size)
+reMainFrame::reMainFrame(reComponent* component, const wxString& title, const wxPoint& pos, const wxSize& size)
 	:wxFrame(NULL, wxID_ANY, title, pos, size)
 {
 	m_component = component;
-	m_project = project;
 
 	CreateUIElements();
 }
@@ -15,7 +14,7 @@ void reMainFrame::CreateUIElements(){
 	m_toolManager = new reToolManager(m_component, this, &m_wxAuiManager);
 	m_viewportDisplay = new reViewportDisplay(m_component, m_toolManager, this);
 	m_propertyInspector = new rePropertyInspector(m_component, m_viewportDisplay, this);
-	m_projectExplorer = new reProjectExplorer(m_component, m_project, this);
+	m_projectExplorer = new reProjectExplorer(m_component, this);
 	m_outliner = new reOutliner(m_component, m_propertyInspector, this);
 
 
@@ -174,14 +173,14 @@ void reMainFrame::EnsureViewportDisplayVisible(const wxString& caption){
 
 void reMainFrame::ProcessProjectOpen(){
 	m_projectExplorer->ShowProject();
-	SetTitle("Recondite Editor - " + m_project->Name());
+	SetTitle("Recondite Editor - " + m_component->GetProject()->Name());
 }
 
 void reMainFrame::NewProject(){
 	reNewProjectDialog dialog;
 
 	if (dialog.ShowModal() == wxID_OK){
-		m_project->Create(dialog.GetProjectDir(), dialog.GetProjectName());
+		m_component->GetProject()->Create(dialog.GetProjectDir(), dialog.GetProjectName());
 		ProcessProjectOpen();
 	}
 }
@@ -190,7 +189,7 @@ void reMainFrame::OpenProject(){
 	wxFileDialog projectDialog(this, "Open Project", wxEmptyString, wxEmptyString, "Recondite Projects (*.rprj)|*.rprj", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
 
 	if (projectDialog.ShowModal() == wxID_OK){
-		bool opened = m_project->Open(projectDialog.GetPath());
+		bool opened = m_component->GetProject()->Open(projectDialog.GetPath());
 
 		if (opened){
 			ProcessProjectOpen();
@@ -199,7 +198,7 @@ void reMainFrame::OpenProject(){
 }
 
 void reMainFrame::CloseProject(){
-	m_project->Close();
+	m_component->GetProject()->Close();
 
 	m_projectExplorer->DeleteAllItems();
 	m_outliner->DeleteAllItems();
@@ -217,7 +216,7 @@ void reMainFrame::NewLevel(){
 	if (dialog.ShowModal() == wxID_OK){
 		wxString levelName = dialog.GetValue();
 
-		bool created = m_project->CreateLevel(levelName);
+		bool created = m_component->GetProject()->CreateLevel(levelName);
 
 		if (created){
 			m_propertyInspector->StopInspecting();
@@ -231,5 +230,5 @@ void reMainFrame::NewLevel(){
 }
 
 void reMainFrame::SaveProject(){
-	m_project->SaveActiveLevel();
+	m_component->GetProject()->SaveActiveLevel();
 }

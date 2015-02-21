@@ -11,7 +11,7 @@
 
 class rePrimitiveBoxTool : public reToolBase{
 public:
-	rePrimitiveBoxTool(rwxComponent* component, wxFrame* owner);
+	rePrimitiveBoxTool(reComponent* component, wxFrame* owner);
 
 public:
 

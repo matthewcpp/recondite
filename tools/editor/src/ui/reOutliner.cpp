@@ -1,6 +1,6 @@
 #include "reOutliner.hpp"
 
-reOutliner::reOutliner(rwxComponent* component, rePropertyInspector* propertyInspector, wxWindow* parent, wxWindowID id)
+reOutliner::reOutliner(reComponent* component, rePropertyInspector* propertyInspector, wxWindow* parent, wxWindowID id)
 	:wxDataViewTreeCtrl(parent, id)
 {
 	m_component = component;

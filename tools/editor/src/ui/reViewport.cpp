@@ -1,6 +1,6 @@
 #include "reViewport.hpp"
 
-reViewport::reViewport(rwxComponent* component, reToolManager* toolManager, const wxString& name, wxWindow *parent, wxWindowID id)
+reViewport::reViewport(reComponent* component, reToolManager* toolManager, const wxString& name, wxWindow *parent, wxWindowID id)
 	:wxPanel(parent, id)
 {
 	m_component = component;

@@ -1,6 +1,6 @@
 #include "rePrimitiveBoxTool.hpp"
 
-rePrimitiveBoxTool::rePrimitiveBoxTool(rwxComponent* component, wxFrame* owner)
+rePrimitiveBoxTool::rePrimitiveBoxTool(reComponent* component, wxFrame* owner)
 	:reToolBase(component, owner)
 {
 }

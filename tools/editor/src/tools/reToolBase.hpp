@@ -7,7 +7,7 @@
 
 class reToolBase : public reTool{
 public:
-	reToolBase(rwxComponent* component, wxFrame* owner);
+	reToolBase(reComponent* component, wxFrame* owner);
 
 public:
 	virtual bool OnMouseDown(wxMouseEvent& event, rwxGLCanvas* canvas);

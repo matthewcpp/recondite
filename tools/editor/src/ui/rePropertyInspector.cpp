@@ -1,6 +1,6 @@
 #include "rePropertyInspector.hpp"
 
-rePropertyInspector::rePropertyInspector(rwxComponent* component, reViewportDisplay* display, wxWindow* parent, wxWindowID id)
+rePropertyInspector::rePropertyInspector(reComponent* component, reViewportDisplay* display, wxWindow* parent, wxWindowID id)
 	:wxPropertyGrid(parent, id)
 {
 	m_component = component;

@@ -3,7 +3,7 @@
 
 #include <map>
 
-#include "rwxComponent.hpp"
+#include "project/reComponent.hpp"
 #include "rwxGLCanvas.hpp"
 
 #include <wx/wx.h>
@@ -17,7 +17,7 @@
 
 class reToolManager{
 public:
-	reToolManager(rwxComponent* component, wxFrame* owner, wxAuiManager* manager);
+	reToolManager(reComponent* component, wxFrame* owner, wxAuiManager* manager);
 	~reToolManager();
 
 	void CreateToolbars();
@@ -43,7 +43,7 @@ private:
 	reToolMap m_tools;
 
 	wxFrame* m_owner;
-	rwxComponent* m_component;
+	reComponent* m_component;
 	wxAuiManager* m_manager;
 
 	reTool* m_activeTool;

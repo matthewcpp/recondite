@@ -1,6 +1,6 @@
 #include "reSelectionTool.hpp"
 
-reSelectionTool::reSelectionTool(rwxComponent* component, wxFrame* owner)
+reSelectionTool::reSelectionTool(reComponent* component, wxFrame* owner)
 	:reToolBase(component, owner)
 {
 

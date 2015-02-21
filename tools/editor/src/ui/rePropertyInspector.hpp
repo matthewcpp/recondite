@@ -1,7 +1,7 @@
 #ifndef RE_PROPERTYINSPECTOR_HPP
 #define RE_PROPERTYINSPECTOR_HPP
 
-#include "rwxComponent.hpp"
+#include "project/reComponent.hpp"
 
 #include <wx/wx.h>
 #include <wx/propgrid/propgrid.h>
@@ -12,7 +12,7 @@
 
 class rePropertyInspector : public wxPropertyGrid{
 public:
-	rePropertyInspector(rwxComponent* component, reViewportDisplay* display, wxWindow* parent, wxWindowID id = wxID_ANY);
+	rePropertyInspector(reComponent* component, reViewportDisplay* display, wxWindow* parent, wxWindowID id = wxID_ANY);
 
 public:
 	void Inspect(const wxString& actorName);

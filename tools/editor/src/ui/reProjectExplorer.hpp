@@ -1,7 +1,7 @@
 #ifndef RE_PROJECTEXPLORER_HPP
 #define RE_PROJECTEXPLORER_HPP
 
-#include "rwxComponent.hpp"
+#include "project/reComponent.hpp"
 
 #include <wx/wx.h>
 #include <wx/dataview.h>
@@ -10,7 +10,7 @@
 
 class reProjectExplorer : public wxDataViewTreeCtrl{
 public:
-	reProjectExplorer(rwxComponent* component, reProject* project, wxWindow* parent, wxWindowID id = wxID_ANY);
+	reProjectExplorer(reComponent* component, wxWindow* parent, wxWindowID id = wxID_ANY);
 
 	void ShowProject();
 	void AddLevel(const wxString& name);
@@ -30,8 +30,7 @@ private:
 	void DeleteLevel(wxDataViewItem target);
 
 private:
-	rwxComponent* m_component;
-	reProject* m_project;
+	reComponent* m_component;
 
 	wxDataViewItem m_projectRoot;
 	wxDataViewItem m_levelsRoot;

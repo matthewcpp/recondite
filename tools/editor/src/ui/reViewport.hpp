@@ -1,7 +1,7 @@
 #ifndef RE_VIEWPORT_HPP
 #define RE_VIEWPORT_HPP
 
-#include "rwxComponent.hpp"
+#include "project/reComponent.hpp"
 
 #include "rwxGLCanvas.hpp"
 #include <wx/wx.h>
@@ -12,7 +12,7 @@
 
 class reViewport : public wxPanel{
 public:
-	reViewport(rwxComponent* component, reToolManager* toolManager, const wxString& name, wxWindow *parent, wxWindowID id = wxID_ANY);
+	reViewport(reComponent* component, reToolManager* toolManager, const wxString& name, wxWindow *parent, wxWindowID id = wxID_ANY);
 
 public:
 	wxString GetViewportName();
@@ -40,7 +40,7 @@ private:
 
 private:
 	rwxGLCanvas* m_glCanvas;
-	rwxComponent* m_component;
+	reComponent* m_component;
 	reToolManager* m_toolManager;
 
 	wxStaticText* m_viewMenuText;

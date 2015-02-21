@@ -5,7 +5,7 @@
 
 class reSelectionTool : public reToolBase{
 public:
-	reSelectionTool(rwxComponent* component, wxFrame* owner);
+	reSelectionTool(reComponent* component, wxFrame* owner);
 
 public:
 	virtual bool OnMouseUp(wxMouseEvent& event, rwxGLCanvas* canvas);

@@ -1,6 +1,6 @@
 #include "reToolManager.hpp"
 
-reToolManager::reToolManager(rwxComponent* component, wxFrame* owner, wxAuiManager* manager){
+reToolManager::reToolManager(reComponent* component, wxFrame* owner, wxAuiManager* manager){
 	m_owner = owner;
 	m_component = component;
 	m_manager = manager;

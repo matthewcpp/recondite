@@ -1,6 +1,6 @@
 #include "reToolBase.hpp"
 
-reToolBase::reToolBase(rwxComponent* component, wxFrame* owner)
+reToolBase::reToolBase(reComponent* component, wxFrame* owner)
 	:reTool(component, owner)
 {}
 

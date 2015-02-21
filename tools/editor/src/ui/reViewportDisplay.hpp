@@ -1,7 +1,7 @@
 #ifndef RE_VIEWPORTDISPLAY_HPP
 #define RE_VIEWPORTDISPLAY_HPP
 
-#include "rwxComponent.hpp"
+#include "project/reComponent.hpp"
 
 #include "reViewport.hpp"
 
@@ -12,7 +12,7 @@
 
 class reViewportDisplay : public wxPanel{
 public:
-	reViewportDisplay(rwxComponent* component, reToolManager* toolManager, wxWindow* parent, wxWindowID id = wxID_ANY);
+	reViewportDisplay(reComponent* component, reToolManager* toolManager, wxWindow* parent, wxWindowID id = wxID_ANY);
 
 public:
 	reViewport* GetViewport(const wxString& name);
@@ -27,7 +27,7 @@ private:
 	void CreateViewportDisplay();
 
 private:
-	rwxComponent* m_component;
+	reComponent* m_component;
 	reToolManager* m_toolManager;
 
 	reViewport* m_topLeftViewport;

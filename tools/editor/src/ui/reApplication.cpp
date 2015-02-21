@@ -1,23 +1,16 @@
 #include "reApplication.hpp"
 
 bool reApplication::OnInit(){
-	m_rwxComponent = new rwxComponent();
-	m_project = new reProject(m_rwxComponent);
+	m_reComponent = new reComponent();
 
 	wxInitAllImageHandlers();
 
 	SetupPaths();
 
-	reMainFrame* mainFrame = new reMainFrame(m_rwxComponent, m_project, "Recondite Editor");
+	reMainFrame* mainFrame = new reMainFrame(m_reComponent, "Recondite Editor");
 	mainFrame->Show(true);
 	mainFrame->Maximize();
 	return true;
-}
-
-int reApplication::OnExit(){
-	delete m_project;
-
-	return wxApp::OnExit();
 }
 
 void reApplication::SetupPaths(){

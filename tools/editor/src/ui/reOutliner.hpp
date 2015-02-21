@@ -1,7 +1,7 @@
 #ifndef RE_OUTLINER_HPP
 #define RE_OUTLINER_HPP
 
-#include "rwxComponent.hpp"
+#include "project/reComponent.hpp"
 
 #include <wx/wx.h>
 #include <wx/dataview.h>
@@ -12,7 +12,7 @@
 
 class reOutliner : public wxDataViewTreeCtrl{
 public:
-	reOutliner(rwxComponent* component, rePropertyInspector* propertyInspector, wxWindow* parent, wxWindowID id = wxID_ANY);
+	reOutliner(reComponent* component, rePropertyInspector* propertyInspector, wxWindow* parent, wxWindowID id = wxID_ANY);
 
 public:
 	void OutlineLevel();
@@ -27,7 +27,7 @@ private:
 	void OnLevelEndLoad(rEvent& event);
 
 private:
-	rwxComponent* m_component;
+	reComponent* m_component;
 
 	rePropertyInspector* m_propertyInspector;
 };

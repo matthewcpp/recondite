@@ -37,3 +37,7 @@ target_link_libraries (editor recondite rgl rwx)
 target_link_libraries(editor ${wxWidgets_LIBRARIES})
 
 add_definitions(-DWXUSINGDLL)
+
+if (MSVC)
+	add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+endif()

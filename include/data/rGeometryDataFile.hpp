@@ -8,7 +8,7 @@
 #include "rString.hpp"
 #include "rTypes.hpp"
 
-#include "data/rGeometryData.hpp"
+#include "data/rModelGeometryData.hpp"
 
 #define rGEOMETRY_MAGIC_NUMBER 1868916594 //rego
 
@@ -26,8 +26,8 @@ public:
 
 	rContentError GetError() const;
 
-	rContentError ReadFromFile(const rString& path, rGeometryData& geometryData);
-	rContentError ReadFromStream(std::istream& stream, rGeometryData& geometryData);
+	rContentError ReadFromFile(const rString& path, rModelGeometryData& geometryData);
+	rContentError ReadFromStream(std::istream& stream, rModelGeometryData& geometryData);
 
 private:
 	void ReadHeader(std::istream& stream);
@@ -36,7 +36,7 @@ private:
 	void ReadVertexBoneLinks(std::istream& stream);
 
 private:
-	rGeometryData* m_geometryData;
+	rModelGeometryData* m_geometryData;
 	rContentError m_error;
 
 	rGeometryFileHeader m_header;
@@ -48,8 +48,8 @@ public:
 
 	rContentError GetError() const;
 
-	rContentError WriteToFile(const rString& path, const rGeometryData& geometryData);
-	rContentError WriteToStream(std::ostream& stream, const rGeometryData& geometryData);
+	rContentError WriteToFile(const rString& path, const rModelGeometryData& geometryData);
+	rContentError WriteToStream(std::ostream& stream, const rModelGeometryData& geometryData);
 
 private:
 
@@ -60,7 +60,7 @@ private:
 
 private:
 
-	const rGeometryData* m_geometryData;
+	const rModelGeometryData* m_geometryData;
 	rContentError m_error;
 
 	rGeometryFileHeader m_header;

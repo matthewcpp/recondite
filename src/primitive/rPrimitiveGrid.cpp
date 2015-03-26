@@ -14,7 +14,7 @@ rString rPrimitiveGrid::ClassName() const{
 	return "PrimitiveGrid";
 }
 
-void rPrimitiveGrid::CreateGeometry(rGeometryData& geometry){
+void rPrimitiveGrid::CreateGeometry(rModelGeometryData& geometry){
 	rElementBufferData* wireframe = geometry.CreateElementBuffer("wire", rGEOMETRY_LINES);
 	rElementBufferData* shaded = geometry.CreateElementBuffer("shaded", rGEOMETRY_TRIANGLES);
 

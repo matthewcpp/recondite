@@ -39,7 +39,7 @@ void rPrimitiveCylinder::SetSegmentCount(int segmentCount){
 	InvalidateGeometry();
 }
 
-void rPrimitiveCylinder::CreateGeometry(rGeometryData& geometry){
+void rPrimitiveCylinder::CreateGeometry(rModelGeometryData& geometry){
 	rElementBufferData* wireframe = geometry.CreateElementBuffer("wire", rGEOMETRY_LINES);
 	rElementBufferData* shaded = geometry.CreateElementBuffer("shaded", rGEOMETRY_TRIANGLES);
 
@@ -55,7 +55,7 @@ void rPrimitiveCylinder::CreateGeometry(rGeometryData& geometry){
 	CreateShellFace(geometry,m_segmentCount, 2 * m_segmentCount + 1, 1, m_segmentCount + 2);
 }
 
-void rPrimitiveCylinder::CreateShellFace(rGeometryData& geometry, int i1, int i2, int i3, int i4){
+void rPrimitiveCylinder::CreateShellFace(rModelGeometryData& geometry, int i1, int i2, int i3, int i4){
 	rElementBufferData* shaded = geometry.GetElementBuffer("shaded");
 
 		rVector3 v1, v2, v3, v4, n1, n2, n3, n4;

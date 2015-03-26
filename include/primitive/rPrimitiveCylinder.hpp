@@ -22,10 +22,10 @@ public:
 	virtual rString ClassName() const;
 
 protected:
-	virtual void CreateGeometry(rGeometryData& geometry);
+	virtual void CreateGeometry(rModelGeometryData& geometry);
 
 private:
-	void CreateShellFace(rGeometryData& geometry, int i1, int i2, int i3, int i4);
+	void CreateShellFace(rModelGeometryData& geometry, int i1, int i2, int i3, int i4);
 
 private:
 	float m_radius;

@@ -11,7 +11,7 @@ rContentError rGeometryDataReader::GetError() const{
 	return m_error;
 }
 
-rContentError rGeometryDataReader::ReadFromFile(const rString& path, rGeometryData& geometryData){
+rContentError rGeometryDataReader::ReadFromFile(const rString& path, rModelGeometryData& geometryData){
 	std::ifstream file(path.c_str(), std::ios::binary);
 
 	if (file){
@@ -21,12 +21,10 @@ rContentError rGeometryDataReader::ReadFromFile(const rString& path, rGeometryDa
 		m_error = rCONTENT_ERROR_FILE_NOT_FOUND;
 	}
 
-	geometryData.SetPath(path);
-
 	return m_error;
 }
 
-rContentError rGeometryDataReader::ReadFromStream(std::istream& stream, rGeometryData& geometryData){
+rContentError rGeometryDataReader::ReadFromStream(std::istream& stream, rModelGeometryData& geometryData){
 	m_geometryData = &geometryData;
 	m_error = rCONTENT_ERROR_NONE;
 	m_geometryData->Clear();
@@ -58,12 +56,14 @@ void rGeometryDataReader::ReadHeader(std::istream& stream){
 }
 
 void rGeometryDataReader::ReadVertexData(std::istream& stream){
+	
 	m_geometryData->Allocate(m_header.vertexCount);
 	char* dataPtr = m_geometryData->VertexData();
-	stream.read(dataPtr, m_header.vertexCount * sizeof(rModelVertex));
+	stream.read(dataPtr, m_header.vertexCount * m_geometryData->VertexSizeInBytes());
 
 	if (!stream)
 		m_error = rCONTENT_ERROR_PARSE_ERROR;
+	
 }
 
 void rGeometryDataReader::ReadElementBufferData(std::istream& stream){
@@ -118,7 +118,7 @@ rContentError rGeometryDataWriter::GetError() const{
 	return m_error;
 }
 
-rContentError rGeometryDataWriter::WriteToFile(const rString& path, const rGeometryData& geometryData){
+rContentError rGeometryDataWriter::WriteToFile(const rString& path, const rModelGeometryData& geometryData){
 	std::ofstream file (path.c_str(), std::ios::binary);
 
 	if (file){
@@ -131,7 +131,7 @@ rContentError rGeometryDataWriter::WriteToFile(const rString& path, const rGeome
 	return m_error;
 }
 
-rContentError rGeometryDataWriter::WriteToStream(std::ostream& stream, const rGeometryData& geometryData){
+rContentError rGeometryDataWriter::WriteToStream(std::ostream& stream, const rModelGeometryData& geometryData){
 	m_geometryData = &geometryData;
 	m_error = rCONTENT_ERROR_NONE;
 
@@ -163,7 +163,7 @@ void rGeometryDataWriter::WriteFileHeader(std::ostream& stream){
 }
 
 void rGeometryDataWriter::WriteVertexData(std::ostream& stream){
-	stream.write(m_geometryData->VertexData(), m_header.vertexCount * sizeof (rModelVertex));
+	stream.write(m_geometryData->VertexData(), m_header.vertexCount * m_geometryData->VertexSizeInBytes());
 
 	if (!stream)
 		m_error = rCONTENT_ERROR_STREAM_ERROR;
@@ -196,6 +196,7 @@ void rGeometryDataWriter::WriteElementBufferData(std::ostream& stream){
 }
 
 void rGeometryDataWriter::WriteVertexBoneLinks(std::ostream& stream){
+	/*
 	const rVertexBoneLinkMap& vertexBoneLinks = m_geometryData->VertexBoneLinks();
 	rVertexBoneLinkMap::const_iterator end = vertexBoneLinks.end();
 
@@ -203,4 +204,5 @@ void rGeometryDataWriter::WriteVertexBoneLinks(std::ostream& stream){
 		rVertexBoneLink link = it->second;
 		stream.write((char*)&link, sizeof (rVertexBoneLink));
 	}
+	*/
 }

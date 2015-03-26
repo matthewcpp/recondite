@@ -39,7 +39,7 @@ rString rPrimitiveSphere::ClassName() const{
 	return "PrimitiveSphere";
 }
 
-void rPrimitiveSphere::CreateGeometry(rGeometryData& geometry){
+void rPrimitiveSphere::CreateGeometry(rModelGeometryData& geometry){
 	rElementBufferData* wireframe = geometry.CreateElementBuffer("wire", rGEOMETRY_LINES);
 	rElementBufferData* shaded = geometry.CreateElementBuffer("shaded", rGEOMETRY_TRIANGLES);
 

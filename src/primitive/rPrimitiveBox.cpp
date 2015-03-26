@@ -12,7 +12,7 @@ rPrimitiveBox::rPrimitiveBox(const rString& id, rEngine* engine)
 	m_depthSegments = 3;
 }
 
-void rPrimitiveBox::GenerateFrontBack(rGeometryData& geometry, float z, const rVector3& normal){
+void rPrimitiveBox::GenerateFrontBack(rModelGeometryData& geometry, float z, const rVector3& normal){
 	float stepX = m_width / (float)m_widthSegments;
 	float stepY = m_height / (float)m_heightSegments;
 
@@ -58,7 +58,7 @@ void rPrimitiveBox::GenerateFrontBack(rGeometryData& geometry, float z, const rV
 	shaded->Push(baseIndex + m_widthSegments, baseIndex + m_heightSegments * widthCount, geometry.VertexCount() - 1);
 }
 
-void rPrimitiveBox::GenerateTopBottom(rGeometryData& geometry, float y, const rVector3& normal){
+void rPrimitiveBox::GenerateTopBottom(rModelGeometryData& geometry, float y, const rVector3& normal){
 	float stepX = m_width / (float)m_widthSegments;
 	float stepZ = m_depth / (float)m_depthSegments;
 
@@ -104,7 +104,7 @@ void rPrimitiveBox::GenerateTopBottom(rGeometryData& geometry, float y, const rV
 	shaded->Push(baseIndex + m_widthSegments, baseIndex + m_depthSegments * widthCount, geometry.VertexCount() - 1);
 }
 
-void rPrimitiveBox::GenerateLeftRight(rGeometryData& geometry, float x, const rVector3& normal){
+void rPrimitiveBox::GenerateLeftRight(rModelGeometryData& geometry, float x, const rVector3& normal){
 	float stepY = m_height / (float)m_heightSegments;
 	float stepZ = m_depth / (float)m_depthSegments;
 
@@ -150,7 +150,7 @@ void rPrimitiveBox::GenerateLeftRight(rGeometryData& geometry, float x, const rV
 	shaded->Push(baseIndex + m_depthSegments, baseIndex + m_heightSegments * depthCount, geometry.VertexCount() - 1);
 }
 
-void rPrimitiveBox::CreateGeometry(rGeometryData& geometry){
+void rPrimitiveBox::CreateGeometry(rModelGeometryData& geometry){
 	geometry.CreateElementBuffer("wire", rGEOMETRY_LINES);
 	geometry.CreateElementBuffer("shaded", rGEOMETRY_TRIANGLES);
 

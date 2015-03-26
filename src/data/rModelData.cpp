@@ -1,24 +1,13 @@
 #include "data/rModelData.hpp"
 
 rModelData::rModelData(){
-	m_skeleton = NULL;
-}
+	m_skeleton = nullptr;
 
-rModelData::~rModelData(){
-	Clear();
+	m_geometry = std::make_unique<rModelGeometryData>();
 }
 
 void rModelData::Clear(){
-	for (rMeshDataMap::iterator it = m_meshes.begin(); it != m_meshes.end(); ++it)
-		delete it->second;
-	
-	for (rMaterialDataMap::iterator it = m_materials.begin(); it!= m_materials.end(); ++it)
-		delete it->second;
-	
-	for (rTexture2DDataMap::iterator it = m_textures.begin(); it != m_textures.end(); ++it)
-		delete it->second;
-	
-	m_geometry.Clear();
+	m_geometry->Clear();
 	m_meshes.clear();
 	m_materials.clear();
 	m_textures.clear();
@@ -28,39 +17,35 @@ void rModelData::Clear(){
 
 	m_boundingBox.Empty();
 
-	if (m_skeleton){
-		delete m_skeleton;
-	}
-
-	m_skeleton = NULL;
+	m_skeleton.reset();
 }
+
+//---------------------------------
 
 size_t rModelData::MeshCount() const{
 	return m_meshes.size();
 }
 
 rMeshData* rModelData::GetMeshData(const rString& name) const{
-	rMeshData* meshData = NULL;
-	
-	rMeshDataMap::const_iterator result = m_meshes.find(name);
-	
-	if (result != m_meshes.end()){
-		meshData = result->second;
+	auto result = m_meshes.find(name);
+
+	if (result == m_meshes.end()){
+		return nullptr;
 	}
-	
-	return meshData;
+	else{
+		return result->second.get();
+	}
 }
 
 rMeshData* rModelData::CreateMeshData(const rString& name){
 	if (m_meshes.count(name)){
-		return NULL;
+		return nullptr;
 	}
 	else{
-		rMeshData* meshData = new rMeshData();
-		meshData->name = name;
-		m_meshes[name] = meshData;
-		
-		return meshData;
+		rMeshDataPtr meshPtr = std::make_shared<rMeshData>(name);
+		m_meshes[name] = meshPtr;
+
+		return meshPtr.get();
 	}
 }
 
@@ -75,30 +60,32 @@ void rModelData::GetMeshDataNames(rArrayString& names) const{
 		names.push_back(it->first);
 }
 
+//---------------------------------
+
 size_t rModelData::MaterialCount() const{
 	return m_materials.size();
 }
 
 rMaterialData* rModelData::GetMaterialData(const rString& name) const{
-	rMaterialData* materialData = NULL;
+	auto result = m_materials.find(name);
 	
-	rMaterialDataMap::const_iterator result = m_materials.find(name);
-	
-	if (result != m_materials.end())
-		materialData = result->second;
-	
-	return materialData;
+	if (result == m_materials.end()){
+		return nullptr;
+	}
+	else {
+		return result->second.get();
+	}
 }
 
 rMaterialData* rModelData::CreateMaterialData(const rString& name){
 	if (m_materials.count(name)){
-		return NULL;
+		return nullptr;
 	}
 	else{
-		rMaterialData* materialData = new rMaterialData();
-		m_materials[name] = materialData;
+		rMaterialDataPtr materialPtr = std::make_shared<rMaterialData>();
+		m_materials[name] = materialPtr;
 		
-		return materialData;
+		return materialPtr.get();
 	}
 }
 
@@ -113,30 +100,31 @@ void rModelData::GetMaterialDataNames(rArrayString& names) const{
 		names.push_back(it->first);
 }
 
+//---------------------------------
+
 size_t rModelData::TextureCount() const{
 	return m_textures.size();
 }
 
 rTexture2DData* rModelData::GetTextureData(const rString& name) const{
-	rTexture2DData* textureData = NULL;
-	
-	rTexture2DDataMap::const_iterator result= m_textures.find(name);
-	
-	if (result != m_textures.end()){
-		textureData = result->second;
+	auto result = m_textures.find(name);
+
+	if (result == m_textures.end()){
+		return nullptr;
 	}
-	
-	return textureData;
+	else{
+		return result->second.get();
+	}
 }
 
 rTexture2DData* rModelData::CreateTextureData(const rString& name){
 	if (m_textures.count(name)){
-		return NULL;
+		return nullptr;
 	}
 	else{
-		rTexture2DData* textureData = new rTexture2DData();
-		m_textures[name] = textureData;
-		return textureData;
+		rTextureDataPtr texturePtr = std::make_shared<rTexture2DData>();
+		m_textures[name] = texturePtr;
+		return texturePtr.get();;
 	}
 }
 
@@ -151,12 +139,10 @@ void rModelData::GetTextureDataNames(rArrayString& names) const{
 		names.push_back(it->first);
 }
 
-rGeometryData& rModelData::GetGeometryData(){
-	return m_geometry;
-}
+//---------------------------------
 
-const rGeometryData& rModelData::GetGeometryData() const{
-	return m_geometry;
+rModelGeometryData* rModelData::GetGeometryData() const{
+	return m_geometry.get();
 }
 
 void rModelData::SetBoundingBox(const rAlignedBox3& boundingBox){
@@ -180,26 +166,14 @@ rString rModelData::GetPath() const{
 }
 
 rSkeleton* rModelData::GetSkeleton() const{
-	return m_skeleton;
+	return m_skeleton.get();
 }
 
 rSkeleton* rModelData::CreateSkeleton(){
-	if (m_skeleton){
-		return NULL;
-	}
-	else{
-		m_skeleton = new rSkeleton();
-		return m_skeleton;
-	}
+	m_skeleton = std::make_unique<rSkeleton>();
+	return m_skeleton.get();
 }
 
 const rAlignedBox3& rModelData::GetBoundingBox() const {
 	return m_boundingBox;
-}
-
-//---------------------
-rMeshData::rMeshData(const rString& n, const rString& buf, const rString& mat){
-	name = n;
-	buffer = buf;
-	material = mat;
 }

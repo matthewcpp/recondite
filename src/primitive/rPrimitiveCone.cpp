@@ -31,7 +31,7 @@ rString rPrimitiveCone::ClassName() const{
 	return "PrimitiveCone";
 }
 
-void rPrimitiveCone::CreateGeometry(rGeometryData& geometry){
+void rPrimitiveCone::CreateGeometry(rModelGeometryData& geometry){
 	rElementBufferData* wireframe = geometry.CreateElementBuffer("wire", rGEOMETRY_LINES);
 	rElementBufferData* shaded = geometry.CreateElementBuffer("shaded", rGEOMETRY_TRIANGLES);
 
@@ -47,7 +47,7 @@ void rPrimitiveCone::CreateGeometry(rGeometryData& geometry){
 	
 }
 
-void rPrimitiveCone::CreateConeFace(rGeometryData& geometry, size_t v1, size_t v2){
+void rPrimitiveCone::CreateConeFace(rModelGeometryData& geometry, size_t v1, size_t v2){
 	rElementBufferData* wireframe = geometry.GetElementBuffer("wire");
 	rElementBufferData* shaded = geometry.GetElementBuffer("shaded");
 

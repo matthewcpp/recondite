@@ -36,7 +36,7 @@ void rPrimitive::RecreateGeometry(){
 	if (m_geometry)
 		m_engine->content->RemoveGeometryAsset(m_geometry->Name());
 
-	rGeometryData geometryData;
+	rModelGeometryData geometryData;
 	CreateGeometry(geometryData);
 
 	rString assetName = Id() + "_geometry";
@@ -59,7 +59,7 @@ void rPrimitive::Draw(){
 	m_engine->renderer->RenderShadedWithEdges(m_geometry, transform, material, m_edgeColor);
 }
 
-void rPrimitive::CreateCircle3d(rGeometryData& geometry, const rVector3& center, float radius, const rVector3& normal, int segmentCount){
+void rPrimitive::CreateCircle3d(rModelGeometryData& geometry, const rVector3& center, float radius, const rVector3& normal, int segmentCount){
 	rElementBufferData* wireframe = geometry.GetElementBuffer("wire");
 	rElementBufferData* shaded = geometry.GetElementBuffer("shaded");
 

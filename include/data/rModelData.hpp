@@ -4,6 +4,7 @@
 #include <map>
 #include <fstream>
 #include <utility>
+#include <memory>
 
 #include "rBuild.hpp"
 #include "rDefs.hpp"
@@ -11,7 +12,7 @@
 
 #include "data/rTexture2DData.hpp"
 #include "data/rMaterialData.hpp"
-#include "data/rGeometryData.hpp"
+#include "data/rModelGeometryData.hpp"
 #include "data/rGeometryDataFile.hpp"
 #include "data/rSkeletonData.hpp"
 
@@ -27,7 +28,8 @@
 
 struct RECONDITE_API rMeshData{
 	rMeshData(){}
-	rMeshData(const rString& n, const rString& buf, const rString& mat);
+	rMeshData(const rString& n) : name(n) {}
+	rMeshData(const rString& n, const rString& buf, const rString& mat) : name(n), buffer(buf), material(mat) {}
 
 	rString name;
 	rString buffer;
@@ -38,7 +40,6 @@ struct RECONDITE_API rMeshData{
 class RECONDITE_API rModelData{
 public:
 	rModelData();
-	~rModelData();
 	
 public:
 	void Clear();
@@ -48,21 +49,26 @@ public:
 	rMeshData* CreateMeshData(const rString& name);
 	void DeleteMeshData(const rString& name);
 	void GetMeshDataNames(rArrayString& names) const;
+
+public:
 	
 	size_t MaterialCount() const;
 	rMaterialData* GetMaterialData(const rString& name) const;
 	rMaterialData* CreateMaterialData(const rString& name);
 	void DeleteMaterialData(const rString& name);
 	void GetMaterialDataNames(rArrayString& names) const;
+
+public:
 	
 	size_t TextureCount() const;
 	rTexture2DData* GetTextureData(const rString& name) const;
 	rTexture2DData* CreateTextureData(const rString& name);
 	void DeleteTextureData(const rString& name);
 	void GetTextureDataNames(rArrayString& names) const;
+
+public:
 	
-	rGeometryData& GetGeometryData();
-	const rGeometryData& GetGeometryData() const;
+	rModelGeometryData* GetGeometryData() const;
 
 	rSkeleton* GetSkeleton() const;
 	rSkeleton* CreateSkeleton();
@@ -78,21 +84,29 @@ public:
 
 private:
 
-	typedef std::map<rString, rMeshData*> rMeshDataMap;
-	typedef std::map<rString, rMaterialData*> rMaterialDataMap;
-	typedef std::map<rString, rTexture2DData*> rTexture2DDataMap;
+	typedef std::shared_ptr<rMeshData> rMeshDataPtr;
+	typedef std::shared_ptr<rTexture2DData> rTextureDataPtr;
+	typedef std::shared_ptr<rMaterialData> rMaterialDataPtr;
+	typedef std::unique_ptr<rModelGeometryData> rGeometryDataPtr;
+	typedef std::unique_ptr<rSkeleton> rSkeletonPtr;
+
+	typedef std::map<rString, rMeshDataPtr> rMeshDataMap;
+	typedef std::map<rString, rMaterialDataPtr> rMaterialDataMap;
+	typedef std::map<rString, rTextureDataPtr> rTexture2DDataMap;
 	
 private:
 	rMeshDataMap m_meshes;
 	rMaterialDataMap m_materials;
 	rTexture2DDataMap m_textures;
-	rGeometryData m_geometry;
+	rGeometryDataPtr m_geometry;
 
-	rSkeleton* m_skeleton;
+	rSkeletonPtr m_skeleton;
 	rAlignedBox3 m_boundingBox;
 
 	rString m_name;
 	rString m_path;
+
+	rNO_COPY_CLASS(rModelData)
 };
 
 #endif

@@ -469,14 +469,18 @@ rGeometry* rContentManager::GetGeometryAsset(const rString& name) const{
 }
 
 rGeometry* rContentManager::LoadGeometryFromPath(const rString& path, const rString& name){
+	/*
 	rGeometryData geometryData;
 	rGeometryDataReader reader;
 	reader.ReadFromFile(path, geometryData);
 
 	return LoadGeometry(geometryData, name);
+	*/
+	return nullptr;
 }
 
 rGeometry* rContentManager::LoadGeometry(const rGeometryData& geometryData, const rString& name){
+	
 	rGeometry* geometry = NULL;
 
 	if (m_geometry.count(name)){
@@ -486,14 +490,17 @@ rGeometry* rContentManager::LoadGeometry(const rGeometryData& geometryData, cons
 		unsigned int vertexBuffer = m_graphicsDevice->CreateArrayBuffer((const char*)geometryData.VertexData(), geometryData.VertexDataSize());
 		unsigned int boneLinkBuffer = 0;
 
+		/*
 		if (geometryData.VertexBoneLinkCount() > 0){
 			rVertexBoneDataArray vertexBoneData;
 			geometryData.CreateVetexBoneDataArray(vertexBoneData);
 
 			boneLinkBuffer = m_graphicsDevice->CreateArrayBuffer((const char*)&vertexBoneData[0], vertexBoneData.size() * sizeof (rVertexBoneDataArray::value_type));
 		}
+		*/
 
-		geometry = new rGeometry(vertexBuffer, boneLinkBuffer , GetNextAssetId(), name, geometryData.Path());
+
+		geometry = new rGeometry(vertexBuffer, boneLinkBuffer , GetNextAssetId(), name, "");
 		
 		rArrayString bufferNames;
 		geometryData.GetElementBufferNames(bufferNames);

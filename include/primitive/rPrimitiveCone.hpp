@@ -21,10 +21,10 @@ public:
 	virtual rString ClassName() const;
 
 protected:
-	virtual void CreateGeometry(rGeometryData& geometry);
+	virtual void CreateGeometry(rModelGeometryData& geometry);
 
 private:
-	void CreateConeFace(rGeometryData& geometry, size_t v1, size_t v2);
+	void CreateConeFace(rModelGeometryData& geometry, size_t v1, size_t v2);
 
 private:
 	float m_height;

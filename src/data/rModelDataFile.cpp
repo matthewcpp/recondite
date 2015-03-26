@@ -41,7 +41,7 @@ rContentError rModelDataWriter::WriteDependencies(const rString& dir, const rMod
 	rString modelName = modelData.GetName();
 
 	rGeometryDataWriter writer;
-	writer.WriteToFile(rPath::Assemble(dir, modelName, "rgeo"), modelData.GetGeometryData());
+	writer.WriteToFile(rPath::Assemble(dir, modelName, "rgeo"), *modelData.GetGeometryData());
 
 	rArrayString names;
 	modelData.GetTextureDataNames(names);

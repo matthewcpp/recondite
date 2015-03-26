@@ -64,182 +64,35 @@ void rElementBufferData::SetGeometryType(rGeometryType type){
 
 //-------------------------------------------------------
 
-rGeometryData::rGeometryData(){
-	Clear();
-}
-
-rGeometryData::~rGeometryData(){
-	Clear();
-}
-
-void rGeometryData::Allocate(size_t size){
-	m_vertexData.resize(size);
-}
-
-void rGeometryData::SetVertex(size_t index, const rVector3& v, const rVector3& n, const rVector2& tc){
-	if (index < m_vertexData.size()){
-		rModelVertex& vertex = m_vertexData[index];
-
-		vertex.position = v;
-		vertex.normal = n;
-		vertex.texCoord = tc;
-	}
-	
-}
-
-void rGeometryData::PushVertex(const rVector3& v, const rVector3& n, const rVector2& tc){
-	rModelVertex vertex(v, n, tc);
-	m_vertexData.push_back(vertex);
-}
-
-bool rGeometryData::GetVertex(size_t index, rModelVertex& data) const{
-	if (index < m_vertexData.size()){
-		data = m_vertexData[index];
-		return true;
-	}
-	else{
-		return false;
-	}
-}
-
-void rGeometryData::GetVertex(size_t index, rVector3* position, rVector2* texCoord, rVector3* normal) const {
-	if (index >= m_vertexData.size())
-		return;
-
-	const rModelVertex& vertex = m_vertexData[index];
-
-	if (position)
-		*position = vertex.position;
-
-	if (texCoord)
-		*texCoord = vertex.texCoord;
-
-	if (normal)
-		*normal = vertex.normal;
-}
-
-void rGeometryData::TransformVertex(size_t index, const rMatrix4& transform){
-	if (index <  m_vertexData.size()){
-		rModelVertex& vertex = m_vertexData[index];
-
-		transform.TransformVector3(vertex.position);
-		transform.TransformVector3(vertex.normal);
-		vertex.normal.Normalize();
-	}
-}
-
-const char* rGeometryData::VertexData() const{
-	if (m_vertexData.size())
-		return (char*)&m_vertexData[0];
-	else
-		return NULL;
-}
-
-char* rGeometryData::VertexData(){
-	if (m_vertexData.size())
-		return (char*)&m_vertexData[0];
-	else
-		return NULL;
-}
-
-size_t rGeometryData::VertexCount() const{
-	return m_vertexData.size();
-}
-
-size_t rGeometryData::VertexDataSize() const{
-	return m_vertexData.size() * sizeof (rModelVertexArray::value_type);
-}
 
 
-const rVertexBoneLinkMap& rGeometryData::VertexBoneLinks() const{
-	return m_vertexBoneLinks;
-}
-
-size_t rGeometryData::VertexBoneLinkCount() const{
-	return m_vertexBoneLinks.size();
-}
-
-void rGeometryData::CreateVertexBoneLink(unsigned short vertexIndex, unsigned short boneIndex, float weight){
-	rVertexBoneLink link(vertexIndex, boneIndex, weight);
-
-	m_vertexBoneLinks.insert(std::make_pair(vertexIndex, link));
-}
-
-void rGeometryData::CreateVetexBoneDataArray(rVertexBoneDataArray& vertexBoneData) const{
-	if (m_vertexBoneLinks.size() > 0){
-		size_t vertexCount = VertexCount();
-		vertexBoneData.resize(vertexCount);
-
-		int linkNum;
-		for (size_t i = 0; i < vertexCount; i++){
-			linkNum = 0;
-			rVertexBoneLinkResult links = m_vertexBoneLinks.equal_range(i);
-
-			for (rVertexBoneLinkMap::const_iterator it = links.first; it != links.second; ++it){
-				vertexBoneData[i].boneIndex[linkNum] = it->second.boneIndex;
-				vertexBoneData[i].weight[linkNum] = it->second.weight;
-				linkNum++;
-			}
-
-			if (linkNum < rMAX_VERTEX_BONE_INFLUENCES){
-				vertexBoneData[i].boneIndex[linkNum] = -1;
-			}
-		}
-	}
-	else {
-		vertexBoneData.clear();
-	}
-}
 
 rElementBufferData* rGeometryData::CreateElementBuffer(const rString& name, rGeometryType geometryType){
-	rElementBufferData* buffer = NULL;
-	
-	rElementBufferDataMap::iterator result = m_elementBuffers.find(name);
-	
-	if (result == m_elementBuffers.end()){
-		buffer = new rElementBufferData(geometryType);
-		m_elementBuffers[name] = buffer;
+	if (m_elementBuffers.count(name)){
+		return nullptr;
 	}
-	
-	return buffer;
-}
-
-rElementBufferData* rGeometryData::CreateElementBuffer(const rString& name, unsigned short* elements, size_t elementCount, rGeometryType type){
-	rElementBufferData* buffer = CreateElementBuffer(name, type);
-	
-	if (buffer){
-		buffer->SetElementData(elements, elementCount, type);
+	else {
+		rElementBufferDataPtr bufferDataPtr = std::make_shared<rElementBufferData>(geometryType);
+		m_elementBuffers[name] = bufferDataPtr;
+		return bufferDataPtr.get();
 	}
-	
-	return buffer;
 }
 
 size_t rGeometryData::ElementBufferCount() const{
 	return m_elementBuffers.size();
 }
 
-bool rGeometryData::RemoveElementBuffer(const rString& name){
-	rElementBufferDataMap::iterator result = m_elementBuffers.find(name);
-	
-	if (result == m_elementBuffers.end()){
-		return false;
-	}
-	else{
-		delete result->second;
-		m_elementBuffers.erase(result);
-		return true;
-	}
+void rGeometryData::RemoveElementBuffer(const rString& name){
+	m_elementBuffers.erase(name);
 }
 
 rElementBufferData* rGeometryData::GetElementBuffer(const rString& name) const{
-	rElementBufferData*  buffer = NULL;
+	auto result = m_elementBuffers.find(name);
 	
-	rElementBufferDataMap::const_iterator result = m_elementBuffers.find(name);
-	
-	if (result != m_elementBuffers.end())
-		buffer = result->second;
-	
-	return buffer;
+	if (result == m_elementBuffers.end())
+		return nullptr;
+	else
+		return result->second.get();
 }
 
 void rGeometryData::GetElementBufferNames(rArrayString& names) const {
@@ -250,22 +103,27 @@ void rGeometryData::GetElementBufferNames(rArrayString& names) const {
 }
 
 void rGeometryData::Clear(){
-	m_vertexData.clear();
-	m_path.clear();
-	
-	rElementBufferDataMap::iterator end = m_elementBuffers.end();
-	for (rElementBufferDataMap::iterator it = m_elementBuffers.begin(); it != end; ++it)
-		delete it->second;
-	
 	m_elementBuffers.clear();
-
 	m_vertexBoneLinks.clear();
+	m_path.clear();
 }
 
-rString rGeometryData::Path() const{
-	return m_path;
+size_t rGeometryData::VertexBoneLinkCount() const{
+	return m_vertexBoneLinks.size();
 }
 
-void rGeometryData::SetPath(const rString& path){
-	m_path = path;
+size_t rGeometryData::CreateVertexBoneLink(unsigned short vertexIndex, unsigned short boneIndex, float weight){
+	rVertexBoneLink boneLink(vertexIndex, boneIndex, weight);
+	m_vertexBoneLinks.push_back(boneLink);
+	return m_vertexBoneLinks.size();
+}
+
+bool rGeometryData::GetVertexBoneLink(size_t index, rVertexBoneLink& boneLink){
+	if (index < m_vertexBoneLinks.size()){
+		boneLink = m_vertexBoneLinks[index];
+		return true;
+	}
+	else {
+		return false;
+	}
 }

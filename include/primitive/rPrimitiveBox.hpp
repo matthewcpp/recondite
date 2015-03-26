@@ -35,13 +35,13 @@ public:
 protected:
 	virtual bool DoSerialize(riSerializationTarget* target);
 
-	virtual void CreateGeometry(rGeometryData& geometry);
+	virtual void CreateGeometry(rModelGeometryData& geometry);
 	virtual void DoRecalculateBoundingVolume();
 	virtual riBoundingVolume* DoGetBoundingVolume();
 
-	void GenerateFrontBack(rGeometryData& geometry, float z, const rVector3& normal);
-	void GenerateTopBottom(rGeometryData& geometry, float y, const rVector3& normal);
-	void GenerateLeftRight(rGeometryData& geometry, float x, const rVector3& nomral);
+	void GenerateFrontBack(rModelGeometryData& geometry, float z, const rVector3& normal);
+	void GenerateTopBottom(rModelGeometryData& geometry, float y, const rVector3& normal);
+	void GenerateLeftRight(rModelGeometryData& geometry, float x, const rVector3& nomral);
 
 private:
 

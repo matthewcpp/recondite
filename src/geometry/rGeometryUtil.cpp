@@ -258,3 +258,82 @@ void rGeometryUtil::CreateRoundedRectVerticies(const rRect& rect, float radius, 
 	r.x = rect.Right() - radius;
 	AppendRectVerticies(r, geometry);
 }
+
+
+void rGeometryUtil::CreateCircle3d(rModelGeometryData& geometry, const rVector3& center, float radius, const rVector3& normal, size_t segmentCount){
+	rElementBufferData* wireframe = geometry.GetElementBuffer("wire");
+	rElementBufferData* shaded = geometry.GetElementBuffer("shaded");
+
+	float step = 360.0f / (float)segmentCount;
+
+	rVector3 position;
+	rVector2 texCoord = rVector2::ZeroVector;
+
+	size_t baseIndex = geometry.VertexCount();
+	geometry.PushVertex(center, normal, texCoord);
+
+	for (int i = 0; i < segmentCount; i++){
+		float angle = float(i) * step;
+		float radians = rMath::DegreeToRad(angle);
+
+		position.Set(std::cos(radians), 0.0f, std::sin(radians));
+		position *= radius;
+		position += center;
+
+		geometry.PushVertex(position, normal, texCoord);
+
+		if (i > 0){
+			wireframe->Push(baseIndex + i, baseIndex + i + 1);
+			shaded->Push(baseIndex, baseIndex + i, baseIndex + i + 1);
+		}
+	}
+
+	wireframe->Push(baseIndex + segmentCount, baseIndex + 1);
+	shaded->Push(baseIndex, baseIndex + segmentCount, baseIndex + 1);
+}
+
+
+void CreateConeFace(const rString& wireName, const rString& shadedName, rModelGeometryData& geometry, size_t v1, size_t v2, float coneAngle, float height){
+	rElementBufferData* wireframe = geometry.GetElementBuffer(wireName);
+	rElementBufferData* shaded = geometry.GetElementBuffer(shadedName);
+
+	rVector3 tip = rVector3::UpVector * height;
+	rVector3 p1, p2, n1, n2;
+
+	geometry.GetVertex(v1, &p1, NULL, NULL);
+	n1 = p1.GetNormalized();
+	n1 *= std::cos(coneAngle);
+	n1.y = std::sin(coneAngle);
+
+	geometry.GetVertex(v2, &p2, NULL, NULL);
+	n2 = p1.GetNormalized();
+	n2 *= std::cos(coneAngle);
+	n2.y = std::sin(coneAngle);
+
+	size_t baseIndex = geometry.VertexCount();
+	geometry.PushVertex(tip, n1, rVector2::ZeroVector);
+	geometry.PushVertex(p1, n1, rVector2::ZeroVector);
+	geometry.PushVertex(p2, n2, rVector2::ZeroVector);
+	shaded->Push(baseIndex, baseIndex + 1, baseIndex + 2);
+
+	wireframe->Push(baseIndex, baseIndex + 1);
+	wireframe->Push(baseIndex, baseIndex + 2);
+}
+
+void rGeometryUtil::GeneratePrimitiveCone(float baseRadius, float height, size_t segmentCount, const rString& name, rModelGeometryData& geometry){
+	rString wireName = name + "_wire";
+	rString shadedName = name + "_shaded";
+	
+	rElementBufferData* wireframe = geometry.CreateElementBuffer(wireName, rGEOMETRY_LINES);
+	rElementBufferData* shaded = geometry.CreateElementBuffer(shadedName, rGEOMETRY_TRIANGLES);
+
+	float coneAngle = std::atan(baseRadius / height);
+
+	CreateCircle3d(geometry, rVector3::ZeroVector, baseRadius, rVector3::DownVector, segmentCount);
+
+	for (int i = 0; i < segmentCount; i++){
+		CreateConeFace(wireName, shadedName, geometry, i + 1, i + 2, coneAngle, height);
+	}
+
+	CreateConeFace(wireName, shadedName, geometry, segmentCount, 1, coneAngle, height);
+}

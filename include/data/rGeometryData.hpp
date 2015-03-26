@@ -5,6 +5,7 @@
 #include <fstream>
 #include <cstring>
 #include <utility>
+#include <memory>
 
 #include "rBuild.hpp"
 #include "rDefs.hpp"
@@ -16,16 +17,6 @@
 #include "rMatrix4.hpp"
 
 #include "rVertexBoneLink.hpp"
-
-struct RECONDITE_API rModelVertex{
-	rModelVertex() {}
-	rModelVertex(const rVector3& v, const rVector3& n, const rVector2& tc)
-		:position(v), texCoord(tc), normal(n) {}
-
-	rVector3 position;
-	rVector2 texCoord;
-	rVector3 normal;
-};
 
 class RECONDITE_API rElementBufferData{
 public:
@@ -57,60 +48,43 @@ private:
 
 class RECONDITE_API rGeometryData{
 public:
-	rGeometryData();
-	~rGeometryData();
+	rGeometryData(){}
+	virtual void Clear();
 
-	void Clear();
-	
-public:
-	void Allocate(size_t size);
+	virtual void TransformVertex(size_t index, const rMatrix4& transform) = 0;
 
-	size_t VertexCount() const;
-	const char* VertexData() const;
-	char* VertexData();
-	size_t VertexDataSize() const;
-
-	void SetVertex(size_t index, const rVector3& v, const rVector3& n, const rVector2& tc);
-	void PushVertex(const rVector3& v, const rVector3& n, const rVector2& tc);
-	bool GetVertex(size_t index, rModelVertex& data) const;
-	void GetVertex(size_t index, rVector3* position, rVector2* texCoord, rVector3* normal) const;
-	
-	void TransformVertex(size_t index, const rMatrix4& transform);
+	virtual size_t VertexCount() const = 0;
+	virtual char* VertexData() const = 0;
+	virtual size_t VertexDataSize() const = 0;
 
 public:
+
+	size_t VertexBoneLinkCount() const;
+	size_t CreateVertexBoneLink(unsigned short vertexIndex, unsigned short boneIndex, float weight);
+	bool GetVertexBoneLink(size_t index, rVertexBoneLink& boneLink);
 	
+public:
 	rElementBufferData* CreateElementBuffer(const rString& name, rGeometryType geometryType);
-	rElementBufferData* CreateElementBuffer(const rString& name, unsigned short* elements, size_t elementCount, rGeometryType type);
 	
 	size_t ElementBufferCount() const;
-	bool RemoveElementBuffer(const rString& name);
+	void RemoveElementBuffer(const rString& name);
 	rElementBufferData* GetElementBuffer(const rString& name) const;
 	void GetElementBufferNames(rArrayString& names) const;
-	
-public:
-
-	const rVertexBoneLinkMap& VertexBoneLinks() const;
-	size_t VertexBoneLinkCount() const;
-	void CreateVertexBoneLink(unsigned short vertexIndex, unsigned short boneIndex, float weight);
-	void CreateVetexBoneDataArray(rVertexBoneDataArray& vertexBoneData) const;
-	
-public:
-
-	rString Path() const;
-	void SetPath(const rString& path);
-
-private:
-	typedef std::vector<rModelVertex> rModelVertexArray;
-	typedef std::map<rString, rElementBufferData*> rElementBufferDataMap;
 
 private:
 
-	rModelVertexArray m_vertexData;
+	typedef std::shared_ptr<rElementBufferData> rElementBufferDataPtr;
+	typedef std::map<rString, rElementBufferDataPtr> rElementBufferDataMap;
+	typedef std::vector<rVertexBoneLink> rVertexBoneLinkVector;
+
+private:
+
 	rElementBufferDataMap m_elementBuffers;
+	rVertexBoneLinkVector m_vertexBoneLinks;
 	
 	rString m_path;
 
-	rVertexBoneLinkMap m_vertexBoneLinks;
+	rNO_COPY_CLASS(rGeometryData)
 };
 
 #endif

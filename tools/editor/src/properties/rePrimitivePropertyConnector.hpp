@@ -4,6 +4,7 @@
 #include "reActorPropertyConnector.hpp"
 
 #include "primitive/rPrimitiveBox.hpp"
+#include "primitive/rPrimitiveGrid.hpp"
 
 class rPrimitivePropertyConnector : public reActorPropertyConnector{
 public:
@@ -21,7 +22,7 @@ private:
 
 };
 
-//--------------------------------
+//--------------------------------PrimitiveBox
 
 class rPrimitiveBoxPropertyConnector : public rPrimitivePropertyConnector {
 public:
@@ -39,4 +40,21 @@ private:
 	rPrimitiveBox* m_box;
 };
 
+//--------------------------------PrimitiveGrid
+
+class rPrimitiveGridPropertyConnector : public rPrimitivePropertyConnector {
+public:
+	rPrimitiveGridPropertyConnector(rPrimitiveGrid* grid);
+
+public:
+	virtual bool SetIntProperty(const wxString& name, int val);
+	virtual wxString GetConnectionClass();
+
+protected:
+	virtual void SetClassPGProperties(wxPropertyGrid* grid);
+	virtual void RefreshClassPGProperties(wxPropertyGrid* grid);
+
+private:
+	rPrimitiveGrid* m_grid;
+};
 #endif

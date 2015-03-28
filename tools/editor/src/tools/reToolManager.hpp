@@ -10,8 +10,6 @@
 #include <wx/aui/aui.h>
 #include <wx/artprov.h>
 
-
-
 #include "reTool.hpp"
 #include "reTools.hpp"
 

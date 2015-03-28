@@ -171,8 +171,13 @@ bool rScene::Load(riSerializationTarget* target){
 			actorTarget->String("id", id);
 
 			rActor3* actor = m_engine->actors->GetActorClass(className, m_engine, id);
-			actor->Load(actorTarget);
-			AddActor(actor);
+			if (actor){
+				actor->Load(actorTarget);
+				AddActor(actor);
+			}
+			else{
+				rLog::Warning("Unable to load actor with class: " + className);
+			}
 		} while (actorTarget->Next());
 	}
 

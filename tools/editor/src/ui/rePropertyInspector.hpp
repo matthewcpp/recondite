@@ -20,6 +20,7 @@ public:
 
 private:
 	void OnPropertyValueChanged(wxPropertyGridEvent& event);
+	rePropertyConnector* GetConnector(rActor3* actor);
 
 	void OnLevelBeginLoad(rEvent& event);
 

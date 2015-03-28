@@ -2,6 +2,7 @@
 #define RE_TOOLS_HPP
 
 #include "rePrimitiveBoxTool.hpp"
+#include "rePrimitiveGridTool.hpp"
 #include "reSelectionTool.hpp"
 
 enum reToolId{
@@ -15,7 +16,7 @@ enum reToolId{
 	reTOOL_PRIMITIVE_SPHERE,
 	reTOOL_PRIMITIVE_CONE,
 	reTOOL_PRIMITIVE_CYLINDER,
-	reTOOL_PRIMITIVE_PLANE,
+	reTOOL_PRIMITIVE_GRID,
 	reTOOL_NONE,
 	reTOOL_ID_END
 };

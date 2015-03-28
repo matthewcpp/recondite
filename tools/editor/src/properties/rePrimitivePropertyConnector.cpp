@@ -38,7 +38,7 @@ bool rPrimitivePropertyConnector::SetColorProperty(const wxString& name, wxColor
 	return refresh;
 }
 
-//--------------------------------
+//--------------------------------PrimitiveBox
 
 rPrimitiveBoxPropertyConnector::rPrimitiveBoxPropertyConnector(rPrimitiveBox* box)
 	:rPrimitivePropertyConnector(box)
@@ -102,4 +102,59 @@ bool rPrimitiveBoxPropertyConnector::SetIntProperty(const wxString& name, int va
 
 wxString rPrimitiveBoxPropertyConnector::GetConnectionClass(){
 	return m_box->ClassName().c_str();
+}
+
+//--------------------------------PrimitiveGrid
+
+rPrimitiveGridPropertyConnector::rPrimitiveGridPropertyConnector(rPrimitiveGrid* grid)
+	:rPrimitivePropertyConnector(grid)
+{
+	m_grid = grid;
+}
+
+void rPrimitiveGridPropertyConnector::SetClassPGProperties(wxPropertyGrid* grid){
+	grid->Append(new wxPropertyCategory("Primitive Grid", wxPG_LABEL));
+	grid->Append(new wxUIntProperty("Width", wxPG_LABEL));
+	grid->Append(new wxUIntProperty("Columns", wxPG_LABEL));
+	grid->Append(new wxUIntProperty("Depth", wxPG_LABEL));
+	grid->Append(new wxUIntProperty("Rows", wxPG_LABEL));
+
+
+	rPrimitivePropertyConnector::SetClassPGProperties(grid);
+}
+
+void rPrimitiveGridPropertyConnector::RefreshClassPGProperties(wxPropertyGrid* grid){
+	grid->SetPropertyValue("Width", m_grid->Width());
+	grid->SetPropertyValue("Columns", m_grid->Colums());
+	grid->SetPropertyValue("Depth", m_grid->Depth());
+	grid->SetPropertyValue("Rows", m_grid->Rows());
+
+	rPrimitivePropertyConnector::RefreshClassPGProperties(grid);
+}
+
+bool rPrimitiveGridPropertyConnector::SetIntProperty(const wxString& name, int val){
+	bool refresh = false;
+
+	if (name == "Width"){
+		m_grid->SetWidth(val);
+		refresh = true;
+	}
+	if (name == "Columns"){
+		m_grid->SetColumns(val);
+		refresh = true;
+	}
+	else if (name == "Depth"){
+		m_grid->SetDepth(val);
+		refresh = true;
+	}
+	if (name == "Rows"){
+		m_grid->SetRows(val);
+		refresh = true;
+	}
+
+	return refresh;
+}
+
+wxString rPrimitiveGridPropertyConnector::GetConnectionClass(){
+	return m_grid->ClassName().c_str();
 }

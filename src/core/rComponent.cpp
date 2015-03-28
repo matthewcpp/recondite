@@ -131,10 +131,16 @@ void rComponent::AddActorClass(const rString& name, rActorFactory::ActorFunction
 
 //TODO: find a better place to put this?
 #include "primitive/rPrimitiveBox.hpp"
+#include "primitive/rPrimitiveGrid.hpp"
 
 void rComponent::InitDefaultActorClasses(){
 	m_actorFactory.AddActorClass("PrimitiveBox",
 		[](rEngine* engine, const rString& id)->rActor3*{
 		return new rPrimitiveBox(id, engine);
+	});
+
+	m_actorFactory.AddActorClass("PrimitiveGrid",
+		[](rEngine* engine, const rString& id)->rActor3*{
+		return new rPrimitiveGrid(id, engine);
 	});
 }

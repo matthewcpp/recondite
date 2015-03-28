@@ -38,23 +38,39 @@ void rePropertyInspector::OnPropertyValueChanged(wxPropertyGridEvent& event){
 		m_display->UpdateDisplay();
 	}
 }
+
+rePropertyConnector* rePropertyInspector::GetConnector(rActor3* actor){
+	if (!actor) return nullptr;
+
+	rePropertyConnector* connector = nullptr;
+
+	rString className = actor->ClassName();
+
+	if (className == "PrimitiveBox")
+		connector = new rPrimitiveBoxPropertyConnector((rPrimitiveBox*)actor);
+	else if (className == "PrimitiveGrid")
+		connector = new rPrimitiveGridPropertyConnector((rPrimitiveGrid*)actor);
+
+	return connector;
+}
+
 void rePropertyInspector::Inspect(const wxString& actorName){
 	rString rstr = actorName.c_str().AsChar();
 	rEngine* engine = m_component->GetEngine();
 
 	rActor3* actor = engine->scene->GetActor(rstr);
+	rePropertyConnector* newConnector = GetConnector(actor);
 
-	wxString oldClass;
+	wxString oldClass, newClass;
 
 	if (m_connector){
 		oldClass = m_connector->GetConnectionClass();
 		delete m_connector;
 	}
-		
 
-	if (actor){
-		wxString newClass = actor->ClassName().c_str();
-		m_connector = new rPrimitiveBoxPropertyConnector((rPrimitiveBox*)actor);
+	if (newConnector){
+		m_connector = newConnector;
+		newClass = newConnector->GetConnectionClass();
 
 		if (newClass == oldClass){
 			m_connector->RefreshPGProperties(this);
@@ -65,7 +81,8 @@ void rePropertyInspector::Inspect(const wxString& actorName){
 			FitColumns();
 		}
 	}
-	else {
+	else{ //unable to find a connector for this actor.
+		m_connector = nullptr;
 		Clear();
 	}
 }

@@ -19,6 +19,7 @@ reToolManager::~reToolManager(){
 
 void reToolManager::InitTools(){
 	m_tools[reTOOL_PRIMITIVE_BOX] = new rePrimitiveBoxTool(m_component, m_owner);
+	m_tools[reTOOL_PRIMITIVE_GRID] = new rePrimitiveGridTool(m_component, m_owner);
 	m_tools[reTOOL_SELECT] = new reSelectionTool(m_component, m_owner);
 
 	ActivateTool(reTOOL_SELECT);
@@ -87,7 +88,7 @@ void reToolManager::CreateToolbars(){
 	m_PrimitiveToolbar->AddTool(reTOOL_PRIMITIVE_SPHERE, "Primitive Sphere", wxBitmap("assets/tool-sphere.png", wxBITMAP_TYPE_PNG))->SetKind(wxITEM_RADIO);
 	m_PrimitiveToolbar->AddTool(reTOOL_PRIMITIVE_CONE, "Primitive Cone", wxBitmap("assets/tool-cone.png", wxBITMAP_TYPE_PNG))->SetKind(wxITEM_RADIO);
 	m_PrimitiveToolbar->AddTool(reTOOL_PRIMITIVE_CYLINDER, "Primitive Cylinder", wxBitmap("assets/tool-cylinder.png", wxBITMAP_TYPE_PNG))->SetKind(wxITEM_RADIO);
-	m_PrimitiveToolbar->AddTool(reTOOL_PRIMITIVE_PLANE, "Primitive Plane", wxBitmap("assets/tool-plane.png", wxBITMAP_TYPE_PNG))->SetKind(wxITEM_RADIO);
+	m_PrimitiveToolbar->AddTool(reTOOL_PRIMITIVE_GRID, "Primitive Plane", wxBitmap("assets/tool-plane.png", wxBITMAP_TYPE_PNG))->SetKind(wxITEM_RADIO);
 	m_PrimitiveToolbar->Realize();
 	m_PrimitiveToolbar->Bind(wxEVT_MENU, &reToolManager::OnToolbarToolClick, this);
 
@@ -99,5 +100,5 @@ void reToolManager::CreateToolbars(){
 }
 
 void reToolManager::OnToolbarToolClick(wxCommandEvent& event){
-
+	ActivateTool((reToolId)event.GetId());
 }

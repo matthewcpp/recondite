@@ -15,6 +15,9 @@ list(APPEND ui_files ${CMAKE_CURRENT_SOURCE_DIR}/reProjectExplorer.cpp)
 list(APPEND ui_files ${CMAKE_CURRENT_SOURCE_DIR}/rePropertyInspector.hpp)
 list(APPEND ui_files ${CMAKE_CURRENT_SOURCE_DIR}/rePropertyInspector.cpp)
 
+list(APPEND ui_files ${CMAKE_CURRENT_SOURCE_DIR}/rePropertyInterface.hpp)
+list(APPEND ui_files ${CMAKE_CURRENT_SOURCE_DIR}/rePropertyInterface.cpp)
+
 list(APPEND ui_files ${CMAKE_CURRENT_SOURCE_DIR}/reViewport.hpp)
 list(APPEND ui_files ${CMAKE_CURRENT_SOURCE_DIR}/reViewport.cpp)
 

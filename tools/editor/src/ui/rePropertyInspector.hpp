@@ -6,9 +6,8 @@
 #include <wx/wx.h>
 #include <wx/propgrid/propgrid.h>
 
-#include "properties/rePropertyConnectors.hpp"
-
 #include "reViewportDisplay.hpp"
+#include "rePropertyInterface.hpp"
 
 class rePropertyInspector : public wxPropertyGrid{
 public:
@@ -20,15 +19,12 @@ public:
 
 private:
 	void OnPropertyValueChanged(wxPropertyGridEvent& event);
-	rePropertyConnector* GetConnector(rActor3* actor);
 
 	void OnLevelBeginLoad(rEvent& event);
 
 private:
 	rwxComponent* m_component;
 	reViewportDisplay* m_display;
-
-	rePropertyConnector* m_connector;
 };
 
 #endif

@@ -17,6 +17,8 @@ public:
 	virtual bool Vector3(const rString& name, rVector3& val) = 0;
 	virtual bool Color(const rString& name, rColor& color) = 0;
 
+	virtual bool Category(const rString& name) = 0;
+
 	virtual riSerializationTarget* SubObject(const rString& name) = 0;
 	virtual bool Next() = 0;
 };

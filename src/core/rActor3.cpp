@@ -231,6 +231,8 @@ bool rActor3::Load(riSerializationTarget* target){
 }
 
 bool rActor3::DoSerialize(riSerializationTarget* target){
+	target->Category("Actor");
+
 	target->Vector3("position", m_position);
 	target->Vector3("rotation", m_rotation);
 	target->Vector3("scale", m_scale);

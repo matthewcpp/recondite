@@ -62,6 +62,10 @@ bool rXMLSerializationTarget::Next(){
 	return false;
 }
 
+bool rXMLSerializationTarget::Category(const rString& name){
+	return false;
+}
+
 
 ///-------------------------------
 
@@ -176,4 +180,8 @@ bool rXMLSerializationSource::Next(){
 		}
 	}
 	return nullptr;
+}
+
+bool rXMLSerializationSource::Category(const rString& name){
+	return false;
 }

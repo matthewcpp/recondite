@@ -100,6 +100,8 @@ rColor rPrimitive::FaceColor() const{
 }
 
 bool rPrimitive::DoSerialize(riSerializationTarget* target){
+	target->Category("Primitive");
+
 	target->Color("faceColor", m_faceColor);
 	target->Color("edgeColor", m_edgeColor);
 

@@ -45,6 +45,8 @@ void rPrimitiveCone::SetSegmentCount(int segmentCount){
 }
 
 bool rPrimitiveCone::DoSerialize(riSerializationTarget* target){
+	target->Category(ClassName());
+
 	target->Float("radius", m_radius);
 	target->Float("height", m_height);
 

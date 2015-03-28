@@ -21,6 +21,8 @@ public:
 	virtual bool Vector3(const rString& name, rVector3& val);
 	virtual bool Color(const rString& name, rColor& val);
 
+	virtual bool Category(const rString& name);
+
 	virtual rXMLSerializationTarget* SubObject(const rString& name);
 	virtual bool Next();
 
@@ -44,6 +46,8 @@ public:
 	virtual bool String(const rString& name, rString& val);
 	virtual bool Vector3(const rString& name, rVector3& val);
 	virtual bool Color(const rString& name, rColor& color);
+
+	virtual bool Category(const rString& name);
 
 	virtual riSerializationTarget* SubObject(const rString& name);
 	virtual bool Next();

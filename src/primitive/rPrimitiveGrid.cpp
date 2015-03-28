@@ -56,6 +56,8 @@ void rPrimitiveGrid::SetColumns( int columns){
 }
 
 bool rPrimitiveGrid::DoSerialize(riSerializationTarget* target){
+	target->Category(ClassName());
+
 	target->Float("width", m_width);
 	target->Float("depth", m_depth);
 

@@ -124,6 +124,8 @@ void rPrimitiveBox::DoRecalculateBoundingVolume(){
 }
 
 bool rPrimitiveBox::DoSerialize(riSerializationTarget* target){
+	target->Category(ClassName());
+
 	target->Float("width", m_width);
 	target->Float("height", m_height);
 	target->Float("depth", m_depth);

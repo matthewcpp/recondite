@@ -4,6 +4,7 @@
 #include "rBuild.hpp"
 
 #include "primitive/rPrimitive.hpp"
+#include "primitive/rPrimitiveGeometry.hpp"
 
 class RECONDITE_API rPrimitiveCone : public rPrimitive{
 public:
@@ -21,7 +22,8 @@ public:
 	virtual rString ClassName() const;
 
 protected:
-	virtual void CreateGeometry(rModelGeometryData& geometry);
+	virtual void CreateGeometry(rModelGeometryData& geometry) override;
+	virtual bool DoSerialize(riSerializationTarget* target) override;
 
 private:
 	void CreateConeFace(rModelGeometryData& geometry, size_t v1, size_t v2);

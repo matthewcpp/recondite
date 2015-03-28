@@ -1,5 +1,14 @@
 #include "primitive/rPrimitiveGeometry.hpp"
 
+//common
+void EnsureBuffers(rGeometryData& geometry){
+	if (!geometry.GetElementBuffer("wire"))
+		geometry.CreateElementBuffer("wire", rGEOMETRY_LINES);
+
+	if (!geometry.GetElementBuffer("shaded"))
+		geometry.CreateElementBuffer("shaded", rGEOMETRY_TRIANGLES);
+}
+
 //Primitive Box
 
 void GenerateBoxFrontBack(rGeometryData& geometry, const rVector3& extents, std::tuple<int, int, int> segmentCounts, float z, const rVector3& normal){
@@ -146,8 +155,7 @@ void GenerateBoxLeftRight(rGeometryData& geometry, const rVector3& extents, std:
 }
 
 void rPrimitiveGeometry::CreateBox(const rVector3& extents, std::tuple<int, int, int> segmentCounts, rGeometryData& geometry){
-	geometry.CreateElementBuffer("wire", rGEOMETRY_LINES);
-	geometry.CreateElementBuffer("shaded", rGEOMETRY_TRIANGLES);
+	EnsureBuffers(geometry);
 
 	float halfWidth = extents.x / 2.0f;
 	float halfDepth = extents.z / 2.0f;
@@ -208,4 +216,84 @@ void rPrimitiveGeometry::CreateGrid(const rVector3& extents, std::tuple<int, int
 
 	shaded->Push(0, columns, rows * widthCount);
 	shaded->Push(columns, rows * widthCount, geometry.VertexCount() - 1);
+}
+
+//Circle
+
+void rPrimitiveGeometry::CreateCircle(const rVector3& center, float radius, const rVector3& normal, size_t segmentCount, rGeometryData& geometry){
+	EnsureBuffers(geometry);
+
+	rElementBufferData* wireframe = geometry.GetElementBuffer("wire");
+	rElementBufferData* shaded = geometry.GetElementBuffer("shaded");
+
+	float step = 360.0f / (float)segmentCount;
+
+	rVector3 position;
+
+	size_t baseIndex = geometry.VertexCount();
+	geometry.PushVertex(center, normal);
+
+	for (size_t i = 0; i < segmentCount; i++){
+		float angle = float(i) * step;
+		float radians = rMath::DegreeToRad(angle);
+
+		position.Set(std::cos(radians), 0.0f, std::sin(radians));
+		position *= radius;
+		position += center;
+
+		geometry.PushVertex(position, normal);
+
+		if (i > 0){
+			wireframe->Push(baseIndex + i, baseIndex + i + 1);
+			shaded->Push(baseIndex, baseIndex + i, baseIndex + i + 1);
+		}
+	}
+
+	wireframe->Push(baseIndex + segmentCount, baseIndex + 1);
+	shaded->Push(baseIndex, baseIndex + segmentCount, baseIndex + 1);
+}
+
+//Cone
+
+void CreateConeFace(rGeometryData& geometry, size_t v1, size_t v2, float height, float coneAngle){
+	rElementBufferData* wireframe = geometry.GetElementBuffer("wire");
+	rElementBufferData* shaded = geometry.GetElementBuffer("shaded");
+
+	rVector3 tip = rVector3::UpVector * height;
+	rVector3 p1, p2, n1, n2;
+
+	geometry.GetVertex(v1, &p1, nullptr);
+	n1 = p1.GetNormalized();
+	n1 *= std::cos(coneAngle);
+	n1.y = std::sin(coneAngle);
+
+	geometry.GetVertex(v2, &p2, nullptr);
+	n2 = p1.GetNormalized();
+	n2 *= std::cos(coneAngle);
+	n2.y = std::sin(coneAngle);
+
+	size_t baseIndex = geometry.VertexCount();
+	geometry.PushVertex(tip, n1);
+	geometry.PushVertex(p1, n1);
+	geometry.PushVertex(p2, n2);
+	shaded->Push(baseIndex, baseIndex + 1, baseIndex + 2);
+
+	wireframe->Push(baseIndex, baseIndex + 1);
+	wireframe->Push(baseIndex, baseIndex + 2);
+}
+
+void rPrimitiveGeometry::CreateCone(float radius, float height, size_t segmentCount, rGeometryData& geometry){
+	EnsureBuffers(geometry);
+	rElementBufferData* wireframe = geometry.GetElementBuffer("wire");
+	rElementBufferData* shaded = geometry.GetElementBuffer("shaded");
+
+	CreateCircle(rVector3::ZeroVector, radius, rVector3::DownVector, segmentCount, geometry);
+
+	float coneAngle = std::atan(radius / height);
+
+	for (size_t i = 0; i < segmentCount; i++){
+		CreateConeFace(geometry, i + 1, i + 2, height, coneAngle);
+	}
+
+	CreateConeFace(geometry, segmentCount, 1, height, coneAngle);
 }

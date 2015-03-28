@@ -31,6 +31,10 @@ size_t rModelGeometryData::VertexSizeInBytes() const{
 	return sizeof(rModelVertex);
 }
 
+void rModelGeometryData::GetVertex(size_t index, rVector3* position, rVector3* normal) const{
+	GetVertex(index, position, nullptr, normal);
+}
+
 void rModelGeometryData::GetVertex(size_t index, rVector3* position, rVector2* texCoord, rVector3* normal) const {
 	if (index >= m_vertexData.size())
 		return;

@@ -10,6 +10,7 @@ public:
 	virtual void Allocate(size_t size);
 
 	virtual void TransformVertex(size_t index, const rMatrix4& transform) override;
+	virtual void PushVertex(const rVector3& position, const rVector3& normal) override;
 
 	virtual size_t VertexCount() const override;
 	virtual char* VertexData() const override;

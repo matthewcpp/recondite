@@ -5,6 +5,7 @@
 #include "rAlignedBox3.hpp"
 
 #include "primitive/rPrimitive.hpp"
+#include "primitive/rPrimitiveGeometry.hpp"
 
 class RECONDITE_API rPrimitiveBox : public rPrimitive{
 public:
@@ -38,10 +39,6 @@ protected:
 	virtual void CreateGeometry(rModelGeometryData& geometry);
 	virtual void DoRecalculateBoundingVolume();
 	virtual riBoundingVolume* DoGetBoundingVolume();
-
-	void GenerateFrontBack(rModelGeometryData& geometry, float z, const rVector3& normal);
-	void GenerateTopBottom(rModelGeometryData& geometry, float y, const rVector3& normal);
-	void GenerateLeftRight(rModelGeometryData& geometry, float x, const rVector3& nomral);
 
 private:
 

@@ -18,6 +18,10 @@ void rModelGeometryData::SetVertex(size_t index, const rVector3& v, const rVecto
 
 }
 
+void rModelGeometryData::PushVertex(const rVector3& position, const rVector3& normal){
+	PushVertex(position, normal, rVector2::ZeroVector);
+}
+
 void rModelGeometryData::PushVertex(const rVector3& v, const rVector3& n, const rVector2& tc){
 	rModelVertex vertex(v, n, tc);
 	m_vertexData.push_back(vertex);

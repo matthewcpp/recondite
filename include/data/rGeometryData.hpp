@@ -52,6 +52,7 @@ public:
 	virtual void Clear();
 
 	virtual void TransformVertex(size_t index, const rMatrix4& transform) = 0;
+	virtual void PushVertex(const rVector3& position, const rVector3& normal) = 0;
 
 	virtual size_t VertexCount() const = 0;
 	virtual char* VertexData() const = 0;

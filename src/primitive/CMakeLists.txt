@@ -5,6 +5,7 @@ add_rec_src(primitive_files "rPrimitiveBox" "primitive")
 add_rec_src(primitive_files "rPrimitiveCone" "primitive")
 add_rec_src(primitive_files "rPrimitiveCylinder" "primitive")
 add_rec_src(primitive_files "rPrimitiveGrid" "primitive")
+add_rec_src(primitive_files "rPrimitiveGeometry" "primitive")
 add_rec_src(primitive_files "rPrimitiveSphere" "primitive")
 
 

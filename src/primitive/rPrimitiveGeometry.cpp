@@ -1,5 +1,7 @@
 #include "primitive/rPrimitiveGeometry.hpp"
 
+//Primitive Box
+
 void GenerateBoxFrontBack(rGeometryData& geometry, const rVector3& extents, std::tuple<int, int, int> segmentCounts, float z, const rVector3& normal){
 	int widthSegments = std::get<0>(segmentCounts);
 	int heightSegments = std::get<1>(segmentCounts);
@@ -158,4 +160,52 @@ void rPrimitiveGeometry::CreateBox(const rVector3& extents, std::tuple<int, int,
 
 	GenerateBoxLeftRight(geometry, extents, segmentCounts,-halfWidth, rVector3::LeftVector);	//generate left
 	GenerateBoxLeftRight(geometry, extents, segmentCounts,halfWidth, rVector3::RightVector);	//generate right
+}
+
+//Primitive Grid
+void rPrimitiveGeometry::CreateGrid(const rVector3& extents, std::tuple<int, int> segmentCounts, rGeometryData& geometry){
+	int columns = std::get<0>(segmentCounts);
+	int rows = std::get<1>(segmentCounts);
+
+	rElementBufferData* wireframe = geometry.CreateElementBuffer("wire", rGEOMETRY_LINES);
+	rElementBufferData* shaded = geometry.CreateElementBuffer("shaded", rGEOMETRY_TRIANGLES);
+
+	float stepX = extents.x / (float)columns;
+	float stepZ = extents.z / (float)rows;
+
+	rVector3 vertex;
+	rVector3 normal = rVector3::UpVector;
+
+	float halfWidth = extents.x / 2.0f;
+	float halfDepth = extents.z / 2.0f;
+
+	float startX, startZ;
+	int widthCount = columns + 1;
+	int depthCount = rows + 1;
+	size_t baseIndex = geometry.VertexCount();
+	startX = -halfWidth;
+	startZ = -halfDepth;
+
+	for (int r = 0; r < depthCount; r++){
+		float currentX = startX;
+		float currentZ = startZ + ((float)r * stepZ);
+
+		for (int c = 0; c < widthCount; c++){
+			int index = baseIndex + (r * widthCount) + c;
+
+			vertex.Set(currentX, 0.0f, currentZ);
+			geometry.PushVertex(vertex, normal);
+
+			if (c < columns)
+				wireframe->Push(index, index + 1);
+
+			if (r < rows)
+				wireframe->Push(index, index + widthCount);
+
+			currentX += stepX;
+		}
+	}
+
+	shaded->Push(0, columns, rows * widthCount);
+	shaded->Push(columns, rows * widthCount, geometry.VertexCount() - 1);
 }

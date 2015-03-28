@@ -34,9 +34,9 @@ public:
 	void SetDepthSegments(int depthSegments);
 
 protected:
-	virtual bool DoSerialize(riSerializationTarget* target);
+	virtual bool DoSerialize(riSerializationTarget* target) override;
 
-	virtual void CreateGeometry(rModelGeometryData& geometry);
+	virtual void CreateGeometry(rModelGeometryData& geometry) override;
 	virtual void DoRecalculateBoundingVolume();
 	virtual riBoundingVolume* DoGetBoundingVolume();
 

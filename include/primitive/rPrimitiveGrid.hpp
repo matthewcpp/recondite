@@ -4,8 +4,9 @@
 #include "rBuild.hpp"
 
 #include "primitive/rPrimitive.hpp"
+#include "primitive/rPrimitiveGeometry.hpp"
 
-class rPrimitiveGrid : public rPrimitive {
+class RECONDITE_API rPrimitiveGrid : public rPrimitive {
 public:
 	rPrimitiveGrid(const rString& id, rEngine* engine);
 
@@ -25,7 +26,9 @@ public:
 	void SetColumns( int columns);
 
 protected:
-	virtual void CreateGeometry(rModelGeometryData& geometry);
+	virtual bool DoSerialize(riSerializationTarget* target) override;
+
+	virtual void CreateGeometry(rModelGeometryData& geometry) override;
 
 
 private:

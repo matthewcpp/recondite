@@ -3,6 +3,7 @@
 
 #include "rePrimitiveBoxTool.hpp"
 #include "rePrimitiveGridTool.hpp"
+#include "rePrimitiveConeTool.hpp"
 #include "reSelectionTool.hpp"
 
 enum reToolId{

@@ -1,11 +1,11 @@
-#include "rePrimitiveBoxTool.hpp"
+#include "tools/rePrimitiveConeTool.hpp"
 
-rePrimitiveBoxTool::rePrimitiveBoxTool(reComponent* component, wxFrame* owner)
+rePrimitiveConeTool::rePrimitiveConeTool(reComponent* component, wxFrame* owner)
 	:reToolBase(component, owner)
 {
 }
 
-bool rePrimitiveBoxTool::OnMouseUp(wxMouseEvent& event, rwxGLCanvas* canvas){
+bool rePrimitiveConeTool::OnMouseUp(wxMouseEvent& event, rwxGLCanvas* canvas){
 	reToolBase::OnMouseUp(event, canvas);
 
 	if (IsClick()){
@@ -19,10 +19,10 @@ bool rePrimitiveBoxTool::OnMouseUp(wxMouseEvent& event, rwxGLCanvas* canvas){
 
 		if (rIntersection::RayIntersectsPlane(selectionRay, groundPlane, &position)){
 			rEngine* engine = m_component->GetEngine();
-			rString id = engine->scene->GetDefaultActorId("box");
-			rPrimitiveBox* box = new rPrimitiveBox(id, engine);
-			box->SetPosition(position);
-			engine->scene->AddActor(box);
+			rString id = engine->scene->GetDefaultActorId("cone");
+			rPrimitiveCone* cone = new rPrimitiveCone(id, engine);
+			cone->SetPosition(position);
+			engine->scene->AddActor(cone);
 
 			return true;
 		}

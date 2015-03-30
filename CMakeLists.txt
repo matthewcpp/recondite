@@ -10,7 +10,7 @@ set (CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 #compiler specific configuration settings
 
 if (${CMAKE_CXX_COMPILER_ID} STREQUAL GNU)
-	SET(GCC_COMPILE_FLAGS "-std=c++11")
+	SET(GCC_COMPILE_FLAGS "-std=c++14")
 	add_definitions(${GCC_COMPILE_FLAGS})
 elseif (MSVC)
     message("SDL_ROOT:" $ENV{SDL_ROOT})

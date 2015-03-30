@@ -22,6 +22,7 @@ public:
 
 protected:
 	virtual bool DoSerialize(riSerializationTarget* target);
+	virtual void OnLoad();
 
 	virtual void CreateGeometry(rModelGeometryData& geometry) = 0;
 	void InvalidateGeometry();

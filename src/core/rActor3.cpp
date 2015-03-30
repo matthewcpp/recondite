@@ -216,18 +216,33 @@ rPropertyCollection& rActor3::CustomProperties(){
 bool rActor3::Save(riSerializationTarget* target){
 	riSerializationTarget* classTarget = target->SubObject("actor");
         
-        rString className = ClassName();
-        rString id = Id();
+    rString className = ClassName();
+    rString id = Id();
         
 	classTarget->String("class", className);
 	classTarget->String("id", id);
 	
 
-	return DoSerialize(classTarget);
+	bool result = DoSerialize(classTarget);
+
+	OnSave();
+
+	return result;
 }
 
+void rActor3::OnSave(){ }
+
 bool rActor3::Load(riSerializationTarget* target){
-	return DoSerialize(target);
+	bool result =  DoSerialize(target);
+
+	OnLoad();
+
+	return result;
+}
+
+
+void rActor3::OnLoad(){
+	SetTransformed(true);
 }
 
 bool rActor3::DoSerialize(riSerializationTarget* target){

@@ -5,6 +5,8 @@
 
 #include <wx/wx.h>
 #include <wx/propgrid/propgrid.h>
+#include <wx/clntdata.h>
+#include <wx/tokenzr.h>
 
 #include "reViewportDisplay.hpp"
 #include "rePropertyInterface.hpp"
@@ -25,6 +27,8 @@ private:
 private:
 	rwxComponent* m_component;
 	reViewportDisplay* m_display;
+
+	rActor3* m_actor;
 };
 
 #endif

@@ -107,3 +107,8 @@ bool rPrimitive::DoSerialize(riSerializationTarget* target){
 
 	return rActor3::DoSerialize(target);
 }
+
+void rPrimitive::OnLoad(){
+	rActor3::OnLoad();
+	InvalidateGeometry();
+}

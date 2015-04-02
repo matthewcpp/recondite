@@ -6,10 +6,12 @@
 #include "rwxGLCanvas.hpp"
 
 #include <wx/wx.h>
+#include <wx/aui/aui.h>
 
 class reTool{
 public:
 	reTool(reComponent* component, wxFrame* owner) :m_owner(owner), m_component(component) {}
+	virtual ~reTool(){}
 
 public:
 	virtual bool OnMouseDown(wxMouseEvent& event, rwxGLCanvas* canvas) { return false; }
@@ -18,6 +20,8 @@ public:
 
 	virtual void OnActivate() {}
 	virtual void OnDeactivate() {}
+
+	virtual wxString GetToolName() const = 0;
 
 protected:
 	wxFrame* m_owner;

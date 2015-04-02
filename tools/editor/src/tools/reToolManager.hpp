@@ -45,8 +45,8 @@ private:
 	wxAuiManager* m_manager;
 
 	reTool* m_activeTool;
+	reToolId m_activeToolId;
 
-	wxAuiToolBar* m_PrimitiveToolbar;
 	wxAuiToolBar* m_TransformToolbar;
 };
 

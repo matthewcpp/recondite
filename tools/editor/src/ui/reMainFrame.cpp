@@ -34,7 +34,10 @@ void reMainFrame::CreateUIElements(){
 		.Name("Project Tools")
 		.Caption("Project Tools")
 		.ToolbarPane()
-		.Top());
+		.Top()
+		.Position(0)
+		.Floatable(false)
+		.Gripper(false));
 
 	m_wxAuiManager.AddPane(m_viewportDisplay, wxAuiPaneInfo()
 		.Center()

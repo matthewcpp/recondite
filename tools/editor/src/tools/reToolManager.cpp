@@ -7,8 +7,9 @@ reToolManager::reToolManager(reComponent* component, wxFrame* owner, wxAuiManage
 
 	m_activeTool = nullptr;
 
-	m_PrimitiveToolbar = nullptr;
 	m_TransformToolbar = nullptr;
+
+	m_activeToolId = reTOOL_NONE;
 
 	InitTools();
 }
@@ -18,9 +19,7 @@ reToolManager::~reToolManager(){
 }
 
 void reToolManager::InitTools(){
-	m_tools[reTOOL_PRIMITIVE_BOX] = new rePrimitiveBoxTool(m_component, m_owner);
-	m_tools[reTOOL_PRIMITIVE_GRID] = new rePrimitiveGridTool(m_component, m_owner);
-	m_tools[reTOOL_PRIMITIVE_CONE] = new rePrimitiveConeTool(m_component, m_owner);
+
 	m_tools[reTOOL_SELECT] = new reSelectionTool(m_component, m_owner);
 
 	ActivateTool(reTOOL_SELECT);
@@ -33,13 +32,23 @@ void reToolManager::Destroy(){
 }
 
 void reToolManager::ActivateTool(reToolId toolId){
-	if (m_activeTool)
-		m_activeTool->OnDeactivate();
+	if (toolId == m_activeToolId) return;
 
-	if (m_tools.count(toolId))
+	if (m_activeTool){
+		m_activeTool->OnDeactivate();
+	}
+
+	if (m_tools.count(toolId)){
 		m_activeTool = m_tools[toolId];
-	else
+		m_activeToolId = toolId;
+
+		m_activeTool->OnActivate();
+	}
+	else{
 		m_activeTool = nullptr;
+		m_activeToolId = reTOOL_NONE;
+	}
+		
 }
 
 bool reToolManager::OnMouseDown(wxMouseEvent& event, rwxGLCanvas* canvas){
@@ -81,24 +90,14 @@ void reToolManager::CreateToolbars(){
 		.Name("Transform Tools")
 		.Caption("Transform Tools")
 		.ToolbarPane()
-		.Top());
+		.Top()
+		.Position(0)
+		.Floatable(false)
+		.Gripper(false));
 
-	m_PrimitiveToolbar = new wxAuiToolBar(m_owner);
-	m_PrimitiveToolbar->SetToolBitmapSize(wxSize(16, 16));
-	m_PrimitiveToolbar->AddTool(reTOOL_PRIMITIVE_BOX, "Primitive Box", wxBitmap("assets/tool-box.png", wxBITMAP_TYPE_PNG))->SetKind(wxITEM_RADIO);
-	m_PrimitiveToolbar->AddTool(reTOOL_PRIMITIVE_SPHERE, "Primitive Sphere", wxBitmap("assets/tool-sphere.png", wxBITMAP_TYPE_PNG))->SetKind(wxITEM_RADIO);
-	m_PrimitiveToolbar->AddTool(reTOOL_PRIMITIVE_CONE, "Primitive Cone", wxBitmap("assets/tool-cone.png", wxBITMAP_TYPE_PNG))->SetKind(wxITEM_RADIO);
-	m_PrimitiveToolbar->AddTool(reTOOL_PRIMITIVE_CYLINDER, "Primitive Cylinder", wxBitmap("assets/tool-cylinder.png", wxBITMAP_TYPE_PNG))->SetKind(wxITEM_RADIO);
-	m_PrimitiveToolbar->AddTool(reTOOL_PRIMITIVE_GRID, "Primitive Plane", wxBitmap("assets/tool-plane.png", wxBITMAP_TYPE_PNG))->SetKind(wxITEM_RADIO);
-	m_PrimitiveToolbar->Realize();
-	m_PrimitiveToolbar->Bind(wxEVT_MENU, &reToolManager::OnToolbarToolClick, this);
 
-	m_manager->AddPane(m_PrimitiveToolbar, wxAuiPaneInfo()
-		.Name("Primitive Tools")
-		.Caption("Primitive Tools")
-		.ToolbarPane()
-		.Top());
 }
+
 
 void reToolManager::OnToolbarToolClick(wxCommandEvent& event){
 	ActivateTool((reToolId)event.GetId());

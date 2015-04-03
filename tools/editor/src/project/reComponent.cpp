@@ -20,3 +20,17 @@ bool reComponent::SubmitCommand(wxCommand* command){
 void reComponent::InitCommandProcessor(wxMenu* editMenu){
 	m_commandProcessor.SetEditMenu(editMenu);
 }
+
+void reComponent::LoadScene(const rString& name){
+	rComponent::LoadScene(name);
+
+	rPrimitiveGrid* groundPlane = new rPrimitiveGrid("__groundPlane", &m_engine);
+	groundPlane->SetEdgeColor(rColor::Blue);
+	groundPlane->SetWidth(100);
+	groundPlane->SetDepth(100);
+	groundPlane->SetRows(25);
+	groundPlane->SetColumns(25);
+	groundPlane->Drawable()->SetFaceVisibility(false);
+
+	m_scene->AddActor(groundPlane);
+}

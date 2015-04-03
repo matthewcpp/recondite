@@ -8,6 +8,9 @@ rPrimitive::rPrimitive(const rString& id, rEngine* engine)
 
 	m_geometry = NULL;
 	m_geometryInvalid = true;
+
+	m_drawable.reset(new rDrawable());
+	m_drawable.get()->SetLineVisibility(true);
 }
 
 rPrimitive::~rPrimitive(){
@@ -56,7 +59,19 @@ void rPrimitive::Draw(){
 	material->SetColor("fragColor", m_faceColor);
 		
 	rMatrix4 transform = TransformMatrix();
-	m_engine->renderer->RenderShadedWithEdges(m_geometry, transform, material, m_edgeColor);
+
+	if (m_drawable->LineVisibility() && m_drawable->FaceVisibility()){
+		material->SetColor("fragColor", m_faceColor);
+		m_engine->renderer->RenderShadedWithEdges(m_geometry, transform, material, m_edgeColor);
+	}
+	else if (m_drawable->LineVisibility()){
+		material->SetColor("fragColor", m_edgeColor);
+		m_engine->renderer->RenderGeometry(m_geometry, transform, "wire", material);
+	}
+	else if (m_drawable->FaceVisibility()){
+		material->SetColor("fragColor", m_faceColor);
+		m_engine->renderer->RenderGeometry(m_geometry, transform, "shaded", material);
+	}
 }
 
 void rPrimitive::CreateCircle3d(rModelGeometryData& geometry, const rVector3& center, float radius, const rVector3& normal, int segmentCount){

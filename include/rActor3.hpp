@@ -1,6 +1,8 @@
 #ifndef R_ACTOR3_HPP
 #define R_ACTOR3_HPP
 
+#include <memory>
+
 #include "rBuild.hpp"
 #include "rVector3.hpp"
 #include "rQuaternion.hpp"
@@ -18,7 +20,6 @@
 class RECONDITE_API rActor3 : public rObject{
 public:
 	rActor3(const rString& id, rEngine* engine);
-	virtual ~rActor3();
 
 	virtual int Update();
 	virtual void Draw();
@@ -40,7 +41,6 @@ public:
 	virtual riBoundingVolume* BoundingVolume();
 
 	rDrawable* Drawable();
-	virtual rDrawable* CreateDrawable();
 
 	rPropertyCollection& CustomProperties();
 
@@ -83,8 +83,8 @@ protected:
 	rVector3 m_scale;
 
 	rMatrix4 m_transform;
-	rDrawable* m_drawable;
 	rPropertyCollection m_customProperties;
+	std::shared_ptr<rDrawable> m_drawable;
 
 private:
 

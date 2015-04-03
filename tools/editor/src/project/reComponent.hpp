@@ -11,6 +11,8 @@
 #include "reSelectionManager.hpp"
 #include "reProject.hpp"
 
+#include "primitive/rPrimitiveGrid.hpp"
+
 class reComponent : public rwxComponent{
 public:
 	reComponent();
@@ -19,6 +21,8 @@ public:
 
 	bool SubmitCommand(wxCommand* command);
 	void InitCommandProcessor(wxMenu* editMenu);
+
+	virtual void LoadScene(const rString& name) override;
 
 private:
 	std::unique_ptr<reSelectionManager> m_selectionManager;

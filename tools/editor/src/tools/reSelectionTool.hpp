@@ -8,7 +8,9 @@ public:
 	reSelectionTool(reComponent* component, wxFrame* owner);
 
 public:
-	virtual bool OnMouseUp(wxMouseEvent& event, rwxGLCanvas* canvas);
+	virtual wxString GetToolName() const override;
+
+	virtual bool OnMouseUp(wxMouseEvent& event, rwxGLCanvas* canvas) override;
 };
 
 #endif

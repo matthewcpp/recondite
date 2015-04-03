@@ -6,6 +6,10 @@ reSelectionTool::reSelectionTool(reComponent* component, wxFrame* owner)
 
 }
 
+wxString reSelectionTool::GetToolName() const{
+	return "Selection Tool";
+}
+
 bool reSelectionTool::OnMouseUp(wxMouseEvent& event, rwxGLCanvas* canvas){
 	reToolBase::OnMouseUp(event, canvas);
 
@@ -26,4 +30,6 @@ bool reSelectionTool::OnMouseUp(wxMouseEvent& event, rwxGLCanvas* canvas){
 			return false;
 		}
 	}
+
+	return false;
 }

@@ -177,6 +177,7 @@ bool reProject::ActivateLevel(const wxString& name){
 	m_activeLevel = name;
 	wxString levelPath = LevelFilePath(m_activeLevel);
 
+	m_component->ClearScene();
 	m_component->LoadScene(levelPath.c_str().AsChar());
 
 	return true;

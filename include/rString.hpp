@@ -44,6 +44,8 @@ public:
 
 	char first() const;
 	char last() const;
+
+	int compare(const char* str) const;
 	
 	rString substr (size_t pos = 0, size_t len = npos) const;
 	size_t find_first_of(char c) const;

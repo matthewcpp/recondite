@@ -35,11 +35,19 @@ void rComponent::LoadScene(const rString& name){
 }
 
 bool rComponent::SaveScene(const rString& path){
+	return SaveSceneXML(path, [](rActor3* actor)->bool{return true; });
+}
+
+void rComponent::ClearScene(){
+	m_scene->Clear();
+}
+
+bool rComponent::SaveSceneXML(const rString& path, std::function<bool(rActor3*)> filterFunc){
 	rXMLDocument doc;
 	rXMLElement* element = doc.CreateRoot("level");
 
 	riSerializationTarget* target = new rXMLSerializationTarget(element);
-	m_scene->Save(target);
+	m_scene->Save(target, filterFunc);
 
 	doc.WriteToFile(path);
 	delete target;

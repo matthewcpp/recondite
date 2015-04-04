@@ -85,6 +85,10 @@ rString::operator const char*() const{
 	return c_str();
 }
 
+int rString::compare(const char* str) const{
+	return m_str.compare(str);
+}
+
 char rString::first() const{
 	if (m_str.length() > 0)
 		return m_str[0];

@@ -21,16 +21,52 @@ void reComponent::InitCommandProcessor(wxMenu* editMenu){
 	m_commandProcessor.SetEditMenu(editMenu);
 }
 
-void reComponent::LoadScene(const rString& name){
-	rComponent::LoadScene(name);
+void reComponent::AddReservedActor(rActor3* actor){
+	m_reservedActors.insert(actor->Id());
+	m_scene->AddActor(actor);
+}
 
-	rPrimitiveGrid* groundPlane = new rPrimitiveGrid("__groundPlane", &m_engine);
-	groundPlane->SetEdgeColor(rColor::Blue);
-	groundPlane->SetWidth(100);
-	groundPlane->SetDepth(100);
-	groundPlane->SetRows(25);
-	groundPlane->SetColumns(25);
-	groundPlane->Drawable()->SetFaceVisibility(false);
+bool reComponent::IsReservedActor(const rString& id){
+	return m_reservedActors.count(id) > 0;
+}
 
-	m_scene->AddActor(groundPlane);
+bool reComponent::SaveScene(const rString& path){
+	const std::set<rString>& reservedActors = m_reservedActors;
+
+	return SaveSceneXML(path, [reservedActors](rActor3* actor)->bool {
+		return reservedActors.count(actor->Id()) == 0;
+	});
+}
+
+void reComponent::ClearScene(){
+	const std::set<rString>& reservedActors = m_reservedActors;
+
+	m_scene->DeleteActors([reservedActors](rActor3* actor)->bool {
+		return reservedActors.count(actor->Id()) == 0;
+	});
+}
+
+void reComponent::OnSceneLoad(rEvent& event){
+	rString groundPlaneId = "__groundPlane__";
+	if (m_scene->GetActor(groundPlaneId) == nullptr){
+		rPrimitiveGrid* groundPlane = new rPrimitiveGrid(groundPlaneId, &m_engine);
+		groundPlane->SetEdgeColor(rColor::Blue);
+		groundPlane->SetWidth(100);
+		groundPlane->SetDepth(100);
+		groundPlane->SetRows(25);
+		groundPlane->SetColumns(25);
+		groundPlane->Drawable()->SetFaceVisibility(false);
+
+		AddReservedActor(groundPlane);
+	}
+}
+
+bool reComponent::Init(wxGLCanvas* canvas){
+	bool result = rwxComponent::Init(canvas);
+
+	if (result){
+		m_scene->Bind(rEVT_SCENE_LOAD_END, this, &reComponent::OnSceneLoad);
+	}
+
+	return result;
 }

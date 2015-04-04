@@ -14,7 +14,13 @@ reViewport::reViewport(reComponent* component, reToolManager* toolManager, const
 }
 
 void reViewport::CreateViewportElements(){
-	m_glCanvas = new rwxGLCanvas(m_component, m_viewportName, this);
+	wxString cameraName = m_viewportName + "_camera";
+	rCamera* camera = new rCamera(cameraName.c_str().AsChar(), m_component->GetEngine());
+	camera->SetPosition(0, 0, 10);
+
+	m_component->AddReservedActor(camera);
+
+	m_glCanvas = new rwxGLCanvas(m_component, camera, m_viewportName, this);
 
 	m_viewMenuText = new wxStaticText(this, reViewportViewMenuId, "View");
 	m_viewMenuText->Bind(wxEVT_LEFT_DOWN, &reViewport::OnViewMenuClick, this);

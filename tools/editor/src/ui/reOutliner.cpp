@@ -18,7 +18,11 @@ void reOutliner::OnItemSelected(wxDataViewEvent& event){
 
 void reOutliner::OnActorAddedToScene(rEvent& event){
 	rActor3Event& actorEvent = static_cast<rActor3Event&> (event);
-	AppendItem(wxDataViewItem(0), actorEvent.Actor()->Id().c_str());
+
+	rString actorId = actorEvent.Actor()->Id();
+
+	if (!m_component->IsReservedActor(actorId))
+		AppendItem(wxDataViewItem(0), actorId.c_str());
 }
 
 void reOutliner::OnComponentInitialized(rEvent& event){
@@ -42,6 +46,7 @@ void reOutliner::OnLevelEndLoad(rEvent& event){
 	m_component->GetScene()->GetActors(actorNames);
 
 	for (auto& actorId : actorNames){
-		AppendItem(wxDataViewItem(0), actorId.c_str());
+		if (!m_component->IsReservedActor(actorId))
+			AppendItem(wxDataViewItem(0), actorId.c_str());
 	}
 }

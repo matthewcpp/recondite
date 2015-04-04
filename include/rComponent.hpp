@@ -31,6 +31,7 @@ public:
 
 	virtual void LoadScene(const rString& name);
 	virtual bool SaveScene(const rString& path);
+	virtual void ClearScene();
 
 	rEngine* GetEngine();
 	rScene* GetScene();
@@ -48,6 +49,8 @@ public:
 protected:
 	virtual void InitEngine(rGraphicsDevice* graphics, rContentManager* content, rInputManager* input);
 	virtual void InitDefaultActorClasses();
+	bool SaveSceneXML(const rString& path, std::function<bool(rActor3*)> filterFunc);
+
 protected:
 	typedef std::map<rString, rViewport*> rViewportMap;
 

@@ -35,6 +35,7 @@ public:
 	virtual void GetActors(rArrayString& names) const;
 
 	virtual void DeleteActor(const rString& name);
+	void DeleteActors(std::function<bool(rActor3*)> shouldDelete);
 
 	virtual rString GetDefaultActorId(const rString& prefix);
 
@@ -44,6 +45,7 @@ public:
 	void Clear();
 
 	virtual bool Save(riSerializationTarget* target);
+	virtual bool Save(riSerializationTarget* target, std::function<bool(rActor3*)> filterFunc);
 	virtual bool Load(riSerializationTarget* target);
 
 	bool IsLoading() const;

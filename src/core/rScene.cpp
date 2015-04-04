@@ -73,6 +73,18 @@ void rScene::DeleteActor(const rString& name){
 	}
 }
 
+void rScene::DeleteActors(std::function<bool(rActor3*)> shouldDelete){
+	for (auto it = m_actors.cbegin(); it != m_actors.cend();){
+		if (shouldDelete(it->second)){
+			delete it->second;
+			m_actors.erase(it++);
+		}
+		else{
+			++it;
+		}
+	}
+}
+
 void rScene::Clear(){
 	rActorMap::iterator end = m_actors.end();
 
@@ -144,18 +156,22 @@ rActor3* rScene::ViewportPick(const rString& viewportName, int x, int y){
 	return nullptr;
 }
 
-bool rScene::Save(riSerializationTarget* target){
+bool rScene::Save(riSerializationTarget* target, std::function<bool(rActor3*)> actorFilter){
 	riSerializationTarget* actorTarget = target->SubObject("actors");
 
-	for (auto& actor : m_actors)
-		actor.second->Save(actorTarget);
+	for (auto& actor : m_actors){
+		if (actorFilter(actor.second))
+			actor.second->Save(actorTarget);
+	}
 
 	return true;
 }
 
-bool rScene::Load(riSerializationTarget* target){
-	Clear();
+bool rScene::Save(riSerializationTarget* target){
+	return Save(target, [](rActor3* actor)->bool{return true; });
+}
 
+bool rScene::Load(riSerializationTarget* target){
 	m_isLoading = true;
 	rEvent event;
 	Trigger(rEVT_SCENE_LOAD_BEGIN, event);

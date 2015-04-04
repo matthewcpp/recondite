@@ -48,6 +48,11 @@ void rPrimitive::RecreateGeometry(){
 	m_geometryInvalid = false;
 }
 
+void rPrimitive::OnDelete(){
+	if (m_geometry)
+		m_engine->content->RemoveGeometryAsset(m_geometry->Name());
+}
+
 void rPrimitive::Draw(){
 	if (m_geometryInvalid){
 		RecreateGeometry();

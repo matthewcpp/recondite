@@ -68,6 +68,7 @@ void rScene::DeleteActor(const rString& name){
 		rActor3Event event(result->second);
 		Trigger(rEVT_SCENE_ACTOR_REMOVED, event);
 
+		result->second->OnDelete();
 		delete result->second;
 		m_actors.erase(result);
 	}
@@ -76,6 +77,7 @@ void rScene::DeleteActor(const rString& name){
 void rScene::DeleteActors(std::function<bool(rActor3*)> shouldDelete){
 	for (auto it = m_actors.cbegin(); it != m_actors.cend();){
 		if (shouldDelete(it->second)){
+			it->second->OnDelete();
 			delete it->second;
 			m_actors.erase(it++);
 		}

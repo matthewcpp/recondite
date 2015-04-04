@@ -230,6 +230,8 @@ void rActor3::OnLoad(){
 	SetTransformed(true);
 }
 
+void rActor3::OnDelete(){}
+
 bool rActor3::DoSerialize(riSerializationTarget* target){
 	target->Category("Actor");
 

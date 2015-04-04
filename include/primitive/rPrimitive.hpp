@@ -20,6 +20,8 @@ public:
 
 	virtual void Draw();
 
+	virtual void OnDelete() override;
+
 protected:
 	virtual bool DoSerialize(riSerializationTarget* target);
 	virtual void OnLoad();

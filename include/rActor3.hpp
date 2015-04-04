@@ -36,6 +36,7 @@ public:
 	virtual rVector3 Scale() const;
 
 	virtual rString ClassName() const = 0;
+	virtual void OnDelete();
 
 	virtual rMatrix4& TransformMatrix();
 	virtual riBoundingVolume* BoundingVolume();

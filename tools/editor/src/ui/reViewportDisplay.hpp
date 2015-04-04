@@ -16,12 +16,16 @@ public:
 
 public:
 	reViewport* GetViewport(const wxString& name);
+	reViewport* GetActiveViewport();
 
 	virtual void UpdateDisplay();
 
 private:
 	void OnComponentInitialized(rEvent& event);
 	void OnDisplayShouldUpdate(rEvent& event);
+
+	void BindCanvasEvents(rwxGLCanvas* canvas);
+	void OnViewportActivate(wxMouseEvent& event);
 
 private:
 	void CreateViewportDisplay();
@@ -34,6 +38,8 @@ private:
 	reViewport* m_topRightViewport;
 	reViewport* m_bottomLeftViewport;
 	reViewport* m_bottomRightViewport;
+
+	reViewport* m_activeViewport;
 
 	wxSplitterWindow* m_leftSplitter;
 	wxSplitterWindow* m_rightSplitter;

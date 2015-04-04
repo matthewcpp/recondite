@@ -6,9 +6,40 @@ reViewportDisplay::reViewportDisplay(reComponent* component, reToolManager* tool
 	m_component = component;
 	m_toolManager = toolManager;
 
+	m_activeViewport = nullptr;
+
 	CreateViewportDisplay();
 
 	m_component->Bind(rEVT_COMPONENT_INITIALIZED, this, &reViewportDisplay::OnComponentInitialized);
+}
+
+reViewport* reViewportDisplay::GetActiveViewport(){
+	return m_activeViewport;
+}
+
+void reViewportDisplay::OnViewportActivate(wxMouseEvent& event){
+	int id = event.GetId();
+
+	if (id == m_topLeftViewport->GetCanvas()->GetId())
+		m_activeViewport = m_topLeftViewport;
+
+	else if (id == m_topRightViewport->GetCanvas()->GetId())
+		m_activeViewport = m_topRightViewport;
+
+	else if (id == m_bottomLeftViewport->GetCanvas()->GetId())
+		m_activeViewport = m_bottomLeftViewport;
+
+	else if (id == m_bottomRightViewport->GetCanvas()->GetId())
+		m_activeViewport = m_bottomRightViewport;
+
+	else
+		m_activeViewport = nullptr;
+}
+
+void reViewportDisplay::BindCanvasEvents(rwxGLCanvas* canvas){
+	canvas->Bind(wxEVT_LEFT_DOWN, &reViewportDisplay::OnViewportActivate, this);
+	canvas->Bind(wxEVT_MIDDLE_DOWN, &reViewportDisplay::OnViewportActivate, this);
+	canvas->Bind(wxEVT_RIGHT_DOWN, &reViewportDisplay::OnViewportActivate, this);
 }
 
 void reViewportDisplay::CreateViewportDisplay(){
@@ -34,6 +65,11 @@ void reViewportDisplay::CreateViewportDisplay(){
 	wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
 	mainSizer->Add(m_mainSplitter, 1, wxEXPAND | wxALL, 2);
 	SetSizer(mainSizer);
+
+	BindCanvasEvents(m_topLeftViewport->GetCanvas());
+	BindCanvasEvents(m_topRightViewport->GetCanvas());
+	BindCanvasEvents(m_bottomLeftViewport->GetCanvas());
+	BindCanvasEvents(m_bottomRightViewport->GetCanvas());
 }
 
 reViewport* reViewportDisplay::GetViewport(const wxString& name){

@@ -52,6 +52,7 @@ private:
 	wxString m_viewportName;
 
 	static wxTimer* s_inputTimer;
+	static wxWindowID s_nextCanvasId;
 
 	std::unique_ptr<rwxViewCameraInteraction> m_interaction;
 };

@@ -20,7 +20,7 @@ void reViewport::CreateViewportElements(){
 
 	m_component->AddReservedActor(camera);
 
-	m_glCanvas = new rwxGLCanvas(m_component, camera, m_viewportName, this);
+	m_glCanvas = new rwxGLCanvas(m_component, camera, m_viewportName, this, s_nextCanvasId++);
 
 	m_viewMenuText = new wxStaticText(this, reViewportViewMenuId, "View");
 	m_viewMenuText->Bind(wxEVT_LEFT_DOWN, &reViewport::OnViewMenuClick, this);
@@ -135,3 +135,4 @@ void reViewport::OnEnterCanvas(wxMouseEvent& event){
 }
 
 wxTimer* reViewport::s_inputTimer = nullptr;
+wxWindowID reViewport::s_nextCanvasId = 17000;

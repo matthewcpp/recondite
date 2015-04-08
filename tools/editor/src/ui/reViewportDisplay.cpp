@@ -34,12 +34,16 @@ void reViewportDisplay::OnViewportActivate(wxMouseEvent& event){
 
 	else
 		m_activeViewport = nullptr;
+
+	event.Skip();
 }
 
 void reViewportDisplay::BindCanvasEvents(rwxGLCanvas* canvas){
 	canvas->Bind(wxEVT_LEFT_DOWN, &reViewportDisplay::OnViewportActivate, this);
 	canvas->Bind(wxEVT_MIDDLE_DOWN, &reViewportDisplay::OnViewportActivate, this);
 	canvas->Bind(wxEVT_RIGHT_DOWN, &reViewportDisplay::OnViewportActivate, this);
+
+	canvas->SetDropTarget(new rePaletteDropTarget(m_component, canvas));
 }
 
 void reViewportDisplay::CreateViewportDisplay(){
@@ -65,11 +69,6 @@ void reViewportDisplay::CreateViewportDisplay(){
 	wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
 	mainSizer->Add(m_mainSplitter, 1, wxEXPAND | wxALL, 2);
 	SetSizer(mainSizer);
-
-	BindCanvasEvents(m_topLeftViewport->GetCanvas());
-	BindCanvasEvents(m_topRightViewport->GetCanvas());
-	BindCanvasEvents(m_bottomLeftViewport->GetCanvas());
-	BindCanvasEvents(m_bottomRightViewport->GetCanvas());
 }
 
 reViewport* reViewportDisplay::GetViewport(const wxString& name){
@@ -91,6 +90,11 @@ void reViewportDisplay::OnComponentInitialized(rEvent& event){
 	scene->Bind(rEVT_SCENE_ACTOR_ADDED, this, &reViewportDisplay::OnDisplayShouldUpdate);
 	scene->Bind(rEVT_SCENE_ACTOR_REMOVED, this, &reViewportDisplay::OnDisplayShouldUpdate);
 	scene->Bind(rEVT_SCENE_LOAD_END, this, &reViewportDisplay::OnDisplayShouldUpdate);
+
+	BindCanvasEvents(m_topLeftViewport->GetCanvas());
+	BindCanvasEvents(m_topRightViewport->GetCanvas());
+	BindCanvasEvents(m_bottomLeftViewport->GetCanvas());
+	BindCanvasEvents(m_bottomRightViewport->GetCanvas());
 }
 
 void reViewportDisplay::UpdateDisplay(){

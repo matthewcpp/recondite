@@ -37,6 +37,7 @@ private:
 
 	rMouseButton m_activeButton;
 	wxPoint m_previousPt;
+	float m_targetDistance;
 };
 
 #endif

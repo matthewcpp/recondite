@@ -9,6 +9,12 @@ list(APPEND ui_files ${CMAKE_CURRENT_SOURCE_DIR}/reMainFrame.cpp)
 list(APPEND ui_files ${CMAKE_CURRENT_SOURCE_DIR}/reOutliner.hpp)
 list(APPEND ui_files ${CMAKE_CURRENT_SOURCE_DIR}/reOutliner.cpp)
 
+list(APPEND ui_files ${CMAKE_CURRENT_SOURCE_DIR}/rePalette.hpp)
+list(APPEND ui_files ${CMAKE_CURRENT_SOURCE_DIR}/rePalette.cpp)
+
+list(APPEND ui_files ${CMAKE_CURRENT_SOURCE_DIR}/rePaletteDropTarget.hpp)
+list(APPEND ui_files ${CMAKE_CURRENT_SOURCE_DIR}/rePaletteDropTarget.cpp)
+
 list(APPEND ui_files ${CMAKE_CURRENT_SOURCE_DIR}/reProjectExplorer.hpp)
 list(APPEND ui_files ${CMAKE_CURRENT_SOURCE_DIR}/reProjectExplorer.cpp)
 

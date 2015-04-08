@@ -12,6 +12,7 @@
 #include "rePropertyInspector.hpp"
 #include "reProjectExplorer.hpp"
 #include "reOutliner.hpp"
+#include "rePalette.hpp"
 
 #include "project/reComponent.hpp"
 #include "tools/reToolManager.hpp"
@@ -74,6 +75,7 @@ private:
 	reProjectExplorer* m_projectExplorer;
 	reOutliner* m_outliner;
 	reToolManager* m_toolManager;
+	rePalette* m_palette;
 
 	wxAuiManager m_wxAuiManager;
 };

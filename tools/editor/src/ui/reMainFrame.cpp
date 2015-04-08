@@ -16,7 +16,7 @@ void reMainFrame::CreateUIElements(){
 	m_propertyInspector = new rePropertyInspector(m_component, m_viewportDisplay, this);
 	m_projectExplorer = new reProjectExplorer(m_component, this);
 	m_outliner = new reOutliner(m_component, m_propertyInspector, this);
-
+	m_palette = new rePalette(m_component, this);
 
 	SetMenuBar(CreateEditorMenuBar());
 	CreateStatusBar();
@@ -48,6 +48,16 @@ void reMainFrame::CreateUIElements(){
 		.Right()
 		.Position(0)
 		.Caption("Property Inspector")
+		.Dockable(true)
+		.Floatable(true)
+		.MinimizeButton(true)
+		.BestSize(250, 450)
+		.MinSize(250, 100));
+
+	m_wxAuiManager.AddPane(m_palette, wxAuiPaneInfo()
+		.Right()
+		.Position(1)
+		.Caption("Palette")
 		.Dockable(true)
 		.Floatable(true)
 		.MinimizeButton(true)

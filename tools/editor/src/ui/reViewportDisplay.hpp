@@ -9,6 +9,7 @@
 #include <wx/splitter.h>
 
 #include "tools/reToolManager.hpp"
+#include "rePaletteDropTarget.hpp"
 
 class reViewportDisplay : public wxPanel{
 public:

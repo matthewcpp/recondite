@@ -4,12 +4,13 @@
 #include <functional>
 #include <map>
 
+#include "rBuild.hpp"
 #include "rString.hpp"
 
 class rEngine;
 class rActor3;
 
-class rActorFactory{
+class RECONDITE_API rActorFactory{
 public:
 	typedef std::function<rActor3* (rEngine*, const rString&)> ActorFunction;
 

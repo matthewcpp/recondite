@@ -7,6 +7,8 @@ rwxViewCameraInteraction::rwxViewCameraInteraction(rCamera* camera){
 
 	m_cameraRotateSpeed = 2.0f;
 	m_cameraMoveSpeed = 0.5f;
+
+	m_targetDistance = 10.0f;
 }
 
 bool rwxViewCameraInteraction::UpdateKeyboardInteraction(){
@@ -114,6 +116,6 @@ void rwxViewCameraInteraction::SetCameraTarget(){
 	rQuaternion q(m_cameraRotation);
 	rVector3 targetDirection = rVector3::ForwardVector;
 	q.TransformVector3(targetDirection);
-	rVector3 targetPosition = m_camera->Position() + targetDirection;
+	rVector3 targetPosition = m_camera->Position() + (targetDirection * m_targetDistance);
 	m_camera->SetTarget(targetPosition);
 }

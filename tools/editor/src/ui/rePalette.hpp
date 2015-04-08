@@ -13,13 +13,14 @@ public:
 	rePalette(reComponent* component, wxWindow* parent);
 
 public:
-	void AddSceneActor(wxBitmap& icon, const wxString& label, const wxString createStr);
+	void AddSceneActor(const wxString& category, wxBitmap& icon, const wxString& label, const wxString createStr);
 	void StartItemDrag(wxMouseEvent& event);
 private:
 	void CreateSceneView();
 
 private:
 	std::map<int, wxString> m_actorMapping;
+	std::map<wxString, wxSizer*> m_categories;
 	int m_nextPaletteId;
 };
 

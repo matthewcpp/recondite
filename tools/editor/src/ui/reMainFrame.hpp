@@ -64,6 +64,7 @@ private:
 		reMainFrame_ViewPropertyInspector,
 		reMainFrame_ViewProjectExplorer,
 		reMainFrame_ViewOutliner,
+		reMainFrame_ViewPalette,
 		reMainFrame_IdUIEnd
 	};
 

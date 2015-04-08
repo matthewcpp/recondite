@@ -5,25 +5,42 @@ rePalette::rePalette(reComponent* component, wxWindow* parent)
 {
 	m_nextPaletteId = 10000;
 
+	SetSizer(new wxBoxSizer(wxVERTICAL));
 	CreateSceneView();
 }
 
-void rePalette::AddSceneActor(wxBitmap& icon, const wxString& label, const wxString createStr){
+void rePalette::AddSceneActor(const wxString& category, wxBitmap& icon, const wxString& label, const wxString createStr){
+	wxSizer* categorySizer = nullptr;
+
+	if (m_categories.count(category)){
+		categorySizer = m_categories[category];
+	}
+	else{
+		wxBoxSizer* boxSizer = new wxBoxSizer(wxVERTICAL);
+		GetSizer()->Add(boxSizer, 0, wxALL, 5);
+		boxSizer->Add(new wxStaticText(this, wxID_ANY, category), 0, wxALL, 5);
+
+		wxBoxSizer* itemSizer = new wxBoxSizer(wxHORIZONTAL);
+		boxSizer->Add(itemSizer, 0, wxALL, 5);
+		m_categories[category] = itemSizer;
+		categorySizer = itemSizer;
+	}
+	
 	int id = m_nextPaletteId++;
 
 	wxStaticBitmap* bitmapIcon = new wxStaticBitmap(this, id, icon);
 	bitmapIcon->Bind(wxEVT_LEFT_DOWN, &rePalette::StartItemDrag, this);
-	GetSizer()->Add(bitmapIcon,0, wxALL, 5);
+	categorySizer->Add(bitmapIcon, 0, wxALL, 5);
 
 	m_actorMapping[id] = createStr;
 }
 
 void rePalette::CreateSceneView(){
-	SetSizer(new wxBoxSizer(wxHORIZONTAL));
+	wxBoxSizer* sizer =new wxBoxSizer(wxHORIZONTAL);
 
-	AddSceneActor(wxBitmap("assets/tool-box.png", wxBITMAP_TYPE_PNG), "Box", "PrimitiveBox");
-	AddSceneActor(wxBitmap("assets/tool-cone.png", wxBITMAP_TYPE_PNG), "Cone", "PrimitiveCone");
-	AddSceneActor(wxBitmap("assets/tool-plane.png", wxBITMAP_TYPE_PNG), "Plane", "PrimitiveGrid");
+	AddSceneActor("Primitives", wxBitmap("assets/tool-box.png", wxBITMAP_TYPE_PNG), "Box", "PrimitiveBox");
+	AddSceneActor("Primitives", wxBitmap("assets/tool-cone.png", wxBITMAP_TYPE_PNG), "Cone", "PrimitiveCone");
+	AddSceneActor("Primitives", wxBitmap("assets/tool-plane.png", wxBITMAP_TYPE_PNG), "Plane", "PrimitiveGrid");
 
 }
 

@@ -138,7 +138,8 @@ wxMenuBar* reMainFrame::CreateEditorMenuBar(){
 	wxMenu* viewMenu = new wxMenu();
 	viewMenu->Append(reMainFrame_ViewPropertyInspector, "Property Inspector");
 	viewMenu->Append(reMainFrame_ViewProjectExplorer, "Project Explorer");
-	viewMenu->Append(reMainFrame_ViewProjectExplorer, "Outliner");
+	viewMenu->Append(reMainFrame_ViewOutliner, "Outliner");
+	viewMenu->Append(reMainFrame_ViewPalette, "Palette");
 	menuBar->Append(viewMenu, "&View");
 
 	Bind(wxEVT_MENU, &reMainFrame::OnFileExit, this, wxID_EXIT);
@@ -160,6 +161,10 @@ void reMainFrame::OnViewWindowSelection(wxCommandEvent& event){
 
 		case reMainFrame_ViewOutliner:
 			m_wxAuiManager.GetPane(m_outliner).Show(true);
+			break;
+
+		case reMainFrame_ViewPalette:
+			m_wxAuiManager.GetPane(m_palette).Show(true);
 			break;
 	};
 	

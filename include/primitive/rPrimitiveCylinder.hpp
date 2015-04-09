@@ -4,6 +4,7 @@
 #include "rBuild.hpp"
 
 #include "primitive/rPrimitive.hpp"
+#include "rPrimitiveGeometry.hpp"
 
 class RECONDITE_API rPrimitiveCylinder : public rPrimitive{
 public:
@@ -22,12 +23,17 @@ public:
 	virtual rString ClassName() const;
 
 protected:
-	virtual void CreateGeometry(rModelGeometryData& geometry);
+	virtual void CreateGeometry(rModelGeometryData& geometry) override;
+
+	virtual void DoRecalculateBoundingVolume() override;
+	virtual riBoundingVolume* DoGetBoundingVolume()override;
 
 private:
 	void CreateShellFace(rModelGeometryData& geometry, int i1, int i2, int i3, int i4);
 
 private:
+	rAlignedBoxBoundingVolume m_boundingVolume;
+
 	float m_radius;
 	float m_height;
 

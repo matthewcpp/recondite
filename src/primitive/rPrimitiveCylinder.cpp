@@ -40,44 +40,38 @@ void rPrimitiveCylinder::SetSegmentCount(int segmentCount){
 }
 
 void rPrimitiveCylinder::CreateGeometry(rModelGeometryData& geometry){
-	rElementBufferData* wireframe = geometry.CreateElementBuffer("wire", rGEOMETRY_LINES);
-	rElementBufferData* shaded = geometry.CreateElementBuffer("shaded", rGEOMETRY_TRIANGLES);
-
-	CreateCircle3d(geometry, rVector3::ZeroVector, m_radius, rVector3::DownVector, m_segmentCount);
-	CreateCircle3d(geometry, rVector3::UpVector * m_height, m_radius, rVector3::UpVector, m_segmentCount);
-
-	for (int i = 1; i <= m_segmentCount; i++){
-		wireframe->Push(i , i + m_segmentCount + 1);
-
-		if (i > 1) CreateShellFace(geometry,i -1, i, i + m_segmentCount, i + m_segmentCount + 1);
-	}
-
-	CreateShellFace(geometry,m_segmentCount, 2 * m_segmentCount + 1, 1, m_segmentCount + 2);
+	rPrimitiveGeometry::CreateCylinder(m_radius, m_height, m_segmentCount, geometry);
 }
 
-void rPrimitiveCylinder::CreateShellFace(rModelGeometryData& geometry, int i1, int i2, int i3, int i4){
-	rElementBufferData* shaded = geometry.GetElementBuffer("shaded");
+riBoundingVolume* rPrimitiveCylinder::DoGetBoundingVolume(){
+	return &m_boundingVolume;
+}
 
-		rVector3 v1, v2, v3, v4, n1, n2, n3, n4;
-		size_t baseIndex = geometry.VertexCount();
+void AddCircle(const rVector3& center, float radius, const rMatrix4& transform, rAlignedBox3& b){
+	rVector3 pt = center + (rVector3::ForwardVector * radius);
+	transform.TransformVector3(pt);
+	b.AddPoint(pt);
 
-		geometry.GetVertex(i1, &v1, NULL, NULL);
-		n1 = v1;
+	pt = center + (rVector3::BackwardVector * radius);
+	transform.TransformVector3(pt);
+	b.AddPoint(pt);
 
-		geometry.GetVertex(i2, &v2, NULL, NULL);
-		n2 = v2;
+	pt = center + (rVector3::LeftVector * radius);
+	transform.TransformVector3(pt);
+	b.AddPoint(pt);
 
-		geometry.GetVertex(i3, &v3, NULL, NULL);
-		n3 = v3;
+	pt = center + (rVector3::RightVector * radius);
+	transform.TransformVector3(pt);
+	b.AddPoint(pt);
+}
 
-		geometry.GetVertex(i4, &v4, NULL, NULL);
-		n4 = v4;
+void rPrimitiveCylinder::DoRecalculateBoundingVolume(){
+	rMatrix4 transform = TransformMatrix();
 
-		geometry.PushVertex(v1,n1,rVector2::ZeroVector);
-		geometry.PushVertex(v2,n2,rVector2::ZeroVector);
-		geometry.PushVertex(v3,n3,rVector2::ZeroVector);
-		geometry.PushVertex(v4,n4,rVector2::ZeroVector);
+	rAlignedBox3 b;
 
-		shaded->Push(baseIndex, baseIndex + 2, baseIndex + 3);
-		shaded->Push(baseIndex, baseIndex + 1, baseIndex + 3);
+	AddCircle(rVector3::ZeroVector, m_radius, transform, b);
+	AddCircle(rVector3::UpVector * m_height, m_radius, transform, b);
+
+	m_boundingVolume.SetBox(b);
 }

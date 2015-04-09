@@ -297,3 +297,51 @@ void rPrimitiveGeometry::CreateCone(float radius, float height, size_t segmentCo
 
 	CreateConeFace(geometry, segmentCount, 1, height, coneAngle);
 }
+
+//Cylinder
+void CreateCylinderFace(rGeometryData& geometry, int i1, int i2, int i3, int i4){
+	rElementBufferData* shaded = geometry.GetElementBuffer("shaded");
+
+	rVector3 v1, v2, v3, v4, n1, n2, n3, n4;
+	size_t baseIndex = geometry.VertexCount();
+
+	geometry.GetVertex(i1, &v1, nullptr);
+	n1 = v1;
+
+	geometry.GetVertex(i2, &v2, nullptr);
+	n2 = v2;
+
+	geometry.GetVertex(i3, &v3, nullptr);
+	n3 = v3;
+
+	geometry.GetVertex(i4, &v4, nullptr);
+	n4 = v4;
+
+	geometry.PushVertex(v1, n1);
+	geometry.PushVertex(v2, n2);
+	geometry.PushVertex(v3, n3);
+	geometry.PushVertex(v4, n4);
+
+	shaded->Push(baseIndex, baseIndex + 2, baseIndex + 3);
+	shaded->Push(baseIndex, baseIndex + 1, baseIndex + 3);
+}
+
+
+void rPrimitiveGeometry::CreateCylinder(float radius, float height, size_t segmentCount, rGeometryData& geometry){
+	EnsureBuffers(geometry);
+
+	EnsureBuffers(geometry);
+	rElementBufferData* wireframe = geometry.GetElementBuffer("wire");
+	rElementBufferData* shaded = geometry.GetElementBuffer("shaded");
+
+	CreateCircle(rVector3::ZeroVector, radius, rVector3::DownVector, segmentCount, geometry);
+	CreateCircle(rVector3::UpVector * height, radius, rVector3::UpVector, segmentCount, geometry);
+
+	for (int i = 1; i <= segmentCount; i++){
+		wireframe->Push(i, i + segmentCount + 1);
+
+		if (i > 1) CreateCylinderFace(geometry, i - 1, i, i + segmentCount, i + segmentCount + 1);
+	}
+
+	CreateCylinderFace(geometry, segmentCount, 2 * segmentCount + 1, 1, segmentCount + 2);
+}

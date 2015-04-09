@@ -41,7 +41,8 @@ void rePalette::CreateSceneView(){
 	AddSceneActor("Primitives", wxBitmap("assets/tool-box.png", wxBITMAP_TYPE_PNG), "Box", "PrimitiveBox");
 	AddSceneActor("Primitives", wxBitmap("assets/tool-cone.png", wxBITMAP_TYPE_PNG), "Cone", "PrimitiveCone");
 	AddSceneActor("Primitives", wxBitmap("assets/tool-plane.png", wxBITMAP_TYPE_PNG), "Plane", "PrimitiveGrid");
-	AddSceneActor("Primitives", wxBitmap("assets/tool-cylinder.png", wxBITMAP_TYPE_PNG), "Cyliner", "PrimitiveCylinder");
+	AddSceneActor("Primitives", wxBitmap("assets/tool-cylinder.png", wxBITMAP_TYPE_PNG), "Cylinder", "PrimitiveCylinder");
+	AddSceneActor("Primitives", wxBitmap("assets/tool-sphere.png", wxBITMAP_TYPE_PNG), "Sphere", "PrimitiveSphere");
 }
 
 void rePalette::StartItemDrag(wxMouseEvent& event){

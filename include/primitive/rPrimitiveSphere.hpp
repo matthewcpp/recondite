@@ -8,6 +8,7 @@
 #include "rMathUtil.hpp"
 
 #include "primitive/rPrimitive.hpp"
+#include "rPrimitiveGeometry.hpp"
 #include "rSphereBoundingVolume.hpp"
 
 class RECONDITE_API rPrimitiveSphere : public rPrimitive{

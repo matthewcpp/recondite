@@ -142,6 +142,7 @@ void rComponent::AddActorClass(const rString& name, rActorFactory::ActorFunction
 #include "primitive/rPrimitiveGrid.hpp"
 #include "primitive/rPrimitiveCone.hpp"
 #include "primitive/rPrimitiveCylinder.hpp"
+#include "primitive/rPrimitiveSphere.hpp"
 
 void rComponent::InitDefaultActorClasses(){
 	m_actorFactory.AddActorClass("PrimitiveBox",
@@ -162,5 +163,10 @@ void rComponent::InitDefaultActorClasses(){
 	m_actorFactory.AddActorClass("PrimitiveCylinder",
 		[](rEngine* engine, const rString& id)->rActor3*{
 		return new rPrimitiveCylinder(id, engine);
+	});
+
+	m_actorFactory.AddActorClass("PrimitiveSphere",
+		[](rEngine* engine, const rString& id)->rActor3*{
+		return new rPrimitiveSphere(id, engine);
 	});
 }

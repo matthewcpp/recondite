@@ -330,7 +330,6 @@ void CreateCylinderFace(rGeometryData& geometry, int i1, int i2, int i3, int i4)
 void rPrimitiveGeometry::CreateCylinder(float radius, float height, size_t segmentCount, rGeometryData& geometry){
 	EnsureBuffers(geometry);
 
-	EnsureBuffers(geometry);
 	rElementBufferData* wireframe = geometry.GetElementBuffer("wire");
 	rElementBufferData* shaded = geometry.GetElementBuffer("shaded");
 
@@ -344,4 +343,56 @@ void rPrimitiveGeometry::CreateCylinder(float radius, float height, size_t segme
 	}
 
 	CreateCylinderFace(geometry, segmentCount, 2 * segmentCount + 1, 1, segmentCount + 2);
+}
+
+//Sphere
+
+void rPrimitiveGeometry::CreateSphere(float radius, size_t rings, size_t sectors, rGeometryData& geometry){
+	EnsureBuffers(geometry);
+
+	rElementBufferData* wireframe = geometry.GetElementBuffer("wire");
+	rElementBufferData* shaded = geometry.GetElementBuffer("shaded");
+
+	rVector3 center(0, radius, 0);
+	rVector3 position = rVector3::ZeroVector;
+	rVector3 normal = rVector3::ZeroVector;
+
+	float R = 1.0f / (float)(rings - 1);
+	float S = 1.0f / (float)(sectors - 1);
+	int r, s;
+
+	for (r = 0; r < rings; r++){
+		for (s = 0; s < sectors; s++) {
+			float y = std::sin(-M_PI_2 + M_PI * r * R);
+			float x = std::cos(2 * M_PI * s * S) * std::sin(M_PI * r * R);
+			float z = std::sin(2 * M_PI * s * S) * std::sin(M_PI * r * R);
+
+			position.Set(x, y + radius, z);
+			normal = position - center;
+			normal.Normalize();
+			position *= radius;
+
+			geometry.PushVertex(position, normal);
+		}
+	}
+
+	//generate indicies
+	for (r = 0; r < rings - 1; r++) {
+		for (s = 0; s < sectors - 1; s++) {
+			int p1 = r * sectors + s;
+			int p2 = r * sectors + (s + 1);
+			int p3 = (r + 1) * sectors + (s + 1);
+			int p4 = (r + 1) * sectors + s;
+
+			//lines
+			wireframe->Push(p1, p2);
+			wireframe->Push(p2, p3);
+			wireframe->Push(p3, p4);
+			wireframe->Push(p4, p1);
+
+			//faces
+			shaded->Push(p1, p2, p4);
+			shaded->Push(p2, p4, p3);
+		}
+	}
 }

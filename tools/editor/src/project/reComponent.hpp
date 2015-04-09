@@ -27,6 +27,7 @@ public:
 
 	virtual bool SaveScene(const rString& path) override;
 	virtual void ClearScene() override;
+	virtual void RenderScene(rViewport* viewport) override;
 
 	void AddReservedActor(rActor3* actor);
 	bool IsReservedActor(const rString& id);

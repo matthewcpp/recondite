@@ -72,3 +72,17 @@ void reSelectionManager::ClearSelection(){
 const wxArrayString& reSelectionManager::GetSelection() const{
 	return m_selectionList;
 }
+
+void reSelectionManager::RenderSelectionBounding(rEngine* engine){
+
+	for (size_t i = 0; i < m_selectionList.size(); i++){
+		rActor3* actor = m_component->GetScene()->GetActor(m_selectionList[i].c_str().AsChar());
+		riBoundingVolume* boundingVolume = actor->BoundingVolume();
+
+		if (boundingVolume){
+			rAlignedBox3 b = boundingVolume->FitBox();
+			engine->renderer->RenderWireBox(b, rColor::Red);
+		}
+	}
+
+}

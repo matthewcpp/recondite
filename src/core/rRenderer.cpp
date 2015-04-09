@@ -217,3 +217,7 @@ void rRenderer::RenderSkeleton(const rSkeleton* skeleton, const rMatrix4Vector& 
 		m_graphicsDevice->EnableDepthTesting(true);
 	}
 }
+
+void rRenderer::EnableDepthTesting(bool enable){
+	m_graphicsDevice->EnableDepthTesting(enable);
+}

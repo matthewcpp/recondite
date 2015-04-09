@@ -29,6 +29,8 @@ public:
 	void BeginRenderView (rViewport& viewport);
 	void EndRenderView();
 	size_t ObjectsRendered() const;
+
+	void EnableDepthTesting(bool enable);
 	
 	void RenderGeometry(rGeometry* geometry, const rMatrix4& transform, const rString& elementBufferName, rMaterial* material);
 	void RenderShadedWithEdges(rGeometry* geometry, const rMatrix4& transform, rMaterial* material, const rColor& edgeColor);

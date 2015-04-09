@@ -32,6 +32,7 @@ class reSelectionManager{
 public:
 	reSelectionManager(rwxComponent* component);
 
+public:
 	void Select(const wxString& name);
 	void AddSelection(const wxString& name);
 	bool Deselect(const wxString& name);
@@ -39,6 +40,9 @@ public:
 	void ClearSelection();
 
 	const wxArrayString& GetSelection() const;
+
+public:
+	void RenderSelectionBounding(rEngine* engine);
 
 private:
 	wxArrayString m_selectionList;

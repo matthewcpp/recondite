@@ -70,3 +70,8 @@ bool reComponent::Init(wxGLCanvas* canvas){
 
 	return result;
 }
+
+void reComponent::RenderScene(rViewport* viewport){
+	rwxComponent::RenderScene(viewport);
+	//m_selectionManager->RenderSelectionBounding(&m_engine);
+}

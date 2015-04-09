@@ -22,14 +22,14 @@ public:
 	virtual rString ClassName() const;
 
 protected:
-	virtual void CreateGeometry(rModelGeometryData& geometry) override;
+	virtual void CreateGeometry(rTexCoordGeometryData& geometry) override;
 	virtual bool DoSerialize(riSerializationTarget* target) override;
 
 	virtual void DoRecalculateBoundingVolume() override;
 	virtual riBoundingVolume* DoGetBoundingVolume()override;
 
 private:
-	void CreateConeFace(rModelGeometryData& geometry, size_t v1, size_t v2);
+	void CreateConeFace(rTexCoordGeometryData& geometry, size_t v1, size_t v2);
 
 private:
 	rAlignedBoxBoundingVolume m_boundingVolume;

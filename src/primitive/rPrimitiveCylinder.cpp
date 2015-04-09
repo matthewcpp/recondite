@@ -39,7 +39,7 @@ void rPrimitiveCylinder::SetSegmentCount(int segmentCount){
 	InvalidateGeometry();
 }
 
-void rPrimitiveCylinder::CreateGeometry(rModelGeometryData& geometry){
+void rPrimitiveCylinder::CreateGeometry(rTexCoordGeometryData& geometry){
 	rPrimitiveGeometry::CreateCylinder(m_radius, m_height, m_segmentCount, geometry);
 }
 

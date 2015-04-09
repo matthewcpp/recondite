@@ -39,7 +39,7 @@ rString rPrimitiveSphere::ClassName() const{
 	return "PrimitiveSphere";
 }
 
-void rPrimitiveSphere::CreateGeometry(rModelGeometryData& geometry){
+void rPrimitiveSphere::CreateGeometry(rTexCoordGeometryData& geometry){
 	rPrimitiveGeometry::CreateSphere(m_radius, m_rings, m_sectors, geometry);
 }
 

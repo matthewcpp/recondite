@@ -12,7 +12,7 @@
 
 #include "data/rTexture2DData.hpp"
 #include "data/rMaterialData.hpp"
-#include "data/rModelGeometryData.hpp"
+#include "data/rTexCoordGeometryData.hpp"
 #include "data/rGeometryDataFile.hpp"
 #include "data/rSkeletonData.hpp"
 
@@ -68,7 +68,7 @@ public:
 
 public:
 	
-	rModelGeometryData* GetGeometryData() const;
+	rTexCoordGeometryData* GetGeometryData() const;
 
 	rSkeleton* GetSkeleton() const;
 	rSkeleton* CreateSkeleton();
@@ -87,7 +87,7 @@ private:
 	typedef std::shared_ptr<rMeshData> rMeshDataPtr;
 	typedef std::shared_ptr<rTexture2DData> rTextureDataPtr;
 	typedef std::shared_ptr<rMaterialData> rMaterialDataPtr;
-	typedef std::unique_ptr<rModelGeometryData> rGeometryDataPtr;
+	typedef std::unique_ptr<rTexCoordGeometryData> rGeometryDataPtr;
 	typedef std::unique_ptr<rSkeleton> rSkeletonPtr;
 
 	typedef std::map<rString, rMeshDataPtr> rMeshDataMap;

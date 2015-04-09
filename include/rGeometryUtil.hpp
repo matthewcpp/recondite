@@ -10,7 +10,7 @@
 #include "rAlignedBox3.hpp"
 
 #include "data/rImmediateBuffer.hpp"
-#include "data/rModelGeometryData.hpp"
+#include "data/rTexCoordGeometryData.hpp"
 
 #include "rFont.hpp"
 #include "rSkeleton.hpp"
@@ -28,8 +28,8 @@ namespace rGeometryUtil{
 	void Create2DText(const rString& str, const rFont* font, const rRect& bounding, rImmediateBuffer& geometry);
 	void CreateSkeletonGeometry(const rSkeleton* skeleton, rImmediateBuffer& geometryData, rImmediateBuffer& lineData);
 
-	void CreateCircle3d(rModelGeometryData& geometry, const rVector3& center, float radius, const rVector3& normal, size_t segmentCount);
-	void GeneratePrimitiveCone(float baseRadius, float height, size_t segmentCount, const rString& name, rModelGeometryData& geometry);
+	void CreateCircle3d(rTexCoordGeometryData& geometry, const rVector3& center, float radius, const rVector3& normal, size_t segmentCount);
+	void GeneratePrimitiveCone(float baseRadius, float height, size_t segmentCount, const rString& name, rTexCoordGeometryData& geometry);
 };
 
 #endif

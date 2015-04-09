@@ -3,7 +3,7 @@
 rModelData::rModelData(){
 	m_skeleton = nullptr;
 
-	m_geometry = std::make_unique<rModelGeometryData>();
+	m_geometry = std::make_unique<rTexCoordGeometryData>();
 }
 
 void rModelData::Clear(){
@@ -141,7 +141,7 @@ void rModelData::GetTextureDataNames(rArrayString& names) const{
 
 //---------------------------------
 
-rModelGeometryData* rModelData::GetGeometryData() const{
+rTexCoordGeometryData* rModelData::GetGeometryData() const{
 	return m_geometry.get();
 }
 

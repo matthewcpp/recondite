@@ -23,13 +23,13 @@ public:
 	virtual rString ClassName() const;
 
 protected:
-	virtual void CreateGeometry(rModelGeometryData& geometry) override;
+	virtual void CreateGeometry(rTexCoordGeometryData& geometry) override;
 
 	virtual void DoRecalculateBoundingVolume() override;
 	virtual riBoundingVolume* DoGetBoundingVolume()override;
 
 private:
-	void CreateShellFace(rModelGeometryData& geometry, int i1, int i2, int i3, int i4);
+	void CreateShellFace(rTexCoordGeometryData& geometry, int i1, int i2, int i3, int i4);
 
 private:
 	rAlignedBoxBoundingVolume m_boundingVolume;

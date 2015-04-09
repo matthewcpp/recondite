@@ -4,7 +4,7 @@
 #include "rBuild.hpp"
 #include "rActor3.hpp"
 
-#include "data/rModelGeometryData.hpp"
+#include "data/rTexCoordGeometryData.hpp"
 
 class RECONDITE_API rPrimitive : public rActor3{
 public:
@@ -26,7 +26,7 @@ protected:
 	virtual bool DoSerialize(riSerializationTarget* target);
 	virtual void OnLoad();
 
-	virtual void CreateGeometry(rModelGeometryData& geometry) = 0;
+	virtual void CreateGeometry(rTexCoordGeometryData& geometry) = 0;
 	void InvalidateGeometry();
 
 private:

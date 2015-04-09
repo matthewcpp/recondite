@@ -14,7 +14,7 @@ rString rPrimitiveGrid::ClassName() const{
 	return "PrimitiveGrid";
 }
 
-void rPrimitiveGrid::CreateGeometry(rModelGeometryData& geometry){
+void rPrimitiveGrid::CreateGeometry(rTexCoordGeometryData& geometry){
 	rVector3 extents(m_width, 0.0f, m_depth);
 	rPrimitiveGeometry::CreateGrid(extents, std::make_tuple(m_rows, m_columns), geometry);
 }

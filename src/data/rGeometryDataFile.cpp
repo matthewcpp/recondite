@@ -11,7 +11,7 @@ rContentError rGeometryDataReader::GetError() const{
 	return m_error;
 }
 
-rContentError rGeometryDataReader::ReadFromFile(const rString& path, rModelGeometryData& geometryData){
+rContentError rGeometryDataReader::ReadFromFile(const rString& path, rTexCoordGeometryData& geometryData){
 	std::ifstream file(path.c_str(), std::ios::binary);
 
 	if (file){
@@ -24,7 +24,7 @@ rContentError rGeometryDataReader::ReadFromFile(const rString& path, rModelGeome
 	return m_error;
 }
 
-rContentError rGeometryDataReader::ReadFromStream(std::istream& stream, rModelGeometryData& geometryData){
+rContentError rGeometryDataReader::ReadFromStream(std::istream& stream, rTexCoordGeometryData& geometryData){
 	m_geometryData = &geometryData;
 	m_error = rCONTENT_ERROR_NONE;
 	m_geometryData->Clear();
@@ -118,7 +118,7 @@ rContentError rGeometryDataWriter::GetError() const{
 	return m_error;
 }
 
-rContentError rGeometryDataWriter::WriteToFile(const rString& path, const rModelGeometryData& geometryData){
+rContentError rGeometryDataWriter::WriteToFile(const rString& path, const rTexCoordGeometryData& geometryData){
 	std::ofstream file (path.c_str(), std::ios::binary);
 
 	if (file){
@@ -131,7 +131,7 @@ rContentError rGeometryDataWriter::WriteToFile(const rString& path, const rModel
 	return m_error;
 }
 
-rContentError rGeometryDataWriter::WriteToStream(std::ostream& stream, const rModelGeometryData& geometryData){
+rContentError rGeometryDataWriter::WriteToStream(std::ostream& stream, const rTexCoordGeometryData& geometryData){
 	m_geometryData = &geometryData;
 	m_error = rCONTENT_ERROR_NONE;
 

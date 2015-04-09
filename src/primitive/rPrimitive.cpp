@@ -39,7 +39,7 @@ void rPrimitive::RecreateGeometry(){
 	if (m_geometry)
 		m_engine->content->RemoveGeometryAsset(m_geometry->Name());
 
-	rModelGeometryData geometryData;
+	rTexCoordGeometryData geometryData;
 	CreateGeometry(geometryData);
 
 	rString assetName = Id() + "_geometry";

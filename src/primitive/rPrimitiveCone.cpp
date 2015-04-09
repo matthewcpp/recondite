@@ -31,7 +31,7 @@ rString rPrimitiveCone::ClassName() const{
 	return "PrimitiveCone";
 }
 
-void rPrimitiveCone::CreateGeometry(rModelGeometryData& geometry){
+void rPrimitiveCone::CreateGeometry(rTexCoordGeometryData& geometry){
 	rPrimitiveGeometry::CreateCone(m_radius, m_height, m_segmentCount, geometry);
 }
 

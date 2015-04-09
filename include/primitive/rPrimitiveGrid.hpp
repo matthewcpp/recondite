@@ -27,7 +27,7 @@ public:
 
 protected:
 	virtual bool DoSerialize(riSerializationTarget* target) override;
-	virtual void CreateGeometry(rModelGeometryData& geometry) override;
+	virtual void CreateGeometry(rTexCoordGeometryData& geometry) override;
 	virtual void DoRecalculateBoundingVolume() override;
 	virtual riBoundingVolume* DoGetBoundingVolume()override;
 

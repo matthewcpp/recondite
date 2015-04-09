@@ -4,7 +4,7 @@
 #include "rBuild.hpp"
 #include "data/rGeometryData.hpp"
 
-class rModelGeometryData : public rGeometryData {
+class rTexCoordGeometryData : public rGeometryData {
 public:
 	virtual void Clear() override;
 	virtual void Allocate(size_t size);

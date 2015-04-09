@@ -12,7 +12,7 @@ rPrimitiveBox::rPrimitiveBox(const rString& id, rEngine* engine)
 	m_depthSegments = 1;
 }
 
-void rPrimitiveBox::CreateGeometry(rModelGeometryData& geometry){
+void rPrimitiveBox::CreateGeometry(rTexCoordGeometryData& geometry){
 	rVector3 extents(m_width, m_height, m_depth);
 	rPrimitiveGeometry::CreateBox(extents, std::make_tuple(m_widthSegments, m_heightSegments, m_depthSegments), geometry);
 }

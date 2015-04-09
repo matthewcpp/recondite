@@ -1,5 +1,24 @@
 #include "reSelectionManager.hpp"
 
+reSelectionEvent::reSelectionEvent(){}
+
+reSelectionEvent::reSelectionEvent(const wxString& selection, const wxArrayString& selectionList){
+	m_selection = selection;
+}
+
+reSelectionEvent::reSelectionEvent(const wxArrayString& selectionList){
+	m_selectionList = selectionList;
+}
+
+wxString reSelectionEvent::Item() const{
+	return m_selection;
+}
+const wxArrayString& reSelectionEvent::SelectionList() const{
+	return m_selectionList;
+}
+
+//---------------------------------------------------
+
 reSelectionManager::reSelectionManager(rwxComponent* component){
 	m_component = component;
 }
@@ -11,6 +30,9 @@ void reSelectionManager::Select(const wxString& name){
 
 void reSelectionManager::AddSelection(const wxString& name){
 	m_selectionList.push_back(name);
+
+	reSelectionEvent event(name, m_selectionList);
+	m_component->Trigger(reSELECTION_SELECT, event);
 }
 
 bool reSelectionManager::Deselect(const wxString& name){
@@ -34,7 +56,17 @@ bool reSelectionManager::IsSelected(const wxString& name){
 }
 
 void reSelectionManager::ClearSelection(){
-	m_selectionList.clear();
+	if (m_selectionList.size() > 0){
+		m_selectionList.clear();
+
+		reSelectionEvent event;
+		m_component->Trigger(reSELECTION_SELECT_NONE, event);
+
+	}
+	else{
+		m_selectionList.clear();
+	}
+	
 }
 
 const wxArrayString& reSelectionManager::GetSelection() const{

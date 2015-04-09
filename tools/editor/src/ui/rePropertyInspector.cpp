@@ -12,6 +12,18 @@ rePropertyInspector::rePropertyInspector(reComponent* component, reViewportDispl
 
 	rScene* scene = m_component->GetScene();
 	scene->Bind(rEVT_SCENE_LOAD_BEGIN, this, &rePropertyInspector::OnLevelBeginLoad);
+
+	m_component->Bind(reSELECTION_SELECT, this, &rePropertyInspector::OnSelection);
+	m_component->Bind(reSELECTION_SELECT_NONE, this, &rePropertyInspector::OnSelectNone);
+}
+
+void rePropertyInspector::OnSelection(rEvent& event){
+	reSelectionEvent& selectionEvent = static_cast<reSelectionEvent&>(event);
+	Inspect(selectionEvent.Item());
+}
+
+void rePropertyInspector::OnSelectNone(rEvent& event){
+	Clear();
 }
 
 void rePropertyInspector::OnPropertyValueChanged(wxPropertyGridEvent& event){

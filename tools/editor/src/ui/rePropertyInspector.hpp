@@ -23,6 +23,8 @@ private:
 	void OnPropertyValueChanged(wxPropertyGridEvent& event);
 
 	void OnLevelBeginLoad(rEvent& event);
+	void OnSelection(rEvent& event);
+	void OnSelectNone(rEvent& event);
 
 private:
 	rwxComponent* m_component;

@@ -25,5 +25,6 @@ bool rePaletteDropTarget::OnDropText(wxCoord x, wxCoord y, const wxString &data)
 	rIntersection::RayIntersectsPlane(selectionRay, targetPlane, &planePos);
 
 	actor->SetPosition(planePos);
+	m_component->GetSelection()->Select(actor->Id().c_str());
 	return true;
 }

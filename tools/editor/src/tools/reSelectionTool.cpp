@@ -24,9 +24,11 @@ bool reSelectionTool::OnMouseUp(wxMouseEvent& event, rwxGLCanvas* canvas){
 		rActor3* actor = scene->RayPick(selectionRay);
 
 		if (actor){
+			m_component->GetSelection()->AddSelection(actor->Id().c_str());
 			return true;
 		}
 		else{
+			m_component->GetSelection()->ClearSelection();
 			return false;
 		}
 	}

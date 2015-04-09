@@ -1,7 +1,7 @@
 #include "rAlignedBox3.hpp"
 
 rAlignedBox3::rAlignedBox3(){
-	Empty();
+	Invalidate();
 }
 
 rAlignedBox3::rAlignedBox3(const rVector3& mmax , const rVector3& mmin){
@@ -141,6 +141,11 @@ void rAlignedBox3::AddPoint(const rVector3& pt){
 
 void rAlignedBox3::Empty(){
 	*this = rAlignedBox3::NullBox;
+}
+
+void rAlignedBox3::Invalidate(){
+	max.Set(-FLT_MAX, -FLT_MAX, -FLT_MAX);
+	min.Set(FLT_MAX, FLT_MAX, FLT_MAX);
 }
 
 const rAlignedBox3 rAlignedBox3::NullBox = rAlignedBox3(rVector3::ZeroVector, rVector3::ZeroVector);

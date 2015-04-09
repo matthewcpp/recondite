@@ -2,6 +2,7 @@
 #define R_ALIGNEDBOX3_HPP
 
 #include <cmath>
+#include <cfloat>
 
 #include "rBuild.hpp"
 
@@ -30,6 +31,7 @@ struct RECONDITE_API rAlignedBox3{
 	void GetCorners(rVector3 corners[]) const;
 
 	bool IsValid() const;
+	void Invalidate();
 	void Empty();
 
 	void Set(const rVector3& mmax , const rVector3& mmin);

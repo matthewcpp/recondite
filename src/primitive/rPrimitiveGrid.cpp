@@ -66,3 +66,35 @@ bool rPrimitiveGrid::DoSerialize(riSerializationTarget* target){
 
 	return rPrimitive::DoSerialize(target);
 }
+
+riBoundingVolume* rPrimitiveGrid::DoGetBoundingVolume(){
+	return &m_boundingVolume;
+}
+
+void rPrimitiveGrid::DoRecalculateBoundingVolume(){
+	rMatrix4 transform = TransformMatrix();
+
+	float halfWidth = m_width / 2.0f;
+	float halfDepth = m_depth / 2.0f;
+
+	rVector3 pt;
+	rAlignedBox3 b;
+
+	pt.Set(-halfWidth, 0, halfDepth);
+	transform.TransformVector3(pt);
+	b.AddPoint(pt);
+
+	pt.Set(halfWidth, 0, halfDepth);
+	transform.TransformVector3(pt);
+	b.AddPoint(pt);
+
+	pt.Set(halfWidth, 0, -halfDepth);
+	transform.TransformVector3(pt);
+	b.AddPoint(pt);
+
+	pt.Set(-halfWidth, 0, -halfDepth);
+	transform.TransformVector3(pt);
+	b.AddPoint(pt);
+
+	m_boundingVolume.SetBox(b);
+}

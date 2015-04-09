@@ -37,10 +37,12 @@ protected:
 	virtual bool DoSerialize(riSerializationTarget* target) override;
 
 	virtual void CreateGeometry(rModelGeometryData& geometry) override;
-	virtual void DoRecalculateBoundingVolume();
-	virtual riBoundingVolume* DoGetBoundingVolume();
+	virtual void DoRecalculateBoundingVolume() override;
+	virtual riBoundingVolume* DoGetBoundingVolume()override;
+
 
 private:
+	rAlignedBoxBoundingVolume m_boundingVolume;
 
 	float m_width;
 	float m_height;
@@ -49,8 +51,6 @@ private:
 	int m_widthSegments;
 	int m_heightSegments;
 	int m_depthSegments;
-
-	rAlignedBoxBoundingVolume m_boundingVolume;
 };
 
 #endif

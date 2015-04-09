@@ -54,3 +54,34 @@ bool rPrimitiveCone::DoSerialize(riSerializationTarget* target){
 
 	return rPrimitive::DoSerialize(target);
 }
+
+riBoundingVolume* rPrimitiveCone::DoGetBoundingVolume(){
+	return &m_boundingVolume;
+}
+
+void rPrimitiveCone::DoRecalculateBoundingVolume(){
+	rMatrix4 transform = TransformMatrix();
+
+	rAlignedBox3 b;
+	rVector3 pt = rVector3::ForwardVector * m_radius;
+	transform.TransformVector3(pt);
+	b.AddPoint(pt);
+
+	pt = rVector3::BackwardVector * m_radius;
+	transform.TransformVector3(pt);
+	b.AddPoint(pt);
+
+	pt = rVector3::LeftVector * m_radius;
+	transform.TransformVector3(pt);
+	b.AddPoint(pt);
+
+	pt = rVector3::RightVector * m_radius;
+	transform.TransformVector3(pt);
+	b.AddPoint(pt);
+
+	pt = rVector3::UpVector * m_height;
+	transform.TransformVector3(pt);
+	b.AddPoint(pt);
+
+	m_boundingVolume.SetBox(b);
+}

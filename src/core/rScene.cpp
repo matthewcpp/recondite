@@ -123,6 +123,8 @@ rActor3* rScene::RayPick(const rRay3& ray){
 	rActorMap::iterator end = m_actors.end();
 	for (rActorMap::iterator it = m_actors.begin(); it != end; ++it){
 		rActor3* currentActor = it->second;
+		if (!currentActor->Pickable()) continue;
+
 		riBoundingVolume* boundingVolume = currentActor->BoundingVolume();
 
 		if (boundingVolume && boundingVolume->IntersectsRay(ray, &selectionPoint)){

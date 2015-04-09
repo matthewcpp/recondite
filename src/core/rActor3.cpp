@@ -8,6 +8,7 @@ rActor3::rActor3(const rString& id, rEngine* engine)
 	m_scale = rVector3::OneVector;
 
 	m_drawable = nullptr;
+	m_pickable = true;
 
 	SetTransformed(true);
 }
@@ -240,4 +241,12 @@ bool rActor3::DoSerialize(riSerializationTarget* target){
 	target->Vector3("scale", m_scale);
 
 	return true;
+}
+
+bool rActor3::Pickable() const{
+	return m_pickable;
+}
+
+void rActor3::SetPickable(bool pickable){
+	m_pickable = pickable;
 }

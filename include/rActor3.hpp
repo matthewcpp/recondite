@@ -41,6 +41,9 @@ public:
 	virtual rMatrix4& TransformMatrix();
 	virtual riBoundingVolume* BoundingVolume();
 
+	bool Pickable() const;
+	void SetPickable(bool pickable);
+
 	rDrawable* Drawable();
 
 	rPropertyCollection& CustomProperties();
@@ -90,6 +93,7 @@ protected:
 private:
 
 	bool m_hasTransformed;
+	bool m_pickable;
 };
 
 #endif

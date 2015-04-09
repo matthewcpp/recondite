@@ -55,6 +55,7 @@ void reComponent::OnSceneLoad(rEvent& event){
 		groundPlane->SetDepth(100);
 		groundPlane->SetRows(25);
 		groundPlane->SetColumns(25);
+		groundPlane->SetPickable(false);
 		groundPlane->Drawable()->SetFaceVisibility(false);
 
 		AddReservedActor(groundPlane);

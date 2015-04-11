@@ -5,6 +5,7 @@
 
 #include "rBuild.hpp"
 #include "rTypes.hpp"
+#include "rDefs.hpp"
 #include "rString.hpp"
 
 #include "rAsset.hpp"
@@ -29,7 +30,7 @@ private:
 
 class RECONDITE_API rGeometry : public rAsset{
 public:
-	rGeometry (unsigned int vertexBufferId, unsigned int vertexBoneLinkBufferId, int assetid, const rString& name, const rString& path);
+	rGeometry (rGeometryProfile profile, unsigned int vertexBufferId, unsigned int vertexBoneLinkBufferId, int assetid, const rString& name, const rString& path);
 	
 public:
 	unsigned int VertexBufferId() const;
@@ -43,6 +44,8 @@ public:
 	const rVertexBoneLinkMap& GetVertexBoneLinks() const;
 	void SetVertexBoneLinks(const rVertexBoneLinkMap& links);
 
+	rGeometryProfile GeometryProfile() const;
+
 	virtual rAssetType Type() const;
 private:
     
@@ -55,6 +58,8 @@ private:
 
 	rElementBufferIdMap m_elementBufferIds;
 	rVertexBoneLinkMap m_vertexBoneLinks;
+
+	rGeometryProfile m_geometryProfile;
 };
 
 typedef std::map<rString, rGeometry*> rGeometryMap;

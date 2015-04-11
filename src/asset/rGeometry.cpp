@@ -1,10 +1,11 @@
 #include "rGeometry.hpp"
 
-rGeometry::rGeometry (unsigned int vertexBufferId, unsigned int vertexBoneLinkBufferId, int assetid, const rString& name, const rString& path)
+rGeometry::rGeometry(rGeometryProfile profile, unsigned int vertexBufferId, unsigned int vertexBoneLinkBufferId, int assetid, const rString& name, const rString& path)
 :rAsset(assetid,name, path)
 {
 	m_vertexBufferId = vertexBufferId;
 	m_vertexBoneLinkBufferId = vertexBoneLinkBufferId;
+	m_geometryProfile = profile;
 }
 
 unsigned int rGeometry::VertexBufferId() const{
@@ -58,4 +59,8 @@ const rVertexBoneLinkMap& rGeometry::GetVertexBoneLinks() const{
 
 void rGeometry::SetVertexBoneLinks(const rVertexBoneLinkMap& links){
 	m_vertexBoneLinks = links;
+}
+
+rGeometryProfile rGeometry::GeometryProfile() const{
+	return m_geometryProfile;
 }

@@ -1,7 +1,7 @@
 #include "data/rImmediateBuffer.hpp"
 
 rImmediateBuffer::rImmediateBuffer(){
-	Reset(rGEOMETRY_LINES, 3, false);
+	Reset(rGeometryType::LINES, 3, false);
 }
 
 rImmediateBuffer::rImmediateBuffer(rGeometryType geometryType, size_t vertexSize, bool texCoords){

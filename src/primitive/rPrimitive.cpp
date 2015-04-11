@@ -63,7 +63,7 @@ void rPrimitive::Draw(){
 
 	material->SetColor("fragColor", m_faceColor);
 		
-	rMatrix4 transform = TransformMatrix();
+	rMatrix4& transform = TransformMatrix();
 
 	if (m_drawable->LineVisibility() && m_drawable->FaceVisibility()){
 		material->SetColor("fragColor", m_faceColor);

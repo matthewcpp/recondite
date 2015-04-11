@@ -3,10 +3,10 @@
 //common
 void EnsureBuffers(rGeometryData& geometry){
 	if (!geometry.GetElementBuffer("wire"))
-		geometry.CreateElementBuffer("wire", rGEOMETRY_LINES);
+		geometry.CreateElementBuffer("wire", rGeometryType::LINES);
 
 	if (!geometry.GetElementBuffer("shaded"))
-		geometry.CreateElementBuffer("shaded", rGEOMETRY_TRIANGLES);
+		geometry.CreateElementBuffer("shaded", rGeometryType::TRIANGLES);
 }
 
 //Primitive Box
@@ -175,8 +175,8 @@ void rPrimitiveGeometry::CreateGrid(const rVector3& extents, std::tuple<int, int
 	int columns = std::get<0>(segmentCounts);
 	int rows = std::get<1>(segmentCounts);
 
-	rElementBufferData* wireframe = geometry.CreateElementBuffer("wire", rGEOMETRY_LINES);
-	rElementBufferData* shaded = geometry.CreateElementBuffer("shaded", rGEOMETRY_TRIANGLES);
+	rElementBufferData* wireframe = geometry.CreateElementBuffer("wire", rGeometryType::LINES);
+	rElementBufferData* shaded = geometry.CreateElementBuffer("shaded", rGeometryType::TRIANGLES);
 
 	float stepX = extents.x / (float)columns;
 	float stepZ = extents.z / (float)rows;
@@ -287,15 +287,17 @@ void rPrimitiveGeometry::CreateCone(float radius, float height, size_t segmentCo
 	rElementBufferData* wireframe = geometry.GetElementBuffer("wire");
 	rElementBufferData* shaded = geometry.GetElementBuffer("shaded");
 
+	size_t baseIndex = geometry.VertexCount();
+
 	CreateCircle(rVector3::ZeroVector, radius, rVector3::DownVector, segmentCount, geometry);
 
 	float coneAngle = std::atan(radius / height);
 
 	for (size_t i = 0; i < segmentCount; i++){
-		CreateConeFace(geometry, i + 1, i + 2, height, coneAngle);
+		CreateConeFace(geometry, baseIndex + i + 1, baseIndex + i + 2, height, coneAngle);
 	}
 
-	CreateConeFace(geometry, segmentCount, 1, height, coneAngle);
+	CreateConeFace(geometry, baseIndex + segmentCount, baseIndex + 1, height, coneAngle);
 }
 
 //Cylinder

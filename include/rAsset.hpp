@@ -31,6 +31,8 @@ protected:
 	
 private:
 	int m_retainCount;
+
+	rNO_COPY_CLASS(rAsset)
 };
 
 

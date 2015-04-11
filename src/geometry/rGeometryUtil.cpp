@@ -60,7 +60,7 @@ void CircleSweep(float x, float y, float radius, float start, float end, size_t 
 }
 
 void rGeometryUtil::CreateRectVerticies(const rRect& rect, rImmediateBuffer& geometry, bool texCoords){
-	geometry.Reset(rGEOMETRY_TRIANGLES, 2, texCoords);
+	geometry.Reset(rGeometryType::TRIANGLES, 2, texCoords);
 
 	geometry.SetIndexBuffer(rectIndicies, 6);
 	
@@ -75,14 +75,14 @@ void rGeometryUtil::CreateRectVerticies(const rRect& rect, rImmediateBuffer& geo
 void rGeometryUtil::CreateWireRectVerticies(const rRect& rect, rImmediateBuffer& geometry){
 	static unsigned short wireRectIndicies[] = {0, 1, 1, 2, 2, 3};
 
-	geometry.Reset(rGEOMETRY_LINE_LOOP, 2, false);
+	geometry.Reset(rGeometryType::LINE_LOOP, 2, false);
 	geometry.SetIndexBuffer(wireRectIndicies, 6);
 
 	CreateRectVerticies(rect, geometry);
 }
 
 void rGeometryUtil::CreateCircleVerticies(const rCircle2& circle, size_t segments, rImmediateBuffer& geometry){
-	geometry.Reset(rGEOMETRY_TRIANGLES, 2, false);
+	geometry.Reset(rGeometryType::TRIANGLES, 2, false);
 
 	geometry.PushVertex(circle.center.x, circle.center.y);
 	
@@ -111,7 +111,7 @@ void rGeometryUtil::CreateCircleVerticies(const rCircle2& circle, size_t segment
 void rGeometryUtil::CreateWireAlignedBoxVerticies(const rAlignedBox3& box,  rImmediateBuffer& geometry){
 	unsigned short indicies[] = { 0,1,1,2,2,3,3,0,4,5,5,6,6,7,7,4,0,4,1,5,2,6,3,7 };
 
-	geometry.Reset(rGEOMETRY_LINES, 3, false);
+	geometry.Reset(rGeometryType::LINES, 3, false);
 	geometry.SetIndexBuffer(indicies, 24);
 
 	geometry.PushVertex(box.min.x, box.max.y, box.max.z);
@@ -156,7 +156,7 @@ void WriteWord(rFontGlyphArray& glyphs, rImmediateBuffer& geometry, int startX, 
 void rGeometryUtil::Create2DText(const rString& str, const rFont* font, const rRect& bounding, rImmediateBuffer& geometry){
 	rFontGlyphArray wordGlyphs;
 
-	geometry.Reset(rGEOMETRY_TRIANGLES, 2, true);
+	geometry.Reset(rGeometryType::TRIANGLES, 2, true);
 
 	int xPos = 0;
 	int yPos = font->Ascender();
@@ -231,9 +231,9 @@ void rGeometryUtil::CreateSkeletonGeometry(const rSkeleton* skeleton, rImmediate
 	rBoneArray bones;
 	skeleton->GetTopLevelBones(bones);
 
-	pointData.Reset(rGEOMETRY_POINTS, 3, false);
+	pointData.Reset(rGeometryType::POINTS, 3, false);
 	pointData.Allocate(skeleton->NumBones());
-	lineData.Reset(rGEOMETRY_LINES, 3, false);
+	lineData.Reset(rGeometryType::LINES, 3, false);
 	lineData.Allocate(skeleton->NumBones());
 
 	for (size_t i = 0; i < bones.size(); i++){
@@ -242,7 +242,7 @@ void rGeometryUtil::CreateSkeletonGeometry(const rSkeleton* skeleton, rImmediate
 }
 
 void rGeometryUtil::CreateRoundedRectVerticies(const rRect& rect, float radius, int detail, rImmediateBuffer& geometry){
-	geometry.Reset(rGEOMETRY_TRIANGLES, 2, false);
+	geometry.Reset(rGeometryType::TRIANGLES, 2, false);
 
 	CircleSweep(rect.Right() - radius , rect.Top() + radius, radius, 0.0f, 90.0f, detail, geometry);
 	CircleSweep(rect.Left() + radius , rect.Top() + radius, radius, 90.0f, 180.0f, detail, geometry);
@@ -324,8 +324,8 @@ void rGeometryUtil::GeneratePrimitiveCone(float baseRadius, float height, size_t
 	rString wireName = name + "_wire";
 	rString shadedName = name + "_shaded";
 	
-	rElementBufferData* wireframe = geometry.CreateElementBuffer(wireName, rGEOMETRY_LINES);
-	rElementBufferData* shaded = geometry.CreateElementBuffer(shadedName, rGEOMETRY_TRIANGLES);
+	rElementBufferData* wireframe = geometry.CreateElementBuffer(wireName, rGeometryType::LINES);
+	rElementBufferData* shaded = geometry.CreateElementBuffer(shadedName, rGeometryType::TRIANGLES);
 
 	float coneAngle = std::atan(baseRadius / height);
 

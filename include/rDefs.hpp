@@ -45,11 +45,16 @@ enum rDataType{
 	rDATA_TYPE_UNKNOWN
 };
 
-enum rGeometryType{
-	rGEOMETRY_TRIANGLES,
-	rGEOMETRY_LINES,
-	rGEOMETRY_LINE_LOOP,
-	rGEOMETRY_POINTS
+enum class rGeometryType{
+	TRIANGLES,
+	LINES,
+	LINE_LOOP,
+	POINTS
+};
+
+enum class rGeometryProfile{
+	TEXCOORD,
+	VERTEXCOLOR
 };
 
 enum rButtonState {

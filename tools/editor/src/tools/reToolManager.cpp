@@ -21,6 +21,7 @@ reToolManager::~reToolManager(){
 void reToolManager::InitTools(){
 
 	m_tools[reTOOL_SELECT] = new reSelectionTool(m_component, m_owner);
+	m_tools[reTOOL_TRANSLATE] = new reTranslateTool(m_component, m_owner);
 
 	ActivateTool(reTOOL_SELECT);
 }

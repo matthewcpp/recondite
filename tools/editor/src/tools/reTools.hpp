@@ -2,6 +2,7 @@
 #define RE_TOOLS_HPP
 
 #include "reSelectionTool.hpp"
+#include "reTranslateTool.hpp"
 
 enum reToolId{
 	reTOOL_ID_BEGIN = 10000,

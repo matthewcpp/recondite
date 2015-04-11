@@ -9,7 +9,7 @@ void rTexCoordGeometryData::Clear(){
 
 void rTexCoordGeometryData::SetVertex(size_t index, const rVector3& v, const rVector3& n, const rVector2& tc){
 	if (index < m_vertexData.size()){
-		rModelVertex& vertex = m_vertexData[index];
+		rTexCoordVertex& vertex = m_vertexData[index];
 
 		vertex.position = v;
 		vertex.normal = n;
@@ -23,12 +23,12 @@ void rTexCoordGeometryData::PushVertex(const rVector3& position, const rVector3&
 }
 
 void rTexCoordGeometryData::PushVertex(const rVector3& v, const rVector3& n, const rVector2& tc){
-	rModelVertex vertex(v, n, tc);
+	rTexCoordVertex vertex(v, n, tc);
 	m_vertexData.push_back(vertex);
 }
 
 size_t rTexCoordGeometryData::VertexSizeInBytes() const{
-	return sizeof(rModelVertex);
+	return sizeof(rTexCoordVertex);
 }
 
 void rTexCoordGeometryData::GetVertex(size_t index, rVector3* position, rVector3* normal) const{
@@ -39,7 +39,7 @@ void rTexCoordGeometryData::GetVertex(size_t index, rVector3* position, rVector2
 	if (index >= m_vertexData.size())
 		return;
 
-	const rModelVertex& vertex = m_vertexData[index];
+	const rTexCoordVertex& vertex = m_vertexData[index];
 
 	if (position)
 		*position = vertex.position;
@@ -53,7 +53,7 @@ void rTexCoordGeometryData::GetVertex(size_t index, rVector3* position, rVector2
 
 void rTexCoordGeometryData::TransformVertex(size_t index, const rMatrix4& transform){
 	if (index <  m_vertexData.size()){
-		rModelVertex& vertex = m_vertexData[index];
+		rTexCoordVertex& vertex = m_vertexData[index];
 
 		transform.TransformVector3(vertex.position);
 		transform.TransformVector3(vertex.normal);
@@ -77,5 +77,9 @@ size_t rTexCoordGeometryData::VertexCount() const{
 }
 
 size_t rTexCoordGeometryData::VertexDataSize() const{
-	return m_vertexData.size() * sizeof(rModelVertexArray::value_type);
+	return m_vertexData.size() * sizeof(rTexCoordVertexArray::value_type);
+}
+
+rGeometryProfile rTexCoordGeometryData::GeometryProfile() const{
+	return rGeometryProfile::TEXCOORD;
 }

@@ -40,7 +40,7 @@ const unsigned short* rElementBufferData::GetElementData() const{
 
 void rElementBufferData::Clear(){
 	m_elementData.clear();
-	m_geometryType = rGEOMETRY_TRIANGLES;
+	m_geometryType = rGeometryType::TRIANGLES;
 }
 
 void rElementBufferData::Push(unsigned short v1, unsigned short v2, unsigned short v3){
@@ -62,9 +62,11 @@ void rElementBufferData::SetGeometryType(rGeometryType type){
 	m_geometryType = type;
 }
 
+const rIndexArray& rElementBufferData::GetIndices() const{
+	return m_elementData;
+}
+
 //-------------------------------------------------------
-
-
 
 
 rElementBufferData* rGeometryData::CreateElementBuffer(const rString& name, rGeometryType geometryType){
@@ -126,4 +128,12 @@ bool rGeometryData::GetVertexBoneLink(size_t index, rVertexBoneLink& boneLink){
 	else {
 		return false;
 	}
+}
+
+void rGeometryData::TransformVertices(size_t startingIndex, const rMatrix4& transform){
+	size_t vertexCount = VertexCount();
+	if (startingIndex >= vertexCount) return;
+
+	for (size_t i = startingIndex; i < vertexCount; i++)
+		TransformVertex(i, transform);
 }

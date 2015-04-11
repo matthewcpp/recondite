@@ -17,6 +17,8 @@ public:
 	virtual char* VertexData() const override;
 	virtual size_t VertexDataSize() const override;
 
+	virtual rGeometryProfile GeometryProfile() const override;
+
 public:
 
 	void SetVertex(size_t index, const rVector3& v, const rVector3& n, const rVector2& tc);
@@ -26,21 +28,21 @@ public:
 
 private:
 
-	struct rModelVertex{
-		rModelVertex() {}
-		rModelVertex(const rVector3& v, const rVector3& n, const rVector2& tc)
+	struct rTexCoordVertex{
+		rTexCoordVertex() {}
+		rTexCoordVertex(const rVector3& v, const rVector3& n, const rVector2& tc)
 			:position(v), texCoord(tc), normal(n) {}
 
 		rVector3 position;
-		rVector2 texCoord;
 		rVector3 normal;
+		rVector2 texCoord;
 	};
 
-	typedef std::vector<rModelVertex> rModelVertexArray;
+	typedef std::vector<rTexCoordVertex> rTexCoordVertexArray;
 
 private:
 
-	rModelVertexArray m_vertexData;
+	rTexCoordVertexArray m_vertexData;
 	rVertexBoneLinkMap m_vertexBoneLinks;
 };
 

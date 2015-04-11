@@ -36,6 +36,8 @@ public:
 	void Push(unsigned short v1, unsigned short v2);
 	
 	void Clear();
+
+	const rIndexArray& GetIndices() const;
 	
 	rGeometryType GeometryType() const;
 	void SetGeometryType(rGeometryType type);
@@ -51,13 +53,17 @@ public:
 	rGeometryData(){}
 	virtual void Clear();
 
+public:
 	virtual void TransformVertex(size_t index, const rMatrix4& transform) = 0;
+	void TransformVertices(size_t startingIndex, const rMatrix4& transform);
 	virtual void PushVertex(const rVector3& position, const rVector3& normal) = 0;
 	virtual void GetVertex(size_t index, rVector3* position, rVector3* normal) const = 0;
 
 	virtual size_t VertexCount() const = 0;
 	virtual char* VertexData() const = 0;
 	virtual size_t VertexDataSize() const = 0;
+
+	virtual rGeometryProfile GeometryProfile() const = 0;
 
 public:
 

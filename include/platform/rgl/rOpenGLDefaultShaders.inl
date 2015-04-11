@@ -26,11 +26,11 @@ const char coloredFragmentShader[] =
 "  gl_FragColor = fragColor;"
 "}";
 
-//default shader for rendering a textured triangle
 
-const char texturedVertexShader[] =
+const char modelVertexShader[] =
 
 "attribute vec4 recPosition;"
+"attribute vec4 recNormal;"
 "attribute vec2 recTexCoord;"
 "varying vec2 v_texCoord;"
 "uniform mat4 recMVPMatrix;"
@@ -39,10 +39,12 @@ const char texturedVertexShader[] =
 "	v_texCoord = recTexCoord;"
 "}";
 
-const char modelVertexShader[] =
+
+//shader program for rendering geometry with texture coordinates
+
+const char texturedVertexShader[] =
 
 "attribute vec4 recPosition;"
-"attribute vec4 recNormal;"
 "attribute vec2 recTexCoord;"
 "varying vec2 v_texCoord;"
 "uniform mat4 recMVPMatrix;"
@@ -64,4 +66,33 @@ const char texturedFragmentShader[] =
 "	if (texturedColor.a < 0.1)"
 "		discard;"
 "	gl_FragColor = texturedColor;"
+"}";
+
+//shader program for rendering geometry which has vertex colors
+const char vertexColorVertexShader[] =
+
+"attribute vec4 recPosition;"
+"attribute vec4 recNormal;"
+"attribute vec4 recVertexColor;"
+""
+"varying vec4 v_vertexColor;"
+"uniform mat4 recMVPMatrix;"
+""
+"void main(){"
+"	gl_Position = recMVPMatrix * recPosition;"
+"	v_vertexColor = recVertexColor;"
+"}";
+
+const char vertexColorFragmentShader[] =
+
+"#ifdef GLES2\n"
+"precision mediump float;\n"
+"#endif\n"
+""
+"varying vec4 v_vertexColor;"
+""
+"void main(){"
+"	if (v_vertexColor.a < 0.1)"
+"		discard;"
+"	gl_FragColor = v_vertexColor;"
 "}";

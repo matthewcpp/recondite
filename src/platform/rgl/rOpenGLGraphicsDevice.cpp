@@ -280,35 +280,80 @@ void rOpenGLGraphicsDevice::RenderGeometry(const rGeometry* geometry, const rMat
 		if (elementBuffer){
 			SetActiveMaterial(material);
 		
-			GLint programId = material->Shader()->ProgramId();
-			GLuint vertexBufferId = geometry->VertexBufferId();
-			GLuint elementBufferId = elementBuffer->BufferId();
+			switch (geometry->GeometryProfile()){
+				case rGeometryProfile::TEXCOORD:
+					RenderTexCoordGeometryProfile(geometry, transform, elementBuffer, material);
+					break;
 
-			GLuint gPositionLoc = glGetAttribLocation ( programId, "recPosition" );
-			GLuint gTexCoordLoc = glGetAttribLocation ( programId, "recTexCoord" );
-			GLuint gNormalLoc = glGetAttribLocation ( programId, "recNormal" );
-			GLuint gMatrixLoc = glGetUniformLocation ( programId, "recMVPMatrix" );
-		
-			glUniformMatrix4fv(gMatrixLoc, 1, GL_FALSE, transform.m);
-		
-			glBindBuffer(GL_ARRAY_BUFFER, vertexBufferId);
-			glVertexAttribPointer ( gPositionLoc, 3, GL_FLOAT, GL_FALSE, 32, 0);
-			glEnableVertexAttribArray ( gPositionLoc );
-
-			glVertexAttribPointer ( gTexCoordLoc, 2, GL_FLOAT, GL_FALSE, 32, (void*)12);
-			glEnableVertexAttribArray ( gTexCoordLoc );
-		
-			glVertexAttribPointer ( gNormalLoc, 3, GL_FLOAT, GL_FALSE, 32, (void*)20);
-			glEnableVertexAttribArray ( gNormalLoc );
-
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBufferId);
-			glDrawElements ( GLGeometryType(elementBuffer->GeometryType()), elementBuffer->Size(), GL_UNSIGNED_SHORT, 0 );
-
-			glDisableVertexAttribArray ( gPositionLoc );
-			glDisableVertexAttribArray ( gTexCoordLoc );
-			glDisableVertexAttribArray ( gNormalLoc );
+				case rGeometryProfile::VERTEXCOLOR:
+					RenderVertexColorGeometryProfile(geometry, transform, elementBuffer, material);
+					break;
+			}
 		}
 	}
+}
+
+void rOpenGLGraphicsDevice::RenderTexCoordGeometryProfile(const rGeometry* geometry, const rMatrix4& transform, rElementBuffer* elementBuffer, rMaterial* material){
+	GLint programId = material->Shader()->ProgramId();
+	GLuint vertexBufferId = geometry->VertexBufferId();
+	GLuint elementBufferId = elementBuffer->BufferId();
+
+	GLuint gPositionLoc = glGetAttribLocation(programId, "recPosition");
+	GLuint gNormalLoc = glGetAttribLocation(programId, "recNormal");
+	GLuint gTexCoordLoc = glGetAttribLocation(programId, "recTexCoord");
+
+	GLuint gMatrixLoc = glGetUniformLocation(programId, "recMVPMatrix");
+
+	glUniformMatrix4fv(gMatrixLoc, 1, GL_FALSE, transform.m);
+
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBufferId);
+	glVertexAttribPointer(gPositionLoc, 3, GL_FLOAT, GL_FALSE, 32, 0);
+	glEnableVertexAttribArray(gPositionLoc);
+
+	glVertexAttribPointer(gNormalLoc, 3, GL_FLOAT, GL_FALSE, 32, (void*)12);
+	glEnableVertexAttribArray(gNormalLoc);
+
+	glVertexAttribPointer(gTexCoordLoc, 2, GL_FLOAT, GL_FALSE, 32, (void*)24);
+	glEnableVertexAttribArray(gTexCoordLoc);
+
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBufferId);
+	glDrawElements(GLGeometryType(elementBuffer->GeometryType()), elementBuffer->Size(), GL_UNSIGNED_SHORT, 0);
+
+	glDisableVertexAttribArray(gPositionLoc);
+	glDisableVertexAttribArray(gTexCoordLoc);
+	glDisableVertexAttribArray(gNormalLoc);
+}
+
+void rOpenGLGraphicsDevice::RenderVertexColorGeometryProfile(const rGeometry* geometry, const rMatrix4& transform, rElementBuffer* elementBuffer, rMaterial* material){
+	GLint programId = material->Shader()->ProgramId();
+	GLuint vertexBufferId = geometry->VertexBufferId();
+	GLuint elementBufferId = elementBuffer->BufferId();
+
+	GLuint gPositionLoc = glGetAttribLocation(programId, "recPosition");
+	GLuint gNormalLoc = glGetAttribLocation(programId, "recNormal");
+	GLuint gVertexColorLoc = glGetAttribLocation(programId, "recVertexColor");
+
+	GLuint gMatrixLoc = glGetUniformLocation(programId, "recMVPMatrix");
+
+	glUniformMatrix4fv(gMatrixLoc, 1, GL_FALSE, transform.m);
+
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBufferId);
+	glVertexAttribPointer(gPositionLoc, 3, GL_FLOAT, GL_FALSE, 40, 0);
+	glEnableVertexAttribArray(gPositionLoc);
+
+	glVertexAttribPointer(gNormalLoc, 3, GL_FLOAT, GL_FALSE, 40, (void*)12);
+	glEnableVertexAttribArray(gNormalLoc);
+
+	glVertexAttribPointer(gVertexColorLoc, 4, GL_FLOAT, GL_FALSE, 40, (void*)24);
+	glEnableVertexAttribArray(gVertexColorLoc);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBufferId);
+	glDrawElements(GLGeometryType(elementBuffer->GeometryType()), elementBuffer->Size(), GL_UNSIGNED_SHORT, 0);
+
+	glDisableVertexAttribArray(gPositionLoc);
+	glDisableVertexAttribArray(gVertexColorLoc);
+	glDisableVertexAttribArray(gNormalLoc);
 }
 
 void rOpenGLGraphicsDevice::RenderImmediate(const rImmediateBuffer& geometry, const rMatrix4& transform, rMaterial* material){
@@ -350,11 +395,11 @@ void rOpenGLGraphicsDevice::RenderImmediate(const rImmediateBuffer& geometry, co
 
 GLenum rOpenGLGraphicsDevice::GLGeometryType(rGeometryType type) const{
 	switch (type){
-	case rGEOMETRY_LINES:
+	case rGeometryType::LINES:
 		return GL_LINES;
-	case rGEOMETRY_LINE_LOOP:
+	case rGeometryType::LINE_LOOP:
 		return GL_LINE_LOOP;
-	case rGEOMETRY_POINTS:
+	case rGeometryType::POINTS:
 		return GL_POINTS;
 	default:
 		return GL_TRIANGLES;

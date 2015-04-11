@@ -1,179 +1,84 @@
 #include "data/rModelData.hpp"
 
-rModelData::rModelData(){
-	m_skeleton = nullptr;
-
-	m_geometry = std::make_unique<rTexCoordGeometryData>();
+rModelData::rModelData(rGeometryProfile geometryProfile){
+	InitWithProfile(geometryProfile);
 }
 
-void rModelData::Clear(){
-	m_geometry->Clear();
+void rModelData::InitWithProfile(rGeometryProfile geometryProfile){
+	switch (geometryProfile){
+		case rGeometryProfile::VERTEXCOLOR:
+			m_geometryData.reset(new rVertexColorGeometryData());
+			break;
+
+		case rGeometryProfile::TEXCOORD:
+			m_geometryData.reset(new rTexCoordGeometryData());
+			break;
+	}
+}
+
+rGeometryData* rModelData::GetGeometryData(){
+	return m_geometryData.get();
+}
+
+rString rModelData::GetDefaultMaterial() const{
+	switch (m_geometryData->GeometryProfile()){
+		case rGeometryProfile::VERTEXCOLOR:
+			return "default_vertex_color_geometry";
+
+		default:
+			return "default_colored";
+	}
+}
+
+void rModelData::CreateMeshDataFromGeometry(){
 	m_meshes.clear();
-	m_materials.clear();
-	m_textures.clear();
 
-	m_name.clear();
-	m_path.clear();
+	rArrayString elementBuffers;
+	m_geometryData->GetElementBufferNames(elementBuffers);
 
-	m_boundingBox.Empty();
+	for (size_t i = 0; i < elementBuffers.size(); i++){
+		rString& elementBuffer = elementBuffers[i];
+		rElementBufferData* elementBufferData = m_geometryData->GetElementBuffer(elementBuffer);
 
-	m_skeleton.reset();
+		if (m_meshes.count(elementBuffer) == 0){
+			rMeshData* meshData = new rMeshData(elementBuffer, elementBuffer, elementBufferData->GeometryType());
+			meshData->materialName = GetDefaultMaterial();
+			m_meshes[elementBuffer].reset(meshData);
+		}
+	}
+
+	RecalculateMeshBoundingBoxes();
 }
 
-//---------------------------------
-
-size_t rModelData::MeshCount() const{
-	return m_meshes.size();
+void rModelData::RecalculateMeshBoundingBoxes(){
+	for (auto& entry : m_meshes){
+		RecalulateMeshDataBounding(entry.second.get());
+	}
 }
 
-rMeshData* rModelData::GetMeshData(const rString& name) const{
-	auto result = m_meshes.find(name);
+void rModelData::RecalulateMeshDataBounding(rMeshData* meshData){
+	rElementBufferData* elementBufferData = m_geometryData->GetElementBuffer(meshData->elementBufferName);
 
-	if (result == m_meshes.end()){
+	if (elementBufferData){
+		meshData->boundingBox.Invalidate();
+		rVector3 position;
+
+		const rIndexArray& indices = elementBufferData->GetIndices();
+		for (size_t i = 0; i < indices.size(); i++){
+			m_geometryData->GetVertex(i, &position, nullptr);
+			meshData->boundingBox.AddPoint(position);
+		}
+	}
+}
+
+rMeshData* rModelData::GetMeshData(const rString& name){
+	if (m_meshes.count(name))
+		return m_meshes[name].get();
+	else
 		return nullptr;
-	}
-	else{
-		return result->second.get();
-	}
-}
-
-rMeshData* rModelData::CreateMeshData(const rString& name){
-	if (m_meshes.count(name)){
-		return nullptr;
-	}
-	else{
-		rMeshDataPtr meshPtr = std::make_shared<rMeshData>(name);
-		m_meshes[name] = meshPtr;
-
-		return meshPtr.get();
-	}
-}
-
-void rModelData::DeleteMeshData(const rString& name){
-	m_meshes.erase(name);
 }
 
 void rModelData::GetMeshDataNames(rArrayString& names) const{
-	names.clear();
-
-	for (rMeshDataMap::const_iterator it = m_meshes.begin(); it != m_meshes.end(); ++it)
-		names.push_back(it->first);
-}
-
-//---------------------------------
-
-size_t rModelData::MaterialCount() const{
-	return m_materials.size();
-}
-
-rMaterialData* rModelData::GetMaterialData(const rString& name) const{
-	auto result = m_materials.find(name);
-	
-	if (result == m_materials.end()){
-		return nullptr;
-	}
-	else {
-		return result->second.get();
-	}
-}
-
-rMaterialData* rModelData::CreateMaterialData(const rString& name){
-	if (m_materials.count(name)){
-		return nullptr;
-	}
-	else{
-		rMaterialDataPtr materialPtr = std::make_shared<rMaterialData>();
-		m_materials[name] = materialPtr;
-		
-		return materialPtr.get();
-	}
-}
-
-void rModelData::DeleteMaterialData(const rString& name){
-	m_materials.erase(name);
-}
-
-void rModelData::GetMaterialDataNames(rArrayString& names) const{
-	names.clear();
-	
-	for (rMaterialDataMap::const_iterator it = m_materials.begin(); it!= m_materials.end(); ++it)
-		names.push_back(it->first);
-}
-
-//---------------------------------
-
-size_t rModelData::TextureCount() const{
-	return m_textures.size();
-}
-
-rTexture2DData* rModelData::GetTextureData(const rString& name) const{
-	auto result = m_textures.find(name);
-
-	if (result == m_textures.end()){
-		return nullptr;
-	}
-	else{
-		return result->second.get();
-	}
-}
-
-rTexture2DData* rModelData::CreateTextureData(const rString& name){
-	if (m_textures.count(name)){
-		return nullptr;
-	}
-	else{
-		rTextureDataPtr texturePtr = std::make_shared<rTexture2DData>();
-		m_textures[name] = texturePtr;
-		return texturePtr.get();;
-	}
-}
-
-void rModelData::DeleteTextureData(const rString& name){
-	m_textures.erase(name);
-}
-
-void rModelData::GetTextureDataNames(rArrayString& names) const{
-	names.clear();
-	
-	for (rTexture2DDataMap::const_iterator it = m_textures.begin(); it != m_textures.end(); ++it)
-		names.push_back(it->first);
-}
-
-//---------------------------------
-
-rTexCoordGeometryData* rModelData::GetGeometryData() const{
-	return m_geometry.get();
-}
-
-void rModelData::SetBoundingBox(const rAlignedBox3& boundingBox){
-	m_boundingBox = boundingBox;
-}
-
-void rModelData::SetName(const rString& name){
-	m_name = name;
-}
-
-rString rModelData::GetName() const{
-	return m_name;
-}
-
-void rModelData::SetPath(const rString& path){
-	m_path = path;
-}
-
-rString rModelData::GetPath() const{
-	return m_path;
-}
-
-rSkeleton* rModelData::GetSkeleton() const{
-	return m_skeleton.get();
-}
-
-rSkeleton* rModelData::CreateSkeleton(){
-	m_skeleton = std::make_unique<rSkeleton>();
-	return m_skeleton.get();
-}
-
-const rAlignedBox3& rModelData::GetBoundingBox() const {
-	return m_boundingBox;
+	for (auto& entry : m_meshes)
+		names.push_back(entry.first);
 }

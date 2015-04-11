@@ -500,7 +500,7 @@ rGeometry* rContentManager::LoadGeometry(const rGeometryData& geometryData, cons
 		*/
 
 
-		geometry = new rGeometry(vertexBuffer, boneLinkBuffer , GetNextAssetId(), name, "");
+		geometry = new rGeometry(geometryData.GeometryProfile(), vertexBuffer, boneLinkBuffer , GetNextAssetId(), name, "");
 		
 		rArrayString bufferNames;
 		geometryData.GetElementBufferNames(bufferNames);
@@ -637,45 +637,38 @@ rModel* rContentManager::GetModelAsset(const rString& name) const{
 rModel* rContentManager::LoadModel(rModelData& modelData, const rString& name){
 	if (m_models.count(name)){
 		m_error = rCONTENT_ERROR_ASSET_NAME_ALREADY_PRESENT;
-		return NULL;
+		return nullptr;
 	}
-	else{
-		rString modelDir = rPath::Directory(modelData.GetPath());
-		rString geometryFile = rPath::Assemble(modelDir, modelData.GetName(), ".rgeo");
-		rGeometry* geometry = GetOrLoadGeometry(modelData.GetName(), geometryFile);
 
-		rModel* model = new rModel(geometry, GetNextAssetId(), name, "");
-		rArrayString meshNames;
-		modelData.GetMeshDataNames(meshNames);
+	rGeometry* geometry = LoadGeometry(*modelData.GetGeometryData(), name + "::geometry");
+	rModel* model = new rModel(geometry, GetNextAssetId(), name, "");
 
-		for (size_t i =0; i < meshNames.size(); i++){
-			rMeshData* meshData = modelData.GetMeshData(meshNames[i]);
-			rString materialFile = rPath::Assemble(modelDir, meshData->material, ".rmat");
-			rMaterial* material = GetOrLoadMaterial(meshData->material, materialFile);
+	rArrayString meshDataNames;
+	modelData.GetMeshDataNames(meshDataNames);
 
-			model->CreateMesh(meshData->name, meshData->buffer, material, meshData->boundingBox);
-		}
+	for (size_t i = 0; i < meshDataNames.size(); i++){
+		rMeshData* meshData = modelData.GetMeshData(meshDataNames[i]);
 
-		rString skeletonFile = rPath::Assemble(modelDir, name, ".rskl");
-		rSkeleton* skeleton= GetOrLoadSkeleton(name, skeletonFile);
-		if (skeleton)
-			model->SetSkeleton(skeleton);
-
-		m_models[name] = model;
-		m_error = rCONTENT_ERROR_NONE;
-		return model;
+		rMaterial* material = GetMaterialAsset(meshData->materialName);
+		model->CreateMesh(meshData->meshName, meshData->elementBufferName, material, meshData->boundingBox);
 	}
+	m_models[name] = model;
+	return model;
 }
 
 rModel* rContentManager::LoadModelFromPath(const rString& path, const rString& name){
-	rModelDataReader reader;
-	rModelData modelData;
-	rContentError error = reader.LoadFromFile(path, modelData);
+	/*
+		rModelDataReader reader;
+		rModelData modelData;
+		rContentError error = reader.LoadFromFile(path, modelData);
 
-	if (error)
+		if (error)
 		return NULL;
-	else
+		else
 		return LoadModel(modelData, name);
+	*/
+
+	return nullptr;
 }
 
 rModel* rContentManager::GetOrLoadModel(const rString& name, const rString& path){

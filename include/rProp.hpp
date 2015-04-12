@@ -16,8 +16,14 @@ public:
 
 	rModel* Model();
 	void SetModel(rModel* model);
+
+protected:
+	virtual void DoRecalculateBoundingVolume() override;
+	virtual riBoundingVolume* DoGetBoundingVolume() override;
+
 private:
 	rModel* m_model;
+	rAlignedBoxBoundingVolume m_boundingVolume;
 };
 
 #endif

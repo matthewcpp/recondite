@@ -6,7 +6,7 @@ rModel::rModel(rGeometry* geometry, int assetid, const rString& name, const rStr
 	m_geometry = geometry;
 	m_skeleton = NULL;
 
-	m_boundingBox.Empty();
+	m_boundingBox.Invalidate();
 }
 
 rModel::~rModel(){

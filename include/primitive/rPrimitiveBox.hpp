@@ -38,7 +38,7 @@ protected:
 
 	virtual void CreateGeometry(rTexCoordGeometryData& geometry) override;
 	virtual void DoRecalculateBoundingVolume() override;
-	virtual riBoundingVolume* DoGetBoundingVolume()override;
+	virtual riBoundingVolume* DoGetBoundingVolume() override;
 
 
 private:

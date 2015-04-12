@@ -82,3 +82,8 @@ void rModelData::GetMeshDataNames(rArrayString& names) const{
 	for (auto& entry : m_meshes)
 		names.push_back(entry.first);
 }
+
+void rModelData::Clear(){
+	m_geometryData->Clear();
+	m_meshes.clear();
+}

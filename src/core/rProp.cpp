@@ -21,8 +21,10 @@ void rProp::SetModel(rModel* model){
 void rProp::Draw(){
 	rMatrix4& transform = TransformMatrix();
 
-	if (this->Drawable()->Visible())
+	if (this->Drawable()->Visible()){
 		m_engine->renderer->RenderModel(m_model, transform);
+		//m_engine->renderer->RenderWireBox(m_boundingVolume.FitBox(), rColor::White);
+	}
 }
 
 void rProp::DoRecalculateBoundingVolume() {

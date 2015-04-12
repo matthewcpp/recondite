@@ -15,6 +15,11 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/tools)
 source_group (Tools FILES ${tool_sources})
 set(editor_files ${editor_files} ${tool_sources})
 
+set(command_sources)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/commands)
+source_group (Commands FILES ${command_sources})
+set(editor_files ${editor_files} ${command_sources})
+
 set(dialog_sources)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/dialogs)
 source_group (Dialogs FILES ${dialog_sources})

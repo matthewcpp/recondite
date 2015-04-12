@@ -21,6 +21,8 @@ public:
 
 	virtual rGeometryProfile GeometryProfile() const override;
 
+	virtual void Clear();
+
 public:
 	void PushVertex(const rVector3& position, const rVector3& normal, const rColor& color);
 

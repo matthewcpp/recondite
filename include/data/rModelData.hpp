@@ -39,6 +39,8 @@ public:
 
 	rGeometryData* GetGeometryData();
 
+	virtual void Clear();
+
 private:
 	void RecalulateMeshDataBounding(rMeshData* meshData);
 	void InitWithProfile(rGeometryProfile geometryProfile);

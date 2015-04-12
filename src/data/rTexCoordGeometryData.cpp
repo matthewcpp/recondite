@@ -2,7 +2,6 @@
 
 void rTexCoordGeometryData::Clear(){
 	m_vertexData.clear();
-	m_vertexBoneLinks.clear();
 }
 
 //vertex operations

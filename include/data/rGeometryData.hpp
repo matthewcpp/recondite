@@ -51,9 +51,11 @@ private:
 class RECONDITE_API rGeometryData{
 public:
 	rGeometryData(){}
-	virtual void Clear();
+	virtual ~rGeometryData(){}
 
 public:
+	virtual void Clear();
+
 	virtual void TransformVertex(size_t index, const rMatrix4& transform) = 0;
 	void TransformVertices(size_t startingIndex, const rMatrix4& transform);
 	virtual void PushVertex(const rVector3& position, const rVector3& normal) = 0;
@@ -66,7 +68,6 @@ public:
 	virtual rGeometryProfile GeometryProfile() const = 0;
 
 public:
-
 	size_t VertexBoneLinkCount() const;
 	size_t CreateVertexBoneLink(unsigned short vertexIndex, unsigned short boneIndex, float weight);
 	bool GetVertexBoneLink(size_t index, rVertexBoneLink& boneLink);
@@ -80,13 +81,11 @@ public:
 	void GetElementBufferNames(rArrayString& names) const;
 
 private:
-
 	typedef std::shared_ptr<rElementBufferData> rElementBufferDataPtr;
 	typedef std::map<rString, rElementBufferDataPtr> rElementBufferDataMap;
 	typedef std::vector<rVertexBoneLink> rVertexBoneLinkVector;
 
 private:
-
 	rElementBufferDataMap m_elementBuffers;
 	rVertexBoneLinkVector m_vertexBoneLinks;
 	

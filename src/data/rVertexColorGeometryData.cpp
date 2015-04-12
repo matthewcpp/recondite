@@ -61,3 +61,7 @@ void rVertexColorGeometryData::PushVertex(const rVector3& position, const rVecto
 	rVertexColorVertex vertex(position, normal, c);
 	m_vertices.push_back(vertex);
 }
+
+void rVertexColorGeometryData::Clear(){
+	m_vertices.clear();
+}

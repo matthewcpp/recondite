@@ -2,19 +2,43 @@
 
 reTranslateGizmo::reTranslateGizmo(reComponent* component){
 	m_component = component;
-	m_prop = nullptr;
+
+	m_xHandle = nullptr;
+	m_yHandle = nullptr;
+	m_zHandle = nullptr;
 }
 
-bool reTranslateGizmo::ContainsActor(rActor3* actor){
-	return m_prop == actor;
+reGizmoAxis reTranslateGizmo::GetGizmoAxis(rActor3* actor){
+	if (actor == m_xHandle)
+		return reGizmoAxis::X;
+	else if (actor == m_yHandle)
+		return reGizmoAxis::Y;
+	else if (actor == m_zHandle)
+		return reGizmoAxis::Z;
+	else
+		return reGizmoAxis::NONE;
 }
 
 void reTranslateGizmo::SetVisibility(bool visibility){
-	m_prop->Drawable()->SetVisibility(visibility);
+	m_xHandle->Drawable()->SetVisibility(visibility);
+	m_yHandle->Drawable()->SetVisibility(visibility);
+	m_zHandle->Drawable()->SetVisibility(visibility);
+}
+
+void reTranslateGizmo::SetPosition(const rVector3& pos){
+	m_currentPosition = pos;
+
+	m_xHandle->SetPosition(pos);
+	m_yHandle->SetPosition(pos);
+	m_zHandle->SetPosition(pos);
+}
+
+rVector3 reTranslateGizmo::GetPosition(){
+	return m_currentPosition;
 }
 
 void reTranslateGizmo::Update(){
-	if (!m_prop)
+	if (!m_xHandle)
 		CreateGizmo();
 
 	//the origin of the gizmo should be in the center of the selection
@@ -33,7 +57,7 @@ void reTranslateGizmo::Update(){
 			selectionBounding.AddBox(actorBounding);
 		}
 
-		m_prop->SetPosition(selectionBounding.Center());
+		SetPosition(selectionBounding.Center());
 		SetVisibility(true);
 	}
 }
@@ -49,45 +73,68 @@ void reTranslateGizmo::CreateGizmo(){
 	float gizmoStemLength = 1.5f;
 	size_t gizmoSegmentCount = 15;
 
-	//create the handles
+	//create Y Handle
 	rPrimitiveGeometry::CreateCone(gizmoRadius, gizmoHeight, gizmoSegmentCount, *geometryData);
 	geometryData->SetColorForVertices(0, rColor::Green);
 	translate.SetTranslate(0, gizmoStemLength, 0);
 	geometryData->TransformVertices(0, translate);
 
-	size_t startingIndex = geometryData->VertexCount();
-	rPrimitiveGeometry::CreateCone(gizmoRadius, gizmoHeight, gizmoSegmentCount, *geometryData);
-	geometryData->SetColorForVertices(startingIndex, rColor::Blue);
-	translate.SetTranslate(gizmoStemLength, 0, 0);
-	rotate.LoadIdentity();
-	rotate.SetRotationZ(-90.0f);
-	xform = translate * rotate;
-	geometryData->TransformVertices(startingIndex, xform);
-
-	startingIndex = geometryData->VertexCount();
-	rPrimitiveGeometry::CreateCone(gizmoRadius, gizmoHeight, gizmoSegmentCount, *geometryData);
-	geometryData->SetColorForVertices(startingIndex, rColor::Red);
-	translate.SetTranslate(0, 0, gizmoStemLength);
-	rotate.LoadIdentity();
-	rotate.SetRotationX(90.0f);
-	xform = translate * rotate;
-	geometryData->TransformVertices(startingIndex, xform);
-
-	//create the stems
 	rElementBufferData* wire = geometryData->GetElementBuffer("wire");
 	wire->ClearElementData();
 
-	startingIndex = geometryData->VertexCount();
+	gizmoData.CreateMeshDataFromGeometry();
+
+	size_t startingIndex = geometryData->VertexCount();
 	rVector3 handleBase(0, gizmoStemLength, 0);
 	geometryData->PushVertex(rVector3::ZeroVector, rVector3::ZeroVector, rColor::Green);
 	geometryData->PushVertex(handleBase, rVector3::ZeroVector, rColor::Green);
 	wire->Push(startingIndex, startingIndex + 1);
+
+	rModel* handleModel = m_component->GetEngine()->content->LoadModel(gizmoData, "__reTranslateGizmoYHandle");
+	m_yHandle = new rProp(handleModel, "__reTranslateGizmoYHandle", m_component->GetEngine());
+	m_component->AddReservedActor(m_yHandle);
+
+	//create X Handle
+	gizmoData.Clear();
+	rPrimitiveGeometry::CreateCone(gizmoRadius, gizmoHeight, gizmoSegmentCount, *geometryData);
+	geometryData->SetColorForVertices(0, rColor::Blue);
+	translate.SetTranslate(gizmoStemLength, 0, 0);
+	rotate.LoadIdentity();
+	rotate.SetRotationZ(-90.0f);
+	xform = translate * rotate;
+	geometryData->TransformVertices(0, xform);
+
+	wire = geometryData->GetElementBuffer("wire");
+	wire->ClearElementData();
+
+	gizmoData.CreateMeshDataFromGeometry();
 
 	startingIndex = geometryData->VertexCount();
 	handleBase.Set(gizmoStemLength, 0, 0);
 	geometryData->PushVertex(rVector3::ZeroVector, rVector3::ZeroVector, rColor::Blue);
 	geometryData->PushVertex(handleBase, rVector3::ZeroVector, rColor::Blue);
 	wire->Push(startingIndex, startingIndex + 1);
+
+	
+
+	handleModel = m_component->GetEngine()->content->LoadModel(gizmoData, "__reTranslateGizmoXHandle");
+	m_xHandle = new rProp(handleModel, "__reTranslateGizmoXHandle", m_component->GetEngine());
+	m_component->AddReservedActor(m_xHandle);
+
+	//create Z Handle
+	gizmoData.Clear();
+	rPrimitiveGeometry::CreateCone(gizmoRadius, gizmoHeight, gizmoSegmentCount, *geometryData);
+	geometryData->SetColorForVertices(0, rColor::Red);
+	translate.SetTranslate(0, 0, gizmoStemLength);
+	rotate.LoadIdentity();
+	rotate.SetRotationX(90.0f);
+	xform = translate * rotate;
+	geometryData->TransformVertices(0, xform);
+
+	wire = geometryData->GetElementBuffer("wire");
+	wire->ClearElementData();
+
+	gizmoData.CreateMeshDataFromGeometry();
 
 	startingIndex = geometryData->VertexCount();
 	handleBase.Set(0, 0, gizmoStemLength);
@@ -96,11 +143,10 @@ void reTranslateGizmo::CreateGizmo(){
 	wire->Push(startingIndex, startingIndex + 1);
 
 
-	gizmoData.CreateMeshDataFromGeometry();
 
-	rModel* gizmoModel = m_component->GetEngine()->content->LoadModel(gizmoData, "__reTranslateGizmo");
-	m_prop = new rProp(gizmoModel, "__reTranslateGizmo", m_component->GetEngine());
-	m_component->AddReservedActor(m_prop);
+	handleModel = m_component->GetEngine()->content->LoadModel(gizmoData, "__reTranslateGizmoZHandle");
+	m_zHandle = new rProp(handleModel, "__reTranslateGizmoZHandle", m_component->GetEngine());
+	m_component->AddReservedActor(m_zHandle);
 
 	SetVisibility(false);
 }

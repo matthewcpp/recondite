@@ -31,3 +31,7 @@ void rLogFile::DoLog(const char* prefix, const rString& message){
 void rLogFile::Shutdown(){
 	m_file.close();
 }
+
+rLogFile::~rLogFile(){
+	Shutdown();
+}

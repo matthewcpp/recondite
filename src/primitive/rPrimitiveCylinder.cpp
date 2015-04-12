@@ -8,6 +8,17 @@ rPrimitiveCylinder::rPrimitiveCylinder(const rString& id, rEngine* engine)
 	m_segmentCount = 20;
 }
 
+bool rPrimitiveCylinder::DoSerialize(riSerializationTarget* target){
+	target->Category(ClassName());
+
+	target->Float("radius", m_radius);
+	target->Float("height", m_height);
+
+	target->Int("segmentCount", m_segmentCount);
+
+	return rPrimitive::DoSerialize(target);
+}
+
 float rPrimitiveCylinder::Radius() const{
 	return m_radius;
 }

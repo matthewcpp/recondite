@@ -27,6 +27,7 @@ protected:
 
 	virtual void DoRecalculateBoundingVolume() override;
 	virtual riBoundingVolume* DoGetBoundingVolume()override;
+	bool DoSerialize(riSerializationTarget* target) override;
 
 private:
 	void CreateShellFace(rTexCoordGeometryData& geometry, int i1, int i2, int i3, int i4);

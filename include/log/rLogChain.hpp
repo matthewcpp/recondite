@@ -9,8 +9,6 @@
 
 #include "rLogTarget.hpp"
 
-typedef std::list<rLogTarget*> rLogTargetList;
-
 class RECONDITE_API rLogChain : public rLogTarget {
 public:
 	rLogChain(rLogTarget* target);

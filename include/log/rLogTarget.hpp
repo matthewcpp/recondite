@@ -7,6 +7,9 @@
 
 class RECONDITE_API rLogTarget{
 public:
+	virtual ~rLogTarget(){}
+
+public:
 	virtual void Debug(const rString& message) = 0;
 	virtual void Warning(const rString& message) = 0;
 	virtual void Trace(const rString& message) = 0;

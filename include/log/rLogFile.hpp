@@ -6,11 +6,11 @@
 #include "rDefs.hpp"
 
 #include "log/rLogTarget.hpp"
-#include "rLogChain.hpp"
 
 class RECONDITE_API rLogFile : public rLogTarget{
 public:
 	rLogFile(const rString& path);
+	~rLogFile();
 	
 	
 	virtual void Debug(const rString& message);

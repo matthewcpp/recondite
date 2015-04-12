@@ -17,7 +17,7 @@
 class reComponent : public rwxComponent{
 public:
 	reComponent();
-	reSelectionManager* GetSelection();
+	reSelectionManager* SelectionManager();
 	reProject* GetProject();
 
 	bool Init(wxGLCanvas* canvas) override;

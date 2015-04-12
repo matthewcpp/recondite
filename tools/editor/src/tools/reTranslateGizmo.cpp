@@ -13,13 +13,29 @@ void reTranslateGizmo::SetVisibility(bool visibility){
 	m_prop->Drawable()->SetVisibility(visibility);
 }
 
-void reTranslateGizmo::SetPosition(const rVector3& position){
-	m_prop->SetPosition(position);
-}
-
 void reTranslateGizmo::Update(){
 	if (!m_prop)
 		CreateGizmo();
+
+	//the origin of the gizmo should be in the center of the selection
+	const wxArrayString& selection = m_component->SelectionManager()->GetSelection();
+
+	if (selection.size() == 0){
+		SetVisibility(false);
+	}
+	else{
+		rScene* scene = m_component->GetScene();
+		rAlignedBox3 selectionBounding, actorBounding;
+
+		for (size_t i = 0; i < selection.size(); i++){
+			rActor3* actor = scene->GetActor(selection[i].c_str().AsChar());
+			actorBounding = actor->BoundingVolume()->FitBox();
+			selectionBounding.AddBox(actorBounding);
+		}
+
+		m_prop->SetPosition(selectionBounding.Center());
+		SetVisibility(true);
+	}
 }
 
 void reTranslateGizmo::CreateGizmo(){

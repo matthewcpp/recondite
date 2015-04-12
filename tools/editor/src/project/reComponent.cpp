@@ -5,7 +5,7 @@ reComponent::reComponent(){
 	m_selectionManager.reset(new reSelectionManager(this));
 }
 
-reSelectionManager* reComponent::GetSelection(){
+reSelectionManager* reComponent::SelectionManager(){
 	return m_selectionManager.get();
 }
 

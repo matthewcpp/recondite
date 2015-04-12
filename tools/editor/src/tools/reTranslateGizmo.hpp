@@ -10,7 +10,6 @@ public:
 
 public:
 	void SetVisibility(bool visibility);
-	void SetPosition(const rVector3& position);
 	void Update();
 
 	bool ContainsActor(rActor3* actor);

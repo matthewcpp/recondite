@@ -18,6 +18,11 @@ protected:
 	bool IsClick();
 	void UpdatePoints(wxMouseEvent& event);
 
+	rActor3* PickActor(wxMouseEvent& event, rwxGLCanvas* canvas);
+
+	bool DoActorSelection(rActor3* actor, wxMouseEvent& event);
+	bool DoClearSelection();
+
 protected:
 	wxPoint m_firstPoint;
 	wxPoint m_previousPoint;

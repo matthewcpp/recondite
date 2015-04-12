@@ -53,15 +53,15 @@ void reViewportDisplay::CreateViewportDisplay(){
 	m_leftSplitter = new wxSplitterWindow(m_mainSplitter, wxID_ANY);
 	m_leftSplitter->SetSashGravity(0.5);
 
-	m_topLeftViewport = new reViewport(m_component, m_toolManager, "Viewport 1", m_leftSplitter);
-	m_bottomLeftViewport = new reViewport(m_component, m_toolManager, "Viewport 2", m_leftSplitter);
+	m_topLeftViewport = new reViewport(m_component, m_toolManager, this, "Viewport 1", m_leftSplitter);
+	m_bottomLeftViewport = new reViewport(m_component, m_toolManager, this, "Viewport 2", m_leftSplitter);
 	m_leftSplitter->SplitHorizontally(m_topLeftViewport, m_bottomLeftViewport);
 
 	m_rightSplitter = new wxSplitterWindow(m_mainSplitter, wxID_ANY);
 	m_rightSplitter->SetSashGravity(0.5);
 
-	m_topRightViewport = new reViewport(m_component, m_toolManager, "Viewport 3", m_rightSplitter);
-	m_bottomRightViewport = new reViewport(m_component, m_toolManager, "Viewport 4", m_rightSplitter);
+	m_topRightViewport = new reViewport(m_component, m_toolManager, this, "Viewport 3", m_rightSplitter);
+	m_bottomRightViewport = new reViewport(m_component, m_toolManager, this, "Viewport 4", m_rightSplitter);
 	m_rightSplitter->SplitHorizontally(m_topRightViewport, m_bottomRightViewport);
 
 	m_mainSplitter->SplitVertically(m_leftSplitter, m_rightSplitter);
@@ -97,7 +97,7 @@ void reViewportDisplay::OnComponentInitialized(rEvent& event){
 	BindCanvasEvents(m_bottomRightViewport->GetCanvas());
 }
 
-void reViewportDisplay::UpdateDisplay(){
+void reViewportDisplay::UpdateAllViewports(){
 	m_topLeftViewport->GetCanvas()->Refresh();
 	m_topRightViewport->GetCanvas()->Refresh();
 	m_bottomLeftViewport->GetCanvas()->Refresh();
@@ -105,5 +105,5 @@ void reViewportDisplay::UpdateDisplay(){
 }
 
 void reViewportDisplay::OnDisplayShouldUpdate(rEvent& event){
-	UpdateDisplay();
+	UpdateAllViewports();
 }

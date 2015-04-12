@@ -22,6 +22,8 @@ public:
 	virtual rGeometryProfile GeometryProfile() const override;
 
 public:
+	void PushVertex(const rVector3& position, const rVector3& normal, const rColor& color);
+
 	void SetColorForVertices(size_t startingIndex, const rColor& color);
 	void SetColorForVertices(size_t startingIndex, size_t endingIndex, const rColor& color);
 

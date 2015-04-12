@@ -7,7 +7,6 @@ rActor3::rActor3(const rString& id, rEngine* engine)
 	m_rotation = rVector3::ZeroVector;
 	m_scale = rVector3::OneVector;
 
-	m_drawable = nullptr;
 	m_pickable = true;
 
 	SetTransformed(true);

@@ -4,6 +4,7 @@ rProp::rProp(rModel* model, const rString& id, rEngine* engine)
 	:rActor3(id, engine)
 {
 	m_model = model;
+	m_drawable.reset(new rDrawable());
 }
 
 rString rProp::ClassName() const{
@@ -20,5 +21,6 @@ void rProp::SetModel(rModel* model){
 void rProp::Draw(){
 	rMatrix4& transform = TransformMatrix();
 
-	m_engine->renderer->RenderModel(m_model, transform);
+	if (this->Drawable()->Visible())
+		m_engine->renderer->RenderModel(m_model, transform);
 }

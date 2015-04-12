@@ -242,7 +242,7 @@ void reMainFrame::NewLevel(){
 
 			m_projectExplorer->AddLevel(levelName);
 			EnsureViewportDisplayVisible();
-			m_viewportDisplay->UpdateDisplay();
+			m_viewportDisplay->UpdateAllViewports();
 		}
 	}
 }

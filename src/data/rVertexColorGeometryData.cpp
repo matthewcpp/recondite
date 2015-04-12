@@ -55,3 +55,9 @@ void rVertexColorGeometryData::SetColorForVertices(size_t startingIndex, size_t 
 rGeometryProfile rVertexColorGeometryData::GeometryProfile() const{
 	return rGeometryProfile::VERTEXCOLOR;
 }
+
+void rVertexColorGeometryData::PushVertex(const rVector3& position, const rVector3& normal, const rColor& color){
+	rVector4 c(color.red / 255.0f, color.green / 255.0f, color.blue / 255.0f, color.alpha / 255.0f);
+	rVertexColorVertex vertex(position, normal, c);
+	m_vertices.push_back(vertex);
+}

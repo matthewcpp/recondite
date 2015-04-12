@@ -1,31 +1,30 @@
 #ifndef RE_TRANSLATETOOL_HPP
 #define RE_TRANSLATETOOL_HPP
 
+#include <memory>
+
 #include "project/reComponent.hpp"
 
 #include <wx/wx.h>
 
-#include "tools/reSelectionTool.hpp"
+#include "tools/reToolBase.hpp"
+#include "tools/reTranslateGizmo.hpp"
 
 #include "data/rModelData.hpp"
 #include "primitive/rPrimitiveGeometry.hpp"
 #include "rProp.hpp"
 
-class reTranslateTool : public reSelectionTool {
+class reTranslateTool : public reToolBase {
 public:
 	reTranslateTool(reComponent* component, wxFrame* owner);
 
-	virtual wxString GetToolName() const override;
+	virtual bool OnMouseDown(wxMouseEvent& event, rwxGLCanvas* canvas) override;
 
+	virtual wxString GetToolName() const override;
 	virtual void OnActivate() override;
 
-private:
-	void CreateGizmo();
-
-	rModel* m_model;
-
 public:
-
+	std::unique_ptr<reTranslateGizmo> m_gizmo;
 };
 
 #endif

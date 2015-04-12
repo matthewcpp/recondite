@@ -35,7 +35,7 @@ public:
 	void Push(unsigned short v1, unsigned short v2, unsigned short v3);
 	void Push(unsigned short v1, unsigned short v2);
 	
-	void Clear();
+	void ClearElementData();
 
 	const rIndexArray& GetIndices() const;
 	

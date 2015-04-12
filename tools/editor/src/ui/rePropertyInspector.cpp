@@ -63,7 +63,7 @@ void rePropertyInspector::OnPropertyValueChanged(wxPropertyGridEvent& event){
 
 	if (writer.PropertySet()){
 		writer.Write(m_actor);
-		m_display->UpdateDisplay();
+		m_display->UpdateAllViewports();
 	}
 }
 

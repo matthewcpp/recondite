@@ -1,11 +1,12 @@
 #include "reViewport.hpp"
 
-reViewport::reViewport(reComponent* component, reToolManager* toolManager, const wxString& name, wxWindow *parent, wxWindowID id)
+reViewport::reViewport(reComponent* component, reToolManager* toolManager, reViewportManager* viewportManager, const wxString& name, wxWindow *parent, wxWindowID id)
 	:wxPanel(parent, id)
 {
 	m_component = component;
 	m_toolManager = toolManager;
 	m_viewportName = name;
+	m_viewportManager = viewportManager;
 
 	if (!s_inputTimer) s_inputTimer = new wxTimer();
 
@@ -68,18 +69,18 @@ void reViewport::OnCanvasMouseEvent(wxMouseEvent& event){
 	wxEventType eventType = event.GetEventType();
 
 	if (eventType == wxEVT_LEFT_DOWN){
-		if(m_toolManager->OnMouseDown(event, m_glCanvas))
-			m_glCanvas->Refresh();
+		if (m_toolManager->OnMouseDown(event, m_glCanvas))
+			m_viewportManager->UpdateAllViewports();
 	}
 	else if (eventType == wxEVT_LEFT_UP){
 		if(m_toolManager->OnMouseUp(event, m_glCanvas))
-			m_glCanvas->Refresh();
+			m_viewportManager->UpdateAllViewports();
 	}
 	else if (eventType == wxEVT_MOTION){
 		bool result = m_toolManager->OnMouseMotion(event, m_glCanvas);
 
 		if (result){
-			m_glCanvas->Refresh();
+			m_viewportManager->UpdateAllViewports();
 		}
 		else{
 			if (m_interaction->OnMouseMotion(event))

@@ -11,7 +11,7 @@
 #include "tools/reToolManager.hpp"
 #include "rePaletteDropTarget.hpp"
 
-class reViewportDisplay : public wxPanel{
+class reViewportDisplay : public reViewportManager, public wxPanel{
 public:
 	reViewportDisplay(reComponent* component, reToolManager* toolManager, wxWindow* parent, wxWindowID id = wxID_ANY);
 
@@ -19,7 +19,7 @@ public:
 	reViewport* GetViewport(const wxString& name);
 	reViewport* GetActiveViewport();
 
-	virtual void UpdateDisplay();
+	virtual void UpdateAllViewports();
 
 private:
 	void OnComponentInitialized(rEvent& event);

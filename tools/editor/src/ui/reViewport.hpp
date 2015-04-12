@@ -10,9 +10,14 @@
 #include "tools/reToolManager.hpp"
 #include "rwxViewCameraInteraction.hpp"
 
+class reViewportManager {
+public:
+	virtual void UpdateAllViewports() = 0;
+};
+
 class reViewport : public wxPanel{
 public:
-	reViewport(reComponent* component, reToolManager* toolManager, const wxString& name, wxWindow *parent, wxWindowID id = wxID_ANY);
+	reViewport(reComponent* component, reToolManager* toolManager, reViewportManager* viewportManager, const wxString& name, wxWindow *parent, wxWindowID id = wxID_ANY);
 
 public:
 	wxString GetViewportName();
@@ -42,6 +47,7 @@ private:
 	rwxGLCanvas* m_glCanvas;
 	reComponent* m_component;
 	reToolManager* m_toolManager;
+	reViewportManager* m_viewportManager;
 
 	wxStaticText* m_viewMenuText;
 	wxMenu m_viewMenu;

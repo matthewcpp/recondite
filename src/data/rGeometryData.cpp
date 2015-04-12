@@ -1,8 +1,6 @@
 #include "data/rGeometryData.hpp"
 
 rElementBufferData::rElementBufferData(rGeometryType geometryType){
-	Clear();
-
 	m_geometryType = geometryType;
 }
 
@@ -38,9 +36,8 @@ const unsigned short* rElementBufferData::GetElementData() const{
 		return NULL;
 }
 
-void rElementBufferData::Clear(){
+void rElementBufferData::ClearElementData(){
 	m_elementData.clear();
-	m_geometryType = rGeometryType::TRIANGLES;
 }
 
 void rElementBufferData::Push(unsigned short v1, unsigned short v2, unsigned short v3){

@@ -20,6 +20,7 @@ public:
 
 	virtual void OnActivate() {}
 	virtual void OnDeactivate() {}
+	virtual void OnUpdate() {}
 
 	virtual wxString GetToolName() const = 0;
 

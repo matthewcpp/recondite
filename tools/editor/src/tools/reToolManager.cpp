@@ -11,6 +11,8 @@ reToolManager::reToolManager(reComponent* component, wxFrame* owner, wxAuiManage
 
 	m_activeToolId = reTOOL_NONE;
 
+	m_component->Bind(reCommandProcessed, this, &reToolManager::OnCommandProcessed);
+
 	InitTools();
 }
 
@@ -71,6 +73,11 @@ bool reToolManager::OnMouseMotion(wxMouseEvent& event, rwxGLCanvas* canvas){
 		return m_activeTool->OnMouseMotion(event, canvas);
 	else
 		return false;
+}
+
+void reToolManager::OnCommandProcessed(rEvent& event){
+	if (m_activeTool)
+		m_activeTool->OnUpdate();
 }
 
 void reToolManager::CreateToolbars(){

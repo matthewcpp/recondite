@@ -26,6 +26,7 @@ public:
 
 	virtual wxString GetToolName() const override;
 	virtual void OnActivate() override;
+	virtual void OnUpdate() override;
 
 private:
 	void SetDragPlaneFromSelectedAxis();

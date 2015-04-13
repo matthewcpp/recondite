@@ -14,6 +14,10 @@
 
 #include "primitive/rPrimitiveGrid.hpp"
 
+enum reComponentEvent{
+	reCommandProcessed
+};
+
 class reComponent : public rwxComponent{
 public:
 	reComponent();
@@ -23,6 +27,8 @@ public:
 	bool Init(wxGLCanvas* canvas) override;
 
 	bool SubmitCommand(wxCommand* command);
+	bool UndoCommand();
+	bool RedoCommand();
 	void InitCommandProcessor(wxMenu* editMenu);
 
 	virtual bool SaveScene(const rString& path) override;

@@ -91,6 +91,10 @@ void reTranslateTool::OnActivate(){
 	m_gizmo->Update();
 }
 
+void reTranslateTool::OnUpdate(){
+	m_gizmo->Update();
+}
+
 wxString reTranslateTool::GetToolName() const{
 	return "Translate Tool";
 }

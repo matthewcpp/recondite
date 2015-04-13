@@ -40,6 +40,9 @@ private:
 
 	void OnFileExit(wxCommandEvent& event);
 
+	void OnUndoCommand(wxCommandEvent& event);
+	void OnRedoCommand(wxCommandEvent& event);
+
 	void NewProject();
 	void OpenProject();
 	void CloseProject();

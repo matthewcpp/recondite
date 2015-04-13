@@ -133,7 +133,11 @@ wxMenuBar* reMainFrame::CreateEditorMenuBar(){
 	fileMenu->Append(wxID_EXIT, "Exit\tAlt+F4");
 	menuBar->Append(fileMenu, "&File");
 	
-	
+	wxMenu* editMenu = new wxMenu();
+	editMenu->Append(wxID_UNDO, "Undo\tCtrl+Z");
+	editMenu->Append(wxID_REDO, "Redo\tCtrl+Y");
+	menuBar->Append(editMenu, "&Edit");
+	m_component->InitCommandProcessor(editMenu);
 
 	wxMenu* viewMenu = new wxMenu();
 	viewMenu->Append(reMainFrame_ViewPropertyInspector, "Property Inspector");
@@ -143,6 +147,9 @@ wxMenuBar* reMainFrame::CreateEditorMenuBar(){
 	menuBar->Append(viewMenu, "&View");
 
 	Bind(wxEVT_MENU, &reMainFrame::OnFileExit, this, wxID_EXIT);
+	Bind(wxEVT_MENU, &reMainFrame::OnUndoCommand, this, wxID_UNDO);
+	Bind(wxEVT_MENU, &reMainFrame::OnRedoCommand, this, wxID_REDO);
+
 	Bind(wxEVT_MENU, &reMainFrame::OnProjectAction, this, reMainFrame_ProjectBegin, reMainFrame_ProjectEnd);
 	Bind(wxEVT_MENU, &reMainFrame::OnViewWindowSelection, this, reMainFrame_IdUIBegin, reMainFrame_IdUIEnd);
 
@@ -173,6 +180,14 @@ void reMainFrame::OnViewWindowSelection(wxCommandEvent& event){
 
 void reMainFrame::OnFileExit(wxCommandEvent& event){
 	CloseFrame();
+}
+
+void reMainFrame::OnUndoCommand(wxCommandEvent& event){
+	m_component->UndoCommand();
+}
+
+void reMainFrame::OnRedoCommand(wxCommandEvent& event){
+	m_component->RedoCommand();
 }
 
 void reMainFrame::CloseFrame(){

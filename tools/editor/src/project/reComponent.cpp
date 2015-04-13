@@ -13,6 +13,28 @@ reProject* reComponent::GetProject(){
 	return m_project.get();
 }
 
+bool reComponent::UndoCommand(){
+	bool result = m_commandProcessor.Undo();
+
+	if (result){
+		rEvent event;
+		Trigger(reCommandProcessed, event);
+	}
+
+	return result;
+}
+
+bool reComponent::RedoCommand(){
+	bool result = m_commandProcessor.Redo();
+
+	if (result){
+		rEvent event;
+		Trigger(reCommandProcessed, event);
+	}
+
+	return result;
+}
+
 bool reComponent::SubmitCommand(wxCommand* command){
 	return m_commandProcessor.Submit(command);
 }

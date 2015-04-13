@@ -25,6 +25,8 @@ public:
 	bool OnMouseUp(wxMouseEvent& event, rwxGLCanvas* canvas);
 	bool OnMouseMotion(wxMouseEvent& event, rwxGLCanvas* canvas);
 
+	void OnCommandProcessed(rEvent& event);
+
 private:
 
 	void OnToolbarToolClick(wxCommandEvent& event);

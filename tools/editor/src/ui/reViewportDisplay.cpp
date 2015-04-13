@@ -91,6 +91,8 @@ void reViewportDisplay::OnComponentInitialized(rEvent& event){
 	scene->Bind(rEVT_SCENE_ACTOR_REMOVED, this, &reViewportDisplay::OnDisplayShouldUpdate);
 	scene->Bind(rEVT_SCENE_LOAD_END, this, &reViewportDisplay::OnDisplayShouldUpdate);
 
+	m_component->Bind(reCommandProcessed, this, &reViewportDisplay::OnCommandProcessed);
+
 	BindCanvasEvents(m_topLeftViewport->GetCanvas());
 	BindCanvasEvents(m_topRightViewport->GetCanvas());
 	BindCanvasEvents(m_bottomLeftViewport->GetCanvas());
@@ -105,5 +107,9 @@ void reViewportDisplay::UpdateAllViewports(){
 }
 
 void reViewportDisplay::OnDisplayShouldUpdate(rEvent& event){
+	UpdateAllViewports();
+}
+
+void reViewportDisplay::OnCommandProcessed(rEvent& event){
 	UpdateAllViewports();
 }

@@ -24,6 +24,7 @@ public:
 private:
 	void OnComponentInitialized(rEvent& event);
 	void OnDisplayShouldUpdate(rEvent& event);
+	void OnCommandProcessed(rEvent& event);
 
 	void BindCanvasEvents(rwxGLCanvas* canvas);
 	void OnViewportActivate(wxMouseEvent& event);

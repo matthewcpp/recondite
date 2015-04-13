@@ -120,9 +120,7 @@ bool reProject::CreateLevel(const wxString& name){
 	m_levels.push_back(name);
 	m_activeLevel = name;
 
-	rScene* scene = m_component->GetScene();
-	if (scene) 
-		scene->Clear();
+	m_component->ClearScene();
 
 	SaveActiveLevel();
 	SaveProjectFile();

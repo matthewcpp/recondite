@@ -88,11 +88,14 @@ void rScene::DeleteActors(std::function<bool(rActor3*)> shouldDelete){
 }
 
 void rScene::Clear(){
+	
 	rActorMap::iterator end = m_actors.end();
 
-	for (rActorMap::iterator it = m_actors.begin(); it != end; ++it)
+	for (rActorMap::iterator it = m_actors.begin(); it != end; ++it){
+		it->second->OnDelete();
 		delete it->second;
-
+	}
+	
 	m_actors.clear();
 }
 

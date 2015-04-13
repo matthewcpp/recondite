@@ -13,7 +13,7 @@ public:
 	rePalette(reComponent* component, wxWindow* parent);
 
 public:
-	void AddSceneActor(const wxString& category, wxBitmap& icon, const wxString& label, const wxString createStr);
+	void AddSceneActor(const wxString& category, const wxBitmap& icon, const wxString& label, const wxString createStr);
 	void StartItemDrag(wxMouseEvent& event);
 private:
 	void CreateSceneView();

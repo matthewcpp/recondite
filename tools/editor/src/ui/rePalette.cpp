@@ -9,7 +9,7 @@ rePalette::rePalette(reComponent* component, wxWindow* parent)
 	CreateSceneView();
 }
 
-void rePalette::AddSceneActor(const wxString& category, wxBitmap& icon, const wxString& label, const wxString createStr){
+void rePalette::AddSceneActor(const wxString& category, const wxBitmap& icon, const wxString& label, const wxString createStr){
 	wxSizer* categorySizer = nullptr;
 
 	if (m_categories.count(category)){

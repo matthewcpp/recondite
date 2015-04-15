@@ -1,5 +1,8 @@
 set(command_files)
 
+list(APPEND command_files ${CMAKE_CURRENT_SOURCE_DIR}/reInsertActorCommand.hpp)
+list(APPEND command_files ${CMAKE_CURRENT_SOURCE_DIR}/reInsertActorCommand.cpp)
+
 list(APPEND command_files ${CMAKE_CURRENT_SOURCE_DIR}/reTranslateCommand.hpp)
 list(APPEND command_files ${CMAKE_CURRENT_SOURCE_DIR}/reTranslateCommand.cpp)
 

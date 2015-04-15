@@ -1,6 +1,8 @@
 #ifndef RE_OUTLINER_HPP
 #define RE_OUTLINER_HPP
 
+#include <map>
+
 #include "project/reComponent.hpp"
 
 #include <wx/wx.h>
@@ -21,6 +23,7 @@ private:
 	void OnItemSelected(wxDataViewEvent& event);
 
 	void OnActorAddedToScene(rEvent& event);
+	void OnActorRemovedFromScene(rEvent& event);
 	void OnComponentInitialized(rEvent& event);
 
 	void OnLevelBeginLoad(rEvent& event);
@@ -30,6 +33,8 @@ private:
 	reComponent* m_component;
 
 	rePropertyInspector* m_propertyInspector;
+
+	std::map<rString, wxDataViewItem> m_actorIdMap;
 };
 
 #endif

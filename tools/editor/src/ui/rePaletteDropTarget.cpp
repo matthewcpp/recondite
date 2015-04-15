@@ -6,11 +6,6 @@ rePaletteDropTarget::rePaletteDropTarget(reComponent* component, rwxGLCanvas* ca
 }
 
 bool rePaletteDropTarget::OnDropText(wxCoord x, wxCoord y, const wxString &data){
-	rEngine* engine = m_component->GetEngine();
-	rString actorId = engine->scene->GetDefaultActorId("actor");
-	rActor3* actor = engine->actors->GetActorClass(data.c_str().AsChar(), engine, actorId);
-	engine->scene->AddActor(actor);
-
 	rCamera* camera = m_canvas->GetCamera();
 	rVector3 target = camera->Target();
 	rVector3 viewDir = camera->Position() - target;
@@ -24,7 +19,9 @@ bool rePaletteDropTarget::OnDropText(wxCoord x, wxCoord y, const wxString &data)
 	rVector3 planePos;
 	rIntersection::RayIntersectsPlane(selectionRay, targetPlane, &planePos);
 
-	actor->SetPosition(planePos);
-	m_component->SelectionManager()->Select(actor->Id().c_str());
+	
+	reInsertActorCommand* insertActorCommand = new reInsertActorCommand(data, planePos, m_component);
+	m_component->SubmitCommand(insertActorCommand);
+
 	return true;
 }

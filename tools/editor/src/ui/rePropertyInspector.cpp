@@ -6,12 +6,11 @@ rePropertyInspector::rePropertyInspector(reComponent* component, reViewportDispl
 	m_component = component;
 	m_display = display;
 
-	m_actor = nullptr;
-
 	Bind(wxEVT_PG_CHANGED, &rePropertyInspector::OnPropertyValueChanged, this);
 
 	rScene* scene = m_component->GetScene();
 	scene->Bind(rEVT_SCENE_LOAD_BEGIN, this, &rePropertyInspector::OnLevelBeginLoad);
+	scene->Bind(rEVT_SCENE_ACTOR_RENAMED, this, &rePropertyInspector::OnActorRenamed);
 
 	m_component->Bind(reSELECTION_SELECT, this, &rePropertyInspector::OnSelection);
 	m_component->Bind(reSELECTION_SELECT_NONE, this, &rePropertyInspector::OnSelectNone);
@@ -34,8 +33,6 @@ void rePropertyInspector::OnPropertyValueChanged(wxPropertyGridEvent& event){
 	wxString propertyType = tokenizer.GetNextToken();
 	wxString propertyName = tokenizer.GetNextToken();
 
-
-	
 	rePropertyWriter writer;
 
 	if (propertyType == "vector3"){
@@ -62,7 +59,8 @@ void rePropertyInspector::OnPropertyValueChanged(wxPropertyGridEvent& event){
 	}
 
 	if (writer.PropertySet()){
-		writer.Write(m_actor);
+		rActor3* actor = m_component->GetScene()->GetActor(m_actorName.c_str().AsChar());
+		writer.Write(actor);
 		m_display->UpdateAllViewports();
 	}
 }
@@ -74,7 +72,7 @@ void rePropertyInspector::Inspect(const wxString& actorName){
 	rActor3* actor = engine->scene->GetActor(rstr);
 	
 	if (actor){
-		m_actor = actor;
+		m_actorName = actorName;
 		rePropertyReader reader(this);
 		reader.Read(actor);
 	}
@@ -82,10 +80,26 @@ void rePropertyInspector::Inspect(const wxString& actorName){
 }
 
 void rePropertyInspector::StopInspecting(){
-	m_actor = nullptr;
+	m_actorName = wxEmptyString;
 	Clear();
 }
 
 void rePropertyInspector::OnLevelBeginLoad(rEvent& event){
 	StopInspecting();
+}
+
+void rePropertyInspector::OnActorRenamed(rEvent& event){
+	rActor3RenameEvent& actorEvent = static_cast<rActor3RenameEvent&> (event);
+
+	wxString oldName = actorEvent.PreviousId().c_str();
+
+	if (oldName == m_actorName){
+		wxString newName = actorEvent.Actor()->Id();
+		m_actorName = newName;
+
+		wxPGProperty* name = GetProperty("id");
+		if (name){
+			name->SetValue(newName);
+		}
+	}
 }

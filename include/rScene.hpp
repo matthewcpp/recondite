@@ -36,6 +36,7 @@ public:
 
 	virtual void DeleteActor(const rString& name);
 	void DeleteActors(std::function<bool(rActor3*)> shouldDelete);
+	bool RenameActor(const rString& oldId, const rString& newId);
 
 	virtual rString GetDefaultActorId(const rString& prefix);
 

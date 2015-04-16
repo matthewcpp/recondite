@@ -26,6 +26,7 @@ private:
 	void OnActorAddedToScene(rEvent& event);
 	void OnActorRemovedFromScene(rEvent& event);
 	void OnActorSelected(rEvent& event);
+	void OnActorRenamed(rEvent& event);
 
 	void OnComponentInitialized(rEvent& event);
 

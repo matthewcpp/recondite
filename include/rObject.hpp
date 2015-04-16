@@ -13,6 +13,7 @@ public:
 
 public:
 	rString Id() const {return m_id;}
+	void SetId(const rString& id) { m_id = id; }
 
 protected:
 	rEngine* m_engine;

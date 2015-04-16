@@ -25,12 +25,13 @@ private:
 	void OnLevelBeginLoad(rEvent& event);
 	void OnSelection(rEvent& event);
 	void OnSelectNone(rEvent& event);
+	void OnActorRenamed(rEvent& event);
 
 private:
 	rwxComponent* m_component;
 	reViewportDisplay* m_display;
 
-	rActor3* m_actor;
+	wxString m_actorName;
 };
 
 #endif

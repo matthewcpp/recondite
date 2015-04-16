@@ -47,4 +47,20 @@ private:
 	rXMLDocument m_actorData;
 };
 
+//Rename
+class reRenameActorCommand : public wxCommand{
+public:
+	reRenameActorCommand(const wxString& oldName, const wxString& newName, reComponent* component);
+
+public:
+	virtual bool Do() override;
+	virtual bool Undo() override;
+
+private:
+	wxString m_oldName;
+	wxString m_newName;
+
+	reComponent* m_component;
+};
+
 #endif

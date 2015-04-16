@@ -77,3 +77,21 @@ void reDeleteActorCommand::SerializeActors(){
 		actor->Save(&target);
 	}
 }
+
+//Rename
+
+reRenameActorCommand::reRenameActorCommand(const wxString& oldName, const wxString& newName, reComponent* component)
+	:wxCommand(true, "Rename Actor")
+{
+	m_oldName = oldName;
+	m_newName = newName;
+
+	m_component = component;
+}
+
+bool reRenameActorCommand::Do(){
+	return m_component->GetScene()->RenameActor(m_oldName.c_str().AsChar(), m_newName.c_str().AsChar());
+}
+bool reRenameActorCommand::Undo(){
+	return m_component->GetScene()->RenameActor(m_newName.c_str().AsChar(), m_oldName.c_str().AsChar());
+}

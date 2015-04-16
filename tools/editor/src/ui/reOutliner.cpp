@@ -40,13 +40,29 @@ void reOutliner::OnActorRemovedFromScene(rEvent& event){
 	}
 }
 
+void reOutliner::OnActorRenamed(rEvent& event){
+	rActor3RenameEvent& actorEvent = static_cast<rActor3RenameEvent&> (event);
+
+	rString oldName = actorEvent.PreviousId();
+
+	if (m_actorIdMap.count(oldName)){
+		rActor3* actor = actorEvent.Actor();
+		rString newName = actor->Id();
+		wxDataViewItem item = m_actorIdMap[oldName];
+
+		m_actorIdMap.erase(oldName);
+		m_actorIdMap[newName] = item;
+		SetItemText(item, newName.c_str());
+	}
+}
+
 void reOutliner::OnComponentInitialized(rEvent& event){
 	rScene* scene = m_component->GetScene();
 
 	//bind scene events
 	scene->Bind(rEVT_SCENE_ACTOR_ADDED, this, &reOutliner::OnActorAddedToScene);
 	scene->Bind(rEVT_SCENE_ACTOR_REMOVED, this, &reOutliner::OnActorRemovedFromScene);
-
+	scene->Bind(rEVT_SCENE_ACTOR_RENAMED, this, &reOutliner::OnActorRenamed);
 	scene->Bind(rEVT_SCENE_LOAD_BEGIN, this, &reOutliner::OnLevelBeginLoad);
 	scene->Bind(rEVT_SCENE_LOAD_END, this, &reOutliner::OnLevelEndLoad);
 
@@ -94,12 +110,25 @@ void reOutliner::OnContext(wxDataViewEvent& event){
 	if (item.IsOk()){
 		wxMenu popupMenu;
 		popupMenu.Append(0, "Delete");
+		popupMenu.Append(1, "Rename...");
 
 		int id = GetPopupMenuSelectionFromUser(popupMenu);
 
 		if (id == 0){
 			const wxArrayString& selection = m_component->SelectionManager()->GetSelection();
 			m_component->SubmitCommand(new reDeleteActorCommand(selection, m_component));
+		}
+		else if (id == 1){
+			wxString actorName = GetItemText(item);
+			wxTextEntryDialog dialog(nullptr, "Name:", "Rename " + actorName);
+
+			if (dialog.ShowModal() == wxID_OK){
+				wxString newName = dialog.GetValue();
+				bool result = m_component->SubmitCommand(new reRenameActorCommand(actorName, newName, m_component));
+
+				if (!result)
+					wxMessageBox("This scene already contains an Actor named " + newName, "Unable to rename " + actorName, wxOK | wxCENTRE | wxICON_ERROR);
+			}
 		}
 	}
 }

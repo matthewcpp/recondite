@@ -34,6 +34,21 @@ void rScene::Draw(){
 		it->second->Draw();
 }
 
+bool rScene::RenameActor(const rString& oldId, const rString& newId){
+	if (m_actors.count(oldId) == 0 || m_actors.count(newId) ==1)
+		return false;
+
+	rActor3* actor = m_actors[oldId];
+	actor->SetId(newId);
+	m_actors.erase(oldId);
+	m_actors[newId] = actor;
+
+	rActor3RenameEvent event(actor, oldId);
+	Trigger(rEVT_SCENE_ACTOR_RENAMED, event);
+
+	return true;
+}
+
 void rScene::AddActor(rActor3* actor){
 	rString name = actor->Id();
 	

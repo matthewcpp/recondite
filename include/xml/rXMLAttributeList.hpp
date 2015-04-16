@@ -1,15 +1,15 @@
 #ifndef R_ATTRIBUTE_LIST_HPP
 #define R_ATTRIBUTE_LIST_HPP
 
+#include "rBuild.hpp"
+
 #include <map>
 #include <string>
 #include <sstream>
 
 #include "rTypes.hpp"
 
-
-
-class rXMLAttributeList{
+class RECONDITE_API rXMLAttributeList{
 public:
 	rXMLAttributeList(){}
 	rXMLAttributeList(const rXMLAttributeList& list);

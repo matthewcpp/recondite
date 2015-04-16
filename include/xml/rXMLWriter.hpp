@@ -1,6 +1,8 @@
 #ifndef R_XMLWRITER_HPP
 #define R_XMLWRITER_HPP
 
+#include "rBuild.hpp"
+
 #include <string>
 #include <stack>
 #include <sstream>
@@ -10,7 +12,7 @@
 #include "xml/rXMLAttributeList.hpp"
 
 
-class rXMLWriter{
+class RECONDITE_API rXMLWriter{
 public:
 	rXMLWriter(std::ostream& stream) : m_stream(stream) {}
 	~rXMLWriter();

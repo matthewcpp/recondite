@@ -4,6 +4,8 @@
 #include <vector>
 #include <sstream>
 
+#include "rBuild.hpp"
+
 #include "rTypes.hpp"
 #include "rString.hpp"
 #include "xml/rXMLAttributeList.hpp"
@@ -11,7 +13,7 @@
 class rXMLElement;
 typedef std::vector<rXMLElement*> rXMLElementArray;
 
-class rXMLElement{
+class RECONDITE_API rXMLElement{
 public:
 	rXMLElement(rXMLElement* parent, const rString& name);
 	rXMLElement(rXMLElement* parent, const rString& name, const rString& text);

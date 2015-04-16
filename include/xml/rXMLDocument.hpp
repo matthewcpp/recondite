@@ -3,6 +3,8 @@
 
 #include <fstream>
 
+#include "rBuild.hpp"
+
 #include "rTypes.hpp"
 #include "xml/rXMLElement.hpp"
 
@@ -12,7 +14,7 @@
 
 #include "stream/rIFileStream.hpp"
 
-class rXMLDocument{
+class RECONDITE_API rXMLDocument{
 public:
 	rXMLDocument();
 	~rXMLDocument();

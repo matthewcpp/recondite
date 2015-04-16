@@ -5,7 +5,7 @@
 
 #include "reTool.hpp"
 
-#include "commands/reDeleteActorCommand.hpp"
+#include "commands/reActorCommands.hpp"
 
 class reToolBase : public reTool{
 public:

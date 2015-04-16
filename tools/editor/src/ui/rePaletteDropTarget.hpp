@@ -2,7 +2,7 @@
 #define RE_PALETTEDROPTARGET_HPP
 
 #include "project/reComponent.hpp"
-#include "commands/reInsertActorCommand.hpp"
+#include "commands/reActorCommands.hpp"
 
 #include "rwxGLCanvas.hpp"
 

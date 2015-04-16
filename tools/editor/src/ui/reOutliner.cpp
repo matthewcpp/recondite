@@ -8,6 +8,9 @@ reOutliner::reOutliner(reComponent* component, rePropertyInspector* propertyInsp
 
 	Bind(wxEVT_DATAVIEW_SELECTION_CHANGED, &reOutliner::OnItemSelected, this);
 	Bind(wxEVT_DATAVIEW_ITEM_CONTEXT_MENU, &reOutliner::OnContext, this);
+
+	Bind(wxEVT_DATAVIEW_ITEM_START_EDITING, &reOutliner::OnEditBegin, this);
+	Bind(wxEVT_DATAVIEW_ITEM_VALUE_CHANGED, &reOutliner::OnItemEdit, this);
 	
 	m_component->Bind(rEVT_COMPONENT_INITIALIZED, this, &reOutliner::OnComponentInitialized);
 }
@@ -124,11 +127,37 @@ void reOutliner::OnContext(wxDataViewEvent& event){
 
 			if (dialog.ShowModal() == wxID_OK){
 				wxString newName = dialog.GetValue();
-				bool result = m_component->SubmitCommand(new reRenameActorCommand(actorName, newName, m_component));
-
-				if (!result)
-					wxMessageBox("This scene already contains an Actor named " + newName, "Unable to rename " + actorName, wxOK | wxCENTRE | wxICON_ERROR);
+				DoActorRename(actorName, newName);
 			}
 		}
 	}
+}
+
+void reOutliner::OnEditBegin(wxDataViewEvent& event){
+	wxDataViewItem item = event.GetItem();
+	m_CurrentEditedItem = GetItemText(item);
+}
+
+void reOutliner::OnItemEdit(wxDataViewEvent& event){
+	if (m_CurrentEditedItem != wxEmptyString){
+		wxString oldName = m_CurrentEditedItem;
+		m_CurrentEditedItem.Clear();
+
+		wxDataViewItem item = event.GetItem();
+		wxString newName = GetItemText(item);
+
+		bool result = DoActorRename(oldName, newName);
+
+		if (!result)
+			SetItemText(item, oldName);
+	}
+}
+
+bool reOutliner::DoActorRename(const wxString& oldName, const wxString& newName){
+	bool result = m_component->SubmitCommand(new reRenameActorCommand(oldName, newName, m_component));
+
+	if (!result)
+		wxMessageBox("This scene already contains an Actor named " + newName, "Unable to rename " + oldName, wxOK | wxCENTRE | wxICON_ERROR);
+	
+	return result;
 }

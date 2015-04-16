@@ -32,6 +32,7 @@ private:
 	void OnShadingMenuClick(wxMouseEvent& event);
 
 	void OnCanvasMouseEvent(wxMouseEvent& event);
+	void OnCanvasKeypress(wxKeyEvent& event);
 
 	void OnEnterCanvas(wxMouseEvent& event);
 	void OnTimer(wxTimerEvent& event);

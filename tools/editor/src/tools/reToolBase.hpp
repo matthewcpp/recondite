@@ -5,6 +5,8 @@
 
 #include "reTool.hpp"
 
+#include "commands/reDeleteActorCommand.hpp"
+
 class reToolBase : public reTool{
 public:
 	reToolBase(reComponent* component, wxFrame* owner);
@@ -13,6 +15,7 @@ public:
 	virtual bool OnMouseDown(wxMouseEvent& event, rwxGLCanvas* canvas);
 	virtual bool OnMouseUp(wxMouseEvent& event, rwxGLCanvas* canvas);
 	virtual bool OnMouseMotion(wxMouseEvent& event, rwxGLCanvas* canvas);
+	virtual bool OnKeyUp(wxKeyEvent& event, rwxGLCanvas* canvas);
 
 protected:
 	bool IsClick();
@@ -22,6 +25,8 @@ protected:
 
 	bool DoActorSelection(rActor3* actor, wxMouseEvent& event);
 	bool DoClearSelection();
+
+	bool DeleteSelection();
 
 protected:
 	wxPoint m_firstPoint;

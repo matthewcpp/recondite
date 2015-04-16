@@ -21,9 +21,12 @@ public:
 
 private:
 	void OnItemSelected(wxDataViewEvent& event);
+	void OnContext(wxDataViewEvent& event);
 
 	void OnActorAddedToScene(rEvent& event);
 	void OnActorRemovedFromScene(rEvent& event);
+	void OnActorSelected(rEvent& event);
+
 	void OnComponentInitialized(rEvent& event);
 
 	void OnLevelBeginLoad(rEvent& event);

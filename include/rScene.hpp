@@ -47,6 +47,7 @@ public:
 	virtual bool Save(riSerializationTarget* target);
 	virtual bool Save(riSerializationTarget* target, std::function<bool(rActor3*)> filterFunc);
 	virtual bool Load(riSerializationTarget* target);
+	virtual bool ParseActors(riSerializationTarget* target);
 
 	bool IsLoading() const;
 

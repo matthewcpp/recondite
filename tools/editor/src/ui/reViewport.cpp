@@ -57,8 +57,10 @@ void reViewport::BindEvents(){
 	m_glCanvas->Bind(wxEVT_RIGHT_DOWN, &reViewport::OnCanvasMouseEvent, this);
 	m_glCanvas->Bind(wxEVT_RIGHT_UP, &reViewport::OnCanvasMouseEvent, this);
 	m_glCanvas->Bind(wxEVT_MOUSEWHEEL, &reViewport::OnCanvasMouseEvent, this);
-
 	m_glCanvas->Bind(wxEVT_MOTION, &reViewport::OnCanvasMouseEvent, this);
+
+	this->Bind(wxEVT_KEY_DOWN, &reViewport::OnCanvasKeypress, this);
+	m_glCanvas->Bind(wxEVT_KEY_UP, &reViewport::OnCanvasKeypress, this);
 
 	m_glCanvas->Bind(wxEVT_ENTER_WINDOW, &reViewport::OnEnterCanvas, this);
 
@@ -109,6 +111,21 @@ void reViewport::OnCanvasMouseEvent(wxMouseEvent& event){
 	}
 }
 
+void reViewport::OnCanvasKeypress(wxKeyEvent& event){
+	wxEventType eventType = event.GetEventType();
+
+	bool handled = false;
+
+	if (eventType == wxEVT_KEY_DOWN)
+		handled = m_toolManager->OnKeyDown(event, m_glCanvas);
+	else
+		handled = m_toolManager->OnKeyUp(event, m_glCanvas);
+
+	if (!handled){
+		event.Skip();
+	}
+}
+
 rwxGLCanvas* reViewport::GetCanvas(){
 	return m_glCanvas;
 }
@@ -133,6 +150,7 @@ void reViewport::OnTimer(wxTimerEvent& event){
 void reViewport::OnEnterCanvas(wxMouseEvent& event){
 	s_inputTimer->SetOwner(this);
 	s_inputTimer->Start(25);
+	m_glCanvas->SetFocus();
 }
 
 wxTimer* reViewport::s_inputTimer = nullptr;

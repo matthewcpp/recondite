@@ -183,9 +183,17 @@ bool rScene::Load(riSerializationTarget* target){
 	rEvent event;
 	Trigger(rEVT_SCENE_LOAD_BEGIN, event);
 
+	ParseActors(target);
+
+	m_isLoading = false;
+	Trigger(rEVT_SCENE_LOAD_END, event);
+
+	return true;
+}
+bool rScene::ParseActors(riSerializationTarget* target){
 	riSerializationTarget* actorsTarget = target->SubObject("actors");
 	riSerializationTarget* actorTarget = actorsTarget->SubObject("actor");
-	
+
 	if (actorTarget){
 		rString className, id;
 
@@ -204,11 +212,9 @@ bool rScene::Load(riSerializationTarget* target){
 		} while (actorTarget->Next());
 	}
 
-	m_isLoading = false;
-	Trigger(rEVT_SCENE_LOAD_END, event);
-
 	return true;
 }
+
 
 bool rScene::IsLoading() const{
 	return m_isLoading;

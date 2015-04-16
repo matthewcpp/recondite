@@ -75,6 +75,20 @@ bool reToolManager::OnMouseMotion(wxMouseEvent& event, rwxGLCanvas* canvas){
 		return false;
 }
 
+bool reToolManager::OnKeyDown(wxKeyEvent& event, rwxGLCanvas* canvas){
+	if (m_activeTool)
+		return m_activeTool->OnKeyDown(event, canvas);
+	else
+		return false;
+}
+
+bool reToolManager::OnKeyUp(wxKeyEvent& event, rwxGLCanvas* canvas){
+	if (m_activeTool)
+		return m_activeTool->OnKeyUp(event, canvas);
+	else
+		return false;
+}
+
 void reToolManager::OnCommandProcessed(rEvent& event){
 	if (m_activeTool)
 		m_activeTool->OnUpdate();

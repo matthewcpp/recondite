@@ -1,5 +1,21 @@
 #include "rePropertyInterface.hpp"
 
+//rePropertyInterfaceBase
+
+riSerializationTarget* rePropertyInterfaceBase::SubObject(const rString& name) {
+	return this;
+}
+
+bool rePropertyInterfaceBase::Next(){
+	return false;
+}
+
+bool rePropertyInterfaceBase::Category(const rString& name){
+	return false;
+}
+
+//rePropertyReader
+
 rePropertyReader::rePropertyReader(wxPropertyGrid* grid){
 	m_grid = grid;
 }
@@ -107,14 +123,6 @@ bool rePropertyReader::Category(const rString& name) {
 	return true;
 }
 
-riSerializationTarget* rePropertyReader::SubObject(const rString& name) {
-	return this;
-}
-
-bool rePropertyReader::Next(){
-	return false;
-}
-
 wxString rePropertyReader::DisplayName(const wxString& name){
 	wxString wxstr;
 	wxStringOutputStream buffer(&wxstr);
@@ -180,16 +188,57 @@ bool rePropertyWriter::Color(const rString& name, rColor& val){
 	return DoGetValue<rColor>(name, val);
 }
 
-
-bool rePropertyWriter::Category(const rString& name){
-	return false;
+//rePropertyGetter
+rePropertyGetter::rePropertyGetter(){
+	m_propertySet = false;
 }
 
+bool rePropertyGetter::Boolean(const rString& name, bool& val){
+	DoSetValue<bool>(name, val);
 
-riSerializationTarget* rePropertyWriter::SubObject(const rString& name){
-	return this;
+	return m_propertySet;
 }
 
-bool rePropertyWriter::Next(){
-	return false;
+bool rePropertyGetter::Int(const rString& name, int& val){
+	DoSetValue<int>(name, val);
+
+	return m_propertySet;
+}
+
+bool rePropertyGetter::Float(const rString& name, float& val){
+	DoSetValue<float>(name, val);
+
+	return m_propertySet;
+}
+
+bool rePropertyGetter::String(const rString& name, rString& val){
+	DoSetValue<rString>(name, val);
+
+	return m_propertySet;
+}
+
+bool rePropertyGetter::Vector3(const rString& name, rVector3& val){
+	DoSetValue<rVector3>(name, val);
+
+	return m_propertySet;
+}
+
+bool rePropertyGetter::Color(const rString& name, rColor& val){
+	DoSetValue<rColor>(name, val);
+
+	return m_propertySet;
+}
+
+const wxAny& rePropertyGetter::GetValue() const{
+	return m_value;
+}
+
+void rePropertyGetter::GetProperty(const wxString& propertyName, rActor3* actor){
+	m_propertyName = propertyName.c_str().AsChar();
+
+	actor->Save(this);
+}
+
+bool rePropertyGetter::PropertySet() const{
+	return m_propertySet;
 }

@@ -33,7 +33,7 @@ void rePropertyInspector::OnPropertyValueChanged(wxPropertyGridEvent& event){
 	wxString propertyType = tokenizer.GetNextToken();
 	wxString propertyName = tokenizer.GetNextToken();
 
-	rePropertyWriter writer;
+	wxAny anyVal;
 
 	if (propertyType == "vector3"){
 		wxVariant x = GetProperty(propertyName + ".x")->GetValue();
@@ -42,27 +42,29 @@ void rePropertyInspector::OnPropertyValueChanged(wxPropertyGridEvent& event){
 
 		rVector3 vec3(x.GetDouble(), y.GetDouble(), z.GetDouble());
 
-		wxAny any = vec3;
-		writer.SetProperty(propertyName, any);
+		anyVal = vec3;
 	}
 	else if (propertyType == "color"){
 		wxAny colorVal = property->GetValue();
 		wxColor cpv = colorVal.As<wxColor>();
 		rColor c(cpv.Red(), cpv.Green(), cpv.Blue(), cpv.Alpha());
 
-		wxAny any = c;
-		writer.SetProperty(propertyName, any);
+		anyVal = c;
 	}
 	else if (propertyType == "int" || propertyType == "float" || propertyType == "string" || propertyType == "bool"){
-		wxAny any = property->GetValue();
-		writer.SetProperty(propertyName, any);
+		anyVal = property->GetValue();
 	}
 
+	m_component->SubmitCommand(new reSetPropertyCommand(m_actorName, propertyName, anyVal, m_component));
+
+	/*
 	if (writer.PropertySet()){
-		rActor3* actor = m_component->GetScene()->GetActor(m_actorName.c_str().AsChar());
-		writer.Write(actor);
-		m_display->UpdateAllViewports();
+	rActor3* actor = m_component->GetScene()->GetActor(m_actorName.c_str().AsChar());
+	writer.Write(actor);
+	m_display->UpdateAllViewports();
 	}
+	*/
+
 }
 
 void rePropertyInspector::Inspect(const wxString& actorName){

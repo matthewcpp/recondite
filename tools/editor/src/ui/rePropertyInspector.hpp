@@ -11,6 +11,8 @@
 #include "reViewportDisplay.hpp"
 #include "rePropertyInterface.hpp"
 
+#include "commands/reSetPropertyCommand.hpp"
+
 class rePropertyInspector : public wxPropertyGrid{
 public:
 	rePropertyInspector(reComponent* component, reViewportDisplay* display, wxWindow* parent, wxWindowID id = wxID_ANY);
@@ -28,7 +30,7 @@ private:
 	void OnActorRenamed(rEvent& event);
 
 private:
-	rwxComponent* m_component;
+	reComponent* m_component;
 	reViewportDisplay* m_display;
 
 	wxString m_actorName;

@@ -14,6 +14,75 @@ bool rePropertyInterfaceBase::Category(const rString& name){
 	return false;
 }
 
+//rePropertyUpdater
+
+bool rePropertyUpdater::Boolean(const rString& name, bool& val) {
+	wxString wxName = name.c_str();
+
+	m_grid->SetPropertyValue(wxName, val);
+
+	return true;
+}
+
+bool rePropertyUpdater::Int(const rString& name, int& val) {
+	wxString wxName = name.c_str();
+
+	m_grid->SetPropertyValue(wxName, val);
+
+	return true;
+}
+
+bool rePropertyUpdater::Float(const rString& name, float& val) {
+	wxString wxName = name.c_str();
+
+	m_grid->SetPropertyValue(wxName, val);
+
+	return true;
+}
+
+bool rePropertyUpdater::String(const rString& name, rString& val) {
+	wxString wxName = name.c_str();
+	wxString valString = val.c_str();
+
+	m_grid->SetPropertyValue(wxName, valString);
+
+	return true;
+}
+
+bool rePropertyUpdater::Vector3(const rString& name, rVector3& val) {
+	wxString wxName = name.c_str();
+
+	m_grid->SetPropertyValue(wxName + ".x", val.x);
+	m_grid->SetPropertyValue(wxName + ".y", val.y);
+	m_grid->SetPropertyValue(wxName + ".z", val.z);
+
+	return true;
+}
+
+bool rePropertyUpdater::Color(const rString& name, rColor& color) {
+	wxString wxName = name.c_str();
+	wxColor wxc(color.red, color.green, color.blue, color.alpha);
+
+	wxVariant variant;
+	variant << wxc;
+
+	m_grid->SetPropertyValue(wxName, variant);
+
+	return true;
+}
+
+void rePropertyUpdater::Read(rActor3* actor){
+	if (!actor) return;
+
+	m_grid->Freeze();
+	actor->Save(this);
+	m_grid->Thaw();
+}
+
+rePropertyUpdater::rePropertyUpdater(wxPropertyGrid* grid){
+	m_grid = grid;
+}
+
 //rePropertyReader
 
 rePropertyReader::rePropertyReader(wxPropertyGrid* grid){
@@ -71,7 +140,8 @@ bool rePropertyReader::Float(const rString& name, float& val) {
 bool rePropertyReader::String(const rString& name, rString& val) {
 	wxString wxName = name.c_str();
 	wxString displayName = DisplayName(wxName);
-	wxStringProperty* property = new wxStringProperty(displayName, wxName, val.c_str());
+	wxString wxValString = val.c_str();
+	wxStringProperty* property = new wxStringProperty(displayName, wxName, wxValString);
 
 	wxString propertyInfo = wxString::Format("string:%s", name.c_str());
 	property->SetClientObject(new wxStringClientData(propertyInfo));
@@ -107,7 +177,7 @@ bool rePropertyReader::Color(const rString& name, rColor& color) {
 	wxColor wxc(color.red, color.green, color.blue);
 	wxString propertyInfo = wxString::Format("color:%s", name.c_str());
 
-	wxColourProperty* property = new wxColourProperty(displayName, wxPG_LABEL, wxc);
+	wxColourProperty* property = new wxColourProperty(displayName, wxName, wxc);
 	property->SetClientObject(new wxStringClientData(propertyInfo));
 
 	m_grid->Append(property);
@@ -116,9 +186,10 @@ bool rePropertyReader::Color(const rString& name, rColor& color) {
 }
 
 bool rePropertyReader::Category(const rString& name) {
+	wxString wxName = name.c_str();
 	wxString displayName = DisplayName(name.c_str());
 
-	m_grid->Append(new wxPropertyCategory(displayName, wxPG_LABEL));
+	m_grid->Append(new wxPropertyCategory(displayName, wxName));
 
 	return true;
 }

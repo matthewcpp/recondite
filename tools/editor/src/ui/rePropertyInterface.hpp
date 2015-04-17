@@ -14,7 +14,7 @@
 
 #include <wx/clntdata.h>
 
-//Base
+//Base -> calculate display names
 
 class rePropertyInterfaceBase : public riSerializationTarget{
 public:
@@ -45,9 +45,32 @@ public:
 private:
 	wxString DisplayName(const wxString& name);
 
+
 private:
 	wxPropertyGrid* m_grid;
 };
+
+//Updater Updates a property grid
+
+class rePropertyUpdater : public rePropertyInterfaceBase{
+public:
+	rePropertyUpdater(wxPropertyGrid* grid);
+
+public:
+	void Read(rActor3* actor);
+
+public:
+	virtual bool Boolean(const rString& name, bool& val) override;
+	virtual bool Int(const rString& name, int& val) override;
+	virtual bool Float(const rString& name, float& val) override;
+	virtual bool String(const rString& name, rString& val) override;
+	virtual bool Vector3(const rString& name, rVector3& val) override;
+	virtual bool Color(const rString& name, rColor& color) override;
+
+private:
+	wxPropertyGrid* m_grid;
+};
+
 
 //Writer Writes a property to the actor
 

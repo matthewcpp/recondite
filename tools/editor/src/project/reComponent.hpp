@@ -15,7 +15,9 @@
 #include "primitive/rPrimitiveGrid.hpp"
 
 enum reComponentEvent{
-	reCommandProcessed = 7000
+	reCommandProcessed = 7000,
+
+	reExternalPropertyChange
 };
 
 class reComponent : public rwxComponent{

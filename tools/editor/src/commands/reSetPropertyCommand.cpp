@@ -13,6 +13,8 @@ reSetPropertyCommand::reSetPropertyCommand(const wxString& actorName, const wxSt
 }
 
 bool reSetPropertyCommand::Do() {
+	bool firstExecute = m_firstExecute;
+
 	if (m_firstExecute){
 		m_firstExecute = false;
 
@@ -26,8 +28,16 @@ bool reSetPropertyCommand::Do() {
 		rePropertyWriter writer;
 		writer.SetProperty(m_propertyName, m_newValue);
 		writer.Write(actor);
+
+		if (!firstExecute){
+			rEvent event;
+			m_component->Trigger(reExternalPropertyChange, event);
+		}
+
 		return true;
 	}
+
+
 	
 	return false;
 }
@@ -39,6 +49,9 @@ bool reSetPropertyCommand::Undo() {
 		rePropertyWriter writer;
 		writer.SetProperty(m_propertyName, m_previousValue);
 		writer.Write(actor);
+
+		rEvent event;
+		m_component->Trigger(reExternalPropertyChange, event);
 		return true;
 	}
 

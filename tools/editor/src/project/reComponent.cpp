@@ -36,7 +36,14 @@ bool reComponent::RedoCommand(){
 }
 
 bool reComponent::SubmitCommand(wxCommand* command){
-	return m_commandProcessor.Submit(command);
+	bool result = m_commandProcessor.Submit(command);
+
+	if (result){
+		rEvent event;
+		Trigger(reCommandProcessed, event);
+	}
+
+	return result;
 }
 
 void reComponent::InitCommandProcessor(wxMenu* editMenu){

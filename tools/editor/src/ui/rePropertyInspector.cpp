@@ -14,6 +14,7 @@ rePropertyInspector::rePropertyInspector(reComponent* component, reViewportDispl
 
 	m_component->Bind(reSELECTION_SELECT, this, &rePropertyInspector::OnSelection);
 	m_component->Bind(reSELECTION_SELECT_NONE, this, &rePropertyInspector::OnSelectNone);
+	m_component->Bind(reExternalPropertyChange, this, &rePropertyInspector::OnExternalPropertyChange);
 }
 
 void rePropertyInspector::OnSelection(rEvent& event){
@@ -56,15 +57,6 @@ void rePropertyInspector::OnPropertyValueChanged(wxPropertyGridEvent& event){
 	}
 
 	m_component->SubmitCommand(new reSetPropertyCommand(m_actorName, propertyName, anyVal, m_component));
-
-	/*
-	if (writer.PropertySet()){
-	rActor3* actor = m_component->GetScene()->GetActor(m_actorName.c_str().AsChar());
-	writer.Write(actor);
-	m_display->UpdateAllViewports();
-	}
-	*/
-
 }
 
 void rePropertyInspector::Inspect(const wxString& actorName){
@@ -104,4 +96,12 @@ void rePropertyInspector::OnActorRenamed(rEvent& event){
 			name->SetValue(newName);
 		}
 	}
+}
+
+void rePropertyInspector::OnExternalPropertyChange(rEvent& event){
+
+	rePropertyUpdater updater(this);
+	rActor3* actor = m_component->GetScene()->GetActor(m_actorName.c_str().AsChar());
+
+	updater.Read(actor);
 }

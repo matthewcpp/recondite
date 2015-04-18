@@ -80,6 +80,9 @@ bool reTranslateTool::OnMouseMotion(wxMouseEvent& event, rwxGLCanvas* canvas){
 
 		m_command->Update(delta);
 		m_gizmo->Update();
+		
+		rEvent event;
+		m_component->Trigger(reExternalPropertyChange, event);
 
 		m_previousWorldPosition = currentWorldSpacePosition;
 

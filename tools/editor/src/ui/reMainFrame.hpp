@@ -13,6 +13,7 @@
 #include "reProjectExplorer.hpp"
 #include "reOutliner.hpp"
 #include "rePalette.hpp"
+#include "reLogWindow.hpp"
 
 #include "project/reComponent.hpp"
 #include "tools/reToolManager.hpp"
@@ -68,6 +69,7 @@ private:
 		reMainFrame_ViewProjectExplorer,
 		reMainFrame_ViewOutliner,
 		reMainFrame_ViewPalette,
+		reMainFrame_ViewLogWindow,
 		reMainFrame_IdUIEnd
 	};
 
@@ -80,6 +82,7 @@ private:
 	reOutliner* m_outliner;
 	reToolManager* m_toolManager;
 	rePalette* m_palette;
+	reLogWindow* m_logWindow;
 
 	wxAuiManager m_wxAuiManager;
 };

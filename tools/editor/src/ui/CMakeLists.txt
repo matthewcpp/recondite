@@ -3,6 +3,9 @@ set(ui_files)
 list(APPEND ui_files ${CMAKE_CURRENT_SOURCE_DIR}/reApplication.hpp)
 list(APPEND ui_files ${CMAKE_CURRENT_SOURCE_DIR}/reApplication.cpp)
 
+list(APPEND ui_files ${CMAKE_CURRENT_SOURCE_DIR}/reLogWindow.hpp)
+list(APPEND ui_files ${CMAKE_CURRENT_SOURCE_DIR}/reLogWindow.cpp)
+
 list(APPEND ui_files ${CMAKE_CURRENT_SOURCE_DIR}/reMainFrame.hpp)
 list(APPEND ui_files ${CMAKE_CURRENT_SOURCE_DIR}/reMainFrame.cpp)
 

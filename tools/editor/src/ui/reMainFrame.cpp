@@ -11,6 +11,7 @@ reMainFrame::reMainFrame(reComponent* component, const wxString& title, const wx
 void reMainFrame::CreateUIElements(){
 	m_wxAuiManager.SetManagedWindow(this);
 
+	m_logWindow = new reLogWindow(m_component, this);
 	m_toolManager = new reToolManager(m_component, this, &m_wxAuiManager);
 	m_viewportDisplay = new reViewportDisplay(m_component, m_toolManager, this);
 	m_propertyInspector = new rePropertyInspector(m_component, m_viewportDisplay, this);
@@ -84,6 +85,16 @@ void reMainFrame::CreateUIElements(){
 		.BestSize(250, 450)
 		.MinSize(250, 100));
 
+	m_wxAuiManager.AddPane(m_logWindow, wxAuiPaneInfo()
+		.Caption("Log")
+		.Dockable(true)
+		.Floatable(true)
+		.Float()
+		.Hide()
+		.MinimizeButton(true)
+		.BestSize(250, 450)
+		.MinSize(250, 100));
+
 	m_toolManager->CreateToolbars();
 
 	m_wxAuiManager.Update();
@@ -144,6 +155,7 @@ wxMenuBar* reMainFrame::CreateEditorMenuBar(){
 	viewMenu->Append(reMainFrame_ViewProjectExplorer, "Project Explorer");
 	viewMenu->Append(reMainFrame_ViewOutliner, "Outliner");
 	viewMenu->Append(reMainFrame_ViewPalette, "Palette");
+	viewMenu->Append(reMainFrame_ViewLogWindow, "Log");
 	menuBar->Append(viewMenu, "&View");
 
 	Bind(wxEVT_MENU, &reMainFrame::OnFileExit, this, wxID_EXIT);
@@ -172,6 +184,10 @@ void reMainFrame::OnViewWindowSelection(wxCommandEvent& event){
 
 		case reMainFrame_ViewPalette:
 			m_wxAuiManager.GetPane(m_palette).Show(true);
+			break;
+
+		case reMainFrame_ViewLogWindow:
+			m_wxAuiManager.GetPane(m_logWindow).Show(true);
 			break;
 	};
 	

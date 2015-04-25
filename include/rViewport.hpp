@@ -59,6 +59,9 @@ public:
 	void SetClipping(float near, float far);
 	void GetViewFrustrum(rFrustrum& frustrum) const;
 
+	void SetFovY(float fovy);
+	float FovY() const;
+
 	rString Name() const;
 
 private:
@@ -70,6 +73,7 @@ private:
 	
 	float m_nearClip;
 	float m_farClip;
+	float m_fovY;
 };
 
 #endif

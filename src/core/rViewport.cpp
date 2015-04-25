@@ -7,6 +7,7 @@ rViewport::rViewport(const rString& name, rViewportType type){
 	m_rect.Set(0,0,0,0);
 	m_name = name;
 	SetClipping(1.0f, 100.0f);
+	m_fovY = 45.0f;
 }
 
 void rViewport::SetNearClip(float nearClip){
@@ -61,7 +62,7 @@ int rViewport::GetSelectionRay(const rPoint& pos , rRay3& selectionRay) const{
 void rViewport::GetProjectionMatrix(rMatrix4& matrix) const{
 	switch (m_type){
 	case rVIEWPORT_PERSP:
-		rMatrixUtil::Perspective(45.0f, (float)m_rect.width / m_rect.height, m_nearClip, m_farClip, matrix);
+		rMatrixUtil::Perspective(m_fovY, (float)m_rect.width / m_rect.height, m_nearClip, m_farClip, matrix);
 		break;
 		
 	case rVIEWPORT_ORTHO:
@@ -148,4 +149,12 @@ void rViewport::GetViewFrustrum(rFrustrum& frustrum) const{
 
 rString rViewport::Name() const{
 	return m_name;
+}
+
+void rViewport::SetFovY(float fovy){
+	m_fovY = fovy;
+}
+
+float rViewport::FovY() const{
+	return m_fovY;
 }

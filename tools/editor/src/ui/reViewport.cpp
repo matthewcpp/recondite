@@ -8,6 +8,8 @@ reViewport::reViewport(reComponent* component, reToolManager* toolManager, reVie
 	m_viewportName = name;
 	m_viewportManager = viewportManager;
 
+	m_isMaximized = false;
+
 	if (!s_inputTimer) s_inputTimer = new wxTimer();
 
 	CreateViewportElements();
@@ -36,13 +38,18 @@ void reViewport::CreateViewportElements(){
 	m_shadingMenu.AppendRadioItem(10001, "Shaded");
 	m_shadingMenu.AppendRadioItem(10002, "Wireframe on Shaded");
 
+	m_minMaxButton = new wxBitmapButton(this, wxID_ANY, wxBitmap("assets/action-maximize.png", wxBITMAP_TYPE_PNG));
+
 	wxBoxSizer* menuSizer = new wxBoxSizer(wxHORIZONTAL);
-	menuSizer->Add(m_viewMenuText, 0, wxRIGHT, 3);
-	menuSizer->Add(m_shadingMenuText, 0, wxRIGHT, 3);
+	menuSizer->Add(m_viewMenuText, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 3);
+	menuSizer->Add(m_shadingMenuText, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 3);
+	menuSizer->AddStretchSpacer();
+	menuSizer->Add(m_minMaxButton);
 
 	wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
-	mainSizer->Add(menuSizer, 0, wxALL, 3);
+	mainSizer->Add(menuSizer, 0, wxEXPAND|wxALL, 3);
 	mainSizer->Add(m_glCanvas, 1, wxEXPAND| wxRIGHT|wxLEFT|wxBOTTOM, 3);
+
 
 	SetSizer(mainSizer);
 }
@@ -63,6 +70,8 @@ void reViewport::BindEvents(){
 	m_glCanvas->Bind(wxEVT_KEY_UP, &reViewport::OnCanvasKeypress, this);
 
 	m_glCanvas->Bind(wxEVT_ENTER_WINDOW, &reViewport::OnEnterCanvas, this);
+
+	m_minMaxButton->Bind(wxEVT_BUTTON, &reViewport::OnMinMaxButtonPress, this);
 
 	Bind(wxEVT_TIMER, &reViewport::OnTimer, this);
 }
@@ -151,6 +160,27 @@ void reViewport::OnEnterCanvas(wxMouseEvent& event){
 	s_inputTimer->SetOwner(this);
 	s_inputTimer->Start(25);
 	m_glCanvas->SetFocus();
+}
+
+void reViewport::OnMinMaxButtonPress(wxCommandEvent& event){
+	if (m_isMaximized){
+		m_viewportManager->RestoreViewports();
+		SetViewportIsMaximized(false);
+	}
+	else{
+		m_viewportManager->MaximizeViewport(this);
+		SetViewportIsMaximized(true);
+	}
+	
+}
+
+void reViewport::SetViewportIsMaximized(bool maximized){
+	if (maximized)
+		m_minMaxButton->SetBitmap(wxBitmap("assets/action-minimize.png", wxBITMAP_TYPE_PNG));
+	else
+		m_minMaxButton->SetBitmap(wxBitmap("assets/action-maximize.png", wxBITMAP_TYPE_PNG));
+
+	m_isMaximized = maximized;
 }
 
 wxTimer* reViewport::s_inputTimer = nullptr;

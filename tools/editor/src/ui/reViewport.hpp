@@ -10,9 +10,12 @@
 #include "tools/reToolManager.hpp"
 #include "rwxViewCameraInteraction.hpp"
 
+class reViewport;
 class reViewportManager {
 public:
 	virtual void UpdateAllViewports() = 0;
+	virtual void MaximizeViewport(reViewport* viewport) = 0;
+	virtual void RestoreViewports() = 0;
 };
 
 class reViewport : public wxPanel{
@@ -21,6 +24,9 @@ public:
 
 public:
 	wxString GetViewportName();
+
+	void SetViewportIsMaximized(bool maximized);
+
 	rwxGLCanvas* GetCanvas();
 
 private:
@@ -30,6 +36,7 @@ private:
 private:
 	void OnViewMenuClick(wxMouseEvent& event);
 	void OnShadingMenuClick(wxMouseEvent& event);
+	void OnMinMaxButtonPress(wxCommandEvent& event);
 
 	void OnCanvasMouseEvent(wxMouseEvent& event);
 	void OnCanvasKeypress(wxKeyEvent& event);
@@ -55,6 +62,9 @@ private:
 
 	wxStaticText* m_shadingMenuText;
 	wxMenu m_shadingMenu;
+
+	wxBitmapButton* m_minMaxButton;
+	bool m_isMaximized;
 
 	wxString m_viewportName;
 

@@ -20,6 +20,8 @@ public:
 	reViewport* GetActiveViewport();
 
 	virtual void UpdateAllViewports();
+	virtual void MaximizeViewport(reViewport* viewport);
+	virtual void RestoreViewports();
 
 private:
 	void OnComponentInitialized(rEvent& event);
@@ -31,6 +33,8 @@ private:
 
 private:
 	void CreateViewportDisplay();
+
+	void SaveViewportLayout();
 
 private:
 	reComponent* m_component;
@@ -46,6 +50,10 @@ private:
 	wxSplitterWindow* m_leftSplitter;
 	wxSplitterWindow* m_rightSplitter;
 	wxSplitterWindow* m_mainSplitter;
+
+	std::pair<bool, int> m_splitterInfo[3];
+	int m_sashPositions[3];
+	bool m_isMaximized;
 };
 
 #endif

@@ -11,6 +11,8 @@ reViewportDisplay::reViewportDisplay(reComponent* component, reToolManager* tool
 	CreateViewportDisplay();
 
 	m_component->Bind(rEVT_COMPONENT_INITIALIZED, this, &reViewportDisplay::OnComponentInitialized);
+
+	m_isMaximized = false;
 }
 
 reViewport* reViewportDisplay::GetActiveViewport(){
@@ -112,4 +114,56 @@ void reViewportDisplay::OnDisplayShouldUpdate(rEvent& event){
 
 void reViewportDisplay::OnCommandProcessed(rEvent& event){
 	UpdateAllViewports();
+}
+
+void reViewportDisplay::MaximizeViewport(reViewport* viewport){
+	if (m_isMaximized) return;
+
+	SaveViewportLayout();
+
+	if (viewport == m_topLeftViewport){
+		m_leftSplitter->Unsplit(m_bottomLeftViewport);
+		m_mainSplitter->Unsplit(m_rightSplitter);
+	}
+	else if (viewport == m_bottomLeftViewport){
+		m_leftSplitter->Unsplit(m_topLeftViewport);
+		m_mainSplitter->Unsplit(m_rightSplitter);
+	}
+	else if (viewport == m_topRightViewport){
+		m_rightSplitter->Unsplit(m_bottomRightViewport);
+		m_mainSplitter->Unsplit(m_leftSplitter);
+	}
+	else if (viewport == m_bottomRightViewport){
+		m_rightSplitter->Unsplit(m_topRightViewport);
+		m_mainSplitter->Unsplit(m_leftSplitter);
+	}
+
+	m_isMaximized = true;
+}
+
+void reViewportDisplay::RestoreViewports(){
+	if (!m_isMaximized) return;
+
+	if (m_splitterInfo[0].first)
+		m_leftSplitter->SplitHorizontally(m_topLeftViewport, m_bottomLeftViewport, m_splitterInfo[0].second);
+
+	if (m_splitterInfo[1].first)
+		m_rightSplitter->SplitHorizontally(m_topRightViewport, m_bottomRightViewport, m_splitterInfo[1].second);
+
+	if (m_splitterInfo[2].first)
+		m_mainSplitter->SplitVertically(m_leftSplitter, m_rightSplitter, m_splitterInfo[2].second);
+
+	m_isMaximized = false;
+}
+
+void reViewportDisplay::SaveViewportLayout(){
+	m_splitterInfo[0].first = m_leftSplitter->IsSplit();
+	m_splitterInfo[0].second = m_leftSplitter->GetSashPosition();
+
+	m_splitterInfo[1].first = m_rightSplitter->IsSplit();
+	m_splitterInfo[1].second = m_rightSplitter->GetSashPosition();
+
+	m_splitterInfo[2].first = m_mainSplitter->IsSplit();
+	m_splitterInfo[2].second = m_mainSplitter->GetSashPosition();
+
 }

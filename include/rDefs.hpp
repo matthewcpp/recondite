@@ -56,6 +56,9 @@ enum class rGeometryProfile{
 	TEXCOORD,
 	VERTEXCOLOR
 };
+enum class rRenderMode : unsigned char{
+	Default, Shaded, Wireframe, WireframeOnShaded
+};
 
 enum rButtonState {
 	rBUTTON_STATE_UP,

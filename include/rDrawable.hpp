@@ -5,6 +5,7 @@
 #include <queue>
 
 #include "rBuild.hpp"
+#include "rDefs.hpp"
 
 #include "rColor.hpp"
 #include "rPropertyCollection.hpp"
@@ -49,21 +50,18 @@ public:
 	bool Visible() const;
 	void SetVisibility(bool visibility);
 
+	rRenderMode RenderMode() const;
+	void SetRenderMode(rRenderMode renderMode);
+
 	rColor PickingColor() const;
-
-	bool FaceVisibility() const;
-	void SetFaceVisibility(bool visibility);
-
-	bool LineVisibility() const;
-	void SetLineVisibility(bool visibility);
 
 private:
 	rColor m_pickingColor;
 	rMaterial* m_material;
 	rGeometry* m_geometry;
+	bool m_overdraw;
 	bool m_visible;
-	bool m_lineVisibility;
-	bool m_faceVisibility;
+	rRenderMode m_renderMode;
 
 	rPropertyCollection m_materialProperties;
 

@@ -6,8 +6,8 @@ rDrawable::rDrawable(){
 	s_drawableIdManager.GetNextColor(m_pickingColor);
 	m_material = NULL;
 	m_visible = true;
-	m_lineVisibility = false;
-	m_faceVisibility = true;
+
+	m_renderMode = rRenderMode::Default;
 }
 
 rDrawable::~rDrawable(){
@@ -46,20 +46,12 @@ void rDrawable::SetGeometry(rGeometry* geometry){
 	m_geometry = geometry;
 }
 
-bool rDrawable::FaceVisibility() const{
-	return m_faceVisibility;
+rRenderMode rDrawable::RenderMode() const{
+	return m_renderMode;
 }
 
-void rDrawable::SetFaceVisibility(bool visibility){
-	m_faceVisibility = visibility;
-}
-
-bool rDrawable::LineVisibility() const{
-	return m_lineVisibility;
-}
-
-void rDrawable::SetLineVisibility(bool visibility){
-	m_lineVisibility = visibility;
+void rDrawable::SetRenderMode(rRenderMode renderMode){
+	m_renderMode = renderMode;
 }
 
 PickingColorManager rDrawable::s_drawableIdManager;

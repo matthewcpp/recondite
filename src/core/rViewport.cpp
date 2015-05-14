@@ -8,6 +8,8 @@ rViewport::rViewport(const rString& name, rViewportType type){
 	m_name = name;
 	SetClipping(1.0f, 100.0f);
 	m_fovY = 45.0f;
+
+	m_renderMode = rRenderMode::Shaded;
 }
 
 void rViewport::SetNearClip(float nearClip){
@@ -157,4 +159,12 @@ void rViewport::SetFovY(float fovy){
 
 float rViewport::FovY() const{
 	return m_fovY;
+}
+
+rRenderMode rViewport::RenderMode() const{
+	return m_renderMode;
+}
+
+void rViewport::SetRenderMode(rRenderMode renderMode){
+	m_renderMode = renderMode;
 }

@@ -4,6 +4,7 @@
 #include <climits>
 
 #include "rBuild.hpp"
+#include "rDefs.hpp"
 
 #include "rViewport.hpp"
 #include "rGraphicsDevice.hpp"
@@ -63,6 +64,7 @@ private:
 		rContentManager* m_contentManager;
 
 		rViewport* m_activeViewport;
+		rRenderMode m_renderMode;
 
 		rMatrix4 m_viewMatrix;
 		rMatrix4 m_viewProjectionMatrix;

@@ -2,6 +2,7 @@
 #define R_VIEWPORT_HPP
 
 #include "rBuild.hpp"
+#include "rDefs.hpp"
 
 #include "rString.hpp"
 
@@ -64,6 +65,9 @@ public:
 
 	rString Name() const;
 
+	rRenderMode RenderMode() const;
+	void SetRenderMode(rRenderMode renderMode);
+
 private:
 	rViewportType m_type;
 	rRect m_rect;
@@ -74,6 +78,8 @@ private:
 	float m_nearClip;
 	float m_farClip;
 	float m_fovY;
+
+	rRenderMode m_renderMode;
 };
 
 #endif

@@ -14,6 +14,7 @@ void rRenderer::BeginRenderView (rViewport& viewport){
 	rRect window = viewport.GetScreenRect();
 	m_graphicsDevice->SetViewport(window.x, window.y, window.width, window.height);
 
+	m_renderMode = viewport.RenderMode();
 	viewport.GetViewProjectionMatrix(m_viewProjectionMatrix);
 	viewport.GetViewMatrix(m_viewMatrix);
 }

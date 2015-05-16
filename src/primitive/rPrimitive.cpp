@@ -10,7 +10,6 @@ rPrimitive::rPrimitive(const rString& id, rEngine* engine)
 	m_geometryInvalid = true;
 
 	m_drawable.reset(new rDrawable());
-	m_drawable.get()->SetLineVisibility(true);
 }
 
 rPrimitive::~rPrimitive(){
@@ -64,18 +63,24 @@ void rPrimitive::Draw(){
 	material->SetColor("fragColor", m_faceColor);
 		
 	rMatrix4& transform = TransformMatrix();
+	rRenderMode renderMode = m_drawable->RenderMode();
 
-	if (m_drawable->LineVisibility() && m_drawable->FaceVisibility()){
-		material->SetColor("fragColor", m_faceColor);
-		m_engine->renderer->RenderShadedWithEdges(m_geometry, transform, material, m_edgeColor);
-	}
-	else if (m_drawable->LineVisibility()){
-		material->SetColor("fragColor", m_edgeColor);
-		m_engine->renderer->RenderGeometry(m_geometry, transform, "wire", material);
-	}
-	else if (m_drawable->FaceVisibility()){
-		material->SetColor("fragColor", m_faceColor);
-		m_engine->renderer->RenderGeometry(m_geometry, transform, "shaded", material);
+	switch (renderMode){
+		case rRenderMode::Shaded:
+			material->SetColor("fragColor", m_edgeColor);
+			m_engine->renderer->RenderGeometry(m_geometry, transform, "wire", material);
+			break;
+
+		case rRenderMode::Wireframe:
+			material->SetColor("fragColor", m_edgeColor);
+			m_engine->renderer->RenderGeometry(m_geometry, transform, "wire", material);
+			break;
+
+		case rRenderMode::Default:
+		case rRenderMode::WireframeOnShaded:
+			material->SetColor("fragColor", m_faceColor);
+			m_engine->renderer->RenderShadedWithEdges(m_geometry, transform, material, m_edgeColor);
+			break;
 	}
 }
 

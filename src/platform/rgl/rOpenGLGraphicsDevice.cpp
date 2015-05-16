@@ -157,55 +157,31 @@ void rOpenGLGraphicsDevice::SetViewport(int x , int y, int width, int height) {
 }
 
 void rOpenGLGraphicsDevice::SetActiveMaterial(rMaterial* material){
-	const rPropertyCollection& materialParameters = material->Parameters();
 	int textureIndex = 0;
 	GLint programId = material->Shader()->ProgramId();
-	rArrayString paramNames;
-	material->GetParameterNames(paramNames);
 	
 	glUseProgram(programId);
-	
-	for (size_t i = 0; i < paramNames.size(); i++){
-		rString paramName = paramNames[i];
-		rPropertyType paramType = materialParameters.GetType(paramName);
-		GLint uniformHandle = glGetUniformLocation ( programId, paramNames[i].c_str() );
-		
-		switch (paramType){
-			case rPROPERTY_TYPE_COLOR:{
-				rColor color;
-				materialParameters.GetColor(paramName, color);
-				glUniform4f(uniformHandle, color.red / 255.0f, color.green / 255.0f, color.blue / 255.0f , color.alpha / 255.0f);
-			}
-			break;
 
-			case rPROPERTY_TYPE_TEXTURE:{
-				rTexture2D* texture = NULL;
-				materialParameters.GetTexture(paramName, texture);
-				glActiveTexture ( GL_TEXTURE0 + textureIndex);
-				glBindTexture ( GL_TEXTURE_2D, texture->GraphicsDeviceID() );
-				glUniform1i ( uniformHandle, textureIndex );
-				textureIndex ++;
+	GLint uniformHandle = glGetUniformLocation(programId, "fragColor");
+	if (uniformHandle != 1){
+		rColor diffuseColor = material->DiffuseColor();
+		glUniform4f(uniformHandle, diffuseColor.red / 255.0f, diffuseColor.green / 255.0f, diffuseColor.blue / 255.0f, diffuseColor.alpha / 255.0f);
+	}
 
-				if (texture->Bpp() > 3){
-					glEnable (GL_BLEND);
-					glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-				}
-				else{
-					glDisable(GL_BLEND);
-				}
+	uniformHandle = glGetUniformLocation(programId, "s_texture");
+	if (uniformHandle != 1){
+		rTexture2D* diffuseTexture = material->DiffuseTexture();
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, diffuseTexture->GraphicsDeviceID());
+		glUniform1i(uniformHandle, textureIndex);
 
-			}
-			break;
-
-			case rPROPERTY_TYPE_FLOAT:{
-				float f = 0.0f;
-				materialParameters.GetFloat(paramName, f);
-				glUniform1f(uniformHandle, f);
-			}
-			break;
+		if (diffuseTexture->Bpp() > 3){
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		}
-
-
+		else{
+			glDisable(GL_BLEND);
+		}
 	}
 }
 

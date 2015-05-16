@@ -38,7 +38,7 @@ void rRenderer::RenderShadedWithEdges(rGeometry* geometry, const rMatrix4& trans
 	m_graphicsDevice->EnablePolygonFillOffset(false);
 
 	rMaterial* edgeMaterial = m_contentManager->GetMaterialAsset("default_colored");
-	edgeMaterial->SetColor("fragColor", edgeColor);
+	//edgeMaterial->SetColor("fragColor", edgeColor);
 	RenderGeometry(geometry, transform, "wire", edgeMaterial);
 }
 
@@ -51,7 +51,7 @@ void rRenderer::Render3dBuffer(rImmediateBuffer& geometry, const rMatrix4& trans
 	rMaterial* material = m_contentManager->GetMaterialAsset("immediate_color");
 
 	if (material){
-		material->SetColor("fragColor", color);
+		//material->SetColor("fragColor", color);
 		m_graphicsDevice->RenderImmediate(geometry, modelViewProjection,  material);
 	}
 }
@@ -76,7 +76,7 @@ void rRenderer::ImmediateColorRender(rImmediateBuffer& geometry, const rColor& c
 	rMaterial* material = m_contentManager->GetMaterialAsset("immediate_color");
 	
 	if (material){
-		material->SetColor("fragColor", color);
+		//material->SetColor("fragColor", color);
 		
 		rMatrix4 transform;
 		if (m_activeViewport){
@@ -92,7 +92,7 @@ void rRenderer::ImmediateTexturedRender(rImmediateBuffer& geometry, rTexture2D* 
 	rMaterial* material = m_contentManager->GetMaterialAsset("immediate_texture");
 	
 	if (material){
-		material->SetTexture("s_texture", texture);
+		//material->SetTexture("s_texture", texture);
 		
 		rMatrix4 transform;
 		if (m_activeViewport){
@@ -141,7 +141,7 @@ void rRenderer::RenderWireBox(const rAlignedBox3& box, const rColor color){
 	rMaterial* material = m_contentManager->GetMaterialAsset("immediate_color");
 
 	if (material){
-		material->SetColor("fragColor", color);
+		//material->SetColor("fragColor", color);
 		m_graphicsDevice->RenderImmediate(geometry, m_viewProjectionMatrix,  material);
 	}
 }
@@ -167,10 +167,10 @@ void rRenderer::RenderString(const rString& str, const rFont* font, const rRect&
 		rGeometryUtil::Create2DText(str, font, bounding, geometry);
 
 		rMaterial* material = m_contentManager->GetMaterialAsset("immediate_text");
-		material->SetColor("fragColor", color);
+		//material->SetColor("fragColor", color);
 
 		if (material){
-			material->SetTexture("s_texture", font->Texture());
+			//material->SetTexture("s_texture", font->Texture());
 
 			rMatrix4 transform;
 			if (m_activeViewport){
@@ -203,15 +203,15 @@ void rRenderer::RenderSkeleton(const rSkeleton* skeleton, const rMatrix4Vector& 
 		}
 
 		rMaterial* material = m_contentManager->GetMaterialAsset("immediate_color");
-		material->SetColor("fragColor",lineColor);
+		//material->SetColor("fragColor",lineColor);
 
 		m_graphicsDevice->EnableDepthTesting(false);
 
 		m_graphicsDevice->RenderImmediate(lineData, m_viewProjectionMatrix, material);
 
 		material = m_contentManager->GetMaterialAsset("default_points");
-		material->SetColor("fragColor", pointColor);
-		material->SetFloat("recPointSize", pointSize);
+		//material->SetColor("fragColor", pointColor);
+		//material->SetFloat("recPointSize", pointSize);
 
 
 		m_graphicsDevice->RenderImmediate(pointData, m_viewProjectionMatrix, material);

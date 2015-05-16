@@ -19,20 +19,20 @@ class RECONDITE_API rMaterial : public rAsset{
 public:
 	rMaterial(rShader* shader, int assetid, const rString& name, const rString& path);
 	
-	void SetTexture(const rString& name, rTexture2D* texture);
-	void SetColor(const rString& name, const rColor& color);
-	void SetFloat(const rString& name, float value);
-	
-	void GetParameterNames(rArrayString& names) const;
-	
 	rShader* Shader() const;
 	
 	virtual rAssetType Type() const;
 
-	const rPropertyCollection& Parameters() const;
+	void SetDiffuseTexture(rTexture2D* diffuseTexture);
+	rTexture2D* DiffuseTexture() const;
+
+	void SetDiffuseColor(const rColor& diffuseColor);
+	rColor DiffuseColor() const;
 	
 private:
-	rPropertyCollection m_parameters;
+
+	rTexture2D* m_diffuseTexture;
+	rColor m_diffuseColor;
 	
 	rShader* m_shader;
 };

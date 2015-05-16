@@ -60,25 +60,25 @@ void rPrimitive::Draw(){
 	rMaterial* material = m_engine->content->GetMaterialAsset("default_colored");
 	if (!material) return;
 
-	material->SetColor("fragColor", m_faceColor);
+//	material->SetColor("fragColor", m_faceColor);
 		
 	rMatrix4& transform = TransformMatrix();
 	rRenderMode renderMode = m_drawable->RenderMode();
 
 	switch (renderMode){
 		case rRenderMode::Shaded:
-			material->SetColor("fragColor", m_edgeColor);
+			//material->SetColor("fragColor", m_edgeColor);
 			m_engine->renderer->RenderGeometry(m_geometry, transform, "wire", material);
 			break;
 
 		case rRenderMode::Wireframe:
-			material->SetColor("fragColor", m_edgeColor);
+			//material->SetColor("fragColor", m_edgeColor);
 			m_engine->renderer->RenderGeometry(m_geometry, transform, "wire", material);
 			break;
 
 		case rRenderMode::Default:
 		case rRenderMode::WireframeOnShaded:
-			material->SetColor("fragColor", m_faceColor);
+			//material->SetColor("fragColor", m_faceColor);
 			m_engine->renderer->RenderShadedWithEdges(m_geometry, transform, material, m_edgeColor);
 			break;
 	}

@@ -282,7 +282,7 @@ bool rContentManager::LoadMaterialDependencies(const rMaterialData& materialData
 				if (texture){
 					loadedTextures.push_back(texture);
 					texture->Retain();
-					material->SetTexture(materialParams[i], texture);
+					//material->SetTexture(materialParams[i], texture);
 				}
 				else{ //if there is an error, release all textures we have loaded and return false
 					for (size_t t = 0; t < loadedTextures.size(); t++){
@@ -299,7 +299,7 @@ bool rContentManager::LoadMaterialDependencies(const rMaterialData& materialData
 				unsigned int c[4];
 				stream >> c[0] >> c[1] >> c[2] >> c[3];
 				rColor color(c[0], c[1], c[2], c[3]);
-				material->SetColor(materialParams[i], color);
+				//material->SetColor(materialParams[i], color);
 			}
 			break;
 		};
@@ -365,33 +365,6 @@ rMaterial* rContentManager::LoadMaterial(const rMaterialData& materialData, cons
 }
 
 rContentError rContentManager::RemoveMaterialAsset(const rString& name){
-	rMaterialItr result = m_materials.find(name);
-	
-	if (result == m_materials.end()){
-		m_error = rCONTENT_ERROR_ASSET_NOT_PRESENT;
-	}
-	
-	rMaterial* material = result->second;
-	if (material->RetainCount() == 0){
-		const rPropertyCollection& parameters = material->Parameters();
-		rArrayString parameterNames;
-		material->GetParameterNames(parameterNames);
-		
-		for (size_t i = 0; i < parameterNames.size(); i++){
-			rString paramName = parameterNames[i];
-			rPropertyType paramType = parameters.GetType(paramName);
-			if (parameters.GetType(paramName) == rPROPERTY_TYPE_TEXTURE){
-				rTexture2D* texture = NULL;
-				parameters.GetTexture(paramName, texture);
-				ReleaseAsset(texture);
-			}
-		}
-			
-		delete material;
-		m_error = rCONTENT_ERROR_NONE;
-		NotifyAssetUnloaded(rASSET_MATERIAL, name);
-	}
-	
 	return m_error;
 }
 

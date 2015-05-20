@@ -34,9 +34,9 @@ void reViewport::CreateViewportElements(){
 	m_shadingMenuText = new wxStaticText(this, reViewportShadingMenuId, "Shading");
 	m_shadingMenuText->Bind(wxEVT_LEFT_DOWN, &reViewport::OnShadingMenuClick, this);
 
-	m_shadingMenu.AppendRadioItem(10000, "Wireframe");
-	m_shadingMenu.AppendRadioItem(10001, "Shaded");
-	m_shadingMenu.AppendRadioItem(10002, "Wireframe on Shaded");
+	m_shadingMenu.AppendRadioItem(reVIEWPORT_MENU_WIREFRAME, "Wireframe");
+	m_shadingMenu.AppendRadioItem(reVIEWPORT_MENU_SHADED, "Shaded")->Check(true);
+	m_shadingMenu.AppendRadioItem(reVIEWPORT_MENU_WIREFRAME_ON_SHADED, "Wireframe on Shaded");
 
 	m_minMaxButton = new wxBitmapButton(this, wxID_ANY, wxBitmap("assets/action-maximize.png", wxBITMAP_TYPE_PNG));
 
@@ -144,7 +144,24 @@ void reViewport::OnViewMenuClick(wxMouseEvent& event){
 }
 
 void reViewport::OnShadingMenuClick(wxMouseEvent& event){
-	m_shadingMenuText->GetPopupMenuSelectionFromUser(m_shadingMenu);
+	int shadingMenuChoice = m_shadingMenuText->GetPopupMenuSelectionFromUser(m_shadingMenu);
+
+	switch (shadingMenuChoice){
+	case reVIEWPORT_MENU_WIREFRAME:
+		m_glCanvas->GetViewport()->SetRenderMode(rRenderMode::Wireframe);
+		Refresh();
+		break;
+
+	case reVIEWPORT_MENU_SHADED:
+		m_glCanvas->GetViewport()->SetRenderMode(rRenderMode::Shaded);
+		Refresh();
+		break;
+
+	case reVIEWPORT_MENU_WIREFRAME_ON_SHADED:
+		m_glCanvas->GetViewport()->SetRenderMode(rRenderMode::WireframeOnShaded);
+		Refresh();
+		break;
+	}
 }
 
 wxString reViewport::GetViewportName(){

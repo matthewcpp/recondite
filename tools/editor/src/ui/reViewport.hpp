@@ -18,6 +18,12 @@ public:
 	virtual void RestoreViewports() = 0;
 };
 
+enum reViewportMenuId{
+	reVIEWPORT_MENU_WIREFRAME = 10000,
+	reVIEWPORT_MENU_SHADED,
+	reVIEWPORT_MENU_WIREFRAME_ON_SHADED
+};
+
 class reViewport : public wxPanel{
 public:
 	reViewport(reComponent* component, reToolManager* toolManager, reViewportManager* viewportManager, const wxString& name, wxWindow *parent, wxWindowID id = wxID_ANY);

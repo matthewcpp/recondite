@@ -21,7 +21,7 @@ void rProp::SetModel(rModel* model){
 void rProp::Draw(){
 	rMatrix4& transform = TransformMatrix();
 
-	m_engine->renderer->RenderModel(Drawable(), m_model, transform);
+	m_engine->renderer->RenderModel(m_model, transform);
 }
 
 void rProp::DoRecalculateBoundingVolume() {

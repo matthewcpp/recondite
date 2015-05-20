@@ -16,16 +16,27 @@
 #include "rAlignedBox3.hpp"
 #include "rDrawable.hpp"
 
-struct RECONDITE_API rMesh {
+class RECONDITE_API rMesh {
+public:
 	rMesh(const rString& n, const rString& buf, rGeometryType geo, const rAlignedBox3& box);
+
+public:
+	inline rDrawable* Drawable();
 	
 	rString name;
 	rString buffer;
 	rAlignedBox3 boundingBox;
-	rMaterial* material;
+
 	rGeometry* geometry;
 	rGeometryType geometryType;
+
+private:
+	rDrawable m_drawable;
 };
+
+rDrawable* rMesh::Drawable(){
+	return &m_drawable;
+}
 
 typedef std::map<rString, rMesh*> rMeshMap;
 

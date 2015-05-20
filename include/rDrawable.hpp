@@ -48,6 +48,8 @@ public:
 	rShader* Shader() const;
 	void SetShader(rShader* shader);
 
+	rMaterial* Material() const;
+	void SetMaterial(rMaterial* material);
 
 	rColor PickingColor() const;
 
@@ -56,6 +58,7 @@ private:
 	bool m_visible;
 	bool m_forceRender;
 	rShader* m_shader;
+	rMaterial* m_material;
 
 private:
 	static PickingColorManager s_drawableIdManager;

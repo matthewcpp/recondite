@@ -20,7 +20,7 @@ rMesh* rModel::CreateMesh(const rString& name, const rString& buffer, rGeometryT
 	else{
 		rMesh* mesh = new rMesh(name, buffer, geometryType, boundingBox);
 		mesh->geometry = m_geometry;
-		mesh->material = material;
+		mesh->Drawable()->SetMaterial(material);
 
 		m_meshes[name] = mesh;
 

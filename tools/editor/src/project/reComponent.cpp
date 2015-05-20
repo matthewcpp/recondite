@@ -85,12 +85,12 @@ void reComponent::OnSceneLoad(rEvent& event){
 		groundPlane->SetRows(25);
 		groundPlane->SetColumns(25);
 		groundPlane->SetPickable(false);
-		groundPlane->Drawable()->SetForceRender(true);
 
 		AddReservedActor(groundPlane);
 
 		groundPlane->RecreateGeometry();
 		rModel* model = groundPlane->Model();
+		model->GetMesh("wire")->Drawable()->SetForceRender(true);
 		model->DeleteMesh("shaded");
 	}
 }

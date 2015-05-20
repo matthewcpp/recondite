@@ -567,7 +567,12 @@ rModel* rContentManager::LoadModel(rModelData& modelData, const rString& name){
 
 		rMaterial* material = CreateMaterial(name + "::" + meshData->meshName + "::material");
 		
-		model->CreateMesh(meshData->meshName, meshData->elementBufferName, meshData->geometryType, material, meshData->boundingBox);
+		rMesh* mesh = model->CreateMesh(meshData->meshName, meshData->elementBufferName, meshData->geometryType, material, meshData->boundingBox);
+
+		if (meshData->geometryType == rGeometryType::LINES || meshData->geometryType == rGeometryType::LINE_LOOP)
+			mesh->Drawable()->SetShader(DefaultLineShader());
+		else
+			mesh->Drawable()->SetShader(DefaultLineShader());
 	}
 	m_models[name] = model;
 	return model;
@@ -599,7 +604,13 @@ rModel* rContentManager::GetOrLoadModel(const rString& name, const rString& path
 }
 
 rContentError rContentManager::RemoveModelAsset(const rString& name){
-	m_models.erase(name);
+	if (m_models.count(name)){
+		rModel* model = m_models[name];
+		rGeometry* geometry = model->Geometry();
+		RemoveGeometryAsset(geometry->Name());
+		m_models.erase(name);
+	}
+
 	return rCONTENT_ERROR_NONE;
 }
 

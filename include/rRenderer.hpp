@@ -48,8 +48,8 @@ public:
 
 	void RenderWireBox(const rAlignedBox3& box, const rColor color);
 
-	void RenderModel(rDrawable* drawable, const rModel* model, const rMatrix4& transform);
-	void ForceRenderModel(rDrawable* drawable, const rModel* model, const rMatrix4& modelViewProjection);
+	void RenderModel(const rModel* model, const rMatrix4& transform);
+	void ForceRenderModel(const rModel* model, const rMatrix4& modelViewProjection);
 	void RenderWireframeOnShaded(const rModel* model, const rMatrix4& transform);
 
 	void RenderBuffer(const rImmediateBuffer& buffer, rMaterial* material);
@@ -58,8 +58,8 @@ public:
 	void RenderSkeleton(const rSkeleton* skeleton, const rMatrix4Vector& transformArray, const rColor& lineColor, const rColor& pointColor, float pointSize);
 
 private:
-	void RenderLineMeshes(rDrawable* drawable, const rModel* model, const rMatrix4& modelViewProjection);
-	void RenderTriangleMeshes(rDrawable* drawable, const rModel* model, const rMatrix4& modelViewProjection);
+	void RenderLineMeshes(const rModel* model, const rMatrix4& modelViewProjection);
+	void RenderTriangleMeshes(const rModel* model, const rMatrix4& modelViewProjection);
 
 private:	
 	void ImmediateColorRender(rImmediateBuffer& geometry, const rColor& color);

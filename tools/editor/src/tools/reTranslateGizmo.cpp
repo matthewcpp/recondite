@@ -91,7 +91,7 @@ void reTranslateGizmo::CreateGizmo(){
 	wire->Push(startingIndex, startingIndex + 1);
 
 	rModel* handleModel = m_component->GetEngine()->content->LoadModel(gizmoData, "__reTranslateGizmoYHandle");
-	handleModel->GetMesh("wire")->material->SetDiffuseColor(rColor::Green);
+	handleModel->GetMesh("wire")->Drawable()->Material()->SetDiffuseColor(rColor::Green);
 	m_yHandle = new rProp(handleModel, "__reTranslateGizmoYHandle", m_component->GetEngine());
 	m_yHandle->Drawable()->SetShader(m_component->GetEngine()->content->DefaultPrimitiveShader());
 	m_component->AddReservedActor(m_yHandle);
@@ -120,7 +120,7 @@ void reTranslateGizmo::CreateGizmo(){
 	
 
 	handleModel = m_component->GetEngine()->content->LoadModel(gizmoData, "__reTranslateGizmoXHandle");
-	handleModel->GetMesh("wire")->material->SetDiffuseColor(rColor::Blue);
+	handleModel->GetMesh("wire")->Drawable()->Material()->SetDiffuseColor(rColor::Blue);
 	m_xHandle = new rProp(handleModel, "__reTranslateGizmoXHandle", m_component->GetEngine());
 	m_xHandle->Drawable()->SetShader(m_component->GetEngine()->content->DefaultPrimitiveShader());
 	m_component->AddReservedActor(m_xHandle);
@@ -149,7 +149,7 @@ void reTranslateGizmo::CreateGizmo(){
 
 
 	handleModel = m_component->GetEngine()->content->LoadModel(gizmoData, "__reTranslateGizmoZHandle");
-	handleModel->GetMesh("wire")->material->SetDiffuseColor(rColor::Red);
+	handleModel->GetMesh("wire")->Drawable()->Material()->SetDiffuseColor(rColor::Red);
 	m_zHandle = new rProp(handleModel, "__reTranslateGizmoZHandle", m_component->GetEngine());
 	m_zHandle->Drawable()->SetShader(m_component->GetEngine()->content->DefaultPrimitiveShader());
 

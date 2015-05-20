@@ -20,10 +20,16 @@ void rPrimitive::SetColor(const rColor& color){
 
 void rPrimitive::SetEdgeColor(const rColor& color){
 	m_edgeColor = color;
+
+	if (m_model)
+		m_model->GetMesh("wire")->Drawable()->Material()->SetDiffuseColor(m_edgeColor);
 }
 
 void rPrimitive::SetFaceColor(const rColor& color){
 	m_faceColor = color;
+
+	if (m_model)
+		m_model->GetMesh("shaded")->Drawable()->Material()->SetDiffuseColor(m_faceColor);
 }
 
 void rPrimitive::InvalidateGeometry(){
@@ -46,8 +52,8 @@ void rPrimitive::RecreateGeometry(){
 	rString assetName = Id() + "_model";
 	m_model = m_engine->content->LoadModel(modelData, assetName);
 
-	m_model->GetMesh("wire")->material->SetDiffuseColor(m_edgeColor);
-	m_model->GetMesh("shaded")->material->SetDiffuseColor(m_faceColor);
+	m_model->GetMesh("wire")->Drawable()->Material()->SetDiffuseColor(m_edgeColor);
+	m_model->GetMesh("shaded")->Drawable()->Material()->SetDiffuseColor(m_faceColor);
 
 	m_geometryInvalid = false;
 }
@@ -63,7 +69,7 @@ void rPrimitive::Draw(){
 	}
 		
 	rMatrix4& transform = TransformMatrix();
-	m_engine->renderer->RenderModel(Drawable(), m_model, transform);
+	m_engine->renderer->RenderModel(m_model, transform);
 }
 
 rColor rPrimitive::EdgeColor() const{

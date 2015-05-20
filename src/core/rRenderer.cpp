@@ -57,7 +57,7 @@ void rRenderer::Render3dBuffer(rImmediateBuffer& geometry, const rMatrix4& trans
 	}
 }
 
-void rRenderer::ForceRenderModel(rDrawable* drawable, const rModel* model, const rMatrix4& modelViewProjection){
+void rRenderer::ForceRenderModel(const rModel* model, const rMatrix4& modelViewProjection){
 	rArrayString meshNames;
 	model->GetMeshNames(meshNames);
 
@@ -65,6 +65,7 @@ void rRenderer::ForceRenderModel(rDrawable* drawable, const rModel* model, const
 
 	for (size_t i = 0; i < meshNames.size(); i++){
 		rMesh* mesh = model->GetMesh(meshNames[i]);
+		rDrawable* drawable = mesh->Drawable();
 
 		if (mesh->geometryType == rGeometryType::TRIANGLES){
 			m_graphicsDevice->EnablePolygonFillOffset(true);
@@ -75,12 +76,12 @@ void rRenderer::ForceRenderModel(rDrawable* drawable, const rModel* model, const
 			m_graphicsDevice->ActivateShader(drawable->Shader()->ProgramId());
 		}
 
-		m_graphicsDevice->RenderGeometry(geometry, modelViewProjection, mesh->buffer, mesh->material);
+		m_graphicsDevice->RenderGeometry(geometry, modelViewProjection, mesh->buffer, drawable->Material());
 		m_objectsRendered++;
 	}
 }
 
-void rRenderer::RenderLineMeshes(rDrawable* drawable, const rModel* model, const rMatrix4& modelViewProjection){
+void rRenderer::RenderLineMeshes(const rModel* model, const rMatrix4& modelViewProjection){
 	rArrayString meshNames;
 	model->GetMeshNames(meshNames);
 
@@ -88,16 +89,17 @@ void rRenderer::RenderLineMeshes(rDrawable* drawable, const rModel* model, const
 
 	for (size_t i = 0; i < meshNames.size(); i++){
 		rMesh* mesh = model->GetMesh(meshNames[i]);
+		rDrawable* drawable = mesh->Drawable();
 
 		if (mesh->geometryType == rGeometryType::LINES || mesh->geometryType == rGeometryType::LINE_LOOP){
 			m_graphicsDevice->ActivateShader(drawable->Shader()->ProgramId());
-			m_graphicsDevice->RenderGeometry(geometry, modelViewProjection, mesh->buffer, mesh->material);
+			m_graphicsDevice->RenderGeometry(geometry, modelViewProjection, mesh->buffer, drawable->Material());
 			m_objectsRendered++;
 		}
 	}
 }
 
-void rRenderer::RenderTriangleMeshes(rDrawable* drawable, const rModel* model, const rMatrix4& modelViewProjection){
+void rRenderer::RenderTriangleMeshes(const rModel* model, const rMatrix4& modelViewProjection){
 	rArrayString meshNames;
 	model->GetMeshNames(meshNames);
 
@@ -106,36 +108,31 @@ void rRenderer::RenderTriangleMeshes(rDrawable* drawable, const rModel* model, c
 	for (size_t i = 0; i < meshNames.size(); i++){
 		rMesh* mesh = model->GetMesh(meshNames[i]);
 
+		rDrawable* drawable = mesh->Drawable();
+
 		if (mesh->geometryType == rGeometryType::TRIANGLES){
 			m_graphicsDevice->ActivateShader(drawable->Shader()->ProgramId());
-			m_graphicsDevice->RenderGeometry(geometry, modelViewProjection, mesh->buffer, mesh->material);
+			m_graphicsDevice->RenderGeometry(geometry, modelViewProjection, mesh->buffer, drawable->Material());
 			m_objectsRendered++;
 		}
 	}
 }
 
 
-void rRenderer::RenderModel(rDrawable* drawable, const rModel* model, const rMatrix4& transform){
+void rRenderer::RenderModel(const rModel* model, const rMatrix4& transform){
 	rMatrix4 modelViewProjection = m_viewProjectionMatrix * transform;
 
-	if (!drawable->Visible()) return;
-
-	if (drawable->ForceRender()){
-		ForceRenderModel(drawable, model, modelViewProjection);
-	}
-	else{
-		switch (m_renderMode){
+	switch (m_renderMode){
 		case rRenderMode::Wireframe:
-			RenderLineMeshes(drawable, model, modelViewProjection);
+			RenderLineMeshes(model, modelViewProjection);
 			break;
 
 		case rRenderMode::Shaded:
-			RenderTriangleMeshes(drawable, model, modelViewProjection);
+			RenderTriangleMeshes(model, modelViewProjection);
 			break;
 
 		default:
-			ForceRenderModel(drawable, model, modelViewProjection);
-		}
+			ForceRenderModel(model, modelViewProjection);
 	}
 }
 

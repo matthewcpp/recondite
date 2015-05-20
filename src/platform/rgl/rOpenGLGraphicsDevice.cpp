@@ -165,7 +165,7 @@ void rOpenGLGraphicsDevice::ActivateShader(unsigned int shaderId){
 
 void rOpenGLGraphicsDevice::SetActiveMaterial(rMaterial* material){
 	GLint uniformHandle = glGetUniformLocation(m_activeShaderProgram, "fragColor");
-	if (uniformHandle != 1){
+	if (uniformHandle != -1){
 		rColor diffuseColor = material->DiffuseColor();
 		glUniform4f(uniformHandle, diffuseColor.red / 255.0f, diffuseColor.green / 255.0f, diffuseColor.blue / 255.0f, diffuseColor.alpha / 255.0f);
 	}
@@ -173,7 +173,7 @@ void rOpenGLGraphicsDevice::SetActiveMaterial(rMaterial* material){
 	rTexture2D* diffuseTexture = material->DiffuseTexture();
 	if (diffuseTexture){
 		uniformHandle = glGetUniformLocation(m_activeShaderProgram, "s_texture");
-		if (uniformHandle != 1){
+		if (uniformHandle != -1){
 			glActiveTexture(GL_TEXTURE0);
 			glBindTexture(GL_TEXTURE_2D, diffuseTexture->GraphicsDeviceID());
 			glUniform1i(uniformHandle, 0);

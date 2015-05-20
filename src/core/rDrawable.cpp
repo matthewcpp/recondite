@@ -32,7 +32,6 @@ bool rDrawable::ForceRender(){
 
 void rDrawable::SetForceRender(bool forceRender){
 	m_forceRender = forceRender;
-
 }
 
 rShader* rDrawable::Shader() const{
@@ -41,6 +40,13 @@ rShader* rDrawable::Shader() const{
 
 void rDrawable::SetShader(rShader* shader){
 	m_shader = shader;
+}
+
+rMaterial* rDrawable::Material() const{
+	return m_material;
+}
+void rDrawable::SetMaterial(rMaterial* material){
+	m_material = material;
 }
 
 PickingColorManager rDrawable::s_drawableIdManager;

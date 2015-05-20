@@ -32,6 +32,6 @@ int rPawn::Update(){
 void rPawn::Draw(){
 	if (m_model){
 		rMatrix4 transform;
-		m_engine->renderer->RenderModel(Drawable(), m_model, transform);
+		m_engine->renderer->RenderModel(m_model, transform);
 	}
 }

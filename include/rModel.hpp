@@ -2,6 +2,7 @@
 #define R_MODEL_HPP
 
 #include <map>
+#include <memory>
 
 #include "rBuild.hpp"
 #include "rTypes.hpp"
@@ -13,14 +14,17 @@
 #include "rMaterial.hpp"
 #include "rSkeleton.hpp"
 #include "rAlignedBox3.hpp"
+#include "rDrawable.hpp"
 
 struct RECONDITE_API rMesh {
-	rMesh(const rString& n, const rString& buf, rMaterial* mat, const rAlignedBox3& box);
+	rMesh(const rString& n, const rString& buf, rGeometryType geo, const rAlignedBox3& box);
 	
 	rString name;
 	rString buffer;
-	rMaterial* material;
 	rAlignedBox3 boundingBox;
+	rMaterial* material;
+	rGeometry* geometry;
+	rGeometryType geometryType;
 };
 
 typedef std::map<rString, rMesh*> rMeshMap;
@@ -31,7 +35,7 @@ public:
 	~rModel();
 	
 public:
-	rMesh* CreateMesh(const rString& name, const rString& buffer, rMaterial* material, const rAlignedBox3 boundingBox);
+	rMesh* CreateMesh(const rString& name, const rString& buffer, rGeometryType geometryType, rMaterial* material, const rAlignedBox3 boundingBox);
 	rMesh* GetMesh(const rString& name) const;
 	void DeleteMesh(const rString& name);
 	void GetMeshNames(rArrayString& meshNames) const;

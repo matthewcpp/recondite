@@ -6,6 +6,8 @@ rOpenGLGraphicsDevice::rOpenGLGraphicsDevice(){
 	m_defaultFramebuffer = 0;
 	m_activeRenderBufferId = 0;
 
+	m_activeShaderProgram = -1;
+
 	m_clearColor.Set(0, 0, 0, 255);
 }
 
@@ -69,118 +71,120 @@ unsigned int rOpenGLGraphicsDevice::CreateShaderProgram(const rString& vertex, c
     vertexShader = CompileShader(GL_VERTEX_SHADER, vertex.c_str());
 
     if (!vertexShader)
-	    return 0;
+return 0;
 
-    fragmentShader = CompileShader(GL_FRAGMENT_SHADER, fragment.c_str());
+fragmentShader = CompileShader(GL_FRAGMENT_SHADER, fragment.c_str());
 
-    if (!fragmentShader){
-	    glDeleteShader(vertexShader);
-	    return 0;
-    }
+if (!fragmentShader){
+	glDeleteShader(vertexShader);
+	return 0;
+}
 
-    programObject = glCreateProgram();
+programObject = glCreateProgram();
 
-    if (!programObject)
-	    return 0;
+if (!programObject)
+return 0;
 
-    glAttachShader(programObject, vertexShader);
-    glAttachShader(programObject, fragmentShader);
+glAttachShader(programObject, vertexShader);
+glAttachShader(programObject, fragmentShader);
 
-    glLinkProgram(programObject);
-    glGetProgramiv(programObject, GL_LINK_STATUS, &linked);
+glLinkProgram(programObject);
+glGetProgramiv(programObject, GL_LINK_STATUS, &linked);
 
-    if (!linked){
+if (!linked){
 	GLint infoLen = 0;
 	glGetProgramiv(programObject, GL_INFO_LOG_LENGTH, &infoLen);
 
 	if (infoLen > 1){
-	     char* infoLog = new char[infoLen];
+		char* infoLog = new char[infoLen];
 
-	     glGetProgramInfoLog(programObject, infoLen, NULL, infoLog);
-	     m_lastError.assign(infoLog, infoLen);         
+		glGetProgramInfoLog(programObject, infoLen, NULL, infoLog);
+		m_lastError.assign(infoLog, infoLen);
 
-	     delete [] infoLog;
+		delete[] infoLog;
 	}
 
 	glDeleteProgram(programObject);
 	return 0;
-    }
+}
 
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
+glDeleteShader(vertexShader);
+glDeleteShader(fragmentShader);
 
-    m_lastError.clear();
-    return programObject;
+m_lastError.clear();
+return programObject;
 }
 
 GLuint rOpenGLGraphicsDevice::CompileShader(GLenum type, const char* program){
-    GLuint shader;
-    GLint compiled;
+	GLuint shader;
+	GLint compiled;
 
-    shader = glCreateShader(type);
+	shader = glCreateShader(type);
 
-    if (!shader)
-	    return 0;
+	if (!shader)
+		return 0;
 
-    glShaderSource(shader, 1, &program, NULL);
-    glCompileShader(shader);
-    glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
-	
-    if (!compiled){
-      GLint infoLen = 0;
-      glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLen);
+	glShaderSource(shader, 1, &program, NULL);
+	glCompileShader(shader);
+	glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
 
-      if (infoLen > 1){
-	 char* infoLog = new char[infoLen];
+	if (!compiled){
+		GLint infoLen = 0;
+		glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLen);
 
-	 glGetShaderInfoLog(shader, infoLen, NULL, infoLog);
-	 m_lastError.assign(infoLog, infoLen);
-	 rLog::Error(m_lastError);
+		if (infoLen > 1){
+			char* infoLog = new char[infoLen];
 
-	 delete [] infoLog;
-      }
+			glGetShaderInfoLog(shader, infoLen, NULL, infoLog);
+			m_lastError.assign(infoLog, infoLen);
+			rLog::Error(m_lastError);
 
-      glDeleteShader(shader);
-      return 0;
-    }
+			delete[] infoLog;
+		}
 
-    m_lastError.clear();
-    return shader;
+		glDeleteShader(shader);
+		return 0;
+	}
+
+	m_lastError.clear();
+	return shader;
 }
 
 void rOpenGLGraphicsDevice::Uninit(){
 	m_isInit = false;
 }
 
-void rOpenGLGraphicsDevice::SetViewport(int x , int y, int width, int height) {
+void rOpenGLGraphicsDevice::SetViewport(int x, int y, int width, int height) {
 	glViewport(x, y, width, height);
 }
 
-void rOpenGLGraphicsDevice::SetActiveMaterial(rMaterial* material){
-	int textureIndex = 0;
-	GLint programId = material->Shader()->ProgramId();
-	
-	glUseProgram(programId);
+void rOpenGLGraphicsDevice::ActivateShader(unsigned int shaderId){
+	m_activeShaderProgram = (GLint)shaderId;
+	glUseProgram(m_activeShaderProgram);
+}
 
-	GLint uniformHandle = glGetUniformLocation(programId, "fragColor");
+void rOpenGLGraphicsDevice::SetActiveMaterial(rMaterial* material){
+	GLint uniformHandle = glGetUniformLocation(m_activeShaderProgram, "fragColor");
 	if (uniformHandle != 1){
 		rColor diffuseColor = material->DiffuseColor();
 		glUniform4f(uniformHandle, diffuseColor.red / 255.0f, diffuseColor.green / 255.0f, diffuseColor.blue / 255.0f, diffuseColor.alpha / 255.0f);
 	}
 
-	uniformHandle = glGetUniformLocation(programId, "s_texture");
-	if (uniformHandle != 1){
-		rTexture2D* diffuseTexture = material->DiffuseTexture();
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, diffuseTexture->GraphicsDeviceID());
-		glUniform1i(uniformHandle, textureIndex);
+	rTexture2D* diffuseTexture = material->DiffuseTexture();
+	if (diffuseTexture){
+		uniformHandle = glGetUniformLocation(m_activeShaderProgram, "s_texture");
+		if (uniformHandle != 1){
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, diffuseTexture->GraphicsDeviceID());
+			glUniform1i(uniformHandle, 0);
 
-		if (diffuseTexture->Bpp() > 3){
-			glEnable(GL_BLEND);
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		}
-		else{
-			glDisable(GL_BLEND);
+			if (diffuseTexture->Bpp() > 3){
+				glEnable(GL_BLEND);
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			}
+			else{
+				glDisable(GL_BLEND);
+			}
 		}
 	}
 }
@@ -270,15 +274,14 @@ void rOpenGLGraphicsDevice::RenderGeometry(const rGeometry* geometry, const rMat
 }
 
 void rOpenGLGraphicsDevice::RenderTexCoordGeometryProfile(const rGeometry* geometry, const rMatrix4& transform, rElementBuffer* elementBuffer, rMaterial* material){
-	GLint programId = material->Shader()->ProgramId();
 	GLuint vertexBufferId = geometry->VertexBufferId();
 	GLuint elementBufferId = elementBuffer->BufferId();
 
-	GLuint gPositionLoc = glGetAttribLocation(programId, "recPosition");
-	GLuint gNormalLoc = glGetAttribLocation(programId, "recNormal");
-	GLuint gTexCoordLoc = glGetAttribLocation(programId, "recTexCoord");
+	GLuint gPositionLoc = glGetAttribLocation(m_activeShaderProgram, "recPosition");
+	GLuint gNormalLoc = glGetAttribLocation(m_activeShaderProgram, "recNormal");
+	GLuint gTexCoordLoc = glGetAttribLocation(m_activeShaderProgram, "recTexCoord");
 
-	GLuint gMatrixLoc = glGetUniformLocation(programId, "recMVPMatrix");
+	GLuint gMatrixLoc = glGetUniformLocation(m_activeShaderProgram, "recMVPMatrix");
 
 	glUniformMatrix4fv(gMatrixLoc, 1, GL_FALSE, transform.m);
 
@@ -302,15 +305,14 @@ void rOpenGLGraphicsDevice::RenderTexCoordGeometryProfile(const rGeometry* geome
 }
 
 void rOpenGLGraphicsDevice::RenderVertexColorGeometryProfile(const rGeometry* geometry, const rMatrix4& transform, rElementBuffer* elementBuffer, rMaterial* material){
-	GLint programId = material->Shader()->ProgramId();
 	GLuint vertexBufferId = geometry->VertexBufferId();
 	GLuint elementBufferId = elementBuffer->BufferId();
 
-	GLuint gPositionLoc = glGetAttribLocation(programId, "recPosition");
-	GLuint gNormalLoc = glGetAttribLocation(programId, "recNormal");
-	GLuint gVertexColorLoc = glGetAttribLocation(programId, "recVertexColor");
+	GLuint gPositionLoc = glGetAttribLocation(m_activeShaderProgram, "recPosition");
+	GLuint gNormalLoc = glGetAttribLocation(m_activeShaderProgram, "recNormal");
+	GLuint gVertexColorLoc = glGetAttribLocation(m_activeShaderProgram, "recVertexColor");
 
-	GLuint gMatrixLoc = glGetUniformLocation(programId, "recMVPMatrix");
+	GLuint gMatrixLoc = glGetUniformLocation(m_activeShaderProgram, "recMVPMatrix");
 
 	glUniformMatrix4fv(gMatrixLoc, 1, GL_FALSE, transform.m);
 
@@ -344,9 +346,8 @@ void rOpenGLGraphicsDevice::RenderImmediate(const rImmediateBuffer& geometry, co
 
 		SetActiveMaterial(material);
 
-		GLint programId = material->Shader()->ProgramId();
-		GLuint gPositionLoc = glGetAttribLocation ( programId, "recPosition" );
-		GLuint gMatrixLoc = glGetUniformLocation ( programId, "recMVPMatrix" );
+		GLuint gPositionLoc = glGetAttribLocation(m_activeShaderProgram, "recPosition");
+		GLuint gMatrixLoc = glGetUniformLocation(m_activeShaderProgram, "recMVPMatrix");
 		GLuint gTexCoordLoc = 0;
 		
 		glUniformMatrix4fv(gMatrixLoc, 1, GL_FALSE, transform.m);
@@ -355,7 +356,7 @@ void rOpenGLGraphicsDevice::RenderImmediate(const rImmediateBuffer& geometry, co
 		glEnableVertexAttribArray ( gPositionLoc );
 
 		if (texCoords){
-			gTexCoordLoc = glGetAttribLocation ( programId, "recTexCoord" );
+			gTexCoordLoc = glGetAttribLocation(m_activeShaderProgram, "recTexCoord");
 			glVertexAttribPointer ( gTexCoordLoc, 2, GL_FLOAT, GL_FALSE, vertexStride, geometry.VertexData() + (vertexElementSize * sizeof (GLfloat)));
 			glEnableVertexAttribArray ( gTexCoordLoc );
 		}

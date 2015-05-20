@@ -4,10 +4,10 @@
 
 rDrawable::rDrawable(){
 	s_drawableIdManager.GetNextColor(m_pickingColor);
-	m_material = NULL;
-	m_visible = true;
 
-	m_renderMode = rRenderMode::Default;
+	m_visible = true;
+	m_forceRender = false;
+	m_shader = nullptr;
 }
 
 rDrawable::~rDrawable(){
@@ -18,14 +18,6 @@ rColor rDrawable::PickingColor() const{
 	return m_pickingColor;
 }
 
-rMaterial* rDrawable::Material() const{
-	return m_material;
-}
-
-void rDrawable::SetMaterial(rMaterial* material){
-	m_material = material;
-}
-
 bool rDrawable::Visible() const{
 	return m_visible;
 }
@@ -34,24 +26,21 @@ void rDrawable::SetVisibility(bool visibility){
 	m_visible = visibility;
 }
 
-rPropertyCollection& rDrawable::MaterialProperties(){
-	return m_materialProperties;
+bool rDrawable::ForceRender(){
+	return m_forceRender;
 }
 
-rGeometry* rDrawable::Geometry() const{
-	return m_geometry;
+void rDrawable::SetForceRender(bool forceRender){
+	m_forceRender = forceRender;
+
 }
 
-void rDrawable::SetGeometry(rGeometry* geometry){
-	m_geometry = geometry;
+rShader* rDrawable::Shader() const{
+	return m_shader;
 }
 
-rRenderMode rDrawable::RenderMode() const{
-	return m_renderMode;
-}
-
-void rDrawable::SetRenderMode(rRenderMode renderMode){
-	m_renderMode = renderMode;
+void rDrawable::SetShader(rShader* shader){
+	m_shader = shader;
 }
 
 PickingColorManager rDrawable::s_drawableIdManager;

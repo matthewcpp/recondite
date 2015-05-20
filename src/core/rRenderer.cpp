@@ -15,6 +15,7 @@ void rRenderer::BeginRenderView (rViewport& viewport){
 	m_graphicsDevice->SetViewport(window.x, window.y, window.width, window.height);
 
 	m_renderMode = viewport.RenderMode();
+
 	viewport.GetViewProjectionMatrix(m_viewProjectionMatrix);
 	viewport.GetViewMatrix(m_viewMatrix);
 }
@@ -56,20 +57,86 @@ void rRenderer::Render3dBuffer(rImmediateBuffer& geometry, const rMatrix4& trans
 	}
 }
 
-void rRenderer::RenderModel(const rModel* model, const rMatrix4& transform){
-	rMatrix4 modelViewProjection = m_viewProjectionMatrix * transform;
-
-	rGeometry* geometry = model->Geometry();
+void rRenderer::ForceRenderModel(rDrawable* drawable, const rModel* model, const rMatrix4& modelViewProjection){
 	rArrayString meshNames;
 	model->GetMeshNames(meshNames);
+
+	rGeometry* geometry = model->Geometry();
 
 	for (size_t i = 0; i < meshNames.size(); i++){
 		rMesh* mesh = model->GetMesh(meshNames[i]);
 
-		m_graphicsDevice->RenderGeometry(geometry, modelViewProjection, mesh->buffer, mesh->material);
-	}
+		if (mesh->geometryType == rGeometryType::TRIANGLES){
+			m_graphicsDevice->EnablePolygonFillOffset(true);
+			m_graphicsDevice->ActivateShader(drawable->Shader()->ProgramId());
+		}
+		else{
+			m_graphicsDevice->EnablePolygonFillOffset(false);
+			m_graphicsDevice->ActivateShader(drawable->Shader()->ProgramId());
+		}
 
-	m_objectsRendered++;
+		m_graphicsDevice->RenderGeometry(geometry, modelViewProjection, mesh->buffer, mesh->material);
+		m_objectsRendered++;
+	}
+}
+
+void rRenderer::RenderLineMeshes(rDrawable* drawable, const rModel* model, const rMatrix4& modelViewProjection){
+	rArrayString meshNames;
+	model->GetMeshNames(meshNames);
+
+	rGeometry* geometry = model->Geometry();
+
+	for (size_t i = 0; i < meshNames.size(); i++){
+		rMesh* mesh = model->GetMesh(meshNames[i]);
+
+		if (mesh->geometryType == rGeometryType::LINES || mesh->geometryType == rGeometryType::LINE_LOOP){
+			m_graphicsDevice->ActivateShader(drawable->Shader()->ProgramId());
+			m_graphicsDevice->RenderGeometry(geometry, modelViewProjection, mesh->buffer, mesh->material);
+			m_objectsRendered++;
+		}
+	}
+}
+
+void rRenderer::RenderTriangleMeshes(rDrawable* drawable, const rModel* model, const rMatrix4& modelViewProjection){
+	rArrayString meshNames;
+	model->GetMeshNames(meshNames);
+
+	rGeometry* geometry = model->Geometry();
+
+	for (size_t i = 0; i < meshNames.size(); i++){
+		rMesh* mesh = model->GetMesh(meshNames[i]);
+
+		if (mesh->geometryType == rGeometryType::TRIANGLES){
+			m_graphicsDevice->ActivateShader(drawable->Shader()->ProgramId());
+			m_graphicsDevice->RenderGeometry(geometry, modelViewProjection, mesh->buffer, mesh->material);
+			m_objectsRendered++;
+		}
+	}
+}
+
+
+void rRenderer::RenderModel(rDrawable* drawable, const rModel* model, const rMatrix4& transform){
+	rMatrix4 modelViewProjection = m_viewProjectionMatrix * transform;
+
+	if (!drawable->Visible()) return;
+
+	if (drawable->ForceRender()){
+		ForceRenderModel(drawable, model, modelViewProjection);
+	}
+	else{
+		switch (m_renderMode){
+		case rRenderMode::Wireframe:
+			RenderLineMeshes(drawable, model, modelViewProjection);
+			break;
+
+		case rRenderMode::Shaded:
+			RenderTriangleMeshes(drawable, model, modelViewProjection);
+			break;
+
+		default:
+			ForceRenderModel(drawable, model, modelViewProjection);
+		}
+	}
 }
 
 void rRenderer::ImmediateColorRender(rImmediateBuffer& geometry, const rColor& color){
@@ -144,21 +211,6 @@ void rRenderer::RenderWireBox(const rAlignedBox3& box, const rColor color){
 		//material->SetColor("fragColor", color);
 		m_graphicsDevice->RenderImmediate(geometry, m_viewProjectionMatrix,  material);
 	}
-}
-
-void rRenderer::CreateRequiredMaterials(){
-	rMaterialData materialData;
-	materialData.SetShader("default_colored", "");
-	materialData.SetParameter(rPROPERTY_TYPE_COLOR, "fragColor", "255 255 255 255");
-	
-	m_contentManager->LoadMaterial(materialData, "immediate_color");
-	
-	rMaterialData texMaterial;
-	texMaterial.SetShader("default_textured", "");
-	texMaterial.SetParameter(rPROPERTY_TYPE_COLOR, "fragColor", "255 255 255 255");
-
-	m_contentManager->LoadMaterial(texMaterial, "immediate_texture");
-	m_contentManager->LoadMaterial(texMaterial, "immediate_text");
 }
 
 void rRenderer::RenderString(const rString& str, const rFont* font, const rRect& bounding, const rColor& color){

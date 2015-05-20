@@ -1,13 +1,11 @@
 #include "rMaterial.hpp"
 
-rMaterial::rMaterial(rShader* shader, int assetid, const rString& name, const rString& path)
+rMaterial::rMaterial(int assetid, const rString& name, const rString& path)
 	:rAsset(assetid, name, path)
 {
-	m_shader = shader;
-}
-
-rShader* rMaterial::Shader() const{
-	return m_shader;
+	m_pointSize = 1.0f;
+	m_diffuseColor = rColor::White;
+	m_diffuseTexture = nullptr;
 }
 
 void rMaterial::SetDiffuseTexture(rTexture2D* diffuseTexture){
@@ -24,6 +22,14 @@ void rMaterial::SetDiffuseColor(const rColor& diffuseColor){
 
 rColor rMaterial::DiffuseColor() const{
 	return m_diffuseColor;
+}
+
+void rMaterial::SetPointSize(float pointSize){
+	m_pointSize = pointSize;
+}
+
+float rMaterial::PointSize() const{
+	return m_pointSize;
 }
 
 rAssetType rMaterial::Type() const{

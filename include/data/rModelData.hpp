@@ -13,6 +13,7 @@
 #include "rAlignedBox3.hpp"
 #include "rTexCoordGeometryData.hpp"
 #include "rVertexColorGeometryData.hpp"
+#include "rMaterialData.hpp"
 
 struct RECONDITE_API rMeshData{
 	rMeshData(const rString& mName, const rString& bufferName, rGeometryType geoType)
@@ -20,7 +21,7 @@ struct RECONDITE_API rMeshData{
 
 	rString meshName;
 	rString elementBufferName;
-	rString materialName;
+	rMaterialData materialData;
 
 	rAlignedBox3 boundingBox;
 	rGeometryType geometryType;
@@ -44,8 +45,6 @@ public:
 private:
 	void RecalulateMeshDataBounding(rMeshData* meshData);
 	void InitWithProfile(rGeometryProfile geometryProfile);
-	
-	rString GetDefaultMaterial() const;
 
 private:
 	

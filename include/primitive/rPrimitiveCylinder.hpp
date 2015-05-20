@@ -23,7 +23,7 @@ public:
 	virtual rString ClassName() const;
 
 protected:
-	virtual void CreateGeometry(rTexCoordGeometryData& geometry) override;
+	virtual void CreateGeometry(rGeometryData& geometry) override;
 
 	virtual void DoRecalculateBoundingVolume() override;
 	virtual riBoundingVolume* DoGetBoundingVolume()override;

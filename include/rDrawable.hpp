@@ -39,31 +39,23 @@ public:
 
 public:
 
-	rMaterial* Material() const;
-	void SetMaterial(rMaterial* material);
-
-	rGeometry* Geometry() const;
-	void SetGeometry(rGeometry* geometry);
-
-	rPropertyCollection& MaterialProperties();
-
 	bool Visible() const;
 	void SetVisibility(bool visibility);
 
-	rRenderMode RenderMode() const;
-	void SetRenderMode(rRenderMode renderMode);
+	bool ForceRender();
+	void SetForceRender(bool forceRender);
+
+	rShader* Shader() const;
+	void SetShader(rShader* shader);
+
 
 	rColor PickingColor() const;
 
 private:
 	rColor m_pickingColor;
-	rMaterial* m_material;
-	rGeometry* m_geometry;
-	bool m_overdraw;
 	bool m_visible;
-	rRenderMode m_renderMode;
-
-	rPropertyCollection m_materialProperties;
+	bool m_forceRender;
+	rShader* m_shader;
 
 private:
 	static PickingColorManager s_drawableIdManager;

@@ -30,7 +30,7 @@ public:
 
 
 protected:
-	virtual void CreateGeometry(rTexCoordGeometryData& geometry);
+	virtual void CreateGeometry(rGeometryData& geometry);
 	virtual void DoRecalculateBoundingVolume();
 	virtual riBoundingVolume* DoGetBoundingVolume();
 

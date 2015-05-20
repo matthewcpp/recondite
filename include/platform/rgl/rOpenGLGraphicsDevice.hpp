@@ -58,6 +58,7 @@ public:
 	
 	virtual unsigned int CreateShaderProgram(const rString& vertex, const rString& fragment);
 	virtual void DeleteShaderProgram(unsigned int shaderId);
+	virtual void ActivateShader(unsigned int shaderId);
 	
 	virtual unsigned int CreateArrayBuffer(const char* data, size_t dataSize);
 	virtual unsigned int CreateElementBuffer(const unsigned short* elementData, size_t elementDataSize);
@@ -102,6 +103,7 @@ private:
 private:
 	rglRenderbufferMap m_renderBuffers;
 	GLint m_defaultFramebuffer;
+	GLint m_activeShaderProgram;
 
 	unsigned int m_nextRenderbufferId;
 	unsigned int m_activeRenderBufferId;

@@ -245,6 +245,19 @@ rShader* rContentManager::GetOrLoadShader(const rString& name, const rString& pa
 	return shader;
 }
 
+rShader* rContentManager::DefaultModelShader(){
+	return GetShaderAsset("default_model");
+
+}
+
+rShader* rContentManager::DefaultLineShader(){
+	return GetShaderAsset("default_colored");
+}
+
+rShader* rContentManager::DefaultPrimitiveShader(){
+	return GetShaderAsset("default_colored");
+}
+
 rGeometry* rContentManager::GetOrLoadGeometry(const rString& name, const rString& path){
 	rGeometry* geometry = GetGeometryAsset(name);
 
@@ -265,53 +278,12 @@ rTexture2D* rContentManager::GetOrLoadTexture(const rString& textureName, const 
 }
 
 bool rContentManager::LoadMaterialDependencies(const rMaterialData& materialData, rMaterial* material){
-	rTextureArray loadedTextures;
-	rArrayString materialParams;
-	rMaterialParameterData paramData;
-	
-	materialData.GetParameterNames(materialParams);
-	rString materialDirectory = rPath::Directory(materialData.GetPath());
-	
-	for (size_t i = 0; i < materialParams.size(); i++){
-		materialData.GetParameterData(materialParams[i], paramData);
-		
-		switch (paramData.type){
-			case rPROPERTY_TYPE_TEXTURE:{
-				rTexture2D* texture = GetOrLoadTexture(paramData.value, rPath::Combine(materialDirectory, paramData.path));
-				
-				if (texture){
-					loadedTextures.push_back(texture);
-					texture->Retain();
-					//material->SetTexture(materialParams[i], texture);
-				}
-				else{ //if there is an error, release all textures we have loaded and return false
-					for (size_t t = 0; t < loadedTextures.size(); t++){
-						ReleaseAsset(loadedTextures[t]);
-					}
-					
-					return false;
-				}
-			}
-			break;
-			
-			case rPROPERTY_TYPE_COLOR:{
-				std::stringstream stream(paramData.value.c_str());
-				unsigned int c[4];
-				stream >> c[0] >> c[1] >> c[2] >> c[3];
-				rColor color(c[0], c[1], c[2], c[3]);
-				//material->SetColor(materialParams[i], color);
-			}
-			break;
-		};
-	}
-	
 	return true;
 }
 
 
 rMaterial* rContentManager::LoadMaterialFromPath(const rString& path, const rString& name){
-	rMaterialData materialData(path);
-	return LoadMaterial(materialData, name);
+	return nullptr;
 }
 
 rMaterial* rContentManager::GetOrLoadMaterial(const rString& name, const rString& path){
@@ -327,41 +299,12 @@ rMaterial* rContentManager::GetOrLoadMaterial(const rString& name, const rString
 rMaterial* rContentManager::LoadMaterial(const rMaterialData& materialData, const rString& name){
 	rMaterial* material = NULL;
 	
-	if (m_materials.count(name)){
-		m_error = rCONTENT_ERROR_ASSET_NAME_ALREADY_PRESENT;
-	}
-	else
-	{
-		rString materialDirectory = rPath::Directory(materialData.GetPath());
-		rString shaderPath = rPath::Combine(materialDirectory, materialData.GetShaderPath());
-		rShader* shader = GetOrLoadShader(materialData.GetShaderName(), shaderPath);
-		
-		if (!shader){
-			m_error = rCONTENT_ERROR_UNABLE_TO_LOAD_DEPENDENCY;
-			return NULL;
-		}
-		
-		shader->Retain();
-		material = new rMaterial(shader, GetNextAssetId(), name, materialData.GetPath());
-		
-		if (LoadMaterialDependencies(materialData, material)){
-			rMaterialMapEntry entry(name, material);
-			m_materials.insert(entry);
-			if (!m_processingBatchFile) NotifyAssetLoadComplete(rASSET_MATERIAL, name, materialData.GetPath());
-		}
-		else{
-			ReleaseAsset(shader);
-			delete material;
-			material = NULL;
-			m_error = rCONTENT_ERROR_UNABLE_TO_LOAD_DEPENDENCY;
-		}
-	}
-	
-	if (material == NULL){
-		rLog::Error(name + ": unable to load material - %u", m_error);
-	}
 
 	return material;
+}
+
+rMaterial* rContentManager::CreateMaterial(const rString& name){
+	return new rMaterial(GetNextAssetId(), name, "");
 }
 
 rContentError rContentManager::RemoveMaterialAsset(const rString& name){
@@ -622,8 +565,9 @@ rModel* rContentManager::LoadModel(rModelData& modelData, const rString& name){
 	for (size_t i = 0; i < meshDataNames.size(); i++){
 		rMeshData* meshData = modelData.GetMeshData(meshDataNames[i]);
 
-		rMaterial* material = GetMaterialAsset(meshData->materialName);
-		model->CreateMesh(meshData->meshName, meshData->elementBufferName, material, meshData->boundingBox);
+		rMaterial* material = CreateMaterial(name + "::" + meshData->meshName + "::material");
+		
+		model->CreateMesh(meshData->meshName, meshData->elementBufferName, meshData->geometryType, material, meshData->boundingBox);
 	}
 	m_models[name] = model;
 	return model;
@@ -655,6 +599,7 @@ rModel* rContentManager::GetOrLoadModel(const rString& name, const rString& path
 }
 
 rContentError rContentManager::RemoveModelAsset(const rString& name){
+	m_models.erase(name);
 	return rCONTENT_ERROR_NONE;
 }
 

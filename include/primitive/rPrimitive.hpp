@@ -5,11 +5,12 @@
 #include "rActor3.hpp"
 
 #include "data/rTexCoordGeometryData.hpp"
+#include "data/rModelData.hpp"
+#include "rModel.hpp"
 
 class RECONDITE_API rPrimitive : public rActor3{
 public:
 	rPrimitive(const rString& id, rEngine* engine);
-	~rPrimitive();
 
 	void SetColor(const rColor& color);
 	void SetEdgeColor(const rColor& color);
@@ -17,6 +18,9 @@ public:
 
 	rColor EdgeColor() const;
 	rColor FaceColor() const;
+
+	rModel* Model() const;
+	void RecreateGeometry();
 
 	virtual void Draw();
 
@@ -26,18 +30,15 @@ protected:
 	virtual bool DoSerialize(riSerializationTarget* target);
 	virtual void OnLoad();
 
-	virtual void CreateGeometry(rTexCoordGeometryData& geometry) = 0;
+	virtual void CreateGeometry(rGeometryData& geometry) = 0;
 	void InvalidateGeometry();
-
-private:
-	void RecreateGeometry();
 
 private:
 	rColor m_edgeColor;
 	rColor m_faceColor;
 	bool m_geometryInvalid;
 
-	rGeometry* m_geometry;
+	rModel* m_model;
 };
 
 #endif

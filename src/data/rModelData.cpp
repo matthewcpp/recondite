@@ -20,16 +20,6 @@ rGeometryData* rModelData::GetGeometryData(){
 	return m_geometryData.get();
 }
 
-rString rModelData::GetDefaultMaterial() const{
-	switch (m_geometryData->GeometryProfile()){
-		case rGeometryProfile::VERTEXCOLOR:
-			return "default_vertex_color_geometry";
-
-		default:
-			return "default_colored";
-	}
-}
-
 void rModelData::CreateMeshDataFromGeometry(){
 	m_meshes.clear();
 
@@ -42,7 +32,6 @@ void rModelData::CreateMeshDataFromGeometry(){
 
 		if (m_meshes.count(elementBuffer) == 0){
 			rMeshData* meshData = new rMeshData(elementBuffer, elementBuffer, elementBufferData->GeometryType());
-			meshData->materialName = GetDefaultMaterial();
 			m_meshes[elementBuffer].reset(meshData);
 		}
 	}

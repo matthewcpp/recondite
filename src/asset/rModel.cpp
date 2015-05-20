@@ -13,12 +13,15 @@ rModel::~rModel(){
 	Clear();
 }
 	
-rMesh* rModel::CreateMesh(const rString& name, const rString& buffer, rMaterial* material, const rAlignedBox3 boundingBox){
+rMesh* rModel::CreateMesh(const rString& name, const rString& buffer, rGeometryType geometryType , rMaterial* material, const rAlignedBox3 boundingBox){
 	if (m_meshes.count(name)){
 		return NULL;
 	}
 	else{
-		rMesh* mesh = new rMesh(name, buffer, material, boundingBox);
+		rMesh* mesh = new rMesh(name, buffer, geometryType, boundingBox);
+		mesh->geometry = m_geometry;
+		mesh->material = material;
+
 		m_meshes[name] = mesh;
 
 		m_boundingBox.AddBox(boundingBox);
@@ -81,9 +84,9 @@ rAlignedBox3 rModel::BoundingBox() const{
 
 
 //-----------------------
-rMesh::rMesh(const rString& n, const rString& buf, rMaterial* mat, const rAlignedBox3& box){
+rMesh::rMesh(const rString& n, const rString& buf, rGeometryType geo, const rAlignedBox3& box){
 	name = n;
 	buffer = buf;
-	material = mat;
 	boundingBox = box;
+	geometryType = geo;
 }

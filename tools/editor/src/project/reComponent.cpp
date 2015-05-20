@@ -85,9 +85,13 @@ void reComponent::OnSceneLoad(rEvent& event){
 		groundPlane->SetRows(25);
 		groundPlane->SetColumns(25);
 		groundPlane->SetPickable(false);
-		groundPlane->Drawable()->SetRenderMode(rRenderMode::Wireframe);
+		groundPlane->Drawable()->SetForceRender(true);
 
 		AddReservedActor(groundPlane);
+
+		groundPlane->RecreateGeometry();
+		rModel* model = groundPlane->Model();
+		model->DeleteMesh("shaded");
 	}
 }
 

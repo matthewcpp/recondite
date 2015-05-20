@@ -15,11 +15,12 @@
 
 #include "rPropertyCollection.hpp"
 
-class RECONDITE_API rMaterial : public rAsset{
+class rMaterialBase{
+};
+
+class RECONDITE_API rMaterial : public rMaterialBase, public rAsset{
 public:
-	rMaterial(rShader* shader, int assetid, const rString& name, const rString& path);
-	
-	rShader* Shader() const;
+	rMaterial(int assetid, const rString& name, const rString& path);
 	
 	virtual rAssetType Type() const;
 
@@ -28,13 +29,16 @@ public:
 
 	void SetDiffuseColor(const rColor& diffuseColor);
 	rColor DiffuseColor() const;
+
+	void SetPointSize(float pointSize);
+	float PointSize() const;
+
 	
 private:
 
 	rTexture2D* m_diffuseTexture;
 	rColor m_diffuseColor;
-	
-	rShader* m_shader;
+	float m_pointSize;
 };
 
 typedef std::map<rString, rMaterial*> rMaterialMap;

@@ -2,9 +2,7 @@
 
 rOpenGLContentManager::rOpenGLContentManager(rGraphicsDevice* graphicsDevice)
 	:rContentManager(graphicsDevice)
-{
-
-}
+{}
 
 void rOpenGLContentManager::InitDefaultAssets(){
 	#include "rgl/rOpenGLDefaultShaders.inl"
@@ -24,19 +22,6 @@ void rOpenGLContentManager::InitDefaultAssets(){
 	shaderData.SetShaderData(modelVertexShader, texturedFragmentShader);
     result = LoadShader(shaderData, "default_model");
 
-	shaderData.SetShaderData(vertexColorVertexShader, vertexColorFragmentShader);
+	shaderData.SetShaderData(coloredVertexShader, vertexColorFragmentShader);
 	result = LoadShader(shaderData, "default_vertex_color_geometry");
-
-    rMaterialData materialData;
-    materialData.SetShader("default_colored", "");
-	materialData.SetParameter(rPROPERTY_TYPE_COLOR, "fragColor", "255 255 255 255");
-	LoadMaterial(materialData, "default_colored");
-
-	materialData.SetShader("default_points", "");
-	materialData.SetParameter(rPROPERTY_TYPE_FLOAT, "recPointSize", "1");
-	LoadMaterial(materialData, "default_points");
-
-	materialData.Clear();
-	materialData.SetShader("default_vertex_color_geometry", "");
-	LoadMaterial(materialData, "default_vertex_color_geometry");
 }

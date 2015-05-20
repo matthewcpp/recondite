@@ -73,7 +73,6 @@ void rComponent::InitEngine(rGraphicsDevice* graphics, rContentManager* content,
 
 	m_graphicsDevice->Init();
 	m_engine.content->InitDefaultAssets();
-	m_engine.renderer->CreateRequiredMaterials();
 
 	Init();
 

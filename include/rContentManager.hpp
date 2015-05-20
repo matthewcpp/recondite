@@ -75,6 +75,10 @@ public:
 	rContentError RemoveShaderAsset(const rString& name);
 	size_t NumShaders() const;
 
+	rShader* DefaultModelShader();
+	rShader* DefaultLineShader();
+	rShader* DefaultPrimitiveShader();
+
 //Materials
 public:
 	virtual rMaterial* GetMaterialAsset(const rString& name) const;
@@ -83,6 +87,7 @@ public:
 	virtual rMaterial* LoadMaterialFromPath(const rString& path, const rString& name);
 	rContentError RemoveMaterialAsset(const rString& name);
 	size_t NumMaterials() const;
+	rMaterial* CreateMaterial(const rString& name);
 	
 //Geometry
 public:

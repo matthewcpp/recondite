@@ -6,15 +6,11 @@ rPrimitive::rPrimitive(const rString& id, rEngine* engine)
 	m_edgeColor = rColor(200, 200, 200, 255);
 	m_faceColor = rColor::White;
 
-	m_geometry = NULL;
+	m_model = nullptr;
 	m_geometryInvalid = true;
 
 	m_drawable.reset(new rDrawable());
-}
-
-rPrimitive::~rPrimitive(){
-	if (m_geometry)
-		m_engine->content->RemoveGeometryAsset(m_geometry->Name());
+	m_drawable->SetShader(m_engine->content->DefaultPrimitiveShader());
 }
 
 void rPrimitive::SetColor(const rColor& color){
@@ -35,53 +31,39 @@ void rPrimitive::InvalidateGeometry(){
 }
 
 void rPrimitive::RecreateGeometry(){
-	if (m_geometry)
-		m_engine->content->RemoveGeometryAsset(m_geometry->Name());
+	if (!m_geometryInvalid) return;
 
-	rTexCoordGeometryData geometryData;
+	if (m_model)
+		m_engine->content->RemoveModelAsset(m_model->Name());
+
+	rModelData modelData(rGeometryProfile::TEXCOORD);
+	rGeometryData& geometryData = *modelData.GetGeometryData();
+
 	CreateGeometry(geometryData);
 
-	rString assetName = Id() + "_geometry";
-	 m_geometry = m_engine->content->LoadGeometry(geometryData, assetName);
+	modelData.CreateMeshDataFromGeometry();
+
+	rString assetName = Id() + "_model";
+	m_model = m_engine->content->LoadModel(modelData, assetName);
+
+	m_model->GetMesh("wire")->material->SetDiffuseColor(m_edgeColor);
+	m_model->GetMesh("shaded")->material->SetDiffuseColor(m_faceColor);
 
 	m_geometryInvalid = false;
 }
 
 void rPrimitive::OnDelete(){
-	if (m_geometry)
-		m_engine->content->RemoveGeometryAsset(m_geometry->Name());
+	if (m_model)
+		m_engine->content->RemoveModelAsset(m_model->Name());
 }
 
 void rPrimitive::Draw(){
 	if (m_geometryInvalid){
 		RecreateGeometry();
 	}
-
-	rMaterial* material = m_engine->content->GetMaterialAsset("default_colored");
-	if (!material) return;
-
-//	material->SetColor("fragColor", m_faceColor);
 		
 	rMatrix4& transform = TransformMatrix();
-	rRenderMode renderMode = m_drawable->RenderMode();
-
-	switch (renderMode){
-		case rRenderMode::Shaded:
-			//material->SetColor("fragColor", m_edgeColor);
-			m_engine->renderer->RenderGeometry(m_geometry, transform, "wire", material);
-			break;
-
-		case rRenderMode::Wireframe:
-			//material->SetColor("fragColor", m_edgeColor);
-			m_engine->renderer->RenderGeometry(m_geometry, transform, "wire", material);
-			break;
-
-		case rRenderMode::Default:
-		case rRenderMode::WireframeOnShaded:
-			//material->SetColor("fragColor", m_faceColor);
-			m_engine->renderer->RenderShadedWithEdges(m_geometry, transform, material, m_edgeColor);
-			break;
-	}
+	m_engine->renderer->RenderModel(Drawable(), m_model, transform);
 }
 
 rColor rPrimitive::EdgeColor() const{
@@ -104,4 +86,7 @@ bool rPrimitive::DoSerialize(riSerializationTarget* target){
 void rPrimitive::OnLoad(){
 	rActor3::OnLoad();
 	InvalidateGeometry();
+}
+rModel* rPrimitive::Model() const{
+	return m_model;
 }

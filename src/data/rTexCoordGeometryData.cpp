@@ -68,7 +68,7 @@ char* rTexCoordGeometryData::VertexData() const{
 	if (m_vertexData.size())
 		return (char*)&m_vertexData[0];
 	else
-		return NULL;
+		return nullptr;
 }
 
 size_t rTexCoordGeometryData::VertexCount() const{

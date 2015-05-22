@@ -42,7 +42,7 @@ void rPrimitive::RecreateGeometry(){
 	if (m_model)
 		m_engine->content->RemoveModelAsset(m_model->Name());
 
-	rModelData modelData(rGeometryProfile::TEXCOORD);
+	rModelData modelData(rGeometryProfile::PRIMITIVE);
 	rGeometryData& geometryData = *modelData.GetGeometryData();
 
 	CreateGeometry(geometryData);

@@ -13,6 +13,7 @@
 #include "rAlignedBox3.hpp"
 #include "rTexCoordGeometryData.hpp"
 #include "rVertexColorGeometryData.hpp"
+#include "rPrimitiveGeometryData.hpp"
 #include "rMaterialData.hpp"
 
 struct RECONDITE_API rMeshData{

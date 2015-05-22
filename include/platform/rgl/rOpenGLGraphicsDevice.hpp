@@ -87,7 +87,7 @@ protected:
 private:
 	void RenderTexCoordGeometryProfile(const rGeometry* geometry, const rMatrix4& transform, rElementBuffer* elementBuffer, rMaterial* material);
 	void RenderVertexColorGeometryProfile(const rGeometry* geometry, const rMatrix4& transform, rElementBuffer* elementBuffer, rMaterial* material);
-
+	void RenderPrimitiveGeometryProfile(const rGeometry* geometry, const rMatrix4& transform, rElementBuffer* elementBuffer, rMaterial* material);
 private:
 	struct rglRenderbuffer{
 		GLuint framebufferId;

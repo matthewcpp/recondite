@@ -13,6 +13,10 @@ void rModelData::InitWithProfile(rGeometryProfile geometryProfile){
 		case rGeometryProfile::TEXCOORD:
 			m_geometryData.reset(new rTexCoordGeometryData());
 			break;
+
+		case rGeometryProfile::PRIMITIVE:
+			m_geometryData.reset(new rPrimitiveGeometryData());
+			break;
 	}
 }
 

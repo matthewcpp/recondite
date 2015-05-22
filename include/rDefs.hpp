@@ -52,9 +52,10 @@ enum class rGeometryType{
 	POINTS
 };
 
-enum class rGeometryProfile{
+enum class rGeometryProfile : unsigned char{
 	TEXCOORD,
-	VERTEXCOLOR
+	VERTEXCOLOR,
+	PRIMITIVE
 };
 enum class rRenderMode : unsigned char{
 	Shaded, Wireframe, WireframeOnShaded

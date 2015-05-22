@@ -190,8 +190,8 @@ void rActor3::SetTransformed(bool transformed){
 	m_hasTransformed = transformed;
 }
 
-rDrawable* rActor3::Drawable(){
-	return m_drawable.get();
+rRenderingOptions* rActor3::RenderingOptions(){
+	return m_renderingOptions.get();
 }
 
 rPropertyCollection& rActor3::CustomProperties(){

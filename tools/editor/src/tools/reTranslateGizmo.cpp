@@ -20,9 +20,9 @@ reGizmoAxis reTranslateGizmo::GetGizmoAxis(rActor3* actor){
 }
 
 void reTranslateGizmo::SetVisibility(bool visibility){
-	m_xHandle->Drawable()->SetVisibility(visibility);
-	m_yHandle->Drawable()->SetVisibility(visibility);
-	m_zHandle->Drawable()->SetVisibility(visibility);
+	m_xHandle->RenderingOptions()->SetVisibility(visibility);
+	m_yHandle->RenderingOptions()->SetVisibility(visibility);
+	m_zHandle->RenderingOptions()->SetVisibility(visibility);
 }
 
 void reTranslateGizmo::SetPosition(const rVector3& pos){
@@ -70,6 +70,16 @@ void SetMeshDiffuseColors(rModel* model, const rColor& color){
 		rMesh* mesh = model->GetMesh(meshNames[i]);
 		mesh->Material()->SetDiffuseColor(color);
 	}
+}
+
+void reTranslateGizmo::SetInitialHandleRenderingOptions(){
+	m_xHandle->RenderingOptions()->SetForceRender(true);
+	m_yHandle->RenderingOptions()->SetForceRender(true);
+	m_zHandle->RenderingOptions()->SetForceRender(true);
+
+	m_xHandle->RenderingOptions()->SetOverdraw(true);
+	m_yHandle->RenderingOptions()->SetOverdraw(true);
+	m_zHandle->RenderingOptions()->SetOverdraw(true);
 }
 
 void reTranslateGizmo::CreateGizmo(){
@@ -159,4 +169,6 @@ void reTranslateGizmo::CreateGizmo(){
 
 	m_component->AddReservedActor(m_zHandle);
 	SetVisibility(false);
+
+	SetInitialHandleRenderingOptions();
 }

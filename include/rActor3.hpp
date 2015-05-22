@@ -10,7 +10,7 @@
 
 #include "rEngine.hpp"
 
-#include "rDrawable.hpp"
+#include "rRenderingOptions.hpp"
 
 #include "rAlignedBoxBoundingVolume.hpp"
 #include "rPropertyCollection.hpp"
@@ -44,7 +44,7 @@ public:
 	bool Pickable() const;
 	void SetPickable(bool pickable);
 
-	rDrawable* Drawable();
+	rRenderingOptions* RenderingOptions();
 
 	rPropertyCollection& CustomProperties();
 
@@ -88,7 +88,7 @@ protected:
 
 	rMatrix4 m_transform;
 	rPropertyCollection m_customProperties;
-	std::shared_ptr<rDrawable> m_drawable;
+	std::shared_ptr<rRenderingOptions> m_renderingOptions;
 
 private:
 

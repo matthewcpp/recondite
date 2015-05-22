@@ -4,6 +4,7 @@ rPawn::rPawn(rModel* model, const rString& id , rEngine* engine)
 :rActor3(id, engine)
 {
 	SetModel(model);
+	m_renderingOptions.reset(new rRenderingOptions());
 }
 
 rModel* rPawn::Model() const{
@@ -32,6 +33,6 @@ int rPawn::Update(){
 void rPawn::Draw(){
 	if (m_model){
 		rMatrix4 transform;
-		m_engine->renderer->RenderModel(m_model, transform);
+		m_engine->renderer->RenderModel(m_model, RenderingOptions(), transform);
 	}
 }

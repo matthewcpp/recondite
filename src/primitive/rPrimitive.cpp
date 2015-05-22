@@ -8,6 +8,7 @@ rPrimitive::rPrimitive(const rString& id, rEngine* engine)
 
 	m_model = nullptr;
 	m_geometryInvalid = true;
+	m_renderingOptions.reset(new rRenderingOptions());
 }
 
 void rPrimitive::SetColor(const rColor& color){
@@ -79,7 +80,7 @@ void rPrimitive::Draw(){
 	}
 		
 	rMatrix4& transform = TransformMatrix();
-	m_engine->renderer->RenderModel(m_model, transform);
+	m_engine->renderer->RenderModel(m_model, RenderingOptions(), transform);
 }
 
 rColor rPrimitive::EdgeColor() const{

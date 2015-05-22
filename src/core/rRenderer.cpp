@@ -66,15 +66,7 @@ void rRenderer::ForceRenderModel(const rModel* model, const rMatrix4& modelViewP
 	for (size_t i = 0; i < meshNames.size(); i++){
 		rMesh* mesh = model->GetMesh(meshNames[i]);
 
-		if (mesh->GeometryType() == rGeometryType::TRIANGLES){
-			m_graphicsDevice->EnablePolygonFillOffset(true);
-			m_graphicsDevice->ActivateShader(mesh->Material()->Shader()->ProgramId());
-		}
-		else{
-			m_graphicsDevice->EnablePolygonFillOffset(false);
-			m_graphicsDevice->ActivateShader(mesh->Material()->Shader()->ProgramId());
-		}
-
+		m_graphicsDevice->ActivateShader(mesh->Material()->Shader()->ProgramId());
 		m_graphicsDevice->RenderGeometry(geometry, modelViewProjection, mesh->Buffer(), mesh->Material());
 		m_objectsRendered++;
 	}
@@ -116,20 +108,21 @@ void rRenderer::RenderTriangleMeshes(const rModel* model, const rMatrix4& modelV
 }
 
 
-void rRenderer::RenderModel(const rModel* model, const rMatrix4& transform){
+void rRenderer::RenderModel(const rModel* model, rRenderingOptions* renderingOptions, const rMatrix4& transform){
+	if (!renderingOptions->Visible()) return;
+
+	m_graphicsDevice->EnableDepthTesting(renderingOptions->Overdraw());
+
 	rMatrix4 modelViewProjection = m_viewProjectionMatrix * transform;
 
-	switch (m_renderMode){
-		case rRenderMode::Wireframe:
-			RenderLineMeshes(model, modelViewProjection);
-			break;
-
-		case rRenderMode::Shaded:
-			RenderTriangleMeshes(model, modelViewProjection);
-			break;
-
-		default:
-			ForceRenderModel(model, modelViewProjection);
+	if (renderingOptions->ForceRender()){
+		ForceRenderModel(model, modelViewProjection);
+	}
+	else if (m_renderMode == rRenderMode::Wireframe){
+		RenderLineMeshes(model, modelViewProjection);
+	}
+	else if (m_renderMode == rRenderMode::Shaded){
+		RenderTriangleMeshes(model, modelViewProjection);
 	}
 }
 

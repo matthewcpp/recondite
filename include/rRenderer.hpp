@@ -18,6 +18,7 @@
 #include "rAlignedBox3.hpp"
 
 #include "rSkeleton.hpp"
+#include "rRenderingOptions.hpp"
 #include "rAnimationPlayer.hpp"
 
 class RECONDITE_API rRenderer {
@@ -48,8 +49,7 @@ public:
 
 	void RenderWireBox(const rAlignedBox3& box, const rColor color);
 
-	void RenderModel(const rModel* model, const rMatrix4& transform);
-	void ForceRenderModel(const rModel* model, const rMatrix4& modelViewProjection);
+	void RenderModel(const rModel* model, rRenderingOptions* renderingOptions, const rMatrix4& transform);
 	void RenderWireframeOnShaded(const rModel* model, const rMatrix4& transform);
 
 	void RenderBuffer(const rImmediateBuffer& buffer, rMaterial* material);
@@ -58,6 +58,8 @@ public:
 	void RenderSkeleton(const rSkeleton* skeleton, const rMatrix4Vector& transformArray, const rColor& lineColor, const rColor& pointColor, float pointSize);
 
 private:
+	void ForceRenderModel(const rModel* model, const rMatrix4& modelViewProjection);
+
 	void RenderLineMeshes(const rModel* model, const rMatrix4& modelViewProjection);
 	void RenderTriangleMeshes(const rModel* model, const rMatrix4& modelViewProjection);
 

@@ -19,6 +19,8 @@ public:
 
 private:
 	void CreateGizmo();
+	void SetInitialHandleRenderingOptions();
+
 	void SetPosition(const rVector3& pos);
 	
 private:

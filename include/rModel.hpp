@@ -14,7 +14,6 @@
 #include "rMaterial.hpp"
 #include "rSkeleton.hpp"
 #include "rAlignedBox3.hpp"
-#include "rDrawable.hpp"
 
 class RECONDITE_API rMesh {
 public:

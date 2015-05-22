@@ -6,15 +6,15 @@ rModelData::rModelData(rGeometryProfile geometryProfile){
 
 void rModelData::InitWithProfile(rGeometryProfile geometryProfile){
 	switch (geometryProfile){
-		case rGeometryProfile::VERTEXCOLOR:
+		case rGeometryProfile::VertexColor:
 			m_geometryData.reset(new rVertexColorGeometryData());
 			break;
 
-		case rGeometryProfile::TEXCOORD:
+		case rGeometryProfile::TexCoord:
 			m_geometryData.reset(new rTexCoordGeometryData());
 			break;
 
-		case rGeometryProfile::PRIMITIVE:
+		case rGeometryProfile::Primitive:
 			m_geometryData.reset(new rPrimitiveGeometryData());
 			break;
 	}

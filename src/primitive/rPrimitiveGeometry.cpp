@@ -4,11 +4,11 @@
 
 void EnsureBuffers(const rPrimitiveGeometry::rPrimitiveParams& params, rGeometryData& geometryData){
 	if (!geometryData.GetElementBuffer(params.faceMeshName)){
-		geometryData.CreateElementBuffer(params.faceMeshName, rGeometryType::TRIANGLES);
+		geometryData.CreateElementBuffer(params.faceMeshName, rGeometryType::Triangles);
 	}
 
 	if (!geometryData.GetElementBuffer(params.wireMeshName)){
-		geometryData.CreateElementBuffer(params.wireMeshName, rGeometryType::LINES);
+		geometryData.CreateElementBuffer(params.wireMeshName, rGeometryType::Lines);
 	}
 }
 

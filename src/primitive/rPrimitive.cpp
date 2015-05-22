@@ -36,7 +36,7 @@ void rPrimitive::RecreateGeometry(){
 	if (m_model)
 		m_engine->content->RemoveModelAsset(m_model->Name());
 
-	rModelData modelData(rGeometryProfile::PRIMITIVE);
+	rModelData modelData(rGeometryProfile::Primitive);
 	rGeometryData& geometryData = *modelData.GetGeometryData();
 
 	CreateGeometry(geometryData);
@@ -61,7 +61,7 @@ void rPrimitive::UpdateMaterials(){
 
 			rGeometryType geometryType = mesh->GeometryType();
 
-			if (geometryType == rGeometryType::LINES || geometryType == rGeometryType::LINE_LOOP)
+			if (geometryType == rGeometryType::Lines || geometryType == rGeometryType::LineLoop)
 				mesh->Material()->SetDiffuseColor(m_edgeColor);
 			else
 				mesh->Material()->SetDiffuseColor(m_faceColor);

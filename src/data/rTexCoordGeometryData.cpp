@@ -80,5 +80,5 @@ size_t rTexCoordGeometryData::VertexDataSize() const{
 }
 
 rGeometryProfile rTexCoordGeometryData::GeometryProfile() const{
-	return rGeometryProfile::TEXCOORD;
+	return rGeometryProfile::TexCoord;
 }

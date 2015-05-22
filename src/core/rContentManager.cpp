@@ -567,7 +567,7 @@ rModel* rContentManager::LoadModel(rModelData& modelData, const rString& name){
 
 		rMaterial* material = CreateMaterial(name + "::" + meshData->meshName + "::material");
 		
-		if (meshData->geometryType == rGeometryType::LINES || meshData->geometryType == rGeometryType::LINE_LOOP)
+		if (meshData->geometryType == rGeometryType::Lines || meshData->geometryType == rGeometryType::LineLoop)
 			material->SetShader(DefaultLineShader());
 		else
 			material->SetShader(DefaultLineShader());

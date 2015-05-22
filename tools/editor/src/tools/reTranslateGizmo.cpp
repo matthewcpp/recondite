@@ -86,7 +86,7 @@ void reTranslateGizmo::CreateGizmo(){
 	rEngine* engine = m_component->GetEngine();
 
 	rMatrix4 xform, translate, rotate;
-	rModelData gizmoData(rGeometryProfile::PRIMITIVE);
+	rModelData gizmoData(rGeometryProfile::Primitive);
 	rGeometryData* geometryData = gizmoData.GetGeometryData();
 	rQuaternion q;
 

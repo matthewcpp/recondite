@@ -261,15 +261,15 @@ void rOpenGLGraphicsDevice::RenderGeometry(const rGeometry* geometry, const rMat
 			SetActiveMaterial(material);
 		
 			switch (geometry->GeometryProfile()){
-				case rGeometryProfile::TEXCOORD:
+				case rGeometryProfile::TexCoord:
 					RenderTexCoordGeometryProfile(geometry, transform, elementBuffer, material);
 					break;
 
-				case rGeometryProfile::VERTEXCOLOR:
+				case rGeometryProfile::VertexColor:
 					RenderVertexColorGeometryProfile(geometry, transform, elementBuffer, material);
 					break;
 
-				case rGeometryProfile::PRIMITIVE:
+				case rGeometryProfile::Primitive:
 					RenderPrimitiveGeometryProfile(geometry, transform, elementBuffer, material);
 					break;
 			}
@@ -401,11 +401,11 @@ void rOpenGLGraphicsDevice::RenderImmediate(const rImmediateBuffer& geometry, co
 
 GLenum rOpenGLGraphicsDevice::GLGeometryType(rGeometryType type) const{
 	switch (type){
-	case rGeometryType::LINES:
+	case rGeometryType::Lines:
 		return GL_LINES;
-	case rGeometryType::LINE_LOOP:
+	case rGeometryType::LineLoop:
 		return GL_LINE_LOOP;
-	case rGeometryType::POINTS:
+	case rGeometryType::Points:
 		return GL_POINTS;
 	default:
 		return GL_TRIANGLES;

@@ -41,5 +41,5 @@ size_t rPrimitiveGeometryData::VertexDataSize() const{
 }
 
 rGeometryProfile rPrimitiveGeometryData::GeometryProfile() const{
-	return rGeometryProfile::PRIMITIVE;
+	return rGeometryProfile::Primitive;
 }

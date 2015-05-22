@@ -53,7 +53,7 @@ void rVertexColorGeometryData::SetColorForVertices(size_t startingIndex, size_t 
 }
 
 rGeometryProfile rVertexColorGeometryData::GeometryProfile() const{
-	return rGeometryProfile::VERTEXCOLOR;
+	return rGeometryProfile::VertexColor;
 }
 
 void rVertexColorGeometryData::PushVertex(const rVector3& position, const rVector3& normal, const rColor& color){

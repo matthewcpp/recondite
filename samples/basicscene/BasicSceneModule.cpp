@@ -69,7 +69,7 @@ void BasicSceneModule::BeforeRenderScene(rViewInfo& view, rEngine& engine){
 
 void BasicSceneModule::AfterRenderScene(rViewInfo& view, rEngine& engine){
 	if (m_drawRay){
-		rImmediateBuffer buffer(rGeometryType::LINES, 3, false);
+		rImmediateBuffer buffer(rGeometryType::Lines, 3, false);
 		buffer.PushVertex(m_ray.origin);
 		buffer.PushVertex(m_ray.direction * 50.0f);
 

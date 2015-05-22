@@ -46,16 +46,16 @@ enum rDataType{
 };
 
 enum class rGeometryType{
-	TRIANGLES,
-	LINES,
-	LINE_LOOP,
-	POINTS
+	Triangles,
+	Lines,
+	LineLoop,
+	Points
 };
 
 enum class rGeometryProfile : unsigned char{
-	TEXCOORD,
-	VERTEXCOLOR,
-	PRIMITIVE
+	TexCoord,
+	VertexColor,
+	Primitive
 };
 enum class rRenderMode : unsigned char{
 	Shaded, Wireframe, WireframeOnShaded

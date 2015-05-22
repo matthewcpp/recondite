@@ -13,8 +13,8 @@ rPrimitiveBox::rPrimitiveBox(const rString& id, rEngine* engine)
 }
 
 void rPrimitiveBox::CreateGeometry(rGeometryData& geometry){
-	rVector3 extents(m_width, m_height, m_depth);
-	rPrimitiveGeometry::CreateBox(extents, std::make_tuple(m_widthSegments, m_heightSegments, m_depthSegments), geometry);
+	rPrimitiveGeometry::rPrimitiveBoxParams params(rVector3(m_width, m_height, m_depth), m_widthSegments, m_heightSegments, m_depthSegments);
+	rPrimitiveGeometry::CreateBox(params, geometry);
 }
 
 rString rPrimitiveBox::ClassName() const{

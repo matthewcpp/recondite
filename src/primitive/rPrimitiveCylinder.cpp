@@ -51,7 +51,8 @@ void rPrimitiveCylinder::SetSegmentCount(int segmentCount){
 }
 
 void rPrimitiveCylinder::CreateGeometry(rGeometryData& geometry){
-	rPrimitiveGeometry::CreateCylinder(m_radius, m_height, m_segmentCount, geometry);
+	rPrimitiveGeometry::rPrimitiveCylinderParams params(m_radius, m_height, m_segmentCount);
+	rPrimitiveGeometry::CreateCylinder(params, geometry);
 }
 
 riBoundingVolume* rPrimitiveCylinder::DoGetBoundingVolume(){

@@ -33,6 +33,8 @@ protected:
 	virtual void CreateGeometry(rGeometryData& geometry) = 0;
 	void InvalidateGeometry();
 
+	void UpdateMaterials();
+
 private:
 	rColor m_edgeColor;
 	rColor m_faceColor;

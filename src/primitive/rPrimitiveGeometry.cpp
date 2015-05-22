@@ -1,41 +1,40 @@
 #include "primitive/rPrimitiveGeometry.hpp"
 
 //common
-void EnsureBuffers(rGeometryData& geometry){
-	if (!geometry.GetElementBuffer("wire"))
-		geometry.CreateElementBuffer("wire", rGeometryType::LINES);
 
-	if (!geometry.GetElementBuffer("shaded"))
-		geometry.CreateElementBuffer("shaded", rGeometryType::TRIANGLES);
+void EnsureBuffers(const rPrimitiveGeometry::rPrimitiveParams& params, rGeometryData& geometryData){
+	if (!geometryData.GetElementBuffer(params.faceMeshName)){
+		geometryData.CreateElementBuffer(params.faceMeshName, rGeometryType::TRIANGLES);
+	}
+
+	if (!geometryData.GetElementBuffer(params.wireMeshName)){
+		geometryData.CreateElementBuffer(params.wireMeshName, rGeometryType::LINES);
+	}
 }
 
 //Primitive Box
-
-void GenerateBoxFrontBack(rGeometryData& geometry, const rVector3& extents, std::tuple<int, int, int> segmentCounts, float z, const rVector3& normal){
-	int widthSegments = std::get<0>(segmentCounts);
-	int heightSegments = std::get<1>(segmentCounts);
-
-	float stepX = extents.x / (float)widthSegments;
-	float stepY = extents.y / (float)heightSegments;
+void GenerateBoxFrontBack(rGeometryData& geometry, const rPrimitiveGeometry::rPrimitiveBoxParams& params, float z, const rVector3& normal){
+	float stepX = params.extents.x / (float)params.widthSegments;
+	float stepY = params.extents.y / (float)params.heightSegments;
 
 	rVector3 vertex;
 
-	rElementBufferData* wireframe = geometry.GetElementBuffer("wire");
-	rElementBufferData* shaded = geometry.GetElementBuffer("shaded");
+	rElementBufferData* wireframe = geometry.GetElementBuffer(params.wireMeshName);
+	rElementBufferData* shaded = geometry.GetElementBuffer(params.faceMeshName);
 
-	float halfWidth = extents.x / 2.0f;
-	float halfDepth = extents.y / 2.0f;
+	float halfWidth = params.extents.x / 2.0f;
+	float halfDepth = params.extents.y / 2.0f;
 
 	float startX, startY;
-	int widthCount = widthSegments + 1;
-	int heightCount = heightSegments + 1;
+	int widthCount = params.widthSegments + 1;
+	int heightCount = params.heightSegments + 1;
 	size_t baseIndex = geometry.VertexCount();
 	startX = -halfWidth;
 	startY = 0.0f;
 
 	for (int r = 0; r < heightCount; r++){
 		float currentX = startX;
-		float currentY = startY + extents.y - ((float)r * stepY);
+		float currentY = startY + params.extents.y - ((float)r * stepY);
 
 		for (int c = 0; c < widthCount; c++){
 			int index = baseIndex + (r * widthCount) + c;
@@ -43,11 +42,11 @@ void GenerateBoxFrontBack(rGeometryData& geometry, const rVector3& extents, std:
 			vertex.Set(currentX, currentY, z);
 			geometry.PushVertex(vertex, normal);
 
-			if (c < widthSegments){
+			if (c < params.widthSegments){
 				wireframe->Push(index, index + 1);
 			}
 
-			if (r < heightSegments){
+			if (r < params.heightSegments){
 				wireframe->Push(index, index + widthCount);
 			}
 
@@ -55,28 +54,25 @@ void GenerateBoxFrontBack(rGeometryData& geometry, const rVector3& extents, std:
 		}
 	}
 
-	shaded->Push(baseIndex, baseIndex + widthSegments, baseIndex + heightSegments * widthCount);
-	shaded->Push(baseIndex + widthSegments, baseIndex + heightSegments * widthCount, geometry.VertexCount() - 1);
+	shaded->Push(baseIndex, baseIndex + params.widthSegments, baseIndex + params.heightSegments * widthCount);
+	shaded->Push(baseIndex + params.widthSegments, baseIndex + params.heightSegments * widthCount, geometry.VertexCount() - 1);
 }
 
-void GenerateBoxTopBottom(rGeometryData& geometry, const rVector3& extents, std::tuple<int, int, int> segmentCounts, float y, const rVector3& normal){
-	int widthSegments = std::get<0>(segmentCounts);
-	int depthSegments = std::get<2>(segmentCounts);
-
-	float stepX = extents.x / (float)widthSegments;
-	float stepZ = extents.z / (float)depthSegments;
+void GenerateBoxTopBottom(rGeometryData& geometry, const rPrimitiveGeometry::rPrimitiveBoxParams& params, float y, const rVector3& normal){
+	float stepX = params.extents.x / (float)params.widthSegments;
+	float stepZ = params.extents.z / (float)params.depthSegments;
 
 	rVector3 vertex;
 
-	rElementBufferData* wireframe = geometry.GetElementBuffer("wire");
-	rElementBufferData* shaded = geometry.GetElementBuffer("shaded");
+	rElementBufferData* wireframe = geometry.GetElementBuffer(params.wireMeshName);
+	rElementBufferData* shaded = geometry.GetElementBuffer(params.faceMeshName);
 
-	float halfWidth = extents.x / 2.0f;
-	float halfDepth = extents.z / 2.0f;
+	float halfWidth = params.extents.x / 2.0f;
+	float halfDepth = params.extents.z / 2.0f;
 
 	float startX, startZ;
-	int widthCount = widthSegments + 1;
-	int depthCount = depthSegments + 1;
+	int widthCount = params.widthSegments + 1;
+	int depthCount = params.depthSegments + 1;
 	size_t baseIndex = geometry.VertexCount();
 	startX = -halfWidth;
 	startZ = -halfDepth;
@@ -91,11 +87,11 @@ void GenerateBoxTopBottom(rGeometryData& geometry, const rVector3& extents, std:
 			vertex.Set(currentX, y, currentZ);
 			geometry.PushVertex(vertex, normal);
 
-			if (c < widthSegments){
+			if (c < params.widthSegments){
 				wireframe->Push(index, index + 1);
 			}
 
-			if (r < depthSegments){
+			if (r < params.depthSegments){
 				wireframe->Push(index, index + widthCount);
 			}
 
@@ -103,29 +99,26 @@ void GenerateBoxTopBottom(rGeometryData& geometry, const rVector3& extents, std:
 		}
 	}
 
-	shaded->Push(baseIndex, baseIndex + widthSegments, baseIndex + depthSegments * widthCount);
-	shaded->Push(baseIndex + widthSegments, baseIndex + depthSegments * widthCount, geometry.VertexCount() - 1);
+	shaded->Push(baseIndex, baseIndex + params.widthSegments, baseIndex + params.depthSegments * widthCount);
+	shaded->Push(baseIndex + params.widthSegments, baseIndex + params.depthSegments * widthCount, geometry.VertexCount() - 1);
 }
 
-void GenerateBoxLeftRight(rGeometryData& geometry, const rVector3& extents, std::tuple<int, int, int> segmentCounts, float x, const rVector3& normal){
-	int heightSegments = std::get<1>(segmentCounts);
-	int depthSegments = std::get<2>(segmentCounts);
-
-	float stepY = extents.y / (float)heightSegments;
-	float stepZ = extents.z / (float)depthSegments;
+void GenerateBoxLeftRight(rGeometryData& geometry, const rPrimitiveGeometry::rPrimitiveBoxParams& params, float x, const rVector3& normal){
+	float stepY = params.extents.y / (float)params.heightSegments;
+	float stepZ = params.extents.z / (float)params.depthSegments;
 
 	rVector3 vertex;
 
-	rElementBufferData* wireframe = geometry.GetElementBuffer("wire");
-	rElementBufferData* shaded = geometry.GetElementBuffer("shaded");
+	rElementBufferData* wireframe = geometry.GetElementBuffer(params.wireMeshName);
+	rElementBufferData* shaded = geometry.GetElementBuffer(params.faceMeshName);
 
-	float halfDepth = extents.z / 2.0f;
+	float halfDepth = params.extents.z / 2.0f;
 
 	float startY, startZ;
-	int depthCount = depthSegments + 1;
-	int heightCount = heightSegments + 1;
+	int depthCount = params.depthSegments + 1;
+	int heightCount = params.heightSegments + 1;
 	size_t baseIndex = geometry.VertexCount();
-	startY = extents.y;
+	startY = params.extents.y;
 	startZ = -halfDepth;
 
 	for (int r = 0; r < heightCount; r++){
@@ -138,11 +131,11 @@ void GenerateBoxLeftRight(rGeometryData& geometry, const rVector3& extents, std:
 			vertex.Set(x, currentY, currentZ);
 			geometry.PushVertex(vertex, normal);
 
-			if (c < depthSegments){
+			if (c < params.depthSegments){
 				wireframe->Push(index, index + 1);
 			}
 
-			if (r < heightSegments){
+			if (r < params.heightSegments){
 				wireframe->Push(index, index + depthCount);
 			}
 
@@ -150,46 +143,45 @@ void GenerateBoxLeftRight(rGeometryData& geometry, const rVector3& extents, std:
 		}
 	}
 
-	shaded->Push(baseIndex, baseIndex + depthSegments, baseIndex + heightSegments * depthCount);
-	shaded->Push(baseIndex + depthSegments, baseIndex + heightSegments * depthCount, geometry.VertexCount() - 1);
+	shaded->Push(baseIndex, baseIndex + params.depthSegments, baseIndex + params.heightSegments * depthCount);
+	shaded->Push(baseIndex + params.depthSegments, baseIndex + params.heightSegments * depthCount, geometry.VertexCount() - 1);
 }
 
-void rPrimitiveGeometry::CreateBox(const rVector3& extents, std::tuple<int, int, int> segmentCounts, rGeometryData& geometry){
-	EnsureBuffers(geometry);
+void rPrimitiveGeometry::CreateBox(const rPrimitiveBoxParams& params, rGeometryData& geometry){
+	EnsureBuffers(params, geometry);
 
-	float halfWidth = extents.x / 2.0f;
-	float halfDepth = extents.z / 2.0f;
+	float halfWidth = params.extents.x / 2.0f;
+	float halfDepth = params.extents.z / 2.0f;
 
-	GenerateBoxFrontBack(geometry, extents, segmentCounts, -halfDepth, rVector3::BackwardVector);	//generate back
-	GenerateBoxFrontBack(geometry, extents, segmentCounts, halfDepth, rVector3::ForwardVector);	//generate front
+	GenerateBoxFrontBack(geometry, params, -halfDepth, rVector3::BackwardVector);	//generate back
+	GenerateBoxFrontBack(geometry, params, halfDepth, rVector3::ForwardVector);	//generate front
 
-	GenerateBoxTopBottom(geometry, extents, segmentCounts, 0.0f, rVector3::DownVector);				//generate bottom
-	GenerateBoxTopBottom(geometry, extents, segmentCounts, extents.y, rVector3::UpVector);		//generate top
+	GenerateBoxTopBottom(geometry, params, 0.0f, rVector3::DownVector);				//generate bottom
+	GenerateBoxTopBottom(geometry, params, params.extents.y, rVector3::UpVector);		//generate top
 
-	GenerateBoxLeftRight(geometry, extents, segmentCounts,-halfWidth, rVector3::LeftVector);	//generate left
-	GenerateBoxLeftRight(geometry, extents, segmentCounts,halfWidth, rVector3::RightVector);	//generate right
+	GenerateBoxLeftRight(geometry, params, -halfWidth, rVector3::LeftVector);	//generate left
+	GenerateBoxLeftRight(geometry, params, halfWidth, rVector3::RightVector);	//generate right
 }
 
 //Primitive Grid
-void rPrimitiveGeometry::CreateGrid(const rVector3& extents, std::tuple<int, int> segmentCounts, rGeometryData& geometry){
-	int columns = std::get<0>(segmentCounts);
-	int rows = std::get<1>(segmentCounts);
+void rPrimitiveGeometry::CreateGrid(const rPrimitiveGeometry::rPrimitiveGridParams& params, rGeometryData& geometry){
+	EnsureBuffers(params, geometry);
 
-	rElementBufferData* wireframe = geometry.CreateElementBuffer("wire", rGeometryType::LINES);
-	rElementBufferData* shaded = geometry.CreateElementBuffer("shaded", rGeometryType::TRIANGLES);
+	rElementBufferData* wireframe = geometry.GetElementBuffer(params.wireMeshName);
+	rElementBufferData* shaded = geometry.GetElementBuffer(params.faceMeshName);
 
-	float stepX = extents.x / (float)columns;
-	float stepZ = extents.z / (float)rows;
+	float stepX = params.width / (float)params.columns;
+	float stepZ = params.depth / (float)params.rows;
 
 	rVector3 vertex;
 	rVector3 normal = rVector3::UpVector;
 
-	float halfWidth = extents.x / 2.0f;
-	float halfDepth = extents.z / 2.0f;
+	float halfWidth = params.width / 2.0f;
+	float halfDepth = params.depth / 2.0f;
 
 	float startX, startZ;
-	int widthCount = columns + 1;
-	int depthCount = rows + 1;
+	int widthCount = params.columns + 1;
+	int depthCount = params.rows + 1;
 	size_t baseIndex = geometry.VertexCount();
 	startX = -halfWidth;
 	startZ = -halfDepth;
@@ -204,44 +196,44 @@ void rPrimitiveGeometry::CreateGrid(const rVector3& extents, std::tuple<int, int
 			vertex.Set(currentX, 0.0f, currentZ);
 			geometry.PushVertex(vertex, normal);
 
-			if (c < columns)
+			if (c < params.columns)
 				wireframe->Push(index, index + 1);
 
-			if (r < rows)
+			if (r < params.rows)
 				wireframe->Push(index, index + widthCount);
 
 			currentX += stepX;
 		}
 	}
 
-	shaded->Push(0, columns, rows * widthCount);
-	shaded->Push(columns, rows * widthCount, geometry.VertexCount() - 1);
+	shaded->Push(0, params.columns, params.rows * widthCount);
+	shaded->Push(params.columns, params.rows * widthCount, geometry.VertexCount() - 1);
 }
 
 //Circle
 
-void rPrimitiveGeometry::CreateCircle(const rVector3& center, float radius, const rVector3& normal, size_t segmentCount, rGeometryData& geometry){
-	EnsureBuffers(geometry);
+void rPrimitiveGeometry::CreateCircle(const rPrimitiveGeometry::rPrimitiveCircleParams& params, rGeometryData& geometry){
+	EnsureBuffers(params, geometry);
 
-	rElementBufferData* wireframe = geometry.GetElementBuffer("wire");
-	rElementBufferData* shaded = geometry.GetElementBuffer("shaded");
+	rElementBufferData* wireframe = geometry.GetElementBuffer(params.wireMeshName);
+	rElementBufferData* shaded = geometry.GetElementBuffer(params.faceMeshName);
 
-	float step = 360.0f / (float)segmentCount;
+	float step = 360.0f / (float)params.segmentCount;
 
 	rVector3 position;
 
 	size_t baseIndex = geometry.VertexCount();
-	geometry.PushVertex(center, normal);
+	geometry.PushVertex(params.center, params.normal);
 
-	for (size_t i = 0; i < segmentCount; i++){
+	for (size_t i = 0; i < params.segmentCount; i++){
 		float angle = float(i) * step;
 		float radians = rMath::DegreeToRad(angle);
 
 		position.Set(std::cos(radians), 0.0f, std::sin(radians));
-		position *= radius;
-		position += center;
+		position += params.center;
+		position *= params.radius;
 
-		geometry.PushVertex(position, normal);
+		geometry.PushVertex(position, params.normal);
 
 		if (i > 0){
 			wireframe->Push(baseIndex + i, baseIndex + i + 1);
@@ -249,17 +241,17 @@ void rPrimitiveGeometry::CreateCircle(const rVector3& center, float radius, cons
 		}
 	}
 
-	wireframe->Push(baseIndex + segmentCount, baseIndex + 1);
-	shaded->Push(baseIndex, baseIndex + segmentCount, baseIndex + 1);
+	wireframe->Push(baseIndex + params.segmentCount, baseIndex + 1);
+	shaded->Push(baseIndex, baseIndex + params.segmentCount, baseIndex + 1);
 }
 
 //Cone
 
-void CreateConeFace(rGeometryData& geometry, size_t v1, size_t v2, float height, float coneAngle){
-	rElementBufferData* wireframe = geometry.GetElementBuffer("wire");
-	rElementBufferData* shaded = geometry.GetElementBuffer("shaded");
+void CreateConeFace(rGeometryData& geometry, size_t v1, size_t v2, const rPrimitiveGeometry::rPrimitiveConeParams& params, float coneAngle){
+	rElementBufferData* wireframe = geometry.GetElementBuffer(params.wireMeshName);
+	rElementBufferData* shaded = geometry.GetElementBuffer(params.faceMeshName);
 
-	rVector3 tip = rVector3::UpVector * height;
+	rVector3 tip = rVector3::UpVector * params.height;
 	rVector3 p1, p2, n1, n2;
 
 	geometry.GetVertex(v1, &p1, nullptr);
@@ -282,27 +274,28 @@ void CreateConeFace(rGeometryData& geometry, size_t v1, size_t v2, float height,
 	wireframe->Push(baseIndex, baseIndex + 2);
 }
 
-void rPrimitiveGeometry::CreateCone(float radius, float height, size_t segmentCount, rGeometryData& geometry){
-	EnsureBuffers(geometry);
-	rElementBufferData* wireframe = geometry.GetElementBuffer("wire");
-	rElementBufferData* shaded = geometry.GetElementBuffer("shaded");
+void rPrimitiveGeometry::CreateCone(const rPrimitiveGeometry::rPrimitiveConeParams& params, rGeometryData& geometry){
+	EnsureBuffers(params, geometry);
+	rElementBufferData* wireframe = geometry.GetElementBuffer(params.wireMeshName);
+	rElementBufferData* shaded = geometry.GetElementBuffer(params.faceMeshName);
 
 	size_t baseIndex = geometry.VertexCount();
 
-	CreateCircle(rVector3::ZeroVector, radius, rVector3::DownVector, segmentCount, geometry);
+	rPrimitiveCircleParams circleParams(rVector3::ZeroVector, rVector3::DownVector, params.radius, params.segmentCount);
+	CreateCircle(circleParams, geometry);
 
-	float coneAngle = std::atan(radius / height);
+	float coneAngle = std::atan(params.radius / params.height);
 
-	for (size_t i = 0; i < segmentCount; i++){
-		CreateConeFace(geometry, baseIndex + i + 1, baseIndex + i + 2, height, coneAngle);
+	for (size_t i = 0; i < params.segmentCount; i++){
+		CreateConeFace(geometry, baseIndex + i + 1, baseIndex + i + 2, params, coneAngle);
 	}
 
-	CreateConeFace(geometry, baseIndex + segmentCount, baseIndex + 1, height, coneAngle);
+	CreateConeFace(geometry, baseIndex + params.segmentCount, baseIndex + 1, params, coneAngle);
 }
 
 //Cylinder
-void CreateCylinderFace(rGeometryData& geometry, int i1, int i2, int i3, int i4){
-	rElementBufferData* shaded = geometry.GetElementBuffer("shaded");
+void CreateCylinderFace(const rPrimitiveGeometry::rPrimitiveCylinderParams& params, rGeometryData& geometry, int i1, int i2, int i3, int i4){
+	rElementBufferData* shaded = geometry.GetElementBuffer(params.faceMeshName);
 
 	rVector3 v1, v2, v3, v4, n1, n2, n3, n4;
 	size_t baseIndex = geometry.VertexCount();
@@ -329,62 +322,69 @@ void CreateCylinderFace(rGeometryData& geometry, int i1, int i2, int i3, int i4)
 }
 
 
-void rPrimitiveGeometry::CreateCylinder(float radius, float height, size_t segmentCount, rGeometryData& geometry){
-	EnsureBuffers(geometry);
+void rPrimitiveGeometry::CreateCylinder(const rPrimitiveGeometry::rPrimitiveCylinderParams& params, rGeometryData& geometry){
+	EnsureBuffers(params, geometry);
 
-	rElementBufferData* wireframe = geometry.GetElementBuffer("wire");
-	rElementBufferData* shaded = geometry.GetElementBuffer("shaded");
+	rElementBufferData* wireframe = geometry.GetElementBuffer(params.wireMeshName);
+	rElementBufferData* shaded = geometry.GetElementBuffer(params.faceMeshName);
 
-	CreateCircle(rVector3::ZeroVector, radius, rVector3::DownVector, segmentCount, geometry);
-	CreateCircle(rVector3::UpVector * height, radius, rVector3::UpVector, segmentCount, geometry);
+	rPrimitiveCircleParams circleParams(rVector3::ZeroVector, rVector3::DownVector, params.radius, params.segmentCount);
+	circleParams.faceMeshName = params.faceMeshName;
+	circleParams.wireMeshName = params.wireMeshName;
 
-	for (int i = 1; i <= segmentCount; i++){
-		wireframe->Push(i, i + segmentCount + 1);
+	CreateCircle(circleParams, geometry);
 
-		if (i > 1) CreateCylinderFace(geometry, i - 1, i, i + segmentCount, i + segmentCount + 1);
+	circleParams.center = rVector3::UpVector;
+	circleParams.normal = rVector3::UpVector;
+
+	CreateCircle(circleParams, geometry);
+
+	for (int i = 1; i <= params.segmentCount; i++){
+		wireframe->Push(i, i + params.segmentCount + 1);
+
+		if (i > 1) CreateCylinderFace(params, geometry, i - 1, i, i + params.segmentCount, i + params.segmentCount + 1);
 	}
 
-	CreateCylinderFace(geometry, segmentCount, 2 * segmentCount + 1, 1, segmentCount + 2);
+	CreateCylinderFace(params, geometry, params.segmentCount, 2 * params.segmentCount + 1, 1, params.segmentCount + 2);
 }
 
 //Sphere
 
-void rPrimitiveGeometry::CreateSphere(float radius, size_t rings, size_t sectors, rGeometryData& geometry){
-	EnsureBuffers(geometry);
+void rPrimitiveGeometry::CreateSphere(const rPrimitiveSphereParams& params, rGeometryData& geometry){
+	EnsureBuffers(params, geometry);
+	rElementBufferData* wireframe = geometry.GetElementBuffer(params.wireMeshName);
+	rElementBufferData* shaded = geometry.GetElementBuffer(params.faceMeshName);
 
-	rElementBufferData* wireframe = geometry.GetElementBuffer("wire");
-	rElementBufferData* shaded = geometry.GetElementBuffer("shaded");
-
-	rVector3 center(0, radius, 0);
+	rVector3 center(0, params.radius, 0);
 	rVector3 position = rVector3::ZeroVector;
 	rVector3 normal = rVector3::ZeroVector;
 
-	float R = 1.0f / (float)(rings - 1);
-	float S = 1.0f / (float)(sectors - 1);
+	float R = 1.0f / (float)(params.rings - 1);
+	float S = 1.0f / (float)(params.sectors - 1);
 	int r, s;
 
-	for (r = 0; r < rings; r++){
-		for (s = 0; s < sectors; s++) {
+	for (r = 0; r < params.rings; r++){
+		for (s = 0; s < params.sectors; s++) {
 			float y = std::sin(-M_PI_2 + M_PI * r * R);
 			float x = std::cos(2 * M_PI * s * S) * std::sin(M_PI * r * R);
 			float z = std::sin(2 * M_PI * s * S) * std::sin(M_PI * r * R);
 
-			position.Set(x, y + radius, z);
+			position.Set(x, y + params.radius, z);
 			normal = position - center;
 			normal.Normalize();
-			position *= radius;
+			position *= params.radius;
 
 			geometry.PushVertex(position, normal);
 		}
 	}
 
 	//generate indicies
-	for (r = 0; r < rings - 1; r++) {
-		for (s = 0; s < sectors - 1; s++) {
-			int p1 = r * sectors + s;
-			int p2 = r * sectors + (s + 1);
-			int p3 = (r + 1) * sectors + (s + 1);
-			int p4 = (r + 1) * sectors + s;
+	for (r = 0; r < params.rings - 1; r++) {
+		for (s = 0; s < params.sectors - 1; s++) {
+			int p1 = r * params.sectors + s;
+			int p2 = r * params.sectors + (s + 1);
+			int p3 = (r + 1) * params.sectors + (s + 1);
+			int p4 = (r + 1) * params.sectors + s;
 
 			//lines
 			wireframe->Push(p1, p2);

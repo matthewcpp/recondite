@@ -40,7 +40,8 @@ rString rPrimitiveSphere::ClassName() const{
 }
 
 void rPrimitiveSphere::CreateGeometry(rGeometryData& geometry){
-	rPrimitiveGeometry::CreateSphere(m_radius, m_rings, m_sectors, geometry);
+	rPrimitiveGeometry::rPrimitiveSphereParams params(m_radius, m_rings, m_sectors);
+	rPrimitiveGeometry::CreateSphere(params, geometry);
 }
 
 riBoundingVolume* rPrimitiveSphere::DoGetBoundingVolume(){

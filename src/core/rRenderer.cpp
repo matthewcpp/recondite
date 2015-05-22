@@ -65,18 +65,17 @@ void rRenderer::ForceRenderModel(const rModel* model, const rMatrix4& modelViewP
 
 	for (size_t i = 0; i < meshNames.size(); i++){
 		rMesh* mesh = model->GetMesh(meshNames[i]);
-		rDrawable* drawable = mesh->Drawable();
 
-		if (mesh->geometryType == rGeometryType::TRIANGLES){
+		if (mesh->GeometryType() == rGeometryType::TRIANGLES){
 			m_graphicsDevice->EnablePolygonFillOffset(true);
-			m_graphicsDevice->ActivateShader(drawable->Shader()->ProgramId());
+			m_graphicsDevice->ActivateShader(mesh->Material()->Shader()->ProgramId());
 		}
 		else{
 			m_graphicsDevice->EnablePolygonFillOffset(false);
-			m_graphicsDevice->ActivateShader(drawable->Shader()->ProgramId());
+			m_graphicsDevice->ActivateShader(mesh->Material()->Shader()->ProgramId());
 		}
 
-		m_graphicsDevice->RenderGeometry(geometry, modelViewProjection, mesh->buffer, drawable->Material());
+		m_graphicsDevice->RenderGeometry(geometry, modelViewProjection, mesh->Buffer(), mesh->Material());
 		m_objectsRendered++;
 	}
 }
@@ -89,11 +88,11 @@ void rRenderer::RenderLineMeshes(const rModel* model, const rMatrix4& modelViewP
 
 	for (size_t i = 0; i < meshNames.size(); i++){
 		rMesh* mesh = model->GetMesh(meshNames[i]);
-		rDrawable* drawable = mesh->Drawable();
+		rGeometryType geometryType = mesh->GeometryType();
 
-		if (mesh->geometryType == rGeometryType::LINES || mesh->geometryType == rGeometryType::LINE_LOOP){
-			m_graphicsDevice->ActivateShader(drawable->Shader()->ProgramId());
-			m_graphicsDevice->RenderGeometry(geometry, modelViewProjection, mesh->buffer, drawable->Material());
+		if (geometryType == rGeometryType::LINES || geometryType == rGeometryType::LINE_LOOP){
+			m_graphicsDevice->ActivateShader(mesh->Material()->Shader()->ProgramId());
+			m_graphicsDevice->RenderGeometry(geometry, modelViewProjection, mesh->Buffer(), mesh->Material());
 			m_objectsRendered++;
 		}
 	}
@@ -108,11 +107,9 @@ void rRenderer::RenderTriangleMeshes(const rModel* model, const rMatrix4& modelV
 	for (size_t i = 0; i < meshNames.size(); i++){
 		rMesh* mesh = model->GetMesh(meshNames[i]);
 
-		rDrawable* drawable = mesh->Drawable();
-
-		if (mesh->geometryType == rGeometryType::TRIANGLES){
-			m_graphicsDevice->ActivateShader(drawable->Shader()->ProgramId());
-			m_graphicsDevice->RenderGeometry(geometry, modelViewProjection, mesh->buffer, drawable->Material());
+		if (mesh->GeometryType() == rGeometryType::TRIANGLES){
+			m_graphicsDevice->ActivateShader(mesh->Material()->Shader()->ProgramId());
+			m_graphicsDevice->RenderGeometry(geometry, modelViewProjection, mesh->Buffer(), mesh->Material());
 			m_objectsRendered++;
 		}
 	}

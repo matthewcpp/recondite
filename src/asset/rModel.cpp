@@ -1,5 +1,38 @@
 #include "rModel.hpp"
 
+//---------------rMesh
+
+rMesh::rMesh(const rString& n, const rString& buf, rGeometryType geo, const rAlignedBox3& box, rMaterial* material){
+	m_name = n;
+	m_buffer = buf;
+	m_boundingBox = box;
+	m_geometryType = geo;
+	m_material = material;
+}
+
+rString rMesh::Name() const{
+	return m_name;
+}
+
+rString rMesh::Buffer() const{
+	return m_buffer;
+}
+
+rAlignedBox3 rMesh::BoundingBox() const{
+	return m_boundingBox;
+}
+
+rGeometryType rMesh::GeometryType() const{
+	return m_geometryType;
+}
+
+rMaterial* rMesh::Material() const{
+	return m_material;
+}
+
+//---------------rModel
+
+
 rModel::rModel(rGeometry* geometry, int assetid, const rString& name, const rString& path)
 :rAsset(assetid, name, path)
 {
@@ -18,10 +51,7 @@ rMesh* rModel::CreateMesh(const rString& name, const rString& buffer, rGeometryT
 		return NULL;
 	}
 	else{
-		rMesh* mesh = new rMesh(name, buffer, geometryType, boundingBox);
-		mesh->geometry = m_geometry;
-		mesh->Drawable()->SetMaterial(material);
-
+		rMesh* mesh = new rMesh(name, buffer, geometryType, boundingBox, material);
 		m_meshes[name] = mesh;
 
 		m_boundingBox.AddBox(boundingBox);
@@ -80,13 +110,4 @@ void rModel::SetSkeleton(rSkeleton* skeleton){
 }
 rAlignedBox3 rModel::BoundingBox() const{
 	return m_boundingBox;
-}
-
-
-//-----------------------
-rMesh::rMesh(const rString& n, const rString& buf, rGeometryType geo, const rAlignedBox3& box){
-	name = n;
-	buffer = buf;
-	boundingBox = box;
-	geometryType = geo;
 }

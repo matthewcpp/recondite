@@ -33,9 +33,10 @@ public:
 	void SetPointSize(float pointSize);
 	float PointSize() const;
 
-	
+	rShader* Shader() const;
+	void SetShader(rShader* shader);
 private:
-
+	rShader* m_shader;
 	rTexture2D* m_diffuseTexture;
 	rColor m_diffuseColor;
 	float m_pointSize;

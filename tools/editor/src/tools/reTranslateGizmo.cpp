@@ -68,7 +68,7 @@ void SetMeshDiffuseColors(rModel* model, const rColor& color){
 
 	for (size_t i = 0; i < meshNames.size(); i++){
 		rMesh* mesh = model->GetMesh(meshNames[i]);
-		mesh->Drawable()->Material()->SetDiffuseColor(color);
+		mesh->Material()->SetDiffuseColor(color);
 	}
 }
 

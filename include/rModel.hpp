@@ -18,25 +18,26 @@
 
 class RECONDITE_API rMesh {
 public:
-	rMesh(const rString& n, const rString& buf, rGeometryType geo, const rAlignedBox3& box);
+	rMesh(const rString& n, const rString& buf, rGeometryType geo, const rAlignedBox3& box, rMaterial* material);
 
 public:
-	inline rDrawable* Drawable();
+	rString Name() const;
+	rString Buffer() const;
+	rAlignedBox3 BoundingBox() const;
+	rGeometryType GeometryType() const;
 	
-	rString name;
-	rString buffer;
-	rAlignedBox3 boundingBox;
-
-	rGeometry* geometry;
-	rGeometryType geometryType;
+	rMaterial* Material() const;
 
 private:
-	rDrawable m_drawable;
+
+	rString m_name;
+	rString m_buffer;
+	rAlignedBox3 m_boundingBox;
+	rGeometryType m_geometryType;
+	rMaterial* m_material;
 };
 
-rDrawable* rMesh::Drawable(){
-	return &m_drawable;
-}
+
 
 typedef std::map<rString, rMesh*> rMeshMap;
 

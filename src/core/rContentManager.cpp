@@ -567,12 +567,12 @@ rModel* rContentManager::LoadModel(rModelData& modelData, const rString& name){
 
 		rMaterial* material = CreateMaterial(name + "::" + meshData->meshName + "::material");
 		
-		rMesh* mesh = model->CreateMesh(meshData->meshName, meshData->elementBufferName, meshData->geometryType, material, meshData->boundingBox);
-
 		if (meshData->geometryType == rGeometryType::LINES || meshData->geometryType == rGeometryType::LINE_LOOP)
-			mesh->Drawable()->SetShader(DefaultLineShader());
+			material->SetShader(DefaultLineShader());
 		else
-			mesh->Drawable()->SetShader(DefaultLineShader());
+			material->SetShader(DefaultLineShader());
+
+		rMesh* mesh = model->CreateMesh(meshData->meshName, meshData->elementBufferName, meshData->geometryType, material, meshData->boundingBox);
 	}
 	m_models[name] = model;
 	return model;

@@ -35,3 +35,11 @@ float rMaterial::PointSize() const{
 rAssetType rMaterial::Type() const{
 	return rASSET_MATERIAL;
 }
+
+rShader* rMaterial::Shader() const{
+	return m_shader;
+}
+
+void rMaterial::SetShader(rShader* shader){
+	m_shader = shader;
+}

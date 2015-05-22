@@ -8,9 +8,6 @@ rPrimitive::rPrimitive(const rString& id, rEngine* engine)
 
 	m_model = nullptr;
 	m_geometryInvalid = true;
-
-	m_drawable.reset(new rDrawable());
-	m_drawable->SetShader(m_engine->content->DefaultPrimitiveShader());
 }
 
 void rPrimitive::SetColor(const rColor& color){
@@ -20,16 +17,12 @@ void rPrimitive::SetColor(const rColor& color){
 
 void rPrimitive::SetEdgeColor(const rColor& color){
 	m_edgeColor = color;
-
-	if (m_model)
-		m_model->GetMesh("wire")->Drawable()->Material()->SetDiffuseColor(m_edgeColor);
+	UpdateMaterials();
 }
 
 void rPrimitive::SetFaceColor(const rColor& color){
 	m_faceColor = color;
-
-	if (m_model)
-		m_model->GetMesh("shaded")->Drawable()->Material()->SetDiffuseColor(m_faceColor);
+	UpdateMaterials();
 }
 
 void rPrimitive::InvalidateGeometry(){
@@ -65,12 +58,12 @@ void rPrimitive::UpdateMaterials(){
 		for (size_t i = 0; i < meshes.size(); i++){
 			rMesh* mesh = m_model->GetMesh(meshes[i]);
 
-			rGeometryType geometryType = mesh->geometryType;
+			rGeometryType geometryType = mesh->GeometryType();
 
 			if (geometryType == rGeometryType::LINES || geometryType == rGeometryType::LINE_LOOP)
-				mesh->Drawable()->Material()->SetDiffuseColor(m_edgeColor);
+				mesh->Material()->SetDiffuseColor(m_edgeColor);
 			else
-				mesh->Drawable()->Material()->SetDiffuseColor(m_faceColor);
+				mesh->Material()->SetDiffuseColor(m_faceColor);
 		}
 	}
 }

@@ -90,7 +90,7 @@ void reComponent::OnSceneLoad(rEvent& event){
 
 		groundPlane->RecreateGeometry();
 		rModel* model = groundPlane->Model();
-		model->GetMesh("wire")->Drawable()->SetForceRender(true);
+		//model->GetMesh("wire")->Drawable()->SetForceRender(true);
 		model->DeleteMesh("shaded");
 	}
 }

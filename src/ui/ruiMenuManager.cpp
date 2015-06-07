@@ -52,7 +52,7 @@ void ruiMenuManager::CalculateMenuSize(rEngine& engine){
 	ruiStyle* style = GetStyle();
 	rString fontName;
 	style->GetString("font", fontName);
-	rFont* font = engine.content->GetFontAsset(fontName);
+	rFont* font = engine.content->Fonts()->Get(fontName);
 
 	if (!font) return;
 
@@ -72,7 +72,7 @@ void ruiMenuManager::Draw(rEngine& engine){
 	ruiStyle* style = GetStyle();
 	rString fontName;
 	style->GetString("font", fontName);
-	rFont* font = engine.content->GetFontAsset(fontName);
+	rFont* font = engine.content->Fonts()->Get(fontName);
 
 	if (!font) return;
 

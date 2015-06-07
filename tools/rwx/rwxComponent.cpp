@@ -7,13 +7,14 @@ rwxComponent::rwxComponent(){
 }
 
 bool rwxComponent::Init(wxGLCanvas* canvas){
+	rFileSystem* fileSystem = new rFileSystem();
 	m_rwxGraphicsDevice = new rwxOpenGLGraphicsDevice();
-	m_rglContentManager = new rOpenGLContentManager(m_rwxGraphicsDevice);
+	m_rglContentManager = new rOpenGLContentManager(m_rwxGraphicsDevice, fileSystem);
 	m_rInputManager = new rInputManager();
 
 	m_rwxGraphicsDevice->Init(canvas);
 
-	InitEngine(m_rwxGraphicsDevice, m_rglContentManager, m_rInputManager);
+	InitEngine(m_rwxGraphicsDevice, m_rglContentManager, m_rInputManager, fileSystem);
 
 	rComponent::Init();
 

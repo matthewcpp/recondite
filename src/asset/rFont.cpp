@@ -1,17 +1,14 @@
-#include "rFont.hpp"
+#include "asset/rFont.hpp"
 
-rFont::rFont(rTexture2D* texture, size_t size, size_t lineHeight, size_t ascender, size_t descender, int assetid, const rString& name, const rString& path)
-:rAsset(assetid, name, path)
+rFont::rFont(const rString& name, rTexture* texture, size_t size, size_t lineHeight, size_t ascender, size_t descender)
 {
 	m_texture = texture;
 	m_size = size;
 	m_lineHeight = lineHeight;
 	m_ascender = ascender;
 	m_descender = descender;
-}
 
-rAssetType rFont::Type() const{
-	return rASSET_FONT;
+	m_name = name;
 }
 
 rFont::~rFont(){
@@ -66,7 +63,7 @@ void rFont::Clear(){
 	m_glyphs.clear();
 }
 
-rTexture2D* rFont::Texture() const{
+rTexture* rFont::Texture() const{
 	return m_texture;
 }
 

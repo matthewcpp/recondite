@@ -170,7 +170,7 @@ void rOpenGLGraphicsDevice::SetActiveMaterial(rMaterial* material){
 		glUniform4f(uniformHandle, diffuseColor.red / 255.0f, diffuseColor.green / 255.0f, diffuseColor.blue / 255.0f, diffuseColor.alpha / 255.0f);
 	}
 
-	rTexture2D* diffuseTexture = material->DiffuseTexture();
+	rTexture* diffuseTexture = material->DiffuseTexture();
 	if (diffuseTexture){
 		uniformHandle = glGetUniformLocation(m_activeShaderProgram, "s_texture");
 		if (uniformHandle != -1){

@@ -20,13 +20,13 @@ TEST(Ui_ruiStyle, Clear){
 
 TEST(Ui_ruiStyle, Extend){
 	ruiStyle baseStyle;
-	rTexture2D* testTexture1 = new rTexture2D(0,0,3,0,0,"test1","/test/rtex1");
-	rTexture2D* testTexture2 = new rTexture2D(0,0,3,0,0,"test2","/test/rtex2");
+	rTexture* testTexture1 = new rTexture("test1", 64, 64, 3, 1);
+	rTexture* testTexture2 = new rTexture("test2", 64, 64, 3, 2);
 
 	float floatVal = 5566.2187f;
 	int intVal = 8675309;
 
-	bool b; int i; float f; rTexture2D* tex;
+	bool b; int i; float f; rTexture* tex;
 
 	ruiStyle style1;
 	style1.SetBool("bool", true);

@@ -115,12 +115,12 @@ bool rPropertyCollection::GetFont(const rString& key, rFont*& font) const{
 	}
 }
 
-void rPropertyCollection::SetTexture(const rString& key, rTexture2D* val){
+void rPropertyCollection::SetTexture(const rString& key, rTexture* val){
 	DeleteProperty(key);
 	m_properties[key] = new rProperty(val);
 }
 
-bool rPropertyCollection::GetTexture(const rString& key, rTexture2D*& texture) const{
+bool rPropertyCollection::GetTexture(const rString& key, rTexture*& texture) const{
 	rPropertyMap::const_iterator p = m_properties.find(key);
 
 	if (p != m_properties.end()  && p->second->type == rPROPERTY_TYPE_TEXTURE){
@@ -193,7 +193,7 @@ rProperty::rProperty(rFont* f){
 	value.fontVal = f;
 }
 
-rProperty::rProperty(rTexture2D* t){
+rProperty::rProperty(rTexture* t){
 	type = rPROPERTY_TYPE_TEXTURE;
 	value.textureVal = t;
 }

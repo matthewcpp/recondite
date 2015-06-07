@@ -5,6 +5,8 @@
 
 #include "rBuild.hpp"
 
+#include "rFileSystem.hpp"
+
 #include "rApplicationBase.hpp"
 #include "rSDLGraphicsDevice.hpp"
 #include "rgl/rOpenGLContentManager.hpp"

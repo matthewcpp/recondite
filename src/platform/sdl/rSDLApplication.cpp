@@ -20,11 +20,12 @@ bool rApplication::Init(){
 		return false;
 	}
 
+	rFileSystem* fileSystem = new rFileSystem();
 	 m_graphicsDevice = new rSDLGraphicsDevice();
-	 m_contentManager = new rOpenGLContentManager(m_graphicsDevice);
+	 m_contentManager = new rOpenGLContentManager(m_graphicsDevice, fileSystem);
 	 m_inputManager = new rSDLInputManager();
 
-	 InitEngine(m_graphicsDevice, m_contentManager, m_inputManager);
+	 InitEngine(m_graphicsDevice, m_contentManager, m_inputManager, fileSystem);
 	 InitModule();
 
 	 return true;

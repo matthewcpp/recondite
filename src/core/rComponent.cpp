@@ -22,7 +22,8 @@ void rComponent::Uninit(){
 }
 
 void rComponent::LoadScene(const rString& name){
-	rIAssetStream stream = m_engine.content->LoadTextFromPath(name);
+	auto stream = m_engine.content->FileSystem()->GetReadFileRef(name);
+
 	if (stream){
 		rXMLDocument doc;
 		doc.LoadFromStream(*stream);
@@ -55,7 +56,7 @@ bool rComponent::SaveSceneXML(const rString& path, std::function<bool(rActor3*)>
 	return true;
 }
 
-void rComponent::InitEngine(rGraphicsDevice* graphics, rContentManager* content, rInputManager* input){
+void rComponent::InitEngine(rGraphicsDevice* graphics, rContentManager* content, rInputManager* input, rFileSystem* fileSystem){
 	m_graphicsDevice = graphics;
 
 	m_overlayManager = new ruiOverlayManager(&m_engine);
@@ -73,6 +74,8 @@ void rComponent::InitEngine(rGraphicsDevice* graphics, rContentManager* content,
 
 	m_graphicsDevice->Init();
 	m_engine.content->InitDefaultAssets();
+
+	m_fileSystem = fileSystem;
 
 	Init();
 

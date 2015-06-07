@@ -4,7 +4,7 @@
 #include "rBuild.hpp"
 #include "rActor3.hpp"
 
-#include "rModel.hpp"
+#include "asset/rModel.hpp"
 
 class RECONDITE_API rProp : public rActor3{
 public:

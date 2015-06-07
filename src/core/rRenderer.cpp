@@ -33,14 +33,7 @@ void rRenderer::RenderGeometry(rGeometry* geometry, const rMatrix4& transform, c
 }
 
 void rRenderer::RenderShadedWithEdges(rGeometry* geometry, const rMatrix4& transform, rMaterial* material, const rColor& edgeColor){
-	m_graphicsDevice->EnablePolygonFillOffset(true);
-		RenderGeometry(geometry, transform, "shaded", material);
-		
-	m_graphicsDevice->EnablePolygonFillOffset(false);
 
-	rMaterial* edgeMaterial = m_contentManager->GetMaterialAsset("default_colored");
-	//edgeMaterial->SetColor("fragColor", edgeColor);
-	RenderGeometry(geometry, transform, "wire", edgeMaterial);
 }
 
 void rRenderer::RenderBuffer(const rImmediateBuffer& buffer, rMaterial* material){
@@ -48,13 +41,7 @@ void rRenderer::RenderBuffer(const rImmediateBuffer& buffer, rMaterial* material
 }
 
 void rRenderer::Render3dBuffer(rImmediateBuffer& geometry, const rMatrix4& transform, const rColor& color){
-	rMatrix4 modelViewProjection = m_viewProjectionMatrix * transform;
-	rMaterial* material = m_contentManager->GetMaterialAsset("immediate_color");
 
-	if (material){
-		//material->SetColor("fragColor", color);
-		m_graphicsDevice->RenderImmediate(geometry, modelViewProjection,  material);
-	}
 }
 
 void rRenderer::ForceRenderModel(const rModel* model, const rMatrix4& modelViewProjection){
@@ -127,35 +114,11 @@ void rRenderer::RenderModel(const rModel* model, rRenderingOptions* renderingOpt
 }
 
 void rRenderer::ImmediateColorRender(rImmediateBuffer& geometry, const rColor& color){
-	rMaterial* material = m_contentManager->GetMaterialAsset("immediate_color");
-	
-	if (material){
-		//material->SetColor("fragColor", color);
-		
-		rMatrix4 transform;
-		if (m_activeViewport){
-			rRect overlay = m_activeViewport->GetScreenRect();
-			rMatrixUtil::Ortho2D(overlay.Left(), overlay.Right(), overlay.Bottom(), overlay.Top(), transform);
-		}
-		
-		m_graphicsDevice->RenderImmediate(geometry, transform, material);
-	}
+
 }
 
-void rRenderer::ImmediateTexturedRender(rImmediateBuffer& geometry, rTexture2D* texture){
-	rMaterial* material = m_contentManager->GetMaterialAsset("immediate_texture");
-	
-	if (material){
-		//material->SetTexture("s_texture", texture);
-		
-		rMatrix4 transform;
-		if (m_activeViewport){
-			rRect overlay = m_activeViewport->GetScreenRect();
-			rMatrixUtil::Ortho2D(overlay.Left(), overlay.Right(), overlay.Bottom(), overlay.Top(), transform);
-		}
-		
-		m_graphicsDevice->RenderImmediate(geometry, transform, material);
-	}
+void rRenderer::ImmediateTexturedRender(rImmediateBuffer& geometry, rTexture* texture){
+
 }
 
 void rRenderer::RenderRect(const rRect& rect, const rColor& color){
@@ -170,7 +133,7 @@ void rRenderer::RenderRoundedRect(const rRect& rect, float radius, const rColor&
 	ImmediateColorRender(geometry, color);
 }
 
-void rRenderer::RenderRect(const rRect& rect, rTexture2D* texture){
+void rRenderer::RenderRect(const rRect& rect, rTexture* texture){
 	rImmediateBuffer geometry;
 	rGeometryUtil::CreateRectVerticies(rect, geometry, true);
 	ImmediateTexturedRender(geometry, texture);
@@ -189,15 +152,7 @@ void rRenderer::RenderCircle(const rCircle2& circle, const rColor& color){
 }
 
 void rRenderer::RenderWireBox(const rAlignedBox3& box, const rColor color){
-	rImmediateBuffer geometry;
-	rGeometryUtil::CreateWireAlignedBoxVerticies(box, geometry);
 
-	rMaterial* material = m_contentManager->GetMaterialAsset("immediate_color");
-
-	if (material){
-		//material->SetColor("fragColor", color);
-		m_graphicsDevice->RenderImmediate(geometry, m_viewProjectionMatrix,  material);
-	}
 }
 
 void rRenderer::RenderString(const rString& str, const rFont* font, const rRect& bounding, const rColor& color){
@@ -205,7 +160,7 @@ void rRenderer::RenderString(const rString& str, const rFont* font, const rRect&
 		rImmediateBuffer geometry;
 		rGeometryUtil::Create2DText(str, font, bounding, geometry);
 
-		rMaterial* material = m_contentManager->GetMaterialAsset("immediate_text");
+		rMaterial* material = nullptr;
 		//material->SetColor("fragColor", color);
 
 		if (material){
@@ -241,14 +196,13 @@ void rRenderer::RenderSkeleton(const rSkeleton* skeleton, const rMatrix4Vector& 
 			lineData.TransformVertex(i, transformArray[i]);
 		}
 
-		rMaterial* material = m_contentManager->GetMaterialAsset("immediate_color");
+		rMaterial* material = nullptr;
 		//material->SetColor("fragColor",lineColor);
 
 		m_graphicsDevice->EnableDepthTesting(false);
 
 		m_graphicsDevice->RenderImmediate(lineData, m_viewProjectionMatrix, material);
 
-		material = m_contentManager->GetMaterialAsset("default_points");
 		//material->SetColor("fragColor", pointColor);
 		//material->SetFloat("recPointSize", pointSize);
 

@@ -1,4 +1,4 @@
-#include "rModel.hpp"
+#include "asset/rModel.hpp"
 
 //---------------rMesh
 
@@ -33,13 +33,12 @@ rMaterial* rMesh::Material() const{
 //---------------rModel
 
 
-rModel::rModel(rGeometry* geometry, int assetid, const rString& name, const rString& path)
-:rAsset(assetid, name, path)
-{
+rModel::rModel(const rString& name, rGeometry* geometry){
 	m_geometry = geometry;
 	m_skeleton = NULL;
 
 	m_boundingBox.Invalidate();
+	m_name = name;
 }
 
 rModel::~rModel(){
@@ -90,10 +89,6 @@ rGeometry* rModel::Geometry() const{
 	return m_geometry;
 }
 
-rAssetType rModel::Type() const{
-	return rASSET_MODEL;
-}
-
 void rModel::GetMeshNames(rArrayString& meshNames) const{
 	meshNames.clear();
 	
@@ -110,4 +105,8 @@ void rModel::SetSkeleton(rSkeleton* skeleton){
 }
 rAlignedBox3 rModel::BoundingBox() const{
 	return m_boundingBox;
+}
+
+rString rModel::Name() const{
+	return m_name;
 }

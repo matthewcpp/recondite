@@ -47,7 +47,7 @@ public:
 	virtual void AddActorClass(const rString& name, rActorFactory::ActorFunction func);
 
 protected:
-	virtual void InitEngine(rGraphicsDevice* graphics, rContentManager* content, rInputManager* input);
+	virtual void InitEngine(rGraphicsDevice* graphics, rContentManager* content, rInputManager* input, rFileSystem* fileSystem);
 	virtual void InitDefaultActorClasses();
 	bool SaveSceneXML(const rString& path, std::function<bool(rActor3*)> filterFunc);
 
@@ -61,6 +61,7 @@ protected:
 
 	rGraphicsDevice* m_graphicsDevice;
 	ruiOverlayManager* m_overlayManager;
+	rFileSystem* m_fileSystem;
 
 	rViewportMap m_viewports;
 

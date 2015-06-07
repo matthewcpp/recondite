@@ -1,11 +1,11 @@
-#include "rGeometry.hpp"
+#include "asset/rGeometry.hpp"
 
-rGeometry::rGeometry(rGeometryProfile profile, unsigned int vertexBufferId, unsigned int vertexBoneLinkBufferId, int assetid, const rString& name, const rString& path)
-:rAsset(assetid,name, path)
+rGeometry::rGeometry(const rString& name, rGeometryProfile profile, unsigned int vertexBufferId, unsigned int vertexBoneLinkBufferId)
 {
 	m_vertexBufferId = vertexBufferId;
 	m_vertexBoneLinkBufferId = vertexBoneLinkBufferId;
 	m_geometryProfile = profile;
+	m_name = name;
 }
 
 unsigned int rGeometry::VertexBufferId() const{
@@ -13,10 +13,6 @@ unsigned int rGeometry::VertexBufferId() const{
 }
 unsigned int rGeometry::VertexBoneLinkBufferId() const{
 	return m_vertexBoneLinkBufferId;
-}
-
-rAssetType rGeometry::Type() const{
-	return rASSET_GEOMETRY;
 }
 
 ruInt rGeometry::ElementBufferCount() const{
@@ -63,4 +59,8 @@ void rGeometry::SetVertexBoneLinks(const rVertexBoneLinkMap& links){
 
 rGeometryProfile rGeometry::GeometryProfile() const{
 	return m_geometryProfile;
+}
+
+rString rGeometry::Name() const{
+	return m_name;
 }

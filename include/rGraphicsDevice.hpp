@@ -8,11 +8,11 @@
 #include "rDefs.hpp"
 
 #include "rViewport.hpp"
-#include "rMaterial.hpp"
 #include "rAlignedBox3.hpp"
-#include "rGeometry.hpp"
 
-#include "data/rGeometryData.hpp"
+#include "asset/rMaterial.hpp"
+#include "asset/rGeometry.hpp"
+
 #include "data/rImmediateBuffer.hpp"
 
 class RECONDITE_API rGraphicsDevice{

@@ -112,7 +112,7 @@ rFont* ruiWidgetBase::DetermineFont(){
 
 	rString fontName = "consolas";
 	style->GetString("font", fontName);
-	return m_engine->content->GetFontAsset(fontName);
+	return m_engine->content->Fonts()->Get(fontName);
 }
 
 rString ruiWidgetBase::UiState() const{

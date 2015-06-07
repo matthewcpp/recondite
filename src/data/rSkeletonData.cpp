@@ -22,12 +22,9 @@ rContentError rSkeletonData::WriteToStream(std::ostream& stream, const rSkeleton
 		WriteHeader(stream, skeleton);
 		WriteBones(stream, skeleton);
 		WriteAnimations(stream, skeleton);
+	}
 
-		return rCONTENT_ERROR_NONE;
-	}
-	else{
-		return rCONTENT_ERROR_STREAM_ERROR;
-	}
+	return rContentError::None;
 }
 
 void rSkeletonData::WriteHeader(std::ostream& stream, const rSkeleton& skeleton){
@@ -129,12 +126,9 @@ rContentError rSkeletonData::ReadFromStream(std::istream& stream, rSkeleton& ske
 		ReadHeader(stream, skeleton);
 		ReadBones(stream, skeleton);
 		ReadAnimations(stream, skeleton);
-
-		return rCONTENT_ERROR_NONE;
 	}
-	else{
-		return rCONTENT_ERROR_STREAM_ERROR;
-	}
+	
+	return rContentError::None;
 }
 
 

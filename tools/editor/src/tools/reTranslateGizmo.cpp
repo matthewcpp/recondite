@@ -109,7 +109,7 @@ void reTranslateGizmo::CreateGizmo(){
 	geometryData->PushVertex(handleBase, rVector3::ZeroVector);
 	wire->Push(startingIndex, startingIndex + 1);
 
-	rModel* handleModel = engine->content->LoadModel(gizmoData, "__reTranslateGizmoYHandle");
+	rModel* handleModel = engine->content->Models()->LoadFromData(gizmoData, "__reTranslateGizmoYHandle");
 	SetMeshDiffuseColors(handleModel, rColor::Green);
 
 	m_yHandle = new rProp(handleModel, "__reTranslateGizmoYHandle", m_component->GetEngine());
@@ -137,7 +137,7 @@ void reTranslateGizmo::CreateGizmo(){
 	geometryData->PushVertex(handleBase, rVector3::ZeroVector);
 	wire->Push(startingIndex, startingIndex + 1);
 
-	handleModel = m_component->GetEngine()->content->LoadModel(gizmoData, "__reTranslateGizmoXHandle");
+	handleModel = m_component->GetEngine()->content->Models()->LoadFromData(gizmoData, "__reTranslateGizmoXHandle");
 	SetMeshDiffuseColors(handleModel, rColor::Blue);
 
 	m_xHandle = new rProp(handleModel, "__reTranslateGizmoXHandle", m_component->GetEngine());
@@ -163,7 +163,7 @@ void reTranslateGizmo::CreateGizmo(){
 	geometryData->PushVertex(handleBase, rVector3::ZeroVector);
 	wire->Push(startingIndex, startingIndex + 1);
 
-	handleModel = m_component->GetEngine()->content->LoadModel(gizmoData, "__reTranslateGizmoZHandle");
+	handleModel = m_component->GetEngine()->content->Models()->LoadFromData(gizmoData, "__reTranslateGizmoZHandle");
 	m_zHandle = new rProp(handleModel, "__reTranslateGizmoZHandle", m_component->GetEngine());
 	SetMeshDiffuseColors(handleModel, rColor::Red);
 

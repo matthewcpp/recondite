@@ -8,8 +8,8 @@
 
 #include "rString.hpp"
 #include "rColor.hpp"
-#include "rFont.hpp"
-#include "rTexture2D.hpp"
+#include "asset/rFont.hpp"
+#include "asset/rTexture.hpp"
 
 enum rPropertyType{
 	rPROPERTY_TYPE_BOOL,
@@ -29,7 +29,7 @@ union rPropertyValue{
 	rString* stringVal;
 	rColor* colorVal;
 	rFont* fontVal;
-	rTexture2D* textureVal;
+	rTexture* textureVal;
 };
 
 struct rProperty{
@@ -39,7 +39,7 @@ struct rProperty{
 	rProperty(const rString& s);
 	rProperty(const rColor& c);
 	rProperty(rFont* f);
-	rProperty(rTexture2D* t);
+	rProperty(rTexture* t);
 
 	~rProperty();
 
@@ -69,8 +69,8 @@ public:
 	void SetFont(const rString& key, rFont* val);
 	bool GetFont(const rString& key, rFont*& font) const;
 
-	void SetTexture(const rString& key, rTexture2D* val);
-	bool GetTexture(const rString& key, rTexture2D*& texture) const;
+	void SetTexture(const rString& key, rTexture* val);
+	bool GetTexture(const rString& key, rTexture*& texture) const;
 
 	void DeleteProperty(const rString& key);
 	size_t NumProperties() const;

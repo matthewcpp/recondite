@@ -10,9 +10,9 @@
 #include "rAlignedBox3.hpp"
 
 #include "data/rImmediateBuffer.hpp"
-#include "data/rTexCoordGeometryData.hpp"
+#include "asset/rTexCoordGeometryData.hpp"
 
-#include "rFont.hpp"
+#include "asset/rFont.hpp"
 #include "rSkeleton.hpp"
 
 #include "rMathUtil.hpp"

@@ -32,7 +32,7 @@
 #include "rAlignedBox3.hpp"
 
 #include "rViewport.hpp"
-#include "rMaterial.hpp"
+#include "asset/rMaterial.hpp"
 
 #include "rGraphicsDevice.hpp"
 #include "rMatrix4.hpp"

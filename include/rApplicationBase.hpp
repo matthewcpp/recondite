@@ -38,7 +38,7 @@ public:
 	virtual rModule* CreateModule() = 0;
 
 protected:
-	virtual void InitEngine(rGraphicsDevice* graphics, rContentManager* content, rInputManager* input);
+	virtual void InitEngine(rGraphicsDevice* graphics, rContentManager* content, rInputManager* input, rFileSystem* fileSystem);
 	void InitModule();
 
 protected:

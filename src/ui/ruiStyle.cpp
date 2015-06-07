@@ -14,7 +14,7 @@ void ruiStyle::SetFont(const rString& key, rFont* font){
 	m_changed = true;
 }
 
-void ruiStyle::SetTexture(const rString& key, rTexture2D* texture){
+void ruiStyle::SetTexture(const rString& key, rTexture* texture){
 	rPropertyCollection::SetTexture(key, texture);
 	m_changed = true;
 }

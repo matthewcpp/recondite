@@ -98,8 +98,8 @@ size_t rApplicationBase::FrameCount() const{
 	return m_frameCount;
 }
 
-void rApplicationBase::InitEngine(rGraphicsDevice* graphics, rContentManager* content, rInputManager* input){
-	rComponent::InitEngine(graphics, content, input);
+void rApplicationBase::InitEngine(rGraphicsDevice* graphics, rContentManager* content, rInputManager* input, rFileSystem* fileSystem){
+	rComponent::InitEngine(graphics, content, input, fileSystem);
 }
 
 

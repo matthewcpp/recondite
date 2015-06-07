@@ -21,6 +21,8 @@
 #include "rRenderingOptions.hpp"
 #include "rAnimationPlayer.hpp"
 
+#include "asset/rModel.hpp"
+
 class RECONDITE_API rRenderer {
 public:
 	rRenderer(rGraphicsDevice* graphicsDevice, rContentManager* contentManager);
@@ -38,7 +40,7 @@ public:
 
 	void RenderRect(const rRect& rect, const rColor& color);
 	void RenderWireRect(const rRect& rect, const rColor& color);
-	void RenderRect(const rRect& rect, rTexture2D* texture);
+	void RenderRect(const rRect& rect, rTexture* texture);
 
 	void RenderRoundedRect(const rRect& rect, float radius, const rColor& color);
 	
@@ -65,7 +67,7 @@ private:
 
 private:	
 	void ImmediateColorRender(rImmediateBuffer& geometry, const rColor& color);
-	void ImmediateTexturedRender(rImmediateBuffer& geometry, rTexture2D* texture);
+	void ImmediateTexturedRender(rImmediateBuffer& geometry, rTexture* texture);
 
 private:
 		rGraphicsDevice* m_graphicsDevice;

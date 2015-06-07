@@ -64,7 +64,6 @@ bool ruiSlider::OnPointerMove(const rPoint& position){
 }
 
 void ruiSlider::StartDrag(const rPoint& position){
-	rLog::Trace("start drag");
 	m_prevDrag = position;
 	handleGrabbed = true;
 }

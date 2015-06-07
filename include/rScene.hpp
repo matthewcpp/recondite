@@ -20,6 +20,8 @@
 
 #include "interface/riSerialization.hpp"
 
+#include "rLog.hpp"
+
 class RECONDITE_API rScene : public rEventHandler, public riScene, public riSerializable{
 public:
 	rScene(rEngine* engine);

@@ -5,7 +5,7 @@
 
 #include "rBuild.hpp"
 
-#include "data/rGeometryData.hpp"
+#include "asset/rGeometryData.hpp"
 #include "rPrimitiveGeometryParams.hpp"
 
 namespace rPrimitiveGeometry{

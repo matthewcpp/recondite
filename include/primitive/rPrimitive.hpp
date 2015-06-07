@@ -4,9 +4,9 @@
 #include "rBuild.hpp"
 #include "rActor3.hpp"
 
-#include "data/rTexCoordGeometryData.hpp"
-#include "data/rModelData.hpp"
-#include "rModel.hpp"
+#include "asset/rTexCoordGeometryData.hpp"
+#include "asset/rModelData.hpp"
+#include "asset/rModel.hpp"
 
 class RECONDITE_API rPrimitive : public rActor3{
 public:

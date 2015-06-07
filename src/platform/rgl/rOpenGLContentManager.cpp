@@ -1,27 +1,28 @@
 #include "rgl/rOpenGLContentManager.hpp"
 
-rOpenGLContentManager::rOpenGLContentManager(rGraphicsDevice* graphicsDevice)
-	:rContentManager(graphicsDevice)
+rOpenGLContentManager::rOpenGLContentManager(rGraphicsDevice* graphicsDevice, rFileSystem* fileSystem)
+	:rContentManager(graphicsDevice, fileSystem)
 {}
 
 void rOpenGLContentManager::InitDefaultAssets(){
 	#include "rgl/rOpenGLDefaultShaders.inl"
 	rLog::Info("Loading OpengGL Shaders");
+	rShaderManager* shaderManager = Shaders();
 
     rShaderData shaderData;
 
-    shaderData.SetShaderData(coloredVertexShader, coloredFragmentShader);
-    rShader* result = LoadShader(shaderData, "default_colored");
+    shaderData.Set(coloredVertexShader, coloredFragmentShader);
+    rShader* result = shaderManager->LoadFromData(shaderData, "default_colored");
 
-    shaderData.SetShaderData(pointVertexShader, coloredFragmentShader);
-	result = LoadShader(shaderData, "default_points");
+    shaderData.Set(pointVertexShader, coloredFragmentShader);
+	result = shaderManager->LoadFromData(shaderData, "default_points");
 
-    shaderData.SetShaderData(texturedVertexShader, texturedFragmentShader);
-    result = LoadShader(shaderData, "default_textured");
+    shaderData.Set(texturedVertexShader, texturedFragmentShader);
+	result = shaderManager->LoadFromData(shaderData, "default_textured");
 
-	shaderData.SetShaderData(modelVertexShader, texturedFragmentShader);
-    result = LoadShader(shaderData, "default_model");
+	shaderData.Set(modelVertexShader, texturedFragmentShader);
+	result = shaderManager->LoadFromData(shaderData, "default_model");
 
-	shaderData.SetShaderData(coloredVertexShader, vertexColorFragmentShader);
-	result = LoadShader(shaderData, "default_vertex_color_geometry");
+	shaderData.Set(coloredVertexShader, vertexColorFragmentShader);
+	result = shaderManager->LoadFromData(shaderData, "default_vertex_color_geometry");
 }

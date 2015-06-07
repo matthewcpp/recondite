@@ -4,7 +4,6 @@
 #include "rBuild.hpp"
 
 #include "rContentListener.hpp"
-#include "rAsset.hpp"
 
 #include "rLog.hpp"
 

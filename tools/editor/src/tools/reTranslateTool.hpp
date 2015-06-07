@@ -11,7 +11,7 @@
 #include "tools/reTranslateGizmo.hpp"
 #include "commands/reTranslateCommand.hpp"
 
-#include "data/rModelData.hpp"
+#include "asset/rModelData.hpp"
 #include "primitive/rPrimitiveGeometry.hpp"
 #include "rProp.hpp"
 

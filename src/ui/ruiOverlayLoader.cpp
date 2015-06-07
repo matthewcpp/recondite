@@ -75,7 +75,7 @@ void ruiOverlayLoader::ParseStylesheetItem(rXMLElement* element){
 	rString dir = rPath::Directory(m_path);
 	rString stylesheetPath = rPath::Combine(dir, pathName);
 
-	rIAssetStream cssFile = m_engine->content->LoadTextFromPath(stylesheetPath);
+	auto cssFile = m_engine->content->FileSystem()->GetReadFileRef(stylesheetPath);
 	
 	if (cssFile)
 		m_engine->ui->Styles()->ParseStylesheet(*cssFile);

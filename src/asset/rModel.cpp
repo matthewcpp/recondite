@@ -110,3 +110,10 @@ rAlignedBox3 rModel::BoundingBox() const{
 rString rModel::Name() const{
 	return m_name;
 }
+
+void rModel::ForEach(std::function<bool(rMesh*)> func){
+	for (auto& entry : m_meshes){
+		rMesh* mesh = entry.second;
+		if (!func(mesh)) break;
+	}
+}

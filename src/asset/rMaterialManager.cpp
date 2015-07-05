@@ -16,7 +16,7 @@ rMaterial* rMaterialManager::CreateAssetFromData(const rMaterialData& materialDa
 }
 
 void rMaterialManager::DisposeAsset(rMaterial* material){
-
+	//release shader here
 }
 
 rMaterial* rMaterialManager::CreateMaterial(const rString& name){

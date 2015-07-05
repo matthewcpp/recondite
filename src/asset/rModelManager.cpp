@@ -32,5 +32,12 @@ rModel* rModelManager::CreateAssetFromData(const rModelData& modelData, const rS
 }
 
 void rModelManager::DisposeAsset(rModel* model){
+	rMaterialManager* materialManager = m_materialManager;
 
+	model->ForEach([materialManager](rMesh* mesh)->bool{
+		materialManager->Release(mesh->Material()->Name());
+		return true;
+	});
+
+	m_geometryManager->Release(model->Geometry()->Name());
 }

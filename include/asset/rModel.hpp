@@ -3,6 +3,7 @@
 
 #include <map>
 #include <memory>
+#include <functional>
 
 #include "rBuild.hpp"
 #include "rTypes.hpp"
@@ -45,6 +46,8 @@ public:
 	rMesh* GetMesh(const rString& name) const;
 	void DeleteMesh(const rString& name);
 	void GetMeshNames(rArrayString& meshNames) const;
+
+	void ForEach(std::function<bool(rMesh*)> func);
 	
 	rGeometry* Geometry() const;
 	

@@ -2,8 +2,9 @@
 
 ruiOverlayLoader::ruiParseItemMap ruiOverlayLoader::s_parseItemMap;
 
-ruiOverlayLoader::ruiOverlayLoader(rEngine* engine){
+ruiOverlayLoader::ruiOverlayLoader(rEngine* engine, ruiIManager* ui){
 	m_engine = engine;
+	m_ui = ui;
 
 	InitParseItemMap();
 }
@@ -78,7 +79,7 @@ void ruiOverlayLoader::ParseStylesheetItem(rXMLElement* element){
 	auto cssFile = m_engine->content->FileSystem()->GetReadFileRef(stylesheetPath);
 	
 	if (cssFile)
-		m_engine->ui->Styles()->ParseStylesheet(*cssFile);
+		m_ui->Styles()->ParseStylesheet(*cssFile);
 }
 
 void ruiOverlayLoader::ParseAbsoluteLayoutItem(rXMLElement* element){
@@ -106,7 +107,7 @@ void ruiOverlayLoader::ParseTextItem(rXMLElement* element){
 	rString id = m_currentOverlay->GetDefaultId();
 	element->GetAttribute<rString>("id", id);
 
-	ruiText* text = new ruiText(element->Text(), id, m_engine);
+	ruiText* text = new ruiText(element->Text(), id, m_ui, m_engine);
 	ParseClassList(element, text);
 
 	m_layoutStack.back()->AddItem(text);
@@ -124,7 +125,7 @@ void ruiOverlayLoader::ParsePickerItem(rXMLElement* element){
 		options.push_back(element->GetChild(i)->Text());
 	}
 
-	ruiPicker* picker = new ruiPicker(options, id, m_engine);
+	ruiPicker* picker = new ruiPicker(options, id, m_ui, m_engine);
 	ParseClassList(element, picker);
 
 	m_layoutStack.back()->AddItem(picker);
@@ -135,7 +136,7 @@ void ruiOverlayLoader::ParseCheckboxItem(rXMLElement* element){
 	rString id = m_currentOverlay->GetDefaultId();
 	element->GetAttribute<rString>("id", id);
 
-	ruiCheckbox* checkbox = new ruiCheckbox(id, m_engine);
+	ruiCheckbox* checkbox = new ruiCheckbox(id, m_ui, m_engine);
 
 	rString checked;
 	if (element->GetAttribute<rString>("checked", checked))
@@ -151,7 +152,7 @@ void ruiOverlayLoader::ParseButtonItem(rXMLElement* element){
 	rString id = m_currentOverlay->GetDefaultId();
 	element->GetAttribute<rString>("id", id);
 
-	ruiButton* button = new ruiButton(element->Text(), id, m_engine);
+	ruiButton* button = new ruiButton(element->Text(), id, m_ui, m_engine);
 
 	ParseClassList(element, button);
 

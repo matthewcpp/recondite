@@ -1,8 +1,10 @@
 #include "ui/ruiWidgetBase.hpp"
 
-ruiWidgetBase::ruiWidgetBase(const rString& id, rEngine* engine)
+ruiWidgetBase::ruiWidgetBase(const rString& id, ruiIManager* ui, rEngine* engine)
 	:rObject(id, engine)
 {
+	m_ui = ui;
+
 	m_style.MarkChanged();
 	InvalidateSize();
 }
@@ -34,14 +36,14 @@ void ruiWidgetBase::GetClasses(rArrayString& classlist){
 }
 
 void ruiWidgetBase::ExtendStyle(const rString& selector){
-	ruiStyle* style = m_engine->ui->Styles()->GetStyle(selector);
+	ruiStyle* style = m_ui->Styles()->GetStyle(selector);
 	if (style) m_computedStyle.Extend(*style);
 }
 
 void ruiWidgetBase::RecomputeStyle(){
 	m_computedStyle.Clear();
 
-	ruiStyleManager* styleManager = m_engine->ui->Styles();
+	ruiStyleManager* styleManager = m_ui->Styles();
 	ruiStyle* style = NULL;
 
 	//start with any base level styles for this widget type

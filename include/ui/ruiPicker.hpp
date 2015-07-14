@@ -13,8 +13,8 @@
 
 class RECONDITE_API ruiPicker : public ruiWidget{
 public:
-	ruiPicker(const rString& id, rEngine* engine);
-	ruiPicker(rArrayString& options, const rString& id, rEngine* engine);
+	ruiPicker(const rString& id, ruiIManager* ui, rEngine* engine);
+	ruiPicker(rArrayString& options, const rString& id, ruiIManager* ui, rEngine* engine);
 	
 public:
 	void AddOption(const rString& option);

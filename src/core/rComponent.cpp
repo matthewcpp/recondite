@@ -64,7 +64,6 @@ void rComponent::InitEngine(rGraphicsDevice* graphics, rContentManager* content,
 
 	m_engine.component = this;
 
-	m_engine.ui = m_overlayManager;
 	m_engine.content = content;
 	m_engine.input = input;
 	m_engine.renderer = new rRenderer(graphics, content);

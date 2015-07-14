@@ -12,7 +12,6 @@
 
 #include "interface/riComponent.hpp"
 #include "interface/riScene.hpp"
-#include "ui/ruiInterface.hpp"
 
 class rEngine{
 public:
@@ -23,7 +22,6 @@ public:
 	rTime time;
 	riComponent* component;
 	riScene* scene;
-	ruiIManager* ui;
 };
 
 #endif

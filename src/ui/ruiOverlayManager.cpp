@@ -17,7 +17,7 @@ ruiOverlay* ruiOverlayManager::CreateOverlay(rViewport* viewport){
 }
 
 ruiOverlay* ruiOverlayManager::CreateOverlay(const rString& filePath, rViewport* viewport){
-	ruiOverlayLoader loader(m_engine);
+	ruiOverlayLoader loader(m_engine, this);
 	ruiOverlay* overlay = loader.ParseOverlay(filePath, viewport);
 
 	if (overlay){

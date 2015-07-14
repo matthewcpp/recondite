@@ -1,13 +1,13 @@
 #include "ui/ruiPicker.hpp"
 
-ruiPicker::ruiPicker(const rString& id, rEngine* engine)
-:ruiWidget(id, engine)
+ruiPicker::ruiPicker(const rString& id, ruiIManager* ui, rEngine* engine)
+:ruiWidget(id, ui, engine)
 {
 	Init();
 }
 
-ruiPicker::ruiPicker(rArrayString& options, const rString& id, rEngine* engine)
-:ruiWidget(id, engine)
+ruiPicker::ruiPicker(rArrayString& options, const rString& id, ruiIManager* ui, rEngine* engine)
+:ruiWidget(id, ui, engine)
 {
 	Init();
 	SetOptions(options);
@@ -31,7 +31,7 @@ void ruiPicker::ShowOptionsMenu(){
 	for (size_t i = 0; i < m_options.size(); i++)
 		menu->AppendItem(i, m_options[i]);
 
-	m_engine->ui->ShowContextMenu(menu, ComputedStyle(), rPoint(boundingBox.Left(), boundingBox.Bottom() + 3), this);
+	m_ui->ShowContextMenu(menu, ComputedStyle(), rPoint(boundingBox.Left(), boundingBox.Bottom() + 3), this);
 }
 
 rSize ruiPicker::ComputeSize(){

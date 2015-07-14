@@ -9,7 +9,7 @@
 
 class RECONDITE_API ruiSlider : public ruiWidget{
 public:
-	ruiSlider(const rString& id, rEngine* engine);
+	ruiSlider(const rString& id, ruiIManager* ui, rEngine* engine);
 	
 public:
 	

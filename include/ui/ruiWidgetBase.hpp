@@ -7,11 +7,11 @@
 #include "rEngine.hpp"
 #include "rObject.hpp"
 
-#include "ui/ruiStyle.hpp"
+#include "ui/ruiInterface.hpp"
 
 class RECONDITE_API ruiWidgetBase : public rObject{
 public:
-	ruiWidgetBase(const rString& id, rEngine* engine);
+	ruiWidgetBase(const rString& id, ruiIManager* ui, rEngine* engine);
 
 public:
 	virtual rRect BoundingBox() = 0;
@@ -46,6 +46,9 @@ private:
 	int GetClassIndex(const rString& className) const;
 	void RecomputeStyle();
 	void ExtendStyle(const rString& selector);
+
+protected:
+	ruiIManager* m_ui;
 	
 private:
 	ruiStyle m_style;
@@ -54,7 +57,6 @@ private:
 	rString m_uiState;
 
 	rSize m_size;
-
 };
 
 #endif

@@ -16,12 +16,12 @@ rGlyphData::~rGlyphData(){
 		delete[] data;
 }
 
-rFontData::rFontData(){
-	m_size = 0;
-	m_ascender = 0;
-	m_descender = 0;
-
-	m_textureGenerated = false;
+rFontData::rFontData(uint16_t size, rFontStyle style, uint16_t lineHeight, uint16_t ascender, uint16_t descender){
+	m_size = size;
+	m_fontStyle = style;
+	m_lineHeight = lineHeight;
+	m_ascender = ascender;
+	m_descender = descender;
 }
 
 rFontData::~rFontData(){
@@ -29,17 +29,13 @@ rFontData::~rFontData(){
 }
 
 void rFontData::Clear(){
-	for (rGlyphDataMap::iterator it = m_glyphs.begin(); it != m_glyphs.end(); ++it)
-		delete it->second;
-
 	m_glyphs.clear();
+}
 
-	m_name.clear();
-	m_path.clear();
-	m_textureFile.clear();
-
-	m_size = 0;
-	m_textureGenerated = false;
+void  rFontData::ForEach(IteratorFunc func){
+	for (auto glyphEntry : m_glyphs){
+		if (!func(glyphEntry.second)) return;
+	}
 }
 
 rGlyphData* rFontData::AddGlyph(int scancode, short width, short height, short top, short leftBearing, short advance, unsigned char* data){
@@ -62,18 +58,84 @@ void rFontData::RemoveGlyph(int scancode){
 	}
 }
 
-void rFontData::GenerateTexture(){
-	rGlyphDataArray sortedGlyphs;
+size_t rFontData::GlyphCount() const{
+	return m_glyphs.size();
+}
 
-	for (rGlyphDataMap::iterator it = m_glyphs.begin(); it != m_glyphs.end(); ++it){
-		sortedGlyphs.push_back(it->second);
+void rFontData::GetGlyphData(rGlyphDataArray& glyphs) const{
+	glyphs.clear();
+	glyphs.reserve(m_glyphs.size());
+
+	for (rGlyphDataMap::const_iterator it = m_glyphs.begin(); it != m_glyphs.end(); ++it)
+		glyphs.push_back(it->second);
+}
+
+uint16_t rFontData::LineHeight() const{
+	return m_lineHeight;
+}
+
+uint16_t rFontData::Ascender() const{
+	return m_ascender;
+}
+
+uint16_t rFontData::Descender() const{
+	return m_descender;
+}
+
+//-----------------------
+
+rFontFamilyData::rFontFamilyData(){
+	m_textureGenerated = false;
+}
+
+rFontData* rFontFamilyData::CreateFont(uint32_t size, rFontStyle style, uint16_t lineHeight, uint16_t ascender, uint16_t descender){
+	std::shared_ptr<rFontData> fontData;
+	fontData.reset(new rFontData(size, style, lineHeight, ascender, descender));
+
+
+
+	return fontData.get();
+}
+
+void rFontFamilyData::DeleteFont(uint32_t size, rFontStyle style){
+
+}
+
+rFontData* rFontFamilyData::GetFont(uint32_t size, rFontStyle style){
+	return nullptr;
+}
+
+void rFontFamilyData::Clear(){
+	m_fonts.clear();
+}
+
+rString rFontFamilyData::Name() const{
+	return m_name;
+}
+
+void rFontFamilyData::SetName(const rString& name){
+	m_name = name;
+}
+
+void rFontFamilyData::GatherGlyphs(rGlyphDataArray& glyphs){
+	auto end = m_fonts.end();
+	for (auto it = m_fonts.begin(); it != m_fonts.end(); ++it){
+		it->second->ForEach([&glyphs](rGlyphData* glyphData)->bool{
+			glyphs.push_back(glyphData);
+			return true;
+		});
 	}
+}
+
+void rFontFamilyData::GenerateTexture(){
+	rGlyphDataArray sortedGlyphs;
+	GatherGlyphs(sortedGlyphs);
 
 	std::sort(sortedGlyphs.begin(), sortedGlyphs.end(), rGlyphDataHeightSortDesc());
 
 	short TEXTURE_SIZE = 256;
 
-	m_textureData.Allocate(TEXTURE_SIZE,TEXTURE_SIZE,4);
+	m_textureData.Allocate(TEXTURE_SIZE, TEXTURE_SIZE, 4);
 	m_textureData.FillColor(rColor::Black);
 
 	int rowHeight = sortedGlyphs[0]->height;
@@ -83,7 +145,7 @@ void rFontData::GenerateTexture(){
 	for (size_t i = 0; i < sortedGlyphs.size(); i++){
 		rGlyphData* g = sortedGlyphs[i];
 
-		if (xIndex + g->width >= TEXTURE_SIZE ){
+		if (xIndex + g->width >= TEXTURE_SIZE){
 			yIndex += rowHeight;
 			rowHeight = g->height;
 			xIndex = 0;
@@ -100,7 +162,7 @@ void rFontData::GenerateTexture(){
 	m_textureGenerated = true;
 }
 
-void rFontData::SetTexCoordsForGlyph(int x, int y, rGlyphData* glyph){
+void rFontFamilyData::SetTexCoordsForGlyph(int x, int y, rGlyphData* glyph){
 	float TEXTURE_SIZE = 256.0f;
 
 	float top = 1.0f - (y / TEXTURE_SIZE);
@@ -114,8 +176,8 @@ void rFontData::SetTexCoordsForGlyph(int x, int y, rGlyphData* glyph){
 	glyph->texCoords[3].Set(left, bottom);
 }
 
-void rFontData::WriteGlyphDataToTexture(int x, int y, rGlyphData* glyph){
-	rColor pixel(255,255,255,255);
+void rFontFamilyData::WriteGlyphDataToTexture(int x, int y, rGlyphData* glyph){
+	rColor pixel(255, 255, 255, 255);
 	int dataIndex = 0;
 
 	for (int yPos = 0; yPos < glyph->height; yPos++){
@@ -127,81 +189,6 @@ void rFontData::WriteGlyphDataToTexture(int x, int y, rGlyphData* glyph){
 	}
 }
 
-size_t rFontData::GlyphCount() const{
-	return m_glyphs.size();
-}
-
-int rFontData::Size() const{
-	return m_size;
-}
-
-void rFontData::SetSize(int size){
-	m_size = size;
-}
-
-rString rFontData::Name() const{
-	return m_name;
-}
-
-void rFontData::SetName(const rString& name){
-	m_name = name;
-}
-
-const rTextureData& rFontData::TextureData() const{
+const rTextureData& rFontFamilyData::TextureData() const{
 	return m_textureData;
-}
-
-
-
-rString rFontData::TextureFile() const{
-	return m_textureFile;
-}
-
-rString rFontData::TexturePath() const{
-	rString dir = rPath::Directory(m_path);
-	return rPath::Combine(dir, m_textureFile);
-}
-
-rString rFontData::GetPath() const{
-	return m_path;
-}
-
-void rFontData::SetPath(const rString& path){
-	m_path = path;
-}
-
-void rFontData::GetGlyphData(rGlyphDataArray& glyphs) const{
-	glyphs.clear();
-	glyphs.reserve(m_glyphs.size());
-
-	for (rGlyphDataMap::const_iterator it = m_glyphs.begin(); it != m_glyphs.end(); ++it)
-		glyphs.push_back(it->second);
-}
-
-bool rFontData::TextureDataPresent() const{
-	return m_textureGenerated;
-}
-
-size_t rFontData::LineHeight () const{
-	return m_lineHeight;
-}
-
-void rFontData::SetLineHeight(size_t lineHeight){
-	m_lineHeight = lineHeight;
-}
-
-size_t rFontData::Ascender() const{
-	return m_ascender;
-}
-
-void rFontData::SetAscender(size_t ascender){
-	m_ascender = ascender;
-}
-
-size_t rFontData::Descender() const{
-	return m_descender;
-}
-
-void rFontData::SetDescender(size_t descender){
-	m_descender = descender;
 }

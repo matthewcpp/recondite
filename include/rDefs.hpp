@@ -47,6 +47,10 @@ enum class rRenderMode : unsigned char{
 	Shaded, Wireframe, WireframeOnShaded
 };
 
+enum class rFontStyle : unsigned char{
+	Normal, Bold, Italic
+};
+
 enum rButtonState {
 	rBUTTON_STATE_UP,
 	rBUTTON_STATE_DOWN,

@@ -4,6 +4,8 @@
 #include <map>
 #include <vector>
 #include <algorithm>
+#include <memory>
+#include <functional>
 
 #include "rBuild.hpp"
 #include "rDefs.hpp"
@@ -20,7 +22,7 @@
 
 #include "stream/rIFileStream.hpp"
 
-struct RECONDITE_API rGlyphData : public rFontGlyph{
+struct rGlyphData : public rFontGlyph{
 	rGlyphData();
 	rGlyphData(int s, short w, short h, short t, short l, short a, unsigned char* d);
 	~rGlyphData();
@@ -39,60 +41,70 @@ typedef std::vector <rGlyphData*> rGlyphDataArray;
 
 class RECONDITE_API rFontData{
 public:
-	rFontData();
+	rFontData(uint16_t size, rFontStyle style, uint16_t lineHeight, uint16_t ascender, uint16_t descender);
 	~rFontData();
 
+	typedef std::function<bool(rGlyphData*)> IteratorFunc;
+
+public:
 	void Clear();
-
-	void GenerateTexture();
 	
+	uint16_t Size() const;
+	uint16_t Ascender() const;
+	uint16_t Descender() const;
+	uint16_t LineHeight() const;
 
-	int Size() const;
-	void SetSize(int size);
-
-	size_t Ascender() const;
-	void SetAscender(size_t ascender);
-
-	size_t Descender() const;
-	void SetDescender(size_t descender);
-
-	size_t LineHeight () const;
-	void SetLineHeight(size_t lineHeight);
-
-	rString Name() const;
-	void SetName(const rString& name);
-
+	void ForEach(IteratorFunc func);
 
 	rGlyphData* AddGlyph(int scancode, short width, short height, short top, short leftBearing, short advance, unsigned char* data);
 	void GetGlyphData(rGlyphDataArray& glyphs) const;
 	void RemoveGlyph(int scancode);
 	size_t GlyphCount() const;
 
+private:
+
+	rGlyphDataMap m_glyphs;
+
+	uint16_t m_size;
+	rFontStyle m_fontStyle;
+
+	uint16_t m_lineHeight;
+	uint16_t m_ascender;
+	uint16_t m_descender;
+};
+
+class RECONDITE_API rFontFamilyData{
+public:
+	rFontFamilyData();
+
+public:
+	void Clear();
+
+	rFontData* CreateFont(uint32_t size, rFontStyle style, uint16_t lineHeight, uint16_t ascender, uint16_t descender);
+	rFontData* GetFont(uint32_t size, rFontStyle style = rFontStyle::Normal);
+	void DeleteFont(uint32_t size, rFontStyle style = rFontStyle::Normal);
+
+	rString Name() const;
+	void SetName(const rString& name);
+
+
+	void GenerateTexture();
 	const rTextureData& TextureData() const;
-	bool TextureDataPresent() const;
 
-	rString GetPath() const;
-	void SetPath(const rString& path);
+private:
 
-	rString TextureFile() const;
-	rString TexturePath() const;
-
+	void GatherGlyphs(rGlyphDataArray& glyphs);
 	void SetTexCoordsForGlyph(int x, int y, rGlyphData* glyph);
 	void WriteGlyphDataToTexture(int x, int y, rGlyphData* glyph);
 
 private:
+	typedef std::map<int, std::shared_ptr<rFontData>> rFontDataMap;
 
-	rGlyphDataMap m_glyphs;
+	rFontDataMap m_fonts;
 	rTextureData m_textureData;
 
 	rString m_name;
-	rString m_textureFile;
-	rString m_path;
 
-	int m_size;
-	size_t m_lineHeight;
-	size_t m_ascender;
-	size_t m_descender;
 
 	bool m_textureGenerated;
 };

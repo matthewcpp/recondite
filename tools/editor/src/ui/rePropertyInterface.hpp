@@ -1,6 +1,8 @@
 #ifndef RE_PROPERTYINTERFACE_HPP
 #define RE_PROPERTYINTERFACE_HPP
 
+#include <locale>
+
 #include "rActor3.hpp"
 #include "interface/riSerialization.hpp"
 

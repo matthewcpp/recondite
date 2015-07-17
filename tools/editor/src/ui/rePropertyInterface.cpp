@@ -199,12 +199,14 @@ wxString rePropertyReader::DisplayName(const wxString& name){
 	wxStringOutputStream buffer(&wxstr);
 	wxTextOutputStream str(buffer);
 
+	std::locale locale = std::locale();
+
 	for (size_t i = 0; i < name.length(); i++){
 		wxUniChar c = name[i];
 		if (i == 0) {
-			str.PutChar(std::toupper(c));
+			str.PutChar(std::toupper(c, locale));
 		}
-		else if (std::isupper(name[i])){
+		else if (std::isupper(name[i], locale)){
 			str.PutChar(' ').PutChar(c);
 		}
 		else{

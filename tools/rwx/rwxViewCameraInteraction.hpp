@@ -33,8 +33,6 @@ private:
 	float m_cameraRotateSpeed;
 	float m_cameraMoveSpeed;
 
-	rVector3 m_cameraRotation;
-
 	rMouseButton m_activeButton;
 	wxPoint m_previousPt;
 	float m_targetDistance;

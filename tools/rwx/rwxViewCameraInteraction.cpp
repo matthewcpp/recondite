@@ -3,7 +3,6 @@
 rwxViewCameraInteraction::rwxViewCameraInteraction(rCamera* camera){
 	m_camera = camera;
 	m_activeButton = rMOUSE_BUTTON_NONE;
-	m_cameraRotation = rVector3::ZeroVector;
 
 	m_cameraRotateSpeed = 2.0f;
 	m_cameraMoveSpeed = 0.5f;
@@ -54,23 +53,28 @@ bool rwxViewCameraInteraction::OnMouseMotion(wxMouseEvent& event){
 		}
 	}
 	else if (m_activeButton == rMOUSE_BUTTON_RIGHT){
+		rVector3 cameraRotation = m_camera->Rotation();
+
 		if (delta.x > 0){
-			m_cameraRotation.y += m_cameraRotateSpeed;
+			cameraRotation.y += m_cameraRotateSpeed;
 			refresh = true;
 		}
 		else if (delta.x < 0){
-			m_cameraRotation.y -= m_cameraRotateSpeed;
+			cameraRotation.y -= m_cameraRotateSpeed;
 			refresh = true;
 		}
 
 		if (delta.y > 0){
-			m_cameraRotation.x += m_cameraRotateSpeed;
+			cameraRotation.x += m_cameraRotateSpeed;
 			refresh = true;
 		}
 		else if (delta.y < 0){
-			m_cameraRotation.x -= m_cameraRotateSpeed;
+			cameraRotation.x -= m_cameraRotateSpeed;
 			refresh = true;
 		}
+
+		if (refresh)
+			m_camera->SetRotation(cameraRotation);
 	}
 
 	if (refresh)
@@ -113,9 +117,6 @@ bool rwxViewCameraInteraction::OnMousewheel(wxMouseEvent& event){
 }
 
 void rwxViewCameraInteraction::SetCameraTarget(){
-	rQuaternion q(m_cameraRotation);
-	rVector3 targetDirection = rVector3::ForwardVector;
-	q.TransformVector3(targetDirection);
-	rVector3 targetPosition = m_camera->Position() + (targetDirection * m_targetDistance);
+	rVector3 targetPosition = m_camera->Position() + m_camera->Forward();
 	m_camera->SetTarget(targetPosition);
 }

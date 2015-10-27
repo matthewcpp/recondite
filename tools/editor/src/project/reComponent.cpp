@@ -92,7 +92,7 @@ void reComponent::OnSceneLoad(rEvent& event){
 		groundPlane->RenderingOptions()->SetForceRender(true);
 
 		rModel* model = groundPlane->Model();
-		model->DeleteMesh("shaded");
+		model->DeleteMesh("faces");
 	}
 }
 

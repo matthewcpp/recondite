@@ -24,6 +24,7 @@ c++ framework for creating graphics applications
     - SDL_ROOT
     - GTEST_ROOT
     - WX_ROOT
+	- FREETYPE_ROOT
 
 **Building on Linux**
 

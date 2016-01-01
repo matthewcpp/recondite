@@ -17,10 +17,13 @@ elseif (MSVC)
     message("GLEW_ROOT:" $ENV{GLEW_ROOT})
     message("GTEST_ROOT:" $ENV{GTEST_ROOT})
 	message("WX_ROOT:" $ENV{WX_ROOT})
+	message("FREETYPE_ROOT:" $ENV{FREETYPE_ROOT})
+	
+	set(ENV{FREETYPE_DIR} $ENV{FREETYPE_ROOT})
 	
 	#configure wxmsw build variables
 	set(wxWidgets_ROOT_DIR $ENV{WX_ROOT})
-	set(wxWidgets_LIB_DIR ${wxWidgets_ROOT_DIR}/lib/vc_lib)
+	set(wxWidgets_LIB_DIR ${wxWidgets_ROOT_DIR}/lib/vc_dll)
 	set(wxWidgets_CONFIGURATION "mswud")
 	
 endif()
@@ -30,6 +33,7 @@ find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(SDL REQUIRED)
 find_package(GTest REQUIRED)
+find_package(Freetype REQUIRED)
 find_package(wxWidgets COMPONENTS gl aui adv core base propgrid xml REQUIRED)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)

@@ -1,5 +1,9 @@
 #include "sdl/rSDLGraphicsDevice.hpp"
 
+rSDLGraphicsDevice::rSDLGraphicsDevice(SDL_Window* window) {
+	m_window = window;
+}
+
 bool rSDLGraphicsDevice::Init(){
     GLenum err = glewInit();
 
@@ -9,5 +13,5 @@ bool rSDLGraphicsDevice::Init(){
 }
 
 void rSDLGraphicsDevice::SwapBuffers(){
-	SDL_GL_SwapBuffers();
+	SDL_GL_SwapWindow(m_window);
 }

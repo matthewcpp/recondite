@@ -76,8 +76,6 @@ void rComponent::InitEngine(rGraphicsDevice* graphics, rContentManager* content,
 
 	m_fileSystem = fileSystem;
 
-	Init();
-
 	m_isReady = true;
 }
 

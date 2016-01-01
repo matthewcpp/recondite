@@ -18,6 +18,10 @@ void rSDLInputManager::ProcessInputEvent(SDL_Event& event){
 		ProcessMouseButtonEvent(rBUTTON_STATE_UP, event);
 		break;
 
+	case SDL_MOUSEWHEEL:
+		ProcessWheelEvent(event);
+		break;
+
 	case SDL_KEYDOWN:
 		ProcessKeyboardEvent(rKEY_DOWN, event);
 		break;
@@ -26,6 +30,13 @@ void rSDLInputManager::ProcessInputEvent(SDL_Event& event){
 		ProcessKeyboardEvent(rKEY_UP, event);
 		break;
 	};
+}
+
+void rSDLInputManager::ProcessWheelEvent(SDL_Event& event) {
+	if (event.wheel.y > 0)
+		CreateMouseWheelEvent(rMOUSEWHEEL_UP);
+	else if (event.wheel.y < 0)
+		CreateMouseWheelEvent(rMOUSEWHEEL_DOWN);
 }
 
 void rSDLInputManager::ProcessMouseButtonEvent(rButtonState state, SDL_Event& event){
@@ -40,12 +51,6 @@ void rSDLInputManager::ProcessMouseButtonEvent(rButtonState state, SDL_Event& ev
 		break;
 	case SDL_BUTTON_RIGHT:
 		CreateMouseButtonEvent(rMOUSE_BUTTON_RIGHT, state, position);
-		break;
-	case SDL_BUTTON_WHEELUP:
-		CreateMouseWheelEvent(rMOUSEWHEEL_UP);
-		break;
-	case SDL_BUTTON_WHEELDOWN:
-		CreateMouseWheelEvent(rMOUSEWHEEL_DOWN);
 		break;
 	};
 }

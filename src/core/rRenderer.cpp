@@ -23,6 +23,10 @@ void rRenderer::BeginRenderView (rViewport& viewport){
 void rRenderer::EndRenderView(){
 }
 
+void rRenderer::SetClearColor(const rColor& color) {
+	m_graphicsDevice->SetClearColor(color);
+}
+
 size_t rRenderer::ObjectsRendered() const{
 	return m_objectsRendered;
 }

@@ -9,8 +9,14 @@
 
 class rSDLGraphicsDevice : public rOpenGLGraphicsDevice{
 public:
+	rSDLGraphicsDevice(SDL_Window* window);
+
+public:
 	virtual bool Init();
 	virtual void SwapBuffers();
+
+private:
+	SDL_Window* m_window;
 };
 
 #endif

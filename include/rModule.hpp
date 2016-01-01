@@ -18,21 +18,16 @@
 class RECONDITE_API rModule {
 public:
 
-	virtual void BeforeUpdateScene(rEngine& engine) = 0;
-	virtual void AfterUpdateScene(rEngine& engine) = 0;
+	virtual void BeforeUpdateScene() {};
+	virtual void AfterUpdateScene() {};
 	
-	virtual void BeforeRenderScene(rViewInfo& view, rEngine& engine) = 0;
-	virtual void AfterRenderScene(rViewInfo& view, rEngine& engine) = 0;
+	virtual void BeforeRenderScene(rViewInfo* viewInfo) {};
+	virtual void AfterRenderScene(rViewInfo* viewInfo) {};
 
-	virtual void BeforeRenderOverlay(rViewInfo& view, rEngine& engine) = 0;
-	virtual void AfterRenderOverlay(rViewInfo& view, rEngine& engine) = 0;
-
-	virtual void Init(rEngine& engine) = 0;
-	virtual void InitUI(ruiOverlayManager& manager, rEngine& engine) = 0;
-	virtual void Uninit(rEngine& engine) = 0;
-	virtual void LoadScene(const rString& sceneName, rEngine& engine) = 0;
+	virtual void Init() {};
+	virtual void Uninit() {};
+	virtual void LoadScene(const rString& sceneName) = 0;
 	virtual void DeleteActor(rActor3* actor) = 0;
-
 };
 
 

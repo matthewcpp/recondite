@@ -13,13 +13,16 @@ if (${CMAKE_CXX_COMPILER_ID} STREQUAL GNU)
 	SET(GCC_COMPILE_FLAGS "-std=c++11")
 	add_definitions(${GCC_COMPILE_FLAGS})
 elseif (MSVC)
-    message("SDL_ROOT:" $ENV{SDL_ROOT})
+    message("SDL2_ROOT:" $ENV{SDL2_ROOT})
     message("GLEW_ROOT:" $ENV{GLEW_ROOT})
     message("GTEST_ROOT:" $ENV{GTEST_ROOT})
 	message("WX_ROOT:" $ENV{WX_ROOT})
 	message("FREETYPE_ROOT:" $ENV{FREETYPE_ROOT})
 	
 	set(ENV{FREETYPE_DIR} $ENV{FREETYPE_ROOT})
+	
+	set(ENV{SDL2DIR} $ENV{SDL2_ROOT})
+	set(SDL2_BUILDING_LIBRARY "TRUE")
 	
 	#configure wxmsw build variables
 	set(wxWidgets_ROOT_DIR $ENV{WX_ROOT})
@@ -31,7 +34,7 @@ endif()
 find_package(Threads REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
-find_package(SDL REQUIRED)
+find_package(SDL2 REQUIRED)
 find_package(GTest REQUIRED)
 find_package(Freetype REQUIRED)
 find_package(wxWidgets COMPONENTS gl aui adv core base propgrid xml REQUIRED)
@@ -40,7 +43,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/platform)
 
 include_directories( ${OPENGL_INCLUDE_DIRS} ${GLEW_INCLUDE_PATH} ${CMAKE_CURRENT_SOURCE_DIR})
-include_directories( ${SDL_INCLUDE_DIR} )
 
 include (recondite)
 

@@ -37,7 +37,8 @@ protected:
 	rOpenGLContentManager* m_contentManager;
 	rSDLInputManager* m_inputManager;
 
-
+	SDL_Window* m_window;
+	SDL_GLContext m_glContext;
 };
 
 #endif

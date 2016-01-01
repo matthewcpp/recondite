@@ -2,7 +2,9 @@
 
 rApplication::rApplication()
 	:rApplicationBase()
-{}
+{
+	m_window = nullptr;
+}
 
 rApplication::~rApplication(){
 }
@@ -15,13 +17,27 @@ bool rApplication::Init(){
 		return false;
 	}
 
-	if (SDL_SetVideoMode(m_displaySize.x, m_displaySize.y, 0, SDL_OPENGL) == 0){
-		rLog::Error("Error Setting SDL OpenGL Video Mode");
+	m_window = SDL_CreateWindow("My Game Window",
+		SDL_WINDOWPOS_UNDEFINED,
+		SDL_WINDOWPOS_UNDEFINED,
+		1024, 768,
+		SDL_WINDOW_OPENGL);
+
+	if (m_window) {
+		m_glContext = SDL_GL_CreateContext(m_window);
+	}
+	else {
+		rLog::Error("Error Setting SDL OpenGL Video Mode.");
+		return false;
+	}
+
+	if (!m_glContext){
+		rLog::Error("Error Creating OpenGL context.");
 		return false;
 	}
 
 	rFileSystem* fileSystem = new rFileSystem();
-	 m_graphicsDevice = new rSDLGraphicsDevice();
+	 m_graphicsDevice = new rSDLGraphicsDevice(m_window);
 	 m_contentManager = new rOpenGLContentManager(m_graphicsDevice, fileSystem);
 	 m_inputManager = new rSDLInputManager();
 

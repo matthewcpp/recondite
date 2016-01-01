@@ -4,12 +4,14 @@ rApplicationBase::rApplicationBase(){
 	m_module = NULL;
 	m_frameCount = 0;
 	m_targetFPS = 30;
+
+	m_displaySize.Set(1024, 768);
 }
 
 void rApplicationBase::Update(){
-	m_module->BeforeUpdateScene(m_engine);
+	m_module->BeforeUpdateScene();
 		m_scene->Update();
-	m_module->AfterUpdateScene(m_engine);
+	m_module->AfterUpdateScene();
 
 	m_overlayManager->Update(m_engine);
 
@@ -24,14 +26,14 @@ void rApplicationBase::Draw(){
 	//render the scene in each viewport
 	m_graphicsDevice->EnableDepthTesting(true);
 	for (rViewportMap::iterator it = m_viewports.begin(); it != end; ++it){
-		rViewInfo view;
-		view.viewport = it->second;
-		view.overlay = m_overlayManager->GetOverlay(view.viewport);
+		rViewInfo viewInfo;
+		viewInfo.viewport = it->second;
+		viewInfo.overlay = m_overlayManager->GetOverlay(viewInfo.viewport);
 
-		m_engine.renderer->BeginRenderView(*view.viewport);
-		m_module->BeforeRenderScene(view, m_engine);
+		m_engine.renderer->BeginRenderView(*viewInfo.viewport);
+		m_module->BeforeRenderScene(&viewInfo);
 		m_scene->Draw();
-		m_module->AfterRenderScene(view, m_engine);
+		m_module->AfterRenderScene(&viewInfo);
 		m_engine.renderer->EndRenderView();
 	}
 
@@ -42,9 +44,7 @@ void rApplicationBase::Draw(){
 		view.viewport = it->second;
 		view.overlay = m_overlayManager->GetOverlay(view.viewport);
 
-		m_module->BeforeRenderOverlay(view, m_engine);
 		m_overlayManager->Draw(view.viewport);
-		m_module->AfterRenderOverlay(view, m_engine);
 	}
 
 	m_overlayManager->DrawFinal();
@@ -79,11 +79,8 @@ void rApplicationBase::SetTargetFPS(unsigned int targetFPS){
 }
 
 void rApplicationBase::InitModule(){
-	m_module = CreateModule();
-	
-	m_module->Init(m_engine);
-	m_module->InitUI(*m_overlayManager, m_engine);
-	m_module->LoadScene("Default", m_engine);
+	m_module = CreateModule(&m_engine);
+	m_module->Init();
 }
 
 void rApplicationBase::SetDisplaySize(int width, int height){
@@ -104,7 +101,7 @@ void rApplicationBase::InitEngine(rGraphicsDevice* graphics, rContentManager* co
 
 
 void rApplicationBase::Uninit(){
-	m_module->Uninit(m_engine);
+	m_module->Uninit();
 
 	rComponent::Uninit();
 }

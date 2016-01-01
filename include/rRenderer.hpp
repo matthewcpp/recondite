@@ -29,6 +29,8 @@ public:
 	
 public:
 
+	void SetClearColor(const rColor& color);
+
 	void BeginRenderView (rViewport& viewport);
 	void EndRenderView();
 	size_t ObjectsRendered() const;

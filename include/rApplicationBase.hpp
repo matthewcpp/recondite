@@ -32,10 +32,8 @@ public:
 
 	virtual size_t FrameCount() const;
 
-	
-
 public:
-	virtual rModule* CreateModule() = 0;
+	virtual rModule* CreateModule(rEngine* engine) = 0;
 
 protected:
 	virtual void InitEngine(rGraphicsDevice* graphics, rContentManager* content, rInputManager* input, rFileSystem* fileSystem);

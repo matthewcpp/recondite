@@ -12,11 +12,11 @@
 class rFileSystem{
 
 public:
-	typedef std::shared_ptr<rIStream> rIStreamRef;
-	typedef std::shared_ptr<rOStream> rOStreamRef;
+	typedef std::shared_ptr<rIStream> rIFileStreamHandle;
+	typedef std::shared_ptr<rOStream> rOFileStreamHandle;
 
-	rIStreamRef GetReadFileRef(const rString& path);
-	rOStreamRef GetWriteFileRef(const rString& path);
+	rIFileStreamHandle GetReadFileRef(const rString& path);
+	rOFileStreamHandle GetWriteFileRef(const rString& path);
 };
 
 #endif

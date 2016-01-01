@@ -2,6 +2,7 @@
 #define R_TEXTUREFILE_HPP
 
 #include <memory>
+#include <cstdint>
 
 #include "rDefs.hpp"
 #include "rBuild.hpp"
@@ -12,7 +13,13 @@
 #include "stream/rOStream.hpp"
 
 class RECONDITE_API rTextureFile{
-	static rContentError Read(rFileSystem* fileSystem, const rString& path, std::unique_ptr<rTextureData>& textureData);
+public:
+	rContentError Read(rFileSystem* fileSystem, const rString& path, rTextureData& textureData);
+	rContentError Write(rFileSystem* fileSystem, const rString& path, const rTextureData& textureData);
+
+private:
+
+
 };
 
 #endif

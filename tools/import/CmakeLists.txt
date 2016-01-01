@@ -1,0 +1,13 @@
+set(importer_files)
+
+list(APPEND importer_files ${CMAKE_CURRENT_SOURCE_DIR}/include/ImageImporter.hpp)
+list(APPEND importer_files ${CMAKE_CURRENT_SOURCE_DIR}/src/ImageImporter.cpp)
+
+add_library( rimport SHARED ${importer_files})
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+add_definitions(-DRECONDITE_BUILD_SHARED)
+
+set_target_properties(rimport PROPERTIES FOLDER Tools)
+
+target_link_libraries(rimport recondite)

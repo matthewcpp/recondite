@@ -2,7 +2,8 @@
 #define R_DEFS_HPP
 
 enum class rContentError{
-	None = 0
+	None = 0,
+	Error
 };
 
 enum class rAssetType{

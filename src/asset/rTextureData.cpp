@@ -93,5 +93,5 @@ int rTextureData::Bpp() const{
 }
 
 const unsigned char* rTextureData::Data() const{
-    return &m_data[0];
+	return m_data.data();
 }

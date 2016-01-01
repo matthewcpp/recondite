@@ -17,7 +17,7 @@ bool rApplication::Init(){
 		return false;
 	}
 
-	m_window = SDL_CreateWindow("My Game Window",
+	m_window = SDL_CreateWindow("recondite",
 		SDL_WINDOWPOS_UNDEFINED,
 		SDL_WINDOWPOS_UNDEFINED,
 		1024, 768,
@@ -43,6 +43,8 @@ bool rApplication::Init(){
 
 	 InitEngine(m_graphicsDevice, m_contentManager, m_inputManager, fileSystem);
 	 InitModule();
+
+	 SDL_SetWindowTitle(m_window, m_module->GetModuleName().c_str());
 
 	 return true;
 }

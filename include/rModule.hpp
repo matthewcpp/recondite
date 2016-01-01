@@ -8,15 +8,13 @@
 #include "rScene.hpp"
 #include "rViewInfo.hpp"
 
-//modules need to export 2 methods in order for them to be loaded by the DLL loader classes
-#ifdef _MSC_VER
-	#define RECONDITE_MODULE_INTERFACE __declspec(dllexport)
-#else
-	#define RECONDITE_MODULE_INTERFACE
-#endif
-
 class RECONDITE_API rModule {
 public:
+	rModule(const rString& name);
+
+public:
+
+	rString GetModuleName() const;
 
 	virtual void BeforeUpdateScene() {};
 	virtual void AfterUpdateScene() {};
@@ -28,6 +26,9 @@ public:
 	virtual void Uninit() {};
 	virtual void LoadScene(const rString& sceneName) = 0;
 	virtual void DeleteActor(rActor3* actor) = 0;
+
+private:
+	rString m_moduleName;
 };
 
 

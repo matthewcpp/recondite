@@ -25,4 +25,7 @@ void rOpenGLContentManager::InitDefaultAssets(){
 
 	shaderData.Set(coloredVertexShader, vertexColorFragmentShader);
 	result = shaderManager->LoadFromData(shaderData, "default_vertex_color_geometry");
+
+	shaderData.Set(spriteVertexShader, spriteFragmentShader);
+	result = shaderManager->LoadFromData(shaderData, "default_sprite");
 }

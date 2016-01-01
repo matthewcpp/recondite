@@ -24,6 +24,7 @@ public:
 	rShader* DefaultModelShader();
 	rShader* DefaultLineShader();
 	rShader* DefaultPrimitiveShader();
+	rShader* DefaultSpriteShader();
 
 	virtual rShader* CreateAssetFromData(const rShaderData& shaderData, const rString& name) override;
 	virtual void DisposeAsset(rShader* shader) override;

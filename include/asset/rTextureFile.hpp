@@ -14,7 +14,7 @@
 
 class RECONDITE_API rTextureFile{
 public:
-	rContentError Read(rFileSystem* fileSystem, const rString& path, rTextureData& textureData);
+	static rContentError Read(rFileSystem* fileSystem, const rString& path, std::unique_ptr<rTextureData>& textureData);
 	rContentError Write(rFileSystem* fileSystem, const rString& path, const rTextureData& textureData);
 
 private:

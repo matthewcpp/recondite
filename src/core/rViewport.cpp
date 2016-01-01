@@ -85,10 +85,8 @@ void rViewport::GetViewMatrix(rMatrix4& matrix) const{
 void rViewport::GetViewProjectionMatrix(rMatrix4& matrix) const{
 	rMatrix4 projection, view;
 
-	if (m_camera){
-		GetProjectionMatrix(projection);
-		GetViewMatrix(view);
-	}
+	GetProjectionMatrix(projection);
+	GetViewMatrix(view);
 
 	matrix = projection * view;
 }

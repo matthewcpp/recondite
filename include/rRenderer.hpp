@@ -44,6 +44,8 @@ public:
 	void RenderWireRect(const rRect& rect, const rColor& color);
 	void RenderRect(const rRect& rect, rTexture* texture);
 
+	void RenderSprite(rTexture* texture, const rPoint& position);
+
 	void RenderRoundedRect(const rRect& rect, float radius, const rColor& color);
 	
 	void RenderCircle(const rCircle2& circle, const rColor& color);

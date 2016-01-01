@@ -15,18 +15,20 @@ struct rTextureFileHeader {
 	uint32_t unused3;
 };
 
-rContentError rTextureFile::Read(rFileSystem* fileSystem, const rString& path, rTextureData& textureData){
-	auto file = fileSystem->GetReadFileRef(path);
+rContentError rTextureFile::Read(rFileSystem* fileSystem, const rString& path, std::unique_ptr<rTextureData>& textureData){
+	auto stream = fileSystem->GetReadFileRef(path);
 
-	if (file) {
+	if (stream && stream->IsOk()) {
 		rTextureFileHeader header;
-		file->Read((char*)&header, sizeof(rTextureFileHeader));
+		stream->Read((char*)&header, sizeof(rTextureFileHeader));
 
 		size_t dataSize = header.bpp * header.width * header.height;
 
 		rCharArray charBuffer;
 		charBuffer.resize(dataSize);
-		file->Read(charBuffer.data(), dataSize);
+		stream->Read(charBuffer.data(), dataSize);
+		textureData.reset(new rTextureData());
+		textureData->SetImageData(header.width, header.height, header.bpp, (unsigned char*)charBuffer.data());
 
 		return rContentError::None;
 	}
@@ -47,14 +49,14 @@ void InitHeader(rTextureFileHeader& header, const rTextureData& textureData) {
 }
 
 rContentError rTextureFile::Write(rFileSystem* fileSystem, const rString& path, const rTextureData& textureData) {
-	auto file = fileSystem->GetWriteFileRef(path);
+	auto stream = fileSystem->GetWriteFileRef(path);
 
-	if (file) {
+	if (stream && stream->IsOk()) {
 		rTextureFileHeader header;
 		InitHeader(header, textureData);
 
-		file->Write((const char*)&header, sizeof(header));
-		file->Write((const char*)textureData.Data(), textureData.DataSize());
+		stream->Write((const char*)&header, sizeof(header));
+		stream->Write((const char*)textureData.Data(), textureData.DataSize());
 
 		return rContentError::None;
 	}

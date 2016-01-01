@@ -9,7 +9,6 @@
 
 #include "rTexture.hpp"
 #include "rColor.hpp"
-#include "rMatrix4.hpp"
 #include "rShader.hpp"
 
 #include "rPropertyCollection.hpp"

@@ -1,3 +1,31 @@
+//sprite shader
+const char spriteVertexShader[] =
+
+"attribute vec4 recPosition;"
+"attribute vec2 recTexCoord;"
+"varying vec2 v_texCoord;"
+"uniform mat4 recMVPMatrix;"
+"void main(){"
+"	gl_Position = recMVPMatrix * recPosition;"
+"	v_texCoord = recTexCoord;"
+"}";
+
+const char spriteFragmentShader[] =
+
+"#ifdef GLES2\n"
+"precision mediump float;\n"
+"#endif\n"
+"varying vec2 v_texCoord;"
+"uniform vec4 fragColor;"
+"uniform sampler2D s_texture;"
+"void main(){"
+"	vec4 texturedColor = texture2D( s_texture, v_texCoord ) * fragColor;"
+"	if (texturedColor.a < 0.1)"
+"		discard;"
+"	gl_FragColor = texturedColor;"
+"}";
+
+
 //default shader for rendering a solid color
 const char coloredVertexShader[] = 
 

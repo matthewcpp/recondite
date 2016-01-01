@@ -27,3 +27,7 @@ rShader* rShaderManager::DefaultLineShader(){
 rShader* rShaderManager::DefaultPrimitiveShader(){
 	return Retain("default_primitive");
 }
+
+rShader* rShaderManager::DefaultSpriteShader() {
+	return Retain("default_sprite");
+}

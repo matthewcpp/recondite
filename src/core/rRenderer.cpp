@@ -125,6 +125,26 @@ void rRenderer::ImmediateTexturedRender(rImmediateBuffer& geometry, rTexture* te
 
 }
 
+void rRenderer::RenderSprite(rTexture* texture, const rPoint& position) {
+	rImmediateBuffer buffer(rGeometryType::Triangles, 2, true);
+	rRect rect(position.x, position.y, texture->Width(), texture->Height());
+	rGeometryUtil::CreateRectVerticies(rect, buffer, true);
+
+	rMaterial* spriteMaterial = m_contentManager->Materials()->Get("sprite_material");
+	if (!spriteMaterial) {
+		spriteMaterial = m_contentManager->Materials()->CreateMaterial("sprite_material");
+		spriteMaterial->SetShader(m_contentManager->Shaders()->DefaultSpriteShader());
+	}
+
+	spriteMaterial->SetDiffuseTexture(texture);
+
+	rMatrix4 matrix;
+	m_activeViewport->GetViewProjectionMatrix(matrix);
+
+	m_graphicsDevice->ActivateShader(spriteMaterial->Shader()->ProgramId());
+	m_graphicsDevice->RenderImmediate(buffer, matrix, spriteMaterial);
+}
+
 void rRenderer::RenderRect(const rRect& rect, const rColor& color){
 	rImmediateBuffer geometry;
 	rGeometryUtil::CreateRectVerticies(rect, geometry, false);

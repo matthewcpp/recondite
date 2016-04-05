@@ -21,7 +21,7 @@ c++ framework for creating graphics applications
 
 1.  Set environment variables:
     - GLEW_ROOT
-    - SDL_ROOT
+    - SDL2_ROOT
     - GTEST_ROOT
     - WX_ROOT
 	- FREETYPE_ROOT

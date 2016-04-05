@@ -35,6 +35,8 @@ public:
 
 	rwxGLCanvas* GetCanvas();
 
+	static void DisableInputTimer();
+
 private:
 	void CreateViewportElements();
 	void BindEvents();

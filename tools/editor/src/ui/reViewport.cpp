@@ -200,5 +200,9 @@ void reViewport::SetViewportIsMaximized(bool maximized){
 	m_isMaximized = maximized;
 }
 
+void reViewport::DisableInputTimer() {
+	s_inputTimer->Stop();
+}
+
 wxTimer* reViewport::s_inputTimer = nullptr;
 wxWindowID reViewport::s_nextCanvasId = 17000;

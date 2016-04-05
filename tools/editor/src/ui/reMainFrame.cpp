@@ -207,6 +207,7 @@ void reMainFrame::OnRedoCommand(wxCommandEvent& event){
 }
 
 void reMainFrame::CloseFrame(){
+	reViewport::DisableInputTimer();
 	Close();
 }
 

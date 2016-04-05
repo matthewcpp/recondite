@@ -7,6 +7,7 @@
 #include "rBuild.hpp"
 #include "rDefs.hpp"
 #include "rString.hpp"
+#include "rSize.hpp"
 
 class RECONDITE_API rTexture{
 public:
@@ -15,13 +16,14 @@ public:
 	
 	int Width() const;
 	int Height() const;
+	rSize Size() const;
 	int GraphicsDeviceID() const;
 	int Bpp() const;
 	rString Name() const;
 	
 private:
 	
-	int m_width , m_height;
+	rSize m_size;
 	int m_bpp;
 	unsigned int m_graphicsDeviceId;
 	rString m_name;

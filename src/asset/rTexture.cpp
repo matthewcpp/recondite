@@ -2,19 +2,22 @@
 
 rTexture::rTexture(const rString& name, int width, int height, int bpp, unsigned int graphicsDeviceId)
 {
-	m_width = width;
-	m_height = height;
+	m_size.Set(width, height);
 	m_bpp = bpp;
 	m_graphicsDeviceId = graphicsDeviceId;
 	m_name = name;
 }
 
 int rTexture::Width() const{
-	return m_width;
+	return m_size.x;
 }
 
 int rTexture::Height() const{
-	return m_height;
+	return m_size.y;
+}
+
+rSize rTexture::Size() const {
+	return m_size;
 }
 
 int rTexture::GraphicsDeviceID() const{

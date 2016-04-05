@@ -10,6 +10,7 @@ rRenderer::rRenderer(rGraphicsDevice* graphicsDevice, rContentManager* contentMa
 void rRenderer::BeginRenderView (rViewport& viewport){
 	m_objectsRendered = 0;
 	m_activeViewport = &viewport;
+	m_spriteBatch.Clear();
 	
 	rRect window = viewport.GetScreenRect();
 	m_graphicsDevice->SetViewport(window.x, window.y, window.width, window.height);
@@ -21,6 +22,7 @@ void rRenderer::BeginRenderView (rViewport& viewport){
 }
 
 void rRenderer::EndRenderView(){
+	RenderSpriteBatch();
 }
 
 void rRenderer::SetClearColor(const rColor& color) {
@@ -125,24 +127,26 @@ void rRenderer::ImmediateTexturedRender(rImmediateBuffer& geometry, rTexture* te
 
 }
 
-void rRenderer::RenderSprite(rTexture* texture, const rPoint& position) {
-	rImmediateBuffer buffer(rGeometryType::Triangles, 2, true);
-	rRect rect(position.x, position.y, texture->Width(), texture->Height());
-	rGeometryUtil::CreateRectVerticies(rect, buffer, true);
+rSpriteBatch* rRenderer::SpriteBatch() {
+	return &m_spriteBatch;
+}
 
+void rRenderer::RenderSpriteBatch() {
 	rMaterial* spriteMaterial = m_contentManager->Materials()->Get("sprite_material");
 	if (!spriteMaterial) {
 		spriteMaterial = m_contentManager->Materials()->CreateMaterial("sprite_material");
 		spriteMaterial->SetShader(m_contentManager->Shaders()->DefaultSpriteShader());
 	}
 
-	spriteMaterial->SetDiffuseTexture(texture);
+	m_spriteBatch.ForEach([&](rTexture* texture, rImmediateBuffer* buffer) {
+		spriteMaterial->SetDiffuseTexture(texture);
 
-	rMatrix4 matrix;
-	m_activeViewport->GetViewProjectionMatrix(matrix);
+		rMatrix4 matrix;
+		m_activeViewport->GetViewProjectionMatrix(matrix);
 
-	m_graphicsDevice->ActivateShader(spriteMaterial->Shader()->ProgramId());
-	m_graphicsDevice->RenderImmediate(buffer, matrix, spriteMaterial);
+		m_graphicsDevice->ActivateShader(spriteMaterial->Shader()->ProgramId());
+		m_graphicsDevice->RenderImmediate(*buffer, matrix, spriteMaterial);
+	});
 }
 
 void rRenderer::RenderRect(const rRect& rect, const rColor& color){

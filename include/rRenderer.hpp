@@ -20,6 +20,7 @@
 #include "rSkeleton.hpp"
 #include "rRenderingOptions.hpp"
 #include "rAnimationPlayer.hpp"
+#include "rSpriteBatch.hpp"
 
 #include "asset/rModel.hpp"
 
@@ -44,7 +45,7 @@ public:
 	void RenderWireRect(const rRect& rect, const rColor& color);
 	void RenderRect(const rRect& rect, rTexture* texture);
 
-	void RenderSprite(rTexture* texture, const rPoint& position);
+	rSpriteBatch* SpriteBatch();
 
 	void RenderRoundedRect(const rRect& rect, float radius, const rColor& color);
 	
@@ -73,6 +74,8 @@ private:
 	void ImmediateColorRender(rImmediateBuffer& geometry, const rColor& color);
 	void ImmediateTexturedRender(rImmediateBuffer& geometry, rTexture* texture);
 
+	void RenderSpriteBatch();
+
 private:
 		rGraphicsDevice* m_graphicsDevice;
 		rContentManager* m_contentManager;
@@ -85,6 +88,7 @@ private:
 
 
 		size_t m_objectsRendered;
+		rSpriteBatch m_spriteBatch;
 };
 
 #endif

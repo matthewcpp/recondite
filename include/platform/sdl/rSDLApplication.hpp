@@ -9,7 +9,7 @@
 
 #include "rApplicationBase.hpp"
 #include "rSDLGraphicsDevice.hpp"
-#include "rgl/rOpenGLContentManager.hpp"
+#include "platform/rgl/rOpenGLContentManager.hpp"
 #include "rSDLInputManager.hpp"
 
 #include "ui/ruiOverlayManager.hpp"
@@ -17,7 +17,7 @@
 #include "rViewport.hpp"
 #include "rCamera.hpp"
 
-#include "sdl/rSDLMain.hpp"
+#include "platform/sdl/rSDLMain.hpp"
 
 class RECONDITE_API rApplication : public rApplicationBase{
 public:

@@ -199,6 +199,12 @@ void rImmediateBuffer::SetIndexBuffer(const unsigned short* indices, size_t inde
 	memcpy(&m_indexData[0], indices, indexCount * sizeof(unsigned short));
 }
 
+void rImmediateBuffer::AppendIndexBuffer(const unsigned short* indices, size_t indexCount) {
+	for (size_t i = 0; i < indexCount; i++) {
+		m_indexData.push_back(indices[i]);
+	}
+}
+
 void rImmediateBuffer::TransformVertex(size_t i, const rMatrix4& matrix){
 	size_t index = VertexDataArrayIndex(i);
 

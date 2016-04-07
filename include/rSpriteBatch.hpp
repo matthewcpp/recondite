@@ -17,8 +17,8 @@ public:
 	void ForEach(rSpriteBatchFunction function);
 	void Clear();
 
-	void RenderTexture(rTexture* texture, const rVector2& position);
-	void RenderTexture(rTexture* texture, const rVector2& position, const rVector2& size);
+	void RenderTexture(rTexture* texture, const rVector2& position, float depth = 0.0);
+	void RenderTexture(rTexture* texture, const rVector2& position, const rVector2& size, float depth = 0.0);
 
 
 private:

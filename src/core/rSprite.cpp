@@ -56,10 +56,10 @@ void rSprite::Draw() {
 	rVector2 position(m_position.x, m_position.y);
 
 	if (m_sizeSet) {
-		m_engine->renderer->SpriteBatch()->RenderTexture(m_texture, position, m_size);
+		m_engine->renderer->SpriteBatch()->RenderTexture(m_texture, position, m_size, m_position.z);
 	}
 	else {
-		m_engine->renderer->SpriteBatch()->RenderTexture(m_texture, position);
+		m_engine->renderer->SpriteBatch()->RenderTexture(m_texture, position, m_position.z);
 	}
 		
 }

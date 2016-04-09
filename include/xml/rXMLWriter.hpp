@@ -5,16 +5,15 @@
 
 #include <string>
 #include <stack>
-#include <sstream>
-#include <ostream>
 
 #include "rTypes.hpp"
+#include "stream/rOStream.hpp"
 #include "xml/rXMLAttributeList.hpp"
 
 
 class RECONDITE_API rXMLWriter{
 public:
-	rXMLWriter(std::ostream& stream) : m_stream(stream) {}
+	rXMLWriter(rOStream& stream) : m_stream(stream) {}
 	~rXMLWriter();
 	
 public:
@@ -74,7 +73,7 @@ private:
 	typedef std::stack<rString> rElementStack;
 	
 private:
-	std::ostream& m_stream;
+	rOStream& m_stream;
 	rElementStack m_stack;
 };
 
@@ -193,7 +192,7 @@ void rXMLWriter::WriteElementWithAttributesAndValue(const rString& name , const 
 		WriteAttributeList(attributes);
 	}
 	
-	m_stream << ">"<< str.str();
+	m_stream << ">"<< str.str().c_str();
 	
 	WriteEndElementTag(name);
 }
@@ -212,7 +211,7 @@ void rXMLWriter::WriteOpenElementWithAttributesAndValue(const rString& name , co
 		WriteAttributeList(attributes);
 	}
 	
-	m_stream << ">"<<str.str()<<std::endl;
+	m_stream << ">"<<str.str().c_str()<< '\n';
 	
 	m_stack.push(name);
 }

@@ -1,8 +1,6 @@
 #ifndef R_XMLDOCUMENT_HPP
 #define R_XMLDOCUMENT_HPP
 
-#include <fstream>
-
 #include "rBuild.hpp"
 
 #include "rTypes.hpp"
@@ -13,6 +11,7 @@
 #include "xml/rXMLDocumentLoader.hpp"
 
 #include "stream/rIFileStream.hpp"
+#include "stream/rOStream.hpp"
 
 class RECONDITE_API rXMLDocument{
 public:
@@ -25,8 +24,7 @@ public:
 	
 	void FindElements(const rString& search, rXMLElementArray& result) const;
 	
-	int WriteToFile(const rString& path) const;
-	int WriteToStream(std::ostream& stream) const;
+	int WriteToStream(rOStream& stream) const;
 	
 	rXMLReaderError LoadFromFile(const rString& path);
 	rXMLReaderError LoadFromStream(rIStream& stream);

@@ -7,8 +7,6 @@
 #include "xml/rXMLReaderDelegate.hpp"
 #include "xml/rXMLElement.hpp"
 
-typedef std::stack<rXMLElement*> rXMLElementStack;
-
 class rXMLDocumentLoader : public rXMLReaderDelegate{
 public:
 	rXMLDocumentLoader();
@@ -20,6 +18,9 @@ public:
 	virtual void OnEndElement(const rString& elementName);
 	virtual void OnReadCharacters(const rString& data);
 	
+private:
+	typedef std::stack<rXMLElement*> rXMLElementStack;
+
 private:
 	rXMLElementStack m_stack;
 	rXMLElement* m_root;

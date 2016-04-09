@@ -18,7 +18,7 @@ void rXMLWriter::WriteStartElementTag(const rString& name){
 }
 
 void rXMLWriter::WriteEndElementTag(const rString& name){
-	m_stream << "</" << name<<">"<< std::endl;
+	m_stream << "</" << name<<">\n";
 } 
 
 void rXMLWriter::WriteElement(const rString& name){
@@ -76,7 +76,7 @@ void rXMLWriter::WriteElementWithAttributes(const rString& name , const rXMLAttr
 	
 	m_stream << '<'<<name<<' ';
 	WriteAttributeList(attributes);
-	m_stream << " />" << std::endl;
+	m_stream << " />" << '\n';
 }
 
 void rXMLWriter::WriteOpenElementWithAttributes(const rString& name , const rXMLAttributeList& attributes){	
@@ -84,7 +84,7 @@ void rXMLWriter::WriteOpenElementWithAttributes(const rString& name , const rXML
 	
 	m_stream << '<'<<name<<' ';
 	WriteAttributeList(attributes);
-	m_stream << " >" << std::endl;
+	m_stream << " >" << '\n';
 	
 	m_stack.push(name);
 }

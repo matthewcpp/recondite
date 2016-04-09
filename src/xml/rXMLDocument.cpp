@@ -58,19 +58,7 @@ rXMLReaderError rXMLDocument::LoadFromStream(rIStream& stream){
 	return error;
 }
 
-int rXMLDocument::WriteToFile(const rString& path) const{
-	std::ofstream file(path.c_str());
-	
-	if (!file)
-		return 1;
-	
-	int error = WriteToStream(file);
-	
-	file.close();
-	return error;
-}
-
-int rXMLDocument::WriteToStream(std::ostream& stream) const{
+int rXMLDocument::WriteToStream(rOStream& stream) const{
 	if (m_root){
 		rXMLWriter writer(stream);
 		WriteXMLElement(m_root, writer);

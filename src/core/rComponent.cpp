@@ -50,7 +50,8 @@ bool rComponent::SaveSceneXML(const rString& path, std::function<bool(rActor3*)>
 	riSerializationTarget* target = new rXMLSerializationTarget(element);
 	m_scene->Save(target, filterFunc);
 
-	doc.WriteToFile(path);
+	rOFileStream fileStream(path);
+	doc.WriteToStream(fileStream);
 	delete target;
 
 	return true;

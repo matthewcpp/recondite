@@ -1,5 +1,15 @@
 #include "Converter.hpp"
 
+#include "rFileSystem.hpp"
+#include "rPath.hpp"
+
+#include "ImageImporter.hpp"
+#include "asset/rTextureData.hpp"
+#include "asset/rTextureFile.hpp"
+
+#include "TextureAtlasImporter.hpp"
+#include "asset/rTextureAtlasData.hpp"
+
 #include <iostream>
 
 namespace recondite { namespace tools {
@@ -10,6 +20,10 @@ namespace recondite { namespace tools {
 
 		opts.AddOption(Keyword("texture", "t"), [&](std::string inputfile) {
 			this->ConvertImage(inputfile.c_str());
+		});
+
+		opts.AddOption(Keyword("texture_atlas", "ta"), [&](std::string manifest) {
+			this->CreateTextureAtlas(manifest.c_str());
 		});
 
 		auto parseContext = opts.CreateParseContext(argv + 1, argv + argc);
@@ -32,7 +46,10 @@ namespace recondite { namespace tools {
 		rTextureData textureData;
 		int error = imageImporter.ImportImage(path, textureData);
 
-		if (!error) {
+		if (error) {
+			std::cout << "texture conversion failed." << std::endl;
+		}
+		else {
 			rString outDir, outName;
 			rPath::Split(path, &outDir, &outName, nullptr);
 
@@ -42,8 +59,38 @@ namespace recondite { namespace tools {
 			rTextureFile textureFile;
 			textureFile.Write(&m_fileSystem, outPath, textureData);
 		}
+
+		return error;
+	}
+
+	int Converter::CreateTextureAtlas(const rString& path) {
+		std::cout << "Generate Texture Atlas from manifest: " << path << std::endl;
+
+		import::TextureAtlasImporter textureAtlas;
+
+		rTextureAtlasData textureAtlasData;
+		rTextureData textureData;
+
+		int error = textureAtlas.GenerateAtlas(path, textureAtlasData, textureData);
+
+		rString outDir, outName;
+		rPath::Split(path, &outDir, &outName, nullptr);
+
+		if (error) {
+			std::cout << "texture atlas generation failed." << std::endl;
+		}
 		else {
-			std::cout << "texture conversion failed." << std::endl;
+			rString outDir, outName;
+			rPath::Split(path, &outDir, &outName, nullptr);
+
+			rString atlasOutPath = rPath::Assemble(outDir, outName, "ratl");
+			rString textureOutPath = rPath::Assemble(outDir, outName, "rtex");
+
+			rOFileStream atlasFile(atlasOutPath);
+			textureAtlasData.Write(atlasFile);
+
+			rTextureFile textureFile;
+			textureFile.Write(&m_fileSystem, textureOutPath, textureData);
 		}
 
 		return error;

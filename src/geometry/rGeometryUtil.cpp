@@ -81,6 +81,8 @@ bool rGeometryUtil::CreateWireRectVerticies(const rRect& rect, rImmediateBuffer&
 	geometry.AppendIndexBuffer(wireRectIndicies, 6);
 
 	CreateRectVerticies(rect, geometry, zValue);
+
+	return true;
 }
 
 bool rGeometryUtil::CreateCircleVerticies(const rCircle2& circle, size_t segments, rImmediateBuffer& geometry, float zValue){

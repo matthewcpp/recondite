@@ -67,30 +67,33 @@ namespace recondite { namespace tools {
 		std::cout << "Generate Texture Atlas from manifest: " << path << std::endl;
 
 		import::TextureAtlasImporter textureAtlas;
-
-		rTextureAtlasData textureAtlasData;
-		rTextureData textureData;
-
-		int error = textureAtlas.GenerateAtlas(path, textureAtlasData, textureData);
-
-		rString outDir, outName;
-		rPath::Split(path, &outDir, &outName, nullptr);
+		int error = textureAtlas.ReadManifestFromPath(path);
 
 		if (error) {
-			std::cout << "texture atlas generation failed." << std::endl;
+			std::cout << "texture atlas parse failed." << std::endl;
 		}
 		else {
-			rString outDir, outName;
-			rPath::Split(path, &outDir, &outName, nullptr);
+			rTextureAtlasData textureAtlasData;
+			rTextureData textureData;
 
-			rString atlasOutPath = rPath::Assemble(outDir, outName, "ratl");
-			rString textureOutPath = rPath::Assemble(outDir, outName, "rtex");
+			error = textureAtlas.GenerateAtlas(textureAtlasData, textureData);
 
-			rOFileStream atlasFile(atlasOutPath);
-			textureAtlasData.Write(atlasFile);
+			if (error){
+				std::cout << "texture atlas generation failed." << std::endl;
+			}
+			else{
+				rString outDir, outName;
+				rPath::Split(path, &outDir, &outName, nullptr);
 
-			rTextureFile textureFile;
-			textureFile.Write(&m_fileSystem, textureOutPath, textureData);
+				rString atlasOutPath = rPath::Assemble(outDir, outName, "ratl");
+				rString textureOutPath = rPath::Assemble(outDir, outName, "rtex");
+
+				rOFileStream atlasFile(atlasOutPath);
+				textureAtlasData.Write(atlasFile);
+
+				rTextureFile textureFile;
+				textureFile.Write(&m_fileSystem, textureOutPath, textureData);
+			}
 		}
 
 		return error;

@@ -61,6 +61,6 @@ enum rButtonState {
 #define rNO_COPY_CLASS(classname)								\
 		public:													\
 			classname(const classname&) = delete;				\
-			classname& operator=(const classname&) = delete;
+			classname& operator=(const classname&) = delete;	
 
 #endif

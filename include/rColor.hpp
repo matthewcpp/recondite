@@ -22,6 +22,7 @@ struct RECONDITE_API rColor{
 	static const rColor Green;
 	static const rColor Blue;
 	static const rColor Black;
+	static const rColor Transparent;
 };
 
 class rColorComparator{

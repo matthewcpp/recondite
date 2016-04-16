@@ -26,3 +26,16 @@ float rMath::Max3(float n1 , float n2, float n3){
 	
 	return n3;
 }
+
+uint32_t rMath::NextHighestPowerOf2(uint32_t v){
+	v--;
+	v |= v >> 1;
+	v |= v >> 2;
+	v |= v >> 4;
+	v |= v >> 8;
+	v |= v >> 16;
+	v++;
+	v += (v == 0);
+
+	return v;
+}

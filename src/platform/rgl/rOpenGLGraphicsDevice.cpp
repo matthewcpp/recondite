@@ -174,9 +174,19 @@ void rOpenGLGraphicsDevice::SetActiveMaterial(rMaterial* material){
 	if (diffuseTexture){
 		uniformHandle = glGetUniformLocation(m_activeShaderProgram, "s_texture");
 		if (uniformHandle != -1){
+			//set the texture as active
 			glActiveTexture(GL_TEXTURE0);
 			glBindTexture(GL_TEXTURE_2D, diffuseTexture->GraphicsDeviceID());
 			glUniform1i(uniformHandle, 0);
+
+			//pass the UV information into the shader
+			uniformHandle = glGetUniformLocation(m_activeShaderProgram, "v_uvOrigin");
+			const rVector2& uvOrigin = diffuseTexture->UVOrigin();
+			glUniform2f(uniformHandle, uvOrigin.x, uvOrigin.y);
+
+			uniformHandle = glGetUniformLocation(m_activeShaderProgram, "v_uvSize");
+			const rVector2& uvSize = diffuseTexture->UVSize();
+			glUniform2f(uniformHandle, uvSize.x, uvSize.y);
 
 			if (diffuseTexture->Bpp() > 3){
 				glEnable(GL_BLEND);

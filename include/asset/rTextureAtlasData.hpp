@@ -18,15 +18,6 @@
 
 class RECONDITE_API rTextureAtlasData {
 public:
-	void AddEntry(const rString& name, const rSize& textureSize, const rVector2& uvOrigin, const rVector2& uvSize);
-	size_t GetNumEntries() const;
-	void Clear();
-
-public:
-	rContentError Read(rIStream& stream);
-	rContentError Write(rOStream& stream);
-
-public:
 	struct rTextureAtlasEntry {
 		rTextureAtlasEntry() {}
 		rTextureAtlasEntry(const rString& _name, const rSize& _textureSize, const rVector2& _uvOrigin, const rVector2& _uvSize)
@@ -37,6 +28,16 @@ public:
 		rVector2 uvOrigin;
 		rVector2 uvSize;
 	};
+
+public:
+	void AddEntry(const rString& name, const rSize& textureSize, const rVector2& uvOrigin, const rVector2& uvSize);
+	const rTextureAtlasEntry* GetEntry(size_t index) const;
+	size_t GetNumEntries() const;
+	void Clear();
+
+public:
+	rContentError Read(rIStream& stream);
+	rContentError Write(rOStream& stream);
 
 private:
 	typedef std::shared_ptr<rTextureAtlasEntry> rTextureEntryRef;

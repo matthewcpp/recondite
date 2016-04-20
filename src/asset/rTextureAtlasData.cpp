@@ -14,11 +14,19 @@ void rTextureAtlasData::Clear() {
 	m_textureEntries.clear();
 }
 
+const rTextureAtlasData::rTextureAtlasEntry* rTextureAtlasData::GetEntry(size_t index) const{
+	if (index >= m_textureEntries.size())
+		return nullptr;
+	else
+		return m_textureEntries[index].get();
+}
+
 rContentError rTextureAtlasData::Read(rIStream& stream) {
 	if (!stream.IsOk()) return rContentError::Error;
 
 	rXMLDocument doc;
-	doc.LoadFromStream(stream);
+	int error = doc.LoadFromStream(stream);
+	if (error) return rContentError::Error;
 
 	rXMLElement* textures = doc.GetRoot()->GetChild(0);
 
@@ -40,6 +48,8 @@ rContentError rTextureAtlasData::Read(rIStream& stream) {
 		rXMLElement* uvSize = textureEntry->GetChild(3);
 		uvSize->GetAttribute<float>("x", entry.uvSize.x);
 		uvSize->GetAttribute<float>("y", entry.uvSize.y);
+
+		AddEntry(entry.name, entry.textureSize, entry.uvOrigin, entry.uvSize);
 	}
 
 	return rContentError::None;

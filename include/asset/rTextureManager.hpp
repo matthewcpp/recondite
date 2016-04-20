@@ -14,13 +14,19 @@
 #include "rTextureData.hpp"
 #include "rTextureFile.hpp"
 
-class rTextureManager : public rAssetManager<rTexture, rTextureData, rTextureFile>{
+#include "rTextureAtlasData.hpp"
+
+class RECONDITE_API rTextureManager : public rAssetManager<rTexture, rTextureData, rTextureFile>{
 public:
 	rTextureManager(rGraphicsDevice* graphicsDevice, rFileSystem* fileSystem);
+
+public:
+	bool LoadAtlas(const rString& path, const rString& name);
 
 protected:
 	virtual rTexture* CreateAssetFromData(const rTextureData& textureData, const rString& name) override;
 	virtual void DisposeAsset(rTexture* texture) override;
+	
 
 private:
 	rGraphicsDevice* m_graphicsDevice;

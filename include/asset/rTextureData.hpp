@@ -1,22 +1,20 @@
 #ifndef R_TEXTURE2DDATA_HPP
 #define R_TEXTURE2DDATA_HPP
 
-#include <string>
-#include <fstream>
+#include <memory>
 
 #include "rBuild.hpp"
-#include "rDefs.hpp"
-#include "rTypes.hpp"
-
-
 #include "rSize.hpp"
 #include "rColor.hpp"
+
+#include "stream/rIStream.hpp"
+#include "stream/rOStream.hpp"
 
 class RECONDITE_API rTextureData {
 public:
     rTextureData();
+	~rTextureData();
 
-public:
 	void Allocate(int width, int height, int bpp);
 	void Allocate(int width, int height, int bpp, const rColor& color);
 
@@ -37,14 +35,13 @@ public:
 
 	void Clear();
 
-private:
-	size_t GetPixelIndex(int x, int y) const;
+	int Read(rIStream& stream);
+	int Write(rOStream& stream);
     
 private:
-    rUnsigedByteArray m_data;
-    
-    rSize m_size;
-    int m_bpp;
+
+	struct Impl;
+	std::unique_ptr<Impl> _impl;
 };
 
 #endif

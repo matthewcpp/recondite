@@ -5,7 +5,6 @@
 
 #include "ImageImporter.hpp"
 #include "asset/rTextureData.hpp"
-#include "asset/rTextureFile.hpp"
 
 #include "TextureAtlasImporter.hpp"
 #include "asset/rTextureAtlasData.hpp"
@@ -56,8 +55,8 @@ namespace recondite { namespace tools {
 			rString outPath = rPath::Assemble(outDir, outName, "rtex");
 			std::cout << "saving file: " << outPath << std::endl;
 
-			rTextureFile textureFile;
-			textureFile.Write(&m_fileSystem, outPath, textureData);
+			auto outFile = m_fileSystem.GetWriteFileRef(outPath);
+			textureData.Write(*outFile);
 		}
 
 		return error;
@@ -91,8 +90,8 @@ namespace recondite { namespace tools {
 				rOFileStream atlasFile(atlasOutPath);
 				textureAtlasData.Write(atlasFile);
 
-				rTextureFile textureFile;
-				textureFile.Write(&m_fileSystem, textureOutPath, textureData);
+				auto outFile = m_fileSystem.GetWriteFileRef(textureOutPath);
+				textureData.Write(*outFile);
 			}
 		}
 

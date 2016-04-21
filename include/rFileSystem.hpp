@@ -9,7 +9,7 @@
 #include "stream/rIFileStream.hpp"
 #include "stream/rOFileStream.hpp"
 
-class rFileSystem{
+class RECONDITE_API rFileSystem{
 
 public:
 	typedef std::shared_ptr<rIStream> rIFileStreamHandle;

@@ -1,36 +1,48 @@
 #include "asset/rTextureAtlasData.hpp"
 
+#include "xml/rXMLDocument.hpp"
+
+struct rTextureAtlasData::Impl{
+	std::vector<std::shared_ptr<rTextureAtlasData::Entry>> textureEntries;
+};
+
+rTextureAtlasData::rTextureAtlasData(){
+	_impl.reset(new Impl());
+}
+
+rTextureAtlasData::~rTextureAtlasData(){}
+
 void rTextureAtlasData::AddEntry(const rString& name, const rSize& textureSize, const rVector2& uvOrigin, const rVector2& uvSize) {
-	rTextureEntryRef textureEntry;
-	textureEntry.reset(new rTextureAtlasEntry(name, textureSize, uvOrigin, uvSize));
-	m_textureEntries.push_back(textureEntry);
+	std::shared_ptr<rTextureAtlasData::Entry> textureEntry;
+	textureEntry.reset(new Entry(name, textureSize, uvOrigin, uvSize));
+	_impl->textureEntries.push_back(textureEntry);
 }
 
 size_t rTextureAtlasData::GetNumEntries() const {
-	return m_textureEntries.size();
+	return _impl->textureEntries.size();
 }
 
 void rTextureAtlasData::Clear() {
-	m_textureEntries.clear();
+	_impl->textureEntries.clear();
 }
 
-const rTextureAtlasData::rTextureAtlasEntry* rTextureAtlasData::GetEntry(size_t index) const{
-	if (index >= m_textureEntries.size())
+const rTextureAtlasData::Entry* rTextureAtlasData::GetEntry(size_t index) const{
+	if (index >= _impl->textureEntries.size())
 		return nullptr;
 	else
-		return m_textureEntries[index].get();
+		return _impl->textureEntries[index].get();
 }
 
-rContentError rTextureAtlasData::Read(rIStream& stream) {
-	if (!stream.IsOk()) return rContentError::Error;
+int rTextureAtlasData::Read(rIStream& stream) {
+	if (!stream.IsOk()) return 1;
 
 	rXMLDocument doc;
 	int error = doc.LoadFromStream(stream);
-	if (error) return rContentError::Error;
+	if (error) return 1;
 
 	rXMLElement* textures = doc.GetRoot()->GetChild(0);
 
-	rTextureAtlasEntry entry;
+	Entry entry;
 
 	for (size_t i = 0; i < textures->NumChildren(); i++) {
 		rXMLElement* textureEntry = textures->GetChild(i);
@@ -52,33 +64,43 @@ rContentError rTextureAtlasData::Read(rIStream& stream) {
 		AddEntry(entry.name, entry.textureSize, entry.uvOrigin, entry.uvSize);
 	}
 
-	return rContentError::None;
+	return 0;
 }
 
-rContentError rTextureAtlasData::Write(rOStream& stream) {
-	if (!stream.IsOk()) return rContentError::Error;
+int rTextureAtlasData::Write(rOStream& stream) {
+	if (!stream.IsOk()) return 1;
 
 	rXMLDocument doc;
 	rXMLElement* textures = doc.CreateRoot("TextureAtlas")->CreateChild("Textures");
 
-	for (size_t i = 0; i < m_textureEntries.size(); i++) {
+	for (size_t i = 0; i < _impl->textureEntries.size(); i++) {
+		rTextureAtlasData::Entry* atlasDataEntry= _impl->textureEntries[i].get();
 		rXMLElement* textureEntry = textures->CreateChild("Texture");
 
-		rXMLElement* name = textureEntry->CreateChild("Name", m_textureEntries[i]->name);
+		rXMLElement* name = textureEntry->CreateChild("Name", atlasDataEntry->name);
 
 		rXMLElement* textureSize = textureEntry->CreateChild("TextureSize");
-		textureSize->AddAttribute("x", m_textureEntries[i]->textureSize.x);
-		textureSize->AddAttribute("y", m_textureEntries[i]->textureSize.y);
+		textureSize->AddAttribute("x", atlasDataEntry->textureSize.x);
+		textureSize->AddAttribute("y", atlasDataEntry->textureSize.y);
 
 		rXMLElement* uvOrigin = textureEntry->CreateChild("UVOrigin");
-		uvOrigin->AddAttribute("x", m_textureEntries[i]->uvOrigin.x);
-		uvOrigin->AddAttribute("y", m_textureEntries[i]->uvOrigin.y);
+		uvOrigin->AddAttribute("x", atlasDataEntry->uvOrigin.x);
+		uvOrigin->AddAttribute("y", atlasDataEntry->uvOrigin.y);
 
 		rXMLElement* uvSize = textureEntry->CreateChild("UVSize");
-		uvSize->AddAttribute("x", m_textureEntries[i]->uvSize.x);
-		uvSize->AddAttribute("y", m_textureEntries[i]->uvSize.y);
+		uvSize->AddAttribute("x", atlasDataEntry->uvSize.x);
+		uvSize->AddAttribute("y", atlasDataEntry->uvSize.y);
 	}
 
 	doc.WriteToStream(stream);
-	return rContentError::None;
+	return 0;
+}
+
+rTextureAtlasData::Entry::Entry() {}
+
+rTextureAtlasData::Entry::Entry(const rString& _name, const rSize& _textureSize, const rVector2& _uvOrigin, const rVector2& _uvSize){
+	name = _name;
+	textureSize = _textureSize;
+	uvOrigin = _uvOrigin;
+	uvSize = _uvSize;
 }

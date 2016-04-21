@@ -12,16 +12,14 @@
 
 #include "stream/rIStream.hpp"
 #include "stream/rOStream.hpp"
-#include "xml/rXMLDocument.hpp"
 
 
 
 class RECONDITE_API rTextureAtlasData {
 public:
-	struct rTextureAtlasEntry {
-		rTextureAtlasEntry() {}
-		rTextureAtlasEntry(const rString& _name, const rSize& _textureSize, const rVector2& _uvOrigin, const rVector2& _uvSize)
-			:name(_name), textureSize(_textureSize), uvOrigin(_uvOrigin), uvSize(_uvSize) {}
+	struct Entry {
+		Entry();
+		Entry(const rString& _name, const rSize& _textureSize, const rVector2& _uvOrigin, const rVector2& _uvSize);
 
 		rString name;
 		rSize textureSize;
@@ -30,20 +28,21 @@ public:
 	};
 
 public:
+	rTextureAtlasData();
+	~rTextureAtlasData();
+
 	void AddEntry(const rString& name, const rSize& textureSize, const rVector2& uvOrigin, const rVector2& uvSize);
-	const rTextureAtlasEntry* GetEntry(size_t index) const;
+	const Entry* GetEntry(size_t index) const;
 	size_t GetNumEntries() const;
 	void Clear();
 
 public:
-	rContentError Read(rIStream& stream);
-	rContentError Write(rOStream& stream);
+	int Read(rIStream& stream);
+	int Write(rOStream& stream);
 
 private:
-	typedef std::shared_ptr<rTextureAtlasEntry> rTextureEntryRef;
-	typedef std::vector<rTextureEntryRef> rTextureEntryArray;
-
-	rTextureEntryArray m_textureEntries;
+	struct Impl;
+	std::unique_ptr<Impl> _impl;
 };
 
 

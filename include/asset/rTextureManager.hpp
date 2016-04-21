@@ -1,9 +1,7 @@
 #ifndef R_TEXTUREMANAGER_HPP
 #define R_TEXTUREMANAGER_HPP
 
-#include <map>
 #include <memory>
-#include <functional>
 
 #include "rBuild.hpp"
 #include "rGraphicsDevice.hpp"
@@ -12,24 +10,28 @@
 #include "rAssetManager.hpp"
 #include "rTexture.hpp"
 #include "rTextureData.hpp"
-#include "rTextureFile.hpp"
 
 #include "rTextureAtlasData.hpp"
 
-class RECONDITE_API rTextureManager : public rAssetManager<rTexture, rTextureData, rTextureFile>{
+class RECONDITE_API rTextureManager {
 public:
 	rTextureManager(rGraphicsDevice* graphicsDevice, rFileSystem* fileSystem);
+	~rTextureManager();
 
 public:
-	bool LoadAtlas(const rString& path, const rString& name);
+	rTexture* LoadFromPath(const rString& path, const rString& name);
+	rTexture* Load(const rTextureData& textureData, const rString& name);
+	rTexture* Get(const rString& name);
 
-protected:
-	virtual rTexture* CreateAssetFromData(const rTextureData& textureData, const rString& name) override;
-	virtual void DisposeAsset(rTexture* texture) override;
-	
+	int Delete(const rString& name);
+
+	int LoadAtlasFromPath(const rString& path, const rString& name);
+
+	void Clear();
 
 private:
-	rGraphicsDevice* m_graphicsDevice;
+	struct Impl;
+	std::unique_ptr<Impl> _impl;
 };
 
 #endif

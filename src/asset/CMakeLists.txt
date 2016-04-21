@@ -3,7 +3,6 @@ set(asset_files)
 add_rec_src(asset_files "rTexture" "asset")
 add_rec_src(asset_files "rTextureManager" "asset")
 add_rec_src(asset_files "rTextureData" "asset")
-add_rec_src(asset_files "rTextureFile" "asset")
 
 add_rec_src(asset_files "rTextureAtlasData" "asset")
 

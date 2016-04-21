@@ -5,6 +5,7 @@
 
 #include "rBuild.hpp"
 #include "rDefs.hpp"
+#include "rString.hpp"
 
 namespace recondite { namespace import {
 	class RECONDITE_API ImageImporter {

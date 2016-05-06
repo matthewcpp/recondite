@@ -9,6 +9,8 @@
 #include "TextureAtlasImporter.hpp"
 #include "asset/rTextureAtlasData.hpp"
 
+#include "FontImporter.hpp"
+
 #include <iostream>
 
 namespace recondite { namespace tools {
@@ -21,8 +23,12 @@ namespace recondite { namespace tools {
 			this->ConvertImage(inputfile.c_str());
 		});
 
-		opts.AddOption(Keyword("texture_atlas", "ta"), [&](std::string manifest) {
+		opts.AddOption(Keyword("texture-atlas", "ta"), [&](std::string manifest) {
 			this->CreateTextureAtlas(manifest.c_str());
+		});
+
+		opts.AddOption(Keyword("font", "f"), [&](std::string manifest){
+			this->ConvertFont(manifest.c_str());
 		});
 
 		auto parseContext = opts.CreateParseContext(argv + 1, argv + argc);
@@ -93,6 +99,32 @@ namespace recondite { namespace tools {
 				auto outFile = m_fileSystem.GetWriteFileRef(textureOutPath);
 				textureData.Write(*outFile);
 			}
+		}
+
+		return error;
+	}
+
+	int Converter::ConvertFont(const rString& path){
+		std::cout << "Generate Font from file: " << path << std::endl;
+
+		import::FontImporter fontImporter;
+		int error = fontImporter.ReadManifestFromPath(path);
+
+		if (error){
+			std::cout << "font file parse failed." << std::endl;
+		}
+		else{
+			rFontData fontData;
+			rTextureData textureData;
+
+			error = fontImporter.GenerateFont(fontData, textureData);
+
+			rString outDir, outName;
+			rPath::Split(path, &outDir, &outName, nullptr);
+			rString textureOutPath = rPath::Assemble(outDir, outName, "rtex");
+
+			auto outFile = m_fileSystem.GetWriteFileRef(textureOutPath);
+			textureData.Write(*outFile);
 		}
 
 		return error;

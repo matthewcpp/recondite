@@ -63,7 +63,13 @@ void rTextureData::SetPixel(int x, int y, unsigned char r, unsigned char g, unsi
 }
 
 void rTextureData::SetPixel(int x, int y, const rColor& color){
-	SetPixel(x, y, color.red, color.green, color.blue, color.alpha);
+	size_t index = _impl->GetPixelIndex(x, y);
+	_impl->data[index] = color.red;
+	_impl->data[index + 1] = color.green;
+	_impl->data[index + 2] = color.blue;
+
+	if (_impl->bpp == 4)
+		_impl->data[index + 3] = color.alpha;
 }
 
 void rTextureData::GetPixel(int x, int y, rColor& color) const{

@@ -3,12 +3,12 @@
 
 #include "asset/rTextureData.hpp"
 
-#include "rBuild.hpp"
+#include "BuildImport.hpp"
 #include "rDefs.hpp"
 #include "rString.hpp"
 
 namespace recondite { namespace import {
-	class RECONDITE_API ImageImporter {
+	class RECONDITE_IMPORT_API ImageImporter {
 	public:
 		ImageImporter() {}
 		int ImportImage(const rString& path, rTextureData& data);

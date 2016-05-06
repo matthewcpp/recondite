@@ -1,9 +1,9 @@
 #ifndef R_POINT2_T_HPP
 #define R_POINT2_T_HPP
 
-#include <cmath>
+#include "rBuild.hpp"
 
-struct rVector2{
+struct RECONDITE_API rVector2{
 
 	rVector2(){}
 	rVector2(float xx , float yy) : x(xx) , y(yy) {}

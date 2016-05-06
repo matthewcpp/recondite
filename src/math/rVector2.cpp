@@ -1,5 +1,6 @@
 #include "rVector2.hpp"
 
+#include <cmath>
 
 float rVector2::Length() const{
 	return std::sqrt(x * x + y * y);

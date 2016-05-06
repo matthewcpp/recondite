@@ -1,5 +1,7 @@
 #include "RectPacker.hpp"
 
+#include "rMathUtil.hpp"
+
 namespace recondite { namespace import {
 	RectPacker::RectPacker(){
 		_maxSize.Set(1024, 1024);
@@ -95,5 +97,10 @@ namespace recondite { namespace import {
 
 	rSize RectPacker::GetResultSize() const{
 		return _resultSize;
+	}
+
+	void RectPacker::CalculatePackedUVForItem(Item* item, rVector2& uvOrigin, rVector2& uvSize){
+		uvOrigin.Set((float)item->packedLocation.x / _resultSize.x, 1.0 - ((float)item->packedLocation.y / _resultSize.y));
+		uvSize.Set((float)item->sourceSize.x / _resultSize.x, (float)item->sourceSize.y / _resultSize.y);
 	}
 }}

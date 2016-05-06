@@ -7,7 +7,8 @@
 
 #include "rSize.hpp"
 #include "rPoint.hpp"
-#include "rMathUtil.hpp"
+#include "rVector2.hpp"
+
 
 namespace recondite { namespace import {
 	class RectPacker {
@@ -26,6 +27,8 @@ namespace recondite { namespace import {
 		size_t GetItemCount() const;
 		bool Pack();
 		rSize GetResultSize() const;
+
+		void CalculatePackedUVForItem(Item* item, rVector2& uvOrigin, rVector2& uvSize);
 
 	public:
 		void SetMaxSize(const rSize& maxSize);

@@ -1,16 +1,11 @@
 #ifndef R_FONTMANAGER_HPP
 #define R_FONTMANAGER_HPP
 
-#include <map>
-#include <memory>
-#include <functional>
-
 #include "rBuild.hpp"
 #include "rFileSystem.hpp"
+#include "rString.hpp"
 
-#include "rAssetManager.hpp"
 #include "rTextureManager.hpp"
-
 #include "rFont.hpp"
 
 class RECONDITE_API rFontManager {

@@ -32,9 +32,6 @@ add_rec_src(asset_files "rModelFile" "asset")
 
 add_rec_src(asset_files "rFont" "asset")
 add_rec_src(asset_files "rFontManager" "asset")
-add_rec_src(asset_files "rFontData" "asset")
-add_rec_src(asset_files "rFontFile" "asset")
-add_rec_src(asset_files "rFontGlyph" "asset")
 
 add_rec_src(asset_files "rSkeleton")
 

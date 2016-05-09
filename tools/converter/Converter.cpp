@@ -114,17 +114,28 @@ namespace recondite { namespace tools {
 			std::cout << "font file parse failed." << std::endl;
 		}
 		else{
-			rFontData fontData;
+			Font::Family fontData;
 			rTextureData textureData;
 
 			error = fontImporter.GenerateFont(fontData, textureData);
 
-			rString outDir, outName;
-			rPath::Split(path, &outDir, &outName, nullptr);
-			rString textureOutPath = rPath::Assemble(outDir, outName, "rtex");
+			if (error){
+				std::cout << "font generation failed." << std::endl;
+				return 1;
+			}
+			else{
+				rString outDir, outName;
+				rPath::Split(path, &outDir, &outName, nullptr);
 
-			auto outFile = m_fileSystem.GetWriteFileRef(textureOutPath);
-			textureData.Write(*outFile);
+				rString fontOutPath = rPath::Assemble(outDir, outName, "rfnt");
+				rString textureOutPath = rPath::Assemble(outDir, outName, "rtex");
+
+				auto fontOutFile = m_fileSystem.GetWriteFileRef(fontOutPath);
+				fontData.Write(*fontOutFile);
+
+				auto texOutFile = m_fileSystem.GetWriteFileRef(textureOutPath);
+				textureData.Write(*texOutFile);
+			}
 		}
 
 		return error;

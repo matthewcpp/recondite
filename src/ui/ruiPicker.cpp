@@ -35,7 +35,7 @@ void ruiPicker::ShowOptionsMenu(){
 }
 
 rSize ruiPicker::ComputeSize(){
-	rFont* font = DetermineFont();;
+	Font::Face* font = DetermineFont();;
 	rSize computedSize(0,0);
 
 	if (font){
@@ -60,7 +60,7 @@ void ruiPicker::Draw(){
 	m_engine->renderer->RenderRect(box, color);
 	
 
-	rFont* font = DetermineFont();
+	Font::Face* font = DetermineFont();
 	
 	if (font){
 		rString text = SelectionText();

@@ -51,8 +51,8 @@ public:
 	
 	void RenderCircle(const rCircle2& circle, const rColor& color);
 
-	void RenderString(const rString& text, const rFont* font, const rPoint& pos, const rColor& color);
-	void RenderString(const rString& str, const rFont* font, const rRect& bounding, const rColor& color);
+	void RenderString(const rString& text, const Font::Face* font, const rPoint& pos, const rColor& color);
+	void RenderString(const rString& str, const Font::Face* font, const rRect& bounding, const rColor& color);
 
 	void RenderWireBox(const rAlignedBox3& box, const rColor color);
 

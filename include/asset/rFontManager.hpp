@@ -12,19 +12,23 @@
 #include "rTextureManager.hpp"
 
 #include "rFont.hpp"
-#include "rFontData.hpp"
-#include "rFontFile.hpp"
 
-class RECONDITE_API rFontManager : public rAssetManager < rFont, rFontData, rFontFile > {
+class RECONDITE_API rFontManager {
 public:
 	rFontManager(rFileSystem* fileSystem, rTextureManager* textureManager);
+	~rFontManager();
 
-protected:
-	virtual rFont* CreateAssetFromData(const rFontData& fontData, const rString& name) override;
-	virtual void DisposeAsset(rFont* font) override;
+public:
+	Font::Family* LoadFromPath(const rString& path, const rString& name);
+	Font::Family* Get(const rString& name);
+
+	int Delete(const rString& name);
+
+	void Clear();
 
 private:
-	rTextureManager* m_textureManager;
+	struct Impl;
+	Impl* _impl;
 };
 
 #endif

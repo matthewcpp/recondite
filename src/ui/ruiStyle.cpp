@@ -9,7 +9,7 @@ void ruiStyle::SetBool(const rString& key, bool val){
 	m_changed = true;
 }
 
-void ruiStyle::SetFont(const rString& key, rFont* font){
+void ruiStyle::SetFont(const rString& key, Font::Face* font){
 	rPropertyCollection::SetFont(key, font);
 	m_changed = true;
 }

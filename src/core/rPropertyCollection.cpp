@@ -98,12 +98,12 @@ bool rPropertyCollection::GetColor(const rString& key, rColor& val) const {
 	}
 }
 
-void rPropertyCollection::SetFont(const rString& key, rFont* val){
+void rPropertyCollection::SetFont(const rString& key, Font::Face* val){
 	DeleteProperty(key);
 	m_properties[key] = new rProperty(val);
 }
 
-bool rPropertyCollection::GetFont(const rString& key, rFont*& font) const{
+bool rPropertyCollection::GetFont(const rString& key, Font::Face*& font) const{
 	rPropertyMap::const_iterator p = m_properties.find(key);
 
 	if (p != m_properties.end()  && p->second->type == rPROPERTY_TYPE_FONT){
@@ -188,7 +188,7 @@ rProperty::rProperty(const rColor& c){
 	value.colorVal = new rColor(c);
 }
 
-rProperty::rProperty(rFont* f){
+rProperty::rProperty(Font::Face* f){
 	type = rPROPERTY_TYPE_FONT;
 	value.fontVal = f;
 }

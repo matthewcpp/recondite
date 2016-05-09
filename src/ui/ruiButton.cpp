@@ -37,7 +37,7 @@ void ruiButton::Draw(){
 	else
 		m_engine->renderer->RenderRect(box, color);
 	
-	rFont* font = DetermineFont();
+	Font::Face* font = DetermineFont();
 	
 	if (font){
 		color = rColor::Black;
@@ -58,7 +58,7 @@ rSize ruiButton::ComputeSize(){
 	style->GetInt("padding-bottom", padding[2]);
 	style->GetInt("padding-left", padding[3]);
 
-	rFont* font = DetermineFont();
+	Font::Face* font = DetermineFont();
 
 	rSize widgetSize(padding[1] + padding[3], padding[0] + padding[2]);
 

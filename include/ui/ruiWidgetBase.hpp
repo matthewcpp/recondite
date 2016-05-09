@@ -36,7 +36,7 @@ public:
 	void UiState(const rString& state);
 
 protected: //style related utility methods
-	rFont* DetermineFont();
+	Font::Face* DetermineFont();
 
 protected:
 	virtual rSize ComputeSize() = 0;

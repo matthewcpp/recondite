@@ -183,7 +183,7 @@ void rRenderer::RenderWireBox(const rAlignedBox3& box, const rColor color){
 
 }
 
-void rRenderer::RenderString(const rString& str, const rFont* font, const rRect& bounding, const rColor& color){
+void rRenderer::RenderString(const rString& str, const Font::Face* font, const rRect& bounding, const rColor& color){
 	if (font){
 		rImmediateBuffer geometry;
 		rGeometryUtil::Create2DText(str, font, bounding, geometry);
@@ -209,7 +209,7 @@ void rRenderer::RenderString(const rString& str, const rFont* font, const rRect&
 	}
 }
 
-void rRenderer::RenderString(const rString& text, const rFont* font, const rPoint& pos, const rColor& color){
+void rRenderer::RenderString(const rString& text, const Font::Face* font, const rPoint& pos, const rColor& color){
 	rRect bounding(pos.x, pos.y, INT_MAX, INT_MAX);
 	RenderString(text, font, bounding, color);
 }

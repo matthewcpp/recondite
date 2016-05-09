@@ -28,7 +28,7 @@ union rPropertyValue{
 	float floatVal;
 	rString* stringVal;
 	rColor* colorVal;
-	rFont* fontVal;
+	Font::Face* fontVal;
 	rTexture* textureVal;
 };
 
@@ -38,7 +38,7 @@ struct rProperty{
 	rProperty(float f);
 	rProperty(const rString& s);
 	rProperty(const rColor& c);
-	rProperty(rFont* f);
+	rProperty(Font::Face* f);
 	rProperty(rTexture* t);
 
 	~rProperty();
@@ -66,8 +66,8 @@ public:
 	void SetColor(const rString& key, const rColor& val);
 	bool GetColor(const rString& key, rColor& val) const;
 
-	void SetFont(const rString& key, rFont* val);
-	bool GetFont(const rString& key, rFont*& font) const;
+	void SetFont(const rString& key, Font::Face* val);
+	bool GetFont(const rString& key, Font::Face*& font) const;
 
 	void SetTexture(const rString& key, rTexture* val);
 	bool GetTexture(const rString& key, rTexture*& texture) const;

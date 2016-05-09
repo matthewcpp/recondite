@@ -1,8 +1,6 @@
 #ifndef R_TEXTUREMANAGER_HPP
 #define R_TEXTUREMANAGER_HPP
 
-#include <memory>
-
 #include "rBuild.hpp"
 #include "rGraphicsDevice.hpp"
 #include "rFileSystem.hpp"
@@ -31,7 +29,7 @@ public:
 
 private:
 	struct Impl;
-	std::unique_ptr<Impl> _impl;
+	Impl* _impl;
 };
 
 #endif

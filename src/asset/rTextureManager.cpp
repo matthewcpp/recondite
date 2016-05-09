@@ -14,12 +14,14 @@ struct rTextureManager::Impl{
 
 rTextureManager::rTextureManager(rGraphicsDevice* graphicsDevice, rFileSystem* fileSystem)
 {
-	_impl.reset(new Impl());
+	_impl =new Impl();
 	_impl->graphicsDevice = graphicsDevice;
 	_impl->fileSystem = fileSystem;
 }
 
-rTextureManager::~rTextureManager(){}
+rTextureManager::~rTextureManager(){
+	delete _impl;
+}
 
 rTexture* rTextureManager::LoadFromPath(const rString& path, const rString& name){
 	if (Get(name)) return nullptr;

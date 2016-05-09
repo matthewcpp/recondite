@@ -18,16 +18,16 @@ namespace recondite { namespace import {
 
 	struct FaceDescription{
 		FaceDescription(){}
-		FaceDescription(const rString& _path, uint16_t _size, rFontStyle _fontStyle)
+		FaceDescription(const rString& _path, uint16_t _size, Font::Style _fontStyle)
 			:path(_path), size(_size), fontStyle(_fontStyle){}
 
 		rString path;
 		uint16_t size;
-		rFontStyle fontStyle;
+		Font::Style fontStyle;
 		std::vector<FontGlyphRect> glyphRects;
 
 		FT_Face fontFace;
-		rFontData::FaceData* faceData;
+		Font::Face* faceData;
 	};
 
 	struct FontImporter::Impl{
@@ -36,11 +36,11 @@ namespace recondite { namespace import {
 		std::vector<uint32_t> scancodes;
 
 
-		int InitFontFaces(FT_Library freetypeLibrary, rFontData& fontData);
+		int InitFontFaces(FT_Library freetypeLibrary, Font::Family& fontData);
 		int UninitFontFaces(FT_Library freetypeLibrary);
 
-		int GenerateGlyphRects(FT_Library freetypeLibrary, RectPacker& rectPacker, rFontData& fontData);
-		int GenerateGlyphBitmap(FT_Library freetypeLibrary, RectPacker& rectPacker, rFontData& fontData, rTextureData& textureData);
+		int GenerateGlyphRects(FT_Library freetypeLibrary, RectPacker& rectPacker, Font::Family& fontData);
+		int GenerateGlyphBitmap(FT_Library freetypeLibrary, RectPacker& rectPacker, Font::Family& fontData, rTextureData& textureData);
 	};
 
 	FontImporter::FontImporter(){
@@ -65,16 +65,16 @@ namespace recondite { namespace import {
 		return ReadManifestFromStream(stream);
 	}
 
-	rFontStyle GetStyleFromFaceElement(rXMLElement* element){
+	Font::Style GetStyleFromFaceElement(rXMLElement* element){
 		rString styleName;
 		element->GetChild(1)->GetText(styleName);
 
 		if (styleName == "Bold")
-			return rFontStyle::Bold;
+			return Font::Style::Bold;
 		else if (styleName == "Italic")
-			return rFontStyle::Italic;
+			return Font::Style::Italic;
 		else
-			return rFontStyle::Normal;
+			return Font::Style::Normal;
 	}
 
 	int FontImporter::ReadManifestFromStream(rIStream& stream){
@@ -101,7 +101,7 @@ namespace recondite { namespace import {
 		return 0;
 	}
 
-	int FontImporter::AddFaceDescription(const rString& path, uint16_t size, rFontStyle style){
+	int FontImporter::AddFaceDescription(const rString& path, uint16_t size, Font::Style style){
 		_impl->faceDescriptions.push_back(FaceDescription(path, size, style));
 
 		return 0;
@@ -111,11 +111,11 @@ namespace recondite { namespace import {
 		_impl->assetPathPrefix = assetPrefix;
 	}
 
-	int FontImporter::Impl::InitFontFaces(FT_Library freetypeLibrary, rFontData& fontData){
+	int FontImporter::Impl::InitFontFaces(FT_Library freetypeLibrary, Font::Family& fontData){
 		int error = 0;
 
 		for (auto& faceDescription: faceDescriptions){
-			faceDescription.faceData = fontData.CreateFontFace(faceDescription.size, faceDescription.fontStyle);
+			faceDescription.faceData = fontData.CreateFace(faceDescription.size, faceDescription.fontStyle);
 			
 			rString fontFilePath;
 			if (assetPathPrefix.empty()){
@@ -142,7 +142,7 @@ namespace recondite { namespace import {
 		return 0;
 	}
 
-	int FontImporter::Impl::GenerateGlyphRects(FT_Library freetypeLibrary, RectPacker& rectPacker, rFontData& fontData){
+	int FontImporter::Impl::GenerateGlyphRects(FT_Library freetypeLibrary, RectPacker& rectPacker, Font::Family& fontData){
 		int error = 0;
 
 		for (size_t i = 0; i < faceDescriptions.size(); i++){
@@ -167,7 +167,7 @@ namespace recondite { namespace import {
 		return error;
 	}
 
-	int FontImporter::Impl::GenerateGlyphBitmap(FT_Library freetypeLibrary, RectPacker& rectPacker, rFontData& fontData, rTextureData& textureData){
+	int FontImporter::Impl::GenerateGlyphBitmap(FT_Library freetypeLibrary, RectPacker& rectPacker, Font::Family& fontData, rTextureData& textureData){
 		int error = 0;
 		rSize resultSize = rectPacker.GetResultSize();
 		textureData.Allocate(resultSize.x, resultSize.y, 4, rColor::Transparent);
@@ -184,8 +184,6 @@ namespace recondite { namespace import {
 				rectPacker.CalculatePackedUVForItem(&faceDescription.glyphRects[i], uvOrigin, uvSize);
 				faceDescription.faceData->SetGlyph(i, scancodes[i], glyph->bitmap.width, glyph->bitmap.rows, glyph->bitmap_top, glyph->bitmap_left, (glyph->advance.x >> 6), uvOrigin, uvSize);
 				
-				//write glyph into texture
-				// glyph->bitmap.buffer
 				rColor pixel = rColor::White;
 
 				for (int h = 0; h < glyph->bitmap.rows; h++){
@@ -201,7 +199,7 @@ namespace recondite { namespace import {
 		return error;
 	}
 
-	int FontImporter::GenerateFont(rFontData& fontData, rTextureData& textureData){
+	int FontImporter::GenerateFont(Font::Family& fontData, rTextureData& textureData){
 		FT_Library freetypeLibrary;
 		
 		RectPacker rectPacker;

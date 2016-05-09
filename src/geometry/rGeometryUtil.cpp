@@ -134,89 +134,10 @@ void rGeometryUtil::CreateWireAlignedBoxVerticies(const rAlignedBox3& box,  rImm
 	geometry.PushVertex(box.min.x, box.min.y, box.min.z);
 }
 
-void WriteWord(rFontGlyphArray& glyphs, rImmediateBuffer& geometry, int startX, int startY){
-	int xPos = startX;
-	int yPos = startY;
 
-	rFontGlyph* glyph = NULL;
-	for (size_t i = 0; i < glyphs.size(); i++){
-		glyph = glyphs[i];
 
-		int left = xPos + glyph->leftBearing;
-		int right = left + glyph->width;
-		int top = yPos - glyph->top;
-		int bottom = top + glyph->height;
-
-		size_t index = geometry.VertexCount();
-		geometry.PushVertex(left, top, glyph->texCoords[0].x, glyph->texCoords[0].y);
-		geometry.PushVertex(right , top, glyph->texCoords[1].x, glyph->texCoords[1].y);
-		geometry.PushVertex(right, bottom , glyph->texCoords[2].x, glyph->texCoords[2].y);
-		geometry.PushVertex(left, bottom, glyph->texCoords[3].x, glyph->texCoords[3].y);
-
-		geometry.PushIndex(index, index + 1, index + 2);
-		geometry.PushIndex(index, index + 2, index + 3);
-
-		xPos += glyph->advance;
-	}
-
-	glyphs.clear();
-}
-
-void rGeometryUtil::Create2DText(const rString& str, const rFont* font, const rRect& bounding, rImmediateBuffer& geometry){
-	rFontGlyphArray wordGlyphs;
-
-	geometry.Reset(rGeometryType::Triangles, 2, true);
-
-	int xPos = 0;
-	int yPos = font->Ascender();
-
-	int wordWidth = 0;
-	int spaceLeft = bounding.width;
-
-	int lineCount = 0;
-
-	for (int i = 0; i < str.size(); i++){
-		int c = str[i];
-
-		if (c == '\n'){
-			if (wordWidth > spaceLeft ){ //current word will not fit on this line
-				yPos += font->LineHeight();
-				xPos = 0;
-			}
-
-			WriteWord(wordGlyphs, geometry, xPos, yPos);
-
-			yPos += font->LineHeight();
-			xPos = 0;
-			spaceLeft = bounding.width;
-			wordWidth = 0;
-
-		}
-		else{
-			rFontGlyph* glyph = font->GetGlyph(c);
-
-			if (c == ' '){
-				if (wordWidth + glyph->advance > spaceLeft ){ //current word will not fit on this line
-					yPos += font->LineHeight();
-					xPos = 0;
-					spaceLeft = bounding.width;
-				}
-
-				WriteWord(wordGlyphs, geometry, xPos, yPos);
-
-				spaceLeft -= wordWidth + glyph->advance;
-				xPos += wordWidth + glyph->advance;;
-				wordWidth = 0;
-
-			}
-			else{
-				wordWidth += glyph->advance;
-				wordGlyphs.push_back(glyph);
-			}
-		}
-	}
-
-	WriteWord(wordGlyphs, geometry, xPos, yPos);
+void rGeometryUtil::Create2DText(const rString& str, const Font::Face* font, const rRect& bounding, rImmediateBuffer& geometry){
+	
 }
 
 void BuildBoneGeometry(rImmediateBuffer& pointData, rImmediateBuffer& lineData, rBone* bone, unsigned short parentVertexIndex){

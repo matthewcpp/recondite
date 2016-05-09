@@ -7,7 +7,7 @@
 #include "rString.hpp"
 
 #include "stream/rIFileStream.hpp"
-#include "asset/rFontData.hpp"
+#include "asset/rFont.hpp"
 #include "asset/rTextureData.hpp"
 
 namespace recondite { namespace import {
@@ -19,13 +19,13 @@ namespace recondite { namespace import {
 
 	public:
 		void SetAssetPathPrefix(const rString& assetPrefix);
-		int AddFaceDescription(const rString& path, uint16_t size, rFontStyle style);
+		int AddFaceDescription(const rString& path, uint16_t size, Font::Style style);
 
 	public:
 		int ReadManifestFromPath(const rString& path);
 		int ReadManifestFromStream(rIStream& stream);
 
-		int GenerateFont(rFontData& fontData, rTextureData& textureData);
+		int GenerateFont(Font::Family& fontData, rTextureData& textureData);
 
 	private:
 		struct Impl;

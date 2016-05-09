@@ -29,7 +29,7 @@ void ruiText::Draw(){
 	if (style->GetColor("background-color", color))
 		m_engine->renderer->RenderRect(boundingBox, color);
 
-	rFont* font = DetermineFont();
+	Font::Face* font = DetermineFont();
 	
 	if (font){
 		color.Set(255,255,255,255);
@@ -45,7 +45,7 @@ rString ruiText::GetWidgetType() const{
 
 rSize ruiText::ComputeSize(){
 	ruiStyle* style = ComputedStyle();
-	rFont* font = DetermineFont();
+	Font::Face* font = DetermineFont();
 
 	if (font)
 		return font->MeasureString(m_text);

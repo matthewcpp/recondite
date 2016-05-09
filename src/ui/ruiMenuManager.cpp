@@ -52,12 +52,13 @@ void ruiMenuManager::CalculateMenuSize(rEngine& engine){
 	ruiStyle* style = GetStyle();
 	rString fontName;
 	style->GetString("font", fontName);
-	rFont* font = engine.content->Fonts()->Get(fontName);
-
+	//rFont* font = engine.content->Fonts()->Get(fontName);
+	
+	Font::Face* font = nullptr;
 	if (!font) return;
 
 	size_t menuItemCount = m_menu->NumItems();
-	m_rowHeight = font->LineHeight();
+	//m_rowHeight = font->LineHeight();
 
 	for (size_t i = 0; i < menuItemCount; i++){
 		m_menuSize.y += m_rowHeight;
@@ -72,8 +73,8 @@ void ruiMenuManager::Draw(rEngine& engine){
 	ruiStyle* style = GetStyle();
 	rString fontName;
 	style->GetString("font", fontName);
-	rFont* font = engine.content->Fonts()->Get(fontName);
-
+	//rFont* font = engine.content->Fonts()->Get(fontName);
+	Font::Face* font = nullptr;
 	if (!font) return;
 
 	if (m_menuSize == rSize::Default)

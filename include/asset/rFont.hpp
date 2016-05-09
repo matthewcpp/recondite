@@ -3,51 +3,85 @@
 
 #include <map>
 #include <algorithm>
-#include <climits>
+#include <cstdint>
 
 #include "rBuild.hpp"
 #include "rString.hpp"
 
-#include "rFontGlyph.hpp"
 #include "asset/rTexture.hpp"
+
+#include "stream/rIStream.hpp"
+#include "stream/rOStream.hpp"
 
 #include "rSize.hpp"
 
-typedef std::map<int, rFontGlyph*> rFontGlyphMap;
 
-class RECONDITE_API rFont{
-public:
-	rFont(const rString& name, rTexture* texture, size_t size, size_t lineHeight, size_t ascender, size_t descender);
-	~rFont();
-	
-	rFontGlyph* GetGlyph(int scancode) const;
-	rFontGlyph* AddGlyph(const rFontGlyph& g);
-	size_t NumGlyphs() const;
-	rTexture* Texture() const;
-	
-	rSize MeasureString(const rString& str, int lineWidth = INT_MAX) const;
 
-	void RemoveGlyph(int scancode);
-	
-	void Clear();
-	
-	size_t Size() const;
-	size_t LineHeight() const;
-	size_t Ascender() const;
-	size_t Descender() const;
+namespace Font{
+	enum class Style : unsigned char{
+		Normal, Bold, Italic
+	};
 
-	rString Name() const;
+	struct RECONDITE_API Glyph{
+		uint32_t scancode;
+		int16_t width;
+		int16_t height;
+		int16_t top;
+		int16_t leftBearing;
+		int16_t advance;
 
-private:
+		rVector2 uvOrigin;
+		rVector2 uvSize;
+	};
 
-	rFontGlyphMap m_glyphs;
-	rTexture* m_texture;
-	size_t m_size;
-	size_t m_lineHeight;
-	size_t m_ascender;
-	size_t m_descender;
+	class Family;
 
-	rString m_name;
-};
+	class RECONDITE_API Face{
+	public:
+		Face(uint16_t size, Style style);
+		Face();
+		~Face();
+
+		Glyph* GetGlyph(uint32_t scancode);
+
+		void AllocateGlyphs(size_t size);
+		size_t NumGlyphs();
+
+		void SetFaceMetrics(int16_t lineHeight, int16_t ascender, int16_t descender);
+		bool SetGlyph(uint32_t index, uint32_t scancode, int16_t width, int16_t height, int16_t top, int16_t leftBearing, int16_t advance, const rVector2& uvOrigin, const rVector2& uvSize);
+
+		rSize MeasureString(const rString& text);
+
+		uint16_t GetSize();
+		Style GetStyle();
+
+	private:
+		friend class Family;
+
+	private:
+		struct Impl;
+		Impl* _impl;
+	};
+
+	class RECONDITE_API Family{
+	public:
+		Family();
+		~Family();
+
+		Face* GetFace(size_t size, Style style);
+		Face* CreateFace(size_t size, Style style);
+
+		rString GetName();
+		void SetName(const rString& name);
+
+	public:
+		int Read(rIStream& stream);
+		int Write(rOStream& stream);
+
+	private:
+		struct Impl;
+		Impl* _impl;
+	};
+}
 
 #endif

@@ -38,7 +38,7 @@ namespace recondite { namespace import {
 	bool RectPacker::Pack(){
 		std::vector<Item*> itemsToPack = _itemList;
 		std::sort(itemsToPack.begin(), itemsToPack.end(), [](Item* item1, Item* item2) -> bool {
-			return item1->sourceSize.y < item2->sourceSize.y;
+			return item1->sourceSize.y > item2->sourceSize.y;
 		});
 
 

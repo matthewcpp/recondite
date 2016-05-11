@@ -2,6 +2,7 @@
 #define R_RENDERER_HPP
 
 #include <climits>
+#include <memory>
 
 #include "rBuild.hpp"
 #include "rDefs.hpp"
@@ -88,7 +89,7 @@ private:
 
 
 		size_t m_objectsRendered;
-		rSpriteBatch m_spriteBatch;
+		std::unique_ptr<rSpriteBatch> m_spriteBatch;
 };
 
 #endif

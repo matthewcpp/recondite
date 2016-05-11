@@ -38,8 +38,8 @@ namespace Font{
 
 	class RECONDITE_API Face{
 	public:
-		Face(uint16_t size, Style style);
-		Face();
+		Face(uint16_t size, Style style, Family* family);
+		Face(Family* family);
 		~Face();
 
 		Glyph* GetGlyph(uint32_t scancode);
@@ -54,6 +54,11 @@ namespace Font{
 
 		uint16_t GetSize();
 		Style GetStyle();
+		int16_t GetAscender();
+		int16_t GetDescender();
+		int16_t GetLineHeight();
+
+		Family* GetFamily();
 
 	private:
 		friend class Family;

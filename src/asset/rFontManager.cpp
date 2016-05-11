@@ -65,3 +65,7 @@ int rFontManager::Delete(const rString& name){
 void rFontManager::Clear(){
 
 }
+
+rTexture* rFontManager::GetFontTexture(Font::Face* face){
+	return _impl->textureManager->Get(face->GetFamily()->GetName() + "::Texture");
+}

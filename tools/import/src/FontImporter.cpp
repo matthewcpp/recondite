@@ -128,7 +128,7 @@ namespace recondite { namespace import {
 			error = FT_New_Face(freetypeLibrary, fontFilePath.c_str(), 0, &faceDescription.fontFace);
 			FT_Set_Pixel_Sizes(faceDescription.fontFace, 0, faceDescription.size);
 
-			faceDescription.faceData->SetFaceMetrics(faceDescription.fontFace->height >> 6, faceDescription.fontFace->ascender >> 6, faceDescription.fontFace->descender >> 6);
+			faceDescription.faceData->SetFaceMetrics(faceDescription.fontFace->size->metrics.height >> 6, faceDescription.fontFace->size->metrics.ascender >> 6, faceDescription.fontFace->size->metrics.descender >> 6);
 		}
 
 		return error;

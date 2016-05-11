@@ -17,6 +17,8 @@ public:
 	Font::Family* LoadFromPath(const rString& path, const rString& name);
 	Font::Family* Get(const rString& name);
 
+	rTexture* GetFontTexture(Font::Face* face);
+
 	int Delete(const rString& name);
 
 	void Clear();

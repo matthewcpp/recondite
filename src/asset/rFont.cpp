@@ -15,22 +15,31 @@ namespace Font{
 
 	struct Face::Impl{
 		FaceDataMetrics metrics;
+		Family* family;
 		std::vector<Glyph> glyphs;
 	};
 
-	Face::Face(uint16_t size, Font::Style style){
+	Face::Face(uint16_t size, Font::Style style, Family* family){
 		_impl = new Impl();
 
 		_impl->metrics.size = size;
 		_impl->metrics.style = style;
+		_impl->family = family;
 	}
 
-	Face::Face(){
+	Face::Face(Family* family){
 		_impl = new Impl();
+		_impl->metrics.size = 0;
+		_impl->metrics.style = Style::Normal;
+		_impl->family = family;
 	}
 
 	Face::~Face(){
 		delete _impl;
+	}
+
+	Family* Face::GetFamily(){
+		return _impl->family;
 	}
 
 	bool SearchForGlyph(uint32_t scancode, const std::vector<Glyph>& glyphs, size_t min, size_t max, size_t& result){
@@ -47,14 +56,14 @@ namespace Font{
 			size_t midpoint = (min + max) / 2;
 
 			if (glyphs[midpoint].scancode == scancode){
-				result = glyphs[midpoint].scancode;
+				result = midpoint;
 				return true;
 			}
 			else if (glyphs[midpoint].scancode > scancode){
-				return SearchForGlyph(scancode, glyphs, midpoint + 1, max, result);
+				return SearchForGlyph(scancode, glyphs, min, midpoint - 1, result);
 			}
 			else{
-				return SearchForGlyph(scancode, glyphs, min, midpoint - 1, result);
+				return SearchForGlyph(scancode, glyphs, midpoint + 1, max, result);
 			}
 		}
 	}
@@ -102,6 +111,26 @@ namespace Font{
 		_impl->metrics.descender = descender;
 	}
 
+	uint16_t Face::GetSize(){
+		return _impl->metrics.size;
+	}
+
+	Style Face::GetStyle(){
+		return _impl->metrics.style;
+	}
+
+	int16_t Face::GetAscender(){
+		return _impl->metrics.ascender;
+	}
+
+	int16_t Face::GetDescender(){
+		return _impl->metrics.descender;
+	}
+
+	int16_t Face::GetLineHeight(){
+		return _impl->metrics.lineHeight;
+	}
+
 	struct rFontFileHeader;
 
 	struct Family::Impl{
@@ -120,11 +149,16 @@ namespace Font{
 	}
 
 	Face* Family::GetFace(size_t size, Font::Style style){
+		for (size_t i = 0; i < _impl->faces.size(); i++){
+			if (_impl->faces[i]->GetSize() == size && _impl->faces[i]->GetStyle() == style)
+				return _impl->faces[i].get();
+		}
+
 		return nullptr;
 	}
 
 	Face* Family::CreateFace(size_t size, Font::Style style){
-		Face* face = new Face(size, style);
+		Face* face = new Face(size, style, this);
 		_impl->faces.emplace_back(face);
 
 		return face;
@@ -164,7 +198,7 @@ namespace Font{
 		stream.Read((char*)&header, sizeof(rFontFileHeader));
 
 		for (uint32_t i = 0; i < header.numFaces; i++){
-			Face* face = new Face();
+			Face* face = new Face(this);
 			stream.Read((char*)&face->_impl->metrics, sizeof(FaceDataMetrics));
 
 			uint32_t numGlyphs;

@@ -10,6 +10,8 @@ struct rFontManager::Impl{
 	rFileSystem* fileSystem;
 	std::map<rString, std::unique_ptr<Font::Family>> fonts;
 
+	Font::Family systemDefault;
+
 	Impl(rFileSystem* _fileSystem, rTextureManager* _textureManager)
 	: fileSystem(_fileSystem), textureManager(_textureManager) {}
 };
@@ -29,7 +31,9 @@ Font::Family* rFontManager::LoadFromPath(const rString& path, const rString& nam
 	rPath::Split(path, &outDir, &outName, nullptr);
 
 	rString textureFilePath = rPath::Assemble(outDir, name, "rtex");
-	if (_impl->textureManager->LoadFromPath(textureFilePath, name + "::Texture") == nullptr)
+	rString textureName = name + "::Texture";
+
+	if (_impl->textureManager->LoadFromPath(textureFilePath, textureName) == nullptr)
 		return nullptr;
 
 	auto fontFile = _impl->fileSystem->GetReadFileRef(path);
@@ -45,6 +49,7 @@ Font::Family* rFontManager::LoadFromPath(const rString& path, const rString& nam
 	}
 	else
 	{
+		_impl->textureManager->Delete(textureName);
 		return nullptr;
 	}
 }
@@ -68,4 +73,8 @@ void rFontManager::Clear(){
 
 rTexture* rFontManager::GetFontTexture(Font::Face* face){
 	return _impl->textureManager->Get(face->GetFamily()->GetName() + "::Texture");
+}
+
+Font::Face* rFontManager::SystemDefault(){
+	return Get("__default_font__")->GetFace(14, Font::Style::Normal);
 }

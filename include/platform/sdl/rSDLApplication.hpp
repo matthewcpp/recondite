@@ -32,10 +32,14 @@ public:
 
 	virtual unsigned long GetTimeMiliseconds() const;
 
+	virtual rString GetBasePath();
+
 protected:
 	rSDLGraphicsDevice* m_graphicsDevice;
 	rOpenGLContentManager* m_contentManager;
 	rSDLInputManager* m_inputManager;
+
+	rString m_basePath;
 
 	SDL_Window* m_window;
 	SDL_GLContext m_glContext;

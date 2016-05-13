@@ -23,6 +23,8 @@ public:
 
 	void Clear();
 
+	Font::Face* SystemDefault();
+
 private:
 	struct Impl;
 	Impl* _impl;

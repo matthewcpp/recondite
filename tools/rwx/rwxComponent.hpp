@@ -5,6 +5,7 @@
 
 #include "wx/wx.h"
 #include "wx/glcanvas.h"
+#include "wx/stdpaths.h"
 
 #include "rBuild.hpp"
 
@@ -25,6 +26,8 @@ public:
 	wxGLContext* GetContext();
 
 	virtual void RenderScene(rViewport* viewport);
+
+	virtual rString GetBasePath();
 
 public:
 	virtual bool Init(wxGLCanvas* canvas);

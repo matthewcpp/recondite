@@ -1,5 +1,7 @@
 #include "ui/ruiOverlayManager.hpp"
 
+#include "ui/ruiOverlayLoader.hpp"
+
 ruiOverlayManager::ruiOverlayManager(rEngine* engine){
 	m_engine = engine;
 }
@@ -10,14 +12,14 @@ ruiOverlayManager::~ruiOverlayManager(){
 
 ruiOverlay* ruiOverlayManager::CreateOverlay(rViewport* viewport){
 
-	ruiOverlay* overlay = new ruiOverlay(viewport);
+	ruiOverlay* overlay = new ruiOverlay(m_engine, viewport);
 	AddOverlayToViewport(overlay, viewport);
 
 	return overlay;
 }
 
-ruiOverlay* ruiOverlayManager::CreateOverlay(const rString& filePath, rViewport* viewport){
-	ruiOverlayLoader loader(m_engine, this);
+ruiOverlay* ruiOverlayManager::LoadOverlay(const rString& filePath, rViewport* viewport){
+	ruiOverlayLoader loader(m_engine);
 	ruiOverlay* overlay = loader.ParseOverlay(filePath, viewport);
 
 	if (overlay){
@@ -47,7 +49,6 @@ void ruiOverlayManager::Clear(){
 	}
 
 	m_overlays.clear();
-	m_styleManager.Clear();
 }
 
 rViewport* ruiOverlayManager::DetermineViewport(const rPoint& point){
@@ -81,16 +82,12 @@ ruiOverlay* ruiOverlayManager::GetOverlay(rViewport* viewport) const{
 		return NULL;
 }
 
-ruiStyleManager* ruiOverlayManager::Styles(){
-	return &m_styleManager;
-}
-
-void ruiOverlayManager::Update(rEngine& engine){
+void ruiOverlayManager::Update(){
 	ruiViewportOverlayMap::iterator end = m_overlays.end();
 
 	for (ruiViewportOverlayMap::iterator it = m_overlays.begin(); it != end; ++it){
 		m_activeOverlay = it->second;
-		it->second->Update(engine);
+		it->second->Update();
 	}
 
 	m_activeOverlay = NULL;
@@ -102,16 +99,11 @@ void ruiOverlayManager::Draw(rViewport* viewport){
 
 	if (m_overlays.count(viewport)){
 		m_activeOverlay = m_overlays[viewport];
-		m_activeOverlay->Draw(*m_engine);
+		m_activeOverlay->Draw();
 	}
 
 	m_activeOverlay = NULL;
 }
-
-void ruiOverlayManager::DrawFinal(){
-	m_menuManager.Draw(*m_engine);
-}
-
 bool ruiOverlayManager::InsertKeyEvent(rKey key, rKeyState state){
 	return false;
 }
@@ -131,7 +123,7 @@ bool ruiOverlayManager::InsertMouseButtonEvent(rMouseButton button, rButtonState
 
 bool ruiOverlayManager::ProcessMouseDown(rMouseButton button, const rPoint& position){
 	ruiMouseEvent event(button, rBUTTON_STATE_DOWN, position);
-	m_menuManager.Trigger(ruiEVT_MOUSE_DOWN, event);
+	//m_menuManager.Trigger(ruiEVT_MOUSE_DOWN, event);
 
 	if (event.Handled())
 		return true;
@@ -152,7 +144,7 @@ bool ruiOverlayManager::ProcessMouseDown(rMouseButton button, const rPoint& posi
 
 bool ruiOverlayManager::InsertMouseMotionEvent(const rPoint& position){
 	ruiMouseEvent event(position);
-	m_menuManager.Trigger(ruiEVT_MOUSE_MOTION, event);
+	//m_menuManager.Trigger(ruiEVT_MOUSE_MOTION, event);
 
 	if (event.Handled())
 		return true;
@@ -191,7 +183,7 @@ bool ruiOverlayManager::InsertMouseMotionEvent(const rPoint& position){
 
 bool ruiOverlayManager::ProcessMouseUp(rMouseButton button, const rPoint& position){
 	ruiMouseEvent event(button, rBUTTON_STATE_UP, position);
-	m_menuManager.Trigger(ruiEVT_MOUSE_UP, event);
+	//m_menuManager.Trigger(ruiEVT_MOUSE_UP, event);
 
 	if (event.Handled())
 		return true;
@@ -232,16 +224,4 @@ bool ruiOverlayManager::InsertMouseWheelEvent(const rPoint& position, rMouseWhee
 	}
 
 	return false;
-}
-
-bool ruiOverlayManager::ShowContextMenu(ruiMenu* menu, const rPoint& position, rEventHandler* handler){
-	return ShowContextMenu(menu, NULL, position, handler);
-}
-
-bool ruiOverlayManager::ShowContextMenu(ruiMenu* menu, ruiStyle* style, const rPoint& position, rEventHandler* handler){
-	return m_menuManager.ShowContextMenu(menu, style, position, handler);
-}
-
-void ruiOverlayManager::CancelContextMenu(){
-	m_menuManager.CancelContextMenu();
 }

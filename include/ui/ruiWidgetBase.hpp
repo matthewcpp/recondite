@@ -6,12 +6,13 @@
 #include "rString.hpp"
 #include "rEngine.hpp"
 #include "rObject.hpp"
+#include "ruiStyle.hpp"
 
-#include "ui/ruiInterface.hpp"
+class ruiOverlay;
 
 class RECONDITE_API ruiWidgetBase : public rObject{
 public:
-	ruiWidgetBase(const rString& id, ruiIManager* ui, rEngine* engine);
+	ruiWidgetBase(const rString& id, ruiOverlay* overlay, rEngine* engine);
 
 public:
 	virtual rRect BoundingBox() = 0;
@@ -48,7 +49,7 @@ private:
 	void ExtendStyle(const rString& selector);
 
 protected:
-	ruiIManager* m_ui;
+	ruiOverlay* m_overlay;
 	
 private:
 	ruiStyle m_style;

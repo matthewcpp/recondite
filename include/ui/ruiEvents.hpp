@@ -5,6 +5,7 @@
 #include "rEventHandler.hpp"
 
 #include "input/rMouse.hpp"
+#include "ui/ruiMenu.hpp"
 
 #include "ruiWidgetBase.hpp"
 

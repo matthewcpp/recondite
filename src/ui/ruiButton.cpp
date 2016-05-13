@@ -1,7 +1,7 @@
 #include "ui/ruiButton.hpp"
 
-ruiButton::ruiButton(const rString& text, const rString& id, ruiIManager* ui, rEngine* engine)
-	:ruiWidget(id, ui, engine)
+ruiButton::ruiButton(const rString& text, const rString& id, ruiOverlay* overlay, rEngine* engine)
+	:ruiWidget(id, overlay, engine)
 {
 	m_text = text;
 	m_state = rBUTTON_STATE_UP;

@@ -11,14 +11,9 @@
 #include "rViewport.hpp"
 
 #include "ui/ruiOverlay.hpp"
-#include "ui/ruiWidget.hpp"
 #include "ui/ruiInterface.hpp"
-#include "ui/ruiStyleManager.hpp"
 #include "ui/ruiEvents.hpp"
-#include "ui/ruiMenu.hpp"
 #include "ui/ruiMenuManager.hpp"
-
-#include "ui/ruiOverlayLoader.hpp"
 
 class RECONDITE_API ruiOverlayManager : public ruiIManager {
 public:
@@ -34,20 +29,14 @@ public:
 	virtual bool InsertTouchEvent(int id, const rPoint& position, rTouchType type);
 	virtual bool InsertKeyEvent(rKey key, rKeyState state);
 	
-	void Update(rEngine& engine);
+	void Update();
 	void Draw(rViewport* viewport);
-	void DrawFinal();
 
 	void Clear();
 
-	ruiOverlay* CreateOverlay(rViewport* viewport);
-	ruiOverlay* CreateOverlay(const rString& filePath, rViewport* viewport);
-	ruiOverlay* GetOverlay(rViewport* viewport) const;
-
-	virtual ruiStyleManager* Styles();
-	virtual bool ShowContextMenu(ruiMenu* menu, const rPoint& position, rEventHandler* handler);
-	virtual bool ShowContextMenu(ruiMenu* menu, ruiStyle* style, const rPoint& position, rEventHandler* handler);
-	virtual void CancelContextMenu();
+	virtual ruiOverlay* CreateOverlay(rViewport* viewport);
+	virtual ruiOverlay* LoadOverlay(const rString& filePath, rViewport* viewport);
+	virtual ruiOverlay* GetOverlay(rViewport* viewport) const;
 
 private:
 	rViewport* DetermineViewport(const rPoint& point);
@@ -65,9 +54,6 @@ private:
 	ruiViewportOverlayMap m_overlays;
 	ruiOverlay* m_activeOverlay;
 	rEngine* m_engine;
-	
-	ruiStyleManager m_styleManager;
-	ruiMenuManager m_menuManager;
 };
 
 #endif

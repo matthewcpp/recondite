@@ -38,7 +38,7 @@ public:
 
 public:
 	void Clear();
-	virtual void InitDefaultAssets() = 0;
+	virtual void InitDefaultAssets(const rString& defaultAssetPath) = 0;
 
 private:
 

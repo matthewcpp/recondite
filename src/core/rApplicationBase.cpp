@@ -13,7 +13,7 @@ void rApplicationBase::Update(){
 		m_scene->Update();
 	m_module->AfterUpdateScene();
 
-	m_overlayManager->Update(m_engine);
+	m_overlayManager->Update();
 
 	m_engine.input->PostUpdate();
 }
@@ -46,8 +46,6 @@ void rApplicationBase::Draw(){
 
 		m_overlayManager->Draw(view.viewport);
 	}
-
-	m_overlayManager->DrawFinal();
 
 	m_graphicsDevice->SwapBuffers();
 

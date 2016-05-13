@@ -14,7 +14,7 @@ public:
 	rOpenGLContentManager(rGraphicsDevice* graphicsDevice, rFileSystem* fileSystem);
 
 public:
-	virtual void InitDefaultAssets();
+	virtual void InitDefaultAssets(const rString& defaultAssetPath);
 };
 
 #endif

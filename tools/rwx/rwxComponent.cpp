@@ -1,4 +1,5 @@
 #include "rwxComponent.hpp"
+#include "wx/filename.h"
 
 rwxComponent::rwxComponent(){
 	m_rwxGraphicsDevice = NULL;
@@ -54,4 +55,10 @@ rInputManager* rwxComponent::InputManager(){
 
 wxGLContext* rwxComponent::GetContext(){
 	return m_rwxGraphicsDevice->GetContext();
+}
+
+rString rwxComponent::GetBasePath(){
+	wxFileName exePath(wxStandardPaths::Get().GetExecutablePath());
+
+	return exePath.GetPath().c_str().AsChar();
 }

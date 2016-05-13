@@ -61,7 +61,8 @@ void rComponent::InitEngine(rGraphicsDevice* graphics, rContentManager* content,
 	m_graphicsDevice = graphics;
 
 	m_overlayManager = new ruiOverlayManager(&m_engine);
-	input->SetUI(m_overlayManager);
+	input->SetUIManager(m_overlayManager);
+	m_engine.ui = m_overlayManager;
 
 	m_engine.component = this;
 
@@ -73,7 +74,9 @@ void rComponent::InitEngine(rGraphicsDevice* graphics, rContentManager* content,
 	m_engine.scene = m_scene;
 
 	m_graphicsDevice->Init();
-	m_engine.content->InitDefaultAssets();
+
+	rString defaultAssetPath = GetBasePath() + "default/";
+	m_engine.content->InitDefaultAssets(defaultAssetPath);
 
 	m_fileSystem = fileSystem;
 
@@ -87,6 +90,10 @@ rViewport* rComponent::CreateViewport(const rString& name){
 	else {
 		rViewport* viewport = new rViewport(name);
 		m_viewports[name] = viewport;
+
+		viewport->SetPosition(0, 0);
+		viewport->SetSize(DisplaySize());
+
 		return viewport;
 	}
 }

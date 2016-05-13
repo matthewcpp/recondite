@@ -1,9 +1,10 @@
 #include "ui/ruiWidgetBase.hpp"
+#include "ui/ruiOverlay.hpp"
 
-ruiWidgetBase::ruiWidgetBase(const rString& id, ruiIManager* ui, rEngine* engine)
+ruiWidgetBase::ruiWidgetBase(const rString& id, ruiOverlay* ui, rEngine* engine)
 	:rObject(id, engine)
 {
-	m_ui = ui;
+	m_overlay = ui;
 
 	m_style.MarkChanged();
 	InvalidateSize();
@@ -36,14 +37,14 @@ void ruiWidgetBase::GetClasses(rArrayString& classlist){
 }
 
 void ruiWidgetBase::ExtendStyle(const rString& selector){
-	ruiStyle* style = m_ui->Styles()->GetStyle(selector);
+	ruiStyle* style = m_overlay->Styles()->GetStyle(selector);
 	if (style) m_computedStyle.Extend(*style);
 }
 
 void ruiWidgetBase::RecomputeStyle(){
 	m_computedStyle.Clear();
 
-	ruiStyleManager* styleManager = m_ui->Styles();
+	ruiStyleManager* styleManager = m_overlay->Styles();
 	ruiStyle* style = NULL;
 
 	//start with any base level styles for this widget type
@@ -112,10 +113,7 @@ void ruiWidgetBase::InvalidateSize(){
 Font::Face* ruiWidgetBase::DetermineFont(){
 	ruiStyle* style = ComputedStyle();
 
-	rString fontName = "consolas";
-	style->GetString("font", fontName);
-	//return m_engine->content->Fonts()->Get(fontName);
-	return nullptr;
+	return m_engine->content->Fonts()->SystemDefault();
 }
 
 rString ruiWidgetBase::UiState() const{

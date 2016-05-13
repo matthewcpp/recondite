@@ -7,23 +7,28 @@
 
 #include "rEngine.hpp"
 
-#include "ui/ruiInterface.hpp"
-#include "ui/ruiLayout.hpp"
+#include "ui/ruiStyleManager.hpp"
+#include "ui/ruiMenuManager.hpp"
 
-#include "stream/rOStringStream.hpp"
-
-#include "ruiWidget.hpp"
+class ruiWidget;
+class ruiLayout;
 
 class RECONDITE_API ruiOverlay {
 public:
-	ruiOverlay(rViewport* viewport);
+	ruiOverlay(rEngine* engine, rViewport* viewport);
+	~ruiOverlay();
+
+public:
+	bool ShowContextMenu(ruiMenu* menu, const rPoint& position, rEventHandler* handler);
+	bool ShowContextMenu(ruiMenu* menu, ruiStyle* style, const rPoint& position, rEventHandler* handler);
+	void CancelContextMenu();
 
 public:
 	virtual void AddWidget(ruiWidget* widget);
 	ruiWidget* GetWidget(const rString& id);
 
-	void Update(rEngine& engine);
-	void Draw(rEngine& engine);
+	void Update();
+	void Draw();
 
 	void Clear();
 
@@ -32,23 +37,18 @@ public:
 
 	ruiWidget* SelectWidget(const rPoint& position);
 
+	ruiStyleManager* Styles();
+
 	ruiLayout* Layout() const;
 	void SetLayout(ruiLayout* layout);
 
 	void UpdateLayout(bool force = false);
 
 	rString GetDefaultId () const;
-protected:
-	typedef std::vector<ruiWidget*> rWidgetVector;
 
 private:
-
-	rWidgetVector m_widgets;
-
-	ruiWidget* m_activeWidget;
-	ruiWidget* m_modalWidget;
-	ruiLayout* m_layout;
-	rViewport* m_viewport;
+	struct Impl;
+	Impl* _impl;
 };
 
 #endif

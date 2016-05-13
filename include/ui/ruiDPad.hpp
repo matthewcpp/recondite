@@ -13,7 +13,7 @@ typedef std::map<int, rDPadButton> rTouchDPadButtonMap;
 
 class RECONDITE_API ruiDPad : public ruiWidget{
 public:
-	ruiDPad(rDPad* dpad, const rString& id, ruiIManager* ui, rEngine* engine);
+	ruiDPad(rDPad* dpad, const rString& id, ruiOverlay* overlay, rEngine* engine);
 
 	void SetDPadButtonRect(rDPadButton button, const rRect& rect);
 	void CalculateDefaultButtonRects();

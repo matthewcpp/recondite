@@ -1,5 +1,13 @@
 #include "rPath.hpp"
 
+bool isSeperator(char c){
+#ifdef WIN32
+	return c == '/' || c == '\\';
+#else
+	return c == '/';
+#endif
+}
+
 rString rPath::Directory(const rString& path){
 	size_t pos = path.find_last_of('/');
 
@@ -59,7 +67,7 @@ rString rPath::Combine(const rString& dir, const rString& filename){
 		char dirLast = dir.last();
 		char filenameFirst = filename.first();
 
-		if (dirLast != '/' && filenameFirst != '/'){
+		if (!isSeperator(dirLast) && !isSeperator(filenameFirst)){
 			result += '/';
 		}
 	}

@@ -1,7 +1,8 @@
 #include "ui/ruiMenuManager.hpp"
 
-ruiMenuManager::ruiMenuManager(){
+ruiMenuManager::ruiMenuManager(rEngine* engine){
 	m_menu = NULL;
+	m_engine = engine;
 
 	m_defaultStyle.SetColor("color", rColor(0,0,0,255));
 	m_defaultStyle.SetColor("background-color", rColor(200,200,200,255));
@@ -35,8 +36,7 @@ void ruiMenuManager::CancelContextMenu(){
 	m_rowHeight = 0;
 }
 
-void ruiMenuManager::Update(rEngine& engine){
-}
+void ruiMenuManager::Update(){}
 
 ruiStyle* ruiMenuManager::GetStyle(){
 	if (m_style)
@@ -67,7 +67,7 @@ void ruiMenuManager::CalculateMenuSize(rEngine& engine){
 	}
 }
 
-void ruiMenuManager::Draw(rEngine& engine){
+void ruiMenuManager::Draw(){
 	if (!m_menu) return;
 
 	ruiStyle* style = GetStyle();
@@ -78,7 +78,7 @@ void ruiMenuManager::Draw(rEngine& engine){
 	if (!font) return;
 
 	if (m_menuSize == rSize::Default)
-		CalculateMenuSize(engine);
+		CalculateMenuSize(*m_engine);
 
 	size_t menuItemCount = m_menu->NumItems();
 	rColor color;
@@ -86,14 +86,14 @@ void ruiMenuManager::Draw(rEngine& engine){
 	rRect bounding(m_position, m_menuSize);
 
 	style->GetColor("background-color", color);
-	engine.renderer->RenderRect(bounding, color);
+	m_engine->renderer->RenderRect(bounding, color);
 	
 	style->GetColor("color", color);
 
 	for (size_t i = 0; i < menuItemCount; i++){
 		rPoint point(bounding.x, bounding.Top() + (i * m_rowHeight));
 
-		engine.renderer->RenderString(m_menu->GetItem(i)->Label(), font, point, color);
+		m_engine->renderer->RenderString(m_menu->GetItem(i)->Label(), font, point, color);
 	}
 }
 

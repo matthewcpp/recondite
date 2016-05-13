@@ -10,14 +10,14 @@
 
 class RECONDITE_API ruiMenuManager : public ruiDefaultEventHandler{
 public:
-	ruiMenuManager();
+	ruiMenuManager(rEngine* engine);
 
 public:
 	bool ShowContextMenu(ruiMenu* menu, ruiStyle* style, const rPoint& position, rEventHandler* handler);
 	void CancelContextMenu();
 
-	void Update(rEngine& engine);
-	virtual void Draw(rEngine& engine);
+	void Update();
+	virtual void Draw();
 
 private:
 	bool PickMenuItem(const rPoint& position);
@@ -34,6 +34,7 @@ private:
 	ruiStyle* m_style;
 	rSize m_menuSize;
 	size_t m_rowHeight;
+	rEngine* m_engine;
 
 	ruiStyle m_defaultStyle;
 };

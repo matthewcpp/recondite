@@ -19,8 +19,8 @@ public:
 	virtual void LoadScene(const rString& name) = 0;
 
 	//temporary
-	//TODO: handle multiple display?
 	virtual rSize DisplaySize() const = 0;
+	virtual rString GetBasePath() = 0;
 };
 
 #endif

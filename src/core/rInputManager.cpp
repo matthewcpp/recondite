@@ -4,8 +4,8 @@ rInputManager::rInputManager(){
 	m_ui = NULL;
 }
 
-void rInputManager::SetUI(ruiIManager* uiInput){
-	m_ui = uiInput;
+void rInputManager::SetUIManager(ruiOverlayManager* uiManager){
+	m_ui = uiManager;
 }
 
 size_t rInputManager::TouchCount() const{

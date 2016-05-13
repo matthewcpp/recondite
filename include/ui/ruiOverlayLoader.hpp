@@ -22,7 +22,7 @@
 
 class RECONDITE_API ruiOverlayLoader{
 public:
-	ruiOverlayLoader(rEngine* engine, ruiIManager* ui);
+	ruiOverlayLoader(rEngine* engine);
 	
 public:
 	ruiOverlay* ParseOverlay(const rString& path, rViewport* viewport);
@@ -49,7 +49,6 @@ private:
 	
 private:
 	rEngine* m_engine;
-	ruiIManager* m_ui;
 	
 	ruiOverlay* m_currentOverlay;
 	ruiLayoutVector m_layoutStack;

@@ -12,6 +12,11 @@ rApplication::~rApplication(){
 bool rApplication::Init(){
 	int sdlInit = SDL_Init(SDL_INIT_VIDEO);
 
+	char* base_path = SDL_GetBasePath();
+	m_basePath = base_path;
+
+	SDL_free(base_path);
+
 	if (sdlInit < 0){
 		rLog::Error("Error Initializing SDL: %i", sdlInit);
 		return false;
@@ -64,4 +69,8 @@ void rApplication::ProcessEvent(SDL_Event& event){
 
 unsigned long rApplication::GetTimeMiliseconds() const{
 	return SDL_GetTicks();
+}
+
+rString rApplication::GetBasePath(){
+	return m_basePath;
 }

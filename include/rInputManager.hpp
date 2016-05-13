@@ -18,13 +18,13 @@
 #include "input/rKeyboard.hpp"
 #include "input/rGestureTracker.hpp"
 
-#include "ui/ruiOverlayManager.hpp"
+#include "ui/ruiManager.hpp"
 
 class RECONDITE_API rInputManager : public rInput{
 public:
 
 	rInputManager();
-	void SetUIManager(ruiOverlayManager* uiManager);
+	void SetUIManager(ruiManager* uiManager);
 
 	rTouch* CreateTouch(int id, const rPoint& position, rTouchType type = rTOUCH_DOWN);
 	virtual rTouch* GetTouch(int id);
@@ -60,7 +60,7 @@ private:
 	rControllerArray m_controllers;
 	rGestureTracker m_gestures;
 
-	ruiOverlayManager* m_ui;
+	ruiManager* m_ui;
 
 	rMouse m_mouse;
 	rKeyboard m_keyboard;

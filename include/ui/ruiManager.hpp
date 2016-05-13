@@ -1,5 +1,5 @@
-#ifndef RUI_OVERLAYMANAGER_HPP
-#define RUI_OVERLAYMANAGER_HPP
+#ifndef RUI_MANAGER_HPP
+#define RUI_MANAGER_HPP
 
 #include <map>
 
@@ -11,14 +11,23 @@
 #include "rViewport.hpp"
 
 #include "ui/ruiOverlay.hpp"
-#include "ui/ruiInterface.hpp"
 #include "ui/ruiEvents.hpp"
 #include "ui/ruiMenuManager.hpp"
 
-class RECONDITE_API ruiOverlayManager : public ruiIManager {
+class ruiMenu;
+class ruiOverlay;
+
+class RECONDITE_API ruiIManager {
 public:
-	ruiOverlayManager(rEngine* engine);
-	~ruiOverlayManager();
+	virtual ruiOverlay* CreateOverlay(rViewport* viewport) = 0;
+	virtual ruiOverlay* LoadOverlay(const rString& filePath, rViewport* viewport) = 0;
+	virtual ruiOverlay* GetOverlay(rViewport* viewport) const = 0;
+};
+
+class RECONDITE_API ruiManager : public ruiIManager {
+public:
+	ruiManager(rEngine* engine);
+	~ruiManager();
 	
 public:
 

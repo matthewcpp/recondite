@@ -4,7 +4,7 @@ rInputManager::rInputManager(){
 	m_ui = NULL;
 }
 
-void rInputManager::SetUIManager(ruiOverlayManager* uiManager){
+void rInputManager::SetUIManager(ruiManager* uiManager){
 	m_ui = uiManager;
 }
 

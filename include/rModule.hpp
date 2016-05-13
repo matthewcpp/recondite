@@ -4,7 +4,7 @@
 #include "rBuild.hpp"
 
 #include "rEngine.hpp"
-#include "ui/ruiOverlayManager.hpp"
+#include "ui/ruiManager.hpp"
 #include "rScene.hpp"
 #include "rViewInfo.hpp"
 

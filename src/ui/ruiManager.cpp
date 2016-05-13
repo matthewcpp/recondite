@@ -1,16 +1,15 @@
-#include "ui/ruiOverlayManager.hpp"
-
+#include "ui/ruiManager.hpp"
 #include "ui/ruiOverlayLoader.hpp"
 
-ruiOverlayManager::ruiOverlayManager(rEngine* engine){
+ruiManager::ruiManager(rEngine* engine){
 	m_engine = engine;
 }
 
-ruiOverlayManager::~ruiOverlayManager(){
+ruiManager::~ruiManager(){
 	Clear();
 }
 
-ruiOverlay* ruiOverlayManager::CreateOverlay(rViewport* viewport){
+ruiOverlay* ruiManager::CreateOverlay(rViewport* viewport){
 
 	ruiOverlay* overlay = new ruiOverlay(m_engine, viewport);
 	AddOverlayToViewport(overlay, viewport);
@@ -18,7 +17,7 @@ ruiOverlay* ruiOverlayManager::CreateOverlay(rViewport* viewport){
 	return overlay;
 }
 
-ruiOverlay* ruiOverlayManager::LoadOverlay(const rString& filePath, rViewport* viewport){
+ruiOverlay* ruiManager::LoadOverlay(const rString& filePath, rViewport* viewport){
 	ruiOverlayLoader loader(m_engine);
 	ruiOverlay* overlay = loader.ParseOverlay(filePath, viewport);
 
@@ -32,7 +31,7 @@ ruiOverlay* ruiOverlayManager::LoadOverlay(const rString& filePath, rViewport* v
 	}
 }
 
-void ruiOverlayManager::AddOverlayToViewport(ruiOverlay* overlay, rViewport* viewport){
+void ruiManager::AddOverlayToViewport(ruiOverlay* overlay, rViewport* viewport){
 	ruiViewportOverlayMap::iterator result = m_overlays.find(viewport);
 
 	if (result != m_overlays.end()){
@@ -41,7 +40,7 @@ void ruiOverlayManager::AddOverlayToViewport(ruiOverlay* overlay, rViewport* vie
 	m_overlays[viewport] = overlay;
 }
 
-void ruiOverlayManager::Clear(){
+void ruiManager::Clear(){
 	ruiViewportOverlayMap::iterator end = m_overlays.end();
 
 	for (ruiViewportOverlayMap::iterator it = m_overlays.begin(); it != end; ++it){
@@ -51,7 +50,7 @@ void ruiOverlayManager::Clear(){
 	m_overlays.clear();
 }
 
-rViewport* ruiOverlayManager::DetermineViewport(const rPoint& point){
+rViewport* ruiManager::DetermineViewport(const rPoint& point){
 	ruiViewportOverlayMap::iterator end = m_overlays.end();
 
 	for (ruiViewportOverlayMap::iterator it = m_overlays.begin(); it != end; ++it){
@@ -64,7 +63,7 @@ rViewport* ruiOverlayManager::DetermineViewport(const rPoint& point){
 	return NULL;
 }
 
-ruiOverlay* ruiOverlayManager::DetermineOverlay(const rPoint& point){
+ruiOverlay* ruiManager::DetermineOverlay(const rPoint& point){
 	rViewport* viewport = DetermineViewport(point);
 
 	if (viewport && m_overlays.count(viewport))
@@ -73,7 +72,7 @@ ruiOverlay* ruiOverlayManager::DetermineOverlay(const rPoint& point){
 		return NULL;
 }
 
-ruiOverlay* ruiOverlayManager::GetOverlay(rViewport* viewport) const{
+ruiOverlay* ruiManager::GetOverlay(rViewport* viewport) const{
 	ruiViewportOverlayMap::const_iterator result = m_overlays.find(viewport);
 
 	if (result != m_overlays.end())
@@ -82,7 +81,7 @@ ruiOverlay* ruiOverlayManager::GetOverlay(rViewport* viewport) const{
 		return NULL;
 }
 
-void ruiOverlayManager::Update(){
+void ruiManager::Update(){
 	ruiViewportOverlayMap::iterator end = m_overlays.end();
 
 	for (ruiViewportOverlayMap::iterator it = m_overlays.begin(); it != end; ++it){
@@ -93,7 +92,7 @@ void ruiOverlayManager::Update(){
 	m_activeOverlay = NULL;
 }
 
-void ruiOverlayManager::Draw(rViewport* viewport){
+void ruiManager::Draw(rViewport* viewport){
 	ruiViewportOverlayMap::iterator end = m_overlays.end();
 	ruiViewportOverlayMap::iterator vp = m_overlays.find(viewport);
 
@@ -104,15 +103,15 @@ void ruiOverlayManager::Draw(rViewport* viewport){
 
 	m_activeOverlay = NULL;
 }
-bool ruiOverlayManager::InsertKeyEvent(rKey key, rKeyState state){
+bool ruiManager::InsertKeyEvent(rKey key, rKeyState state){
 	return false;
 }
 
-bool ruiOverlayManager::InsertTouchEvent(int id, const rPoint& position, rTouchType type){
+bool ruiManager::InsertTouchEvent(int id, const rPoint& position, rTouchType type){
 	return false;
 }
 
-bool ruiOverlayManager::InsertMouseButtonEvent(rMouseButton button, rButtonState state, const rPoint& position){
+bool ruiManager::InsertMouseButtonEvent(rMouseButton button, rButtonState state, const rPoint& position){
 	if (state == rBUTTON_STATE_DOWN)
 		return ProcessMouseDown(button, position);
 	else if (state ==rBUTTON_STATE_UP)
@@ -121,7 +120,7 @@ bool ruiOverlayManager::InsertMouseButtonEvent(rMouseButton button, rButtonState
 		return false;
 }
 
-bool ruiOverlayManager::ProcessMouseDown(rMouseButton button, const rPoint& position){
+bool ruiManager::ProcessMouseDown(rMouseButton button, const rPoint& position){
 	ruiMouseEvent event(button, rBUTTON_STATE_DOWN, position);
 	//m_menuManager.Trigger(ruiEVT_MOUSE_DOWN, event);
 
@@ -142,7 +141,7 @@ bool ruiOverlayManager::ProcessMouseDown(rMouseButton button, const rPoint& posi
 	return false;
 }
 
-bool ruiOverlayManager::InsertMouseMotionEvent(const rPoint& position){
+bool ruiManager::InsertMouseMotionEvent(const rPoint& position){
 	ruiMouseEvent event(position);
 	//m_menuManager.Trigger(ruiEVT_MOUSE_MOTION, event);
 
@@ -181,7 +180,7 @@ bool ruiOverlayManager::InsertMouseMotionEvent(const rPoint& position){
 	return false;
 }
 
-bool ruiOverlayManager::ProcessMouseUp(rMouseButton button, const rPoint& position){
+bool ruiManager::ProcessMouseUp(rMouseButton button, const rPoint& position){
 	ruiMouseEvent event(button, rBUTTON_STATE_UP, position);
 	//m_menuManager.Trigger(ruiEVT_MOUSE_UP, event);
 
@@ -210,7 +209,7 @@ bool ruiOverlayManager::ProcessMouseUp(rMouseButton button, const rPoint& positi
 }
 
 
-bool ruiOverlayManager::InsertMouseWheelEvent(const rPoint& position, rMouseWheelDirection direction){
+bool ruiManager::InsertMouseWheelEvent(const rPoint& position, rMouseWheelDirection direction){
 	ruiMouseEvent event(direction, position);
 
 	ruiOverlay* overlay = DetermineOverlay(position);

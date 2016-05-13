@@ -12,7 +12,7 @@
 #include "platform/rgl/rOpenGLContentManager.hpp"
 #include "rSDLInputManager.hpp"
 
-#include "ui/ruiOverlayManager.hpp"
+#include "ui/ruiManager.hpp"
 
 #include "rViewport.hpp"
 #include "rCamera.hpp"

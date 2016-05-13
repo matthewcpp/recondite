@@ -7,7 +7,7 @@
 #include "rEngine.hpp"
 #include "rScene.hpp"
 #include "rInputManager.hpp"
-#include "ui/ruiOverlayManager.hpp"
+#include "ui/ruiManager.hpp"
 #include "rActorFactory.hpp"
 
 #include "interface/riComponent.hpp"
@@ -60,7 +60,7 @@ protected:
 	rScene* m_scene;
 
 	rGraphicsDevice* m_graphicsDevice;
-	ruiOverlayManager* m_overlayManager;
+	ruiManager* m_overlayManager;
 	rFileSystem* m_fileSystem;
 
 	rViewportMap m_viewports;

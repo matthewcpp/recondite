@@ -14,9 +14,9 @@ public:
 	virtual void SetPosition2d(const rVector2& position);
 	virtual rVector2 Position2d() const;
 
-	void SetSize(const rVector2& size);
-	void SetSize(float x, float y);
-	rVector2 GetSize() const;
+	void SetSize(const rSize& size);
+	void SetSize(int x, int y);
+	rSize GetSize() const;
 
 	void SetRenderDepth(float depth);
 	float RenderDepth() const;
@@ -29,7 +29,7 @@ public:
 	virtual rString ClassName() const override;
 
 private:
-	rVector2 m_size;
+	rSize m_size;
 	bool m_sizeSet;
 	rTexture* m_texture;
 };

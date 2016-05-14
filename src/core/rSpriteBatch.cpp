@@ -1,42 +1,74 @@
 #include "rSpriteBatch.hpp"
 
 #include <vector>
+#include <map>
+#include <memory>
 
 #include "data/rImmediateBuffer.hpp"
 #include "rGeometryUtil.hpp"
 #include "asset/rFont.hpp"
 
+struct SpriteBatchBuffer{
+	rColor color;
+	rImmediateBuffer data;
+
+	SpriteBatchBuffer(size_t elementSize, const rColor& _color)
+		:data(rGeometryType::Triangles, elementSize, true), color(_color){}
+};
+
 struct rSpriteBatch::Impl{
 	rContentManager* contentManager;
 	rGraphicsDevice* graphicsDevice;
 
-	std::map<rTexture*, std::shared_ptr<rImmediateBuffer>> spriteBuffers;
-	std::map<rTexture*, std::shared_ptr<rImmediateBuffer>> textBuffers;
+	typedef std::map<rTexture*, std::vector<std::unique_ptr<SpriteBatchBuffer>>> TextureBatchMap;
+	TextureBatchMap textBatches;
+	TextureBatchMap spriteBatches;
 
 	Impl(rGraphicsDevice* _graphicsDevice, rContentManager* _contentManager) : graphicsDevice(_graphicsDevice), contentManager(_contentManager) {}
 
-	void EnsureSpriteBuffer(rTexture* texture);
-	void EnsureTextBuffer(Font::Face* face);
+	rImmediateBuffer* GetBuffer(TextureBatchMap& textureBatch, rTexture* texture, const rColor& color);
+	rImmediateBuffer* EnsureTextBuffer(Font::Face* face, const rColor& color);
+	rImmediateBuffer* EnsureSpriteBuffer(rTexture* texture, const rColor& color);
 };
 
-void rSpriteBatch::Impl::EnsureSpriteBuffer(rTexture* texture){
-	if (spriteBuffers.count(texture) == 0) {
-		std::shared_ptr<rImmediateBuffer> buffer;
-		buffer.reset(new rImmediateBuffer(rGeometryType::Triangles, 3, true));
+rImmediateBuffer* rSpriteBatch::Impl::EnsureSpriteBuffer(rTexture* texture, const rColor& color){
+	rImmediateBuffer* retBuffer = GetBuffer(spriteBatches, texture, color);
 
-		spriteBuffers[texture] = buffer;
+	if (!retBuffer){
+		SpriteBatchBuffer* batch = new SpriteBatchBuffer(3, color);
+		spriteBatches[texture].emplace_back(batch);
+
+		retBuffer = &batch->data;
 	}
+
+	return retBuffer;
 }
 
-void rSpriteBatch::Impl::EnsureTextBuffer(Font::Face* face){
+rImmediateBuffer* rSpriteBatch::Impl::EnsureTextBuffer(Font::Face* face, const rColor& color){
 	rTexture* texture = contentManager->Fonts()->GetFontTexture(face);
+	rImmediateBuffer* retBuffer = GetBuffer(textBatches, texture, color);
 
-	if (textBuffers.count(texture) == 0) {
-		std::shared_ptr<rImmediateBuffer> buffer;
-		buffer.reset(new rImmediateBuffer(rGeometryType::Triangles, 2, true));
+	if (!retBuffer){
+		SpriteBatchBuffer* batch =  new SpriteBatchBuffer(2, color);
+		textBatches[texture].emplace_back(batch);
 
-		textBuffers[texture] = buffer;
+		retBuffer = &batch->data;
 	}
+	
+	return retBuffer;
+}
+
+rImmediateBuffer* rSpriteBatch::Impl::GetBuffer(TextureBatchMap& textureBatch, rTexture* texture, const rColor& color){
+	auto result = textureBatch.find(texture);
+
+	if (result != textureBatch.end()){
+		for (size_t i = 0; i < result->second.size(); i++){
+			if (result->second[i]->color == color)
+				return &result->second[i]->data;
+		}
+	}
+
+	return nullptr;
 }
 
 rSpriteBatch::rSpriteBatch(rGraphicsDevice* graphicsDevice, rContentManager* contentManager){
@@ -47,23 +79,20 @@ rSpriteBatch::~rSpriteBatch(){
 	delete _impl;
 }
 
-void rSpriteBatch::RenderTexture(rTexture* texture, const rVector2& position, float depth) {
-	rVector2 size((float)texture->Width(), (float)texture->Height());
-	RenderTexture(texture, position, size, depth);
+void rSpriteBatch::RenderTexture(rTexture* texture, const rVector2& position, const rColor& color, float depth) {
+	RenderTexture(texture, position, texture->Size(), color, depth);
 }
 
-void rSpriteBatch::RenderTexture(rTexture* texture, const rVector2& position, const rVector2& size, float depth) {
-	_impl->EnsureSpriteBuffer(texture);
-
-	rImmediateBuffer& buffer = *(_impl->spriteBuffers[texture].get());
+void rSpriteBatch::RenderTexture(rTexture* texture, const rVector2& position, const rSize& size, const rColor& color, float depth) {
+	rImmediateBuffer* buffer =_impl->EnsureSpriteBuffer(texture, color);
 
 	rRect rect(position.x, position.y, size.x, size.y);
-	rGeometryUtil::CreateRectVerticies(rect, buffer, true, depth);
+	rGeometryUtil::CreateRectVerticies(rect, *buffer, true, depth);
 }
 
 void rSpriteBatch::Clear() {
-	_impl->spriteBuffers.clear();
-	_impl->textBuffers.clear();
+	_impl->textBatches.clear();
+	_impl->spriteBatches.clear();
 }
 
 void rSpriteBatch::Render(const rMatrix4& viewMatrix){
@@ -74,12 +103,16 @@ void rSpriteBatch::Render(const rMatrix4& viewMatrix){
 	}
 
 	_impl->graphicsDevice->ActivateShader(spriteMaterial->Shader()->ProgramId());
-	auto end = _impl->spriteBuffers.end();
 
-	for (auto it = _impl->spriteBuffers.begin(); it != end; ++it) {
+	auto end = _impl->spriteBatches.end();
+
+	for (auto it = _impl->spriteBatches.begin(); it != end; ++it) {
 		spriteMaterial->SetDiffuseTexture(it->first);
-		
-		_impl->graphicsDevice->RenderImmediate(*it->second, viewMatrix, spriteMaterial);
+
+		for (size_t i = 0; i < it->second.size(); i++){
+			spriteMaterial->SetDiffuseColor(it->second[i]->color);
+			_impl->graphicsDevice->RenderImmediate(it->second[i]->data, viewMatrix, spriteMaterial);
+		}
 	}
 
 	rMaterial* textMaterial = _impl->contentManager->Materials()->Get("default_text");
@@ -87,17 +120,22 @@ void rSpriteBatch::Render(const rMatrix4& viewMatrix){
 		textMaterial = _impl->contentManager->Materials()->CreateMaterial("default_text");
 		textMaterial->SetShader(_impl->contentManager->Shaders()->Get("default_textured"));
 	}
+
 	_impl->graphicsDevice->ActivateShader(textMaterial->Shader()->ProgramId());
 
-	end = _impl->textBuffers.end();
-	for (auto it = _impl->textBuffers.begin(); it != end; ++it) {
+	end = _impl->textBatches.end();
+
+	for (auto it = _impl->textBatches.begin(); it != end; ++it) {
 		textMaterial->SetDiffuseTexture(it->first);
 
-		_impl->graphicsDevice->RenderImmediate(*it->second, viewMatrix, textMaterial);
+		for (size_t i = 0; i < it->second.size(); i++){
+			textMaterial->SetDiffuseColor(it->second[i]->color);
+			_impl->graphicsDevice->RenderImmediate(it->second[i]->data, viewMatrix, textMaterial);
+		}
 	}
 }
 
-void WriteWord(Font::Glyph** glyphs, size_t glyphCount, rImmediateBuffer& buffer, int startX, int startY){
+void WriteWord(Font::Glyph** glyphs, size_t glyphCount, int startX, int startY, rImmediateBuffer& buffer, const rPoint& origin){
 	int xPos = startX;
 	int yPos = startY;
 
@@ -106,9 +144,9 @@ void WriteWord(Font::Glyph** glyphs, size_t glyphCount, rImmediateBuffer& buffer
 	for (size_t i = 0; i < glyphCount; i++){
 		glyph = glyphs[i];
 
-		int left = xPos + glyph->leftBearing;
+		int left = origin.x + xPos + glyph->leftBearing;
 		int right = left + glyph->width;
-		int top = yPos - glyph->top;
+		int top = origin.y + yPos - glyph->top;
 		int bottom = top + glyph->height;
 
 		size_t index = buffer.VertexCount();
@@ -125,21 +163,19 @@ void WriteWord(Font::Glyph** glyphs, size_t glyphCount, rImmediateBuffer& buffer
 	}
 }
 
-void rSpriteBatch::RenderString(Font::Face* face, const rString& text, const rPoint& position, const rSize& size){
+void rSpriteBatch::RenderString(const rString& text, Font::Face* face, const rPoint& position, const rSize& size, const rColor& color){
 	rTexture* fontTexture = _impl->contentManager->Fonts()->GetFontTexture(face);
 
 	if (fontTexture){
-		_impl->EnsureTextBuffer(face);
-
-		rImmediateBuffer& buffer = *(_impl->textBuffers[fontTexture].get());
+		rImmediateBuffer* buffer = _impl->EnsureTextBuffer(face, color);
 
 		Font::WrapText(face, text, size, [&](Font::Glyph** glyphs, size_t glyphCount, int startX, int startY){
-			WriteWord(glyphs, glyphCount, buffer, startX, startY);
+			WriteWord(glyphs, glyphCount, startX, startY, *buffer, position);
 		});
 	}
 }
 
-void rSpriteBatch::RenderString(Font::Face* face, const rString& text, const rPoint& position){
+void rSpriteBatch::RenderString(const rString& text, Font::Face* face, const rPoint& position, const rColor& color){
 	rSize maxSize(INT_MAX, INT_MAX);
-	RenderString(face, text, position, maxSize);
+	RenderString(text, face, position, maxSize, color);
 }

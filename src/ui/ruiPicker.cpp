@@ -68,7 +68,7 @@ void ruiPicker::Draw(){
 		color.Set(0,0,0,255);
 		style->GetColor("color", color);
 		
-		m_engine->renderer->RenderString(text,font, box, color);
+		m_engine->renderer->SpriteBatch()->RenderString(text, font, point, box.Size(), color);
 	}
 
 }

@@ -27,3 +27,11 @@ void rColor::ToArray(unsigned char* color) const{
 	color[2] = blue;
 	color[3] = alpha;
 }
+
+bool rColor::operator==(const rColor& color){
+	return red == color.red && blue == color.blue && green == color.green && alpha == color.alpha;
+}
+
+bool rColor::operator!=(const rColor& color){
+	return !(*this == color);
+}

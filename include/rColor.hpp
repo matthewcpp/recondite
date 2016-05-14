@@ -17,6 +17,9 @@ struct RECONDITE_API rColor{
 	
 	uint8_t red, green, blue, alpha;
 
+	bool operator==(const rColor& color);
+	bool operator!=(const rColor& color);
+
 	static const rColor White;
 	static const rColor Red;
 	static const rColor Green;

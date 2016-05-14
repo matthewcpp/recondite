@@ -10,4 +10,9 @@ add_definitions(-DRECONDITE_BUILD_SHARED)
 include_directories(${SDL2_INCLUDE_DIR})
 target_link_libraries(rsdl recondite rgl) 
 target_link_libraries(rsdl ${OPENGL_LIBRARIES} ${GLEW_LIBRARY})
-target_link_libraries(rsdl ${SDL2_LIBRARY})
+
+# In this case we are building a shared library and not want to link against sdl main
+# Lets pull only the libsdl library out of the list and link that
+set(sdl_lib)
+list(GET SDL2_LIBRARY 1 sdl_lib)
+target_link_libraries(rsdl ${sdl_lib})

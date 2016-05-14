@@ -93,7 +93,7 @@ void ruiMenuManager::Draw(){
 	for (size_t i = 0; i < menuItemCount; i++){
 		rPoint point(bounding.x, bounding.Top() + (i * m_rowHeight));
 
-		m_engine->renderer->RenderString(m_menu->GetItem(i)->Label(), font, point, color);
+		m_engine->renderer->SpriteBatch()->RenderString(m_menu->GetItem(i)->Label(), font, point, color);
 	}
 }
 

@@ -44,7 +44,7 @@ void ruiButton::Draw(){
 		style->GetColor("color", color);
 
 		rPoint textPos(m_position.x + padding[1], m_position.y + padding[0]);
-		m_engine->renderer->RenderString(m_text, font, textPos, color);
+		m_engine->renderer->SpriteBatch()->RenderString(m_text, font, textPos, color);
 	}
 	
 }

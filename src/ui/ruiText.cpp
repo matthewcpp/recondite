@@ -35,7 +35,7 @@ void ruiText::Draw(){
 		color.Set(255,255,255,255);
 		style->GetColor("color", color);
 
-		m_engine->renderer->RenderString(m_text, font, boundingBox, color);
+		m_engine->renderer->SpriteBatch()->RenderString(m_text, font, m_position, color);
 	}
 }
 

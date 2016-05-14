@@ -22,17 +22,17 @@ rVector2 rSprite::Position2d() const {
 	return rVector2(m_position.x, m_position.y);
 }
 
-void rSprite::SetSize(const rVector2& size) {
+void rSprite::SetSize(const rSize& size) {
 	m_size = size;
 	m_sizeSet = true;
 }
 
-void rSprite::SetSize(float x, float y) {
+void rSprite::SetSize(int x, int y) {
 	m_size.Set(x, y);
 	m_sizeSet = true;
 }
 
-rVector2 rSprite::GetSize() const {
+rSize rSprite::GetSize() const {
 	return m_size;
 }
 
@@ -56,10 +56,10 @@ void rSprite::Draw() {
 	rVector2 position(m_position.x, m_position.y);
 
 	if (m_sizeSet) {
-		m_engine->renderer->SpriteBatch()->RenderTexture(m_texture, position, m_size, m_position.z);
+		m_engine->renderer->SpriteBatch()->RenderTexture(m_texture, position, m_size, rColor::White, m_position.z);
 	}
 	else {
-		m_engine->renderer->SpriteBatch()->RenderTexture(m_texture, position, m_position.z);
+		m_engine->renderer->SpriteBatch()->RenderTexture(m_texture, position, rColor::White, m_position.z);
 	}
 		
 }

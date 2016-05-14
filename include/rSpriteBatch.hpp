@@ -1,9 +1,6 @@
 #ifndef R_SPRITEBATCH_HPP
 #define R_SPRITEBATCH_HPP
 
-#include <map>
-#include <memory>
-
 #include "rBuild.hpp"
 
 #include "asset/rTexture.hpp"
@@ -21,11 +18,11 @@ public:
 public:
 	void Clear();
 
-	void RenderTexture(rTexture* texture, const rVector2& position, float depth = 0.0);
-	void RenderTexture(rTexture* texture, const rVector2& position, const rVector2& size, float depth = 0.0);
+	void RenderTexture(rTexture* texture, const rVector2& position, const rColor& color = rColor::White, float depth = 0.0);
+	void RenderTexture(rTexture* texture, const rVector2& position, const rSize& size, const rColor& color = rColor::White, float depth = 0.0);
 
-	void RenderString(Font::Face* face, const rString& text, const rPoint& position);
-	void RenderString(Font::Face* face, const rString& text, const rPoint& position, const rSize& size);
+	void RenderString(const rString& text, Font::Face* face, const rPoint& position, const rColor& color = rColor::White);
+	void RenderString(const rString& text, Font::Face* face, const rPoint& position, const rSize& size, const rColor& color = rColor::White);
 
 	void Render(const rMatrix4& viewMatrix);
 

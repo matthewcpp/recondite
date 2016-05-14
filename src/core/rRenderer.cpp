@@ -15,8 +15,6 @@ void rRenderer::Begin(const rMatrix4 viewProjectionMatrix){
 	m_viewProjectionMatrix = viewProjectionMatrix;
 
 	//m_renderMode = viewport->RenderMode();
-
-	//viewport->GetViewProjectionMatrix(m_viewProjectionMatrix);
 }
 
 void rRenderer::End(){
@@ -147,37 +145,6 @@ void rRenderer::RenderCircle(const rCircle2& circle, const rColor& color){
 
 void rRenderer::RenderWireBox(const rAlignedBox3& box, const rColor color){
 
-}
-
-void rRenderer::RenderString(const rString& str, const Font::Face* font, const rRect& bounding, const rColor& color){
-	if (font){
-		rImmediateBuffer geometry;
-		rGeometryUtil::Create2DText(str, font, bounding, geometry);
-
-		rMaterial* material = nullptr;
-		//material->SetColor("fragColor", color);
-
-		if (material){
-			//material->SetTexture("s_texture", font->Texture());
-
-			rMatrix4 transform;
-			if (m_activeViewport){
-				rRect overlay = m_activeViewport->GetScreenRect();
-				rMatrixUtil::Ortho2D(overlay.Left(), overlay.Right(), overlay.Bottom(), overlay.Top(), transform);
-			}
-
-			rMatrix4 translate;
-			translate.SetTranslate(bounding.x,bounding.y, 0.0f);
-			transform *= translate;
-
-			m_graphicsDevice->RenderImmediate(geometry, transform, material);
-		}
-	}
-}
-
-void rRenderer::RenderString(const rString& text, const Font::Face* font, const rPoint& pos, const rColor& color){
-	rRect bounding(pos.x, pos.y, INT_MAX, INT_MAX);
-	RenderString(text, font, bounding, color);
 }
 
 void rRenderer::EnableDepthTesting(bool enable){

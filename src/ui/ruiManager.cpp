@@ -1,29 +1,60 @@
 #include "ui/ruiManager.hpp"
 #include "ui/ruiOverlayLoader.hpp"
 
+struct ruiControllerClassDescription{
+	ruiIManager::ControllerCreateFunction createFunc;
+	ruiIManager::ControllerDeleteFunction deleteFunc;
+
+	ruiControllerClassDescription(){}
+	ruiControllerClassDescription(ruiIManager::ControllerCreateFunction createf, ruiIManager::ControllerDeleteFunction deletef)
+	:createFunc(createf), deleteFunc(deletef){}
+};
+
+struct ruiManager::Impl{
+	rEngine* engine;
+
+	std::map<rViewport*, ruiOverlay*> overlays;
+	std::map<rString, ruiControllerClassDescription> controllerMap;
+
+	Impl(rEngine* _engine) : engine(_engine){}
+
+	bool ProcessMouseDown(rMouseButton button, const rPoint& position);
+	bool ProcessMouseUp(rMouseButton button, const rPoint& position);
+
+	rViewport* DetermineViewport(const rPoint& point);
+	ruiOverlay* DetermineOverlay(const rPoint& point);
+	void AddOverlayToViewport(ruiOverlay* overlay, rViewport* viewport);
+};
+
 ruiManager::ruiManager(rEngine* engine){
-	m_engine = engine;
+	_impl = new Impl(engine);
 }
 
 ruiManager::~ruiManager(){
 	Clear();
+	delete _impl;
 }
 
 ruiOverlay* ruiManager::CreateOverlay(rViewport* viewport){
 
-	ruiOverlay* overlay = new ruiOverlay(m_engine, viewport);
-	AddOverlayToViewport(overlay, viewport);
+	ruiOverlay* overlay = new ruiOverlay(_impl->engine, viewport);
+	_impl->AddOverlayToViewport(overlay, viewport);
 
 	return overlay;
 }
 
 ruiOverlay* ruiManager::LoadOverlay(const rString& filePath, rViewport* viewport){
-	ruiOverlayLoader loader(m_engine);
+	ruiOverlayLoader loader(this, _impl->engine);
 	ruiOverlay* overlay = loader.ParseOverlay(filePath, viewport);
 
 	if (overlay){
-		AddOverlayToViewport(overlay, viewport);
+		_impl->AddOverlayToViewport(overlay, viewport);
 		overlay->UpdateLayout(true);
+
+		ruiController* controller = overlay->GetController();
+		if (controller)
+			controller->OnOverlayLoaded();
+
 		return overlay;
 	}
 	else {
@@ -31,29 +62,58 @@ ruiOverlay* ruiManager::LoadOverlay(const rString& filePath, rViewport* viewport
 	}
 }
 
-void ruiManager::AddOverlayToViewport(ruiOverlay* overlay, rViewport* viewport){
-	ruiViewportOverlayMap::iterator result = m_overlays.find(viewport);
+void ruiManager::Impl::AddOverlayToViewport(ruiOverlay* overlay, rViewport* viewport){
+	auto result = overlays.find(viewport);
 
-	if (result != m_overlays.end()){
+	if (result != overlays.end()){
 		delete result->second;
 	}
-	m_overlays[viewport] = overlay;
+
+	overlays[viewport] = overlay;
+}
+
+bool ruiManager::RegisterControllerClass(const rString& name, ControllerCreateFunction createFunc, ControllerDeleteFunction deleteFunc){
+	if (_impl->controllerMap.count(name) == 0){
+		ruiControllerClassDescription description(createFunc, deleteFunc);
+		_impl->controllerMap[name] = description;
+
+		return true;
+	}
+	else{
+		return false;
+	}
+
+}
+
+void ruiManager::UnregisterControllerClass(const rString& name){
+	_impl->controllerMap.erase(name);
+}
+
+ruiController* ruiManager::CreateController(const rString& name, ruiOverlay* overlay){
+	auto result = _impl->controllerMap.find(name);
+
+	if (result == _impl->controllerMap.end()){
+		return nullptr;
+	}
+	else{
+		return result->second.createFunc(name, _impl->engine, overlay);
+	}
 }
 
 void ruiManager::Clear(){
-	ruiViewportOverlayMap::iterator end = m_overlays.end();
+	auto end = _impl->overlays.end();
 
-	for (ruiViewportOverlayMap::iterator it = m_overlays.begin(); it != end; ++it){
+	for (auto it = _impl->overlays.begin(); it != end; ++it){
 		delete it->second;
 	}
 
-	m_overlays.clear();
+	_impl->overlays.clear();
 }
 
-rViewport* ruiManager::DetermineViewport(const rPoint& point){
-	ruiViewportOverlayMap::iterator end = m_overlays.end();
+rViewport* ruiManager::Impl::DetermineViewport(const rPoint& point){
+	auto end = overlays.end();
 
-	for (ruiViewportOverlayMap::iterator it = m_overlays.begin(); it != end; ++it){
+	for (auto it = overlays.begin(); it != end; ++it){
 		rRect screenRect = it->first->GetScreenRect();
 
 		if (screenRect.ContainsPoint(point))
@@ -63,45 +123,36 @@ rViewport* ruiManager::DetermineViewport(const rPoint& point){
 	return NULL;
 }
 
-ruiOverlay* ruiManager::DetermineOverlay(const rPoint& point){
+ruiOverlay* ruiManager::Impl::DetermineOverlay(const rPoint& point){
 	rViewport* viewport = DetermineViewport(point);
 
-	if (viewport && m_overlays.count(viewport))
-		return m_overlays[viewport];
+	if (viewport && overlays.count(viewport))
+		return overlays[viewport];
 	else
 		return NULL;
 }
 
 ruiOverlay* ruiManager::GetOverlay(rViewport* viewport) const{
-	ruiViewportOverlayMap::const_iterator result = m_overlays.find(viewport);
+	auto result = _impl->overlays.find(viewport);
 
-	if (result != m_overlays.end())
+	if (result != _impl->overlays.end())
 		return result->second;
 	else
 		return NULL;
 }
 
 void ruiManager::Update(){
-	ruiViewportOverlayMap::iterator end = m_overlays.end();
+	auto end = _impl->overlays.end();
 
-	for (ruiViewportOverlayMap::iterator it = m_overlays.begin(); it != end; ++it){
-		m_activeOverlay = it->second;
+	for (auto it = _impl->overlays.begin(); it != end; ++it){
 		it->second->Update();
 	}
-
-	m_activeOverlay = NULL;
 }
 
 void ruiManager::Draw(rViewport* viewport){
-	ruiViewportOverlayMap::iterator end = m_overlays.end();
-	ruiViewportOverlayMap::iterator vp = m_overlays.find(viewport);
-
-	if (m_overlays.count(viewport)){
-		m_activeOverlay = m_overlays[viewport];
-		m_activeOverlay->Draw();
+	if (_impl->overlays.count(viewport)){
+		_impl->overlays[viewport]->Draw();
 	}
-
-	m_activeOverlay = NULL;
 }
 bool ruiManager::InsertKeyEvent(rKey key, rKeyState state){
 	return false;
@@ -113,14 +164,14 @@ bool ruiManager::InsertTouchEvent(int id, const rPoint& position, rTouchType typ
 
 bool ruiManager::InsertMouseButtonEvent(rMouseButton button, rButtonState state, const rPoint& position){
 	if (state == rBUTTON_STATE_DOWN)
-		return ProcessMouseDown(button, position);
+		return _impl->ProcessMouseDown(button, position);
 	else if (state ==rBUTTON_STATE_UP)
-		return ProcessMouseUp(button, position);
+		return _impl->ProcessMouseUp(button, position);
 	else
 		return false;
 }
 
-bool ruiManager::ProcessMouseDown(rMouseButton button, const rPoint& position){
+bool ruiManager::Impl::ProcessMouseDown(rMouseButton button, const rPoint& position){
 	ruiMouseEvent event(button, rBUTTON_STATE_DOWN, position);
 	//m_menuManager.Trigger(ruiEVT_MOUSE_DOWN, event);
 
@@ -148,7 +199,7 @@ bool ruiManager::InsertMouseMotionEvent(const rPoint& position){
 	if (event.Handled())
 		return true;
 
-	ruiOverlay* overlay = DetermineOverlay(position);
+	ruiOverlay* overlay = _impl->DetermineOverlay(position);
 
 	if (overlay){
 		ruiWidget* activeWidget = overlay->ActiveWidget();
@@ -180,7 +231,7 @@ bool ruiManager::InsertMouseMotionEvent(const rPoint& position){
 	return false;
 }
 
-bool ruiManager::ProcessMouseUp(rMouseButton button, const rPoint& position){
+bool ruiManager::Impl::ProcessMouseUp(rMouseButton button, const rPoint& position){
 	ruiMouseEvent event(button, rBUTTON_STATE_UP, position);
 	//m_menuManager.Trigger(ruiEVT_MOUSE_UP, event);
 
@@ -212,7 +263,7 @@ bool ruiManager::ProcessMouseUp(rMouseButton button, const rPoint& position){
 bool ruiManager::InsertMouseWheelEvent(const rPoint& position, rMouseWheelDirection direction){
 	ruiMouseEvent event(direction, position);
 
-	ruiOverlay* overlay = DetermineOverlay(position);
+	ruiOverlay* overlay = _impl->DetermineOverlay(position);
 
 	if (overlay){
 		ruiWidget* activeWidget = overlay->ActiveWidget();

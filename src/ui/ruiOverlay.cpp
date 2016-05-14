@@ -11,12 +11,13 @@ struct ruiOverlay::Impl{
 	ruiWidget* modalWidget;
 	ruiLayout* layout;
 	rViewport* viewport;
+	ruiController* controller;
 
 	ruiStyleManager styleManager;
 	ruiMenuManager menuManager;
 
 	Impl(rEngine* _engine, rViewport* _viewport)
-		:activeWidget(nullptr), viewport(_viewport), menuManager(_engine) {}
+		:activeWidget(nullptr), viewport(_viewport), menuManager(_engine), controller(nullptr) {}
 };
 
 ruiOverlay::ruiOverlay(rEngine* engine, rViewport* viewport){
@@ -126,4 +127,12 @@ bool ruiOverlay::ShowContextMenu(ruiMenu* menu, ruiStyle* style, const rPoint& p
 
 void ruiOverlay::CancelContextMenu(){
 	_impl->menuManager.CancelContextMenu();
+}
+
+ruiController* ruiOverlay::GetController(){
+	return _impl->controller;
+}
+
+void ruiOverlay::SetController(ruiController* controller){
+	_impl->controller = controller;
 }

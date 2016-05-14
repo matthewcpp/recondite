@@ -20,9 +20,11 @@
 #include "ui/ruiCheckbox.hpp"
 #include "ui/ruiButton.hpp"
 
+class ruiManager;
+
 class RECONDITE_API ruiOverlayLoader{
 public:
-	ruiOverlayLoader(rEngine* engine);
+	ruiOverlayLoader(ruiManager* manager, rEngine* engine);
 	
 public:
 	ruiOverlay* ParseOverlay(const rString& path, rViewport* viewport);
@@ -44,11 +46,13 @@ private:
 	void ParsePickerItem(rXMLElement* element);
 	void ParseCheckboxItem(rXMLElement* element);
 	void ParseButtonItem(rXMLElement* element);
+	void ParseControllerItem(rXMLElement* element);
 
 	void ParseClassList(rXMLElement* element, ruiWidget* widget);
 	
 private:
 	rEngine* m_engine;
+	ruiManager* m_manager;
 	
 	ruiOverlay* m_currentOverlay;
 	ruiLayoutVector m_layoutStack;

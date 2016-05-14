@@ -1,20 +1,22 @@
 #ifndef RUI_CONTROLLER_HPP
 #define RUI_CONTROLLER_HPP
 
-#include "rEvent.hpp"
-#include "ui/ruiOverlay.hpp"
+#include "rBuild.hpp"
 
-class ruiController{
+class RECONDITE_API ruiController{
 public:
-	ruiController(ruiOverlay* overlay);
-	~ruiController();
+	ruiController(const rString& className) : _className(className) {}
 
-	virtual void OnOverlayLoaded();
-	ruiOverlay* GetOverlay();
+public:
+	virtual void OnOverlayLoaded() = 0;
+	inline rString GetClassName() const;
 
 private:
-	struct Impl;
-	Impl* _impl;
+	rString _className;
 };
+
+inline rString ruiController::GetClassName() const{
+	return _className;
+}
 
 #endif

@@ -102,10 +102,11 @@ void ruiStylesheetLoader::InitParseStyleMap(){
 	s_parseStyleMap["margin"] = &ruiStylesheetLoader::ParseMarginProperty;
 
 	s_parseStyleMap["border-radius"] = &ruiStylesheetLoader::ParseIntProperty;
+	s_parseStyleMap["border-color"] = &ruiStylesheetLoader::ParseColorProperty;
 
 	s_parseStyleMap["color"] = &ruiStylesheetLoader::ParseColorProperty;
 	s_parseStyleMap["background-color"] = &ruiStylesheetLoader::ParseColorProperty;
-	s_parseStyleMap["border-color"] = &ruiStylesheetLoader::ParseColorProperty;
+	
 
 	s_parseStyleMap["font"] = &ruiStylesheetLoader::ParseStringProperty;
 }

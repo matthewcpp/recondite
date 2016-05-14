@@ -13,6 +13,7 @@
 #include "ui/ruiOverlay.hpp"
 #include "ui/ruiEvents.hpp"
 #include "ui/ruiMenuManager.hpp"
+#include "ui/ruiController.hpp"
 
 class ruiMenu;
 class ruiOverlay;
@@ -22,6 +23,12 @@ public:
 	virtual ruiOverlay* CreateOverlay(rViewport* viewport) = 0;
 	virtual ruiOverlay* LoadOverlay(const rString& filePath, rViewport* viewport) = 0;
 	virtual ruiOverlay* GetOverlay(rViewport* viewport) const = 0;
+
+	typedef ruiController*(*ControllerCreateFunction)(const rString& className, rEngine*, ruiOverlay*);
+	typedef void(*ControllerDeleteFunction)(ruiController* controller);
+
+	virtual bool RegisterControllerClass(const rString& name, ControllerCreateFunction createFunc, ControllerDeleteFunction deleteFunc) = 0;
+	virtual void UnregisterControllerClass(const rString& name) = 0;
 };
 
 class RECONDITE_API ruiManager : public ruiIManager {
@@ -46,23 +53,15 @@ public:
 	virtual ruiOverlay* CreateOverlay(rViewport* viewport);
 	virtual ruiOverlay* LoadOverlay(const rString& filePath, rViewport* viewport);
 	virtual ruiOverlay* GetOverlay(rViewport* viewport) const;
+	
+
+	virtual bool RegisterControllerClass(const rString& name, ControllerCreateFunction createFunc, ControllerDeleteFunction deleteFunc);
+	virtual void UnregisterControllerClass(const rString& name);
+	virtual ruiController* CreateController(const rString& name, ruiOverlay* overlay);
 
 private:
-	rViewport* DetermineViewport(const rPoint& point);
-	ruiOverlay* DetermineOverlay(const rPoint& point);
-	void AddOverlayToViewport(ruiOverlay* overlay, rViewport* viewport);
-
-private:
-	bool ProcessMouseDown(rMouseButton button, const rPoint& position);
-	bool ProcessMouseUp(rMouseButton button, const rPoint& position);
-
-private:
-	typedef std::map<rViewport* , ruiOverlay*> ruiViewportOverlayMap;
-
-private:
-	ruiViewportOverlayMap m_overlays;
-	ruiOverlay* m_activeOverlay;
-	rEngine* m_engine;
+	struct Impl;
+	Impl* _impl;
 };
 
 #endif

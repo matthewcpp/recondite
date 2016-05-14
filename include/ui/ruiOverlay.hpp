@@ -9,6 +9,7 @@
 
 #include "ui/ruiStyleManager.hpp"
 #include "ui/ruiMenuManager.hpp"
+#include "ui/ruiController.hpp"
 
 class ruiWidget;
 class ruiLayout;
@@ -26,6 +27,9 @@ public:
 public:
 	virtual void AddWidget(ruiWidget* widget);
 	ruiWidget* GetWidget(const rString& id);
+
+	ruiController* GetController();
+	void SetController(ruiController* controller);
 
 	void Update();
 	void Draw();

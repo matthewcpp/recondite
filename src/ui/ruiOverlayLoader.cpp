@@ -1,9 +1,12 @@
 #include "ui/ruiOverlayLoader.hpp"
 
+#include "ui/ruiManager.hpp"
+
 ruiOverlayLoader::ruiParseItemMap ruiOverlayLoader::s_parseItemMap;
 
-ruiOverlayLoader::ruiOverlayLoader(rEngine* engine){
+ruiOverlayLoader::ruiOverlayLoader(ruiManager* manager, rEngine* engine){
 	m_engine = engine;
+	m_manager = manager;
 
 	InitParseItemMap();
 }
@@ -18,6 +21,7 @@ void ruiOverlayLoader::InitParseItemMap(){
 	s_parseItemMap["picker"] = &ruiOverlayLoader::ParsePickerItem;
 	s_parseItemMap["checkbox"] = &ruiOverlayLoader::ParseCheckboxItem;
 	s_parseItemMap["button"] = &ruiOverlayLoader::ParseButtonItem;
+	s_parseItemMap["controller"] = &ruiOverlayLoader::ParseControllerItem;
 }
 
 void ruiOverlayLoader::Reset(){
@@ -65,7 +69,9 @@ void ruiOverlayLoader::ParseChildItems(rXMLElement* parent){
 		if (method){ 
 			(*this.*method)(element);
 		}
-
+		else{
+			ParseChildItems(element);
+		}
 	}
 }
 
@@ -194,4 +200,12 @@ void ruiOverlayLoader::ParseLinearLayoutItem(rXMLElement* element){
 	ParseChildItems(element);
 
 	m_layoutStack.pop_back();
+}
+
+void ruiOverlayLoader::ParseControllerItem(rXMLElement* element){
+	rString controllerType;
+	if (element->GetAttribute("type", controllerType)){
+		m_currentOverlay->SetController(m_manager->CreateController(controllerType, m_currentOverlay));
+	}
+		
 }

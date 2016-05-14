@@ -33,8 +33,10 @@ public:
 
 	void SetClearColor(const rColor& color);
 
-	void BeginRenderView (rViewport& viewport);
-	void EndRenderView();
+	void Begin(const rMatrix4 viewProjectionMatrix);
+	void End();
+	void SetMatrix(const rMatrix4& matrix);
+
 	size_t ObjectsRendered() const;
 
 	void EnableDepthTesting(bool enable);
@@ -44,7 +46,6 @@ public:
 
 	void RenderRect(const rRect& rect, const rColor& color);
 	void RenderWireRect(const rRect& rect, const rColor& color);
-	void RenderRect(const rRect& rect, rTexture* texture);
 
 	rSpriteBatch* SpriteBatch();
 
@@ -60,11 +61,6 @@ public:
 	void RenderModel(const rModel* model, rRenderingOptions* renderingOptions, const rMatrix4& transform);
 	void RenderWireframeOnShaded(const rModel* model, const rMatrix4& transform);
 
-	void RenderBuffer(const rImmediateBuffer& buffer, rMaterial* material);
-	void Render3dBuffer(rImmediateBuffer& geometry, const rMatrix4& transform, const rColor& color);
-
-	void RenderSkeleton(const rSkeleton* skeleton, const rMatrix4Vector& transformArray, const rColor& lineColor, const rColor& pointColor, float pointSize);
-
 private:
 	void ForceRenderModel(const rModel* model, const rMatrix4& modelViewProjection);
 
@@ -73,7 +69,6 @@ private:
 
 private:	
 	void ImmediateColorRender(rImmediateBuffer& geometry, const rColor& color);
-	void ImmediateTexturedRender(rImmediateBuffer& geometry, rTexture* texture);
 
 	void RenderSpriteBatch();
 
@@ -84,9 +79,7 @@ private:
 		rViewport* m_activeViewport;
 		rRenderMode m_renderMode;
 
-		rMatrix4 m_viewMatrix;
 		rMatrix4 m_viewProjectionMatrix;
-
 
 		size_t m_objectsRendered;
 		std::unique_ptr<rSpriteBatch> m_spriteBatch;

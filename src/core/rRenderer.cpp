@@ -6,24 +6,20 @@ rRenderer::rRenderer(rGraphicsDevice* graphicsDevice, rContentManager* contentMa
 
 	m_spriteBatch.reset(new rSpriteBatch(graphicsDevice, contentManager));
 	
-	m_activeViewport = NULL;
 }
 
-void rRenderer::BeginRenderView (rViewport& viewport){
+void rRenderer::Begin(const rMatrix4 viewProjectionMatrix){
 	m_objectsRendered = 0;
-	m_activeViewport = &viewport;
 	m_spriteBatch->Clear();
-	
-	rRect window = viewport.GetScreenRect();
-	m_graphicsDevice->SetViewport(window.x, window.y, window.width, window.height);
 
-	m_renderMode = viewport.RenderMode();
+	m_viewProjectionMatrix = viewProjectionMatrix;
 
-	viewport.GetViewProjectionMatrix(m_viewProjectionMatrix);
-	viewport.GetViewMatrix(m_viewMatrix);
+	//m_renderMode = viewport->RenderMode();
+
+	//viewport->GetViewProjectionMatrix(m_viewProjectionMatrix);
 }
 
-void rRenderer::EndRenderView(){
+void rRenderer::End(){
 	RenderSpriteBatch();
 }
 
@@ -41,14 +37,6 @@ void rRenderer::RenderGeometry(rGeometry* geometry, const rMatrix4& transform, c
 }
 
 void rRenderer::RenderShadedWithEdges(rGeometry* geometry, const rMatrix4& transform, rMaterial* material, const rColor& edgeColor){
-
-}
-
-void rRenderer::RenderBuffer(const rImmediateBuffer& buffer, rMaterial* material){
-	m_graphicsDevice->RenderImmediate(buffer, m_viewProjectionMatrix, material);
-}
-
-void rRenderer::Render3dBuffer(rImmediateBuffer& geometry, const rMatrix4& transform, const rColor& color){
 
 }
 
@@ -125,19 +113,12 @@ void rRenderer::ImmediateColorRender(rImmediateBuffer& geometry, const rColor& c
 
 }
 
-void rRenderer::ImmediateTexturedRender(rImmediateBuffer& geometry, rTexture* texture){
-
-}
-
 rSpriteBatch* rRenderer::SpriteBatch() {
 	return m_spriteBatch.get();
 }
 
 void rRenderer::RenderSpriteBatch() {
-	rMatrix4 matrix;
-	m_activeViewport->GetViewProjectionMatrix(matrix);
-
-	m_spriteBatch->Render(matrix);
+	m_spriteBatch->Render(m_viewProjectionMatrix);
 }
 
 void rRenderer::RenderRect(const rRect& rect, const rColor& color){
@@ -150,12 +131,6 @@ void rRenderer::RenderRoundedRect(const rRect& rect, float radius, const rColor&
 	rImmediateBuffer geometry;
 	rGeometryUtil::CreateRoundedRectVerticies(rect, radius, 10, geometry);
 	ImmediateColorRender(geometry, color);
-}
-
-void rRenderer::RenderRect(const rRect& rect, rTexture* texture){
-	rImmediateBuffer geometry;
-	rGeometryUtil::CreateRectVerticies(rect, geometry, true);
-	ImmediateTexturedRender(geometry, texture);
 }
 
 void rRenderer::RenderWireRect(const rRect& rect, const rColor& color){
@@ -205,32 +180,10 @@ void rRenderer::RenderString(const rString& text, const Font::Face* font, const 
 	RenderString(text, font, bounding, color);
 }
 
-void rRenderer::RenderSkeleton(const rSkeleton* skeleton, const rMatrix4Vector& transformArray, const rColor& lineColor, const rColor& pointColor, float pointSize){
-	if (skeleton){
-		rImmediateBuffer pointData, lineData;
-		rGeometryUtil::CreateSkeletonGeometry(skeleton, pointData, lineData);
-
-		for (size_t i = 0; i <transformArray.size(); i++){
-			pointData.TransformVertex(i, transformArray[i]);
-			lineData.TransformVertex(i, transformArray[i]);
-		}
-
-		rMaterial* material = nullptr;
-		//material->SetColor("fragColor",lineColor);
-
-		m_graphicsDevice->EnableDepthTesting(false);
-
-		m_graphicsDevice->RenderImmediate(lineData, m_viewProjectionMatrix, material);
-
-		//material->SetColor("fragColor", pointColor);
-		//material->SetFloat("recPointSize", pointSize);
-
-
-		m_graphicsDevice->RenderImmediate(pointData, m_viewProjectionMatrix, material);
-		m_graphicsDevice->EnableDepthTesting(true);
-	}
-}
-
 void rRenderer::EnableDepthTesting(bool enable){
 	m_graphicsDevice->EnableDepthTesting(enable);
+}
+
+void rRenderer::SetMatrix(const rMatrix4& matrix){
+	m_viewProjectionMatrix = matrix;
 }

@@ -6,7 +6,6 @@
 #include "rEngine.hpp"
 #include "ui/ruiManager.hpp"
 #include "rScene.hpp"
-#include "rViewInfo.hpp"
 
 class RECONDITE_API rModule {
 public:
@@ -19,8 +18,8 @@ public:
 	virtual void BeforeUpdateScene() {};
 	virtual void AfterUpdateScene() {};
 	
-	virtual void BeforeRenderScene(rViewInfo* viewInfo) {};
-	virtual void AfterRenderScene(rViewInfo* viewInfo) {};
+	virtual void BeforeRenderScene(rViewport* viewInfo) {};
+	virtual void AfterRenderScene(rViewport* viewInfo) {};
 
 	virtual void Init() {};
 	virtual void Uninit() {};

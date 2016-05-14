@@ -26,25 +26,33 @@ void rApplicationBase::Draw(){
 	//render the scene in each viewport
 	m_graphicsDevice->EnableDepthTesting(true);
 	for (rViewportMap::iterator it = m_viewports.begin(); it != end; ++it){
-		rViewInfo viewInfo;
-		viewInfo.viewport = it->second;
-		viewInfo.overlay = m_overlayManager->GetOverlay(viewInfo.viewport);
+		rViewport* viewport = it->second;
 
-		m_engine.renderer->BeginRenderView(*viewInfo.viewport);
-		m_module->BeforeRenderScene(&viewInfo);
+		rRect window = viewport->GetScreenRect();
+		m_graphicsDevice->SetViewport(window.x, window.y, window.width, window.height);
+
+		rMatrix4 viewProjectionMatrix;
+		viewport->GetViewProjectionMatrix(viewProjectionMatrix);
+
+		m_engine.renderer->Begin(viewProjectionMatrix);
+		m_module->BeforeRenderScene(viewport);
 		m_scene->Draw();
-		m_module->AfterRenderScene(&viewInfo);
-		m_engine.renderer->EndRenderView();
+		m_module->AfterRenderScene(viewport);
+		m_engine.renderer->End();
 	}
 
 	//render the overlay for each viewport
 	m_graphicsDevice->EnableDepthTesting(false);
 	for (rViewportMap::iterator it = m_viewports.begin(); it != end; ++it){
-		rViewInfo view;
-		view.viewport = it->second;
-		view.overlay = m_overlayManager->GetOverlay(view.viewport);
+		rViewport* viewport = it->second;
 
-		m_overlayManager->Draw(view.viewport);
+		rMatrix4 matrixOrtho2D;
+		rRect window = viewport->GetScreenRect();
+		rMatrixUtil::Ortho2D(window.Left(), window.Right(), window.Bottom(), window.Top(), matrixOrtho2D);
+
+		m_engine.renderer->Begin(matrixOrtho2D);
+		m_overlayManager->Draw(viewport);
+		m_engine.renderer->End();
 	}
 
 	m_graphicsDevice->SwapBuffers();

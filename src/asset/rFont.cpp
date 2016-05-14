@@ -79,8 +79,36 @@ namespace Font{
 		}
 	}
 
+	void MeasureWord(Font::Glyph** glyphs, size_t glyphCount, rSize& measuredSize, int startX, int startY){
+		int xPos = startX;
+		int yPos = startY;
+
+		Font::Glyph *glyph = nullptr;
+
+		for (size_t i = 0; i < glyphCount; i++){
+			glyph = glyphs[i];
+
+			int left = xPos + glyph->leftBearing;
+			int right = left + glyph->width;
+			int top = yPos - glyph->top;
+			int bottom = top + glyph->height;
+
+			measuredSize.x = std::max(measuredSize.x, right);
+			measuredSize.y = std::max(measuredSize.y, bottom);
+
+			xPos += glyph->advance;
+		}
+	}
+
 	rSize Face::MeasureString(const rString& text){
-		return rSize(0, 0);
+		rSize maxSize(INT_MAX, INT_MAX);
+		rSize measuredSize(0, 0);
+
+		Font::WrapText(this, text, maxSize, [&](Font::Glyph** glyphs, size_t glyphCount, int startX, int startY){
+			MeasureWord(glyphs, glyphCount, measuredSize, startX, startY);
+		});
+
+		return measuredSize;
 	}
 
 
@@ -230,5 +258,65 @@ namespace Font{
 		}
 
 		return 0;
+	}
+
+	void WrapText(Face* face, const rString& text, const rSize& size, std::function<void(Glyph**, size_t, int, int)> wordFunc){
+		std::vector<Font::Glyph*> wordGlyphs;
+
+		int xPos = 0;
+		int yPos = face->GetAscender();
+
+		int wordWidth = 0;
+		int spaceLeft = size.x;
+
+		int lineCount = 0;
+
+		for (size_t i = 0; i < text.size(); i++){
+			int c = text[i];
+
+			if (c == '\n'){
+				if (wordWidth > spaceLeft){ //current word will not fit on this line
+					yPos += face->GetLineHeight();
+					xPos = 0;
+				}
+
+				wordFunc(wordGlyphs.data(), wordGlyphs.size(), xPos, yPos);
+				wordGlyphs.clear();
+
+				yPos += face->GetLineHeight();
+				xPos = 0;
+				spaceLeft = size.x;
+				wordWidth = 0;
+
+			}
+			else{
+				Font::Glyph* glyph = face->GetGlyph(c);
+
+				if (c == ' '){
+					if (wordWidth + glyph->advance > spaceLeft){ //current word will not fit on this line
+						yPos += face->GetLineHeight();
+						xPos = 0;
+						spaceLeft = size.x;
+					}
+
+					wordFunc(wordGlyphs.data(), wordGlyphs.size(), xPos, yPos);
+					wordGlyphs.clear();
+
+					spaceLeft -= wordWidth + glyph->advance;
+					xPos += wordWidth + glyph->advance;
+					wordWidth = 0;
+
+				}
+				else{
+					wordWidth += glyph->advance;
+					wordGlyphs.push_back(glyph);
+				}
+			}
+		}
+
+		if (wordGlyphs.size() > 0){
+			wordFunc(wordGlyphs.data(), wordGlyphs.size(), xPos, yPos);
+			wordGlyphs.clear();
+		}
 	}
 }

@@ -4,6 +4,7 @@
 
 #include "data/rImmediateBuffer.hpp"
 #include "rGeometryUtil.hpp"
+#include "asset/rFont.hpp"
 
 struct rSpriteBatch::Impl{
 	rContentManager* contentManager;
@@ -96,13 +97,13 @@ void rSpriteBatch::Render(const rMatrix4& viewMatrix){
 	}
 }
 
-void WriteWord(std::vector<Font::Glyph*>& glyphs, rImmediateBuffer& buffer, int startX, int startY){
+void WriteWord(Font::Glyph** glyphs, size_t glyphCount, rImmediateBuffer& buffer, int startX, int startY){
 	int xPos = startX;
 	int yPos = startY;
 
 	Font::Glyph *glyph = nullptr;
 
-	for (size_t i = 0; i < glyphs.size(); i++){
+	for (size_t i = 0; i < glyphCount; i++){
 		glyph = glyphs[i];
 
 		int left = xPos + glyph->leftBearing;
@@ -122,11 +123,9 @@ void WriteWord(std::vector<Font::Glyph*>& glyphs, rImmediateBuffer& buffer, int 
 
 		xPos += glyph->advance;
 	}
-
-	glyphs.clear();
 }
 
-void rSpriteBatch::RenderString(Font::Face* face, const rString& text, const rVector2& position, const rSize& size){
+void rSpriteBatch::RenderString(Font::Face* face, const rString& text, const rPoint& position, const rSize& size){
 	rTexture* fontTexture = _impl->contentManager->Fonts()->GetFontTexture(face);
 
 	if (fontTexture){
@@ -134,63 +133,13 @@ void rSpriteBatch::RenderString(Font::Face* face, const rString& text, const rVe
 
 		rImmediateBuffer& buffer = *(_impl->textBuffers[fontTexture].get());
 
-		std::vector<Font::Glyph*> wordGlyphs;
-
-		int xPos = 0;
-		int yPos = face->GetAscender();
-
-		int wordWidth = 0;
-		int spaceLeft = size.x;
-
-		int lineCount = 0;
-
-		for (size_t i = 0; i < text.size(); i++){
-			int c = text[i];
-
-			if (c == '\n'){
-				if (wordWidth > spaceLeft){ //current word will not fit on this line
-					yPos += face->GetLineHeight();
-					xPos = 0;
-				}
-
-				WriteWord(wordGlyphs, buffer, xPos, yPos);
-
-				yPos += face->GetLineHeight();
-				xPos = 0;
-				spaceLeft = size.x;
-				wordWidth = 0;
-
-			}
-			else{
-				Font::Glyph* glyph = face->GetGlyph(c);
-
-				if (c == ' '){
-					if (wordWidth + glyph->advance > spaceLeft){ //current word will not fit on this line
-						yPos += face->GetLineHeight();
-						xPos = 0;
-						spaceLeft = size.x;
-					}
-
-					WriteWord(wordGlyphs, buffer, xPos, yPos);
-
-					spaceLeft -= wordWidth + glyph->advance;
-					xPos += wordWidth + glyph->advance;
-					wordWidth = 0;
-
-				}
-				else{
-					wordWidth += glyph->advance;
-					wordGlyphs.push_back(glyph);
-				}
-			}
-		}
-
-		if (wordGlyphs.size() > 0)
-			WriteWord(wordGlyphs, buffer, xPos, yPos);
+		Font::WrapText(face, text, size, [&](Font::Glyph** glyphs, size_t glyphCount, int startX, int startY){
+			WriteWord(glyphs, glyphCount, buffer, startX, startY);
+		});
 	}
 }
 
-void rSpriteBatch::RenderString(Font::Face* face, const rString& text, const rVector2& position){
+void rSpriteBatch::RenderString(Font::Face* face, const rString& text, const rPoint& position){
 	rSize maxSize(INT_MAX, INT_MAX);
 	RenderString(face, text, position, maxSize);
 }

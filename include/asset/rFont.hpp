@@ -4,6 +4,7 @@
 #include <map>
 #include <algorithm>
 #include <cstdint>
+#include <functional>
 
 #include "rBuild.hpp"
 #include "rString.hpp"
@@ -87,6 +88,9 @@ namespace Font{
 		struct Impl;
 		Impl* _impl;
 	};
+
+
+	void RECONDITE_API WrapText(Face* face, const rString& text, const rSize& size, std::function<void(Glyph**, size_t, int, int)> wordFunc);
 }
 
 #endif

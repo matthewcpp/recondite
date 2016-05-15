@@ -96,13 +96,14 @@ void rSpriteBatch::Clear() {
 }
 
 void rSpriteBatch::Render(const rMatrix4& viewMatrix){
+	rShaderManager* shaderManager = _impl->contentManager->Shaders();
 	rMaterial* spriteMaterial = _impl->contentManager->Materials()->Get("sprite_material");
 	if (!spriteMaterial) {
 		spriteMaterial = _impl->contentManager->Materials()->CreateMaterial("sprite_material");
 		spriteMaterial->SetShader(_impl->contentManager->Shaders()->DefaultSpriteShader());
 	}
 
-	_impl->graphicsDevice->ActivateShader(spriteMaterial->Shader()->ProgramId());
+	_impl->graphicsDevice->ActivateShader(shaderManager->DefaultSpriteShader()->ProgramId());
 
 	auto end = _impl->spriteBatches.end();
 
@@ -121,7 +122,7 @@ void rSpriteBatch::Render(const rMatrix4& viewMatrix){
 		textMaterial->SetShader(_impl->contentManager->Shaders()->Get("default_textured"));
 	}
 
-	_impl->graphicsDevice->ActivateShader(textMaterial->Shader()->ProgramId());
+	_impl->graphicsDevice->ActivateShader(shaderManager->DefaultTextShader()->ProgramId());
 
 	end = _impl->textBatches.end();
 

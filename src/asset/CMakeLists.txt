@@ -8,8 +8,6 @@ add_rec_src(asset_files "rTextureAtlasData" "asset")
 
 add_rec_src(asset_files "rShader" "asset")
 add_rec_src(asset_files "rShaderManager" "asset")
-add_rec_src(asset_files "rShaderData" "asset")
-add_rec_src(asset_files "rShaderFile" "asset")
 
 add_rec_src(asset_files "rGeometry" "asset")
 add_rec_src(asset_files "rGeometryManager" "asset")

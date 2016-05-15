@@ -1,33 +1,125 @@
 #include "asset/rShaderManager.hpp"
 
+#include <map>
+#include <memory>
+#include <functional>
+
+#include "rPath.hpp"
+#include "rDefs.hpp"
+
+
+
+struct rShaderManager::Impl{
+	rGraphicsDevice* graphicsDevice;
+	rFileSystem* fileSystem;
+
+	std::map<rString, std::unique_ptr<rShader>> shaders;
+
+	Impl(rGraphicsDevice* _graphicsDevice, rFileSystem* _fileSystem) : graphicsDevice(_graphicsDevice), fileSystem(_fileSystem){}
+
+	rShader* LoadFromStream(rIStream* vertex, rIStream* fragment);
+	rShader* Create(const rString& vertex, const rString& fragment, const rString& name);
+};
+
 rShaderManager::rShaderManager(rGraphicsDevice* graphicsDevice, rFileSystem* fileSystem)
-	:rAssetManager<rShader, rShaderData, rShaderFile>(fileSystem)
 {
-	m_graphicsDevice = graphicsDevice;
+	_impl = new Impl(graphicsDevice, fileSystem);
 }
 
-rShader* rShaderManager::CreateAssetFromData(const rShaderData& shaderData, const rString& name) {
-	unsigned int shaderId = m_graphicsDevice->CreateShaderProgram(shaderData.VertexProgram(), shaderData.FragmentProgram());
-
-	return new rShader(name, shaderId);
+rShaderManager::~rShaderManager(){
+	delete _impl;
 }
 
-void rShaderManager::DisposeAsset(rShader* shader) {
-	m_graphicsDevice->DeleteShaderProgram(shader->ProgramId());
+rShader* rShaderManager::LoadFromPath(const rString& directory, const rString& name){
+	if (Get(name)) return nullptr;
+
+
+	rString vertexShaderPath = rPath::Assemble(directory, name, "vert");
+	rString fragmentShaderPath = rPath::Assemble(directory, name, "frag");
+
+	auto vertexShaderFile = _impl->fileSystem->GetReadFileRef(vertexShaderPath);
+	auto fragmentShaderFile = _impl->fileSystem->GetReadFileRef(fragmentShaderPath);
+
+	if (vertexShaderFile && fragmentShaderFile){
+		//read the files into strings
+		vertexShaderFile->Seek(0, rSeekMode::End);
+		size_t size = vertexShaderFile->Pos();
+		vertexShaderFile->Seek(0, rSeekMode::Beginning);
+		rString vertexShaderStr(size, ' ');
+		vertexShaderFile->Read(&vertexShaderStr[0], size);
+
+		fragmentShaderFile->Seek(0, rSeekMode::End);
+		size = fragmentShaderFile->Pos();
+		fragmentShaderFile->Seek(0, rSeekMode::Beginning);
+		rString fragmentShaderStr(size, ' ');
+		fragmentShaderFile->Read(&fragmentShaderStr[0], size);
+
+		return _impl->Create(vertexShaderStr, fragmentShaderStr, name);
+	}
+	else{
+		return nullptr;
+	}
+}
+
+rShader* rShaderManager::Load(const rString& vertex, const rString& fragment, const rString& name){
+	if (Get(name)){
+		return nullptr;
+	}
+	else{
+		return _impl->Create(vertex, fragment, name);
+	}
+}
+
+rShader* rShaderManager::Impl::Create(const rString& vertex, const rString& fragment, const rString& name){
+	unsigned int shaderId = graphicsDevice->CreateShaderProgram(vertex, fragment);
+
+	if (shaderId > 0){
+		rShader* shader = new rShader(name, shaderId);
+		std::unique_ptr<rShader> ref(shader);
+		shaders.insert(std::make_pair(name, std::move(ref)));
+		return shader;
+	}
+	else{
+		return nullptr;
+	}
+
+}
+
+rShader* rShaderManager::Get(const rString& name){
+	auto result = _impl->shaders.find(name);
+
+	if (result == _impl->shaders.end()){
+		return nullptr;
+	}
+	else{
+		return result->second.get();
+	}
+}
+
+int rShaderManager::Delete(const rString& name){
+	return 0;
+}
+
+void rShaderManager::Clear(){
+	_impl->shaders.clear();
 }
 
 rShader* rShaderManager::DefaultModelShader(){
-	return Retain("default_model");
+	return Get("default_model");
 }
 
 rShader* rShaderManager::DefaultLineShader(){
-	return Retain("default_colored");
+	return Get("default_colored");
 }
 
 rShader* rShaderManager::DefaultPrimitiveShader(){
-	return Retain("default_primitive");
+	return Get("default_primitive");
 }
 
 rShader* rShaderManager::DefaultSpriteShader() {
-	return Retain("default_sprite");
+	return Get("__default_sprite__");
+}
+
+rShader* rShaderManager::DefaultTextShader(){
+	return Get("__default_text__");
 }

@@ -1,36 +1,35 @@
 #ifndef R_SHADERMANAGER_HPP
 #define R_SHADERMANAGER_HPP
 
-#include <map>
-#include <memory>
-#include <functional>
-
 #include "rBuild.hpp"
 #include "rGraphicsDevice.hpp"
 #include "rFileSystem.hpp"
 
-#include "rAssetManager.hpp"
-
 #include "rShader.hpp"
-#include "rShaderData.hpp"
-#include "rShaderFile.hpp"
 
-class rShaderManager : public rAssetManager<rShader, rShaderData, rShaderFile>{
+class RECONDITE_API rShaderManager {
 public:
 	rShaderManager(rGraphicsDevice* graphicsDevice, rFileSystem* fileSystem);
-
+	~rShaderManager();
 public:
+
+	rShader* LoadFromPath(const rString& directory, const rString& name);
+	rShader* Load(const rString& vertex, const rString& fragment, const rString& name);
+
+	rShader* Get(const rString& name);
+	int Delete(const rString& name);
+
+	void Clear();
 
 	rShader* DefaultModelShader();
 	rShader* DefaultLineShader();
 	rShader* DefaultPrimitiveShader();
 	rShader* DefaultSpriteShader();
-
-	virtual rShader* CreateAssetFromData(const rShaderData& shaderData, const rString& name) override;
-	virtual void DisposeAsset(rShader* shader) override;
+	rShader* DefaultTextShader();
 
 private:
-	rGraphicsDevice* m_graphicsDevice;
+	struct Impl;
+	Impl* _impl;
 };
 
 #endif

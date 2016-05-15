@@ -54,6 +54,12 @@ enum rButtonState {
 	rBUTTON_STATE_NONE
 };
 
+enum class rSeekMode{
+	Beginning,
+	Current,
+	End
+};
+
 #define rNO_COPY_CLASS(classname)								\
 		public:													\
 			classname(const classname&) = delete;				\

@@ -6,10 +6,8 @@ rOpenGLContentManager::rOpenGLContentManager(rGraphicsDevice* graphicsDevice, rF
 {}
 
 void rOpenGLContentManager::InitDefaultAssets(const rString& defaultAssetPath){
-	#include "rgl/rOpenGLDefaultShaders.inl"
-	rLog::Info("Loading OpengGL Shaders");
-	rShaderManager* shaderManager = Shaders();
-
+	
+	/*
     rShaderData shaderData;
 
     shaderData.Set(coloredVertexShader, coloredFragmentShader);
@@ -21,14 +19,15 @@ void rOpenGLContentManager::InitDefaultAssets(const rString& defaultAssetPath){
     shaderData.Set(texturedVertexShader, texturedFragmentShader);
 	result = shaderManager->LoadFromData(shaderData, "default_textured");
 
-	shaderData.Set(modelVertexShader, texturedFragmentShader);
-	result = shaderManager->LoadFromData(shaderData, "default_model");
-
 	shaderData.Set(coloredVertexShader, vertexColorFragmentShader);
 	result = shaderManager->LoadFromData(shaderData, "default_vertex_color_geometry");
 
-	shaderData.Set(spriteVertexShader, spriteFragmentShader);
-	result = shaderManager->LoadFromData(shaderData, "default_sprite");
+	*/
+
+	rLog::Info("Loading Default OpengGL Shaders");
+	rShaderManager* shaderManager = Shaders();
+	shaderManager->LoadFromPath(defaultAssetPath, "__default_sprite__");
+	shaderManager->LoadFromPath(defaultAssetPath, "__default_text__");
 
 	rString defaultFontPath = rPath::Combine(defaultAssetPath, "__default_font__.rfnt");
 	Fonts()->LoadFromPath(defaultFontPath, "__default_font__");

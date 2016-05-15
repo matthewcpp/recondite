@@ -18,6 +18,8 @@ public:
 	virtual rOStream& Write(const char* buffer, size_t size);
 
 	virtual void Seek(size_t pos);
+	virtual void Seek(size_t pos, rSeekMode seekFrom);
+
 	virtual size_t Pos();
 
 	virtual bool IsOk() const;

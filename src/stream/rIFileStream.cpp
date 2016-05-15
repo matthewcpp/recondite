@@ -32,6 +32,25 @@ void rIFileStream::Seek(size_t pos){
 	m_file.seekg(pos);
 }
 
+void rIFileStream::Seek(size_t pos, rSeekMode seekFrom){
+	std::ios_base::seekdir direction;
+
+	switch (seekFrom){
+	case rSeekMode::Current:
+		direction = std::ios_base::cur;
+		break;
+
+	case rSeekMode::End:
+		direction = std::ios_base::end;
+		break;
+
+	default:
+		direction = std::ios_base::beg;
+	}
+
+	m_file.seekg(pos, direction);
+}
+
 size_t rIFileStream::Pos(){
 	return m_file.tellg();
 }

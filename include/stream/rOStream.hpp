@@ -5,6 +5,7 @@
 #include <cstring>
 
 #include "rBuild.hpp"
+#include "rDefs.hpp"
 
 class RECONDITE_API rOStream{
 public:
@@ -12,6 +13,7 @@ public:
 	virtual rOStream& Write(const char* buffer, size_t size) = 0;
 
 	virtual void Seek(size_t pos) = 0;
+	virtual void Seek(size_t pos, rSeekMode seekFrom) = 0;
 	virtual size_t Pos() = 0;
 
 	virtual bool IsOk() const = 0;
@@ -23,7 +25,7 @@ public:
 	virtual rOStream& operator << (unsigned short s) = 0;
 	virtual rOStream& operator << (int i) = 0;
 	virtual rOStream& operator << (unsigned int i) = 0;
-        virtual rOStream& operator << (long l) = 0;
+    virtual rOStream& operator << (long l) = 0;
 	virtual rOStream& operator << (unsigned long l) = 0;
 	virtual rOStream& operator << (float f) = 0;
 

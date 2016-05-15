@@ -19,6 +19,7 @@ public:
 	virtual size_t ReadCount() const;
 	virtual int Peek();
 	virtual void Seek(size_t pos);
+	virtual void Seek(size_t pos, rSeekMode seekFrom);
 	virtual size_t Pos();
 	virtual bool IsOk() const;
 	virtual rIStream& Get(char& ch);

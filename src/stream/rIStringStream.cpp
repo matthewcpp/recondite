@@ -27,6 +27,25 @@ void rIStringStream::Seek(size_t pos){
 	m_stream.seekg(pos);
 }
 
+void rIStringStream::Seek(size_t pos, rSeekMode seekFrom){
+	std::ios_base::seekdir direction;
+
+	switch (seekFrom){
+	case rSeekMode::Current:
+		direction = std::ios_base::cur;
+		break;
+
+	case rSeekMode::End:
+		direction = std::ios_base::end;
+		break;
+
+	default:
+		direction = std::ios_base::beg;
+	}
+
+	m_stream.seekg(pos, direction);
+}
+
 size_t rIStringStream::Pos(){
 	return m_stream.tellg();
 }

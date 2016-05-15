@@ -4,6 +4,7 @@
 #include <cstddef>
 
 #include "rBuild.hpp"
+#include "rDefs.hpp"
 
 class RECONDITE_API rIStream{
 public:
@@ -12,6 +13,7 @@ public:
 	virtual size_t ReadCount() const = 0;
 	virtual int Peek() = 0;
 	virtual void Seek(size_t pos) = 0;
+	virtual void Seek(size_t pos, rSeekMode seekFrom) = 0;
 	virtual size_t Pos() = 0;
 	virtual bool IsOk() const = 0;
 	virtual rIStream& Get(char& ch) = 0;

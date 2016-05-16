@@ -47,7 +47,7 @@ void rRenderer::ForceRenderModel(const rModel* model, const rMatrix4& modelViewP
 	for (size_t i = 0; i < meshNames.size(); i++){
 		rMesh* mesh = model->GetMesh(meshNames[i]);
 
-		m_graphicsDevice->ActivateShader(mesh->Material()->Shader()->ProgramId());
+		//m_graphicsDevice->ActivateShader(mesh->Material()->Shader()->ProgramId());
 		m_graphicsDevice->RenderGeometry(geometry, modelViewProjection, mesh->Buffer(), mesh->Material());
 		m_objectsRendered++;
 	}
@@ -64,7 +64,7 @@ void rRenderer::RenderLineMeshes(const rModel* model, const rMatrix4& modelViewP
 		rGeometryType geometryType = mesh->GeometryType();
 
 		if (geometryType == rGeometryType::Lines || geometryType == rGeometryType::LineLoop){
-			m_graphicsDevice->ActivateShader(mesh->Material()->Shader()->ProgramId());
+			//m_graphicsDevice->ActivateShader(mesh->Material()->Shader()->ProgramId());
 			m_graphicsDevice->RenderGeometry(geometry, modelViewProjection, mesh->Buffer(), mesh->Material());
 			m_objectsRendered++;
 		}
@@ -81,7 +81,7 @@ void rRenderer::RenderTriangleMeshes(const rModel* model, const rMatrix4& modelV
 		rMesh* mesh = model->GetMesh(meshNames[i]);
 
 		if (mesh->GeometryType() == rGeometryType::Triangles){
-			m_graphicsDevice->ActivateShader(mesh->Material()->Shader()->ProgramId());
+			//m_graphicsDevice->ActivateShader(mesh->Material()->Shader()->ProgramId());
 			m_graphicsDevice->RenderGeometry(geometry, modelViewProjection, mesh->Buffer(), mesh->Material());
 			m_objectsRendered++;
 		}

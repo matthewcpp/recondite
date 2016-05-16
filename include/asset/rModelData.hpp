@@ -14,7 +14,6 @@
 #include "rTexCoordGeometryData.hpp"
 #include "rVertexColorGeometryData.hpp"
 #include "rPrimitiveGeometryData.hpp"
-#include "rMaterialData.hpp"
 
 struct RECONDITE_API rMeshData{
 	rMeshData(const rString& mName, const rString& bufferName, rGeometryType geoType)
@@ -22,7 +21,6 @@ struct RECONDITE_API rMeshData{
 
 	rString meshName;
 	rString elementBufferName;
-	rMaterialData materialData;
 
 	rAlignedBox3 boundingBox;
 	rGeometryType geometryType;

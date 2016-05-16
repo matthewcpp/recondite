@@ -1,11 +1,10 @@
 #include "asset/rMaterial.hpp"
 
-rMaterial::rMaterial(const rString& name)
+rMaterial::rMaterial()
 {
 	m_pointSize = 1.0f;
 	m_diffuseColor = rColor::White;
 	m_diffuseTexture = nullptr;
-	m_name = name;
 }
 
 void rMaterial::SetDiffuseTexture(rTexture* diffuseTexture){
@@ -30,16 +29,4 @@ void rMaterial::SetPointSize(float pointSize){
 
 float rMaterial::PointSize() const{
 	return m_pointSize;
-}
-
-rString rMaterial::Name() const{
-	return m_name;
-}
-
-rShader* rMaterial::Shader() const{
-	return m_shader;
-}
-
-void rMaterial::SetShader(rShader* shader){
-	m_shader = shader;
 }

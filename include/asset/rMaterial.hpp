@@ -15,7 +15,7 @@
 
 class RECONDITE_API rMaterial {
 public:
-	rMaterial(const rString& name);
+	rMaterial();
 
 	void SetDiffuseTexture(rTexture* diffuseTexture);
 	rTexture* DiffuseTexture() const;
@@ -26,18 +26,10 @@ public:
 	void SetPointSize(float pointSize);
 	float PointSize() const;
 
-	rShader* Shader() const;
-	void SetShader(rShader* shader);
-
-	rString Name() const;
-
 private:
-	rShader* m_shader;
 	rTexture* m_diffuseTexture;
 	rColor m_diffuseColor;
 	float m_pointSize;
-
-	rString m_name;
 };
 
 #endif

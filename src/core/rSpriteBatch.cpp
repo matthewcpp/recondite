@@ -24,7 +24,9 @@ struct rSpriteBatch::Impl{
 	TextureBatchMap textBatches;
 	TextureBatchMap spriteBatches;
 
-	Impl(rGraphicsDevice* _graphicsDevice, rContentManager* _contentManager) : graphicsDevice(_graphicsDevice), contentManager(_contentManager) {}
+	std::unique_ptr<rMaterial> material;
+
+	Impl(rGraphicsDevice* _graphicsDevice, rContentManager* _contentManager) : graphicsDevice(_graphicsDevice), contentManager(_contentManager), material(new rMaterial()) {}
 
 	rImmediateBuffer* GetBuffer(TextureBatchMap& textureBatch, rTexture* texture, const rColor& color);
 	rImmediateBuffer* EnsureTextBuffer(Font::Face* face, const rColor& color);
@@ -97,41 +99,30 @@ void rSpriteBatch::Clear() {
 
 void rSpriteBatch::Render(const rMatrix4& viewMatrix){
 	rShaderManager* shaderManager = _impl->contentManager->Shaders();
-	rMaterial* spriteMaterial = _impl->contentManager->Materials()->Get("sprite_material");
-	if (!spriteMaterial) {
-		spriteMaterial = _impl->contentManager->Materials()->CreateMaterial("sprite_material");
-		spriteMaterial->SetShader(_impl->contentManager->Shaders()->DefaultSpriteShader());
-	}
-
 	_impl->graphicsDevice->ActivateShader(shaderManager->DefaultSpriteShader()->ProgramId());
 
 	auto end = _impl->spriteBatches.end();
 
 	for (auto it = _impl->spriteBatches.begin(); it != end; ++it) {
-		spriteMaterial->SetDiffuseTexture(it->first);
+		_impl->material->SetDiffuseTexture(it->first);
 
 		for (size_t i = 0; i < it->second.size(); i++){
-			spriteMaterial->SetDiffuseColor(it->second[i]->color);
-			_impl->graphicsDevice->RenderImmediate(it->second[i]->data, viewMatrix, spriteMaterial);
+			_impl->material->SetDiffuseColor(it->second[i]->color);
+			_impl->graphicsDevice->RenderImmediate(it->second[i]->data, viewMatrix, _impl->material.get());
 		}
 	}
 
-	rMaterial* textMaterial = _impl->contentManager->Materials()->Get("default_text");
-	if (!textMaterial) {
-		textMaterial = _impl->contentManager->Materials()->CreateMaterial("default_text");
-		textMaterial->SetShader(_impl->contentManager->Shaders()->Get("default_textured"));
-	}
 
 	_impl->graphicsDevice->ActivateShader(shaderManager->DefaultTextShader()->ProgramId());
 
 	end = _impl->textBatches.end();
 
 	for (auto it = _impl->textBatches.begin(); it != end; ++it) {
-		textMaterial->SetDiffuseTexture(it->first);
+		_impl->material->SetDiffuseTexture(it->first);
 
 		for (size_t i = 0; i < it->second.size(); i++){
-			textMaterial->SetDiffuseColor(it->second[i]->color);
-			_impl->graphicsDevice->RenderImmediate(it->second[i]->data, viewMatrix, textMaterial);
+			_impl->material->SetDiffuseColor(it->second[i]->color);
+			_impl->graphicsDevice->RenderImmediate(it->second[i]->data, viewMatrix, _impl->material.get());
 		}
 	}
 }

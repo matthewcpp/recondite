@@ -22,7 +22,6 @@ elseif (MSVC)
 	set(ENV{FREETYPE_DIR} $ENV{FREETYPE_ROOT})
 	
 	set(ENV{SDL2DIR} $ENV{SDL2_ROOT})
-	set(SDL2_BUILDING_LIBRARY "TRUE")
 	
 	#configure wxmsw build variables
 	set(wxWidgets_ROOT_DIR $ENV{WX_ROOT})
@@ -34,9 +33,9 @@ endif()
 find_package(Threads REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
-find_package(SDL2 REQUIRED)
 find_package(GTest REQUIRED)
 find_package(Freetype REQUIRED)
+find_package(SDL2 REQUIRED)
 find_package(wxWidgets COMPONENTS gl aui adv core base propgrid xml REQUIRED)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
@@ -46,15 +45,15 @@ include_directories( ${OPENGL_INCLUDE_DIRS} ${GLEW_INCLUDE_PATH} ${CMAKE_CURRENT
 
 include (recondite)
 
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/platform)
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/test)
-#add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/samples)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/samples)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/tools)
 
 

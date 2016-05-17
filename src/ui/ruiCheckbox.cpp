@@ -25,14 +25,14 @@ void ruiCheckbox::Draw(){
 	rColor color(200,200,200,255);
 	style->GetColor("border-color", color);
 
-	m_engine->renderer->RenderWireRect(outline, color);
+	m_engine->renderer->SpriteBatch()->RenderWireRectangle(outline, color);
 	
 	if (m_isChecked){
 		color.Set(0,0,255,255);
 		style->GetColor("color", color);
 
 		rRect fill(outline.x + 5, outline.y + 5, outline.width - 12, outline.height - 12);
-		m_engine->renderer->RenderRect(fill, color);
+		m_engine->renderer->SpriteBatch()->RenderRectangle(fill, color);
 	}
 }
 

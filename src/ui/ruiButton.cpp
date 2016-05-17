@@ -33,9 +33,9 @@ void ruiButton::Draw(){
 	style->GetInt("border-radius", borderRadius);
 
 	if (borderRadius > 0)
-		m_engine->renderer->RenderRoundedRect(box, borderRadius, color);
+		m_engine->renderer->SpriteBatch()->RenderRoundedRectangle(box, borderRadius, color);
 	else
-		m_engine->renderer->RenderRect(box, color);
+		m_engine->renderer->SpriteBatch()->RenderRectangle(box, color);
 	
 	Font::Face* font = DetermineFont();
 	

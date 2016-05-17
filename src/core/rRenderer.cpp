@@ -119,30 +119,6 @@ void rRenderer::RenderSpriteBatch() {
 	m_spriteBatch->Render(m_viewProjectionMatrix);
 }
 
-void rRenderer::RenderRect(const rRect& rect, const rColor& color){
-	rImmediateBuffer geometry;
-	rGeometryUtil::CreateRectVerticies(rect, geometry, false);
-	ImmediateColorRender(geometry, color);
-}
-
-void rRenderer::RenderRoundedRect(const rRect& rect, float radius, const rColor& color){
-	rImmediateBuffer geometry;
-	rGeometryUtil::CreateRoundedRectVerticies(rect, radius, 10, geometry);
-	ImmediateColorRender(geometry, color);
-}
-
-void rRenderer::RenderWireRect(const rRect& rect, const rColor& color){
-	rImmediateBuffer geometry;
-	rGeometryUtil::CreateWireRectVerticies(rect, geometry);
-	ImmediateColorRender(geometry, color);
-}
-
-void rRenderer::RenderCircle(const rCircle2& circle, const rColor& color){
-	rImmediateBuffer geometry;
-	rGeometryUtil::CreateCircleVerticies(circle, 20, geometry);
-	ImmediateColorRender(geometry, color);
-}
-
 void rRenderer::RenderWireBox(const rAlignedBox3& box, const rColor color){
 
 }

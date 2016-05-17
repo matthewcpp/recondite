@@ -69,8 +69,8 @@ void ruiAnalogStick::Draw(){
 	rColor gray(205,201,201,255);
 	rColor darkGray(139,137,137,255);
 	
-	m_engine->renderer->RenderCircle(m_outerCircle, gray);
-	m_engine->renderer->RenderCircle(m_stick, darkGray);
+	m_engine->renderer->SpriteBatch()->RenderCircle(m_outerCircle, gray);
+	m_engine->renderer->SpriteBatch()->RenderCircle(m_stick, darkGray);
 }
 
 void ruiAnalogStick::SetCircles(){

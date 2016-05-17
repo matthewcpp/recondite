@@ -98,11 +98,11 @@ void ruiSlider::Draw(){
 	
 	rColor color(200,200,200,255);
 	style->GetColor("background-color", color);
-	m_engine->renderer->RenderRect(box, color);
+	m_engine->renderer->SpriteBatch()->RenderRectangle(box, color);
 
 	color.Set(255,255,255,255);
 	style->GetColor("color", color);
-	m_engine->renderer->RenderRect(handle, color);
+	m_engine->renderer->SpriteBatch()->RenderRectangle(handle, color);
 }
 
 rString ruiSlider::GetWidgetType() const{

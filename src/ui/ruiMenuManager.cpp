@@ -86,7 +86,7 @@ void ruiMenuManager::Draw(){
 	rRect bounding(m_position, m_menuSize);
 
 	style->GetColor("background-color", color);
-	m_engine->renderer->RenderRect(bounding, color);
+	m_engine->renderer->SpriteBatch()->RenderRectangle(bounding, color);
 	
 	style->GetColor("color", color);
 

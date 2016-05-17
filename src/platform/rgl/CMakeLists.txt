@@ -12,6 +12,9 @@ list(APPEND rgl_shaders ${CMAKE_CURRENT_SOURCE_DIR}/shaders/__default_sprite__.f
 list(APPEND rgl_shaders ${CMAKE_CURRENT_SOURCE_DIR}/shaders/__default_text__.vert)
 list(APPEND rgl_shaders ${CMAKE_CURRENT_SOURCE_DIR}/shaders/__default_text__.frag)
 
+list(APPEND rgl_shaders ${CMAKE_CURRENT_SOURCE_DIR}/shaders/__default_drawing__.vert)
+list(APPEND rgl_shaders ${CMAKE_CURRENT_SOURCE_DIR}/shaders/__default_drawing__.frag)
+
 set(recondite_files ${recondite_files} ${rgl_files} PARENT_SCOPE)
 
 add_library( rgl SHARED ${rgl_files} ${rgl_shaders})

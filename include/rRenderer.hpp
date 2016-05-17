@@ -44,14 +44,7 @@ public:
 	void RenderGeometry(rGeometry* geometry, const rMatrix4& transform, const rString& elementBufferName, rMaterial* material);
 	void RenderShadedWithEdges(rGeometry* geometry, const rMatrix4& transform, rMaterial* material, const rColor& edgeColor);
 
-	void RenderRect(const rRect& rect, const rColor& color);
-	void RenderWireRect(const rRect& rect, const rColor& color);
-
 	rSpriteBatch* SpriteBatch();
-
-	void RenderRoundedRect(const rRect& rect, float radius, const rColor& color);
-	
-	void RenderCircle(const rCircle2& circle, const rColor& color);
 
 	void RenderWireBox(const rAlignedBox3& box, const rColor color);
 

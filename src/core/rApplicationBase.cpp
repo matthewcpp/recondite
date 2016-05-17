@@ -42,7 +42,6 @@ void rApplicationBase::Draw(){
 	}
 
 	//render the overlay for each viewport
-	m_graphicsDevice->EnableDepthTesting(false);
 	for (rViewportMap::iterator it = m_viewports.begin(); it != end; ++it){
 		rViewport* viewport = it->second;
 

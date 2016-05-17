@@ -123,3 +123,7 @@ rShader* rShaderManager::DefaultSpriteShader() {
 rShader* rShaderManager::DefaultTextShader(){
 	return Get("__default_text__");
 }
+
+rShader* rShaderManager::DefaultDrawingShader(){
+	return Get("__default_drawing__");
+}

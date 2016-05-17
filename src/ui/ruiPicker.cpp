@@ -57,7 +57,7 @@ void ruiPicker::Draw(){
 	rColor color(200,200,200,255);
 	style->GetColor("background-color", color);
 
-	m_engine->renderer->RenderRect(box, color);
+	m_engine->renderer->SpriteBatch()->RenderRectangle(box, color);
 	
 
 	Font::Face* font = DetermineFont();

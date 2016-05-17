@@ -27,7 +27,7 @@ void ruiText::Draw(){
 	rRect boundingBox = BoundingBox();
 
 	if (style->GetColor("background-color", color))
-		m_engine->renderer->RenderRect(boundingBox, color);
+		m_engine->renderer->SpriteBatch()->RenderRectangle(boundingBox, color);
 
 	Font::Face* font = DetermineFont();
 	
@@ -35,7 +35,7 @@ void ruiText::Draw(){
 		color.Set(255,255,255,255);
 		style->GetColor("color", color);
 
-		m_engine->renderer->SpriteBatch()->RenderString(m_text, font, m_position, color);
+		m_engine->renderer->SpriteBatch()->RenderString(m_text, font, m_position, color, 0.01);
 	}
 }
 

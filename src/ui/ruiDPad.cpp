@@ -30,10 +30,10 @@ void ruiDPad::Draw(){
 	
 	for (int button = rDPAD_LEFT; button <= rDPAD_DOWN; button++){
 			if (m_dpad->GetButton((rDPadButton)button).Down()){
-				m_engine->renderer->RenderRect(m_buttons[button], darkGray);
+				m_engine->renderer->SpriteBatch()->RenderRectangle(m_buttons[button], darkGray);
 			}
 			else{
-				m_engine->renderer->RenderRect(m_buttons[button], gray);
+				m_engine->renderer->SpriteBatch()->RenderRectangle(m_buttons[button], gray);
 			}
 	}
 }

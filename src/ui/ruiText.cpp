@@ -26,12 +26,7 @@ void ruiText::Draw(){
 	rColor color(255,255,255,255);
 	rRect boundingBox = BoundingBox();
 
-	if (style->GetColor("background-color", color))
-		m_engine->renderer->SpriteBatch()->RenderRectangle(boundingBox, color);
-
-	if (style->GetColor("border-color", color)){
-		m_engine->renderer->SpriteBatch()->RenderWireRectangle(boundingBox, color, 0.01);
-	}
+	RenderWidgetBase(style, boundingBox);
 
 	Font::Face* font = DetermineFont();
 	

@@ -74,6 +74,28 @@ void ruiWidgetBase::RecomputeStyle(){
 }
 void ruiWidgetBase::Draw(){}
 
+void ruiWidgetBase::RenderWidgetBase(ruiStyle* style, const rRect& boundingBox){
+	rColor color(255, 255, 255, 255);
+
+	int borderRadius = 0;
+	style->GetInt("border-radius", borderRadius);
+
+	if (style->GetColor("background-color", color)){
+		if (borderRadius > 0)
+			m_engine->renderer->SpriteBatch()->RenderRoundedRectangle(boundingBox, borderRadius, color);
+		else
+			m_engine->renderer->SpriteBatch()->RenderRectangle(boundingBox, color);
+	}
+		
+
+	if (style->GetColor("border-color", color)){
+		if (borderRadius > 0)
+			m_engine->renderer->SpriteBatch()->RenderWireRoundedRectangle(boundingBox, borderRadius, color, 0.01);
+		else
+			m_engine->renderer->SpriteBatch()->RenderWireRectangle(boundingBox, color, 0.01);
+	}
+}
+
 
 void ruiWidgetBase::Update(){
 	if (m_style.HasChanged())

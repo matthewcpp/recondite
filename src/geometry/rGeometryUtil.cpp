@@ -1,7 +1,7 @@
 #include "rGeometryUtil.hpp"
 
 unsigned short rectIndicies[] = {0, 1, 3, 1, 2, 3};
-unsigned short wireRectIndicies[] = { 0, 1, 1, 2, 2, 3 };
+unsigned short wireRectIndicies[] = { 0, 1, 1, 2, 2, 3, 3, 0 };
 
 void CreateRectVerticiesWithTexCoords(const rRect& rect, rImmediateBuffer& geometry, float zValue){
 	geometry.PushVertex(rect.x, rect.y, zValue, 0.0f, 1.0f);
@@ -64,7 +64,10 @@ bool rGeometryUtil::CreateRectVerticies(const rRect& rect, rImmediateBuffer& geo
 	if (geometry.GeometryType() != rGeometryType::Triangles) return false;
 	if (texCoords && !geometry.HasTexCoords()) return false;
 
-	geometry.AppendIndexBuffer(rectIndicies, 6);
+	uint16_t baseIndex = (uint16_t)geometry.VertexCount();
+	for (uint16_t i = 0; i < 6; i++){
+		geometry.PushIndex(rectIndicies[i] + baseIndex);
+	}
 	
 	if (texCoords){
 		CreateRectVerticiesWithTexCoords(rect, geometry, zValue);
@@ -77,8 +80,12 @@ bool rGeometryUtil::CreateRectVerticies(const rRect& rect, rImmediateBuffer& geo
 }
 
 bool rGeometryUtil::CreateWireRectVerticies(const rRect& rect, rImmediateBuffer& geometry, float zValue){
-	if (geometry.GeometryType() != rGeometryType::LineLoop) return false;
-	geometry.AppendIndexBuffer(wireRectIndicies, 6);
+	if (geometry.GeometryType() != rGeometryType::Lines) return false;
+
+	uint16_t baseIndex = (uint16_t)geometry.VertexCount();
+	for (uint16_t i = 0; i < 8; i++){
+		geometry.PushIndex(wireRectIndicies[i] + baseIndex);
+	}
 
 	CreateRectVerticies(rect, geometry, zValue);
 

@@ -47,9 +47,8 @@ void ruiWidgetBase::RecomputeStyle(){
 	ruiStyleManager* styleManager = m_overlay->Styles();
 	ruiStyle* style = NULL;
 
-	//start with any base level styles for this widget type
 	ExtendStyle(GetWidgetType());
-	ExtendStyle(GetWidgetType() + ":" + m_uiState);
+	
 
 	//next apply styles for each class assigned to this widget
 	for (size_t i = 0; i < m_classList.size(); i++){
@@ -59,13 +58,19 @@ void ruiWidgetBase::RecomputeStyle(){
 
 	//apply a style for this particualr widget instance
 	ExtendStyle("#" + Id());
-	ExtendStyle("#" + Id() + ":" + m_uiState);
+	
 
-	//finally apply local style override
+	//apply local style override
 	m_computedStyle.Extend(m_style);
 
+	ExtendStyle(GetWidgetType() + ":" + m_uiState);
+	for (size_t i = 0; i < m_classList.size(); i++){
+		ExtendStyle("." + m_classList[i] + ":" + m_uiState);
+	}
+	ExtendStyle("#" + Id() + ":" + m_uiState);
+
 	m_style.ClearChanged();
-	InvalidateSize();
+	RecomputeSize(true);
 }
 void ruiWidgetBase::Draw(){}
 
@@ -99,11 +104,42 @@ ruiStyle* ruiWidgetBase::ComputedStyle(){
 	return &m_computedStyle;
 }
 
-rSize ruiWidgetBase::Size(){
-	if (m_size == rSize::Default)
+void ruiWidgetBase::RecomputeSize(bool force){
+	if (force || m_size == rSize::Default){
 		m_size = ComputeSize();
+		ruiStyle* style = ComputedStyle();
+		m_contentOffset.Set(0, 0);
 
+		int padding[4] = { 0, 0, 0, 0 };
+		style->GetInt("padding-top", padding[0]);
+		style->GetInt("padding-right", padding[1]);
+		style->GetInt("padding-bottom", padding[2]);
+		style->GetInt("padding-left", padding[3]);
+
+		m_size.x += padding[1] + padding[3];
+		m_size.y += padding[0] + padding[2];
+
+		m_contentOffset.x += padding[3];
+		m_contentOffset.y += padding[0];
+
+		if (style->HasKey("border-color")){
+			m_size.x += 2;
+			m_size.y += 2;
+
+			m_contentOffset.x += 1;
+			m_contentOffset.x += 1;
+		}
+	}
+}
+
+rSize ruiWidgetBase::Size(){
+	RecomputeSize();
 	return m_size;
+}
+
+rPoint ruiWidgetBase::ContentOffset(){
+	RecomputeSize();
+	return m_contentOffset;
 }
 
 void ruiWidgetBase::InvalidateSize(){

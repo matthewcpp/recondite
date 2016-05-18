@@ -83,3 +83,7 @@ void ruiStyle::MarkChanged(){
 void ruiStyle::ClearChanged(){
 	m_changed = false;
 }
+
+bool ruiStyle::HasKey(const rString& key){
+	return m_properties.count(key) > 0;
+}

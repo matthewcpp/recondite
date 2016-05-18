@@ -29,6 +29,7 @@ public:
 	void SetPosition(const rPoint& position);
 
 protected:
+	rPoint ContentPosition();
 	rPoint m_position;
 };
 

@@ -30,6 +30,7 @@ private:
 	void ParseStringProperty(const rString& name, const rString& value);
 
 	void ParseMarginProperty(const rString& name, const rString& value);
+	void ParsePaddingProperty(const rString& name, const rString& value);
 
 private:
 	ruiStyleMap* m_styleMap;

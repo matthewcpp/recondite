@@ -23,3 +23,7 @@ void ruiWidget::SetPosition(const rPoint& position){
 rRect ruiWidget::BoundingBox(){
 	return rRect(m_position, Size());
 }
+
+rPoint ruiWidget::ContentPosition(){
+	return m_position + ContentOffset();
+}

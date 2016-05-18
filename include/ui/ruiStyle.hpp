@@ -20,6 +20,8 @@ public:
 	void SetFloat(const rString& key, float f);
 	void SetColor(const rString& key, const rColor& color);
 
+	bool HasKey(const rString& key);
+
 	void Extend(const ruiStyle& style);
 
 	bool HasChanged() const;

@@ -42,11 +42,13 @@ protected: //style related utility methods
 protected:
 	virtual rSize ComputeSize() = 0;
 	void InvalidateSize();
+	rPoint ContentOffset();
 
 private:
 	int GetClassIndex(const rString& className) const;
 	void RecomputeStyle();
 	void ExtendStyle(const rString& selector);
+	void RecomputeSize(bool force = false);
 
 protected:
 	ruiOverlay* m_overlay;
@@ -58,6 +60,7 @@ private:
 	rString m_uiState;
 
 	rSize m_size;
+	rPoint m_contentOffset;
 };
 
 #endif

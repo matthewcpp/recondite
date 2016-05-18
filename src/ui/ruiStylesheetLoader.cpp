@@ -79,6 +79,16 @@ void ruiStylesheetLoader::ParseMarginProperty(const rString& name, const rString
 	}
 }
 
+void ruiStylesheetLoader::ParsePaddingProperty(const rString& name, const rString& value){
+	int paddingVal;
+	if (rString::ToInt(value, paddingVal)){
+		m_currentStyle->SetInt("padding-top", paddingVal);
+		m_currentStyle->SetInt("padding-bottom", paddingVal);
+		m_currentStyle->SetInt("padding-left", paddingVal);
+		m_currentStyle->SetInt("padding-right", paddingVal);
+	}
+}
+
 void ruiStylesheetLoader::InitParseStyleMap(){
 	if (s_parseStyleMap.size() >0)
 		return;
@@ -93,6 +103,8 @@ void ruiStylesheetLoader::InitParseStyleMap(){
 	s_parseStyleMap["padding-bottom"] = &ruiStylesheetLoader::ParseIntProperty;
 	s_parseStyleMap["padding-left"] = &ruiStylesheetLoader::ParseIntProperty;
 	s_parseStyleMap["padding-right"] = &ruiStylesheetLoader::ParseIntProperty;
+
+	s_parseStyleMap["padding"] = &ruiStylesheetLoader::ParsePaddingProperty;
 
 	s_parseStyleMap["margin-top"] = &ruiStylesheetLoader::ParseIntProperty;
 	s_parseStyleMap["margin-bottom"] = &ruiStylesheetLoader::ParseIntProperty;

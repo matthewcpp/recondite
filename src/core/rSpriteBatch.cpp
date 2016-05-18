@@ -147,6 +147,14 @@ void rSpriteBatch::Render(const rMatrix4& viewMatrix){
 		_impl->material->SetDiffuseColor(color);
 		_impl->graphicsDevice->RenderImmediate(*it.second.get(), viewMatrix, _impl->material.get());
 	}
+
+	for (auto& it : _impl->lineBatches){
+		rColor color;
+		_impl->UnhashColor(it.first, color);
+
+		_impl->material->SetDiffuseColor(color);
+		_impl->graphicsDevice->RenderImmediate(*it.second.get(), viewMatrix, _impl->material.get());
+	}
 }
 
 void WriteWord(Font::Glyph** glyphs, size_t glyphCount, int startX, int startY, rImmediateBuffer& buffer, const rPoint& origin, float zValue){

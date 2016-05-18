@@ -247,8 +247,10 @@ bool ruiManager::Impl::ProcessMouseUp(rMouseButton button, const rPoint& positio
 			rRect boundingBox = activeWidget->BoundingBox();
 			activeWidget->Trigger(ruiEVT_MOUSE_UP, event);
 
-			if (boundingBox.ContainsPoint(position))
+			if (boundingBox.ContainsPoint(position)){
 				activeWidget->UiState("hover");
+			}
+				
 			else{
 				activeWidget->UiState("");
 				overlay->ActivateWidget(NULL);

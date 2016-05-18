@@ -29,13 +29,17 @@ void ruiText::Draw(){
 	if (style->GetColor("background-color", color))
 		m_engine->renderer->SpriteBatch()->RenderRectangle(boundingBox, color);
 
+	if (style->GetColor("border-color", color)){
+		m_engine->renderer->SpriteBatch()->RenderWireRectangle(boundingBox, color, 0.01);
+	}
+
 	Font::Face* font = DetermineFont();
 	
 	if (font){
 		color.Set(255,255,255,255);
 		style->GetColor("color", color);
 
-		m_engine->renderer->SpriteBatch()->RenderString(m_text, font, m_position, color, 0.01);
+		m_engine->renderer->SpriteBatch()->RenderString(m_text, font, ContentPosition(), color, 0.01);
 	}
 }
 

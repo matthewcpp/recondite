@@ -34,6 +34,7 @@ public:
 	void RenderRectangle(const rRect& rect, const rColor& color, float zValue = 0.0f);
 	void RenderWireRectangle(const rRect& rect, const rColor& color, float zValue = 0.0f);
 	void RenderRoundedRectangle(const rRect& rect, float radius, const rColor& color, float zValue = 0.0f);
+	void RenderWireRoundedRectangle(const rRect& rect, float radius, const rColor& color, float zValue = 0.0f);
 	
 
 private:

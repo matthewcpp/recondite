@@ -1,5 +1,7 @@
 #include "rGeometryUtil.hpp"
 
+#include <functional>
+
 unsigned short rectIndicies[] = {0, 1, 3, 1, 2, 3};
 unsigned short wireRectIndicies[] = { 0, 1, 1, 2, 2, 3, 3, 0 };
 
@@ -27,7 +29,9 @@ void AppendRectVerticies(const rRect& rect, rImmediateBuffer& geometry, float zV
 
 }
 
-void CircleSweep(float x, float y, float radius, float start, float end, size_t count, rImmediateBuffer& geometry, float zValue){
+typedef std::function<void(uint16_t, uint16_t, uint16_t)> CircleIndexFunc;
+
+void CircleSweep(float x, float y, float radius, float start, float end, size_t count, rImmediateBuffer& geometry, float zValue, CircleIndexFunc indexFunc){
 	unsigned short centerIndex = geometry.VertexCount();
 	unsigned short currentIndex = centerIndex;
 	rVector3 center(x,y, zValue);
@@ -38,7 +42,7 @@ void CircleSweep(float x, float y, float radius, float start, float end, size_t 
 	float step = (end - start) / (float)count;
 	rVector3 vertex;
 
-	for (size_t i = 0; i <= count; i++){
+	for (uint16_t i = 0; i <= count; i++){
 		float rad = rMath::DegreeToRad(deg);
 
 		vertex.Set(std::cos(rad), std::sin(rad), 0.0);
@@ -49,9 +53,7 @@ void CircleSweep(float x, float y, float radius, float start, float end, size_t 
 		geometry.PushVertex(vertex);
 		currentIndex += 1;
 
-		if (count){
-			geometry.PushIndex(centerIndex, currentIndex - 1, currentIndex);
-		}
+		indexFunc(centerIndex, i, currentIndex);
 		
 		deg += step;
 
@@ -178,13 +180,40 @@ void rGeometryUtil::CreateSkeletonGeometry(const rSkeleton* skeleton, rImmediate
 	}
 }
 
+void GenerateRoundedBorders(rRect rect, float radius, int detail, rImmediateBuffer& geometry, float zValue, CircleIndexFunc& indexFunc){
+	CircleSweep(rect.Right() - radius, rect.Top() + radius, radius, 0.0f, 90.0f, detail, geometry, zValue, indexFunc);
+	CircleSweep(rect.Left() + radius, rect.Top() + radius, radius, 90.0f, 180.0f, detail, geometry, zValue, indexFunc);
+	CircleSweep(rect.Left() + radius, rect.Bottom() - radius, radius, 180.0f, 270.0f, detail, geometry, zValue, indexFunc);
+	CircleSweep(rect.Right() - radius, rect.Bottom() - radius, radius, 270.0f, 360.0f, detail, geometry, zValue, indexFunc);
+}
+
+bool rGeometryUtil::CreateRoundedWireRectVerticies(const rRect& rect, float radius, int detail, rImmediateBuffer& geometry, float zValue){
+	if (geometry.GeometryType() != rGeometryType::Lines) return false;
+
+	CircleIndexFunc indexFunc = [&](uint16_t centerIndex, uint16_t vertexNum, uint16_t currentIndex){
+		if (vertexNum)
+			geometry.PushIndex(currentIndex - 1, currentIndex);
+	};
+
+	GenerateRoundedBorders(rect, radius, detail, geometry, zValue, indexFunc);
+
+	rRect r(rect.x + radius, rect.y, rect.width - (2 * radius), rect.height);
+	unsigned short offset = geometry.VertexCount();
+	CreateRectVerticies(r, geometry, zValue);
+	geometry.PushIndex(offset, offset + 1);
+	geometry.PushIndex(offset+2, offset + 3);
+
+	return true;
+}
+
 bool rGeometryUtil::CreateRoundedRectVerticies(const rRect& rect, float radius, int detail, rImmediateBuffer& geometry, float zValue){
 	if (geometry.GeometryType() != rGeometryType::Triangles) return false;
 
-	CircleSweep(rect.Right() - radius , rect.Top() + radius, radius, 0.0f, 90.0f, detail, geometry, zValue);
-	CircleSweep(rect.Left() + radius , rect.Top() + radius, radius, 90.0f, 180.0f, detail, geometry, zValue);
-	CircleSweep(rect.Left() + radius , rect.Bottom() - radius, radius, 180.0f, 270.0f, detail, geometry, zValue);
-	CircleSweep(rect.Right() - radius , rect.Bottom() - radius, radius, 270.0f, 360.0f, detail, geometry, zValue);
+	CircleIndexFunc indexFunc = [&](uint16_t centerIndex, uint16_t vertexNum, uint16_t currentIndex){
+		geometry.PushIndex(centerIndex, currentIndex - 1, currentIndex);
+	};
+
+	GenerateRoundedBorders(rect, radius, detail, geometry, zValue, indexFunc);
 
 	rRect r(rect.x + radius, rect.y, rect.width - (2* radius), rect.height);
 	AppendRectVerticies(r, geometry, zValue);

@@ -8,7 +8,7 @@ public:
 	ruiController(const rString& className) : _className(className) {}
 
 public:
-	virtual void OnOverlayLoaded() = 0;
+	virtual void OnDocumentLoaded() = 0;
 	inline rString GetClassName() const;
 
 private:

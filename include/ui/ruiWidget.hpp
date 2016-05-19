@@ -11,7 +11,7 @@
 
 #include "rEngine.hpp"
 
-#include "ui/ruiOverlay.hpp"
+#include "ui/ruiDocument.hpp"
 #include "ui/ruiStyleManager.hpp"
 #include "ui/ruiWidgetBase.hpp"
 
@@ -20,7 +20,7 @@
 
 class RECONDITE_API ruiWidget : public ruiWidgetBase, public ruiDefaultEventHandler {
 public:
-	ruiWidget(const rString& id, ruiOverlay* overlay, rEngine* engine);
+	ruiWidget(const rString& id, ruiDocument* document, rEngine* engine);
 
 	virtual rRect BoundingBox();
 

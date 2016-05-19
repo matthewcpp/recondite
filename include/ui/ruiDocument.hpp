@@ -1,5 +1,5 @@
-#ifndef RUI_OVERLAY_HPP
-#define RUI_OVERLAY_HPP
+#ifndef RUI_DOCUMENT_HPP
+#define RUI_DOCUMENT_HPP
 
 #include <vector>
 
@@ -21,10 +21,10 @@ class RECONDITE_API ruiIDocument{
 	virtual ruiWidget* GetWidget(const rString& id) = 0;
 };
 
-class RECONDITE_API ruiOverlay : public ruiIDocument{
+class RECONDITE_API ruiDocument : public ruiIDocument{
 public:
-	ruiOverlay(rEngine* engine, rViewport* viewport);
-	~ruiOverlay();
+	ruiDocument(rEngine* engine, rViewport* viewport);
+	~ruiDocument();
 
 public:
 	virtual bool ShowContextMenu(ruiMenu* menu, ruiStyle* style, const rPoint& position, rEventHandler* handler);

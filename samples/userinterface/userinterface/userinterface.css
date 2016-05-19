@@ -1,0 +1,28 @@
+.hello{
+	color: 255 0 255 255;
+	border-color: 255 0 0 255;
+	background-color: 255 255 255 255;
+	margin: 5;
+	padding: 5;
+}
+
+#more-text{
+	color: 0 255 0 255;
+	background-color: 0 0 255 255;
+}
+
+#more-text:hover{
+	color: 0 0 0 255;
+}
+
+button{
+	border-radius: 10;
+	border-color: 175 175 175 255;
+	background-color: 100 100 100 255;
+	color: 255 255 255;
+	padding: 5;
+}
+
+button:active{
+	background-color: 255 255 0 255;
+}

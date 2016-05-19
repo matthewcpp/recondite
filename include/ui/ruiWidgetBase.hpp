@@ -8,11 +8,11 @@
 #include "rObject.hpp"
 #include "ruiStyle.hpp"
 
-class ruiOverlay;
+class ruiDocument;
 
 class RECONDITE_API ruiWidgetBase : public rObject{
 public:
-	ruiWidgetBase(const rString& id, ruiOverlay* overlay, rEngine* engine);
+	ruiWidgetBase(const rString& id, ruiDocument* document, rEngine* engine);
 
 public:
 	virtual rRect BoundingBox() = 0;
@@ -52,7 +52,7 @@ private:
 	void RecomputeSize(bool force = false);
 
 protected:
-	ruiOverlay* m_overlay;
+	ruiDocument* m_document;
 	
 private:
 	ruiStyle m_style;

@@ -1,0 +1,18 @@
+<overlay>
+	<head>
+		<controller type="UserInterfaceController" />
+		<stylesheet>userinterface.css</stylesheet>
+	</head>
+	<body>
+		<linearlayout id="main-layout" direction="vertical">
+			<text id="hello-text" class="hello">Hello World!</text>
+			<text id="more-text" class="hello">~~More Text~~</text>
+			<button>I'm a button!!!!</button>
+			<picker>
+				<option>Option 1</option>
+				<option>Option 2</option>
+				<option>Option 3</option>
+			</picker>
+		</linearlayout>
+	</body>
+</overlay>

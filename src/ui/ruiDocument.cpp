@@ -1,11 +1,11 @@
-#include "ui/ruiOverlay.hpp"
+#include "ui/ruiDocument.hpp"
 
 #include "ui/ruiWidget.hpp"
 #include "ui/ruiLayout.hpp"
 #include "stream/rOStringStream.hpp"
 #include "ui/ruiMenuManager.hpp"
 
-struct ruiOverlay::Impl{
+struct ruiDocument::Impl{
 	std::vector<ruiWidget*> widgets;
 
 	ruiWidget* activeWidget;
@@ -21,7 +21,7 @@ struct ruiOverlay::Impl{
 		:activeWidget(nullptr), viewport(_viewport), menuManager(_engine), controller(nullptr) {}
 };
 
-ruiOverlay::ruiOverlay(rEngine* engine, rViewport* viewport){
+ruiDocument::ruiDocument(rEngine* engine, rViewport* viewport){
 	_impl = new Impl(engine, viewport);
 
 	_impl->activeWidget = NULL;
@@ -29,15 +29,15 @@ ruiOverlay::ruiOverlay(rEngine* engine, rViewport* viewport){
 	_impl->viewport = viewport;
 }
 
-ruiOverlay::~ruiOverlay(){
+ruiDocument::~ruiDocument(){
 	delete _impl;
 }
 
-void ruiOverlay::AddWidget(ruiWidget* widget){
+void ruiDocument::AddWidget(ruiWidget* widget){
 	_impl->widgets.push_back(widget);
 }
 
-ruiWidget* ruiOverlay::GetWidget(const rString& id){
+ruiWidget* ruiDocument::GetWidget(const rString& id){
 	for (size_t i = 0; i < _impl->widgets.size(); i++){
 		if (_impl->widgets[i]->Id() == id)
 			return _impl->widgets[i];
@@ -46,35 +46,35 @@ ruiWidget* ruiOverlay::GetWidget(const rString& id){
 	return NULL;
 }
 
-void ruiOverlay::Update(){
+void ruiDocument::Update(){
 	for (size_t i = 0; i < _impl->widgets.size(); i++)
 		_impl->widgets[i]->Update();
 
 	UpdateLayout();
 }
 
-void ruiOverlay::UpdateLayout(bool force){
+void ruiDocument::UpdateLayout(bool force){
 	if (_impl->layout){
 		rRect layoutRect = _impl->viewport->GetScreenRect();
 			_impl->layout->Layout(layoutRect);
         }
 }
 
-void ruiOverlay::Draw(){
+void ruiDocument::Draw(){
 	for (size_t i = 0; i < _impl->widgets.size(); i++)
 		_impl->widgets[i]->Draw();
 
 	_impl->menuManager.Draw();
 }
 
-void ruiOverlay::Clear(){
+void ruiDocument::Clear(){
 	for (size_t i = 0; i < _impl->widgets.size(); i++)
 		delete _impl->widgets[i];
 	
 	_impl->widgets.clear();
 }
 
-ruiWidget* ruiOverlay::SelectWidget(const rPoint& position){
+ruiWidget* ruiDocument::SelectWidget(const rPoint& position){
 	rRect boundingBox;
 
 	for (size_t i = 0; i < _impl->widgets.size(); i++){
@@ -88,45 +88,45 @@ ruiWidget* ruiOverlay::SelectWidget(const rPoint& position){
 	return NULL;
 }
 
-ruiLayout* ruiOverlay::Layout() const{
+ruiLayout* ruiDocument::Layout() const{
 	return _impl->layout;
 }
 
-void ruiOverlay::SetLayout(ruiLayout* layout){
+void ruiDocument::SetLayout(ruiLayout* layout){
 	if (_impl->layout)
 		delete _impl->layout;
 	
 	_impl->layout = layout;
 }
 
-rString ruiOverlay::GetDefaultId () const{
+rString ruiDocument::GetDefaultId () const{
 	rOStringStream str("item");
 	str << _impl->widgets.size();
 
 	return str.Str();
 }
 
-ruiStyleManager* ruiOverlay::Styles(){
+ruiStyleManager* ruiDocument::Styles(){
 	return &_impl->styleManager;
 }
 
-bool ruiOverlay::ShowContextMenu(ruiMenu* menu, ruiStyle* style, const rPoint& position, rEventHandler* handler){
+bool ruiDocument::ShowContextMenu(ruiMenu* menu, ruiStyle* style, const rPoint& position, rEventHandler* handler){
 	return _impl->menuManager.ShowContextMenu(menu, style, position, handler);
 }
 
-void ruiOverlay::CancelContextMenu(){
+void ruiDocument::CancelContextMenu(){
 	_impl->menuManager.CancelContextMenu();
 }
 
-ruiController* ruiOverlay::GetController(){
+ruiController* ruiDocument::GetController(){
 	return _impl->controller;
 }
 
-void ruiOverlay::SetController(ruiController* controller){
+void ruiDocument::SetController(ruiController* controller){
 	_impl->controller = controller;
 }
 
-void ruiOverlay::ProcessMouseDownEvent(ruiMouseEvent& event){
+void ruiDocument::ProcessMouseDownEvent(ruiMouseEvent& event){
 	if (_impl->menuManager.OnPointerDown(event.Position())) return;
 
 	if (_impl->activeWidget){
@@ -135,7 +135,7 @@ void ruiOverlay::ProcessMouseDownEvent(ruiMouseEvent& event){
 	}
 }
 
-void ruiOverlay::ProcessMouseMotionEvent(ruiMouseEvent& event){
+void ruiDocument::ProcessMouseMotionEvent(ruiMouseEvent& event){
 	rPoint position = event.Position();
 	if (_impl->activeWidget){
 		rRect boundingBox = _impl->activeWidget->BoundingBox();
@@ -160,7 +160,7 @@ void ruiOverlay::ProcessMouseMotionEvent(ruiMouseEvent& event){
 	}
 }
 
-void ruiOverlay::ProcessMouseUpEvent(ruiMouseEvent& event){
+void ruiDocument::ProcessMouseUpEvent(ruiMouseEvent& event){
 	if (_impl->activeWidget){
 		rRect boundingBox = _impl->activeWidget->BoundingBox();
 		_impl->activeWidget->Trigger(ruiEVT_MOUSE_UP, event);
@@ -176,7 +176,7 @@ void ruiOverlay::ProcessMouseUpEvent(ruiMouseEvent& event){
 	}
 }
 
-void ruiOverlay::ProcessMouseWheelEvent(ruiMouseEvent& event){
+void ruiDocument::ProcessMouseWheelEvent(ruiMouseEvent& event){
 	if (_impl->activeWidget){
 		_impl->activeWidget->Trigger(ruiEVT_MOUSE_WHEEL, event);
 	}

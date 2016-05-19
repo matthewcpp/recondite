@@ -2,15 +2,15 @@
 
 #include "rEngine.hpp"
 
-#include "ui/ruiOverlay.hpp"
+#include "ui/ruiDocument.hpp"
 #include "ui/ruiController.hpp"
 
 class UserInterfaceController : public ruiController{
 public:
-	UserInterfaceController(const rString& name, rEngine* engine, ruiOverlay* overlay);
-	virtual void OnOverlayLoaded();
+	UserInterfaceController(const rString& name, rEngine* engine, ruiDocument* document);
+	virtual void OnDocumentLoaded();
 
 private:
 	rEngine* _engine;
-	ruiOverlay* _overlay;
+	ruiDocument* _document;
 };

@@ -60,9 +60,9 @@ bool rComponent::SaveSceneXML(const rString& path, std::function<bool(rActor3*)>
 void rComponent::InitEngine(rGraphicsDevice* graphics, rContentManager* content, rInputManager* input, rFileSystem* fileSystem){
 	m_graphicsDevice = graphics;
 
-	m_overlayManager = new ruiManager(&m_engine);
-	input->SetUIManager(m_overlayManager);
-	m_engine.ui = m_overlayManager;
+	m_uiManager = new ruiManager(&m_engine);
+	input->SetUIManager(m_uiManager);
+	m_engine.ui = m_uiManager;
 
 	m_engine.component = this;
 

@@ -60,7 +60,7 @@ protected:
 	rScene* m_scene;
 
 	rGraphicsDevice* m_graphicsDevice;
-	ruiManager* m_overlayManager;
+	ruiManager* m_uiManager;
 	rFileSystem* m_fileSystem;
 
 	rViewportMap m_viewports;

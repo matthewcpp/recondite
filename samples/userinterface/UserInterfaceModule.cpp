@@ -2,8 +2,8 @@
 
 #include "UserInterfaceController.hpp"
 
-ruiController* CreateUiController(const rString& name, rEngine* engine, ruiOverlay* overlay){
-	return new UserInterfaceController(name, engine, overlay);
+ruiController* CreateUiController(const rString& name, rEngine* engine, ruiDocument* document){
+	return new UserInterfaceController(name, engine, document);
 }
 
 void DeleteUiController(ruiController* controller){
@@ -20,7 +20,7 @@ void UserInterfaceModule::Init() {
 	_engine->ui->RegisterControllerClass("UserInterfaceController", &CreateUiController, &DeleteUiController);
 	rViewport* mainViewport = _engine->component->CreateViewport("main");
 
-	_engine->ui->LoadOverlay("C:/development/recondite/samples/userinterface/userinterface/userinterface.xml", mainViewport);
+	_engine->ui->LoadUiDocument("C:/development/recondite/samples/userinterface/userinterface/userinterface.xml", mainViewport);
 }
 
 void UserInterfaceModule::AfterRenderScene(rViewport* viewInfo){

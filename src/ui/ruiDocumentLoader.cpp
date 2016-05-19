@@ -1,38 +1,38 @@
-#include "ui/ruiOverlayLoader.hpp"
+#include "ui/ruiDocumentLoader.hpp"
 
 #include "ui/ruiManager.hpp"
 
-ruiOverlayLoader::ruiParseItemMap ruiOverlayLoader::s_parseItemMap;
+ruiDocumentLoader::ruiParseItemMap ruiDocumentLoader::s_parseItemMap;
 
-ruiOverlayLoader::ruiOverlayLoader(ruiManager* manager, rEngine* engine){
+ruiDocumentLoader::ruiDocumentLoader(ruiManager* manager, rEngine* engine){
 	m_engine = engine;
 	m_manager = manager;
 
 	InitParseItemMap();
 }
 
-void ruiOverlayLoader::InitParseItemMap(){
+void ruiDocumentLoader::InitParseItemMap(){
 	if (s_parseItemMap.size() > 0) return;
 
-	s_parseItemMap["stylesheet"] = &ruiOverlayLoader::ParseStylesheetItem;
-	s_parseItemMap["absolutelayout"] = &ruiOverlayLoader::ParseAbsoluteLayoutItem;
-	s_parseItemMap["linearlayout"] = &ruiOverlayLoader::ParseLinearLayoutItem;
-	s_parseItemMap["text"] = &ruiOverlayLoader::ParseTextItem;
-	s_parseItemMap["picker"] = &ruiOverlayLoader::ParsePickerItem;
-	s_parseItemMap["checkbox"] = &ruiOverlayLoader::ParseCheckboxItem;
-	s_parseItemMap["button"] = &ruiOverlayLoader::ParseButtonItem;
-	s_parseItemMap["controller"] = &ruiOverlayLoader::ParseControllerItem;
+	s_parseItemMap["stylesheet"] = &ruiDocumentLoader::ParseStylesheetItem;
+	s_parseItemMap["absolutelayout"] = &ruiDocumentLoader::ParseAbsoluteLayoutItem;
+	s_parseItemMap["linearlayout"] = &ruiDocumentLoader::ParseLinearLayoutItem;
+	s_parseItemMap["text"] = &ruiDocumentLoader::ParseTextItem;
+	s_parseItemMap["picker"] = &ruiDocumentLoader::ParsePickerItem;
+	s_parseItemMap["checkbox"] = &ruiDocumentLoader::ParseCheckboxItem;
+	s_parseItemMap["button"] = &ruiDocumentLoader::ParseButtonItem;
+	s_parseItemMap["controller"] = &ruiDocumentLoader::ParseControllerItem;
 }
 
-void ruiOverlayLoader::Reset(){
-	m_currentOverlay = NULL;
+void ruiDocumentLoader::Reset(){
+	m_currentDocument = NULL;
 
 	m_path.clear();
 	m_error.clear();
 	m_layoutStack.clear();
 }
 
-ruiOverlayLoader::ruiParseItemMethod ruiOverlayLoader::GetParseItemMethod (const rString& itemName){
+ruiDocumentLoader::ruiParseItemMethod ruiDocumentLoader::GetParseItemMethod (const rString& itemName){
 	rString item = itemName;
 	
 	for (size_t i =0; i < itemName.size(); i++)
@@ -44,7 +44,7 @@ ruiOverlayLoader::ruiParseItemMethod ruiOverlayLoader::GetParseItemMethod (const
 		return NULL;
 }
 
-ruiOverlay* ruiOverlayLoader::ParseOverlay(const rString& path, rViewport* viewport){
+ruiDocument* ruiDocumentLoader::LoadDocument(const rString& path, rViewport* viewport){
 	Reset();
 
 	rXMLDocument document;
@@ -53,15 +53,15 @@ ruiOverlay* ruiOverlayLoader::ParseOverlay(const rString& path, rViewport* viewp
 	rXMLElement* root = document.GetRoot();
 	if (!root) return NULL;
 
-	m_currentOverlay = new ruiOverlay(m_engine, viewport);
+	m_currentDocument = new ruiDocument(m_engine, viewport);
 	m_path = path;
 
 	ParseChildItems(root);
 
-	return m_currentOverlay;
+	return m_currentDocument;
 }
 
-void ruiOverlayLoader::ParseChildItems(rXMLElement* parent){
+void ruiDocumentLoader::ParseChildItems(rXMLElement* parent){
 	for (size_t i = 0; i < parent->NumChildren(); i++){
 		rXMLElement* element = parent->GetChild(i);
 		ruiParseItemMethod method = GetParseItemMethod(element->Name());
@@ -75,7 +75,7 @@ void ruiOverlayLoader::ParseChildItems(rXMLElement* parent){
 	}
 }
 
-void ruiOverlayLoader::ParseStylesheetItem(rXMLElement* element){
+void ruiDocumentLoader::ParseStylesheetItem(rXMLElement* element){
 	rString pathName = element->Text();
 	
 	rString dir = rPath::Directory(m_path);
@@ -84,10 +84,10 @@ void ruiOverlayLoader::ParseStylesheetItem(rXMLElement* element){
 	auto cssFile = m_engine->content->FileSystem()->GetReadFileRef(stylesheetPath);
 	
 	if (cssFile)
-		m_currentOverlay->Styles()->ParseStylesheet(*cssFile);
+		m_currentDocument->Styles()->ParseStylesheet(*cssFile);
 }
 
-void ruiOverlayLoader::ParseAbsoluteLayoutItem(rXMLElement* element){
+void ruiDocumentLoader::ParseAbsoluteLayoutItem(rXMLElement* element){
 	int top = 0;
 	int left = 0;
 
@@ -99,7 +99,7 @@ void ruiOverlayLoader::ParseAbsoluteLayoutItem(rXMLElement* element){
 	absoluteLayout->SetLeft(left);
 
 	if (m_layoutStack.size() == 0)
-		m_currentOverlay->SetLayout(absoluteLayout);
+		m_currentDocument->SetLayout(absoluteLayout);
 
 	m_layoutStack.push_back(absoluteLayout);
 
@@ -108,19 +108,19 @@ void ruiOverlayLoader::ParseAbsoluteLayoutItem(rXMLElement* element){
 	m_layoutStack.pop_back();
 }
 
-void ruiOverlayLoader::ParseTextItem(rXMLElement* element){
-	rString id = m_currentOverlay->GetDefaultId();
+void ruiDocumentLoader::ParseTextItem(rXMLElement* element){
+	rString id = m_currentDocument->GetDefaultId();
 	element->GetAttribute<rString>("id", id);
 
-	ruiText* text = new ruiText(element->Text(), id, m_currentOverlay, m_engine);
+	ruiText* text = new ruiText(element->Text(), id, m_currentDocument, m_engine);
 	ParseClassList(element, text);
 
 	m_layoutStack.back()->AddItem(text);
-	m_currentOverlay->AddWidget(text);
+	m_currentDocument->AddWidget(text);
 }
 
-void ruiOverlayLoader::ParsePickerItem(rXMLElement* element){
-	rString id = m_currentOverlay->GetDefaultId();
+void ruiDocumentLoader::ParsePickerItem(rXMLElement* element){
+	rString id = m_currentDocument->GetDefaultId();
 	element->GetAttribute<rString>("id", id);
 
 	rArrayString options;
@@ -130,18 +130,18 @@ void ruiOverlayLoader::ParsePickerItem(rXMLElement* element){
 		options.push_back(element->GetChild(i)->Text());
 	}
 
-	ruiPicker* picker = new ruiPicker(options, id, m_currentOverlay, m_engine);
+	ruiPicker* picker = new ruiPicker(options, id, m_currentDocument, m_engine);
 	ParseClassList(element, picker);
 
 	m_layoutStack.back()->AddItem(picker);
-	m_currentOverlay->AddWidget(picker);
+	m_currentDocument->AddWidget(picker);
 }
 
-void ruiOverlayLoader::ParseCheckboxItem(rXMLElement* element){
-	rString id = m_currentOverlay->GetDefaultId();
+void ruiDocumentLoader::ParseCheckboxItem(rXMLElement* element){
+	rString id = m_currentDocument->GetDefaultId();
 	element->GetAttribute<rString>("id", id);
 
-	ruiCheckbox* checkbox = new ruiCheckbox(id, m_currentOverlay, m_engine);
+	ruiCheckbox* checkbox = new ruiCheckbox(id, m_currentDocument, m_engine);
 
 	rString checked;
 	if (element->GetAttribute<rString>("checked", checked))
@@ -150,22 +150,22 @@ void ruiOverlayLoader::ParseCheckboxItem(rXMLElement* element){
 	ParseClassList(element, checkbox);
 
 	m_layoutStack.back()->AddItem(checkbox);
-	m_currentOverlay->AddWidget(checkbox);
+	m_currentDocument->AddWidget(checkbox);
 }
 
-void ruiOverlayLoader::ParseButtonItem(rXMLElement* element){
-	rString id = m_currentOverlay->GetDefaultId();
+void ruiDocumentLoader::ParseButtonItem(rXMLElement* element){
+	rString id = m_currentDocument->GetDefaultId();
 	element->GetAttribute<rString>("id", id);
 
-	ruiButton* button = new ruiButton(element->Text(), id, m_currentOverlay, m_engine);
+	ruiButton* button = new ruiButton(element->Text(), id, m_currentDocument, m_engine);
 
 	ParseClassList(element, button);
 
 	m_layoutStack.back()->AddItem(button);
-	m_currentOverlay->AddWidget(button);
+	m_currentDocument->AddWidget(button);
 }
 
-void ruiOverlayLoader::ParseClassList(rXMLElement* element, ruiWidget* widget){
+void ruiDocumentLoader::ParseClassList(rXMLElement* element, ruiWidget* widget){
 	rString classList;
 	if (element->GetAttribute<rString>("class", classList)){
 		rIStringStream stream(classList);
@@ -181,7 +181,7 @@ void ruiOverlayLoader::ParseClassList(rXMLElement* element, ruiWidget* widget){
 	}
 }
 
-void ruiOverlayLoader::ParseLinearLayoutItem(rXMLElement* element){
+void ruiDocumentLoader::ParseLinearLayoutItem(rXMLElement* element){
 	ruiLayoutDirection layoutDirection = ruiLAYOUT_HORIZONTAL;
 
 	rString direction;
@@ -193,7 +193,7 @@ void ruiOverlayLoader::ParseLinearLayoutItem(rXMLElement* element){
 	ruiLinearLayout* linearLayout = new ruiLinearLayout(layoutDirection);
 
 	if (m_layoutStack.size() == 0)
-		m_currentOverlay->SetLayout(linearLayout);
+		m_currentDocument->SetLayout(linearLayout);
 
 	m_layoutStack.push_back(linearLayout);
 
@@ -202,10 +202,10 @@ void ruiOverlayLoader::ParseLinearLayoutItem(rXMLElement* element){
 	m_layoutStack.pop_back();
 }
 
-void ruiOverlayLoader::ParseControllerItem(rXMLElement* element){
+void ruiDocumentLoader::ParseControllerItem(rXMLElement* element){
 	rString controllerType;
 	if (element->GetAttribute("type", controllerType)){
-		m_currentOverlay->SetController(m_manager->CreateController(controllerType, m_currentOverlay));
+		m_currentDocument->SetController(m_manager->CreateController(controllerType, m_currentDocument));
 	}
 		
 }

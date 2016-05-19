@@ -1,7 +1,7 @@
 #include "ui/ruiWidget.hpp"
 
-ruiWidget::ruiWidget(const rString& id, ruiOverlay* overlay, rEngine* engine)
-	:ruiWidgetBase(id, overlay, engine)
+ruiWidget::ruiWidget(const rString& id, ruiDocument* document, rEngine* engine)
+	:ruiWidgetBase(id, document, engine)
 {
 	m_position.Set(-1,-1);
 	m_position.Set(0,0);

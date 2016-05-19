@@ -10,21 +10,21 @@
 
 #include "rViewport.hpp"
 
-#include "ui/ruiOverlay.hpp"
+#include "ui/ruiDocument.hpp"
 #include "ui/ruiEvents.hpp"
 #include "ui/ruiMenuManager.hpp"
 #include "ui/ruiController.hpp"
 
 class ruiMenu;
-class ruiOverlay;
+class ruiDocument;
 
 class RECONDITE_API ruiIManager {
 public:
-	virtual ruiOverlay* CreateOverlay(rViewport* viewport) = 0;
-	virtual ruiOverlay* LoadOverlay(const rString& filePath, rViewport* viewport) = 0;
-	virtual ruiOverlay* GetOverlay(rViewport* viewport) const = 0;
+	virtual ruiDocument* CreateUiDocument(rViewport* viewport) = 0;
+	virtual ruiDocument* LoadUiDocument(const rString& filePath, rViewport* viewport) = 0;
+	virtual ruiDocument* GetUiDocument(rViewport* viewport) const = 0;
 
-	typedef ruiController*(*ControllerCreateFunction)(const rString& className, rEngine*, ruiOverlay*);
+	typedef ruiController*(*ControllerCreateFunction)(const rString& className, rEngine*, ruiDocument*);
 	typedef void(*ControllerDeleteFunction)(ruiController* controller);
 
 	virtual bool RegisterControllerClass(const rString& name, ControllerCreateFunction createFunc, ControllerDeleteFunction deleteFunc) = 0;
@@ -50,14 +50,14 @@ public:
 
 	void Clear();
 
-	virtual ruiOverlay* CreateOverlay(rViewport* viewport);
-	virtual ruiOverlay* LoadOverlay(const rString& filePath, rViewport* viewport);
-	virtual ruiOverlay* GetOverlay(rViewport* viewport) const;
+	virtual ruiDocument* CreateUiDocument(rViewport* viewport);
+	virtual ruiDocument* LoadUiDocument(const rString& filePath, rViewport* viewport);
+	virtual ruiDocument* GetUiDocument(rViewport* viewport) const;
 	
 
 	virtual bool RegisterControllerClass(const rString& name, ControllerCreateFunction createFunc, ControllerDeleteFunction deleteFunc);
 	virtual void UnregisterControllerClass(const rString& name);
-	virtual ruiController* CreateController(const rString& name, ruiOverlay* overlay);
+	virtual ruiController* CreateController(const rString& name, ruiDocument* document);
 
 private:
 	struct Impl;

@@ -13,7 +13,7 @@ void rApplicationBase::Update(){
 		m_scene->Update();
 	m_module->AfterUpdateScene();
 
-	m_overlayManager->Update();
+	m_uiManager->Update();
 
 	m_engine.input->PostUpdate();
 }
@@ -41,7 +41,7 @@ void rApplicationBase::Draw(){
 		m_engine.renderer->End();
 	}
 
-	//render the overlay for each viewport
+	//render the document for each viewport
 	for (rViewportMap::iterator it = m_viewports.begin(); it != end; ++it){
 		rViewport* viewport = it->second;
 
@@ -50,7 +50,7 @@ void rApplicationBase::Draw(){
 		rMatrixUtil::Ortho2D(window.Left(), window.Right(), window.Bottom(), window.Top(), matrixOrtho2D);
 
 		m_engine.renderer->Begin(matrixOrtho2D);
-		m_overlayManager->Draw(viewport);
+		m_uiManager->Draw(viewport);
 		m_engine.renderer->End();
 	}
 

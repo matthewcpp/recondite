@@ -1,10 +1,10 @@
 #include "ui/ruiWidgetBase.hpp"
-#include "ui/ruiOverlay.hpp"
+#include "ui/ruiDocument.hpp"
 
-ruiWidgetBase::ruiWidgetBase(const rString& id, ruiOverlay* ui, rEngine* engine)
+ruiWidgetBase::ruiWidgetBase(const rString& id, ruiDocument* document, rEngine* engine)
 	:rObject(id, engine)
 {
-	m_overlay = ui;
+	m_document = document;
 
 	m_style.MarkChanged();
 	InvalidateSize();
@@ -37,14 +37,14 @@ void ruiWidgetBase::GetClasses(rArrayString& classlist){
 }
 
 void ruiWidgetBase::ExtendStyle(const rString& selector){
-	ruiStyle* style = m_overlay->Styles()->GetStyle(selector);
+	ruiStyle* style = m_document->Styles()->GetStyle(selector);
 	if (style) m_computedStyle.Extend(*style);
 }
 
 void ruiWidgetBase::RecomputeStyle(){
 	m_computedStyle.Clear();
 
-	ruiStyleManager* styleManager = m_overlay->Styles();
+	ruiStyleManager* styleManager = m_document->Styles();
 	ruiStyle* style = NULL;
 
 	ExtendStyle(GetWidgetType());

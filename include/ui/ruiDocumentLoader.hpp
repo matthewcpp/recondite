@@ -1,5 +1,5 @@
-#ifndef RUI_OVERLAYLOADER_HPP
-#define RUI_OVERLAYLOADER_HPP
+#ifndef RUI_DOCUMENTLOADER_HPP
+#define RUI_DOCUMENTLOADER_HPP
 
 #include <map>
 #include <vector>
@@ -12,7 +12,7 @@
 
 #include "stream/rIStringStream.hpp"
 
-#include "ui/ruiOverlay.hpp"
+#include "ui/ruiDocument.hpp"
 #include "ui/ruiAbsoluteLayout.hpp"
 #include "ui/ruiLinearLayout.hpp"
 #include "ui/ruiText.hpp"
@@ -22,15 +22,15 @@
 
 class ruiManager;
 
-class RECONDITE_API ruiOverlayLoader{
+class RECONDITE_API ruiDocumentLoader{
 public:
-	ruiOverlayLoader(ruiManager* manager, rEngine* engine);
+	ruiDocumentLoader(ruiManager* manager, rEngine* engine);
 	
 public:
-	ruiOverlay* ParseOverlay(const rString& path, rViewport* viewport);
+	ruiDocument* LoadDocument(const rString& path, rViewport* viewport);
 	
 private:
-	typedef void (ruiOverlayLoader::*ruiParseItemMethod)(rXMLElement* element);
+	typedef void (ruiDocumentLoader::*ruiParseItemMethod)(rXMLElement* element);
 	typedef std::map<rString, ruiParseItemMethod> ruiParseItemMap;
 	typedef std::vector<ruiLayout*> ruiLayoutVector;
 
@@ -54,7 +54,7 @@ private:
 	rEngine* m_engine;
 	ruiManager* m_manager;
 	
-	ruiOverlay* m_currentOverlay;
+	ruiDocument* m_currentDocument;
 	ruiLayoutVector m_layoutStack;
 
 	rString m_path;

@@ -1,7 +1,7 @@
 #include "ui/ruiWidgetBase.hpp"
 #include "ui/ruiDocument.hpp"
 
-ruiWidgetBase::ruiWidgetBase(const rString& id, ruiDocument* document, rEngine* engine)
+ruiWidgetBase::ruiWidgetBase(const rString& id, ruiIDocument* document, rEngine* engine)
 	:rObject(id, engine)
 {
 	m_document = document;

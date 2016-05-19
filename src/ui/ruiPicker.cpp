@@ -1,12 +1,12 @@
 #include "ui/ruiPicker.hpp"
 
-ruiPicker::ruiPicker(const rString& id, ruiDocument* document, rEngine* engine)
+ruiPicker::ruiPicker(const rString& id, ruiIDocument* document, rEngine* engine)
 	:ruiWidget(id, document, engine)
 {
 	Init();
 }
 
-ruiPicker::ruiPicker(rArrayString& options, const rString& id, ruiDocument* document, rEngine* engine)
+ruiPicker::ruiPicker(rArrayString& options, const rString& id, ruiIDocument* document, rEngine* engine)
 	: ruiWidget(id, document, engine)
 {
 	Init();

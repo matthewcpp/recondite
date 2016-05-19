@@ -1,6 +1,6 @@
 #include "ui/ruiAnalogStick.hpp"
 
-ruiAnalogStick::ruiAnalogStick(rController* controller, size_t stickIndex, const rString& id, ruiDocument* document, rEngine* engine)
+ruiAnalogStick::ruiAnalogStick(rController* controller, size_t stickIndex, const rString& id, ruiIDocument* document, rEngine* engine)
 	:ruiWidget(id, document, engine)
 {
 	m_controller = controller;

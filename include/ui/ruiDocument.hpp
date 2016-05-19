@@ -15,10 +15,13 @@ class ruiWidget;
 class ruiLayout;
 
 class RECONDITE_API ruiIDocument{
+public:
 	virtual bool ShowContextMenu(ruiMenu* menu, ruiStyle* style, const rPoint& position, rEventHandler* handler) = 0;
 	virtual void CancelContextMenu() = 0;
 	virtual void AddWidget(ruiWidget* widget) = 0;
 	virtual ruiWidget* GetWidget(const rString& id) = 0;
+
+	virtual ruiStyleManager* Styles() = 0;
 };
 
 class RECONDITE_API ruiDocument : public ruiIDocument{
@@ -50,7 +53,7 @@ public:
 
 	ruiWidget* SelectWidget(const rPoint& position);
 
-	ruiStyleManager* Styles();
+	virtual ruiStyleManager* Styles();
 
 	ruiLayout* Layout() const;
 	void SetLayout(ruiLayout* layout);

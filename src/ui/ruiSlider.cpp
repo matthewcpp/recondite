@@ -1,6 +1,6 @@
 #include "ui/ruiSlider.hpp"
 
-ruiSlider::ruiSlider(const rString& id, ruiDocument* document, rEngine* engine)
+ruiSlider::ruiSlider(const rString& id, ruiIDocument* document, rEngine* engine)
 	:ruiWidget(id, document, engine)
 {
 	m_value = 0;

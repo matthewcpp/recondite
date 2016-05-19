@@ -1,6 +1,6 @@
 #include "ui/ruiButton.hpp"
 
-ruiButton::ruiButton(const rString& text, const rString& id, ruiDocument* document, rEngine* engine)
+ruiButton::ruiButton(const rString& text, const rString& id, ruiIDocument* document, rEngine* engine)
 	:ruiWidget(id, document, engine)
 {
 	m_text = text;

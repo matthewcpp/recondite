@@ -1,6 +1,6 @@
 #include "ui/ruiWidget.hpp"
 
-ruiWidget::ruiWidget(const rString& id, ruiDocument* document, rEngine* engine)
+ruiWidget::ruiWidget(const rString& id, ruiIDocument* document, rEngine* engine)
 	:ruiWidgetBase(id, document, engine)
 {
 	m_position.Set(-1,-1);

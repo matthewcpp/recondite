@@ -25,14 +25,13 @@ void ruiCheckbox::Draw(){
 	rColor color(200,200,200,255);
 	style->GetColor("border-color", color);
 
-	m_engine->renderer->SpriteBatch()->RenderWireRectangle(outline, color);
+	m_engine->renderer->SpriteBatch()->RenderWireRectangle(outline, color, 0.01);
 	
 	if (m_isChecked){
 		color.Set(0,0,255,255);
 		style->GetColor("color", color);
 
-		rRect fill(outline.x + 5, outline.y + 5, outline.width - 12, outline.height - 12);
-		m_engine->renderer->SpriteBatch()->RenderRectangle(fill, color);
+		m_engine->renderer->SpriteBatch()->RenderRectangle(outline, color);
 	}
 }
 
@@ -50,7 +49,7 @@ bool ruiCheckbox::OnPointerUp(const rPoint& position){
 
 rSize ruiCheckbox::ComputeSize(){
 	//temporary
-	return rSize(35,35);
+	return rSize(15,15);
 }
 
 rString ruiCheckbox::GetWidgetType() const{

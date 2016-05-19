@@ -65,6 +65,9 @@ size_t ruiLayout::ItemCount() const{
 
 void ruiLayout::SetPosition(const rPoint& position){
 	m_position = position;
+
+	rRect r(position, rSize::Default);
+	Layout(r);
 }
 
 rPoint ruiLayout::Position() const{

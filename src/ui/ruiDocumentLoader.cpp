@@ -194,6 +194,8 @@ void ruiDocumentLoader::ParseLinearLayoutItem(rXMLElement* element){
 
 	if (m_layoutStack.size() == 0)
 		m_currentDocument->SetLayout(linearLayout);
+	else
+		m_layoutStack.back()->AddItem(linearLayout);
 
 	m_layoutStack.push_back(linearLayout);
 

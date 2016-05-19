@@ -63,7 +63,7 @@ void ruiMenuManager::Draw(){
 	rRect bounding(m_position, m_menuSize);
 
 	m_style->GetColor("background-color", color);
-	m_engine->renderer->SpriteBatch()->RenderRectangle(bounding, color);
+	m_engine->renderer->SpriteBatch()->RenderRectangle(bounding, color, 0.9);
 	
 	color = rColor::Black;
 	m_style->GetColor("color", color);
@@ -71,7 +71,7 @@ void ruiMenuManager::Draw(){
 	for (size_t i = 0; i < menuItemCount; i++){
 		rPoint point(bounding.x, bounding.Top() + (i * m_rowHeight));
 
-		m_engine->renderer->SpriteBatch()->RenderString(m_menu->GetItem(i)->Label(), font, point, color, 0.01);
+		m_engine->renderer->SpriteBatch()->RenderString(m_menu->GetItem(i)->Label(), font, point, color, 0.91);
 	}
 }
 

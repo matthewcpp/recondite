@@ -4,10 +4,6 @@ ruiMenuManager::ruiMenuManager(rEngine* engine){
 	m_menu = NULL;
 	m_engine = engine;
 
-	m_defaultStyle.SetColor("color", rColor(0,0,0,255));
-	m_defaultStyle.SetColor("background-color", rColor(200,200,200,255));
-	m_defaultStyle.SetString("font", "consolas");
-
 	CancelContextMenu();
 }
 
@@ -25,9 +21,6 @@ bool ruiMenuManager::ShowContextMenu(ruiMenu* menu, ruiStyle* style, const rPoin
 }
 
 void ruiMenuManager::CancelContextMenu(){
-	if (m_menu)
-		delete m_menu;
-
 	m_menu = NULL;
 	m_position = rPoint::Zero;
 	m_handler = NULL;
@@ -38,62 +31,47 @@ void ruiMenuManager::CancelContextMenu(){
 
 void ruiMenuManager::Update(){}
 
-ruiStyle* ruiMenuManager::GetStyle(){
-	if (m_style)
-		return m_style;
-	else
-		return &m_defaultStyle;
-}
-
-void ruiMenuManager::CalculateMenuSize(rEngine& engine){
+void ruiMenuManager::CalculateMenuSize(){
 	m_menuSize.Set(0,0);
 	if (!m_menu) return;
-
-	ruiStyle* style = GetStyle();
-	rString fontName;
-	style->GetString("font", fontName);
-	//rFont* font = engine.content->Fonts()->Get(fontName);
 	
-	Font::Face* font = nullptr;
-	if (!font) return;
+	Font::Face* font = m_engine->content->Fonts()->SystemDefault();
+	m_rowHeight = font->GetLineHeight();
 
 	size_t menuItemCount = m_menu->NumItems();
-	//m_rowHeight = font->LineHeight();
 
 	for (size_t i = 0; i < menuItemCount; i++){
-		m_menuSize.y += m_rowHeight;
 		rSize strSize = font->MeasureString(m_menu->GetItem(i)->Label());
+
 		m_menuSize.x = std::max(m_menuSize.x, strSize.x);
+		m_menuSize.y += font->GetLineHeight();
 	}
 }
 
 void ruiMenuManager::Draw(){
 	if (!m_menu) return;
 
-	ruiStyle* style = GetStyle();
-	rString fontName;
-	style->GetString("font", fontName);
-	//rFont* font = engine.content->Fonts()->Get(fontName);
-	Font::Face* font = nullptr;
+	Font::Face* font = m_engine->content->Fonts()->SystemDefault();
 	if (!font) return;
 
 	if (m_menuSize == rSize::Default)
-		CalculateMenuSize(*m_engine);
+		CalculateMenuSize();
 
 	size_t menuItemCount = m_menu->NumItems();
-	rColor color;
+	rColor color = rColor::White;
 
 	rRect bounding(m_position, m_menuSize);
 
-	style->GetColor("background-color", color);
+	m_style->GetColor("background-color", color);
 	m_engine->renderer->SpriteBatch()->RenderRectangle(bounding, color);
 	
-	style->GetColor("color", color);
+	color = rColor::Black;
+	m_style->GetColor("color", color);
 
 	for (size_t i = 0; i < menuItemCount; i++){
 		rPoint point(bounding.x, bounding.Top() + (i * m_rowHeight));
 
-		m_engine->renderer->SpriteBatch()->RenderString(m_menu->GetItem(i)->Label(), font, point, color);
+		m_engine->renderer->SpriteBatch()->RenderString(m_menu->GetItem(i)->Label(), font, point, color, 0.01);
 	}
 }
 

@@ -87,7 +87,6 @@ void ruiWidgetBase::RenderWidgetBase(ruiStyle* style, const rRect& boundingBox){
 			m_engine->renderer->SpriteBatch()->RenderRectangle(boundingBox, color);
 	}
 		
-
 	if (style->GetColor("border-color", color)){
 		if (borderRadius > 0)
 			m_engine->renderer->SpriteBatch()->RenderWireRoundedRectangle(boundingBox, borderRadius, color, 0.01);

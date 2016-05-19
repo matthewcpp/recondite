@@ -19,24 +19,21 @@ public:
 	void Update();
 	virtual void Draw();
 
-private:
-	bool PickMenuItem(const rPoint& position);
-	ruiStyle* GetStyle();
-	void CalculateMenuSize(rEngine& engine);
-
-private:
 	virtual bool OnPointerDown(const rPoint& position);
 
 private:
+	bool PickMenuItem(const rPoint& position);
+	void CalculateMenuSize();
+
+private:
 	ruiMenu* m_menu;
+
 	rPoint m_position;
 	rEventHandler* m_handler;
 	ruiStyle* m_style;
 	rSize m_menuSize;
 	size_t m_rowHeight;
 	rEngine* m_engine;
-
-	ruiStyle m_defaultStyle;
 };
 
 #endif

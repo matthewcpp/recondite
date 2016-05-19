@@ -3,6 +3,7 @@
 #include "ui/ruiWidget.hpp"
 #include "ui/ruiLayout.hpp"
 #include "stream/rOStringStream.hpp"
+#include "ui/ruiMenuManager.hpp"
 
 struct ruiOverlay::Impl{
 	std::vector<ruiWidget*> widgets;
@@ -73,14 +74,6 @@ void ruiOverlay::Clear(){
 	_impl->widgets.clear();
 }
 
-ruiWidget* ruiOverlay::ActiveWidget() const{
-	return _impl->activeWidget;
-}
-
-void ruiOverlay::ActivateWidget(ruiWidget* widget){
-	_impl->activeWidget = widget;
-}
-
 ruiWidget* ruiOverlay::SelectWidget(const rPoint& position){
 	rRect boundingBox;
 
@@ -117,10 +110,6 @@ ruiStyleManager* ruiOverlay::Styles(){
 	return &_impl->styleManager;
 }
 
-bool ruiOverlay::ShowContextMenu(ruiMenu* menu, const rPoint& position, rEventHandler* handler){
-	return ShowContextMenu(menu, NULL, position, handler);
-}
-
 bool ruiOverlay::ShowContextMenu(ruiMenu* menu, ruiStyle* style, const rPoint& position, rEventHandler* handler){
 	return _impl->menuManager.ShowContextMenu(menu, style, position, handler);
 }
@@ -135,4 +124,60 @@ ruiController* ruiOverlay::GetController(){
 
 void ruiOverlay::SetController(ruiController* controller){
 	_impl->controller = controller;
+}
+
+void ruiOverlay::ProcessMouseDownEvent(ruiMouseEvent& event){
+	if (_impl->menuManager.OnPointerDown(event.Position())) return;
+
+	if (_impl->activeWidget){
+		_impl->activeWidget->Trigger(ruiEVT_MOUSE_DOWN, event);
+		_impl->activeWidget->UiState("active");
+	}
+}
+
+void ruiOverlay::ProcessMouseMotionEvent(ruiMouseEvent& event){
+	rPoint position = event.Position();
+	if (_impl->activeWidget){
+		rRect boundingBox = _impl->activeWidget->BoundingBox();
+
+		if (boundingBox.ContainsPoint(position)){
+			_impl->activeWidget->Trigger(ruiEVT_MOUSE_MOTION, event);
+		}
+		else if (_impl->activeWidget->UiState() == "hover"){
+			_impl->activeWidget->Trigger(ruiEVT_MOUSE_LEAVE, event);
+			_impl->activeWidget->UiState("");
+			_impl->activeWidget = nullptr;
+		}
+	}
+	else {
+		ruiWidget* selectedWidget = SelectWidget(position);
+
+		if (selectedWidget){
+			selectedWidget->Trigger(ruiEVT_MOUSE_ENTER, event);
+			selectedWidget->UiState("hover");
+			_impl->activeWidget = selectedWidget;
+		}
+	}
+}
+
+void ruiOverlay::ProcessMouseUpEvent(ruiMouseEvent& event){
+	if (_impl->activeWidget){
+		rRect boundingBox = _impl->activeWidget->BoundingBox();
+		_impl->activeWidget->Trigger(ruiEVT_MOUSE_UP, event);
+
+		if (boundingBox.ContainsPoint(event.Position())){
+			_impl->activeWidget->UiState("hover");
+		}
+
+		else{
+			_impl->activeWidget->UiState("");
+			_impl->activeWidget = nullptr;
+		}
+	}
+}
+
+void ruiOverlay::ProcessMouseWheelEvent(ruiMouseEvent& event){
+	if (_impl->activeWidget){
+		_impl->activeWidget->Trigger(ruiEVT_MOUSE_WHEEL, event);
+	}
 }

@@ -51,26 +51,21 @@ rSize ruiPicker::ComputeSize(){
 }
 
 void ruiPicker::Draw(){
-	rRect box = BoundingBox();
 	ruiStyle* style = ComputedStyle();
 
-	rColor color(200,200,200,255);
-	style->GetColor("background-color", color);
+	rColor color(255, 255, 255, 255);
+	rRect boundingBox = BoundingBox();
 
-	m_engine->renderer->SpriteBatch()->RenderRectangle(box, color);
-	
+	RenderWidgetBase(style, boundingBox);
 
 	Font::Face* font = DetermineFont();
-	
-	if (font){
-		rString text = SelectionText();
-		rPoint point (m_position.x + 5 , m_position.y + 5);
-		color.Set(0,0,0,255);
-		style->GetColor("color", color);
-		
-		m_engine->renderer->SpriteBatch()->RenderString(text, font, point, box.Size(), color);
-	}
 
+	if (font){
+		color.Set(255, 255, 255, 255);
+		style->GetColor("color", color);
+
+		m_engine->renderer->SpriteBatch()->RenderString(SelectionText(), font, ContentPosition(), color, 0.01);
+	}
 }
 
 void ruiPicker::AddOption(const rString& option){

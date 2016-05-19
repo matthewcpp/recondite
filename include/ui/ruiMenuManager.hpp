@@ -5,8 +5,8 @@
 
 #include "rEngine.hpp"
 #include "ruiMenu.hpp"
-#include "ruiWidgetBase.hpp"
 #include "ui/ruiDefaultEventHandler.hpp"
+#include "ruiStyle.hpp"
 
 class RECONDITE_API ruiMenuManager : public ruiDefaultEventHandler{
 public:

@@ -22,7 +22,6 @@ add_rec_src(ui_files "ruiStylesheetParser" "ui")
 add_rec_src(ui_files "ruiText" "ui")
 add_rec_src(ui_files "ruiTextBox" "ui")
 add_rec_src(ui_files "ruiWidget" "ui")
-add_rec_src(ui_files "ruiWidgetBase" "ui")
 
 list(APPEND ui_files ${CMAKE_CURRENT_SOURCE_DIR}/../../include/ui/ruiEvents.hpp)
 list(APPEND ui_files ${CMAKE_CURRENT_SOURCE_DIR}/../../include/ui/ruiController.hpp)

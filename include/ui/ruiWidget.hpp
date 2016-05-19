@@ -3,34 +3,73 @@
 
 #include "rBuild.hpp"
 
-#include "rRenderer.hpp"
-#include "rSize.hpp"
-#include "rPoint.hpp"
-
+#include "rString.hpp"
+#include "rEngine.hpp"
+#include "rObject.hpp"
 #include "ruiStyle.hpp"
 
-#include "rEngine.hpp"
+#include "ruiDefaultEventHandler.hpp"
 
-#include "ui/ruiDocument.hpp"
-#include "ui/ruiStyleManager.hpp"
-#include "ui/ruiWidgetBase.hpp"
+class ruiIDocument;
 
-#include "ui/ruiDefaultEventHandler.hpp"
-
-
-class RECONDITE_API ruiWidget : public ruiWidgetBase, public ruiDefaultEventHandler {
+class RECONDITE_API ruiWidget : public rObject, public ruiDefaultEventHandler{
 public:
 	ruiWidget(const rString& id, ruiIDocument* document, rEngine* engine);
 
+public:
 	virtual rRect BoundingBox();
-
+	virtual rSize Size();
 	virtual rPoint Position() const;
+
+	virtual void Update();
+	virtual void Draw();
+
 	void SetPosition(int x, int y);
 	void SetPosition(const rPoint& position);
 
+public:
+	virtual void AddClass(const rString& className);
+	virtual void RemoveClass(const rString& className);
+	bool HasClass(const rString& className) const;
+	void GetClasses(rArrayString& classlist);
+
+	ruiStyle* Style();
+	ruiStyle* ComputedStyle();
+
+	virtual rString GetWidgetType() const = 0;
+
+	rString UiState() const;
+	void UiState(const rString& state);
+
+protected: //style related utility methods
+	Font::Face* DetermineFont();
+
 protected:
+	virtual rSize ComputeSize() = 0;
+	void InvalidateSize();
+	rPoint ContentOffset();
+	void RenderWidgetBase(ruiStyle* style, const rRect& boundingBox);
+
+private:
+	int GetClassIndex(const rString& className) const;
+	void RecomputeStyle();
+	void ExtendStyle(const rString& selector);
+	void RecomputeSize(bool force = false);
+
+protected:
+	ruiIDocument* m_document;
+
 	rPoint ContentPosition();
 	rPoint m_position;
+
+private:
+	ruiStyle m_style;
+	ruiStyle m_computedStyle;
+	rArrayString m_classList;
+	rString m_uiState;
+
+	rSize m_size;
+	rPoint m_contentOffset;
 };
 
 #endif

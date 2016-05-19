@@ -7,7 +7,7 @@
 #include "input/rMouse.hpp"
 #include "ui/ruiMenu.hpp"
 
-#include "ruiWidgetBase.hpp"
+class ruiWidget;
 
 enum ruiEventType{
 	ruiEVT_MOUSE_DOWN,
@@ -48,10 +48,10 @@ private:
 
 class ruiWidgetEvent : public rEvent{
 public:
-	ruiWidgetEvent(ruiWidgetBase* widget) : m_widget(widget){}
-	ruiWidgetBase* Widget() const {return m_widget;}
+	ruiWidgetEvent(ruiWidget* widget) : m_widget(widget){}
+	ruiWidget* Widget() const { return m_widget; }
 private:
-	ruiWidgetBase* m_widget;
+	ruiWidget* m_widget;
 };
 
 class ruiMenuEvent : public rEvent{

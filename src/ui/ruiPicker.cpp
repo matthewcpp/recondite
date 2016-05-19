@@ -1,5 +1,7 @@
 #include "ui/ruiPicker.hpp"
 
+#include "ui/ruiDocument.hpp"
+
 ruiPicker::ruiPicker(const rString& id, ruiIDocument* document, rEngine* engine)
 	:ruiWidget(id, document, engine)
 {

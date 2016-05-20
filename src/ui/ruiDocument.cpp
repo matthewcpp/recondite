@@ -1,5 +1,7 @@
 #include "ui/ruiDocument.hpp"
 
+#include <map>
+
 #include "ui/ruiWidget.hpp"
 #include "ui/ruiLayout.hpp"
 #include "stream/rOStringStream.hpp"
@@ -7,6 +9,9 @@
 
 struct ruiDocument::Impl{
 	std::vector<ruiWidget*> widgets;
+	std::map<uint32_t, UpdateFunc> everyUpdateFuncs;
+	std::map<uint32_t, UpdateFunc> nextUpdateFuncs;
+	uint32_t updateFuncHandle;
 
 	ruiWidget* activeWidget;
 	ruiWidget* modalWidget;
@@ -18,7 +23,7 @@ struct ruiDocument::Impl{
 	ruiMenuManager menuManager;
 
 	Impl(rEngine* _engine, rViewport* _viewport)
-		:activeWidget(nullptr), viewport(_viewport), menuManager(_engine), controller(nullptr) {}
+		:activeWidget(nullptr), viewport(_viewport), menuManager(_engine), controller(nullptr), updateFuncHandle(1){}
 };
 
 ruiDocument::ruiDocument(rEngine* engine, rViewport* viewport){
@@ -47,6 +52,16 @@ ruiWidget* ruiDocument::GetWidget(const rString& id){
 }
 
 void ruiDocument::Update(){
+	for (auto& item : _impl->everyUpdateFuncs){
+		item.second();
+	}
+
+	for (auto& item : _impl->nextUpdateFuncs){
+		item.second();
+	}
+
+	_impl->nextUpdateFuncs.clear();
+
 	for (size_t i = 0; i < _impl->widgets.size(); i++)
 		_impl->widgets[i]->Update();
 
@@ -180,4 +195,26 @@ void ruiDocument::ProcessMouseWheelEvent(ruiMouseEvent& event){
 	if (_impl->activeWidget){
 		_impl->activeWidget->Trigger(ruiEVT_MOUSE_WHEEL, event);
 	}
+}
+
+uint32_t ruiDocument::RunEveryUpdate(UpdateFunc func){
+	uint32_t handle = _impl->updateFuncHandle++;
+	_impl->everyUpdateFuncs[handle] = func;
+
+	return handle;
+}
+
+uint32_t ruiDocument::RunNextUpdate(UpdateFunc func){
+	uint32_t handle = _impl->updateFuncHandle++;
+	_impl->nextUpdateFuncs[handle] = func;
+
+	return handle;
+}
+
+void ruiDocument::ClearRunEveryUpdate(int handle) {
+	_impl->everyUpdateFuncs.erase(handle);
+}
+
+void ruiDocument::ClearNextUpdate(int handle){
+	_impl->nextUpdateFuncs.erase(handle);
 }

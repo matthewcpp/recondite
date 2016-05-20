@@ -12,13 +12,13 @@ rComponent::rComponent(){
 
 #include "primitive/rPrimitiveBox.hpp"
 bool rComponent::Init(){
-
+	Log::Init();
 
 	return true;
 }
 
 void rComponent::Uninit(){
-	rLog::Shutdown();
+	Log::Shutdown();
 }
 
 void rComponent::LoadScene(const rString& name){

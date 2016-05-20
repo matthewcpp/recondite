@@ -222,7 +222,7 @@ bool rScene::ParseActors(riSerializationTarget* target){
 				AddActor(actor);
 			}
 			else{
-				rLog::Warning("Unable to load actor with class: " + className);
+				Log::Warning("Unable to load actor with class: " + className);
 			}
 		} while (actorTarget->Next());
 	}

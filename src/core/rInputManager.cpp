@@ -20,7 +20,7 @@ rTouch* rInputManager::CreateTouch(int id, const rPoint& position, rTouchType ty
 		rTouch* touch = new rTouch(id, position, type);
 		m_touches[id] = touch;
 
-		rLog::Info("Touch (%u) created Pos: %d, %d (%u)", id, position.x, position.y, type);
+		Log::Info("Touch (%u) created Pos: %d, %d (%u)", id, position.x, position.y, type);
 
 		m_gestures.OnTouchDown(*touch);
 		m_ui->InsertTouchEvent(id, position, type);
@@ -51,7 +51,7 @@ bool rInputManager::UpdateTouch(int id, const rPoint& position, rTouchType type)
 			m_touches.erase(id);
 			delete touch;
 
-			rLog::Info("Touch (%u) ended Pos: %d, %d (%u)", id, position.x, position.y, type);
+			Log::Info("Touch (%u) ended Pos: %d, %d (%u)", id, position.x, position.y, type);
 		}
 		else{
 			//rLog::Trace("Touch (%u) updated Pos: %d, %d (%u)", id, position.x, position.y, type);

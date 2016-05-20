@@ -6,7 +6,7 @@ rOpenGLContentManager::rOpenGLContentManager(rGraphicsDevice* graphicsDevice, rF
 {}
 
 void rOpenGLContentManager::InitDefaultAssets(const rString& defaultAssetPath){
-	rLog::Info("Loading Default OpengGL Shaders");
+	Log::Info("Loading Default OpengGL Shaders");
 
 	rShaderManager* shaderManager = Shaders();
 	shaderManager->LoadFromPath(defaultAssetPath, "__default_sprite__");

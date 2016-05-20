@@ -10,6 +10,9 @@ rApplication::~rApplication(){
 }
 
 bool rApplication::Init(){
+	rApplicationBase::Init();
+	Log::Info("SDL Application Init");
+
 	int sdlInit = SDL_Init(SDL_INIT_VIDEO);
 
 	char* base_path = SDL_GetBasePath();
@@ -18,7 +21,7 @@ bool rApplication::Init(){
 	SDL_free(base_path);
 
 	if (sdlInit < 0){
-		rLog::Error("Error Initializing SDL: %i", sdlInit);
+		Log::Error("Error Initializing SDL: %i", sdlInit);
 		return false;
 	}
 
@@ -32,12 +35,12 @@ bool rApplication::Init(){
 		m_glContext = SDL_GL_CreateContext(m_window);
 	}
 	else {
-		rLog::Error("Error Setting SDL OpenGL Video Mode.");
+		Log::Error("Error Setting SDL OpenGL Video Mode.");
 		return false;
 	}
 
 	if (!m_glContext){
-		rLog::Error("Error Creating OpenGL context.");
+		Log::Error("Error Creating OpenGL context.");
 		return false;
 	}
 

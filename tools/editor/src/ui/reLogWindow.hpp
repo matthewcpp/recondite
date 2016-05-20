@@ -9,7 +9,7 @@
 
 #include "rLog.hpp"
 
-class reLogWindow : public wxPanel , public rLogTarget{
+class reLogWindow : public wxPanel , public Log::Target{
 public:
 	reLogWindow(reComponent* component, wxWindow* parent, wxWindowID id = wxID_ANY);
 
@@ -20,8 +20,6 @@ public:
 	virtual void Trace(const rString& message) override;
 	virtual void Info(const rString& message) override;
 	virtual void Error(const rString& message) override;
-
-	virtual void Shutdown() override;
 
 private:
 	enum class LogTypeIndex{ Debug, Warning, Trace, Info, Error };

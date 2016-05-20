@@ -7,7 +7,7 @@ reLogWindow::reLogWindow(reComponent* component, wxWindow* parent, wxWindowID id
 
 	InitControls();
 
-	rLog::SetLogTarget(this);
+	Log::AddTarget(this);
 }
 
 void reLogWindow::Debug(const rString& message){
@@ -28,10 +28,6 @@ void reLogWindow::Info(const rString& message){
 
 void reLogWindow::Error(const rString& message){
 	AddItem(LogTypeIndex::Error, message);
-}
-
-void reLogWindow::Shutdown(){
-
 }
 
 void reLogWindow::AddItem(LogTypeIndex logType, const rString& message){

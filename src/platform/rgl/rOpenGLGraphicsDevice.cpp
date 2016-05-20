@@ -137,7 +137,7 @@ GLuint rOpenGLGraphicsDevice::CompileShader(GLenum type, const char* program){
 
 			glGetShaderInfoLog(shader, infoLen, NULL, infoLog);
 			m_lastError.assign(infoLog, infoLen);
-			rLog::Error(m_lastError);
+			Log::Error(m_lastError);
 
 			delete[] infoLog;
 		}
@@ -452,7 +452,7 @@ unsigned int rOpenGLGraphicsDevice::CreateRenderbuffer(int width, int height){
 		return targetId;
     }
 	else{
-		rLog::Error("Error Creating Offscreen Renderbuffer: %d", status);
+		Log::Error("Error Creating Offscreen Renderbuffer: %d", status);
         return 0;
 	}
 }

@@ -8,29 +8,31 @@
 #include "rBuild.hpp"
 #include "rString.hpp"
 
-#include "log/rLogTarget.hpp"
+namespace Log {
+	class RECONDITE_API Target{
+	public:
+		virtual void Debug(const rString& message) = 0;
+		virtual void Warning(const rString& message) = 0;
+		virtual void Trace(const rString& message) = 0;
+		virtual void Info(const rString& message) = 0;
+		virtual void Error(const rString& message) = 0;
+	};
 
-class RECONDITE_API rLog{
-public:
-	static void SetLogTarget(rLogTarget* target);
-	
-	static void Debug(const rString format, ...);
-	static void Warning(const rString format, ...);
-	static void Trace(const rString format, ...);
-	static void Info(const rString format, ...);
-	static void Error(const rString format, ...);
-	
-	static void Shutdown();
+	RECONDITE_API void Init();
+	RECONDITE_API void Shutdown();
+	RECONDITE_API void ClearTargets();
 
-	static void SetEnabled(bool enabled);
-	static bool Enabled();
-	
-private:
-	static rString FormatString(const rString format, va_list args);
-	
-private:
-	static rLogTarget* m_logTarget;
-	static bool m_enabled;
-};
+	RECONDITE_API void SetEnabled(bool enabled);
+	RECONDITE_API bool Enabled();
+
+	RECONDITE_API void AddTarget(Target* target);
+	RECONDITE_API void RemoveTarget(Target* target);
+
+	RECONDITE_API void Debug(const rString format, ...);
+	RECONDITE_API void Warning(const rString format, ...);
+	RECONDITE_API void Trace(const rString format, ...);
+	RECONDITE_API void Info(const rString format, ...);
+	RECONDITE_API void Error(const rString format, ...);
+}
 
 #endif

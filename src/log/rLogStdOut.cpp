@@ -19,7 +19,3 @@ void rLogStdOut::Info(const rString& message){
 void rLogStdOut::Error(const rString& message){
 	std::cout << message.c_str() << std::endl;
 }
-
-void rLogStdOut::Shutdown(){
-
-}

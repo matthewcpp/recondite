@@ -5,12 +5,11 @@
 
 #include "rDefs.hpp"
 
-#include "log/rLogTarget.hpp"
+#include "rLog.hpp"
 
-class RECONDITE_API rLogFile : public rLogTarget{
+class RECONDITE_API rLogFile : public Log::Target{
 public:
 	rLogFile(const rString& path);
-	~rLogFile();
 	
 	
 	virtual void Debug(const rString& message);
@@ -18,8 +17,6 @@ public:
 	virtual void Trace(const rString& message);
 	virtual void Info(const rString& message);
 	virtual void Error(const rString& message);
-
-	virtual void Shutdown();
 	
 private:
 

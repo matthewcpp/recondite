@@ -80,7 +80,7 @@ void rPrimitive::Draw(){
 	}
 		
 	rMatrix4& transform = TransformMatrix();
-	m_engine->renderer->RenderModel(m_model, RenderingOptions(), transform);
+	m_engine->renderer->RenderPrimitive(m_model, RenderingOptions(), transform);
 }
 
 rColor rPrimitive::EdgeColor() const{

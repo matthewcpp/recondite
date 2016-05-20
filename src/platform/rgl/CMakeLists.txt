@@ -6,14 +6,18 @@ add_rec_platform_src(rgl_files "rOpenGLGraphicsDevice" "rgl")
 
 set(rgl_shaders)
 
+list(APPEND rgl_shaders ${CMAKE_CURRENT_SOURCE_DIR}/shaders/__default_drawing__.vert)
+list(APPEND rgl_shaders ${CMAKE_CURRENT_SOURCE_DIR}/shaders/__default_drawing__.frag)
+
+list(APPEND rgl_shaders ${CMAKE_CURRENT_SOURCE_DIR}/shaders/__default_primitive__.vert)
+list(APPEND rgl_shaders ${CMAKE_CURRENT_SOURCE_DIR}/shaders/__default_primitive__.frag)
+
 list(APPEND rgl_shaders ${CMAKE_CURRENT_SOURCE_DIR}/shaders/__default_sprite__.vert)
 list(APPEND rgl_shaders ${CMAKE_CURRENT_SOURCE_DIR}/shaders/__default_sprite__.frag)
 
 list(APPEND rgl_shaders ${CMAKE_CURRENT_SOURCE_DIR}/shaders/__default_text__.vert)
 list(APPEND rgl_shaders ${CMAKE_CURRENT_SOURCE_DIR}/shaders/__default_text__.frag)
 
-list(APPEND rgl_shaders ${CMAKE_CURRENT_SOURCE_DIR}/shaders/__default_drawing__.vert)
-list(APPEND rgl_shaders ${CMAKE_CURRENT_SOURCE_DIR}/shaders/__default_drawing__.frag)
 
 set(recondite_files ${recondite_files} ${rgl_files} PARENT_SCOPE)
 

@@ -49,6 +49,7 @@ public:
 	void RenderWireBox(const rAlignedBox3& box, const rColor color);
 
 	void RenderModel(const rModel* model, rRenderingOptions* renderingOptions, const rMatrix4& transform);
+	void RenderPrimitive(const rModel* model, rRenderingOptions* renderingOptions, const rMatrix4& matrix);
 	void RenderWireframeOnShaded(const rModel* model, const rMatrix4& transform);
 
 private:
@@ -57,8 +58,6 @@ private:
 	void RenderLineMeshes(const rModel* model, const rMatrix4& modelViewProjection);
 	void RenderTriangleMeshes(const rModel* model, const rMatrix4& modelViewProjection);
 
-private:	
-	void ImmediateColorRender(rImmediateBuffer& geometry, const rColor& color);
 
 	void RenderSpriteBatch();
 

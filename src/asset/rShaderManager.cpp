@@ -113,7 +113,7 @@ rShader* rShaderManager::DefaultLineShader(){
 }
 
 rShader* rShaderManager::DefaultPrimitiveShader(){
-	return Get("default_primitive");
+	return Get("__default_primitive__");
 }
 
 rShader* rShaderManager::DefaultSpriteShader() {

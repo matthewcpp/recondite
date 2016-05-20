@@ -88,6 +88,26 @@ void rRenderer::RenderTriangleMeshes(const rModel* model, const rMatrix4& modelV
 	}
 }
 
+void rRenderer::RenderPrimitive(const rModel* model, rRenderingOptions* renderingOptions, const rMatrix4& matrix){
+	m_graphicsDevice->ActivateShader(m_contentManager->Shaders()->DefaultPrimitiveShader()->ProgramId());
+
+	rMatrix4 modelViewProjection = m_viewProjectionMatrix * matrix;
+
+	rArrayString meshNames;
+	model->GetMeshNames(meshNames);
+
+	rGeometry* geometry = model->Geometry();
+
+	for (size_t i = 0; i < meshNames.size(); i++){
+		rMesh* mesh = model->GetMesh(meshNames[i]);
+
+		if (mesh->GeometryType() == rGeometryType::Triangles){
+			m_graphicsDevice->RenderGeometry(geometry, modelViewProjection, mesh->Buffer(), mesh->Material());
+			m_objectsRendered++;
+		}
+	}
+}
+
 
 void rRenderer::RenderModel(const rModel* model, rRenderingOptions* renderingOptions, const rMatrix4& transform){
 	if (!renderingOptions->Visible()) return;
@@ -105,10 +125,6 @@ void rRenderer::RenderModel(const rModel* model, rRenderingOptions* renderingOpt
 	else if (m_renderMode == rRenderMode::Shaded){
 		RenderTriangleMeshes(model, modelViewProjection);
 	}
-}
-
-void rRenderer::ImmediateColorRender(rImmediateBuffer& geometry, const rColor& color){
-
 }
 
 rSpriteBatch* rRenderer::SpriteBatch() {

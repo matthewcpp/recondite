@@ -18,7 +18,7 @@ rModel* rModelManager::CreateAssetFromData(const rModelData& modelData, const rS
 	for (size_t i = 0; i < meshDataNames.size(); i++){
 		rMeshData* meshData = modelData.GetMeshData(meshDataNames[i]);
 
-		rMaterial* material = nullptr;// m_materialManager->CreateMaterial(name + "::" + meshData->meshName + "::material");
+		rMaterial* material = new rMaterial();// m_materialManager->CreateMaterial(name + "::" + meshData->meshName + "::material");
 
 		rMesh* mesh = model->CreateMesh(meshData->meshName, meshData->elementBufferName, meshData->geometryType, material, meshData->boundingBox);
 	}

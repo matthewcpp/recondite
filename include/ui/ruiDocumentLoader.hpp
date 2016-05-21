@@ -10,15 +10,8 @@
 
 #include "xml/rXMLDocument.hpp"
 
-#include "stream/rIStringStream.hpp"
-
 #include "ui/ruiDocument.hpp"
-#include "ui/ruiAbsoluteLayout.hpp"
-#include "ui/ruiLinearLayout.hpp"
-#include "ui/ruiText.hpp"
-#include "ui/ruiPicker.hpp"
-#include "ui/ruiCheckbox.hpp"
-#include "ui/ruiButton.hpp"
+
 
 class ruiManager;
 
@@ -43,10 +36,12 @@ private:
 	void ParseAbsoluteLayoutItem(rXMLElement* element);
 	void ParseLinearLayoutItem(rXMLElement* element);
 	void ParseTextItem(rXMLElement* element);
+	void ParseLogTextItem(rXMLElement* element);
 	void ParsePickerItem(rXMLElement* element);
 	void ParseCheckboxItem(rXMLElement* element);
 	void ParseButtonItem(rXMLElement* element);
 	void ParseControllerItem(rXMLElement* element);
+	void ParseSliderItem(rXMLElement* element);
 
 	void ParseClassList(rXMLElement* element, ruiWidget* widget);
 	

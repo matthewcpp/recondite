@@ -31,6 +31,7 @@ public:
 	virtual void ClearNextUpdate(int handle) = 0;
 
 	virtual ruiStyleManager* Styles() = 0;
+	virtual void WidgetUpdated(ruiWidget* widget) = 0;
 };
 
 class RECONDITE_API ruiDocument : public ruiIDocument{
@@ -73,6 +74,7 @@ public:
 	void SetLayout(ruiLayout* layout);
 
 	void UpdateLayout(bool force = false);
+	virtual void WidgetUpdated(ruiWidget* widget);
 
 	rString GetDefaultId () const;
 

@@ -22,8 +22,10 @@ struct ruiDocument::Impl{
 	ruiStyleManager styleManager;
 	ruiMenuManager menuManager;
 
+	bool layoutNeedsUpdate;
+
 	Impl(rEngine* _engine, rViewport* _viewport)
-		:activeWidget(nullptr), viewport(_viewport), menuManager(_engine), controller(nullptr), updateFuncHandle(1){}
+		:activeWidget(nullptr), viewport(_viewport), menuManager(_engine), controller(nullptr), updateFuncHandle(1), layoutNeedsUpdate(false){}
 };
 
 ruiDocument::ruiDocument(rEngine* engine, rViewport* viewport){
@@ -38,8 +40,13 @@ ruiDocument::~ruiDocument(){
 	delete _impl;
 }
 
+void ruiDocument::WidgetUpdated(ruiWidget* widget){
+	_impl->layoutNeedsUpdate = true;
+}
+
 void ruiDocument::AddWidget(ruiWidget* widget){
 	_impl->widgets.push_back(widget);
+	_impl->layoutNeedsUpdate = true;
 }
 
 ruiWidget* ruiDocument::GetWidget(const rString& id){
@@ -69,10 +76,11 @@ void ruiDocument::Update(){
 }
 
 void ruiDocument::UpdateLayout(bool force){
-	if (_impl->layout){
+	if (_impl->layoutNeedsUpdate && _impl->layout){
 		rRect layoutRect = _impl->viewport->GetScreenRect();
-			_impl->layout->Layout(layoutRect);
-        }
+		_impl->layout->Layout(layoutRect);
+		_impl->layoutNeedsUpdate = false;
+    }
 }
 
 void ruiDocument::Draw(){
@@ -112,6 +120,7 @@ void ruiDocument::SetLayout(ruiLayout* layout){
 		delete _impl->layout;
 	
 	_impl->layout = layout;
+	_impl->layoutNeedsUpdate = true;
 }
 
 rString ruiDocument::GetDefaultId () const{

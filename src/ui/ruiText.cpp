@@ -46,8 +46,5 @@ rSize ruiText::ComputeSize(){
 	ruiStyle* style = ComputedStyle();
 	Font::Face* font = DetermineFont();
 
-	if (font)
-		return font->MeasureString(m_text);
-	else
-		return rSize(0,0);
+	return font->MeasureString(m_text);
 }

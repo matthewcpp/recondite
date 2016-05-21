@@ -101,7 +101,7 @@ void ruiWidget::Update(){
 		RecomputeStyle();
 
 	if (m_size == rSize::Default)
-		m_size = ComputeSize();
+		RecomputeSize();
 
 }
 
@@ -165,6 +165,7 @@ rPoint ruiWidget::ContentOffset(){
 
 void ruiWidget::InvalidateSize(){
 	m_size = rSize::Default;
+	m_document->WidgetUpdated(this);
 }
 
 Font::Face* ruiWidget::DetermineFont(){

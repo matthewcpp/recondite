@@ -2,6 +2,17 @@
 
 #include "ui/ruiManager.hpp"
 
+#include "stream/rIStringStream.hpp"
+
+#include "ui/ruiAbsoluteLayout.hpp"
+#include "ui/ruiLinearLayout.hpp"
+#include "ui/ruiText.hpp"
+#include "ui/ruiPicker.hpp"
+#include "ui/ruiCheckbox.hpp"
+#include "ui/ruiButton.hpp"
+#include "ui/ruiSlider.hpp"
+#include "ui/ruiLogText.hpp"
+
 ruiDocumentLoader::ruiParseItemMap ruiDocumentLoader::s_parseItemMap;
 
 ruiDocumentLoader::ruiDocumentLoader(ruiManager* manager, rEngine* engine){
@@ -18,9 +29,11 @@ void ruiDocumentLoader::InitParseItemMap(){
 	s_parseItemMap["absolutelayout"] = &ruiDocumentLoader::ParseAbsoluteLayoutItem;
 	s_parseItemMap["linearlayout"] = &ruiDocumentLoader::ParseLinearLayoutItem;
 	s_parseItemMap["text"] = &ruiDocumentLoader::ParseTextItem;
+	s_parseItemMap["logtext"] = &ruiDocumentLoader::ParseLogTextItem;
 	s_parseItemMap["picker"] = &ruiDocumentLoader::ParsePickerItem;
 	s_parseItemMap["checkbox"] = &ruiDocumentLoader::ParseCheckboxItem;
 	s_parseItemMap["button"] = &ruiDocumentLoader::ParseButtonItem;
+	s_parseItemMap["slider"] = &ruiDocumentLoader::ParseSliderItem;
 	s_parseItemMap["controller"] = &ruiDocumentLoader::ParseControllerItem;
 }
 
@@ -119,6 +132,17 @@ void ruiDocumentLoader::ParseTextItem(rXMLElement* element){
 	m_currentDocument->AddWidget(text);
 }
 
+void ruiDocumentLoader::ParseLogTextItem(rXMLElement* element){
+	rString id = m_currentDocument->GetDefaultId();
+	element->GetAttribute<rString>("id", id);
+
+	ruiLogText* logText = new ruiLogText(id, m_currentDocument, m_engine);
+	ParseClassList(element, logText);
+
+	m_layoutStack.back()->AddItem(logText);
+	m_currentDocument->AddWidget(logText);
+}
+
 void ruiDocumentLoader::ParsePickerItem(rXMLElement* element){
 	rString id = m_currentDocument->GetDefaultId();
 	element->GetAttribute<rString>("id", id);
@@ -151,6 +175,18 @@ void ruiDocumentLoader::ParseCheckboxItem(rXMLElement* element){
 
 	m_layoutStack.back()->AddItem(checkbox);
 	m_currentDocument->AddWidget(checkbox);
+}
+
+void ruiDocumentLoader::ParseSliderItem(rXMLElement* element){
+	rString id = m_currentDocument->GetDefaultId();
+	element->GetAttribute<rString>("id", id);
+
+	ruiSlider* slider = new ruiSlider(id, m_currentDocument, m_engine);
+
+	ParseClassList(element, slider);
+
+	m_layoutStack.back()->AddItem(slider);
+	m_currentDocument->AddWidget(slider);
 }
 
 void ruiDocumentLoader::ParseButtonItem(rXMLElement* element){

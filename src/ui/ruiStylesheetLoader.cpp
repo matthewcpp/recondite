@@ -98,6 +98,8 @@ void ruiStylesheetLoader::InitParseStyleMap(){
 	s_parseStyleMap["left"] = &ruiStylesheetLoader::ParseIntProperty;
 	s_parseStyleMap["right"] = &ruiStylesheetLoader::ParseIntProperty;
 
+	s_parseStyleMap["width"] = &ruiStylesheetLoader::ParseIntProperty;
+	s_parseStyleMap["height"] = &ruiStylesheetLoader::ParseIntProperty;
 
 	s_parseStyleMap["padding-top"] = &ruiStylesheetLoader::ParseIntProperty;
 	s_parseStyleMap["padding-bottom"] = &ruiStylesheetLoader::ParseIntProperty;
@@ -119,6 +121,5 @@ void ruiStylesheetLoader::InitParseStyleMap(){
 	s_parseStyleMap["color"] = &ruiStylesheetLoader::ParseColorProperty;
 	s_parseStyleMap["background-color"] = &ruiStylesheetLoader::ParseColorProperty;
 	
-
 	s_parseStyleMap["font"] = &ruiStylesheetLoader::ParseStringProperty;
 }

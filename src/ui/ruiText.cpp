@@ -3,6 +3,7 @@
 ruiText::ruiText(const rString& id, ruiIDocument* document, rEngine* engine)
 	:ruiWidget(id, document, engine)
 {
+	m_cachedStringSize = rSize::Default;
 }
 ruiText::ruiText(const rString& text, const rString& id, ruiIDocument* document, rEngine* engine)
 	: ruiWidget(id, document, engine)
@@ -16,6 +17,7 @@ rString ruiText::GetText() const{
 
 void ruiText::SetText(const rString& text){
 	m_text = text;
+	m_cachedStringSize = rSize::Default;
 	
 	InvalidateSize();
 }
@@ -46,5 +48,24 @@ rSize ruiText::ComputeSize(){
 	ruiStyle* style = ComputedStyle();
 	Font::Face* font = DetermineFont();
 
-	return font->MeasureString(m_text);
+	if (m_cachedStringSize == rSize::Default){
+		m_cachedStringSize = font->MeasureString(m_text);
+	}
+
+	rSize size = rSize::Default;
+
+	if (!style->GetInt("width", size.x)){
+		size.x = m_cachedStringSize.x;
+	}
+
+	if (!style->GetInt("height", size.y)){
+		if (m_text.empty()){
+			size.y = font->GetLineHeight();
+		}
+		else{
+			size.y = m_cachedStringSize.y;
+		}
+	}
+
+	return size;
 }

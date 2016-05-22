@@ -122,9 +122,10 @@ rSize ruiLogText::ComputeSize(){
 	}
 
 	if (!style->GetInt("height", size.y)){
+		size.y = font->GetLineHeight();
+
 		if (_impl->logMessages.size() > 0)
-			//size.y = _impl->cachesStringSize.y;
-			size.y = _impl->logMessages.size() * font->GetLineHeight();
+			size.y *= _impl->logMessages.size();
 	}
 
 	return size;

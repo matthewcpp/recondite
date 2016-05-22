@@ -23,6 +23,7 @@ protected:
 
 protected:
 	rString m_text;
+	rSize m_cachedStringSize;
 };
 
 #endif

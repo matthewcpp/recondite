@@ -125,7 +125,7 @@ bool ruiSlider::OnPointerDown(const rPoint& position){
 }
 
 void ruiSlider::HandleTrackClick(const rRect& trackRect, const rPoint& position){
-	float newPosition = (float)position.x / ((float)trackRect.Right() - (float)trackRect.Left());
+	float newPosition = float(position.x - trackRect.Left() ) / ((float)trackRect.Right() - (float)trackRect.Left());
 	UpdateValueFromHandlePosition(newPosition);
 }
 

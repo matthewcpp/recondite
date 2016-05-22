@@ -9,8 +9,8 @@ ruiSlider::ruiSlider(const rString& id, ruiIDocument* document, rEngine* engine)
 	m_minValue = 0.0f;
 	m_maxValue = 1.0f;
 
-	m_handleSize.Set(15, 35);
-	m_trackSize.Set(125, 15);
+	m_handleSize.Set(10, 25);
+	m_trackSize.Set(125, 10);
 	m_handlePosition = 0.0;
 	
 	handleGrabbed = false;
@@ -102,6 +102,7 @@ rRect ruiSlider::TrackRect(){
 	rPoint contentPosition = ContentPosition();
 	rSize computedSize = ComputeSize();
 	contentPosition.y += (computedSize.y - m_trackSize.y) / 2;
+	contentPosition.x += m_handleSize.x / 2;
 
 	return rRect(contentPosition, m_trackSize);
 }
@@ -152,10 +153,12 @@ bool ruiSlider::OnPointerUp(const rPoint& position){
 bool ruiSlider::OnPointerMove(const rPoint& position){
 	if (handleGrabbed){
 		rRect trackRect= TrackRect();
+		rPoint delta = position - m_prevDragPos;
+		float deltaAmount = (float)delta.x / (float)m_trackSize.x;
+		float newPosition = rMath::Clamp<float>(m_handlePosition + deltaAmount, 0.0f, 1.0f);
 
-		int xCoord = rMath::Clamp<int>(position.x, trackRect.Left(), trackRect.Right());
-		float newPosition = (float)xCoord / ((float)trackRect.Right() - (float)trackRect.Left());
 		UpdateValueFromHandlePosition(newPosition);
+		m_prevDragPos = position;
 		return true;
 	}
 	else{
@@ -165,13 +168,19 @@ bool ruiSlider::OnPointerMove(const rPoint& position){
 
 void ruiSlider::StartDrag(const rPoint& position){
 	handleGrabbed = true;
+	m_prevDragPos = position;
 
 	ruiWidgetEvent event(this);
 	Trigger(ruiEVENT_SLIDER_DRAG_BEGIN, event);
 }
 
 rSize ruiSlider::ComputeSize(){
-	return rSize(std::max<int>(m_trackSize.x, m_handleSize.x), std::max<int>(m_trackSize.y, m_handleSize.y));
+	rSize contentSize(std::max<int>(m_trackSize.x, m_handleSize.x), std::max<int>(m_trackSize.y, m_handleSize.y));
+
+	//add in space for handles when at the extreme of the track
+	contentSize.x += m_handleSize.x;
+
+	return contentSize;
 }
 
 void ruiSlider::Draw(){

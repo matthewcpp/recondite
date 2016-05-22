@@ -56,6 +56,7 @@ private:
 	rSize m_trackSize;
 	rSize m_handleSize;
 	float m_handlePosition;
+	rPoint m_prevDragPos;
 	
 	bool handleGrabbed;
 };

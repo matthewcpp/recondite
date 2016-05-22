@@ -11,6 +11,13 @@ public:
 	virtual void OnDocumentLoaded();
 
 private:
+	void OnRotateCheckboxClick(rEvent& event);
+	void OnRotationSpeedSliderChange(rEvent& event);
+
+private:
 	rEngine* _engine;
 	ruiDocument* _document;
+
+	uint32_t _rotateHandle;
+	float _rotationSpeed;
 };

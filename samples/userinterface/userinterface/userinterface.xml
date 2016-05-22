@@ -5,14 +5,20 @@
 	</head>
 	<body>
 		<linearlayout id="main-layout" direction="vertical">
-			<text id="hello-text" class="hello">Hello World!</text>
-			<text id="more-text" class="hello">~~More Text~~</text>
-			<button>I'm a button!!!!</button>
+			<linearlayout  direction="horizontal">
+				<text>Enter Your Name: </text><textbox id="your_name" />
+			</linearlayout>
+			
 			<picker>
 				<option>Option 1</option>
 				<option>Option 2</option>
 				<option>Option 3</option>
 			</picker>
+			<linearlayout id="checkbox-layout" direction="horizontal">
+				<text>Rotate Model: </text><checkbox id="rotate_checkbox" />
+			</linearlayout>
+			<slider id="rotate_speed" min="0" max="50"/>
+			<logtext id="logtext" />
 		</linearlayout>
 	</body>
 </overlay>

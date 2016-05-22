@@ -26,3 +26,24 @@ button{
 button:active{
 	background-color: 255 255 0 255;
 }
+
+picker {
+	margin-bottom: 5;
+	background-color: 255 255 255 255;
+}
+
+logtext{
+	margin: 5;
+	padding: 5;
+	border-color: 200 200 200 255;
+}
+
+textbox{
+	width: 150;
+	border-color: 255 255 255 255;
+}
+
+logtext{
+	width: 150;
+	border-color: 255 0 0 255;
+}

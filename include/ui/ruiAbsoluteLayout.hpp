@@ -16,9 +16,6 @@ public:
 	virtual void Layout(rRect& rect);
 	virtual rSize Size() const;
 
-private:
-	rPoint DetermineLocalOrigin() const;
-	rPoint DetermineLayoutItemOrigin(ruiLayoutItem* layoutItem) const;
 };
 
 #endif

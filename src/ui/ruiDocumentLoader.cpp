@@ -7,6 +7,7 @@
 #include "ui/ruiAbsoluteLayout.hpp"
 #include "ui/ruiLinearLayout.hpp"
 #include "ui/ruiText.hpp"
+#include "ui/ruiTextBox.hpp"
 #include "ui/ruiPicker.hpp"
 #include "ui/ruiCheckbox.hpp"
 #include "ui/ruiButton.hpp"
@@ -29,6 +30,7 @@ void ruiDocumentLoader::InitParseItemMap(){
 	s_parseItemMap["absolutelayout"] = &ruiDocumentLoader::ParseAbsoluteLayoutItem;
 	s_parseItemMap["linearlayout"] = &ruiDocumentLoader::ParseLinearLayoutItem;
 	s_parseItemMap["text"] = &ruiDocumentLoader::ParseTextItem;
+	s_parseItemMap["textbox"] = &ruiDocumentLoader::ParseTextBoxItem;
 	s_parseItemMap["logtext"] = &ruiDocumentLoader::ParseLogTextItem;
 	s_parseItemMap["picker"] = &ruiDocumentLoader::ParsePickerItem;
 	s_parseItemMap["checkbox"] = &ruiDocumentLoader::ParseCheckboxItem;
@@ -113,8 +115,33 @@ void ruiDocumentLoader::ParseAbsoluteLayoutItem(rXMLElement* element){
 
 	if (m_layoutStack.size() == 0)
 		m_currentDocument->SetLayout(absoluteLayout);
+	else
+		m_layoutStack.back()->AddItem(absoluteLayout);
 
 	m_layoutStack.push_back(absoluteLayout);
+
+	ParseChildItems(element);
+
+	m_layoutStack.pop_back();
+}
+
+void ruiDocumentLoader::ParseLinearLayoutItem(rXMLElement* element){
+	ruiLayoutDirection layoutDirection = ruiLAYOUT_HORIZONTAL;
+
+	rString direction;
+	if (element->GetAttribute<rString>("direction", direction)){
+		if (direction == "vertical")
+			layoutDirection = ruiLAYOUT_VERTICAL;
+	}
+
+	ruiLinearLayout* linearLayout = new ruiLinearLayout(layoutDirection);
+
+	if (m_layoutStack.size() == 0)
+		m_currentDocument->SetLayout(linearLayout);
+	else
+		m_layoutStack.back()->AddItem(linearLayout);
+
+	m_layoutStack.push_back(linearLayout);
 
 	ParseChildItems(element);
 
@@ -130,6 +157,17 @@ void ruiDocumentLoader::ParseTextItem(rXMLElement* element){
 
 	m_layoutStack.back()->AddItem(text);
 	m_currentDocument->AddWidget(text);
+}
+
+void ruiDocumentLoader::ParseTextBoxItem(rXMLElement* element){
+	rString id = m_currentDocument->GetDefaultId();
+	element->GetAttribute<rString>("id", id);
+
+	ruiTextBox* textbox = new ruiTextBox(element->Text(), id, m_currentDocument, m_engine);
+	ParseClassList(element, textbox);
+
+	m_layoutStack.back()->AddItem(textbox);
+	m_currentDocument->AddWidget(textbox);
 }
 
 void ruiDocumentLoader::ParseLogTextItem(rXMLElement* element){
@@ -225,29 +263,6 @@ void ruiDocumentLoader::ParseClassList(rXMLElement* element, ruiWidget* widget){
 				widget->AddClass(currentClass);
 		}
 	}
-}
-
-void ruiDocumentLoader::ParseLinearLayoutItem(rXMLElement* element){
-	ruiLayoutDirection layoutDirection = ruiLAYOUT_HORIZONTAL;
-
-	rString direction;
-	if (element->GetAttribute<rString>("direction", direction)){
-		if (direction == "vertical")
-			layoutDirection = ruiLAYOUT_VERTICAL;
-	}
-
-	ruiLinearLayout* linearLayout = new ruiLinearLayout(layoutDirection);
-
-	if (m_layoutStack.size() == 0)
-		m_currentDocument->SetLayout(linearLayout);
-	else
-		m_layoutStack.back()->AddItem(linearLayout);
-
-	m_layoutStack.push_back(linearLayout);
-
-	ParseChildItems(element);
-
-	m_layoutStack.pop_back();
 }
 
 void ruiDocumentLoader::ParseControllerItem(rXMLElement* element){

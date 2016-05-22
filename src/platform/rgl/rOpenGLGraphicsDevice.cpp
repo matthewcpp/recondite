@@ -197,6 +197,9 @@ void rOpenGLGraphicsDevice::SetActiveMaterial(rMaterial* material){
 			}
 		}
 	}
+	else{
+		glDisable(GL_BLEND);
+	}
 }
 
 unsigned int rOpenGLGraphicsDevice::CreateArrayBuffer(const char* data, size_t dataSize){

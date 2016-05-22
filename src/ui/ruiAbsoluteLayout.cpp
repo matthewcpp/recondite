@@ -6,38 +6,37 @@ ruiAbsoluteLayout::ruiAbsoluteLayout() {
 }
 
 void ruiAbsoluteLayout::Layout(rRect& rect){
-	rPoint localOrigin = DetermineLocalOrigin();
-
-	for (size_t i = 0; i < m_layoutItems.size(); i++){
+	for (size_t i = 0; i < m_layoutItems.size(); i++){	
 		ruiLayoutItem* layoutItem = m_layoutItems[i];
+		int margins[4] = { 0, 0, 0, 0 };
+
+		int top = 0;
+		int left = 0;
+		int bottom = 0;
+		int right = 0;
+
+		const rPropertyCollection* properties = layoutItem->Properties();
+
+		bool hasTop = properties->GetInt("top", top);
+		bool hasLeft = properties->GetInt("left", left);
+		bool hasBottom = properties->GetInt("bottom", bottom);
+		bool hasRight = properties->GetInt("right", right);
 
 		rSize itemSize = layoutItem->GetSize();
-		rPoint itemOrigin = DetermineLayoutItemOrigin(layoutItem);
-		layoutItem->SetPosition(localOrigin + itemOrigin);
+		rPoint position(rect.Left(), rect.Top());
+
+		if (hasTop)
+			position.y = top;
+		else if (hasBottom)
+			position.y = rect.Bottom() - bottom - itemSize.y;
+
+		if (hasLeft)
+			position.x = left;
+		else if (hasRight)
+			position.x = rect.Right() - right - itemSize.x;
+			
+		layoutItem->SetPosition(position);
 	}
-}
-
-//TODO: make these methods actually take into account right and bottom
-rPoint ruiAbsoluteLayout::DetermineLocalOrigin() const{
-	int top = 0;
-	int left = 0;
-
-	m_properties.GetInt("top", top);
-	m_properties.GetInt("left", left);
-
-	return rPoint(left, top);
-}
-
-rPoint ruiAbsoluteLayout::DetermineLayoutItemOrigin(ruiLayoutItem* layoutItem) const{
-	int top = 0;
-	int left = 0;
-
-	const rPropertyCollection* properties = layoutItem->Properties();
-
-	properties->GetInt("top", top);
-	properties->GetInt("left", left);
-
-	return rPoint(left, top);
 }
 
 rSize ruiAbsoluteLayout::Size() const{

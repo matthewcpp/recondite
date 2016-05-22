@@ -36,6 +36,7 @@ private:
 	void ParseAbsoluteLayoutItem(rXMLElement* element);
 	void ParseLinearLayoutItem(rXMLElement* element);
 	void ParseTextItem(rXMLElement* element);
+	void ParseTextBoxItem(rXMLElement* element);
 	void ParseLogTextItem(rXMLElement* element);
 	void ParsePickerItem(rXMLElement* element);
 	void ParseCheckboxItem(rXMLElement* element);

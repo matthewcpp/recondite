@@ -4,21 +4,19 @@
 		<stylesheet>userinterface.css</stylesheet>
 	</head>
 	<body>
-		<linearlayout id="main-layout" direction="vertical">
-			<linearlayout  direction="horizontal">
-				<text>Enter Your Name: </text><textbox id="your_name" />
+		<absolutelayout>
+			<linearlayout id="main-layout" direction="vertical">
+				<linearlayout id="checkbox-layout" direction="horizontal">
+					<text>Rotate Model: </text><checkbox id="rotate_checkbox" />
+				</linearlayout>
+				
+				<linearlayout  direction="horizontal">
+					<text>Rotation Speed: </text>
+					<slider id="rotate_speed" min="0" max="50"/>
+				</linearlayout>
 			</linearlayout>
 			
-			<picker>
-				<option>Option 1</option>
-				<option>Option 2</option>
-				<option>Option 3</option>
-			</picker>
-			<linearlayout id="checkbox-layout" direction="horizontal">
-				<text>Rotate Model: </text><checkbox id="rotate_checkbox" />
-			</linearlayout>
-			<slider id="rotate_speed" min="0" max="50"/>
 			<logtext id="logtext" />
-		</linearlayout>
+		</absolutelayout>
 	</body>
 </overlay>

@@ -29,21 +29,23 @@ button:active{
 
 picker {
 	margin-bottom: 5;
+	color: 0 255 0 255;
 	background-color: 255 255 255 255;
 }
 
 logtext{
+	bottom: 10;
+	right: 10;
 	margin: 5;
 	padding: 5;
+	width: 250;
 	border-color: 200 200 200 255;
+	margin: 5;
 }
 
 textbox{
 	width: 150;
+	color: 0 0 194 255;
 	border-color: 255 255 255 255;
-}
-
-logtext{
-	width: 150;
-	border-color: 255 0 0 255;
+	margin: 2;
 }

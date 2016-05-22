@@ -183,6 +183,16 @@ void ruiDocumentLoader::ParseSliderItem(rXMLElement* element){
 
 	ruiSlider* slider = new ruiSlider(id, m_currentDocument, m_engine);
 
+	float min, max, value;
+
+	if (element->GetAttribute<float>("min", min) && element->GetAttribute<float>("max", max)){
+		slider->SetValueRange(min, max);
+	}
+
+	if (element->GetAttribute<float>("value", value)){
+		slider->SetValue(value);
+	}
+
 	ParseClassList(element, slider);
 
 	m_layoutStack.back()->AddItem(slider);

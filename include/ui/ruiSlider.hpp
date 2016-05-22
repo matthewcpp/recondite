@@ -13,13 +13,24 @@ public:
 	
 public:
 	
-	int GetValue() const;
-	void SetValue(int value);
+	bool SetValueRange(float min, float max);
+	float GetMinValue();
+	float GetMaxValue();
+
+	float GetValue() const;
+	void SetValue(float value);
 	
-	void SetHandleSize(int size);
-	int GetHandleSize() const;
+	void SetHandleSize(const rSize& size);
+	void SetHandleSize(int width, int height);
+	rSize GetHandleSize() const;
+
+	void SetTrackSize(const rSize& size);
+	void SetTrackSize(int width, int height);
+	rSize GeTrackSize() const;
 	
 	rRect HandleRect();
+	rRect HandleRect(const rRect& trackRect);
+	rRect TrackRect();
 	
 	virtual void Draw();
 	virtual rString GetWidgetType() const;
@@ -34,13 +45,17 @@ public:
 
 private:
 	void StartDrag(const rPoint& position);
-	void HandleDrag(const rPoint& position);
+	void HandleTrackClick(const rRect& trackRect, const rPoint& position);
+	void UpdateValueFromHandlePosition(float position);
 	
 private:
-	int m_value;
-	int m_handleSize;
-	
-	rPoint m_prevDrag;
+	float m_value;
+	float m_minValue;
+	float m_maxValue;
+
+	rSize m_trackSize;
+	rSize m_handleSize;
+	float m_handlePosition;
 	
 	bool handleGrabbed;
 };

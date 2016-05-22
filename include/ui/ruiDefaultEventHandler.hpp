@@ -14,6 +14,7 @@ public:
 protected:
 	virtual bool OnPointerDown(const rPoint& position);
 	virtual bool OnPointerUp(const rPoint& position);
+	virtual bool OnPointerMove(const rPoint& position);
 	virtual bool OnPointerLeave(const rPoint& position);
 	virtual bool OnPointerEnter(const rPoint& position);
 
@@ -22,8 +23,12 @@ private:
 
 	void OnMouseDown(rEvent& event);
 	void OnMouseUp(rEvent& event);
+	void OnMouseMotion(rEvent& event);
 	void OnMouseLeave(rEvent& event);
 	void OnMouseEnter(rEvent& event);
+
+private:
+	bool dragging;
 };
 
 #endif

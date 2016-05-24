@@ -33,32 +33,19 @@ public:
 
 	void SetClearColor(const rColor& color);
 
-	void Begin(const rMatrix4 viewProjectionMatrix);
+	void Begin(const rMatrix4 projection, const rMatrix4& view);
 	void End();
-	void SetMatrix(const rMatrix4& matrix);
 
 	size_t ObjectsRendered() const;
 
 	void EnableDepthTesting(bool enable);
 	
-	void RenderGeometry(rGeometry* geometry, const rMatrix4& transform, const rString& elementBufferName, rMaterial* material);
-	void RenderShadedWithEdges(rGeometry* geometry, const rMatrix4& transform, rMaterial* material, const rColor& edgeColor);
-
 	rSpriteBatch* SpriteBatch();
 
-	void RenderWireBox(const rAlignedBox3& box, const rColor color);
-
-	void RenderModel(const rModel* model, rRenderingOptions* renderingOptions, const rMatrix4& transform);
 	void RenderPrimitive(const rModel* model, rRenderingOptions* renderingOptions, const rMatrix4& matrix);
-	void RenderWireframeOnShaded(const rModel* model, const rMatrix4& transform);
+
 
 private:
-	void ForceRenderModel(const rModel* model, const rMatrix4& modelViewProjection);
-
-	void RenderLineMeshes(const rModel* model, const rMatrix4& modelViewProjection);
-	void RenderTriangleMeshes(const rModel* model, const rMatrix4& modelViewProjection);
-
-
 	void RenderSpriteBatch();
 
 private:
@@ -68,7 +55,8 @@ private:
 		rViewport* m_activeViewport;
 		rRenderMode m_renderMode;
 
-		rMatrix4 m_viewProjectionMatrix;
+		rMatrix4 m_viewMatrix;
+		rMatrix4 m_projectionMatrix;
 
 		size_t m_objectsRendered;
 		std::unique_ptr<rSpriteBatch> m_spriteBatch;

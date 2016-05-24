@@ -1,12 +1,12 @@
 attribute vec4 recPosition;
 attribute vec4 recNormal;
-attribute vec2 recTexCoord;
 
 varying vec2 v_texCoord;
 
-uniform mat4 recMVPMatrix;
+uniform mat4 recProjectionMatrix;
+uniform mat4 recModelviewMatrix;
 
 void main(){
-	gl_Position = recMVPMatrix * recPosition;
-	v_texCoord = recTexCoord;
+	mat4 mvpMatrix = recProjectionMatrix * recModelviewMatrix;
+	gl_Position = mvpMatrix * recPosition;
 }

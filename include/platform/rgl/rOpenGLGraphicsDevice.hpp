@@ -67,7 +67,7 @@ public:
 	virtual void SetViewport(int x , int y, int width, int height) ;
 	virtual void SetActiveMaterial(rMaterial* material);
 
-	virtual void RenderGeometry(const rGeometry* geometry, const rMatrix4& transform, const rString& elementBuffer, rMaterial* material);
+	virtual void RenderGeometry(const rGeometry* geometry, const rMatrix4& projection, const rMatrix4& modelview, const rString& elementBuffer, rMaterial* material);
 	virtual void RenderImmediate(const rImmediateBuffer& geometry, const rMatrix4& transform, rMaterial* material);
 
 	virtual unsigned int CreateRenderbuffer(int width, int height);
@@ -85,9 +85,9 @@ protected:
 	rString m_lastError;
 
 private:
-	void RenderTexCoordGeometryProfile(const rGeometry* geometry, const rMatrix4& transform, rElementBuffer* elementBuffer, rMaterial* material);
-	void RenderVertexColorGeometryProfile(const rGeometry* geometry, const rMatrix4& transform, rElementBuffer* elementBuffer, rMaterial* material);
-	void RenderPrimitiveGeometryProfile(const rGeometry* geometry, const rMatrix4& transform, rElementBuffer* elementBuffer, rMaterial* material);
+	void RenderTexCoordGeometryProfile(const rGeometry* geometry, const rMatrix4& projection, const rMatrix4& modelview, rElementBuffer* elementBuffer, rMaterial* material);
+	void RenderVertexColorGeometryProfile(const rGeometry* geometry, const rMatrix4& projection, const rMatrix4& modelview, rElementBuffer* elementBuffer, rMaterial* material);
+	void RenderPrimitiveGeometryProfile(const rGeometry* geometry, const rMatrix4& projection, const rMatrix4& modelview, rElementBuffer* elementBuffer, rMaterial* material);
 private:
 	struct rglRenderbuffer{
 		GLuint framebufferId;

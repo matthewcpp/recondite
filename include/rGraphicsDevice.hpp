@@ -42,7 +42,7 @@ public:
 	virtual unsigned int CreateElementBuffer(const unsigned short* elementData, size_t elementDataSize) = 0;
 	virtual void DeleteBuffer(unsigned int bufferId) = 0;
 	
-	virtual void RenderGeometry(const rGeometry* geometry, const rMatrix4& transform, const rString& elementBuffer, rMaterial* material) = 0;
+	virtual void RenderGeometry(const rGeometry* geometry,const rMatrix4& projection, const rMatrix4& modelview, const rString& elementBuffer, rMaterial* material) = 0;
 	virtual void RenderImmediate(const rImmediateBuffer& geometry, const rMatrix4& transform, rMaterial* material) = 0;
 	
 	virtual void SetViewport(int x , int y, int width, int height) = 0;

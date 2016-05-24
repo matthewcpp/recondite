@@ -31,10 +31,11 @@ void rwxComponent::RenderScene(rViewport* viewport){
 	rRect window = viewport->GetScreenRect();
 	m_graphicsDevice->SetViewport(window.x, window.y, window.width, window.height);
 
-	rMatrix4 viewProjectionMatrix;
-	viewport->GetViewProjectionMatrix(viewProjectionMatrix);
+	rMatrix4 projection, view;
+	viewport->GetProjectionMatrix(projection);
+	viewport->GetViewMatrix(view);
 
-	m_engine.renderer->Begin(viewProjectionMatrix);
+	m_engine.renderer->Begin(projection, view);
 	m_scene->Draw();
 	m_engine.renderer->End();
 }

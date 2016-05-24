@@ -266,7 +266,7 @@ void rOpenGLGraphicsDevice::UnregisterTexture(int textureID){
 	glDeleteTextures(1, &texID);
 }
 
-void rOpenGLGraphicsDevice::RenderGeometry(const rGeometry* geometry, const rMatrix4& transform, const rString& elementBufferName, rMaterial* material){
+void rOpenGLGraphicsDevice::RenderGeometry(const rGeometry* geometry, const rMatrix4& projection, const rMatrix4& modelview, const rString& elementBufferName, rMaterial* material){
 	if (geometry && material){
 		rElementBuffer* elementBuffer = geometry->GetElementBuffer(elementBufferName);
 	
@@ -275,24 +275,26 @@ void rOpenGLGraphicsDevice::RenderGeometry(const rGeometry* geometry, const rMat
 		
 			switch (geometry->GeometryProfile()){
 				case rGeometryProfile::TexCoord:
-					RenderTexCoordGeometryProfile(geometry, transform, elementBuffer, material);
+					RenderTexCoordGeometryProfile(geometry, projection, modelview, elementBuffer, material);
 					break;
 
 				case rGeometryProfile::VertexColor:
-					RenderVertexColorGeometryProfile(geometry, transform, elementBuffer, material);
+					RenderVertexColorGeometryProfile(geometry, projection, modelview, elementBuffer, material);
 					break;
 
 				case rGeometryProfile::Primitive:
-					RenderPrimitiveGeometryProfile(geometry, transform, elementBuffer, material);
+					RenderPrimitiveGeometryProfile(geometry, projection, modelview, elementBuffer, material);
 					break;
 			}
 		}
 	}
 }
 
-void rOpenGLGraphicsDevice::RenderTexCoordGeometryProfile(const rGeometry* geometry, const rMatrix4& transform, rElementBuffer* elementBuffer, rMaterial* material){
+void rOpenGLGraphicsDevice::RenderTexCoordGeometryProfile(const rGeometry* geometry, const rMatrix4& projection, const rMatrix4& modelview, rElementBuffer* elementBuffer, rMaterial* material){
 	GLuint vertexBufferId = geometry->VertexBufferId();
 	GLuint elementBufferId = elementBuffer->BufferId();
+
+	rMatrix4 mvp = projection * modelview;
 
 	GLuint gPositionLoc = glGetAttribLocation(m_activeShaderProgram, "recPosition");
 	GLuint gNormalLoc = glGetAttribLocation(m_activeShaderProgram, "recNormal");
@@ -300,7 +302,7 @@ void rOpenGLGraphicsDevice::RenderTexCoordGeometryProfile(const rGeometry* geome
 
 	GLuint gMatrixLoc = glGetUniformLocation(m_activeShaderProgram, "recMVPMatrix");
 
-	glUniformMatrix4fv(gMatrixLoc, 1, GL_FALSE, transform.m);
+	glUniformMatrix4fv(gMatrixLoc, 1, GL_FALSE, mvp.m);
 
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBufferId);
 	glVertexAttribPointer(gPositionLoc, 3, GL_FLOAT, GL_FALSE, 32, 0);
@@ -321,9 +323,11 @@ void rOpenGLGraphicsDevice::RenderTexCoordGeometryProfile(const rGeometry* geome
 	glDisableVertexAttribArray(gNormalLoc);
 }
 
-void rOpenGLGraphicsDevice::RenderVertexColorGeometryProfile(const rGeometry* geometry, const rMatrix4& transform, rElementBuffer* elementBuffer, rMaterial* material){
+void rOpenGLGraphicsDevice::RenderVertexColorGeometryProfile(const rGeometry* geometry, const rMatrix4& projection, const rMatrix4& modelview, rElementBuffer* elementBuffer, rMaterial* material){
 	GLuint vertexBufferId = geometry->VertexBufferId();
 	GLuint elementBufferId = elementBuffer->BufferId();
+
+	rMatrix4 mvp = projection * modelview;
 
 	GLuint gPositionLoc = glGetAttribLocation(m_activeShaderProgram, "recPosition");
 	GLuint gNormalLoc = glGetAttribLocation(m_activeShaderProgram, "recNormal");
@@ -331,7 +335,7 @@ void rOpenGLGraphicsDevice::RenderVertexColorGeometryProfile(const rGeometry* ge
 
 	GLuint gMatrixLoc = glGetUniformLocation(m_activeShaderProgram, "recMVPMatrix");
 
-	glUniformMatrix4fv(gMatrixLoc, 1, GL_FALSE, transform.m);
+	glUniformMatrix4fv(gMatrixLoc, 1, GL_FALSE, mvp.m);
 
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBufferId);
 	glVertexAttribPointer(gPositionLoc, 3, GL_FLOAT, GL_FALSE, 40, 0);
@@ -351,16 +355,20 @@ void rOpenGLGraphicsDevice::RenderVertexColorGeometryProfile(const rGeometry* ge
 	glDisableVertexAttribArray(gNormalLoc);
 }
 
-void rOpenGLGraphicsDevice::RenderPrimitiveGeometryProfile(const rGeometry* geometry, const rMatrix4& transform, rElementBuffer* elementBuffer, rMaterial* material){
+void rOpenGLGraphicsDevice::RenderPrimitiveGeometryProfile(const rGeometry* geometry, const rMatrix4& projection, const rMatrix4& modelview, rElementBuffer* elementBuffer, rMaterial* material){
 	GLuint vertexBufferId = geometry->VertexBufferId();
 	GLuint elementBufferId = elementBuffer->BufferId();
+
+	rMatrix4 mvp = projection * modelview;
 
 	GLuint gPositionLoc = glGetAttribLocation(m_activeShaderProgram, "recPosition");
 	GLuint gNormalLoc = glGetAttribLocation(m_activeShaderProgram, "recNormal");
 
-	GLuint gMatrixLoc = glGetUniformLocation(m_activeShaderProgram, "recMVPMatrix");
+	GLuint gProjectionLoc = glGetUniformLocation(m_activeShaderProgram, "recProjectionMatrix");
+	GLuint gModelviewLoc = glGetUniformLocation(m_activeShaderProgram, "recModelviewMatrix");
 
-	glUniformMatrix4fv(gMatrixLoc, 1, GL_FALSE, transform.m);
+	glUniformMatrix4fv(gProjectionLoc, 1, GL_FALSE, projection.m);
+	glUniformMatrix4fv(gModelviewLoc, 1, GL_FALSE, modelview.m);
 
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBufferId);
 	glVertexAttribPointer(gPositionLoc, 3, GL_FLOAT, GL_FALSE, 24, 0);

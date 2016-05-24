@@ -31,10 +31,11 @@ void rApplicationBase::Draw(){
 		rRect window = viewport->GetScreenRect();
 		m_graphicsDevice->SetViewport(window.x, window.y, window.width, window.height);
 
-		rMatrix4 viewProjectionMatrix;
-		viewport->GetViewProjectionMatrix(viewProjectionMatrix);
+		rMatrix4 projection, view;
+		viewport->GetProjectionMatrix(projection);
+		viewport->GetViewMatrix(view);
 
-		m_engine.renderer->Begin(viewProjectionMatrix);
+		m_engine.renderer->Begin(projection, view);
 		m_module->BeforeRenderScene(viewport);
 		m_scene->Draw();
 		m_module->AfterRenderScene(viewport);
@@ -45,11 +46,11 @@ void rApplicationBase::Draw(){
 	for (rViewportMap::iterator it = m_viewports.begin(); it != end; ++it){
 		rViewport* viewport = it->second;
 
-		rMatrix4 matrixOrtho2D;
+		rMatrix4 matrixOrtho2D, identity;
 		rRect window = viewport->GetScreenRect();
 		rMatrixUtil::Ortho2D(window.Left(), window.Right(), window.Bottom(), window.Top(), matrixOrtho2D);
 
-		m_engine.renderer->Begin(matrixOrtho2D);
+		m_engine.renderer->Begin(matrixOrtho2D, identity);
 		m_uiManager->Draw(viewport);
 		m_engine.renderer->End();
 	}

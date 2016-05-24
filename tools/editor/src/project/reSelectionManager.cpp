@@ -81,7 +81,7 @@ void reSelectionManager::RenderSelectionBounding(rEngine* engine){
 
 		if (boundingVolume){
 			rAlignedBox3 b = boundingVolume->FitBox();
-			engine->renderer->RenderWireBox(b, rColor::Red);
+			//engine->renderer->RenderWireBox(b, rColor::Red);
 		}
 	}
 

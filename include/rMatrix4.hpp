@@ -40,6 +40,8 @@ struct RECONDITE_API rMatrix4{
 	
 	rVector4 GetTransformedVector4(const rVector4& v) const;
 	void TransformVector4(rVector4& v) const;
+
+	rMatrix4& Transpose();
 	
 	void SetRotationX(float deg);
 	void SetRotationY(float deg);

@@ -1,4 +1,5 @@
 #include "rMatrix4.hpp"
+#include <algorithm>
 
 const rMatrix4 rMatrix4::IdentityMatrix = rMatrix4();
 
@@ -239,4 +240,17 @@ void rMatrix4::SetRotationZ(float deg){
 
 	m[0] = cosTheta;	m[4] = -sinTheta;
 	m[1] = sinTheta;	m[5] = cosTheta;
+}
+
+rMatrix4& rMatrix4::Transpose(){
+	std::swap(m[1], m[4]);
+	std::swap(m[2], m[8]);
+	std::swap(m[3], m[12]);
+
+	std::swap(m[9], m[6]);
+	std::swap(m[13], m[7]);
+
+	std::swap(m[14], m[11]);
+
+	return *this;
 }

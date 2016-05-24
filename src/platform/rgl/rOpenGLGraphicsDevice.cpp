@@ -359,16 +359,20 @@ void rOpenGLGraphicsDevice::RenderPrimitiveGeometryProfile(const rGeometry* geom
 	GLuint vertexBufferId = geometry->VertexBufferId();
 	GLuint elementBufferId = elementBuffer->BufferId();
 
-	rMatrix4 mvp = projection * modelview;
+	rMatrix4 normalMatrix = modelview;
+	normalMatrix.Invert();
+	normalMatrix.Transpose();
 
 	GLuint gPositionLoc = glGetAttribLocation(m_activeShaderProgram, "recPosition");
 	GLuint gNormalLoc = glGetAttribLocation(m_activeShaderProgram, "recNormal");
 
 	GLuint gProjectionLoc = glGetUniformLocation(m_activeShaderProgram, "recProjectionMatrix");
 	GLuint gModelviewLoc = glGetUniformLocation(m_activeShaderProgram, "recModelviewMatrix");
+	GLuint gNormalMatLoc = glGetUniformLocation(m_activeShaderProgram, "recNormalMatrix");
 
 	glUniformMatrix4fv(gProjectionLoc, 1, GL_FALSE, projection.m);
 	glUniformMatrix4fv(gModelviewLoc, 1, GL_FALSE, modelview.m);
+	glUniformMatrix4fv(gNormalMatLoc, 1, GL_FALSE, normalMatrix.m);
 
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBufferId);
 	glVertexAttribPointer(gPositionLoc, 3, GL_FLOAT, GL_FALSE, 24, 0);

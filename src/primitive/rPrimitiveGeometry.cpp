@@ -153,8 +153,8 @@ void rPrimitiveGeometry::CreateBox(const rPrimitiveBoxParams& params, rGeometryD
 	float halfWidth = params.extents.x / 2.0f;
 	float halfDepth = params.extents.z / 2.0f;
 
-	GenerateBoxFrontBack(geometry, params, -halfDepth, rVector3::BackwardVector);	//generate back
-	GenerateBoxFrontBack(geometry, params, halfDepth, rVector3::ForwardVector);	//generate front
+	GenerateBoxFrontBack(geometry, params, -halfDepth, rVector3::ForwardVector);	//generate back
+	GenerateBoxFrontBack(geometry, params, halfDepth, rVector3::BackwardVector);	//generate front
 
 	GenerateBoxTopBottom(geometry, params, 0.0f, rVector3::DownVector);				//generate bottom
 	GenerateBoxTopBottom(geometry, params, params.extents.y, rVector3::UpVector);		//generate top

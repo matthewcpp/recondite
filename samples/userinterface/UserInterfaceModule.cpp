@@ -24,7 +24,7 @@ void UserInterfaceModule::Init() {
 	rViewport* mainViewport = _engine->component->CreateViewport("main");
 
 	rCamera* camera = new rCamera("main", _engine);
-	camera->SetPosition(0, 0, 10);
+	camera->SetPosition(0, 6, 10);
 	camera->SetTarget(rVector3::ZeroVector);
 	mainViewport->SetCamera(camera);
 

@@ -6,6 +6,7 @@
 
 #include "input/rMouse.hpp"
 #include "ui/ruiMenu.hpp"
+#include "input/rKeyboard.hpp"
 
 class ruiWidget;
 
@@ -16,6 +17,9 @@ enum ruiEventType{
 	ruiEVT_MOUSE_WHEEL,
 	ruiEVT_MOUSE_ENTER,
 	ruiEVT_MOUSE_LEAVE,
+
+	ruiEVT_KEY_DOWN,
+	ruiEVT_KEY_UP,
 
 	ruiEVT_TOUCH_DOWN,
 	ruiEVT_TOUCH_MOVE,
@@ -66,6 +70,18 @@ public:
 private:
 	ruiMenu* m_menu;
 	int m_selection;
+};
+
+class ruiKeyEvent : public rEvent{
+public:
+	ruiKeyEvent(rKey key, rKeyState state) : _key(key), _state(state){}
+
+	rKey Key() const { return _key; }
+	rKeyState State() const { return _state; }
+
+private:
+	rKey _key;
+	rKeyState _state;
 };
 
 #endif

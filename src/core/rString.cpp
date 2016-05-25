@@ -184,3 +184,7 @@ bool rString::ToInt(const rString& str, int& i){
 
 	return result;
 }
+
+void rString::pop_back(){
+	m_str.pop_back();
+}

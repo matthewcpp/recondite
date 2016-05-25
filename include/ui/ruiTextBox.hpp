@@ -4,6 +4,7 @@
 #include "rBuild.hpp"
 
 #include "ui/ruiText.hpp"
+#include "ruiEvents.hpp"
 
 class RECONDITE_API ruiTextBox : public ruiText{
 public:
@@ -14,9 +15,8 @@ public:
 	virtual rString GetWidgetType() const;
 
 public:
-	virtual void OnKeyDown(rKey key, const rKeyboardState& keyboard);
+	virtual void OnKeyDown(rEvent& event);
 
-private:
 
 };
 

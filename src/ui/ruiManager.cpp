@@ -155,6 +155,16 @@ void ruiManager::Draw(rViewport* viewport){
 	}
 }
 bool ruiManager::InsertKeyEvent(rKey key, rKeyState state){
+	ruiDocument* document = _impl->DetermineDocument(_impl->engine->input->GetMouseState()->Position());
+
+	ruiKeyEvent keyEvent(key, state);
+
+	if (state == rKEY_DOWN)
+		document->ProcessKeyDownEvent(keyEvent);
+	else{
+		document->ProcessKeyUpEvent(keyEvent);
+	}
+
 	return false;
 }
 

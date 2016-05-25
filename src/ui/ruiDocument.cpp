@@ -15,6 +15,7 @@ struct ruiDocument::Impl{
 
 	ruiWidget* activeWidget;
 	ruiWidget* modalWidget;
+	ruiWidget* focusedWidget;
 	ruiLayout* layout;
 	rViewport* viewport;
 	ruiController* controller;
@@ -32,6 +33,7 @@ ruiDocument::ruiDocument(rEngine* engine, rViewport* viewport){
 	_impl = new Impl(engine, viewport);
 
 	_impl->activeWidget = NULL;
+	_impl->focusedWidget = NULL;
 	_impl->layout = NULL;
 	_impl->viewport = viewport;
 }
@@ -108,7 +110,7 @@ ruiWidget* ruiDocument::SelectWidget(const rPoint& position){
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 ruiLayout* ruiDocument::Layout() const{
@@ -152,6 +154,9 @@ void ruiDocument::SetController(ruiController* controller){
 
 void ruiDocument::ProcessMouseDownEvent(ruiMouseEvent& event){
 	if (_impl->menuManager.OnPointerDown(event.Position())) return;
+
+	rPoint position = event.Position();
+	_impl->focusedWidget = SelectWidget(position);
 
 	if (_impl->activeWidget){
 		_impl->activeWidget->Trigger(ruiEVT_MOUSE_DOWN, event);
@@ -226,4 +231,14 @@ void ruiDocument::ClearRunEveryUpdate(int handle) {
 
 void ruiDocument::ClearNextUpdate(int handle){
 	_impl->nextUpdateFuncs.erase(handle);
+}
+
+void ruiDocument::ProcessKeyDownEvent(ruiKeyEvent& event){
+	if (_impl->focusedWidget)
+		_impl->focusedWidget->Trigger(ruiEVT_KEY_DOWN, event);
+}
+
+void ruiDocument::ProcessKeyUpEvent(ruiKeyEvent& event){
+	if (_impl->focusedWidget)
+		_impl->focusedWidget->Trigger(ruiEVT_KEY_UP, event);
 }

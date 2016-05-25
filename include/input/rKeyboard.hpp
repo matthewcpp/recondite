@@ -12,6 +12,10 @@ enum rKeyState{
 	rKEY_DOWN
 };
 
+enum rKeyCode{
+	rKEY_BACKSPACE = 8
+};
+
 class RECONDITE_API rKeyboardState{
 public:
 	virtual rKeyState GetKeyState(rKey key) const = 0;

@@ -54,6 +54,9 @@ public:
 	void ProcessMouseUpEvent(ruiMouseEvent& event);
 	void ProcessMouseWheelEvent(ruiMouseEvent& event);
 
+	void ProcessKeyDownEvent(ruiKeyEvent& event);
+	void ProcessKeyUpEvent(ruiKeyEvent& event);
+
 public:
 	virtual void AddWidget(ruiWidget* widget);
 	virtual ruiWidget* GetWidget(const rString& id);

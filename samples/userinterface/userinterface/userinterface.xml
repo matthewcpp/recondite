@@ -6,17 +6,37 @@
 	<body>
 		<absolutelayout>
 			<linearlayout id="main-layout" direction="vertical">
-				<linearlayout id="checkbox-layout" direction="horizontal">
+			
+			<linearlayout direction="horizontal">
+					<text>Model:</text>
+					<picker id="modelpicker">
+						<option>Box</option>
+						<option>Plane</option>
+						<option>Cylinder</option>
+						<option>Cone</option>
+						<option>Sphere</option>
+					</picker>
+			</linearlayout>
+			
+			<linearlayout id="checkbox-layout" direction="horizontal">
+				<text>R:</text><textbox id="rbox">255</textbox>
+				<text>G:</text><textbox id="gbox">255</textbox>
+				<text>B:</text><textbox id="bbox">255</textbox>
+				<button id="rgbbutton">Apply</button>
+			</linearlayout>
+			
+			<linearlayout id="checkbox-layout" direction="horizontal">
 					<text>Rotate Model: </text><checkbox id="rotate_checkbox" />
-				</linearlayout>
+			</linearlayout>
 				
-				<linearlayout  direction="horizontal">
+			<linearlayout  direction="horizontal">
 					<text>Rotation Speed: </text>
-					<slider id="rotate_speed" min="0" max="50"/>
+					<slider id="rotate_speed" min="0" max="50" value="25"/>
 				</linearlayout>
 			</linearlayout>
 			
 			<logtext id="logtext" />
+			<button id="reloadstyles">Reload Stylesheet</button>
 		</absolutelayout>
 	</body>
 </overlay>

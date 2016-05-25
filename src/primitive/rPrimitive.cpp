@@ -79,8 +79,10 @@ void rPrimitive::Draw(){
 		RecreateGeometry();
 	}
 		
-	rMatrix4& transform = TransformMatrix();
-	m_engine->renderer->RenderPrimitive(m_model, RenderingOptions(), transform);
+	if (RenderingOptions()->Visible()){
+		rMatrix4& transform = TransformMatrix();
+		m_engine->renderer->RenderPrimitive(m_model, RenderingOptions(), transform);
+	}
 }
 
 rColor rPrimitive::EdgeColor() const{

@@ -15,6 +15,11 @@
 	color: 0 0 0 255;
 }
 
+#reloadstyles{
+	bottom:10;
+	left: 10;
+}
+
 button{
 	border-radius: 10;
 	border-color: 175 175 175 255;
@@ -31,6 +36,7 @@ picker {
 	margin-bottom: 5;
 	color: 0 255 0 255;
 	background-color: 255 255 255 255;
+	padding: 2;
 }
 
 logtext{

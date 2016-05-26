@@ -98,7 +98,7 @@ bool rGeometryUtil::CreateCircleVerticies(const rCircle2& circle, size_t segment
 	if (geometry.GeometryType() != rGeometryType::Triangles) return false;
 
 
-	geometry.PushVertex(circle.center.x, circle.center.y);
+	geometry.PushVertex(circle.center.x, circle.center.y, zValue);
 	
 	float step = 360.0f / (float)segments;
 	unsigned short index = 1;

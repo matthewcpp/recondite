@@ -24,8 +24,8 @@ public:
 	virtual void Update();
 	virtual void Draw();
 
-	void SetPosition(int x, int y);
-	void SetPosition(const rPoint& position);
+	virtual void SetPosition(int x, int y);
+	virtual void SetPosition(const rPoint& position);
 
 public:
 	virtual void AddClass(const rString& className);

@@ -43,6 +43,7 @@ private:
 	void ParseButtonItem(rXMLElement* element);
 	void ParseControllerItem(rXMLElement* element);
 	void ParseSliderItem(rXMLElement* element);
+	void ParseAnalogStick(rXMLElement* element);
 
 	void ParseClassList(rXMLElement* element, ruiWidget* widget);
 	

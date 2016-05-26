@@ -15,21 +15,24 @@
 class RECONDITE_API ruiAnalogStick : public ruiWidget{
 public:
 
-	ruiAnalogStick(rController* controller, size_t stickIndex, const rString& id, ruiIDocument* document, rEngine* engine);
+	ruiAnalogStick(const rString& id, ruiIDocument* document, rEngine* engine);
 	virtual void Draw();
 
 	virtual rString GetWidgetType() const;
 
+	void SetController(rController* controller, size_t stickIndex);
+	virtual void SetPosition(int x, int y);
+	virtual void SetPosition(const rPoint& position);
+
 public:
-	virtual void OnTouchDown(const rTouch& touch);
-	virtual void OnTouchMove(const rTouch& touch);
-	virtual void OnTouchUp(const rTouch& touch);
+	virtual bool OnPointerDown(const rPoint& position);
+	virtual bool OnPointerMove(const rPoint& position);
+	virtual bool OnPointerUp(const rPoint& position);
 
 protected:
-	virtual rSize DoComputeSize() const;
+	virtual rSize ComputeSize();
 
 private:
-	void SetCircles();
 	void UpdateController();
 	
 	void UpdateStick(const rVector2& position);
@@ -43,7 +46,7 @@ private:
 	rCircle2 m_outerCircle;
 	rCircle2 m_stick;
 	
-	int m_touchId;
+	bool m_dragging;
 };
 
 #endif

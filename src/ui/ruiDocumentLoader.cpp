@@ -13,6 +13,7 @@
 #include "ui/ruiButton.hpp"
 #include "ui/ruiSlider.hpp"
 #include "ui/ruiLogText.hpp"
+#include "ui/ruiAnalogStick.hpp"
 
 ruiDocumentLoader::ruiParseItemMap ruiDocumentLoader::s_parseItemMap;
 
@@ -37,6 +38,7 @@ void ruiDocumentLoader::InitParseItemMap(){
 	s_parseItemMap["button"] = &ruiDocumentLoader::ParseButtonItem;
 	s_parseItemMap["slider"] = &ruiDocumentLoader::ParseSliderItem;
 	s_parseItemMap["controller"] = &ruiDocumentLoader::ParseControllerItem;
+	s_parseItemMap["analogstick"] = &ruiDocumentLoader::ParseAnalogStick;
 }
 
 void ruiDocumentLoader::Reset(){
@@ -271,4 +273,16 @@ void ruiDocumentLoader::ParseControllerItem(rXMLElement* element){
 		m_currentDocument->SetController(m_manager->CreateController(controllerType, m_currentDocument));
 	}
 		
+}
+
+void ruiDocumentLoader::ParseAnalogStick(rXMLElement* element){
+	rString id = m_currentDocument->GetDefaultId();
+	element->GetAttribute<rString>("id", id);
+
+	ruiAnalogStick* analogStick = new ruiAnalogStick(id, m_currentDocument, m_engine);
+
+	ParseClassList(element, analogStick);
+
+	m_layoutStack.back()->AddItem(analogStick);
+	m_currentDocument->AddWidget(analogStick);
 }

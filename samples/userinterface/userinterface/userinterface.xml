@@ -33,7 +33,9 @@
 					<text>Rotation Speed: </text>
 					<slider id="rotate_speed" min="0" max="50" value="25"/>
 				</linearlayout>
+				<analogstick />
 			</linearlayout>
+			
 			
 			<logtext id="logtext" />
 			<button id="reloadstyles">Reload Stylesheet</button>

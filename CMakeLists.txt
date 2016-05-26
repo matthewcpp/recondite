@@ -18,9 +18,10 @@ elseif (MSVC)
     message("GTEST_ROOT:" $ENV{GTEST_ROOT})
 	message("WX_ROOT:" $ENV{WX_ROOT})
 	message("FREETYPE_ROOT:" $ENV{FREETYPE_ROOT})
+	message("ASSIMP_ROOT:" $ENV{ASSIMP_ROOT})
 	
+	set(ASSIMP_ROOT_DIR $ENV{ASSIMP_ROOT})
 	set(ENV{FREETYPE_DIR} $ENV{FREETYPE_ROOT})
-	
 	set(ENV{SDL2DIR} $ENV{SDL2_ROOT})
 	
 	#configure wxmsw build variables
@@ -37,6 +38,7 @@ find_package(GTest REQUIRED)
 find_package(Freetype REQUIRED)
 find_package(SDL2 REQUIRED)
 find_package(wxWidgets COMPONENTS gl aui adv core base propgrid xml REQUIRED)
+find_package(Assimp REQUIRED)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/platform)

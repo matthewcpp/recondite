@@ -17,6 +17,8 @@ c++ framework for creating graphics applications
 
 [wxWidgets](http://www.wxwidgets.org/)
 
+[Assimp] (http://www.assimp.org/)
+
 **Building on Windows**
 
 1.  Set environment variables:
@@ -25,6 +27,7 @@ c++ framework for creating graphics applications
     - GTEST_ROOT
     - WX_ROOT
 	- FREETYPE_ROOT
+	- ASSIMP_ROOT
 
 **Building on Linux**
 

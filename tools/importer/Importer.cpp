@@ -1,4 +1,4 @@
-#include "Converter.hpp"
+#include "Importer.hpp"
 
 #include "rFileSystem.hpp"
 #include "rPath.hpp"
@@ -14,7 +14,7 @@
 #include <iostream>
 
 namespace recondite { namespace tools {
-	int Converter::Main(int argc, char** argv) {
+	int Importer::Main(int argc, char** argv) {
 		using namespace lambda_options::with_char;
 
 		Options opts;
@@ -43,7 +43,7 @@ namespace recondite { namespace tools {
 		return 0;
 	}
 
-	int Converter::ConvertImage(const rString& path) {
+	int Importer::ConvertImage(const rString& path) {
 		std::cout << "convert texture: " << path << std::endl;
 
 		import::ImageImporter imageImporter;
@@ -68,7 +68,7 @@ namespace recondite { namespace tools {
 		return error;
 	}
 
-	int Converter::CreateTextureAtlas(const rString& path) {
+	int Importer::CreateTextureAtlas(const rString& path) {
 		std::cout << "Generate Texture Atlas from manifest: " << path << std::endl;
 
 		import::TextureAtlasImporter textureAtlas;
@@ -104,7 +104,7 @@ namespace recondite { namespace tools {
 		return error;
 	}
 
-	int Converter::ConvertFont(const rString& path){
+	int Importer::ConvertFont(const rString& path){
 		std::cout << "Generate Font from file: " << path << std::endl;
 
 		import::FontImporter fontImporter;

@@ -1,7 +1,7 @@
-#include "Converter.hpp"
+#include "Importer.hpp"
 
 int main(int argc, char** argv) {
-	recondite::tools::Converter converter;
+	recondite::tools::Importer converter;
 
 	return converter.Main(argc, argv);
 }

@@ -9,7 +9,7 @@
 #include "3rdParty/LambdaOptions.h"
 
 namespace recondite { namespace tools {
-	class Converter {
+	class Importer {
 	public:
 		int Main(int argc, char** argv);
 

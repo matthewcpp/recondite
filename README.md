@@ -32,7 +32,7 @@ c++ framework for creating graphics applications
 **Building on Linux**
 
 1.  Install required packages:  
-    -   sudo apt-get install libgtest-dev libglew-dev libsdl1.2-dev libgtk-3-dev libwxgtk3.0-dev
+    -   sudo apt-get install libgtest-dev libglew-dev libsdl2-dev libgtk-3-dev libwxgtk3.0-dev libfreetype6-dev libassimp-dev
 2.  Build gtest
     - cd /usr/src/gtest
     - sudo cmake CMakeLists.txt

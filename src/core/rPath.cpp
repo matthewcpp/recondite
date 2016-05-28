@@ -8,8 +8,24 @@ bool isSeperator(char c){
 #endif
 }
 
+size_t findLastSeperator(const rString& str) {
+	size_t count = str.size();
+
+	if (count > 0) {
+		count -= 1;
+
+		for (size_t i = 0; i <= count; i++) {
+			if (isSeperator(str[count - i])) {
+				return count - i;
+			}
+		}
+	}
+
+	return rString::npos;
+}
+
 rString rPath::Directory(const rString& path){
-	size_t pos = path.find_last_of('/');
+	size_t pos = findLastSeperator(path);
 
 	if (pos == rString::npos){
 		return rString("");
@@ -20,7 +36,7 @@ rString rPath::Directory(const rString& path){
 }
 
 rString rPath::Filename(const rString& path){
-	size_t namepos = path.find_last_of('/');
+	size_t namepos = findLastSeperator(path);
 	size_t extpos = path.find_last_of('.');
 
 	if (namepos == rString::npos){
@@ -39,7 +55,7 @@ rString rPath::Filename(const rString& path){
 }
 
 rString rPath::FullFilename(const rString& path){
-	size_t pos = path.find_last_of('/');
+	size_t pos = findLastSeperator(path);
 
 	if (pos == rString::npos){
 		return path;
@@ -68,7 +84,7 @@ rString rPath::Combine(const rString& dir, const rString& filename){
 		char filenameFirst = filename.first();
 
 		if (!isSeperator(dirLast) && !isSeperator(filenameFirst)){
-			result += '/';
+			result += PathSeparator;
 		}
 	}
 

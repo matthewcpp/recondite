@@ -15,6 +15,12 @@ namespace rPath{
 	
 	void RECONDITE_API Split(const rString& path, rString* directory, rString* filename);
 	void RECONDITE_API Split(const rString& path, rString* directory, rString* filename, rString* ext);
+
+#ifdef WIN32
+	const char PathSeparator = '\\';
+#else
+	const char PathSeparator = '/';
+#endif
 };
 
 #endif

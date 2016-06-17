@@ -86,7 +86,6 @@ protected:
 
 private:
 	void RenderTexCoordGeometryProfile(const rGeometry* geometry, const rMatrix4& projection, const rMatrix4& modelview, rElementBuffer* elementBuffer, rMaterial* material);
-	void RenderVertexColorGeometryProfile(const rGeometry* geometry, const rMatrix4& projection, const rMatrix4& modelview, rElementBuffer* elementBuffer, rMaterial* material);
 	void RenderPrimitiveGeometryProfile(const rGeometry* geometry, const rMatrix4& projection, const rMatrix4& modelview, rElementBuffer* elementBuffer, rMaterial* material);
 private:
 	struct rglRenderbuffer{

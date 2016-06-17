@@ -14,7 +14,6 @@ add_rec_src(asset_files "rGeometryManager" "asset")
 add_rec_src(asset_files "rGeometryData" "asset")
 add_rec_src(asset_files "rGeometryFile" "asset")
 add_rec_src(asset_files "rTexCoordGeometryData" "asset")
-add_rec_src(asset_files "rVertexColorGeometryData" "asset")
 add_rec_src(asset_files "rPrimitiveGeometryData" "asset")
 
 add_rec_src(asset_files "rMaterial" "asset")

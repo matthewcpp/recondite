@@ -41,7 +41,6 @@ enum class rGeometryType{
 
 enum class rGeometryProfile : unsigned char{
 	TexCoord,
-	VertexColor,
 	Primitive
 };
 enum class rRenderMode : unsigned char{

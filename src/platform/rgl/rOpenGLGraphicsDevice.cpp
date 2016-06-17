@@ -278,10 +278,6 @@ void rOpenGLGraphicsDevice::RenderGeometry(const rGeometry* geometry, const rMat
 					RenderTexCoordGeometryProfile(geometry, projection, modelview, elementBuffer, material);
 					break;
 
-				case rGeometryProfile::VertexColor:
-					RenderVertexColorGeometryProfile(geometry, projection, modelview, elementBuffer, material);
-					break;
-
 				case rGeometryProfile::Primitive:
 					RenderPrimitiveGeometryProfile(geometry, projection, modelview, elementBuffer, material);
 					break;
@@ -320,38 +316,6 @@ void rOpenGLGraphicsDevice::RenderTexCoordGeometryProfile(const rGeometry* geome
 
 	glDisableVertexAttribArray(gPositionLoc);
 	glDisableVertexAttribArray(gTexCoordLoc);
-	glDisableVertexAttribArray(gNormalLoc);
-}
-
-void rOpenGLGraphicsDevice::RenderVertexColorGeometryProfile(const rGeometry* geometry, const rMatrix4& projection, const rMatrix4& modelview, rElementBuffer* elementBuffer, rMaterial* material){
-	GLuint vertexBufferId = geometry->VertexBufferId();
-	GLuint elementBufferId = elementBuffer->BufferId();
-
-	rMatrix4 mvp = projection * modelview;
-
-	GLuint gPositionLoc = glGetAttribLocation(m_activeShaderProgram, "recPosition");
-	GLuint gNormalLoc = glGetAttribLocation(m_activeShaderProgram, "recNormal");
-	GLuint gVertexColorLoc = glGetAttribLocation(m_activeShaderProgram, "recVertexColor");
-
-	GLuint gMatrixLoc = glGetUniformLocation(m_activeShaderProgram, "recMVPMatrix");
-
-	glUniformMatrix4fv(gMatrixLoc, 1, GL_FALSE, mvp.m);
-
-	glBindBuffer(GL_ARRAY_BUFFER, vertexBufferId);
-	glVertexAttribPointer(gPositionLoc, 3, GL_FLOAT, GL_FALSE, 40, 0);
-	glEnableVertexAttribArray(gPositionLoc);
-
-	glVertexAttribPointer(gNormalLoc, 3, GL_FLOAT, GL_FALSE, 40, (void*)12);
-	glEnableVertexAttribArray(gNormalLoc);
-
-	glVertexAttribPointer(gVertexColorLoc, 4, GL_FLOAT, GL_FALSE, 40, (void*)24);
-	glEnableVertexAttribArray(gVertexColorLoc);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBufferId);
-	glDrawElements(GLGeometryType(elementBuffer->GeometryType()), elementBuffer->Size(), GL_UNSIGNED_SHORT, 0);
-
-	glDisableVertexAttribArray(gPositionLoc);
-	glDisableVertexAttribArray(gVertexColorLoc);
 	glDisableVertexAttribArray(gNormalLoc);
 }
 

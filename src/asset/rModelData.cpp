@@ -10,10 +10,6 @@ rModelData::rModelData(){
 
 void rModelData::InitWithProfile(rGeometryProfile geometryProfile){
 	switch (geometryProfile){
-		case rGeometryProfile::VertexColor:
-			m_geometryData.reset(new rVertexColorGeometryData());
-			break;
-
 		case rGeometryProfile::TexCoord:
 			m_geometryData.reset(new rTexCoordGeometryData());
 			break;

@@ -34,7 +34,7 @@ void rPrimitive::RecreateGeometry(){
 	if (!m_geometryInvalid) return;
 
 	if (m_model)
-		m_engine->content->Models()->Release(m_model->Name());
+		m_engine->content->Models()->Delete(m_model->Name());
 
 	rModelData modelData(rGeometryProfile::Primitive);
 	rGeometryData& geometryData = *modelData.GetGeometryData();
@@ -71,7 +71,7 @@ void rPrimitive::UpdateMaterials(){
 
 void rPrimitive::OnDelete(){
 	if (m_model)
-		m_engine->content->Models()->Release(m_model->Name());
+		m_engine->content->Models()->Delete(m_model->Name());
 }
 
 void rPrimitive::Draw(){

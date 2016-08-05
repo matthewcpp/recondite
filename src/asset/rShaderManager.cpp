@@ -97,6 +97,14 @@ rShader* rShaderManager::Get(const rString& name){
 }
 
 int rShaderManager::Delete(const rString& name){
+	auto result = _impl->shaders.find(name);
+
+	if (result == _impl->shaders.end()){
+		return 1;
+	}
+	
+	_impl->graphicsDevice->DeleteShaderProgram(result->second.get()->ProgramId());
+	_impl->shaders.erase(result);
 	return 0;
 }
 

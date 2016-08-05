@@ -10,9 +10,7 @@ add_rec_src(asset_files "rShader" "asset")
 add_rec_src(asset_files "rShaderManager" "asset")
 
 add_rec_src(asset_files "rGeometry" "asset")
-add_rec_src(asset_files "rGeometryManager" "asset")
 add_rec_src(asset_files "rGeometryData" "asset")
-add_rec_src(asset_files "rGeometryFile" "asset")
 add_rec_src(asset_files "rTexCoordGeometryData" "asset")
 add_rec_src(asset_files "rPrimitiveGeometryData" "asset")
 
@@ -21,7 +19,6 @@ add_rec_src(asset_files "rMaterial" "asset")
 add_rec_src(asset_files "rModel" "asset")
 add_rec_src(asset_files "rModelManager" "asset")
 add_rec_src(asset_files "rModelData" "asset")
-add_rec_src(asset_files "rModelFile" "asset")
 
 
 add_rec_src(asset_files "rFont" "asset")

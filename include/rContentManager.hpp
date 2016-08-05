@@ -15,7 +15,6 @@
 
 #include "asset/rTextureManager.hpp"
 #include "asset/rShaderManager.hpp"
-#include "asset/rGeometryManager.hpp"
 #include "asset/rFontManager.hpp"
 #include "asset/rModelManager.hpp"
 
@@ -29,10 +28,8 @@ public:
 
 	rTextureManager* Textures();
 	rShaderManager* Shaders();
-	rGeometryManager* Geometry();
 	rFontManager* Fonts();
 	rModelManager* Models();
-	
 
 public:
 	void Clear();
@@ -45,7 +42,6 @@ private:
 
 	std::unique_ptr<rTextureManager> m_textures;
 	std::unique_ptr<rShaderManager> m_shaders;
-	std::unique_ptr<rGeometryManager> m_geometry;
 	std::unique_ptr<rFontManager> m_fonts;
 	std::unique_ptr<rModelManager> m_models;
 };

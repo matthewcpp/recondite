@@ -6,15 +6,13 @@ rContentManager::rContentManager(rGraphicsDevice* graphicsDevice, rFileSystem* f
 
 	m_textures.reset(new rTextureManager(graphicsDevice, fileSystem));
 	m_shaders.reset(new rShaderManager(graphicsDevice, fileSystem));
-	m_geometry.reset(new rGeometryManager(graphicsDevice, fileSystem));
 	m_fonts.reset(new rFontManager(fileSystem, m_textures.get()));
-	m_models.reset(new rModelManager(m_fileSystem, m_shaders.get(), m_geometry.get()));
+	m_models.reset(new rModelManager(m_fileSystem, m_graphicsDevice));
 }
 
 void rContentManager::Clear(){
 	m_textures->Clear();
 	m_shaders->Clear();
-	m_geometry->Clear();
 	m_fonts->Clear();
 	m_models->Clear();
 }
@@ -29,10 +27,6 @@ rTextureManager* rContentManager::Textures(){
 
 rShaderManager* rContentManager::Shaders(){
 	return m_shaders.get();
-}
-
-rGeometryManager* rContentManager::Geometry(){
-	return m_geometry.get();
 }
 
 rFontManager* rContentManager::Fonts(){

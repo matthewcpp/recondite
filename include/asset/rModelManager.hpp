@@ -6,24 +6,23 @@
 
 #include "rAssetManager.hpp"
 
-#include "rGeometryManager.hpp"
 #include "rShaderManager.hpp"
 
 #include "rModel.hpp"
 #include "rModelData.hpp"
-#include "rModelFile.hpp"
 
-class RECONDITE_API rModelManager : public rAssetManager < rModel, rModelData, rModelFile > {
+class RECONDITE_API rModelManager{
 public:
-	rModelManager(rFileSystem* fileSysytem, rShaderManager* shaderManager, rGeometryManager* geometryManager);
+	rModelManager(rFileSystem* fileSysytem, rGraphicsDevice* graphicsDevice);
+	~rModelManager();
 
-protected:
-	virtual rModel* CreateAssetFromData(const rModelData& modelData, const rString& name) override;
-	virtual void DisposeAsset(rModel* model) override;
+	void Clear();
+	rModel* LoadFromData(const rModelData& modelData, const rString& name);
+	int Delete(const rString& name);
 
 private:
-	rGeometryManager* m_geometryManager;
-	rShaderManager* m_shadermanager;
+	struct Impl;
+	Impl* _impl;
 };
 
 #endif

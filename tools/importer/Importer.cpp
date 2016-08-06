@@ -10,6 +10,7 @@
 #include "asset/rTextureAtlasData.hpp"
 
 #include "FontImporter.hpp"
+#include "ModelImporter.hpp"
 
 #include <iostream>
 
@@ -29,6 +30,10 @@ namespace recondite { namespace tools {
 
 		opts.AddOption(Keyword("font", "f"), [&](std::string manifest){
 			this->ConvertFont(manifest.c_str());
+		});
+
+		opts.AddOption(Keyword("model", "m"), [&](std::string inputFile){
+			this->ConvertModel(inputFile.c_str());
 		});
 
 		auto parseContext = opts.CreateParseContext(argv + 1, argv + argc);
@@ -138,6 +143,23 @@ namespace recondite { namespace tools {
 			}
 		}
 
+		return error;
+	}
+
+	int Importer::ConvertModel(const rString& path){
+		std:: cout << "Generate model from file: " << path << std::endl;
+
+		import::ModelImporter modelImporter;
+		rModelData modelData;
+
+		int error = modelImporter.ImportModel(path, modelData);
+
+		if (error){
+			std::cout << "Model import successful." << std::endl;
+		}
+		else{
+			std::cout << "Model import failed." << std::endl;
+		}
 		return error;
 	}
 }}

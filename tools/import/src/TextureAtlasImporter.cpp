@@ -10,7 +10,7 @@
 #include "xml/rXMLDocument.hpp"
 
 namespace recondite { namespace import {
-	struct AtlasItem : public RectPacker::Item{
+	struct AtlasItem : public internal::RectPacker::Item{
 		AtlasItem(const rString& n, const rString& p) : name(n), path(p){}
 		rString name;
 		rString path;
@@ -83,7 +83,7 @@ namespace recondite { namespace import {
 	}
 
 	int TextureAtlasImporter::GenerateAtlas(rTextureAtlasData& textureAtlasData, rTextureData& textureData) {
-		RectPacker packer;
+		internal::RectPacker packer;
 		packer.SetMaxSize(rSize(1024, 1024));
 
 		for (size_t i = 0; i < _impl->atlasEntries.size(); i++)

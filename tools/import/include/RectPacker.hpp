@@ -10,7 +10,7 @@
 #include "rVector2.hpp"
 
 
-namespace recondite { namespace import {
+namespace recondite { namespace import { namespace internal {
 	class RectPacker {
 	public:
 		class Item {
@@ -44,4 +44,4 @@ namespace recondite { namespace import {
 		rSize _maxSize;
 		rSize _resultSize;
 	};
-}}
+}}}

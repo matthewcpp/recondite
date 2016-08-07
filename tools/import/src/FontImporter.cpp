@@ -12,7 +12,7 @@
 #include FT_FREETYPE_H
 
 namespace recondite { namespace import {
-	struct FontGlyphRect : public RectPacker::Item{
+	struct FontGlyphRect : public internal::RectPacker::Item{
 		uint32_t scancode;
 	};
 
@@ -39,8 +39,8 @@ namespace recondite { namespace import {
 		int InitFontFaces(FT_Library freetypeLibrary, Font::Family& fontData);
 		int UninitFontFaces(FT_Library freetypeLibrary);
 
-		int GenerateGlyphRects(FT_Library freetypeLibrary, RectPacker& rectPacker, Font::Family& fontData);
-		int GenerateGlyphBitmap(FT_Library freetypeLibrary, RectPacker& rectPacker, Font::Family& fontData, rTextureData& textureData);
+		int GenerateGlyphRects(FT_Library freetypeLibrary, internal::RectPacker& rectPacker, Font::Family& fontData);
+		int GenerateGlyphBitmap(FT_Library freetypeLibrary, internal::RectPacker& rectPacker, Font::Family& fontData, rTextureData& textureData);
 	};
 
 	FontImporter::FontImporter(){
@@ -142,7 +142,7 @@ namespace recondite { namespace import {
 		return 0;
 	}
 
-	int FontImporter::Impl::GenerateGlyphRects(FT_Library freetypeLibrary, RectPacker& rectPacker, Font::Family& fontData){
+	int FontImporter::Impl::GenerateGlyphRects(FT_Library freetypeLibrary, internal::RectPacker& rectPacker, Font::Family& fontData){
 		int error = 0;
 
 		for (size_t i = 0; i < faceDescriptions.size(); i++){
@@ -167,7 +167,7 @@ namespace recondite { namespace import {
 		return error;
 	}
 
-	int FontImporter::Impl::GenerateGlyphBitmap(FT_Library freetypeLibrary, RectPacker& rectPacker, Font::Family& fontData, rTextureData& textureData){
+	int FontImporter::Impl::GenerateGlyphBitmap(FT_Library freetypeLibrary, internal::RectPacker& rectPacker, Font::Family& fontData, rTextureData& textureData){
 		int error = 0;
 		rSize resultSize = rectPacker.GetResultSize();
 		textureData.Allocate(resultSize.x, resultSize.y, 4, rColor::Transparent);
@@ -202,7 +202,7 @@ namespace recondite { namespace import {
 	int FontImporter::GenerateFont(Font::Family& fontData, rTextureData& textureData){
 		FT_Library freetypeLibrary;
 		
-		RectPacker rectPacker;
+		internal::RectPacker rectPacker;
 		rectPacker.SetMaxSize(rSize(1024, 1024));
 
 		int error = FT_Init_FreeType(&freetypeLibrary);

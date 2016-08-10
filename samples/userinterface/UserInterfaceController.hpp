@@ -17,6 +17,7 @@ private:
 	void OnRotationSpeedSliderChange(rEvent& event);
 	void OnModelPickerChange(rEvent& event);
 	void OnReloadStylesClick(rEvent& event);
+	void OnRGBButtonClick(rEvent& event);
 
 private:
 	void ApplyRotation();

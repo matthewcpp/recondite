@@ -5,8 +5,11 @@
 #include "ui/ruiSlider.hpp"
 #include "ui/ruiPicker.hpp"
 #include "ui/ruiButton.hpp"
+#include "ui/ruiText.hpp"
 #include "rActor3.hpp"
 #include "rLog.hpp"
+
+#include "stream\rIStringStream.hpp"
 
 UserInterfaceController::UserInterfaceController(const rString& name, rEngine* engine, ruiDocument* document)
 	:ruiController(name)
@@ -40,6 +43,10 @@ void UserInterfaceController::OnDocumentLoaded(){
 
 	ruiButton* reloadStyles = (ruiButton*)_document->GetWidget("reloadstyles");
 	modelpicker->Bind(ruiEVENT_BUTTON_CLICK, this, &UserInterfaceController::OnModelPickerChange);
+
+	ruiButton* rgbButton = (ruiButton*)_document->GetWidget("rgbbutton");
+	rgbButton->Bind(ruiEVENT_BUTTON_CLICK, this, &UserInterfaceController::OnRGBButtonClick);
+
 }
 
 void UserInterfaceController::OnModelPickerChange(rEvent& event){
@@ -56,8 +63,31 @@ void UserInterfaceController::OnModelPickerChange(rEvent& event){
 	Log::Info(modelpicker->SelectionText());
 }
 
-void OnReloadStylesClick(rEvent& event){
+void UserInterfaceController::OnReloadStylesClick(rEvent& event){
 
+}
+
+void UserInterfaceController::OnRGBButtonClick(rEvent& event) {
+	ruiText* r = (ruiText*)_document->GetWidget("rbox");
+	ruiText* g = (ruiText*)_document->GetWidget("gbox");
+	ruiText* b = (ruiText*)_document->GetWidget("bbox");
+
+	rColor result = rColor::White;
+	int val;
+
+	rIStringStream rVal(r->GetText());
+	rVal >> val;
+	result.red = val;
+
+	rIStringStream gVal(g->GetText());
+	gVal >> val;
+	result.green = val;
+
+	rIStringStream bVal(b->GetText());
+	bVal >> val;
+	result.blue = val;
+
+	_primitive->SetFaceColor(result);
 }
 
 void UserInterfaceController::OnRotateCheckboxClick(rEvent& event){

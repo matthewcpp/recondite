@@ -25,6 +25,8 @@
 
 #include "asset/rModel.hpp"
 
+using namespace recondite;
+
 class RECONDITE_API rRenderer {
 public:
 	rRenderer(rGraphicsDevice* graphicsDevice, rContentManager* contentManager);
@@ -42,8 +44,7 @@ public:
 	
 	rSpriteBatch* SpriteBatch();
 
-	void RenderPrimitive(const rModel* model, rRenderingOptions* renderingOptions, const rMatrix4& matrix);
-
+	void RenderModel(const Model* model, const rMatrix4& matrix);
 
 private:
 	void RenderSpriteBatch();

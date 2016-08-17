@@ -12,9 +12,9 @@ rPrimitiveBox::rPrimitiveBox(const rString& id, rEngine* engine)
 	m_depthSegments = 1;
 }
 
-void rPrimitiveBox::CreateGeometry(rGeometryData& geometry){
+void rPrimitiveBox::CreateGeometry(ModelData& modelData){
 	rPrimitiveGeometry::rPrimitiveBoxParams params(rVector3(m_width, m_height, m_depth), m_widthSegments, m_heightSegments, m_depthSegments);
-	rPrimitiveGeometry::CreateBox(params, geometry);
+	rPrimitiveGeometry::CreateBox(params, modelData);
 }
 
 rString rPrimitiveBox::ClassName() const{

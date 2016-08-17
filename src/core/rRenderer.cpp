@@ -31,25 +31,26 @@ size_t rRenderer::ObjectsRendered() const{
 	return m_objectsRendered;
 }
 
-void rRenderer::RenderPrimitive(const rModel* model, rRenderingOptions* renderingOptions, const rMatrix4& matrix){
-	m_graphicsDevice->ActivateShader(m_contentManager->Shaders()->DefaultPrimitiveShader()->ProgramId());
-
+void rRenderer::RenderModel(const recondite::Model* model, const rMatrix4& matrix) {
 	rMatrix4 modelView = m_viewMatrix * matrix;
 
-	rArrayString meshNames;
-	model->GetMeshNames(meshNames);
+	const recondite::Geometry* geometry = model->GetGeometry();
 
-	rGeometry* geometry = model->Geometry();
+	if (geometry->GetHasTexCoords())
+		m_graphicsDevice->ActivateShader(m_contentManager->Shaders()->DefaultModelShader()->ProgramId());
+	else
+		m_graphicsDevice->ActivateShader(m_contentManager->Shaders()->DefaultPrimitiveShader()->ProgramId());
 
+	m_graphicsDevice->ActivateGeometryBuffer(geometry);
 
-	for (size_t i = 0; i < meshNames.size(); i++){
-		rMesh* mesh = model->GetMesh(meshNames[i]);
+	for (size_t i = 0; i < model->GetTriangleMeshCount(); i++) {
+		const recondite::Mesh* mesh = model->GetTriangleMesh(i);
 
-		if (mesh->GeometryType() == rGeometryType::Triangles){
-			m_graphicsDevice->RenderGeometry(geometry, m_projectionMatrix, modelView, mesh->Buffer(), mesh->Material());
-			m_objectsRendered++;
-		}
+		m_graphicsDevice->SetActiveMaterial(mesh->GetMaterial());
+		m_graphicsDevice->RenderMesh(mesh, m_projectionMatrix, modelView);
 	}
+
+	m_graphicsDevice->DeactivateGeometryBuffer(geometry);
 }
 
 

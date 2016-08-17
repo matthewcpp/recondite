@@ -10,6 +10,46 @@
 
 #include "rVertexBoneLink.hpp"
 
+namespace recondite {
+	class RECONDITE_API Geometry {
+	public:
+		Geometry() : _bufferId(0), _hasNormals(false), _hasTexCoords(false) {}
+
+		Geometry(uint32_t bufferId, uint32_t vertexCount, bool hasNormals, bool hasTexCoords)
+			: _bufferId(bufferId), _vertexCount(vertexCount), _hasNormals(hasNormals), _hasTexCoords(hasTexCoords) {}
+
+	public:
+		inline uint32_t GetBufferId() const;
+		inline uint32_t GetVertexCount() const;
+		inline bool GetHasNormals() const;
+		inline bool GetHasTexCoords() const;
+
+	private:
+		uint32_t _bufferId;
+		uint32_t _vertexCount;
+		bool _hasNormals;
+		bool _hasTexCoords;
+	};
+
+
+	inline uint32_t Geometry::GetBufferId() const {
+		return _bufferId;
+	}
+
+	inline uint32_t Geometry::GetVertexCount() const {
+		return _vertexCount;
+	}
+
+	inline bool Geometry::GetHasNormals() const {
+		return _hasNormals;
+	}
+
+	inline bool Geometry::GetHasTexCoords() const {
+		return _hasTexCoords;
+	}
+}
+
+
 
 class RECONDITE_API rElementBuffer{
 public:

@@ -4,9 +4,10 @@
 #include "rBuild.hpp"
 #include "rActor3.hpp"
 
-#include "asset/rTexCoordGeometryData.hpp"
 #include "asset/rModelData.hpp"
 #include "asset/rModel.hpp"
+
+using namespace recondite;
 
 class RECONDITE_API rPrimitive : public rActor3{
 public:
@@ -19,7 +20,7 @@ public:
 	rColor EdgeColor() const;
 	rColor FaceColor() const;
 
-	rModel* Model() const;
+	Model* Model() const;
 	void RecreateGeometry();
 
 	virtual void Draw();
@@ -30,7 +31,7 @@ protected:
 	virtual bool DoSerialize(riSerializationTarget* target);
 	virtual void OnLoad();
 
-	virtual void CreateGeometry(rGeometryData& geometry) = 0;
+	virtual void CreateGeometry(ModelData& modelData) = 0;
 	void InvalidateGeometry();
 
 	void UpdateMaterials();
@@ -40,7 +41,7 @@ private:
 	rColor m_faceColor;
 	bool m_geometryInvalid;
 
-	rModel* m_model;
+	recondite::Model* m_model;
 };
 
 #endif

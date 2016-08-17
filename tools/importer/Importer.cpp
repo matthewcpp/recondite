@@ -150,7 +150,7 @@ namespace recondite { namespace tools {
 		std:: cout << "Generate model from file: " << path << std::endl;
 
 		import::ModelImporter modelImporter;
-		rModelData modelData;
+		ModelData modelData;
 
 		int error = modelImporter.ImportModel(path, modelData);
 

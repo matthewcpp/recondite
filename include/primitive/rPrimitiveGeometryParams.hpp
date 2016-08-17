@@ -9,9 +9,12 @@
 namespace rPrimitiveGeometry{
 	struct RECONDITE_API rPrimitiveParams{
 		rPrimitiveParams() 
-			: faceMeshName("faces"), wireMeshName("wire") {}
+			: createFaceMesh(true), faceMeshName("faces"), createWireMesh(true), wireMeshName("wire") {}
 
+		bool createFaceMesh;
 		rString faceMeshName;
+
+		bool createWireMesh;
 		rString wireMeshName;
 	};
 

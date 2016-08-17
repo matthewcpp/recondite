@@ -1,136 +1,122 @@
 #include "asset/rGeometryData.hpp"
 
-rElementBufferData::rElementBufferData(rGeometryType geometryType){
-	m_geometryType = geometryType;
-}
 
-rElementBufferData::rElementBufferData(unsigned short* elements, size_t elementCount, rGeometryType type){
-	SetElementData(elements, elementCount, type);
-}
+namespace recondite {
+	struct GeometryData::Impl {
+		std::vector<rVector3> vertices;
+		std::vector<rVector3> normals;
+		std::vector<rVector2> texCoords;
+	};
 
-void rElementBufferData::SetElementData(unsigned short* elements, size_t elementCount, rGeometryType type){
-	m_elementData.resize(elementCount);
-	size_t dataSize = elementCount * sizeof(unsigned short);
-
-	memcpy(&m_elementData[0], elements, dataSize);
-
-	m_geometryType = type;
-}
-
-size_t rElementBufferData::ElementDataSize() const{
-	return ElementCount() * sizeof (unsigned short);
-}
-
-size_t rElementBufferData::ElementCount() const{
-	return m_elementData.size();
-}
-
-void rElementBufferData::Allocate(size_t count){
-	m_elementData.resize(count);
-}
-
-const unsigned short* rElementBufferData::GetElementData() const{
-	if (m_elementData.size())
-		return &m_elementData[0];
-	else
-		return NULL;
-}
-
-void rElementBufferData::ClearElementData(){
-	m_elementData.clear();
-}
-
-void rElementBufferData::Push(unsigned short v1, unsigned short v2, unsigned short v3){
-	m_elementData.push_back(v1);
-	m_elementData.push_back(v2);
-	m_elementData.push_back(v3);
-}
-
-void rElementBufferData::Push(unsigned short v1, unsigned short v2){
-	m_elementData.push_back(v1);
-	m_elementData.push_back(v2);
-}
-
-rGeometryType rElementBufferData::GeometryType() const{
-	return m_geometryType;
-
-}
-void rElementBufferData::SetGeometryType(rGeometryType type){
-	m_geometryType = type;
-}
-
-const rIndexArray& rElementBufferData::GetIndices() const{
-	return m_elementData;
-}
-
-//-------------------------------------------------------
-
-
-rElementBufferData* rGeometryData::CreateElementBuffer(const rString& name, rGeometryType geometryType){
-	if (m_elementBuffers.count(name)){
-		return nullptr;
+	GeometryData::GeometryData() {
+		_impl = new Impl();
 	}
-	else {
-		rElementBufferDataPtr bufferDataPtr = std::make_shared<rElementBufferData>(geometryType);
-		m_elementBuffers[name] = bufferDataPtr;
-		return bufferDataPtr.get();
+
+	GeometryData::~GeometryData() {
+		delete _impl;
 	}
-}
 
-size_t rGeometryData::ElementBufferCount() const{
-	return m_elementBuffers.size();
-}
-
-void rGeometryData::RemoveElementBuffer(const rString& name){
-	m_elementBuffers.erase(name);
-}
-
-rElementBufferData* rGeometryData::GetElementBuffer(const rString& name) const{
-	auto result = m_elementBuffers.find(name);
-	
-	if (result == m_elementBuffers.end())
-		return nullptr;
-	else
-		return result->second.get();
-}
-
-void rGeometryData::GetElementBufferNames(rArrayString& names) const {
-	names.clear();
-	
-	for (rElementBufferDataMap::const_iterator it = m_elementBuffers.begin(); it != m_elementBuffers.end(); ++it)
-		names.push_back(it->first);
-}
-
-void rGeometryData::Clear(){
-	m_elementBuffers.clear();
-	m_vertexBoneLinks.clear();
-	m_path.clear();
-}
-
-size_t rGeometryData::VertexBoneLinkCount() const{
-	return m_vertexBoneLinks.size();
-}
-
-size_t rGeometryData::CreateVertexBoneLink(unsigned short vertexIndex, unsigned short boneIndex, float weight){
-	rVertexBoneLink boneLink(vertexIndex, boneIndex, weight);
-	m_vertexBoneLinks.push_back(boneLink);
-	return m_vertexBoneLinks.size();
-}
-
-bool rGeometryData::GetVertexBoneLink(size_t index, rVertexBoneLink& boneLink){
-	if (index < m_vertexBoneLinks.size()){
-		boneLink = m_vertexBoneLinks[index];
-		return true;
+	size_t GeometryData::VertexCount() const {
+		return _impl->vertices.size();
 	}
-	else {
-		return false;
+
+	const char* GeometryData::VertexData() const {
+		return (const char*)_impl->vertices.data();
 	}
-}
 
-void rGeometryData::TransformVertices(size_t startingIndex, const rMatrix4& transform){
-	size_t vertexCount = VertexCount();
-	if (startingIndex >= vertexCount) return;
+	const char* GeometryData::NormalData() const {
+		return (const char*)_impl->normals.data();
+	}
 
-	for (size_t i = startingIndex; i < vertexCount; i++)
-		TransformVertex(i, transform);
+	const char* GeometryData::TexCoordData() const {
+		return (const char*)_impl->texCoords.data();
+	}
+
+	void GeometryData::AllocateVertices(size_t size) {
+		_impl->vertices.resize(size);
+	}
+
+	void GeometryData::AllocateTexCoords(size_t size) {
+		_impl->texCoords.resize(size);
+	}
+
+	void GeometryData::AllocateNormals(size_t size) {
+		_impl->normals.resize(size);
+	}
+
+	void GeometryData::Clear() {
+		_impl->vertices.clear();
+		_impl->texCoords.clear();
+	}
+
+	void GeometryData::PushVertex(const rVector3& position) {
+		_impl->vertices.emplace_back(position);
+	}
+
+	void GeometryData::SetVertex(size_t index, const rVector3& position) {
+		_impl->vertices[index] = position;
+	}
+
+	void GeometryData::GetVertex(size_t index, rVector3& position) {
+		position = _impl->vertices[index];
+	}
+
+	void GeometryData::AssignVertices(rVector3* vertices, size_t count) {
+		_impl->vertices.resize(count);
+		memcpy(_impl->vertices.data(), vertices, sizeof(rVector3) * count);
+	}
+
+	size_t GeometryData::VertexDataSize() const {
+		return _impl->vertices.size() * sizeof(rVector3);
+	}
+
+	void GeometryData::PushTexCoord(const rVector2& texCoord) {
+		_impl->texCoords.push_back(texCoord);
+	}
+
+	void GeometryData::SetTexCoord(size_t index, const rVector2& texCoord) {
+		_impl->texCoords[index] = texCoord;
+	}
+
+	void GeometryData::GetTextCoord(size_t index, rVector2& texCoord) {
+		texCoord = _impl->texCoords[index];
+	}
+
+	void GeometryData::AssignTexCoords(const rVector2* texCoords, size_t count) {
+		_impl->texCoords.resize(count);
+		memcpy(_impl->texCoords.data(), texCoords, sizeof(rVector2) * count);
+	}
+
+	size_t GeometryData::TexCoordDataSize() const {
+		return _impl->texCoords.size() * sizeof(rVector2);
+	}
+
+	bool GeometryData::HasTexCoords() const {
+		return _impl->texCoords.size() > 0;
+	}
+
+	void GeometryData::PushNormal(const rVector3& normal) {
+		_impl->normals.emplace_back(normal);
+	}
+
+	void GeometryData::SetNormal(size_t index, const rVector3& normal) {
+		_impl->normals[index] = normal;
+	}
+
+	void GeometryData::GetNormal(size_t index, rVector3& normal) {
+		normal = _impl->normals[index];
+	}
+
+	void GeometryData::AssignNormals(const rVector3* normals, size_t count) {
+		_impl->normals.resize(count);
+		memcpy(_impl->normals.data(), normals, sizeof(rVector3) * count);
+	}
+
+	size_t GeometryData::NormalDataSize() const {
+		return _impl->normals.size() * sizeof(rVector3);
+	}
+
+	bool GeometryData::HasNormals() const {
+		return _impl->normals.size() > 0;
+	}
 }

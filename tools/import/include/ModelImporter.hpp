@@ -10,7 +10,7 @@ namespace recondite { namespace import {
 		~ModelImporter();
 
 	public:
-		int ImportModel(const rString& path, rModelData& modelData);
+		int ImportModel(const rString& path, ModelData& modelData);
 
 	private:
 		struct Impl;

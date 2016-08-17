@@ -3,10 +3,11 @@
 struct rModelManager::Impl{
 	Impl(rFileSystem* fs, rGraphicsDevice* gd) : fileSysytem(fs), graphicsDevice(gd){}
 
-	rGeometry* CreateGeometry(rGeometryData* geometryData);
-
 	rFileSystem* fileSysytem;
 	rGraphicsDevice* graphicsDevice;
+	std::map<rString, std::unique_ptr<Model>> models;
+
+	void DeleteModelData(Model* model);
 };
 
 
@@ -18,45 +19,59 @@ rModelManager::~rModelManager(){
 	delete _impl;
 }
 
-void rModelManager::Clear(){
-}
+Model* rModelManager::LoadFromData(const ModelData& modelData, const rString& name) {
+	if (_impl->models.count(name)) return nullptr;
 
-rGeometry* rModelManager::Impl::CreateGeometry(rGeometryData* geometryData){
-	unsigned int vertexBuffer = graphicsDevice->CreateArrayBuffer((const char*)geometryData->VertexData(), geometryData->VertexDataSize());
 
-	rGeometry* geometry = new rGeometry("", geometryData->GeometryProfile(), vertexBuffer, 0);
+	const GeometryData* geometryData = modelData.GetGeometryData();
+	uint32_t bufferId = _impl->graphicsDevice->CreateGeometryBuffer(geometryData);
+	Geometry geometry(bufferId, geometryData->VertexCount(), geometryData->HasNormals(), geometryData->HasTexCoords());
 
-	//TODO: use foreach interface?
-	rArrayString bufferNames;
-	geometryData->GetElementBufferNames(bufferNames);
+	Model* model = new Model(name, geometry);
 
-	for (size_t i = 0; i < bufferNames.size(); i++){
-		rElementBufferData* buffer = geometryData->GetElementBuffer(bufferNames[i]);
+	for (size_t i = 0; i < modelData.GetTriangleMeshCount(); i++) {
+		const MeshData* meshData = modelData.GetTriangleMesh(i);
 
-		unsigned int elementBufferId = graphicsDevice->CreateElementBuffer(buffer->GetElementData(), buffer->ElementDataSize());
-		geometry->AddElementBuffer(bufferNames[i], elementBufferId, buffer->ElementCount(), buffer->GeometryType());
+		uint32_t bufferId = _impl->graphicsDevice->CreateElementBuffer(meshData->GetBufferData(), meshData->GetBufferDataSize());
+		rMaterial* material = new rMaterial();
+		material->Copy(meshData->GetMaterial());
+		Mesh* mesh = model->CreateTriangleMesh(bufferId, meshData->GetElementCount(), material);
+		mesh->SetName(meshData->GetName());
 	}
 
-	return geometry;
-}
-
-rModel* rModelManager::LoadFromData(const rModelData& modelData, const rString& name){
-	rGeometry* geometry = _impl->CreateGeometry(modelData.GetGeometryData());
-	rModel* model = new rModel(name, geometry);
-
-	rArrayString meshDataNames;
-	modelData.GetMeshDataNames(meshDataNames);
-
-		for (size_t i = 0; i < meshDataNames.size(); i++){
-			rMeshData* meshData = modelData.GetMeshData(meshDataNames[i]);
-
-			rMaterial* material = new rMaterial();
-			rMesh* mesh = model->CreateMesh(meshData->meshName, meshData->elementBufferName, meshData->geometryType, material, meshData->boundingBox);
-		}
+	_impl->models.emplace(name, model);
 
 	return model;
 }
 
-int rModelManager::Delete(const rString& name){
-	return 0;
+bool rModelManager::Delete(const rString& name) {
+	auto result = _impl->models.find(name);
+
+	if (result == _impl->models.end()) {
+		return false;
+	}
+	else {
+		Model* model = result->second.get();
+		_impl->DeleteModelData(model);
+		_impl->models.erase(result);
+		return true;
+	}
+}
+
+void rModelManager::Impl::DeleteModelData(Model* model) {
+	graphicsDevice->DeleteBuffer(model->GetGeometry()->GetBufferId());
+
+	for (size_t i = 0; i < model->GetTriangleMeshCount(); i++) {
+		graphicsDevice->DeleteBuffer(model->GetTriangleMesh(i)->GetElementBufferId());
+	}
+}
+
+void rModelManager::Clear(){
+	auto end = _impl->models.end();
+
+	for (auto it = _impl->models.begin(); it != end; ++it) {
+		_impl->DeleteModelData(it->second.get());
+	}
+
+	_impl->models.clear();
 }

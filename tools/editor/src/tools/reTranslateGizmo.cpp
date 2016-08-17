@@ -82,11 +82,14 @@ void reTranslateGizmo::SetInitialHandleRenderingOptions(){
 	m_zHandle->RenderingOptions()->SetOverdraw(true);
 }
 
+using namespace recondite;
+
 void reTranslateGizmo::CreateGizmo(){
+	/*
 	rEngine* engine = m_component->GetEngine();
 
 	rMatrix4 xform, translate, rotate;
-	rModelData gizmoData(rGeometryProfile::Primitive);
+	ModelData gizmoData(rGeometryProfile::Primitive);
 	rGeometryData* geometryData = gizmoData.GetGeometryData();
 	rQuaternion q;
 
@@ -171,4 +174,5 @@ void reTranslateGizmo::CreateGizmo(){
 	SetVisibility(false);
 
 	SetInitialHandleRenderingOptions();
+	*/
 }

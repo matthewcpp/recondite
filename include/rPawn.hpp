@@ -8,11 +8,11 @@
 
 class RECONDITE_API rPawn : public rActor3{
 public:
-	rPawn(rModel* model, const rString& id , rEngine* engine);
+	rPawn(recondite::Model* model, const rString& id , rEngine* engine);
 	
 public:
-	rModel* Model() const;
-	void SetModel(rModel* model);
+	Model* Model() const;
+	void SetModel(recondite::Model* model);
 	
 	rAnimationPlayer* AnimationPlayer();
 	
@@ -20,7 +20,7 @@ public:
 	virtual void Draw();
 	
 private:
-	rModel* m_model;
+	recondite::Model* m_model;
 	rAnimationPlayer m_animationPlayer;
 };
 

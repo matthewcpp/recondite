@@ -18,7 +18,7 @@ namespace recondite { namespace import {
 		delete _impl;
 	}
 
-	int ModelImporter::ImportModel(const rString& path, rModelData& modelData){
+	int ModelImporter::ImportModel(const rString& path, ModelData& modelData){
 		const aiScene* scene = _impl->importer.ReadFile(path.c_str(),
 			aiProcess_CalcTangentSpace |
 			aiProcess_Triangulate |

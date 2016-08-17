@@ -212,6 +212,81 @@ unsigned int rOpenGLGraphicsDevice::CreateArrayBuffer(const char* data, size_t d
 	return bufferId;
 }
 
+unsigned int rOpenGLGraphicsDevice::CreateGeometryBuffer(const recondite::GeometryData* geometryData) {
+	GLuint bufferId;
+	glGenBuffers(1, &bufferId);
+	glBindBuffer(GL_ARRAY_BUFFER, bufferId);
+
+	size_t vertexDataSize = geometryData->VertexDataSize();
+	size_t normalDataSize = geometryData->NormalDataSize();
+	size_t texCoordDataSize = geometryData->TexCoordDataSize();
+
+	size_t offset = 0;
+
+	glBufferData(GL_ARRAY_BUFFER, vertexDataSize + normalDataSize + texCoordDataSize, 0, GL_STATIC_DRAW);
+
+	glBufferSubData(GL_ARRAY_BUFFER, offset, vertexDataSize, geometryData->VertexData());
+	offset += vertexDataSize;
+
+	if (geometryData->HasNormals()) {
+		glBufferSubData(GL_ARRAY_BUFFER, offset, normalDataSize, geometryData->NormalData());
+		offset += normalDataSize;
+	}
+
+	if (geometryData->HasTexCoords()) {
+		glBufferSubData(GL_ARRAY_BUFFER, offset, texCoordDataSize, geometryData->TexCoordData());
+		offset += normalDataSize;
+	}
+
+	return bufferId;
+}
+
+void rOpenGLGraphicsDevice::ActivateGeometryBuffer(const recondite::Geometry* geometry) {
+	uint32_t offset = 0;
+	GLuint vertexBufferId = geometry->GetBufferId();
+
+	GLuint gPositionLoc = glGetAttribLocation(m_activeShaderProgram, "recPosition");
+
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBufferId);
+	glVertexAttribPointer(gPositionLoc, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid *)offset);
+	glEnableVertexAttribArray(gPositionLoc);
+
+	offset += geometry->GetVertexCount() * 12;
+
+	if (geometry->GetHasNormals()) {
+		GLuint gNormalLoc = glGetAttribLocation(m_activeShaderProgram, "recNormal");
+
+		glVertexAttribPointer(gNormalLoc, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid *)offset);
+		glEnableVertexAttribArray(gNormalLoc);
+
+		offset += geometry->GetVertexCount() * 12;
+	}
+
+	if (geometry->GetHasNormals()) {
+		GLuint gTexCoordLoc = glGetAttribLocation(m_activeShaderProgram, "recTexCoord");
+
+		glVertexAttribPointer(gTexCoordLoc, 2, GL_FLOAT, GL_FALSE, 0, (GLvoid *)offset);
+		glEnableVertexAttribArray(gTexCoordLoc);
+	}
+
+}
+
+void rOpenGLGraphicsDevice::DeactivateGeometryBuffer(const recondite::Geometry* geometry) {
+	GLuint gPositionLoc = glGetAttribLocation(m_activeShaderProgram, "recPosition");
+	glDisableVertexAttribArray(gPositionLoc);
+
+	if (geometry->GetHasNormals()) {
+		GLuint gNormalLoc = glGetAttribLocation(m_activeShaderProgram, "recNormal");
+		glDisableVertexAttribArray(gNormalLoc);
+	}
+
+	if (geometry->GetHasTexCoords()) {
+		GLuint gTexCoordLoc = glGetAttribLocation(m_activeShaderProgram, "recTexCoord");
+		glDisableVertexAttribArray(gTexCoordLoc);
+	}
+
+}
+
 unsigned int rOpenGLGraphicsDevice::CreateElementBuffer(const unsigned short* elementData, size_t elementDataSize){
 	GLuint bufferId;
 	glGenBuffers(1, &bufferId);
@@ -350,6 +425,23 @@ void rOpenGLGraphicsDevice::RenderPrimitiveGeometryProfile(const rGeometry* geom
 
 	glDisableVertexAttribArray(gPositionLoc);
 	glDisableVertexAttribArray(gNormalLoc);
+}
+
+void rOpenGLGraphicsDevice::RenderMesh(const recondite::Mesh* mesh, const rMatrix4& projection, const rMatrix4& modelview) {
+	rMatrix4 normalMatrix = modelview;
+	normalMatrix.Invert();
+	normalMatrix.Transpose();
+
+	GLuint gProjectionLoc = glGetUniformLocation(m_activeShaderProgram, "recProjectionMatrix");
+	GLuint gModelviewLoc = glGetUniformLocation(m_activeShaderProgram, "recModelviewMatrix");
+	GLuint gNormalMatLoc = glGetUniformLocation(m_activeShaderProgram, "recNormalMatrix");
+
+	glUniformMatrix4fv(gProjectionLoc, 1, GL_FALSE, projection.m);
+	glUniformMatrix4fv(gModelviewLoc, 1, GL_FALSE, modelview.m);
+	glUniformMatrix4fv(gNormalMatLoc, 1, GL_FALSE, normalMatrix.m);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->GetElementBufferId());
+	glDrawElements(GLGeometryType(mesh->GetGeometryType()), mesh->GetElementBufferCount(), GL_UNSIGNED_SHORT, 0);
 }
 
 void rOpenGLGraphicsDevice::RenderImmediate(const rImmediateBuffer& geometry, const rMatrix4& transform, rMaterial* material){

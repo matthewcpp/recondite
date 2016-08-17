@@ -31,9 +31,9 @@ rString rPrimitiveCone::ClassName() const{
 	return "PrimitiveCone";
 }
 
-void rPrimitiveCone::CreateGeometry(rGeometryData& geometry){
+void rPrimitiveCone::CreateGeometry(ModelData& modelData){
 	rPrimitiveGeometry::rPrimitiveConeParams params(m_radius, m_height, m_segmentCount);
-	rPrimitiveGeometry::CreateCone(params, geometry);
+	rPrimitiveGeometry::CreateCone(params, modelData);
 }
 
 int rPrimitiveCone::SegmentCount() const{

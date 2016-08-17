@@ -14,9 +14,9 @@ rString rPrimitiveGrid::ClassName() const{
 	return "PrimitiveGrid";
 }
 
-void rPrimitiveGrid::CreateGeometry(rGeometryData& geometry){
+void rPrimitiveGrid::CreateGeometry(ModelData& modelData){
 	rPrimitiveGeometry::rPrimitiveGridParams params(m_width, m_depth, m_rows, m_columns);
-	rPrimitiveGeometry::CreateGrid(params, geometry);
+	rPrimitiveGeometry::CreateGrid(params, modelData);
 }
 
 float rPrimitiveGrid::Width() const{

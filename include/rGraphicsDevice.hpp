@@ -11,7 +11,9 @@
 #include "rAlignedBox3.hpp"
 
 #include "asset/rMaterial.hpp"
+#include "asset/rModel.hpp"
 #include "asset/rGeometry.hpp"
+#include "asset/rGeometryData.hpp"
 
 #include "data/rImmediateBuffer.hpp"
 
@@ -40,8 +42,13 @@ public:
 	
 	virtual unsigned int CreateArrayBuffer(const char* data, size_t dataSize) = 0;
 	virtual unsigned int CreateElementBuffer(const unsigned short* elementData, size_t elementDataSize) = 0;
+	virtual unsigned int CreateGeometryBuffer(const recondite::GeometryData* geometryData) = 0;
 	virtual void DeleteBuffer(unsigned int bufferId) = 0;
 	
+	virtual void ActivateGeometryBuffer(const recondite::Geometry* geometry) = 0;
+	virtual void DeactivateGeometryBuffer(const recondite::Geometry* geometry) = 0;
+	virtual void RenderMesh(const recondite::Mesh* mesh, const rMatrix4& projection, const rMatrix4& modelview) = 0;
+
 	virtual void RenderGeometry(const rGeometry* geometry,const rMatrix4& projection, const rMatrix4& modelview, const rString& elementBuffer, rMaterial* material) = 0;
 	virtual void RenderImmediate(const rImmediateBuffer& geometry, const rMatrix4& transform, rMaterial* material) = 0;
 	

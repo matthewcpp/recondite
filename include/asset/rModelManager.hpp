@@ -11,14 +11,16 @@
 #include "rModel.hpp"
 #include "rModelData.hpp"
 
+using namespace recondite;
+
 class RECONDITE_API rModelManager{
 public:
 	rModelManager(rFileSystem* fileSysytem, rGraphicsDevice* graphicsDevice);
 	~rModelManager();
 
 	void Clear();
-	rModel* LoadFromData(const rModelData& modelData, const rString& name);
-	int Delete(const rString& name);
+	Model* LoadFromData(const ModelData& modelData, const rString& name);
+	bool Delete(const rString& name);
 
 private:
 	struct Impl;

@@ -1,23 +1,25 @@
 #include "rPawn.hpp"
 
-rPawn::rPawn(rModel* model, const rString& id , rEngine* engine)
+rPawn::rPawn(recondite::Model* model, const rString& id , rEngine* engine)
 :rActor3(id, engine)
 {
 	SetModel(model);
 	m_renderingOptions.reset(new rRenderingOptions());
 }
 
-rModel* rPawn::Model() const{
+Model* rPawn::Model() const{
 	return m_model;
 }
 
-void rPawn::SetModel(rModel* model){
+void rPawn::SetModel(recondite::Model* model){
 	m_model = model;
 	
+	/*
 	if (model)
 		m_animationPlayer.SetSkeleton(model->Skeleton());
 	else
 		m_animationPlayer.SetSkeleton(NULL);
+	*/
 }
 	
 rAnimationPlayer* rPawn::AnimationPlayer(){

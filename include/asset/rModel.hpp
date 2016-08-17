@@ -15,65 +15,164 @@
 #include "rSkeleton.hpp"
 #include "rAlignedBox3.hpp"
 
-class RECONDITE_API rMesh {
-public:
-	rMesh(const rString& n, const rString& buf, rGeometryType geo, const rAlignedBox3& box, rMaterial* material);
+namespace recondite {
+	class RECONDITE_API Mesh {
+	public:
+		Mesh(uint32_t bufferId, uint32_t bufferSize, rGeometryType geometryType, rMaterial* material) 
+		: _elementBufferId(bufferId), _bufferCount(bufferSize),  _geometryType(geometryType), _material(material){}
 
-public:
-	rString Name() const;
-	rString Buffer() const;
-	rAlignedBox3 BoundingBox() const;
-	rGeometryType GeometryType() const;
-	
-	rMaterial* Material() const;
+	public:
+		/**
+		Gets the graphics device element buffer id associated with this mesh
+		\returns the element buffer Id for this mesh
+		*/
+		inline uint32_t GetElementBufferId() const;
 
-private:
+		/**
+		Gets the number of elements in the buffer
+		\returns the element buffer size
+		*/
+		inline uint32_t GetElementBufferCount() const;
 
-	rString m_name;
-	rString m_buffer;
-	rAlignedBox3 m_boundingBox;
-	rGeometryType m_geometryType;
-	rMaterial* m_material;
-};
+		/**
+		Gets the type of geometry of this mesh
+		\returns the geometry type
+		*/
+		inline rGeometryType GetGeometryType() const;
 
-class RECONDITE_API rModel {
-public:
-	rModel(const rString& name, rGeometry* geometry);
-	~rModel();
-	
-public:
-	rMesh* CreateMesh(const rString& name, const rString& buffer, rGeometryType geometryType, rMaterial* material, const rAlignedBox3 boundingBox);
-	rMesh* GetMesh(const rString& name) const;
-	void DeleteMesh(const rString& name);
-	void GetMeshNames(rArrayString& meshNames) const;
+		/**
+		Gets the material associated with this mesh
+		\returns the material for this mesh
+		*/
+		inline rMaterial* GetMaterial() const;
 
-	void ForEach(std::function<bool(rMesh*)> func);
-	
-	rGeometry* Geometry() const;
-	
-	size_t NumMeshes() const;
-	void Clear();
-	
-	rSkeleton* Skeleton() const;
-	void SetSkeleton(rSkeleton* skeleton);
+		/**
+		Sets the material associated with this mesh
+		\param material the material to associate with this mesh
+		*/
+		inline void SetMaterial(rMaterial* material);
 
-	rAlignedBox3 BoundingBox() const;
+		/**
+		Gets the name of this mesh.  Names are optional.
+		\returns the mesh name
+		*/
+		inline rString GetName() const;
 
-	rString Name() const;
+		/**
+		Sets the name of this mesh.  Names are optional
+		\param name the name to set for this mesh
+		*/
+		inline void SetName(const rString& name);
 
-private:
-	typedef std::map<rString, rMesh*> rMeshMap;
+	private:
+		uint32_t _elementBufferId;
+		uint32_t _bufferCount;
+		rGeometryType _geometryType;
+		rMaterial* _material;
+		rString _name;
+	};
 
-private:
-	rMeshMap m_meshes;
-	rGeometry* m_geometry;
+	inline uint32_t Mesh::GetElementBufferId() const {
+		return _elementBufferId;
+	}
 
-	rSkeleton* m_skeleton;
-	rAlignedBox3 m_boundingBox;
+	inline uint32_t Mesh::GetElementBufferCount() const {
+		return _bufferCount;
+	}
 
-	rString m_name;
-};
+	inline rGeometryType Mesh::GetGeometryType() const {
+		return _geometryType;
+	}
 
-typedef std::map<rString, rModel*> rModelMap;
+	inline rMaterial* Mesh::GetMaterial() const{
+		return _material;
+	}
+
+	inline void Mesh::SetMaterial(rMaterial* material) {
+		_material = material;
+	}
+
+	inline rString Mesh::GetName() const {
+		return _name;
+	}
+
+	inline void Mesh::SetName(const rString& name) {
+		_name = name;
+	}
+
+	class RECONDITE_API Model {
+	public:
+		Model(const rString& name, const Geometry& geometry);
+		~Model();
+
+	public:
+		/**
+		Creates a new triangle mesh in this model.
+		\param bufferId the graphics device buffer id associated with this mesh
+		\param bufferSize the number of elements in the device buffer
+		\param material the material to associate with this mesh
+		\returns new mesh object
+		*/
+		Mesh* CreateTriangleMesh(uint32_t bufferId, uint32_t bufferSize, rMaterial* material);
+
+		/**
+		Gets the number of triangle meshes in this model
+		\returns the triangle mesh count
+		*/
+		size_t GetTriangleMeshCount() const;
+
+		/**
+		Gets a triangle mesh from this model
+		\param index the index of the triangle mesh to retreive
+		\returns the triangle mesh at the given index
+		*/
+		Mesh* GetTriangleMesh(size_t index) const;
+
+		/**
+		Creates a new line mesh in this model.
+		\param bufferId the graphics device buffer id associated with this mesh
+		\param bufferSize the number of elements in the device buffer
+		\param material the material to associate with this mesh
+		\returns new mesh object
+		*/
+		Mesh* CreateLineMesh(uint32_t bufferId, uint32_t bufferSize, rMaterial* material);
+
+		/**
+		Gets the number of line meshes in this model
+		\returns the line mesh count
+		*/
+		size_t GetLineMeshCount() const;
+
+		/**
+		Gets a line mesh from this model
+		\param index the index of the line mesh to retreive
+		\returns the line mesh at the given index
+		*/
+		Mesh* GetLineMesh(size_t index) const;
+
+
+		/**
+		Gets the geometry for this model
+		\returns the geometry associated with this model
+		*/
+		const Geometry* GetGeometry() const;
+
+		/**
+		Gets the model name
+		\returns the name of the model
+		*/
+		rString GetName() const;
+
+		/**
+		Gets the bounding box for this model
+		\returns the model bounding box
+		*/
+		rAlignedBox3 GetBoundingBox() const;
+
+	private:
+		struct Impl;
+		Impl* _impl;
+	};
+}
 
 #endif

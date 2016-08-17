@@ -38,6 +38,9 @@
 #include "rMatrix4.hpp"
 
 #include "data/rImmediateBuffer.hpp"
+#include "asset/rGeometryData.hpp"
+
+#include "asset/rModel.hpp"
 
 class RECONDITE_API rOpenGLGraphicsDevice : public rGraphicsDevice{
 public:
@@ -62,10 +65,15 @@ public:
 	
 	virtual unsigned int CreateArrayBuffer(const char* data, size_t dataSize);
 	virtual unsigned int CreateElementBuffer(const unsigned short* elementData, size_t elementDataSize);
+	virtual unsigned int CreateGeometryBuffer(const recondite::GeometryData* geometryData);
 	virtual void DeleteBuffer(unsigned int bufferId);
 
 	virtual void SetViewport(int x , int y, int width, int height) ;
 	virtual void SetActiveMaterial(rMaterial* material);
+
+	void RenderMesh(const recondite::Mesh* mesh, const rMatrix4& projection, const rMatrix4& modelview);
+	virtual void ActivateGeometryBuffer(const recondite::Geometry* geometry);
+	virtual void DeactivateGeometryBuffer(const recondite::Geometry* geometry);
 
 	virtual void RenderGeometry(const rGeometry* geometry, const rMatrix4& projection, const rMatrix4& modelview, const rString& elementBuffer, rMaterial* material);
 	virtual void RenderImmediate(const rImmediateBuffer& geometry, const rMatrix4& transform, rMaterial* material);

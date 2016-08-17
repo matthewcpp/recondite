@@ -8,21 +8,21 @@
 
 class RECONDITE_API rProp : public rActor3{
 public:
-	rProp(rModel* model, const rString& id, rEngine* engine);
+	rProp(recondite::Model* model, const rString& id, rEngine* engine);
 
 	virtual rString ClassName() const override;
 
 	virtual void Draw() override;
 
-	rModel* Model();
-	void SetModel(rModel* model);
+	recondite::Model* Model();
+	void SetModel(recondite::Model* model);
 
 protected:
 	virtual void DoRecalculateBoundingVolume() override;
 	virtual riBoundingVolume* DoGetBoundingVolume() override;
 
 private:
-	rModel* m_model;
+	recondite::Model* m_model;
 	rAlignedBoxBoundingVolume m_boundingVolume;
 };
 

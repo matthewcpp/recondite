@@ -13,23 +13,51 @@
 
 #include "rPropertyCollection.hpp"
 
+
 class RECONDITE_API rMaterial {
 public:
 	rMaterial();
 
-	void SetDiffuseTexture(rTexture* diffuseTexture);
-	rTexture* DiffuseTexture() const;
+	inline void SetDiffuseTexture(rTexture* diffuseTexture);
+	inline rTexture* DiffuseTexture() const;
 
-	void SetDiffuseColor(const rColor& diffuseColor);
-	rColor DiffuseColor() const;
+	inline void SetDiffuseColor(const rColor& diffuseColor);
+	inline rColor DiffuseColor() const;
 
-	void SetPointSize(float pointSize);
-	float PointSize() const;
+	inline rString GetName() const;
+	inline void SetName(const rString& name);
 
-private:
+	void Copy(const rMaterial& material);
+
+protected:
 	rTexture* m_diffuseTexture;
 	rColor m_diffuseColor;
-	float m_pointSize;
+	rString m_name;
 };
+
+
+inline void rMaterial::SetDiffuseTexture(rTexture* diffuseTexture) {
+	m_diffuseTexture = diffuseTexture;
+}
+
+inline rTexture* rMaterial::DiffuseTexture() const {
+	return m_diffuseTexture;
+}
+
+inline void rMaterial::SetDiffuseColor(const rColor& diffuseColor) {
+	m_diffuseColor = diffuseColor;
+}
+
+inline rColor rMaterial::DiffuseColor() const {
+	return m_diffuseColor;
+}
+
+inline rString rMaterial::GetName() const {
+	return m_name;
+}
+
+inline void rMaterial::SetName(const rString& name) {
+	m_name = name;
+}
 
 #endif

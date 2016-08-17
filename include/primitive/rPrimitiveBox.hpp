@@ -7,6 +7,8 @@
 #include "primitive/rPrimitive.hpp"
 #include "primitive/rPrimitiveGeometry.hpp"
 
+using namespace recondite;
+
 class RECONDITE_API rPrimitiveBox : public rPrimitive{
 public:
 	rPrimitiveBox(const rString& id, rEngine* engine);
@@ -36,7 +38,7 @@ public:
 protected:
 	virtual bool DoSerialize(riSerializationTarget* target) override;
 
-	virtual void CreateGeometry(rGeometryData& geometry) override;
+	virtual void CreateGeometry(ModelData& modelData) override;
 	virtual void DoRecalculateBoundingVolume() override;
 	virtual riBoundingVolume* DoGetBoundingVolume() override;
 

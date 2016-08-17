@@ -91,8 +91,10 @@ void reComponent::OnSceneLoad(rEvent& event){
 		groundPlane->RecreateGeometry();
 		groundPlane->RenderingOptions()->SetForceRender(true);
 
+		/*
 		rModel* model = groundPlane->Model();
 		model->DeleteMesh("faces");
+		*/
 	}
 }
 

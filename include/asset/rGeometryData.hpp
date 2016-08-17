@@ -18,80 +18,175 @@
 
 #include "rVertexBoneLink.hpp"
 
-class RECONDITE_API rElementBufferData{
-public:
-	rElementBufferData(rGeometryType geometryType);
-	rElementBufferData(unsigned short* elements, size_t elementCount, rGeometryType type);
-	
-public:
-	
-	void SetElementData(unsigned short* elements, size_t elementCount, rGeometryType type);
-	void Allocate(size_t count);
-	
-	const unsigned short* GetElementData() const;
-	size_t ElementDataSize() const;
-	size_t ElementCount() const;
-	
-	void Push(unsigned short v1, unsigned short v2, unsigned short v3);
-	void Push(unsigned short v1, unsigned short v2);
-	
-	void ClearElementData();
+namespace recondite {
+	class RECONDITE_API GeometryData {
+	public:
+		GeometryData();
+		~GeometryData();
 
-	const rIndexArray& GetIndices() const;
-	
-	rGeometryType GeometryType() const;
-	void SetGeometryType(rGeometryType type);
+		/**
+		Gets the number of vertices in this object.
+		\returns Vertex count.
+		*/
+		size_t VertexCount() const;
 
-private:
-	
-	rIndexArray m_elementData;
-	rGeometryType m_geometryType;
-};
+		/**
+		Gets a pointer to the raw vertex data contained in this object.  Useful to pass to a graphics device to create a buffer.
+		\returns Pointer to the vertex data contained in this object.
+		*/
+		const char* VertexData() const;
 
-class RECONDITE_API rGeometryData{
-public:
-	rGeometryData(){}
-	virtual ~rGeometryData(){}
+		/**
+		Gets the size (in bytes) of the vertex data.
+		\returns the vertex data size
+		*/
+		size_t VertexDataSize() const;
 
-public:
-	virtual void Clear();
+		/**
+		Gets a pointer to the raw normal data contained in this object.  Useful to pass to a graphics device to create a buffer.
+		\returns Pointer to the normal data contained in this object.
+		*/
+		const char* NormalData() const;
 
-	virtual void TransformVertex(size_t index, const rMatrix4& transform) = 0;
-	void TransformVertices(size_t startingIndex, const rMatrix4& transform);
-	virtual void PushVertex(const rVector3& position, const rVector3& normal) = 0;
-	virtual void GetVertex(size_t index, rVector3* position, rVector3* normal) const = 0;
+		/**
+		Returns the size (in bytes) of the normal data
+		\returns the normal data size
+		*/
+		size_t NormalDataSize() const;
 
-	virtual size_t VertexCount() const = 0;
-	virtual char* VertexData() const = 0;
-	virtual size_t VertexDataSize() const = 0;
+		/**
+		Gets a pointer to the raw tex coord data contained in this object.  Useful to pass to a graphics device to create a buffer.
+		\returns Pointer to the tex coord data contained in this object.
+		*/
+		const char* TexCoordData() const;
 
-	virtual rGeometryProfile GeometryProfile() const = 0;
+		/**
+		Gets the size (in bytes) of the tex coord data
+		\returns the tex coord data size
+		*/
+		size_t TexCoordDataSize() const;
 
-public:
-	size_t VertexBoneLinkCount() const;
-	size_t CreateVertexBoneLink(unsigned short vertexIndex, unsigned short boneIndex, float weight);
-	bool GetVertexBoneLink(size_t index, rVertexBoneLink& boneLink);
-	
-public:
-	rElementBufferData* CreateElementBuffer(const rString& name, rGeometryType geometryType);
-	
-	size_t ElementBufferCount() const;
-	void RemoveElementBuffer(const rString& name);
-	rElementBufferData* GetElementBuffer(const rString& name) const;
-	void GetElementBufferNames(rArrayString& names) const;
+		/**
+		Reserves space to hold a given number of vertices.
+		\param size the number of verticies to allocate memory for.
+		*/
+		void AllocateVertices(size_t size);
 
-private:
-	typedef std::shared_ptr<rElementBufferData> rElementBufferDataPtr;
-	typedef std::map<rString, rElementBufferDataPtr> rElementBufferDataMap;
-	typedef std::vector<rVertexBoneLink> rVertexBoneLinkVector;
+		/**
+		Reserves space to hold a given number of tex coords.
+		\param size the number of tex coords to allocate memory for.
+		*/
+		void AllocateTexCoords(size_t size);
 
-private:
-	rElementBufferDataMap m_elementBuffers;
-	rVertexBoneLinkVector m_vertexBoneLinks;
-	
-	rString m_path;
+		/**
+		Reserves space to hold a given number of normals.
+		\param size the number of normals to allocate memory for.
+		*/
+		void AllocateNormals(size_t size);
 
-	rNO_COPY_CLASS(rGeometryData)
-};
+		/**
+		Adds a vertex to the geometry data
+		\param position the vertex position
+		\param normal the vertex normal
+		*/
+		void PushVertex(const rVector3& position);
 
+		/**
+		Sets the value of a given vertex
+		\param index the index of the vertex to set
+		\param position the vertex position value to set
+		*/
+		void SetVertex(size_t index, const rVector3& position);
+
+		/**
+		Gets the value of a given index.
+		\param index the index of the vertex to get.
+		\param position pointer to vector that will (if not null) receive the vertex position.
+		\param normal pointer to vector that will (if not null) receive the vertex normal.
+		*/
+		void GetVertex(size_t index, rVector3& position);
+
+		/**
+		Sets the vertex data for this object.
+		\param vertices pointer to array of vertex data.  This data will be copied.
+		\param count the number of vertieces to assign.
+		*/
+		void AssignVertices(rVector3* vertices, size_t count);
+
+		/**
+		Adds a tex coord to the geometry data.
+		\param texCoord the tex coord to add.
+		*/
+		void PushTexCoord(const rVector2& texCoord);
+
+		/**
+		Sets the value of a tex coord at a given index.
+		\param index the index of the texCoord to set.
+		\param texCoord the texCoord value to set.
+		*/
+		void SetTexCoord(size_t index, const rVector2& texCoord);
+
+		/**
+		Gets the value of a tex coord at a given index.
+		\param index the index of the texCoord to get.
+		\param texCoord pointer to vector that will (if not null) receive the tex coord value.
+		*/
+		void GetTextCoord(size_t index, rVector2& texCoord);
+
+		/**
+		Sets the tex coord data for this object.
+		\param texCoords pointer to array of tex coord data.  This data will be copied.
+		\param count the number of tex coords to assign.
+		*/
+		void AssignTexCoords(const rVector2* texCoords, size_t count);
+
+		/**
+		Gets whether this geometry data contains tex coords
+		\returns value whether this geometry contains tex coords
+		*/
+		bool HasTexCoords() const;
+
+		/**
+		Adds a normal to the geometry data.
+		\param normal the tex coord to add.
+		*/
+		void PushNormal(const rVector3& normal);
+
+		/**
+		Sets the value of a normal at a given index.
+		\param index the index of the texCoord to set.
+		\param normal the normal value to set.
+		*/
+		void SetNormal(size_t index, const rVector3& normal);
+
+		/**
+		Gets the value of a normalat a given index.
+		\param index the index of the normal to get.
+		\param normal pointer to vector that will (if not null) receive the normal value
+		*/
+		void GetNormal(size_t index, rVector3& normal);
+
+		/**
+		Sets the normal data for this object
+		\param normals pointer to array of normal data. This data will be copied.
+		\param count the number of normals to assign.
+		*/
+		void AssignNormals(const rVector3* normals, size_t count);
+
+		/**
+		Gets whether this geometry data contains normals
+		\returns value whether this geometry contains normals 
+		*/
+		bool HasNormals() const;
+
+		/**
+		Removes all data from the object.
+		*/
+		void Clear();
+
+	private:
+		struct Impl;
+		Impl* _impl;
+	};
+}
 #endif

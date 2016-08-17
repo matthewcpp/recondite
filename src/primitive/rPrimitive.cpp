@@ -34,14 +34,11 @@ void rPrimitive::RecreateGeometry(){
 	if (!m_geometryInvalid) return;
 
 	if (m_model)
-		m_engine->content->Models()->Delete(m_model->Name());
+		m_engine->content->Models()->Delete(m_model->GetName());
 
-	rModelData modelData(rGeometryProfile::Primitive);
-	rGeometryData& geometryData = *modelData.GetGeometryData();
+	recondite::ModelData modelData;
 
-	CreateGeometry(geometryData);
-
-	modelData.CreateMeshDataFromGeometry();
+	CreateGeometry(modelData);
 
 	rString assetName = Id() + "_model";
 	m_model = m_engine->content->Models()->LoadFromData(modelData, assetName);
@@ -53,25 +50,22 @@ void rPrimitive::RecreateGeometry(){
 
 void rPrimitive::UpdateMaterials(){
 	if (m_model){
-		rArrayString meshes;
-		m_model->GetMeshNames(meshes);
 
-		for (size_t i = 0; i < meshes.size(); i++){
-			rMesh* mesh = m_model->GetMesh(meshes[i]);
+		size_t meshCount = m_model->GetTriangleMeshCount();
+		for (size_t i = 0; i < meshCount; i++) {
+			m_model->GetTriangleMesh(i)->GetMaterial()->SetDiffuseColor(m_faceColor);
+		}
 
-			rGeometryType geometryType = mesh->GeometryType();
-
-			if (geometryType == rGeometryType::Lines || geometryType == rGeometryType::LineLoop)
-				mesh->Material()->SetDiffuseColor(m_edgeColor);
-			else
-				mesh->Material()->SetDiffuseColor(m_faceColor);
+		meshCount = m_model->GetLineMeshCount();
+		for (size_t i = 0; i < meshCount; i++) {
+			m_model->GetLineMesh(i)->GetMaterial()->SetDiffuseColor(m_faceColor);
 		}
 	}
 }
 
 void rPrimitive::OnDelete(){
 	if (m_model)
-		m_engine->content->Models()->Delete(m_model->Name());
+		m_engine->content->Models()->Delete(m_model->GetName());
 }
 
 void rPrimitive::Draw(){
@@ -81,7 +75,7 @@ void rPrimitive::Draw(){
 		
 	if (RenderingOptions()->Visible()){
 		rMatrix4& transform = TransformMatrix();
-		m_engine->renderer->RenderPrimitive(m_model, RenderingOptions(), transform);
+		m_engine->renderer->RenderModel(m_model, transform);
 	}
 }
 
@@ -106,6 +100,6 @@ void rPrimitive::OnLoad(){
 	rActor3::OnLoad();
 	InvalidateGeometry();
 }
-rModel* rPrimitive::Model() const{
+Model* rPrimitive::Model() const{
 	return m_model;
 }

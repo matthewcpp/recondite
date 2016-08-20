@@ -60,7 +60,7 @@ namespace recondite {
 		Gets the buffer data for this mesh.  Useful to pass to a graphics device to create a buffer.
 		\returns the element data.
 		*/
-		const uint16_t* GetBufferData() const;
+		char* GetBufferData() const;
 
 		/**
 		Gets the size of the element buffer data.
@@ -89,6 +89,10 @@ namespace recondite {
 		*/
 		void Push(uint16_t element1, uint16_t element2, uint16_t element3);
 
+		void AllocateBuffer(size_t size);
+
+		rAlignedBox3 GetBoundingBox() const;
+		void SetBoundingBox(const rAlignedBox3& box);
 
 	private:
 		struct Impl;
@@ -146,6 +150,13 @@ namespace recondite {
 		Removes all data from the model.
 		*/
 		void Clear();
+
+		void CalculateBoundings();
+		rAlignedBox3 GetBoundingBox() const;
+
+		int Read(rIStream& stream);
+
+		int Write(rOStream& stream);
 
 	private:
 		struct Impl;

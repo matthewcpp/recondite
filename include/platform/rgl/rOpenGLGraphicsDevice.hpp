@@ -64,7 +64,7 @@ public:
 	virtual void ActivateShader(unsigned int shaderId);
 	
 	virtual unsigned int CreateArrayBuffer(const char* data, size_t dataSize);
-	virtual unsigned int CreateElementBuffer(const unsigned short* elementData, size_t elementDataSize);
+	virtual unsigned int CreateElementBuffer(const char* elementData, size_t elementDataSize);
 	virtual unsigned int CreateGeometryBuffer(const recondite::GeometryData* geometryData);
 	virtual void DeleteBuffer(unsigned int bufferId);
 

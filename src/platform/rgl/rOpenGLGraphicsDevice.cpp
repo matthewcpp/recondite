@@ -287,7 +287,7 @@ void rOpenGLGraphicsDevice::DeactivateGeometryBuffer(const recondite::Geometry* 
 
 }
 
-unsigned int rOpenGLGraphicsDevice::CreateElementBuffer(const unsigned short* elementData, size_t elementDataSize){
+unsigned int rOpenGLGraphicsDevice::CreateElementBuffer(const char* elementData, size_t elementDataSize){
 	GLuint bufferId;
 	glGenBuffers(1, &bufferId);
 	

@@ -34,7 +34,7 @@ namespace recondite {
 		Gets a pointer to the raw vertex data contained in this object.  Useful to pass to a graphics device to create a buffer.
 		\returns Pointer to the vertex data contained in this object.
 		*/
-		const char* VertexData() const;
+		char* VertexData() const;
 
 		/**
 		Gets the size (in bytes) of the vertex data.
@@ -46,7 +46,7 @@ namespace recondite {
 		Gets a pointer to the raw normal data contained in this object.  Useful to pass to a graphics device to create a buffer.
 		\returns Pointer to the normal data contained in this object.
 		*/
-		const char* NormalData() const;
+		char* NormalData() const;
 
 		/**
 		Returns the size (in bytes) of the normal data
@@ -58,7 +58,7 @@ namespace recondite {
 		Gets a pointer to the raw tex coord data contained in this object.  Useful to pass to a graphics device to create a buffer.
 		\returns Pointer to the tex coord data contained in this object.
 		*/
-		const char* TexCoordData() const;
+		char* TexCoordData() const;
 
 		/**
 		Gets the size (in bytes) of the tex coord data
@@ -111,7 +111,7 @@ namespace recondite {
 		\param vertices pointer to array of vertex data.  This data will be copied.
 		\param count the number of vertieces to assign.
 		*/
-		void AssignVertices(rVector3* vertices, size_t count);
+		void PushVertices(rVector3* vertices, size_t count);
 
 		/**
 		Adds a tex coord to the geometry data.
@@ -138,7 +138,7 @@ namespace recondite {
 		\param texCoords pointer to array of tex coord data.  This data will be copied.
 		\param count the number of tex coords to assign.
 		*/
-		void AssignTexCoords(const rVector2* texCoords, size_t count);
+		void PushTexCoords(const rVector2* texCoords, size_t count);
 
 		/**
 		Gets whether this geometry data contains tex coords
@@ -171,7 +171,7 @@ namespace recondite {
 		\param normals pointer to array of normal data. This data will be copied.
 		\param count the number of normals to assign.
 		*/
-		void AssignNormals(const rVector3* normals, size_t count);
+		void PushNormals(const rVector3* normals, size_t count);
 
 		/**
 		Gets whether this geometry data contains normals

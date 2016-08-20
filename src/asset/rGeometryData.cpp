@@ -20,16 +20,16 @@ namespace recondite {
 		return _impl->vertices.size();
 	}
 
-	const char* GeometryData::VertexData() const {
-		return (const char*)_impl->vertices.data();
+	char* GeometryData::VertexData() const {
+		return (char*)_impl->vertices.data();
 	}
 
-	const char* GeometryData::NormalData() const {
-		return (const char*)_impl->normals.data();
+	char* GeometryData::NormalData() const {
+		return (char*)_impl->normals.data();
 	}
 
-	const char* GeometryData::TexCoordData() const {
-		return (const char*)_impl->texCoords.data();
+	char* GeometryData::TexCoordData() const {
+		return (char*)_impl->texCoords.data();
 	}
 
 	void GeometryData::AllocateVertices(size_t size) {
@@ -61,9 +61,11 @@ namespace recondite {
 		position = _impl->vertices[index];
 	}
 
-	void GeometryData::AssignVertices(rVector3* vertices, size_t count) {
-		_impl->vertices.resize(count);
-		memcpy(_impl->vertices.data(), vertices, sizeof(rVector3) * count);
+	void GeometryData::PushVertices(rVector3* vertices, size_t count) {
+		size_t size = _impl->vertices.size();
+
+		_impl->vertices.resize(size + count);
+		memcpy(&_impl->vertices[size], vertices, sizeof(rVector3) * count);
 	}
 
 	size_t GeometryData::VertexDataSize() const {
@@ -82,9 +84,11 @@ namespace recondite {
 		texCoord = _impl->texCoords[index];
 	}
 
-	void GeometryData::AssignTexCoords(const rVector2* texCoords, size_t count) {
-		_impl->texCoords.resize(count);
-		memcpy(_impl->texCoords.data(), texCoords, sizeof(rVector2) * count);
+	void GeometryData::PushTexCoords(const rVector2* texCoords, size_t count) {
+		size_t size = _impl->texCoords.size();
+
+		_impl->texCoords.resize(size + count);
+		memcpy(&_impl->texCoords[size], texCoords, sizeof(rVector2) * count);
 	}
 
 	size_t GeometryData::TexCoordDataSize() const {
@@ -107,9 +111,11 @@ namespace recondite {
 		normal = _impl->normals[index];
 	}
 
-	void GeometryData::AssignNormals(const rVector3* normals, size_t count) {
-		_impl->normals.resize(count);
-		memcpy(_impl->normals.data(), normals, sizeof(rVector3) * count);
+	void GeometryData::PushNormals(const rVector3* normals, size_t count) {
+		size_t size = _impl->normals.size();
+
+		_impl->normals.resize(size + count);
+		memcpy(&_impl->normals[size], normals, sizeof(rVector3) * count);
 	}
 
 	size_t GeometryData::NormalDataSize() const {

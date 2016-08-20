@@ -21,7 +21,7 @@ void rProp::SetModel(recondite::Model* model){
 void rProp::Draw(){
 	rMatrix4& transform = TransformMatrix();
 
-	//m_engine->renderer->RenderModel(m_model, RenderingOptions(), transform);
+	m_engine->renderer->RenderModel(m_model, transform);
 }
 
 void rProp::DoRecalculateBoundingVolume() {

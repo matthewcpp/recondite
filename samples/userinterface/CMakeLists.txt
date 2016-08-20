@@ -1,4 +1,5 @@
 set (userinterface_files)
+set (layout_files)
 
 list(APPEND userinterface_files ${CMAKE_CURRENT_SOURCE_DIR}/UserInterfaceApplication.cpp)
 
@@ -8,7 +9,13 @@ list(APPEND userinterface_files ${CMAKE_CURRENT_SOURCE_DIR}/UserInterfaceControl
 list(APPEND userinterface_files ${CMAKE_CURRENT_SOURCE_DIR}/UserInterfaceModule.hpp)
 list(APPEND userinterface_files ${CMAKE_CURRENT_SOURCE_DIR}/UserInterfaceModule.cpp)
 
-add_executable(userinterface WIN32 ${userinterface_files})
+list(APPEND layout_files ${CMAKE_CURRENT_SOURCE_DIR}/userinterface/userinterface.xml)
+list(APPEND layout_files ${CMAKE_CURRENT_SOURCE_DIR}/userinterface/userinterface.css)
+
+source_group (source FILES ${userinterface_files})
+source_group (layout FILES ${layout_files})
+
+add_executable(userinterface WIN32 ${userinterface_files} ${layout_files})
 set_target_properties(userinterface PROPERTIES FOLDER Samples)
 
 #recondite

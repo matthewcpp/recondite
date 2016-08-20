@@ -62,14 +62,16 @@ void reTranslateGizmo::Update(){
 	}
 }
 
-void SetMeshDiffuseColors(rModel* model, const rColor& color){
+void SetMeshDiffuseColors(recondite::Model* model, const rColor& color){
+	/*
 	rArrayString meshNames;
 	model->GetMeshNames(meshNames);
 
 	for (size_t i = 0; i < meshNames.size(); i++){
-		rMesh* mesh = model->GetMesh(meshNames[i]);
-		mesh->Material()->SetDiffuseColor(color);
+	rMesh* mesh = model->GetMesh(meshNames[i]);
+	mesh->Material()->SetDiffuseColor(color);
 	}
+	*/
 }
 
 void reTranslateGizmo::SetInitialHandleRenderingOptions(){

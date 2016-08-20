@@ -1,23 +1,30 @@
 set (modelviewer_files)
+set (layout_files)
 
-list(APPEND modelviewer_files ${CMAKE_CURRENT_SOURCE_DIR}/rDemoCamera.hpp)
-list(APPEND modelviewer_files ${CMAKE_CURRENT_SOURCE_DIR}/rDemoCamera.cpp)
+list(APPEND modelviewer_files ${CMAKE_CURRENT_SOURCE_DIR}/ModelViewerApplication.cpp)
 
-list(APPEND modelviewer_files ${CMAKE_CURRENT_SOURCE_DIR}/rDemoModule.hpp)
-list(APPEND modelviewer_files ${CMAKE_CURRENT_SOURCE_DIR}/rDemoModule.cpp)
+list(APPEND modelviewer_files ${CMAKE_CURRENT_SOURCE_DIR}/ModelViewerController.hpp)
+list(APPEND modelviewer_files ${CMAKE_CURRENT_SOURCE_DIR}/ModelViewerController.cpp)
 
-list(APPEND modelviewer_files ${CMAKE_CURRENT_SOURCE_DIR}/rDemoPawn.hpp)
-list(APPEND modelviewer_files ${CMAKE_CURRENT_SOURCE_DIR}/rDemoPawn.cpp)
+list(APPEND modelviewer_files ${CMAKE_CURRENT_SOURCE_DIR}/ModelViewerModule.hpp)
+list(APPEND modelviewer_files ${CMAKE_CURRENT_SOURCE_DIR}/ModelViewerModule.cpp)
 
-list(APPEND modelviewer_files ${CMAKE_CURRENT_SOURCE_DIR}/ruiDemoController.hpp)
-list(APPEND modelviewer_files ${CMAKE_CURRENT_SOURCE_DIR}/ruiDemoController.cpp)
+list(APPEND layout_files ${CMAKE_CURRENT_SOURCE_DIR}/modelviewer/modelviewer.xml)
+list(APPEND layout_files ${CMAKE_CURRENT_SOURCE_DIR}/modelviewer/modelviewer.css)
 
-list(APPEND modelviewer_files ${CMAKE_CURRENT_SOURCE_DIR}/ModelViewerPlugin.hpp)
-list(APPEND modelviewer_files ${CMAKE_CURRENT_SOURCE_DIR}/ModelViewerPlugin.cpp)
+source_group (source FILES ${modelviewer_files})
+source_group (layout FILES ${layout_files})
 
-add_library(modelviewer SHARED ${modelviewer_files})
-set_target_properties(modelviewer PROPERTIES IMPORT_PREFIX "")
-set_target_properties(modelviewer PROPERTIES SUFFIX ".rec")
+add_executable(modelviewer WIN32 ${modelviewer_files} ${layout_files})
+set_target_properties(modelviewer PROPERTIES FOLDER Samples)
 
-include_directories(${SDL_INCLUDE_DIR})
-target_link_libraries (modelviewer recondite) 
+#recondite
+target_link_libraries(modelviewer recondite rsdl rgl) 
+
+#sdl
+include_directories(${SDL2_INCLUDE_DIR})
+target_link_libraries(modelviewer ${SDL2_LIBRARY})
+
+#glew
+include_directories(${GLEW_INCLUDE_PATH})
+target_link_libraries(modelviewer ${GLEW_LIBRARY})

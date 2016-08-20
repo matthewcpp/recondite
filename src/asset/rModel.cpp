@@ -5,6 +5,7 @@ namespace recondite {
 	struct Model::Impl {
 		Geometry geometry;
 		rString name;
+		rAlignedBox3 boundingBox;
 		std::vector<std::unique_ptr<Mesh>> triangleMeshes;
 		std::vector<std::unique_ptr<Mesh>> lineMeshes;
 
@@ -58,7 +59,12 @@ namespace recondite {
 	}
 
 	rAlignedBox3 Model::GetBoundingBox() const {
-		return rAlignedBox3::NullBox;
+		return _impl->boundingBox;
 	}
+
+	void Model::SetBoundingBox(const rAlignedBox3& box) {
+		_impl->boundingBox = box;
+	}
+
 
 }

@@ -64,12 +64,16 @@ namespace recondite {
 		*/
 		inline void SetName(const rString& name);
 
+		inline rAlignedBox3 GetBoundingBox() const;
+		inline void SetBoundingBox(const rAlignedBox3& box);
+
 	private:
 		uint32_t _elementBufferId;
 		uint32_t _bufferCount;
 		rGeometryType _geometryType;
 		rMaterial* _material;
 		rString _name;
+		rAlignedBox3 _boundingBox;
 	};
 
 	inline uint32_t Mesh::GetElementBufferId() const {
@@ -98,6 +102,14 @@ namespace recondite {
 
 	inline void Mesh::SetName(const rString& name) {
 		_name = name;
+	}
+
+	inline rAlignedBox3 Mesh::GetBoundingBox() const {
+		return _boundingBox;
+	}
+
+	inline void Mesh::SetBoundingBox(const rAlignedBox3& box) {
+		_boundingBox = box;
 	}
 
 	class RECONDITE_API Model {
@@ -169,6 +181,7 @@ namespace recondite {
 		*/
 		rAlignedBox3 GetBoundingBox() const;
 
+		void SetBoundingBox(const rAlignedBox3& box);
 	private:
 		struct Impl;
 		Impl* _impl;

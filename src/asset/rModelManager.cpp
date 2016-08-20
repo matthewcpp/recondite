@@ -28,6 +28,7 @@ Model* rModelManager::LoadFromData(const ModelData& modelData, const rString& na
 	Geometry geometry(bufferId, geometryData->VertexCount(), geometryData->HasNormals(), geometryData->HasTexCoords());
 
 	Model* model = new Model(name, geometry);
+	model->SetBoundingBox(modelData.GetBoundingBox());
 
 	for (size_t i = 0; i < modelData.GetTriangleMeshCount(); i++) {
 		const MeshData* meshData = modelData.GetTriangleMesh(i);
@@ -37,6 +38,7 @@ Model* rModelManager::LoadFromData(const ModelData& modelData, const rString& na
 		material->Copy(meshData->GetMaterial());
 		Mesh* mesh = model->CreateTriangleMesh(bufferId, meshData->GetElementCount(), material);
 		mesh->SetName(meshData->GetName());
+		mesh->SetBoundingBox(meshData->GetBoundingBox());
 	}
 
 	_impl->models.emplace(name, model);

@@ -154,8 +154,16 @@ namespace recondite { namespace tools {
 
 		int error = modelImporter.ImportModel(path, modelData);
 
-		if (error){
+		if (!error){
 			std::cout << "Model import successful." << std::endl;
+
+			rString outDir, outName;
+			rPath::Split(path, &outDir, &outName, nullptr);
+
+			rString modelOutPath = rPath::Assemble(outDir, outName, "rmdl");
+			auto modelOutFile = m_fileSystem.GetWriteFileRef(modelOutPath);
+
+			modelData.Write(*modelOutFile);
 		}
 		else{
 			std::cout << "Model import failed." << std::endl;

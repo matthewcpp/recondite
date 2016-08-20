@@ -2,9 +2,9 @@
 
 #include "rModule.hpp"
 
-class UserInterfaceModule : public rModule{
+class ModelViewerModule : public rModule {
 public:
-	UserInterfaceModule(rEngine* engine);
+	ModelViewerModule(rEngine* engine);
 
 	virtual void Init();
 	virtual void LoadScene(const rString& sceneName) override;

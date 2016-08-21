@@ -1,27 +1,61 @@
 #include "asset/rModelManager.hpp"
 
+#include "stream/rOStringStream.hpp"
+
 struct rModelManager::Impl{
-	Impl(rFileSystem* fs, rGraphicsDevice* gd) : fileSysytem(fs), graphicsDevice(gd){}
+	Impl(rFileSystem* fs, rGraphicsDevice* gd, rTextureManager* tm) 
+		: fileSysytem(fs), graphicsDevice(gd), textureManager(tm){}
 
 	rFileSystem* fileSysytem;
 	rGraphicsDevice* graphicsDevice;
+	rTextureManager* textureManager;
 	std::map<rString, std::unique_ptr<Model>> models;
 
 	void DeleteModelData(Model* model);
+	void CreateMaterialsForModel(const ModelData& modelData, const rString& baseName, std::vector<rMaterial*>& materials);
 };
 
 
-rModelManager::rModelManager(rFileSystem* fileSysytem, rGraphicsDevice* graphicsDevice){
-	_impl = new Impl(fileSysytem, graphicsDevice);
+rModelManager::rModelManager(rFileSystem* fileSysytem, rGraphicsDevice* graphicsDevice, rTextureManager* textureManager){
+	_impl = new Impl(fileSysytem, graphicsDevice, textureManager);
 }
 
 rModelManager::~rModelManager(){
 	delete _impl;
 }
 
+
+
+void rModelManager::Impl::CreateMaterialsForModel(const ModelData& modelData, const rString& baseName, std::vector<rMaterial*>& materials) {
+	std::vector<rTexture*> textures;
+
+	for (size_t i = 0; i < modelData.GetNumTextures(); i++) {
+		rOStringStream textureName;
+		textureName << baseName << "::texture_" << i;
+
+		rTexture* texture = textureManager->Load(*modelData.GetTexture(i), textureName.Str());
+		textures.push_back(texture);
+	}
+
+	for (size_t i = 0; i < modelData.GetNumMaterials(); i++) {
+		MaterialData* materialData = modelData.GetMaterial(i);
+
+		rMaterial* material = new rMaterial();
+		material->SetDiffuseColor(materialData->diffuseColor);
+
+		if (materialData->diffuseTextureId != UINT32_MAX) {
+			material->SetDiffuseTexture(textures[materialData->diffuseTextureId]);
+		}
+		
+		materials.push_back(material);
+	}
+}
+
 Model* rModelManager::LoadFromData(const ModelData& modelData, const rString& name) {
 	if (_impl->models.count(name)) return nullptr;
 
+	std::vector<rMaterial*> materials;
+	_impl->CreateMaterialsForModel(modelData, name, materials);
 
 	const GeometryData* geometryData = modelData.GetGeometryData();
 	uint32_t bufferId = _impl->graphicsDevice->CreateGeometryBuffer(geometryData);
@@ -34,9 +68,7 @@ Model* rModelManager::LoadFromData(const ModelData& modelData, const rString& na
 		const MeshData* meshData = modelData.GetTriangleMesh(i);
 
 		uint32_t bufferId = _impl->graphicsDevice->CreateElementBuffer(meshData->GetBufferData(), meshData->GetBufferDataSize());
-		rMaterial* material = new rMaterial();
-		material->Copy(meshData->GetMaterial());
-		Mesh* mesh = model->CreateTriangleMesh(bufferId, meshData->GetElementCount(), material);
+		Mesh* mesh = model->CreateTriangleMesh(bufferId, meshData->GetElementCount(), materials[i]);
 		mesh->SetName(meshData->GetName());
 		mesh->SetBoundingBox(meshData->GetBoundingBox());
 	}

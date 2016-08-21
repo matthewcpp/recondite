@@ -1,5 +1,7 @@
 #include "BuildImport.hpp"
 
+#include "ImageImporter.hpp"
+
 #include "stream/rIFileStream.hpp"
 #include "asset/rModelData.hpp"
 

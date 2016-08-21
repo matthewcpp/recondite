@@ -4,7 +4,7 @@
 namespace recondite {
 	struct MeshData::Impl {
 		rString name;
-		rMaterial material;
+		uint32_t materialId;
 		std::vector<uint16_t> elements;
 		rGeometryType geometryType;
 		rAlignedBox3 boundingBox;
@@ -14,6 +14,7 @@ namespace recondite {
 		_impl = new Impl();
 		_impl->geometryType = geometryType;
 		_impl->boundingBox.Empty();
+		_impl->materialId = UINT32_MAX;
 	}
 
 	MeshData::~MeshData() {
@@ -32,12 +33,12 @@ namespace recondite {
 		_impl->name = name;
 	}
 
-	rMaterial& MeshData::GetMaterial() {
-		return _impl->material;
+	uint32_t MeshData::GetMaterialId() const{
+		return _impl->materialId;
 	}
 
-	const rMaterial& MeshData::GetMaterial() const {
-		return _impl->material;
+	void MeshData::SetMaterialId(uint32_t id) {
+		_impl->materialId = id;
 	}
 
 	char* MeshData::GetBufferData() const {
@@ -89,6 +90,9 @@ namespace recondite {
 
 		MeshDataRefArray triangleMeshes;
 		MeshDataRefArray lineMeshes;
+
+		std::vector<std::unique_ptr<rTextureData>> textures;
+		std::vector<std::unique_ptr<MaterialData>> materials;
 
 		void CalculateMeshBounding(MeshDataRefArray& refArray);
 		void InitHeader(ModelFileHeader& header);
@@ -177,12 +181,43 @@ namespace recondite {
 		_impl->CalculateMeshBounding(_impl->lineMeshes);
 	}
 
+	rTextureData* ModelData::CreateTexture() {
+		rTextureData* textureData = new rTextureData();
+		_impl->textures.emplace_back(textureData);
+
+		return textureData;
+	}
+
+	size_t ModelData::GetNumTextures() const {
+		return _impl->textures.size();
+	}
+
+	rTextureData* ModelData::GetTexture(size_t index) const{
+		return _impl->textures[index].get();
+	}
+
+	MaterialData* ModelData::CreateMaterial() {
+		MaterialData* material = new MaterialData();
+		_impl->materials.emplace_back(material);
+		return material;
+	}
+
+	size_t ModelData::GetNumMaterials() const {
+		return _impl->materials.size();
+	}
+
+	MaterialData* ModelData::GetMaterial(size_t index) const{
+		return _impl->materials[index].get();
+	}
+
 	const uint32_t MagicNumber = 1984; //rmdl
 	const uint32_t CurrentVersion = 1;
 
 	struct ModelFileHeader {
 		uint32_t magicNumber;
 		uint32_t version;
+		uint32_t numTextures;
+		uint32_t numMaterials;
 		uint32_t numVertices;
 		uint32_t numNormals;
 		uint32_t numTexCoords;
@@ -193,6 +228,17 @@ namespace recondite {
 		if (stream.IsOk()) {
 			ModelFileHeader header;
 			stream.Read((char*)&header, sizeof(ModelFileHeader));
+
+			for (size_t i = 0; i < header.numTextures; i++) {
+				rTextureData* textureData = new rTextureData();
+				textureData->Read(stream);
+				_impl->textures.emplace_back(textureData);
+			}
+
+			for (size_t i = 0; i < header.numMaterials; i++) {
+				MaterialData* materialData = CreateMaterial();
+				stream.Read((char*)materialData, sizeof(MaterialData));
+			}
 
 			_impl->geometryData.AllocateVertices(header.numVertices);
 			stream.Read(_impl->geometryData.VertexData(), _impl->geometryData.VertexDataSize());
@@ -232,6 +278,14 @@ namespace recondite {
 		_impl->InitHeader(header);
 		stream.Write((const char*)&header, sizeof(header));
 
+		for (size_t i = 0; i < _impl->textures.size(); i++) {
+			_impl->textures[i]->Write(stream);
+		}
+
+		for (size_t i = 0; i < _impl->materials.size(); i++) {
+			stream.Write((const char*)_impl->materials[i].get(), sizeof(MaterialData));
+		}
+
 		stream.Write(_impl->geometryData.VertexData(), _impl->geometryData.VertexDataSize());
 		stream.Write(_impl->geometryData.NormalData(), _impl->geometryData.NormalDataSize());
 
@@ -263,5 +317,8 @@ namespace recondite {
 		header.numTexCoords = geometryData.HasTexCoords() ? geometryData.VertexCount() : 0;
 
 		header.triangleMeshCount = triangleMeshes.size();
+
+		header.numTextures = textures.size();
+		header.numMaterials = materials.size();
 	}
 }

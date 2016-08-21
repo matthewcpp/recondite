@@ -7,7 +7,7 @@ rContentManager::rContentManager(rGraphicsDevice* graphicsDevice, rFileSystem* f
 	m_textures.reset(new rTextureManager(graphicsDevice, fileSystem));
 	m_shaders.reset(new rShaderManager(graphicsDevice, fileSystem));
 	m_fonts.reset(new rFontManager(fileSystem, m_textures.get()));
-	m_models.reset(new rModelManager(m_fileSystem, m_graphicsDevice));
+	m_models.reset(new rModelManager(m_fileSystem, m_graphicsDevice, m_textures.get()));
 }
 
 void rContentManager::Clear(){

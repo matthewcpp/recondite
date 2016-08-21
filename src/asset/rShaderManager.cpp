@@ -17,7 +17,6 @@ struct rShaderManager::Impl{
 
 	Impl(rGraphicsDevice* _graphicsDevice, rFileSystem* _fileSystem) : graphicsDevice(_graphicsDevice), fileSystem(_fileSystem){}
 
-	rShader* LoadFromStream(rIStream* vertex, rIStream* fragment);
 	rShader* Create(const rString& vertex, const rString& fragment, const rString& name);
 };
 
@@ -113,7 +112,7 @@ void rShaderManager::Clear(){
 }
 
 rShader* rShaderManager::DefaultModelShader(){
-	return Get("default_model");
+	return Get("__default_model__");
 }
 
 rShader* rShaderManager::DefaultLineShader(){

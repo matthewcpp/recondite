@@ -262,7 +262,7 @@ void rOpenGLGraphicsDevice::ActivateGeometryBuffer(const recondite::Geometry* ge
 		offset += geometry->GetVertexCount() * 12;
 	}
 
-	if (geometry->GetHasNormals()) {
+	if (geometry->GetHasTexCoords()) {
 		GLuint gTexCoordLoc = glGetAttribLocation(m_activeShaderProgram, "recTexCoord");
 
 		glVertexAttribPointer(gTexCoordLoc, 2, GL_FLOAT, GL_FALSE, 0, (GLvoid *)offset);

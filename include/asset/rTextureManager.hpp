@@ -5,7 +5,6 @@
 #include "rGraphicsDevice.hpp"
 #include "rFileSystem.hpp"
 
-#include "rAssetManager.hpp"
 #include "rTexture.hpp"
 #include "rTextureData.hpp"
 

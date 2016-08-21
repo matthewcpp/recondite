@@ -24,7 +24,5 @@ add_rec_src(asset_files "rFontManager" "asset")
 
 add_rec_src(asset_files "rSkeleton")
 
-list(APPEND asset_files ${CMAKE_CURRENT_SOURCE_DIR}/../../include/asset/rAssetManager.hpp)
-
 set(recondite_files ${recondite_files} ${asset_files} PARENT_SCOPE)
 set(asset_sources ${asset_files} PARENT_SCOPE)

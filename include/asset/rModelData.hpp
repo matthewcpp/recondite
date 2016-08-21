@@ -1,10 +1,10 @@
 #ifndef R_MODELDATA_HPP
 #define R_MODELDATA_HPP
 
-#include <map>
-#include <fstream>
 #include <utility>
 #include <memory>
+#include <climits>
+#include <vector>
 
 #include "rBuild.hpp"
 #include "rDefs.hpp"
@@ -13,8 +13,16 @@
 
 #include "rAlignedBox3.hpp"
 #include "rGeometryData.hpp"
+#include "rTextureData.hpp"
 
 namespace recondite {
+	struct RECONDITE_API MaterialData {
+		uint32_t diffuseTextureId;
+		rColor diffuseColor;
+
+		MaterialData() : diffuseTextureId(UINT_MAX), diffuseColor(rColor::White) {}
+	};
+
 	class RECONDITE_API MeshData {
 	public:
 		MeshData(rGeometryType geometryType);
@@ -33,16 +41,11 @@ namespace recondite {
 		void SetName(const rString& name);
 
 		/**
-		Gets the material for this mesh.
-		\returns the material
+		Gets the material Id for this mesh.
+		\returns the material Id
 		*/
-		rMaterial& GetMaterial();
-
-		/**
-		Gets the material for this mesh.
-		\returns the material
-		*/
-		const rMaterial& GetMaterial() const;
+		uint32_t GetMaterialId() const;
+		void SetMaterialId(uint32_t id);
 
 		/**
 		Gets geometry type for this mesh.
@@ -153,6 +156,14 @@ namespace recondite {
 
 		void CalculateBoundings();
 		rAlignedBox3 GetBoundingBox() const;
+
+		rTextureData* CreateTexture();
+		size_t GetNumTextures() const;
+		rTextureData* GetTexture(size_t index) const;
+
+		MaterialData* CreateMaterial();
+		size_t GetNumMaterials() const;
+		MaterialData* GetMaterial(size_t index) const;
 
 		int Read(rIStream& stream);
 

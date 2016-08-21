@@ -1,5 +1,6 @@
 #include "ModelViewerModule.hpp"
 #include "ModelViewerController.hpp"
+#include "rDemoCamera.hpp"
 
 #include "rCamera.hpp"
 #include "rProp.hpp"
@@ -13,13 +14,13 @@ void DeleteUiController(ruiController* controller) {
 }
 
 ModelViewerModule::ModelViewerModule(rEngine* engine)
-	:rModule("User Interface Sample") 
+	:rModule("Model Viewer Sample") 
 {
 	_engine = engine;
 }
 
 void ModelViewerModule::Init() {
-	auto fileSystemRed = _engine->content->FileSystem()->GetReadFileRef("C:/temp/assets/suv.rmdl");
+	auto fileSystemRed = _engine->content->FileSystem()->GetReadFileRef("C:/temp/assets/fridge/displayfridge.rmdl");
 	ModelData modelData;
 	modelData.Read(*fileSystemRed);
 	Model* model =_engine->content->Models()->LoadFromData(modelData, "suv");
@@ -32,10 +33,10 @@ void ModelViewerModule::Init() {
 	rViewport* mainViewport = _engine->component->CreateViewport("main");
 	mainViewport->SetFarClip(500);
 
-	rCamera* camera = new rCamera("main", _engine);
-	camera->SetPosition(center.x, center.y, boundingBox.max.z* 3);
-	camera->SetTarget(center);
+	rDemoCamera* camera = new rDemoCamera("main", _engine);
+	camera->Reset(center, 150, 0, 0);
 	mainViewport->SetCamera(camera);
+	_engine->scene->AddActor(camera);
 }
 
 void ModelViewerModule::LoadScene(const rString& sceneName) {

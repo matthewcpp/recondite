@@ -9,9 +9,9 @@
 
 class rDemoCamera : public rOrbitCamera{
 public:
-	rDemoCamera(const rString& name , const rVector3& position);
+	rDemoCamera(const rString& name, rEngine* engine);
 
-	virtual int Update(rEngine& engine);
+	virtual int Update() override;
 
 	float OrbitSpeed() const;
 	void SetOrbitSpeed(float speed);
@@ -22,8 +22,8 @@ private:
 	void DoZoom(int zoomDirection);
 	void DoOrbit (const rPoint& position, float timeDelta);
 
-	bool ProcessMouse(rEngine& engine);
-	bool ProcessTouch(rEngine& engine);
+	bool ProcessMouse();
+	bool ProcessTouch();
 
 private:
 	rPoint m_lastUpdatePos;

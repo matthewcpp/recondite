@@ -1,7 +1,7 @@
 #include "rDemoCamera.hpp"
 
-rDemoCamera::rDemoCamera(const rString& name , const rVector3& position)
-	:rOrbitCamera(name, position)
+rDemoCamera::rDemoCamera(const rString& name , rEngine* engine)
+	:rOrbitCamera(name, engine)
 {
 	m_orbitSpeed = 180.0f;
 	m_orbiting = false;
@@ -34,14 +34,14 @@ int rDemoCamera::CalculateZoomDirection(int wheelValue){
 	return ret;
 }
 
-bool rDemoCamera::ProcessMouse(rEngine& engine){
-	const rMouseState* state = engine.input->GetMouseState();
+bool rDemoCamera::ProcessMouse(){
+	const rMouseState* state = m_engine->input->GetMouseState();
 
 	DoZoom(CalculateZoomDirection(state->GetWheelValue()));
 
 	if (state->GetButtonState(rMOUSE_BUTTON_LEFT) == rBUTTON_STATE_DOWN){
 		if (m_orbiting){
-			DoOrbit(state->Position(), engine.time.TimeDeltaSeconds());
+			DoOrbit(state->Position(), m_engine->time.TimeDeltaSeconds());
 		}
 		else {
 			m_lastUpdatePos = state->Position();
@@ -56,15 +56,15 @@ bool rDemoCamera::ProcessMouse(rEngine& engine){
 	}
 }
 
-bool rDemoCamera::ProcessTouch(rEngine& engine){
-	float amount = engine.input->Gestures()->AmountDelta("pinch");
+bool rDemoCamera::ProcessTouch(){
+	float amount = m_engine->input->Gestures()->AmountDelta("pinch");
 
 	if (amount != m_pinchAmount){
 		DoZoom( amount * 100.0f);
 		return true;
 	}
-	else if (engine.input->Gestures()->Active("drag")){
-		DoOrbit(engine.input->Gestures()->Position("drag", 0), engine.time.TimeDeltaSeconds());
+	else if (m_engine->input->Gestures()->Active("drag")){
+		DoOrbit(m_engine->input->Gestures()->Position("drag", 0), m_engine->time.TimeDeltaSeconds());
 		return true;
 	}
 
@@ -72,14 +72,14 @@ bool rDemoCamera::ProcessTouch(rEngine& engine){
 	return false;
 }
 
-int rDemoCamera::Update(rEngine& engine){
+int rDemoCamera::Update(){
 
-	bool processed = ProcessMouse(engine);
+	bool processed = ProcessMouse();
 
 	if (!processed)
-		ProcessTouch(engine);
+		ProcessTouch();
 
-	rOrbitCamera::Update(engine);
+	rOrbitCamera::Update();
 
 	return 0;
 }

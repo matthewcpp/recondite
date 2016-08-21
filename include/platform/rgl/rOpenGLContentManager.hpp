@@ -1,7 +1,7 @@
 #ifndef R_OPENGLCONTENTMANAGER_HPP
 #define R_OPENGLCONTENTMANAGER_HPP
 
-#include "rBuild.hpp"
+#include "rglBuild.hpp"
 
 #include "rLog.hpp"
 
@@ -9,7 +9,7 @@
 #include "rContentManager.hpp"
 #include "rFileSystem.hpp"
 
-class RECONDITE_API rOpenGLContentManager : public rContentManager {
+class RECONDITE_GL_API rOpenGLContentManager : public rContentManager {
 public:
 	rOpenGLContentManager(rGraphicsDevice* graphicsDevice, rFileSystem* fileSystem);
 

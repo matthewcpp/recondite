@@ -21,7 +21,7 @@
 	#include <GLES2/gl2.h>
 #endif
 
-#include "rBuild.hpp"
+#include "rglBuild.hpp"
 
 #include "rTypes.hpp"
 #include "rDefs.hpp"
@@ -42,7 +42,7 @@
 
 #include "asset/rModel.hpp"
 
-class RECONDITE_API rOpenGLGraphicsDevice : public rGraphicsDevice{
+class RECONDITE_GL_API rOpenGLGraphicsDevice : public rGraphicsDevice{
 public:
 	rOpenGLGraphicsDevice();
 	

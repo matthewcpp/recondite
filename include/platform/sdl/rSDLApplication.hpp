@@ -3,7 +3,7 @@
 
 #include "SDL.h"
 
-#include "rBuild.hpp"
+#include "rSDLBuild.hpp"
 
 #include "rFileSystem.hpp"
 
@@ -19,7 +19,7 @@
 
 #include "platform/sdl/rSDLMain.hpp"
 
-class RECONDITE_API rApplication : public rApplicationBase{
+class RECONDITE_SDL_API rApplication : public rApplicationBase{
 public:
 	rApplication();
 	~rApplication();

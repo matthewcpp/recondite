@@ -75,7 +75,6 @@ public:
 	virtual void ActivateGeometryBuffer(const recondite::Geometry* geometry);
 	virtual void DeactivateGeometryBuffer(const recondite::Geometry* geometry);
 
-	virtual void RenderGeometry(const rGeometry* geometry, const rMatrix4& projection, const rMatrix4& modelview, const rString& elementBuffer, rMaterial* material);
 	virtual void RenderImmediate(const rImmediateBuffer& geometry, const rMatrix4& transform, rMaterial* material);
 
 	virtual unsigned int CreateRenderbuffer(int width, int height);
@@ -92,9 +91,6 @@ protected:
 	bool m_isInit;
 	rString m_lastError;
 
-private:
-	void RenderTexCoordGeometryProfile(const rGeometry* geometry, const rMatrix4& projection, const rMatrix4& modelview, rElementBuffer* elementBuffer, rMaterial* material);
-	void RenderPrimitiveGeometryProfile(const rGeometry* geometry, const rMatrix4& projection, const rMatrix4& modelview, rElementBuffer* elementBuffer, rMaterial* material);
 private:
 	struct rglRenderbuffer{
 		GLuint framebufferId;

@@ -12,7 +12,6 @@
 
 #include "asset/rMaterial.hpp"
 #include "asset/rModel.hpp"
-#include "asset/rGeometry.hpp"
 #include "asset/rGeometryData.hpp"
 
 #include "data/rImmediateBuffer.hpp"
@@ -49,7 +48,6 @@ public:
 	virtual void DeactivateGeometryBuffer(const recondite::Geometry* geometry) = 0;
 	virtual void RenderMesh(const recondite::Mesh* mesh, const rMatrix4& projection, const rMatrix4& modelview) = 0;
 
-	virtual void RenderGeometry(const rGeometry* geometry,const rMatrix4& projection, const rMatrix4& modelview, const rString& elementBuffer, rMaterial* material) = 0;
 	virtual void RenderImmediate(const rImmediateBuffer& geometry, const rMatrix4& transform, rMaterial* material) = 0;
 	
 	virtual void SetViewport(int x , int y, int width, int height) = 0;

@@ -24,7 +24,7 @@ UserInterfaceModule::UserInterfaceModule(rEngine* engine)
 	_engine = engine;
 }
 
-void UserInterfaceModule::Init() {
+void UserInterfaceModule::Init(const rArrayString& args) {
 	_engine->ui->RegisterControllerClass("UserInterfaceController", &CreateUiController, &DeleteUiController);
 	rViewport* mainViewport = _engine->component->CreateViewport("main");
 

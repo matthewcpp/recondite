@@ -6,7 +6,7 @@ class UserInterfaceModule : public rModule{
 public:
 	UserInterfaceModule(rEngine* engine);
 
-	virtual void Init();
+	virtual void Init(const rArrayString& args);
 	virtual void LoadScene(const rString& sceneName) override;
 	virtual void DeleteActor(rActor3* actor) override;
 

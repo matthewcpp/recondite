@@ -1,13 +1,13 @@
 #include "platform/sdl/rSDLApplication.hpp"
 #include "ModelViewerModule.hpp"
 
-class UserInterfaceApplication : public rApplication {
+class ModelViewerApplication : public rApplication {
 public:
 	rModule* CreateModule(rEngine* engine);
 };
 
-rModule* UserInterfaceApplication::CreateModule(rEngine* engine) {
+rModule* ModelViewerApplication::CreateModule(rEngine* engine) {
 	return new ModelViewerModule(engine);
 }
 
-IMPLEMENT_MAIN(UserInterfaceApplication)
+IMPLEMENT_MAIN(ModelViewerApplication)

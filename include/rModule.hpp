@@ -21,7 +21,7 @@ public:
 	virtual void BeforeRenderScene(rViewport* viewInfo) {};
 	virtual void AfterRenderScene(rViewport* viewInfo) {};
 
-	virtual void Init() {};
+	virtual void Init(const rArrayString& args) {};
 	virtual void Uninit() {};
 	virtual void LoadScene(const rString& sceneName) = 0;
 	virtual void DeleteActor(rActor3* actor) = 0;

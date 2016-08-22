@@ -19,8 +19,8 @@ ModelViewerModule::ModelViewerModule(rEngine* engine)
 	_engine = engine;
 }
 
-void ModelViewerModule::Init() {
-	auto fileSystemRed = _engine->content->FileSystem()->GetReadFileRef("C:/temp/assets/fridge/displayfridge.rmdl");
+void ModelViewerModule::Init(const rArrayString& args) {
+	auto fileSystemRed = _engine->content->FileSystem()->GetReadFileRef(args[0]);
 	ModelData modelData;
 	modelData.Read(*fileSystemRed);
 	Model* model =_engine->content->Models()->LoadFromData(modelData, "suv");

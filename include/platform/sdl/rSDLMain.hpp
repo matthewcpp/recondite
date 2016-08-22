@@ -6,7 +6,7 @@
 #define IMPLEMENT_MAIN(APPLICATION_TYPE) \
 	int main(int argc, char** argv) {	\
 		APPLICATION_TYPE app;	\
-		app.SetDisplaySize(1024, 768);	\
+		app.SetArgs(argc, argv); \
 		app.Init();		\
 		SDL_Event event;	\
 		while (app.IsReady()){	\

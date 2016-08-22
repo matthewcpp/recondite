@@ -20,6 +20,7 @@ public:
 	rApplicationBase();
 	virtual ~rApplicationBase();
 
+
 	virtual void Uninit();
 
 	virtual void Tick();
@@ -34,6 +35,7 @@ public:
 
 public:
 	virtual rModule* CreateModule(rEngine* engine) = 0;
+	void SetArgs(int argc, char** argv);
 
 protected:
 	virtual void InitEngine(rGraphicsDevice* graphics, rContentManager* content, rInputManager* input, rFileSystem* fileSystem);
@@ -42,7 +44,7 @@ protected:
 protected:
 	unsigned int m_targetFPS;
 	size_t m_frameCount;
-
+	rArrayString args;
 	
 	rModule* m_module;
 

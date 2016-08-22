@@ -8,6 +8,12 @@ rApplicationBase::rApplicationBase(){
 	m_displaySize.Set(1024, 768);
 }
 
+void rApplicationBase::SetArgs(int argc, char** argv) {
+	for (int i = 1; i < argc; i++) {
+		args.emplace_back(argv[i]);
+	}
+}
+
 void rApplicationBase::Update(){
 	m_module->BeforeUpdateScene();
 		m_scene->Update();
@@ -86,7 +92,7 @@ void rApplicationBase::SetTargetFPS(unsigned int targetFPS){
 
 void rApplicationBase::InitModule(){
 	m_module = CreateModule(&m_engine);
-	m_module->Init();
+	m_module->Init(args);
 }
 
 void rApplicationBase::SetDisplaySize(int width, int height){

@@ -40,10 +40,22 @@ void rPrimitive::RecreateGeometry(){
 
 	CreateGeometry(modelData);
 
+	MaterialData* faceMaterial = modelData.CreateMaterial();
+	faceMaterial->diffuseColor = m_faceColor;
+
+	MaterialData* lineMaterial = modelData.CreateMaterial();
+	lineMaterial->diffuseColor = m_edgeColor;
+
+	for (size_t i = 0; i < modelData.GetTriangleMeshCount(); i++) {
+		modelData.GetTriangleMesh(i)->SetMaterialId(0);
+	}
+
+	for (size_t i = 0; i < modelData.GetLineMeshCount(); i++) {
+		modelData.GetLineMesh(i)->SetMaterialId(1);
+	}
+
 	rString assetName = Id() + "_model";
 	m_model = m_engine->content->Models()->LoadFromData(modelData, assetName);
-
-	UpdateMaterials();
 
 	m_geometryInvalid = false;
 }
@@ -58,7 +70,7 @@ void rPrimitive::UpdateMaterials(){
 
 		meshCount = m_model->GetLineMeshCount();
 		for (size_t i = 0; i < meshCount; i++) {
-			m_model->GetLineMesh(i)->GetMaterial()->SetDiffuseColor(m_faceColor);
+			m_model->GetLineMesh(i)->GetMaterial()->SetDiffuseColor(m_edgeColor);
 		}
 	}
 }

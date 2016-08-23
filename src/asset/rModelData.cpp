@@ -267,6 +267,16 @@ namespace recondite {
 				uint32_t materialId;
 				stream.Read((char*)&materialId, sizeof(uint32_t));
 				meshData->SetMaterialId(materialId);
+
+				uint32_t nameLength;
+				stream.Read((char*)&nameLength, sizeof(uint32_t));
+
+				if (nameLength > 0) {
+					std::vector<char> nameBuffer(nameLength);
+					stream.Read(nameBuffer.data(), nameLength);
+					rString nameStr(nameBuffer.data(), nameLength);
+					meshData->SetName(nameStr);
+				}
 			}
 
 			return 0;
@@ -310,6 +320,14 @@ namespace recondite {
 
 			uint32_t materialIndex = meshData->GetMaterialId();
 			stream.Write((const char*)&materialIndex, sizeof(uint32_t));
+
+			rString meshName = meshData->GetName();
+			uint32_t nameLength = meshName.size();
+			stream.Write((const char*)&nameLength, sizeof(uint32_t));
+
+			if (nameLength > 0) {
+				stream.Write(meshName.c_str(), nameLength);
+			}
 		}
 
 		return 0;

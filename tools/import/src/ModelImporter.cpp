@@ -54,6 +54,10 @@ namespace recondite { namespace import {
 			MeshData* meshData = modelData.CreateTriangleMesh();
 			aiMesh* mesh = scene->mMeshes[i];
 
+			if (mesh->mName.length > 0) {
+				meshData->SetName(mesh->mName.C_Str());
+			}
+
 			geometry->PushVertices((rVector3*)mesh->mVertices, mesh->mNumVertices);
 			geometry->PushNormals((rVector3*)mesh->mNormals, mesh->mNumVertices);
 

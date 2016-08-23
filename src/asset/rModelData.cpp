@@ -263,6 +263,10 @@ namespace recondite {
 
 				rAlignedBox3 boundingBox;
 				stream.Read((char*)&boundingBox, sizeof(rAlignedBox3));
+
+				uint32_t materialId;
+				stream.Read((char*)&materialId, sizeof(uint32_t));
+				meshData->SetMaterialId(materialId);
 			}
 
 			return 0;
@@ -303,6 +307,9 @@ namespace recondite {
 
 			rAlignedBox3 boundingBox = meshData->GetBoundingBox();
 			stream.Write((const char*)&boundingBox, sizeof(rAlignedBox3));
+
+			uint32_t materialIndex = meshData->GetMaterialId();
+			stream.Write((const char*)&materialIndex, sizeof(uint32_t));
 		}
 
 		return 0;

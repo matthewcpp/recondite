@@ -12,6 +12,7 @@ namespace recondite { namespace import {
 	public:
 		ImageImporter() {}
 		int ImportImage(const rString& path, rTextureData& data);
+		int ImportImage(const char* imageBytes, size_t imageByteCount, rTextureData& data);
 
 	rNO_COPY_CLASS(ImageImporter)
 	};

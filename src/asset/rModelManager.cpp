@@ -68,7 +68,7 @@ Model* rModelManager::LoadFromData(const ModelData& modelData, const rString& na
 		const MeshData* meshData = modelData.GetTriangleMesh(i);
 
 		uint32_t bufferId = _impl->graphicsDevice->CreateElementBuffer(meshData->GetBufferData(), meshData->GetBufferDataSize());
-		Mesh* mesh = model->CreateTriangleMesh(bufferId, meshData->GetElementCount(), materials[i]);
+		Mesh* mesh = model->CreateTriangleMesh(bufferId, meshData->GetElementCount(), materials[meshData->GetMaterialId()]);
 		mesh->SetName(meshData->GetName());
 		mesh->SetBoundingBox(meshData->GetBoundingBox());
 	}

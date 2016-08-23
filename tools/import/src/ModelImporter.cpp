@@ -32,7 +32,8 @@ namespace recondite { namespace import {
 			aiProcess_CalcTangentSpace |
 			aiProcess_Triangulate |
 			aiProcess_JoinIdenticalVertices |
-			aiProcess_SortByPType);
+			aiProcess_SortByPType |
+			aiProcess_GenSmoothNormals);
 
 		if (!scene)
 			return 1;
@@ -70,6 +71,10 @@ namespace recondite { namespace import {
 				aiFace face = mesh->mFaces[f];
 				meshData->Push(face.mIndices[0] + baseIndex, face.mIndices[1] + baseIndex, face.mIndices[2] + baseIndex);
 			}
+
+			meshData->SetMaterialId(mesh->mMaterialIndex);
+
+			baseIndex += mesh->mNumVertices;
 		}
 	}
 
@@ -89,16 +94,22 @@ namespace recondite { namespace import {
 				rString texPath = texturePath.C_Str();
 
 				if (textureMap.count(texPath) == 0) { //texture file not already loaded
-					rString textureFilePath = rPath::Combine(directory, texPath);
-
 					size_t textureId = modelData.GetNumTextures();
 					rTextureData* textureData = modelData.CreateTexture();
-
 					ImageImporter imageImporter;
-					int result = imageImporter.ImportImage(textureFilePath, *textureData);
+					int result = 0;
 
-					if (result != 0)
-						return result;
+					if (texPath[0] == '*') { //signals embedded texture
+						aiTexture* texture = scene->mTextures[0];
+						result = imageImporter.ImportImage((const char *)texture->pcData, texture->mWidth, *textureData);
+					}
+					else { //load the texture from File
+						rString textureFilePath = rPath::Combine(directory, texPath);
+						result = imageImporter.ImportImage(textureFilePath, *textureData);
+					}
+
+
+					if (result != 0) continue;
 					else {
 						textureMap[texPath] = textureId;
 						materialData->diffuseTextureId = textureId;

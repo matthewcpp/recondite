@@ -22,4 +22,23 @@ namespace recondite { namespace import {
 			return 1;
 		}
 	}
+
+	int ImageImporter::ImportImage(const char* imageBytes, size_t imageByteCount, rTextureData& data) {
+		data.Clear();
+
+		int width, height, bpp;
+
+		unsigned char *imageData = stbi_load_from_memory((const stbi_uc*)imageBytes, (int)imageByteCount, &width, &height, &bpp, 0);
+
+		if (imageData) {
+			data.SetImageData(width, height, bpp, imageData);
+
+			stbi_image_free(imageData);
+
+			return 0;
+		}
+		else {
+			return 1;
+		}
+	}
 }}

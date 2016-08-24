@@ -204,3 +204,7 @@ void ruiWidget::SetPosition(const rPoint& position){
 rPoint ruiWidget::ContentPosition(){
 	return m_position + ContentOffset();
 }
+
+rPropertyCollection& ruiWidget::Properties() {
+	return m_properties;
+}

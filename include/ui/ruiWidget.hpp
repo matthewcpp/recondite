@@ -9,6 +9,7 @@
 #include "ruiStyle.hpp"
 
 #include "ruiDefaultEventHandler.hpp"
+#include "rPropertyCollection.hpp"
 
 class ruiIDocument;
 
@@ -41,6 +42,8 @@ public:
 	rString UiState() const;
 	void UiState(const rString& state);
 
+	rPropertyCollection& Properties();
+
 protected: //style related utility methods
 	Font::Face* DetermineFont();
 
@@ -70,6 +73,7 @@ private:
 
 	rSize m_size;
 	rPoint m_contentOffset;
+	rPropertyCollection m_properties;
 };
 
 #endif

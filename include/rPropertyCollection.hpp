@@ -14,6 +14,7 @@
 enum rPropertyType{
 	rPROPERTY_TYPE_BOOL,
 	rPROPERTY_TYPE_INT,
+	rPROPERTY_TYPE_UNSIGNED_INT,
 	rPROPERTY_TYPE_FLOAT,
 	rPROPERTY_TYPE_STRING,
 	rPROPERTY_TYPE_COLOR,
@@ -25,6 +26,7 @@ enum rPropertyType{
 union rPropertyValue{
 	bool boolVal;
 	int intVal;
+	unsigned int uintVal;
 	float floatVal;
 	rString* stringVal;
 	rColor* colorVal;
@@ -35,6 +37,7 @@ union rPropertyValue{
 struct rProperty{
 	rProperty(bool b);
 	rProperty(int i);
+	rProperty(unsigned int i);
 	rProperty(float f);
 	rProperty(const rString& s);
 	rProperty(const rColor& c);
@@ -56,6 +59,9 @@ public:
 
 	void SetInt(const rString& key, int val);
 	bool GetInt(const rString& key, int& val) const;
+
+	void SetUnsignedInt(const rString& key, unsigned int val);
+	bool GetUnsignedInt(const rString& key, unsigned int& val) const;
 
 	void SetFloat(const rString& key, float val);
 	bool GetFloat(const rString& key, float& val) const;

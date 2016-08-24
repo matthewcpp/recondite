@@ -38,6 +38,23 @@ bool rPropertyCollection::GetInt(const rString& key, int& val) const{
 	}
 }
 
+void rPropertyCollection::SetUnsignedInt(const rString& key, unsigned int val) {
+	DeleteProperty(key);
+	m_properties[key] = new rProperty(val);
+}
+
+bool rPropertyCollection::GetUnsignedInt(const rString& key, unsigned int& val) const {
+	rPropertyMap::const_iterator p = m_properties.find(key);
+
+	if (p != m_properties.end() && p->second->type == rPROPERTY_TYPE_UNSIGNED_INT) {
+		val = p->second->value.uintVal;
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
 void rPropertyCollection::SetFloat(const rString& key, float val){
 	DeleteProperty(key);
 	m_properties[key] = new rProperty(val);
@@ -171,6 +188,11 @@ rProperty::rProperty(bool b){
 rProperty::rProperty(int i){
 	type = rPROPERTY_TYPE_INT;
 	value.intVal = i;
+}
+
+rProperty::rProperty(unsigned int i) {
+	type = rPROPERTY_TYPE_UNSIGNED_INT;
+	value.uintVal = i;
 }
 
 rProperty::rProperty(float f){

@@ -51,6 +51,10 @@ void ruiDocument::AddWidget(ruiWidget* widget){
 	_impl->layoutNeedsUpdate = true;
 }
 
+ruiWidget* ruiDocument::GetActiveWidget() {
+	return _impl->activeWidget;
+}
+
 ruiWidget* ruiDocument::GetWidget(const rString& id){
 	for (size_t i = 0; i < _impl->widgets.size(); i++){
 		if (_impl->widgets[i]->Id() == id)
@@ -182,9 +186,9 @@ void ruiDocument::ProcessMouseMotionEvent(ruiMouseEvent& event){
 		ruiWidget* selectedWidget = SelectWidget(position);
 
 		if (selectedWidget){
-			selectedWidget->Trigger(ruiEVT_MOUSE_ENTER, event);
 			selectedWidget->UiState("hover");
 			_impl->activeWidget = selectedWidget;
+			selectedWidget->Trigger(ruiEVT_MOUSE_ENTER, event);
 		}
 	}
 }

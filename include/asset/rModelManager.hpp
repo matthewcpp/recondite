@@ -20,6 +20,7 @@ public:
 	void Clear();
 	Model* LoadFromData(const ModelData& modelData, const rString& name);
 	bool Delete(const rString& name);
+	Model* Get(const rString& name);
 
 private:
 	struct Impl;

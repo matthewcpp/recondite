@@ -24,6 +24,15 @@ rModelManager::~rModelManager(){
 	delete _impl;
 }
 
+Model* rModelManager::Get(const rString& name) {
+	auto result = _impl->models.find(name);
+
+	if (result == _impl->models.end())
+		return nullptr;
+	else
+		return result->second.get();
+}
+
 
 
 void rModelManager::Impl::CreateMaterialsForModel(const ModelData& modelData, const rString& baseName, std::vector<rMaterial*>& materials) {

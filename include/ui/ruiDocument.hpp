@@ -32,6 +32,8 @@ public:
 
 	virtual ruiStyleManager* Styles() = 0;
 	virtual void WidgetUpdated(ruiWidget* widget) = 0;
+
+	virtual ruiWidget* GetActiveWidget() = 0;
 };
 
 class RECONDITE_API ruiDocument : public ruiIDocument{
@@ -81,7 +83,7 @@ public:
 
 	rString GetDefaultId () const;
 
-
+	virtual ruiWidget* GetActiveWidget();
 private:
 	struct Impl;
 	Impl* _impl;

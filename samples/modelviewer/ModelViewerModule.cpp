@@ -20,10 +20,12 @@ ModelViewerModule::ModelViewerModule(rEngine* engine)
 }
 
 void ModelViewerModule::Init(const rArrayString& args) {
+	_engine->ui->RegisterControllerClass("ModelViewerController", &CreateUiController, &DeleteUiController);
+
 	auto fileSystemRed = _engine->content->FileSystem()->GetReadFileRef(args[0]);
 	ModelData modelData;
 	modelData.Read(*fileSystemRed);
-	Model* model =_engine->content->Models()->LoadFromData(modelData, "suv");
+	Model* model =_engine->content->Models()->LoadFromData(modelData, "model");
 	rAlignedBox3 boundingBox = model->GetBoundingBox();
 	rVector3 center = boundingBox.Center();
 
@@ -37,6 +39,8 @@ void ModelViewerModule::Init(const rArrayString& args) {
 	camera->Reset(center, 150, 0, 0);
 	mainViewport->SetCamera(camera);
 	_engine->scene->AddActor(camera);
+
+	_engine->ui->LoadUiDocument("C:/development/recondite/samples/modelviewer/modelviewer/modelviewer.xml", mainViewport);
 }
 
 void ModelViewerModule::LoadScene(const rString& sceneName) {

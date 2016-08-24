@@ -20,6 +20,8 @@ bool rOpenGLGraphicsDevice::Init(){
 	SetClearColor(c);
 	
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	glGetIntegerv(GL_FRAMEBUFFER_BINDING, &m_defaultFramebuffer);
 
@@ -187,18 +189,7 @@ void rOpenGLGraphicsDevice::SetActiveMaterial(rMaterial* material){
 			uniformHandle = glGetUniformLocation(m_activeShaderProgram, "v_uvSize");
 			const rVector2& uvSize = diffuseTexture->UVSize();
 			glUniform2f(uniformHandle, uvSize.x, uvSize.y);
-
-			if (diffuseTexture->Bpp() > 3){
-				glEnable(GL_BLEND);
-				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-			}
-			else{
-				glDisable(GL_BLEND);
-			}
 		}
-	}
-	else{
-		glDisable(GL_BLEND);
 	}
 }
 

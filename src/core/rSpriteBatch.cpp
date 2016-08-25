@@ -124,19 +124,6 @@ void rSpriteBatch::Render(const rMatrix4& viewMatrix){
 	}
 
 
-	_impl->graphicsDevice->ActivateShader(shaderManager->DefaultTextShader()->ProgramId());
-
-	end = _impl->textBatches.end();
-
-	for (auto it = _impl->textBatches.begin(); it != end; ++it) {
-		_impl->material->SetDiffuseTexture(it->first);
-
-		for (size_t i = 0; i < it->second.size(); i++){
-			_impl->material->SetDiffuseColor(it->second[i]->color);
-			_impl->graphicsDevice->RenderImmediate(it->second[i]->data, viewMatrix, _impl->material.get());
-		}
-	}
-
 	_impl->graphicsDevice->ActivateShader(shaderManager->DefaultDrawingShader()->ProgramId());
 	_impl->material->SetDiffuseTexture(nullptr);
 
@@ -154,6 +141,19 @@ void rSpriteBatch::Render(const rMatrix4& viewMatrix){
 
 		_impl->material->SetDiffuseColor(color);
 		_impl->graphicsDevice->RenderImmediate(*it.second.get(), viewMatrix, _impl->material.get());
+	}
+
+	_impl->graphicsDevice->ActivateShader(shaderManager->DefaultTextShader()->ProgramId());
+
+	end = _impl->textBatches.end();
+
+	for (auto it = _impl->textBatches.begin(); it != end; ++it) {
+		_impl->material->SetDiffuseTexture(it->first);
+
+		for (size_t i = 0; i < it->second.size(); i++) {
+			_impl->material->SetDiffuseColor(it->second[i]->color);
+			_impl->graphicsDevice->RenderImmediate(it->second[i]->data, viewMatrix, _impl->material.get());
+		}
 	}
 }
 

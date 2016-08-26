@@ -1,6 +1,7 @@
 #include "ui/ruiDocument.hpp"
 
 #include <map>
+#include <vector>
 
 #include "ui/ruiWidget.hpp"
 #include "ui/ruiLayout.hpp"
@@ -8,7 +9,7 @@
 #include "ui/ruiMenuManager.hpp"
 
 struct ruiDocument::Impl{
-	std::vector<ruiWidget*> widgets;
+	std::multimap<rString, std::unique_ptr<ruiWidget>> widgets;
 	std::map<uint32_t, UpdateFunc> everyUpdateFuncs;
 	std::map<uint32_t, UpdateFunc> nextUpdateFuncs;
 	uint32_t updateFuncHandle;
@@ -47,7 +48,7 @@ void ruiDocument::WidgetUpdated(ruiWidget* widget){
 }
 
 void ruiDocument::AddWidget(ruiWidget* widget){
-	_impl->widgets.push_back(widget);
+	_impl->widgets.emplace(widget->Id(), widget);
 	_impl->layoutNeedsUpdate = true;
 }
 
@@ -55,13 +56,13 @@ ruiWidget* ruiDocument::GetActiveWidget() {
 	return _impl->activeWidget;
 }
 
-ruiWidget* ruiDocument::GetWidget(const rString& id){
-	for (size_t i = 0; i < _impl->widgets.size(); i++){
-		if (_impl->widgets[i]->Id() == id)
-			return _impl->widgets[i];
-	}
+ruiWidget* ruiDocument::GetWidgetById(const rString& id){
+	auto result = _impl->widgets.find(id);
 
-	return NULL;
+	if (result != _impl->widgets.end())
+		return result->second.get();
+	else
+		return nullptr;
 }
 
 void ruiDocument::Update(){
@@ -75,8 +76,8 @@ void ruiDocument::Update(){
 
 	_impl->nextUpdateFuncs.clear();
 
-	for (size_t i = 0; i < _impl->widgets.size(); i++)
-		_impl->widgets[i]->Update();
+	if (_impl->layout)
+		_impl->layout->Update();
 
 	UpdateLayout();
 }
@@ -90,31 +91,34 @@ void ruiDocument::UpdateLayout(bool force){
 }
 
 void ruiDocument::Draw(){
-	for (size_t i = 0; i < _impl->widgets.size(); i++)
-		_impl->widgets[i]->Draw();
+	if (_impl->layout)
+		_impl->layout->Draw();
 
 	_impl->menuManager.Draw();
 }
 
 void ruiDocument::Clear(){
-	for (size_t i = 0; i < _impl->widgets.size(); i++)
-		delete _impl->widgets[i];
-	
 	_impl->widgets.clear();
 }
 
 ruiWidget* ruiDocument::SelectWidget(const rPoint& position){
 	rRect boundingBox;
+	ruiWidget* widget;
 
-	for (size_t i = 0; i < _impl->widgets.size(); i++){
-		boundingBox = _impl->widgets[i]->BoundingBox();
+	for (auto& it : _impl->widgets){
+		widget = it.second.get();
+		boundingBox = widget->BoundingBox();
 
 		if (boundingBox.ContainsPoint(position)){
-			return _impl->widgets[i];
+			return widget;
 		}
 	}
 
 	return nullptr;
+}
+
+rViewport* ruiDocument::GetViewport() {
+	return _impl->viewport;
 }
 
 ruiLayout* ruiDocument::Layout() const{
@@ -122,9 +126,6 @@ ruiLayout* ruiDocument::Layout() const{
 }
 
 void ruiDocument::SetLayout(ruiLayout* layout){
-	if (_impl->layout)
-		delete _impl->layout;
-	
 	_impl->layout = layout;
 	_impl->layoutNeedsUpdate = true;
 }

@@ -31,20 +31,20 @@ void UserInterfaceController::OnDocumentLoaded(){
 	_primitive = (rPrimitive*)_engine->scene->GetActor("Box");
 	_rotationValue = _primitive->Rotation().y;
 
-	ruiWidget* rotate_checkbox = _document->GetWidget("rotate_checkbox");
+	ruiWidget* rotate_checkbox = _document->GetWidgetById("rotate_checkbox");
 	rotate_checkbox->Bind(ruiEVENT_CHECKBOX_CHANGE, this, &UserInterfaceController::OnRotateCheckboxClick);
 
-	ruiSlider* rotate_speed = (ruiSlider*)_document->GetWidget("rotate_speed");
+	ruiSlider* rotate_speed = (ruiSlider*)_document->GetWidgetById("rotate_speed");
 	rotate_speed->Bind(ruiEVENT_SLIDER_CHANGE, this, &UserInterfaceController::OnRotationSpeedSliderChange);
 	_rotationSpeed = rotate_speed->GetValue();
 
-	ruiPicker* modelpicker = (ruiPicker*)_document->GetWidget("modelpicker");
+	ruiPicker* modelpicker = (ruiPicker*)_document->GetWidgetById("modelpicker");
 	modelpicker->Bind(ruiEVENT_PICKER_CHANGE, this, &UserInterfaceController::OnModelPickerChange);
 
-	ruiButton* reloadStyles = (ruiButton*)_document->GetWidget("reloadstyles");
+	ruiButton* reloadStyles = (ruiButton*)_document->GetWidgetById("reloadstyles");
 	modelpicker->Bind(ruiEVENT_BUTTON_CLICK, this, &UserInterfaceController::OnModelPickerChange);
 
-	ruiButton* rgbButton = (ruiButton*)_document->GetWidget("rgbbutton");
+	ruiButton* rgbButton = (ruiButton*)_document->GetWidgetById("rgbbutton");
 	rgbButton->Bind(ruiEVENT_BUTTON_CLICK, this, &UserInterfaceController::OnRGBButtonClick);
 
 }
@@ -68,9 +68,9 @@ void UserInterfaceController::OnReloadStylesClick(rEvent& event){
 }
 
 void UserInterfaceController::OnRGBButtonClick(rEvent& event) {
-	ruiText* r = (ruiText*)_document->GetWidget("rbox");
-	ruiText* g = (ruiText*)_document->GetWidget("gbox");
-	ruiText* b = (ruiText*)_document->GetWidget("bbox");
+	ruiText* r = (ruiText*)_document->GetWidgetById("rbox");
+	ruiText* g = (ruiText*)_document->GetWidgetById("gbox");
+	ruiText* b = (ruiText*)_document->GetWidgetById("bbox");
 
 	rColor result = rColor::White;
 	int val;

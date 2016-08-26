@@ -7,6 +7,7 @@
 #include "rTypes.hpp"
 
 #include "ruiLayout.hpp"
+#include "rEngine.hpp"
 
 enum ruiLayoutDirection{
 	ruiLAYOUT_HORIZONTAL,
@@ -22,23 +23,25 @@ enum ruiMargin{
 
 class RECONDITE_API ruiLinearLayout : public ruiLayout{
 public:
-	ruiLinearLayout(ruiLayoutDirection layoutDirection);
+	ruiLinearLayout(ruiLayoutDirection layoutDirection, const rString& id, ruiIDocument* document, rEngine* engine);
 
 public:
-	virtual void Layout(rRect& rect);
-	virtual rSize Size() const;
+	virtual rSize Layout(rRect& rect);
 
 	void SetLayoutDirection(ruiLayoutDirection layoutDirection);
 	ruiLayoutDirection LayoutDirection() const;
 
-private:
-	void LayoutHorizontal(rRect& rect);
-	void LayoutVertical(rRect& rect);
+	virtual rString GetWidgetType() const;
 
-	void DetermineMargins(ruiLayoutItem* layoutItem, rIntArray& margins);
+	virtual void SetPosition(const rPoint& position);
 
 private:
-	rSize m_cachedSize;
+	rSize LayoutHorizontal(rRect& rect);
+	rSize LayoutVertical(rRect& rect);
+
+	void DetermineMargins(ruiWidget* widget, rIntArray& margins);
+
+private:
 	ruiLayoutDirection m_layoutDirection;
 };
 

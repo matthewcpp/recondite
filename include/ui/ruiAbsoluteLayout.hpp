@@ -5,16 +5,13 @@
 
 class RECONDITE_API ruiAbsoluteLayout : public ruiLayout {
 public:
-	ruiAbsoluteLayout();
+	ruiAbsoluteLayout(const rString& id, ruiIDocument* document, rEngine* engine);
 
 public:
-	void SetTop(int top);
-	void SetBottom(int bottom);
-	void SetLeft(int left);
-	void SetRight(int right);
+	virtual rSize Layout(rRect& rect);
+	virtual rString GetWidgetType() const;
 
-	virtual void Layout(rRect& rect);
-	virtual rSize Size() const;
+	virtual void SetPosition(const rPoint& position);
 
 };
 

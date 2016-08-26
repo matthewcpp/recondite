@@ -1,7 +1,6 @@
 #ifndef RUI_DOCUMENT_HPP
 #define RUI_DOCUMENT_HPP
 
-#include <vector>
 #include <functional>
 
 #include "rBuild.hpp"
@@ -22,7 +21,7 @@ public:
 	virtual bool ShowContextMenu(ruiMenu* menu, ruiStyle* style, const rPoint& position, rEventHandler* handler) = 0;
 	virtual void CancelContextMenu() = 0;
 	virtual void AddWidget(ruiWidget* widget) = 0;
-	virtual ruiWidget* GetWidget(const rString& id) = 0;
+	virtual ruiWidget* GetWidgetById(const rString& id) = 0;
 
 	virtual uint32_t RunEveryUpdate(UpdateFunc func) = 0;
 	virtual uint32_t RunNextUpdate(UpdateFunc func) = 0;
@@ -34,6 +33,7 @@ public:
 	virtual void WidgetUpdated(ruiWidget* widget) = 0;
 
 	virtual ruiWidget* GetActiveWidget() = 0;
+	virtual rViewport* GetViewport() = 0;
 };
 
 class RECONDITE_API ruiDocument : public ruiIDocument{
@@ -61,7 +61,7 @@ public:
 
 public:
 	virtual void AddWidget(ruiWidget* widget);
-	virtual ruiWidget* GetWidget(const rString& id);
+	virtual ruiWidget* GetWidgetById(const rString& id);
 
 	ruiController* GetController();
 	void SetController(ruiController* controller);
@@ -84,6 +84,8 @@ public:
 	rString GetDefaultId () const;
 
 	virtual ruiWidget* GetActiveWidget();
+
+	virtual rViewport* GetViewport();
 private:
 	struct Impl;
 	Impl* _impl;

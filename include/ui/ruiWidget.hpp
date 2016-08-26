@@ -25,7 +25,6 @@ public:
 	virtual void Update();
 	virtual void Draw();
 
-	virtual void SetPosition(int x, int y);
 	virtual void SetPosition(const rPoint& position);
 
 public:
@@ -44,6 +43,8 @@ public:
 
 	rPropertyCollection& Properties();
 
+	void RecomputeSize(bool force = false);
+
 protected: //style related utility methods
 	Font::Face* DetermineFont();
 
@@ -57,7 +58,7 @@ private:
 	int GetClassIndex(const rString& className) const;
 	void RecomputeStyle();
 	void ExtendStyle(const rString& selector);
-	void RecomputeSize(bool force = false);
+	
 
 protected:
 	ruiIDocument* m_document;

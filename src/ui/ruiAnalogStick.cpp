@@ -19,7 +19,7 @@ void ruiAnalogStick::SetController(rController* controller, size_t stickIndex){
 }
 
 void ruiAnalogStick::SetPosition(int x, int y){
-	ruiWidget::SetPosition(x, y);
+	ruiWidget::SetPosition(rPoint(x,y));
 
 	m_outerCircle.center.Set(x + m_outerCircle.radius, y + m_outerCircle.radius);
 	m_stick.center = m_outerCircle.center;

@@ -105,15 +105,11 @@ void ruiDocumentLoader::ParseStylesheetItem(rXMLElement* element){
 }
 
 void ruiDocumentLoader::ParseAbsoluteLayoutItem(rXMLElement* element){
-	int top = 0;
-	int left = 0;
+	rString id = m_currentDocument->GetDefaultId();
+	element->GetAttribute<rString>("id", id);
 
-	element->GetAttribute<int>("top", top);
-	element->GetAttribute<int>("left", left);
-
-	ruiAbsoluteLayout* absoluteLayout = new ruiAbsoluteLayout();
-	absoluteLayout->SetTop(top);
-	absoluteLayout->SetLeft(left);
+	ruiAbsoluteLayout* absoluteLayout = new ruiAbsoluteLayout(id, m_currentDocument, m_engine);
+	ParseClassList(element, absoluteLayout);
 
 	if (m_layoutStack.size() == 0)
 		m_currentDocument->SetLayout(absoluteLayout);
@@ -121,6 +117,7 @@ void ruiDocumentLoader::ParseAbsoluteLayoutItem(rXMLElement* element){
 		m_layoutStack.back()->AddItem(absoluteLayout);
 
 	m_layoutStack.push_back(absoluteLayout);
+	m_currentDocument->AddWidget(absoluteLayout);
 
 	ParseChildItems(element);
 
@@ -128,6 +125,8 @@ void ruiDocumentLoader::ParseAbsoluteLayoutItem(rXMLElement* element){
 }
 
 void ruiDocumentLoader::ParseLinearLayoutItem(rXMLElement* element){
+	rString id = m_currentDocument->GetDefaultId();
+	element->GetAttribute<rString>("id", id);
 	ruiLayoutDirection layoutDirection = ruiLAYOUT_HORIZONTAL;
 
 	rString direction;
@@ -136,7 +135,8 @@ void ruiDocumentLoader::ParseLinearLayoutItem(rXMLElement* element){
 			layoutDirection = ruiLAYOUT_VERTICAL;
 	}
 
-	ruiLinearLayout* linearLayout = new ruiLinearLayout(layoutDirection);
+	ruiLinearLayout* linearLayout = new ruiLinearLayout(layoutDirection, id, m_currentDocument, m_engine);
+	ParseClassList(element, linearLayout);
 
 	if (m_layoutStack.size() == 0)
 		m_currentDocument->SetLayout(linearLayout);
@@ -144,6 +144,7 @@ void ruiDocumentLoader::ParseLinearLayoutItem(rXMLElement* element){
 		m_layoutStack.back()->AddItem(linearLayout);
 
 	m_layoutStack.push_back(linearLayout);
+	m_currentDocument->AddWidget(linearLayout);
 
 	ParseChildItems(element);
 

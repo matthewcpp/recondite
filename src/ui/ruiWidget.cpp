@@ -53,24 +53,24 @@ void ruiWidget::RecomputeStyle(){
 	//next apply styles for each class assigned to this widget
 	for (size_t i = 0; i < m_classList.size(); i++){
 		ExtendStyle("." + m_classList[i]);
-		ExtendStyle("." + m_classList[i] + ":" + m_uiState);
 	}
 
 	//apply a style for this particualr widget instance
 	ExtendStyle("#" + Id());
 
+	if (m_uiState.length() > 0) {
+		ExtendStyle(GetWidgetType() + ":" + m_uiState);
+		for (size_t i = 0; i < m_classList.size(); i++) {
+			ExtendStyle("." + m_classList[i] + ":" + m_uiState);
+		}
+		ExtendStyle("#" + Id() + ":" + m_uiState);
+	}
 
 	//apply local style override
 	m_computedStyle.Extend(m_style);
 
-	ExtendStyle(GetWidgetType() + ":" + m_uiState);
-	for (size_t i = 0; i < m_classList.size(); i++){
-		ExtendStyle("." + m_classList[i] + ":" + m_uiState);
-	}
-	ExtendStyle("#" + Id() + ":" + m_uiState);
-
 	m_style.ClearChanged();
-	RecomputeSize(true);
+	InvalidateSize();
 }
 void ruiWidget::Draw(){}
 
@@ -191,10 +191,6 @@ rRect ruiWidget::BoundingBox(){
 
 rPoint ruiWidget::Position() const{
 	return m_position;
-}
-
-void ruiWidget::SetPosition(int x, int y){
-	m_position.Set(x, y);
 }
 
 void ruiWidget::SetPosition(const rPoint& position){

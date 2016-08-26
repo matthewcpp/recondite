@@ -49,8 +49,17 @@ logtext{
 }
 
 textbox{
-	width: 150;
+    width: 40;
 	color: 0 0 194 255;
 	border-color: 255 255 255 255;
 	margin: 2;
+}
+
+#bbox{
+    margin-right: 15;
+}
+
+.control-group{
+    margin-top: 10;
+    margin-bottom: 10;
 }

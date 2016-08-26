@@ -1,76 +1,88 @@
 #include "ui/ruiLinearLayout.hpp"
 
-ruiLinearLayout::ruiLinearLayout(ruiLayoutDirection layoutDirection){
-	m_cachedSize.Set(0, 0);
+ruiLinearLayout::ruiLinearLayout(ruiLayoutDirection layoutDirection, const rString& id, ruiIDocument* document, rEngine* engine) 
+	:ruiLayout(id,document, engine){
 	SetLayoutDirection(layoutDirection);
 }
 
-void ruiLinearLayout::Layout(rRect& rect){
-	m_cachedSize.Set(0, 0);
+void ruiLinearLayout::SetPosition(const rPoint& position) {
+	ruiWidget::SetPosition(position);
 
-	if (m_layoutDirection == ruiLAYOUT_HORIZONTAL)
-		LayoutHorizontal(rect);
-	else
-		LayoutVertical(rect);
+	Layout(rRect(m_position, rSize::Default));
 }
 
-void ruiLinearLayout::LayoutHorizontal(rRect& rect){
+rSize ruiLinearLayout::Layout(rRect& rect){
+	rSize size;
+
+	if (m_layoutDirection == ruiLAYOUT_HORIZONTAL)
+		size = LayoutHorizontal(rect);
+	else
+		size = LayoutVertical(rect);
+
+	return size;
+}
+
+rSize ruiLinearLayout::LayoutHorizontal(rRect& rect){
+	rSize m_cachedSize(0, 0);
 	rSize currentItemSize(0, 0);
-	ruiLayoutItem* layoutItem = NULL;
+	
+	ruiWidget* widget = nullptr;
 	rPoint layoutPos(rect.x, rect.y);
 	rIntArray margins(4);
 
 	for (size_t i = 0; i < m_layoutItems.size(); i++){
-		layoutItem = m_layoutItems[i];
-		DetermineMargins(layoutItem, margins);
+		widget = m_layoutItems[i];
+		DetermineMargins(widget, margins);
 
 		rPoint finalPosition = layoutPos;
 		finalPosition.x += margins[ruiMARGIN_LEFT];
 		finalPosition.y += margins[ruiMARGIN_TOP];
-		layoutItem->SetPosition(finalPosition);
+		widget->SetPosition(finalPosition);
 
-		currentItemSize = layoutItem->GetSize();
+		currentItemSize = widget->Size();
 		m_cachedSize.x += currentItemSize.x + margins[ruiMARGIN_LEFT] + margins[ruiMARGIN_RIGHT];
 		m_cachedSize.y = std::max(m_cachedSize.y, currentItemSize.y + margins[ruiMARGIN_TOP] + margins[ruiMARGIN_BOTTOM]);
 		layoutPos.x += currentItemSize.x + margins[ruiMARGIN_LEFT] + margins[ruiMARGIN_RIGHT];
 	}
+
+	return m_cachedSize;
 }
 
-void ruiLinearLayout::LayoutVertical(rRect& rect){
+rSize ruiLinearLayout::LayoutVertical(rRect& rect){
+	rSize m_cachedSize(0, 0);
 	rSize currentItemSize(0, 0);
-	ruiLayoutItem* layoutItem = NULL;
+
+	ruiWidget* widget = nullptr;
 	rPoint layoutPos(rect.x, rect.y);
 	rIntArray margins(4);
 
 	for (size_t i = 0; i < m_layoutItems.size(); i++){
-		layoutItem = m_layoutItems[i];
-		DetermineMargins(layoutItem, margins);
+		widget = m_layoutItems[i];
+		DetermineMargins(widget, margins);
 		
 		rPoint finalPosition = layoutPos;
 		finalPosition.x += margins[ruiMARGIN_LEFT];
 		finalPosition.y += margins[ruiMARGIN_TOP];
-		layoutItem->SetPosition(finalPosition);
+		widget->SetPosition(finalPosition);
 
-		currentItemSize = layoutItem->GetSize();
+		currentItemSize = widget->Size();
 		m_cachedSize.x += std::max(m_cachedSize.x, currentItemSize.x + margins[ruiMARGIN_LEFT] + margins[ruiMARGIN_RIGHT]);
 		m_cachedSize.y = currentItemSize.y + margins[ruiMARGIN_TOP] + margins[ruiMARGIN_BOTTOM];
 		layoutPos.y += currentItemSize.y + margins[ruiMARGIN_TOP] + margins[ruiMARGIN_BOTTOM];
 	}
+
+	return m_cachedSize;
 }
 
-void ruiLinearLayout::DetermineMargins(ruiLayoutItem* layoutItem, rIntArray& margins){
+void ruiLinearLayout::DetermineMargins(ruiWidget* widget, rIntArray& margins){
 	std::fill(margins.begin(), margins.end(), 0);
 
-	const rPropertyCollection* properties = layoutItem->Properties();
+	const ruiStyle* properties = widget->ComputedStyle();
 
 	properties->GetInt("margin-top", margins[ruiMARGIN_TOP]);
 	properties->GetInt("margin-right", margins[ruiMARGIN_RIGHT]);
 	properties->GetInt("margin-bottom", margins[ruiMARGIN_BOTTOM]);
 	properties->GetInt("margin-left", margins[ruiMARGIN_LEFT]);
-}
-
-rSize ruiLinearLayout::Size() const{
-	return m_cachedSize;
 }
 
 void ruiLinearLayout::SetLayoutDirection(ruiLayoutDirection layoutDirection){
@@ -79,4 +91,8 @@ void ruiLinearLayout::SetLayoutDirection(ruiLayoutDirection layoutDirection){
 
 ruiLayoutDirection ruiLinearLayout::LayoutDirection() const{
 	return m_layoutDirection;
+}
+
+rString ruiLinearLayout::GetWidgetType() const {
+	return "linearlayout";
 }

@@ -1,79 +1,46 @@
 #include "ui/ruiLayout.hpp"
-
-ruiWidgetLayoutItem::ruiWidgetLayoutItem(ruiWidget* widget, size_t flags)
-	:ruiLayoutItem(flags)
-{
-	m_widget = widget;
-}
-
-rSize ruiWidgetLayoutItem::GetSize() const{
-	return m_widget->Size();
-}
-
-void ruiWidgetLayoutItem::SetPosition(const rPoint& position){
-	m_widget->SetPosition(position);
-}
-
-const rPropertyCollection* ruiWidgetLayoutItem::Properties() const{
-	return m_widget->ComputedStyle();
-}
+#include "ui/ruiDocument.hpp"
 
 //--------------------
 
-ruiLayoutLayoutItem::ruiLayoutLayoutItem(ruiLayout* layout, size_t flags)
-	:ruiLayoutItem(flags)
-{
-	m_layout = layout;
-}
-
-rSize ruiLayoutLayoutItem::GetSize() const{
-	return m_layout->Size();
-}
-
-void ruiLayoutLayoutItem::SetPosition(const rPoint& position){
-	m_layout->SetPosition(position);
-}
-
-const rPropertyCollection* ruiLayoutLayoutItem::Properties() const{
-	return m_layout->Properties();
-}
-
-//--------------------
-
-ruiLayout::~ruiLayout(){
-	Clear();
-}
+ruiLayout::ruiLayout(const rString& id, ruiIDocument* document, rEngine* engine) 
+	:ruiWidget(id, document, engine)
+{}
 
 void ruiLayout::Clear(){
-	for (size_t i = 0; i < m_layoutItems.size(); i++)
-		delete m_layoutItems[i];
-
 	m_layoutItems.clear();
 }
 
-void ruiLayout::AddItem(ruiWidget* widget, size_t flags){
-	m_layoutItems.push_back(new ruiWidgetLayoutItem(widget, flags));
-}
-
-void ruiLayout::AddItem(ruiLayout* layout, size_t flags){
-	m_layoutItems.push_back(new ruiLayoutLayoutItem(layout, flags));
+void ruiLayout::AddItem(ruiWidget* widget){
+	m_layoutItems.push_back(widget);
+	InvalidateSize();
 }
 
 size_t ruiLayout::ItemCount() const{
 	return m_layoutItems.size();
 }
 
-void ruiLayout::SetPosition(const rPoint& position){
-	m_position = position;
+rSize ruiLayout::ComputeSize() {
+	rSize contentSize(0, 0);
 
-	rRect r(position, rSize::Default);
-	Layout(r);
+	for (size_t i = 0; i < m_layoutItems.size(); i++) {
+		rSize itemSize = m_layoutItems[i]->Size();
+		contentSize.Set(std::max(contentSize.x, itemSize.x), std::max(contentSize.y, itemSize.y));
+	}
+
+	return contentSize;
 }
 
-rPoint ruiLayout::Position() const{
-	return m_position;
+ruiWidget* ruiLayout::GetItem(size_t index) {
+	return m_layoutItems[index];
 }
 
-const rPropertyCollection* ruiLayout::Properties() const{
-	return &m_properties;
+void ruiLayout::Update() {
+	for (size_t i = 0; i < m_layoutItems.size(); i++)
+		m_layoutItems[i]->Update();
+}
+
+void ruiLayout::Draw() {
+	for (size_t i = 0; i < m_layoutItems.size(); i++)
+		m_layoutItems[i]->Draw();
 }

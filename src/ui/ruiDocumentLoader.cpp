@@ -117,7 +117,6 @@ void ruiDocumentLoader::ParseAbsoluteLayoutItem(rXMLElement* element){
 		m_layoutStack.back()->AddItem(absoluteLayout);
 
 	m_layoutStack.push_back(absoluteLayout);
-	m_currentDocument->AddWidget(absoluteLayout);
 
 	ParseChildItems(element);
 
@@ -144,7 +143,6 @@ void ruiDocumentLoader::ParseLinearLayoutItem(rXMLElement* element){
 		m_layoutStack.back()->AddItem(linearLayout);
 
 	m_layoutStack.push_back(linearLayout);
-	m_currentDocument->AddWidget(linearLayout);
 
 	ParseChildItems(element);
 
@@ -159,7 +157,6 @@ void ruiDocumentLoader::ParseTextItem(rXMLElement* element){
 	ParseClassList(element, text);
 
 	m_layoutStack.back()->AddItem(text);
-	m_currentDocument->AddWidget(text);
 }
 
 void ruiDocumentLoader::ParseTextBoxItem(rXMLElement* element){
@@ -170,7 +167,6 @@ void ruiDocumentLoader::ParseTextBoxItem(rXMLElement* element){
 	ParseClassList(element, textbox);
 
 	m_layoutStack.back()->AddItem(textbox);
-	m_currentDocument->AddWidget(textbox);
 }
 
 void ruiDocumentLoader::ParseLogTextItem(rXMLElement* element){
@@ -181,7 +177,6 @@ void ruiDocumentLoader::ParseLogTextItem(rXMLElement* element){
 	ParseClassList(element, logText);
 
 	m_layoutStack.back()->AddItem(logText);
-	m_currentDocument->AddWidget(logText);
 }
 
 void ruiDocumentLoader::ParsePickerItem(rXMLElement* element){
@@ -199,7 +194,6 @@ void ruiDocumentLoader::ParsePickerItem(rXMLElement* element){
 	ParseClassList(element, picker);
 
 	m_layoutStack.back()->AddItem(picker);
-	m_currentDocument->AddWidget(picker);
 }
 
 void ruiDocumentLoader::ParseCheckboxItem(rXMLElement* element){
@@ -215,7 +209,6 @@ void ruiDocumentLoader::ParseCheckboxItem(rXMLElement* element){
 	ParseClassList(element, checkbox);
 
 	m_layoutStack.back()->AddItem(checkbox);
-	m_currentDocument->AddWidget(checkbox);
 }
 
 void ruiDocumentLoader::ParseSliderItem(rXMLElement* element){
@@ -237,7 +230,6 @@ void ruiDocumentLoader::ParseSliderItem(rXMLElement* element){
 	ParseClassList(element, slider);
 
 	m_layoutStack.back()->AddItem(slider);
-	m_currentDocument->AddWidget(slider);
 }
 
 void ruiDocumentLoader::ParseButtonItem(rXMLElement* element){
@@ -249,7 +241,6 @@ void ruiDocumentLoader::ParseButtonItem(rXMLElement* element){
 	ParseClassList(element, button);
 
 	m_layoutStack.back()->AddItem(button);
-	m_currentDocument->AddWidget(button);
 }
 
 void ruiDocumentLoader::ParseClassList(rXMLElement* element, ruiWidget* widget){
@@ -285,5 +276,4 @@ void ruiDocumentLoader::ParseAnalogStick(rXMLElement* element){
 	ParseClassList(element, analogStick);
 
 	m_layoutStack.back()->AddItem(analogStick);
-	m_currentDocument->AddWidget(analogStick);
 }

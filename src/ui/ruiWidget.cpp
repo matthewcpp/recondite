@@ -5,6 +5,7 @@ ruiWidget::ruiWidget(const rString& id, ruiIDocument* document, rEngine* engine)
 	:rObject(id, engine)
 {
 	m_document = document;
+	m_document->AddWidget(this);
 
 	m_style.MarkChanged();
 	InvalidateSize();

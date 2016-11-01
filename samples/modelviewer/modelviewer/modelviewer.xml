@@ -1,8 +1,12 @@
 <document>
   <head>
     <controller type="ModelViewerController" />
+    <stylesheet>modelviewer.css</stylesheet>
   </head>
   <body>
-
+    <absoluteLayout>
+      <linearLayout id="mesh-list" direction="vertical"></linearLayout>
+      <linearLayout id="bone-list" direction="vertical"></linearLayout>
+    </absoluteLayout>
   </body>
 </document>

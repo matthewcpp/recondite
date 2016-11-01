@@ -19,6 +19,33 @@ ModelViewerModule::ModelViewerModule(rEngine* engine)
 	_engine = engine;
 }
 
+rViewport* CreateView(Model* model, rEngine* engine) {
+	rViewport* mainViewport = engine->component->CreateViewport("main");
+
+	rAlignedBox3 boundingBox = model->GetBoundingBox();
+	rVector3 center = boundingBox.Center();
+
+	rDemoCamera* camera = new rDemoCamera("main", engine);
+	engine->scene->AddActor(camera);
+	mainViewport->SetCamera(camera);
+
+	//set up decent clipping values
+	rAlignedBox3 box = model->GetBoundingBox();
+	
+	float diagonal = box.min.Distance(box.max);
+	camera->Reset(center, diagonal * 3, 0, 0);
+
+	mainViewport->SetFarClip(diagonal * 10);
+
+	rVector3 delta = (box.max - box.min) / 15.0;
+	float nearClip = delta.x;
+	nearClip = std::min(nearClip, delta.y);
+	nearClip = std::min(nearClip, delta.z);
+	mainViewport->SetNearClip(nearClip);
+
+	return mainViewport;
+}
+
 void ModelViewerModule::Init(const rArrayString& args) {
 	_engine->ui->RegisterControllerClass("ModelViewerController", &CreateUiController, &DeleteUiController);
 
@@ -26,19 +53,11 @@ void ModelViewerModule::Init(const rArrayString& args) {
 	ModelData modelData;
 	modelData.Read(*fileSystemRed);
 	Model* model =_engine->content->Models()->LoadFromData(modelData, "model");
-	rAlignedBox3 boundingBox = model->GetBoundingBox();
-	rVector3 center = boundingBox.Center();
-
+	
 	rProp* prop = new rProp(model, "prop", _engine);
 	_engine->scene->AddActor(prop);
 
-	rViewport* mainViewport = _engine->component->CreateViewport("main");
-	mainViewport->SetFarClip(500);
-
-	rDemoCamera* camera = new rDemoCamera("main", _engine);
-	camera->Reset(center, 150, 0, 0);
-	mainViewport->SetCamera(camera);
-	_engine->scene->AddActor(camera);
+	rViewport* mainViewport = CreateView(model, _engine);
 
 	_engine->ui->LoadUiDocument("C:/development/recondite/samples/modelviewer/modelviewer/modelviewer.xml", mainViewport);
 }

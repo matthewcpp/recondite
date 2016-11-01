@@ -13,7 +13,7 @@ varying vec3 normalInterp;
 varying vec3 vertPos;
 
 const vec3 lightPos = vec3(1.0,1.0,1.0);
-const vec3 ambientColor = vec3(0.0, 0.0, 0.0);
+const vec3 ambientColor = vec3(0.2, 0.2, 0.2);
 vec3 diffuseColor = fragColor.xyz;
 const vec3 specColor = vec3(1.0, 1.0, 1.0);
 
@@ -30,7 +30,8 @@ void main() {
   float lambertian = max(dot(lightDir,normal), 0.0);
   float specular = 0.0;
 
-  if(lambertian > 0.0) {
+  //TODO: understand why this needs to be be >= as opposed to > (original algorithm)
+  if(lambertian >= 0.0) { 
 		vec3 viewDir = normalize(-vertPos);
 
 		// this is blinn phong

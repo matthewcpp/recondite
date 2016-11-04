@@ -57,7 +57,9 @@ void rApplicationBase::Draw(){
 		rMatrixUtil::Ortho2D(window.Left(), window.Right(), window.Bottom(), window.Top(), matrixOrtho2D);
 
 		m_engine.renderer->Begin(matrixOrtho2D, identity);
+		m_module->BeforeRenderUi(viewport);
 		m_uiManager->Draw(viewport);
+		m_module->AfterRenderUi(viewport);
 		m_engine.renderer->End();
 	}
 

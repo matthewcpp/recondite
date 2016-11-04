@@ -17,6 +17,10 @@ ModelViewerModule::ModelViewerModule(rEngine* engine)
 	:rModule("Model Viewer Sample") 
 {
 	_engine = engine;
+
+	renderSkeleton = true;
+	skeletonLineColor = rColor::Green;
+	skeletonTextColor = rColor::White;
 }
 
 rViewport* CreateView(Model* model, rEngine* engine) {
@@ -52,6 +56,9 @@ void ModelViewerModule::Init(const rArrayString& args) {
 	auto fileSystemRed = _engine->content->FileSystem()->GetReadFileRef(args[0]);
 	ModelData modelData;
 	modelData.Read(*fileSystemRed);
+
+	CreateSkeletonGeometry(modelData);
+
 	Model* model =_engine->content->Models()->LoadFromData(modelData, "model");
 	
 	rProp* prop = new rProp(model, "prop", _engine);
@@ -60,6 +67,41 @@ void ModelViewerModule::Init(const rArrayString& args) {
 	rViewport* mainViewport = CreateView(model, _engine);
 
 	_engine->ui->LoadUiDocument("C:/development/recondite/samples/modelviewer/modelviewer/modelviewer.xml", mainViewport);
+
+}
+
+void ModelViewerModule::CreateSkeletonGeometry(recondite::ModelData& modelData) {
+	recondite::Skeleton* skeleton = modelData.GetSkeleton();
+
+	if (skeleton) {
+		skeletonBuffer.Reset(rGeometryType::Lines, 3, false);
+
+		recondite::MaterialData* skeletonMaterial = modelData.CreateMaterial();
+		skeletonMaterial->diffuseColor = rColor::Green;
+
+		std::vector<rVector3> points;
+
+		size_t boneCount = skeleton->GetBoneCount();
+		for (size_t i = 0; i < boneCount; i++) {
+			recondite::Bone* bone = skeleton->GetBone(i);
+
+			rVector3 bonePos = skeleton->GetGlobalTransform(bone).GetTranslate();
+			boneLabelPoints[bone->name] = bonePos;
+
+			if (!bone->IsRoot()) {
+				recondite::Bone* parent = skeleton->GetBone(bone->parentId);
+
+				rVector3 parentPos = skeleton->GetGlobalTransform(parent).GetTranslate();
+
+				skeletonBuffer.PushVertex(bonePos);
+				skeletonBuffer.PushVertex(parentPos);
+
+
+				size_t indexCount = skeletonBuffer.IndexCount();
+				skeletonBuffer.PushIndex(indexCount, indexCount + 1);
+			}
+		}
+	}
 }
 
 void ModelViewerModule::LoadScene(const rString& sceneName) {
@@ -71,5 +113,28 @@ void ModelViewerModule::DeleteActor(rActor3* actor) {
 }
 
 void ModelViewerModule::AfterRenderScene(rViewport* viewport) {
-
+	if (skeletonBuffer.VertexCount() > 0 && renderSkeleton) {
+		_engine->renderer->EnableDepthTesting(false);
+		_engine->renderer->RenderImmediateLines(skeletonBuffer, skeletonLineColor);
+		_engine->renderer->EnableDepthTesting(true);
+	}
 }
+
+void ModelViewerModule::BeforeRenderUi(rViewport* viewport) {
+	rRect screenRect = viewport->GetScreenRect();
+
+	rMatrix4 viewMatrix, projectionMatrix;
+	viewport->GetViewMatrix(viewMatrix);
+	viewport->GetProjectionMatrix(projectionMatrix);
+
+	rSpriteBatch* sb = _engine->renderer->SpriteBatch();
+
+	for (auto& boneLabel : boneLabelPoints) {
+		rVector2 projectedPoint;
+		rMatrixUtil::Project(boneLabel.second, viewMatrix, projectionMatrix, screenRect, projectedPoint);
+		projectedPoint.y = float(screenRect.height) - projectedPoint.y;
+
+		sb->RenderString(boneLabel.first, _engine->content->Fonts()->SystemDefault(), rPoint(projectedPoint.x, projectedPoint.y), skeletonTextColor);
+	}
+}
+

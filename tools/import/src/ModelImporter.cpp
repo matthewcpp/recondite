@@ -8,14 +8,23 @@
 
 #include "rPath.hpp"
 
+#include "stream/rOFileStream.hpp"
+
 namespace recondite { namespace import {
-	void ImportMeshes(const aiScene* scene, ModelData& modelData);
+	
 
 	struct ModelImporter::Impl{
 		Assimp::Importer importer;
 		rString path;
 
 		int ImportMaterials(const aiScene* scene, ModelData& modelData);
+		void ImportMeshes(const aiScene* scene, ModelData& modelData);
+		void ImportMeshBones(const aiScene* scene, aiMesh* mesh, ModelData& modelData);
+		void CreateSkeletonHierarchy(const aiScene* scene, ModelData& modelData);
+		void NodeDump(const rString& path, const aiScene* scene);
+		void NodeWalk(rOStream& stream, size_t indent, aiNode* node);
+
+		void GatherBones(aiNode* node, Skeleton* skeleton);
 	};
 
 	ModelImporter::ModelImporter(){
@@ -24,6 +33,23 @@ namespace recondite { namespace import {
 
 	ModelImporter::~ModelImporter(){
 		delete _impl;
+	}
+
+	void ModelImporter::Impl::NodeDump(const rString& path, const aiScene* scene) {
+		rOFileStream stream(path);
+
+		NodeWalk(stream, 0, scene->mRootNode);
+	}
+
+	void ModelImporter::Impl::NodeWalk(rOStream& stream, size_t indent, aiNode* node) {
+		for (size_t i = 0; i < indent; i++)
+			stream << ' ';
+
+		stream << node->mName.C_Str() << '\n';
+
+		for (size_t i = 0; i < node->mNumChildren; i++) {
+			NodeWalk(stream, indent + 2, node->mChildren[i]);
+		}
 	}
 
 	int ModelImporter::ImportModel(const rString& path, ModelData& modelData){
@@ -38,15 +64,22 @@ namespace recondite { namespace import {
 		if (!scene)
 			return 1;
 
-		_impl->ImportMaterials(scene, modelData);
-		ImportMeshes(scene, modelData);
+		_impl->NodeDump("C:/temp/node_dump.txt", scene);
 
+		if (scene->mNumAnimations > 0) {
+			modelData.CreateSkeleton();
+			_impl->CreateSkeletonHierarchy(scene, modelData);
+		}
+
+		_impl->ImportMaterials(scene, modelData);
+		_impl->ImportMeshes(scene, modelData);
+		
 		modelData.CalculateBoundings();
 
 		return 0;
 	}
 
-	void ImportMeshes(const aiScene* scene, ModelData& modelData) {
+	void ModelImporter::Impl::ImportMeshes(const aiScene* scene, ModelData& modelData) {
 		GeometryData* geometry = modelData.GetGeometryData();
 		size_t baseIndex = geometry->VertexCount();
 
@@ -78,7 +111,65 @@ namespace recondite { namespace import {
 
 			meshData->SetMaterialId(mesh->mMaterialIndex);
 
+			if (scene->mNumAnimations > 0)
+				ImportMeshBones(scene, mesh, modelData);
+
 			baseIndex += mesh->mNumVertices;
+		}
+	}
+
+	void ModelImporter::Impl::ImportMeshBones(const aiScene* scene, aiMesh* mesh, ModelData& modelData) {
+		size_t baseIndex = modelData.GetGeometryData()->VertexCount() - mesh->mNumVertices;
+		
+
+		Skeleton* skeleton = modelData.GetSkeleton();
+		skeleton->AllocateVertexWeightData(mesh->mNumVertices);
+
+		for (size_t i = 0; i < mesh->mNumBones; i++) {
+			aiBone* bone = mesh->mBones[i];
+
+			Bone* boneData = skeleton->GetBoneByName(bone->mName.C_Str());
+
+			rMatrix4 globalTransform = skeleton->GetGlobalTransform(boneData);
+
+			for (uint32_t j = 0; j < bone->mNumWeights; j++)
+				skeleton->AddVertexWeight(baseIndex + bone->mWeights[j].mVertexId, boneData->id, bone->mWeights[j].mWeight);
+		}
+	}
+
+	void ModelImporter::Impl::GatherBones(aiNode* node, Skeleton* skeleton) {
+		Bone* bone = skeleton->CreateBone(node->mName.C_Str());
+
+		rMatrix4 transformMatrix((float*)&node->mTransformation);
+		transformMatrix.Transpose();
+		bone->transform = transformMatrix;
+
+		Bone* parentBone = skeleton->GetBoneByName(node->mParent->mName.C_Str());
+
+		if (parentBone) {
+			bone->parentId = parentBone->id;
+		}
+
+		for (size_t i = 0; i < node->mNumChildren; i++) {
+			GatherBones(node->mChildren[i], skeleton);
+		}
+	}
+
+	void ModelImporter::Impl::CreateSkeletonHierarchy(const aiScene* scene, ModelData& modelData) {
+		//Need to find child of root node which does not refer to meshes.  This will be the Skeleton Container.
+		aiNode* rootNode = scene->mRootNode;
+		aiNode* skeletonContainer = nullptr;
+
+		for (size_t i = 0; i < rootNode->mNumChildren; i++) {
+			if (rootNode->mChildren[i]->mNumMeshes == 0) {
+				skeletonContainer = rootNode->mChildren[i];
+				break;
+			}
+		}
+
+		//extract bone hierarchy from assimp node tree
+		for (size_t i = 0; i < skeletonContainer->mNumChildren; i++) {
+			GatherBones(skeletonContainer->mChildren[i], modelData.GetSkeleton());
 		}
 	}
 

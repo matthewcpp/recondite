@@ -109,6 +109,32 @@ bool rMatrixUtil::Unproject(const rVector3& point, const rMatrix4& modelMatrix, 
 	return true;
 }
 
+bool rMatrixUtil::Project(const rVector3& point, const rMatrix4& viewMatrix, const rMatrix4& projectionMatrix, const rRect& viewport, rVector2& out) {
+	rVector4 pt4(point.x, point.y, point.z, 1.0f);
+
+	viewMatrix.TransformVector4(pt4);
+	projectionMatrix.TransformVector4(pt4);
+
+	if (pt4.w == 0)
+		return false;
+
+	pt4 /= pt4.w;
+
+	/* Map x, y and z to range 0-1 */
+	pt4.x = pt4.x * 0.5f + 0.5f;
+	pt4.y = pt4.y * 0.5f + 0.5f;
+	pt4.z = pt4.z * 0.5f + 0.5f;
+
+	/* Map x,y to viewport */
+	pt4.x = pt4.x * viewport.width;
+	pt4.y = pt4.y * viewport.height;
+
+	out.x = pt4.x;
+	out.y = pt4.y;
+
+	return true;
+}
+
 void rMatrixUtil::QuaterionToMatrix(const rQuaternion& q, rMatrix4& m){
 	m.LoadIdentity();
 	

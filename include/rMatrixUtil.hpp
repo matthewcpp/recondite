@@ -7,6 +7,7 @@
 
 #include "rMathUtil.hpp"
 #include "rMatrix4.hpp"
+#include "rVector2.hpp"
 #include "rVector3.hpp"
 #include "rVector4.hpp"
 #include "rRect.hpp"
@@ -20,6 +21,7 @@ namespace rMatrixUtil{
 	void RECONDITE_API Ortho2D(float left, float right, float bottom, float top, rMatrix4& matrix);
 	void RECONDITE_API Ortho(float left, float right, float bottom, float top, float near, float far,rMatrix4& matrix);
 	bool RECONDITE_API Unproject(const rVector3& point, const rMatrix4& modelMatrix, const rMatrix4& projectionMatrix, const rRect& viewport, rVector3& out);
+	bool RECONDITE_API Project(const rVector3& point, const rMatrix4& viewMatrix, const rMatrix4& projectionMatrix, const rRect& viewport, rVector2& out);
 
 	void RECONDITE_API QuaterionToMatrix(const rQuaternion& q, rMatrix4& m);
 	void RECONDITE_API ExtractViewFrustrum(const rMatrix4& matrix, rFrustrum& frustrum);

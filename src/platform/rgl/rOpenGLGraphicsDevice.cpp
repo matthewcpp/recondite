@@ -332,7 +332,7 @@ void rOpenGLGraphicsDevice::UnregisterTexture(int textureID){
 	glDeleteTextures(1, &texID);
 }
 
-void rOpenGLGraphicsDevice::RenderMesh(const recondite::Mesh* mesh, const rMatrix4& projection, const rMatrix4& modelview) {
+void rOpenGLGraphicsDevice::RenderTriangleMesh(const recondite::Mesh* mesh, const rMatrix4& projection, const rMatrix4& modelview) {
 	rMatrix4 normalMatrix = modelview;
 	normalMatrix.Invert();
 	normalMatrix.Transpose();
@@ -344,6 +344,16 @@ void rOpenGLGraphicsDevice::RenderMesh(const recondite::Mesh* mesh, const rMatri
 	glUniformMatrix4fv(gProjectionLoc, 1, GL_FALSE, projection.m);
 	glUniformMatrix4fv(gModelviewLoc, 1, GL_FALSE, modelview.m);
 	glUniformMatrix4fv(gNormalMatLoc, 1, GL_FALSE, normalMatrix.m);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->GetElementBufferId());
+	glDrawElements(GLGeometryType(mesh->GetGeometryType()), mesh->GetElementBufferCount(), GL_UNSIGNED_SHORT, 0);
+}
+
+void rOpenGLGraphicsDevice::RenderLineMesh(const recondite::Mesh* mesh, const rMatrix4& projection, const rMatrix4& modelview) {
+	rMatrix4 mvpMatrix = projection * modelview;
+	GLuint matrixLoc = glGetUniformLocation(m_activeShaderProgram, "recMVPMatrix");
+
+	glUniformMatrix4fv(matrixLoc, 1, GL_FALSE, mvpMatrix.m);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->GetElementBufferId());
 	glDrawElements(GLGeometryType(mesh->GetGeometryType()), mesh->GetElementBufferCount(), GL_UNSIGNED_SHORT, 0);

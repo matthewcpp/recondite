@@ -20,10 +20,10 @@
 
 #include "rSkeleton.hpp"
 #include "rRenderingOptions.hpp"
-#include "rAnimationPlayer.hpp"
 #include "rSpriteBatch.hpp"
 
 #include "asset/rModel.hpp"
+#include "asset/rMaterial.hpp"
 
 using namespace recondite;
 
@@ -41,10 +41,13 @@ public:
 	size_t ObjectsRendered() const;
 
 	void EnableDepthTesting(bool enable);
+	bool DepthTestEnabled() const;
 	
 	rSpriteBatch* SpriteBatch();
 
 	void RenderModel(const Model* model, const rMatrix4& matrix);
+
+	void RenderImmediateLines(const rImmediateBuffer& buffer, rColor color);
 
 private:
 	void RenderSpriteBatch();
@@ -54,13 +57,13 @@ private:
 		rContentManager* m_contentManager;
 
 		rViewport* m_activeViewport;
-		rRenderMode m_renderMode;
 
 		rMatrix4 m_viewMatrix;
 		rMatrix4 m_projectionMatrix;
 
 		size_t m_objectsRendered;
 		std::unique_ptr<rSpriteBatch> m_spriteBatch;
+		bool m_depthTestEnabled;
 };
 
 #endif

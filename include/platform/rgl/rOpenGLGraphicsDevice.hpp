@@ -71,7 +71,9 @@ public:
 	virtual void SetViewport(int x , int y, int width, int height) ;
 	virtual void SetActiveMaterial(rMaterial* material);
 
-	void RenderMesh(const recondite::Mesh* mesh, const rMatrix4& projection, const rMatrix4& modelview);
+	virtual void RenderTriangleMesh(const recondite::Mesh* mesh, const rMatrix4& projection, const rMatrix4& modelview);
+	virtual void RenderLineMesh(const recondite::Mesh* mesh, const rMatrix4& projection, const rMatrix4& modelview);
+
 	virtual void ActivateGeometryBuffer(const recondite::Geometry* geometry);
 	virtual void DeactivateGeometryBuffer(const recondite::Geometry* geometry);
 

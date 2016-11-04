@@ -116,7 +116,7 @@ rShader* rShaderManager::DefaultModelShader(){
 }
 
 rShader* rShaderManager::DefaultLineShader(){
-	return Get("default_colored");
+	return Get("__default_line__");
 }
 
 rShader* rShaderManager::DefaultPrimitiveShader(){

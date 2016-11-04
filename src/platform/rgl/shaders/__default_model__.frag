@@ -24,23 +24,21 @@ void main() {
 	if (texturedColor.a < 0.1)
 		discard;
 
-  vec3 normal = normalize(normalInterp);
-  vec3 lightDir = normalize(lightPos - vertPos);
+	vec3 normal = normalize(normalInterp);
+	vec3 lightDir = normalize(lightPos - vertPos);
 
-  float lambertian = max(dot(lightDir,normal), 0.0);
-  float specular = 0.0;
+	float lambertian = max(dot(lightDir,normal), 0.0);
+	float specular = 0.0;
 
-  //TODO: understand why this needs to be be >= as opposed to > (original algorithm)
-  if(lambertian >= 0.0) { 
-		vec3 viewDir = normalize(-vertPos);
+	vec3 viewDir = normalize(-vertPos);
 
-		// this is blinn phong
-		vec3 halfDir = normalize(lightDir + viewDir);
-		float specAngle = max(dot(halfDir, normal), 0.0);
-		specular = pow(specAngle, 16.0);
+	// this is blinn phong
+	vec3 halfDir = normalize(lightDir + viewDir);
+	float specAngle = max(dot(halfDir, normal), 0.0);
+	specular = pow(specAngle, 16.0);
 
-		vec4 shadedColor = vec4(ambientColor + lambertian * diffuseColor + specular * specColor, 1.0);
+	vec4 shadedColor = vec4(ambientColor + lambertian * diffuseColor + specular * specColor, 1.0);
 
-		gl_FragColor = shadedColor * texturedColor;
-	}
+	gl_FragColor = shadedColor * texturedColor;
+
 }

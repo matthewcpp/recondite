@@ -66,9 +66,13 @@ Model* rModelManager::LoadFromData(const ModelData& modelData, const rString& na
 	std::vector<rMaterial*> materials;
 	_impl->CreateMaterialsForModel(modelData, name, materials);
 
+	Geometry geometry, lineGeometry;
+
 	const GeometryData* geometryData = modelData.GetGeometryData();
-	uint32_t bufferId = _impl->graphicsDevice->CreateGeometryBuffer(geometryData);
-	Geometry geometry(bufferId, geometryData->VertexCount(), geometryData->HasNormals(), geometryData->HasTexCoords());
+	if (geometryData->VertexCount()) {
+		uint32_t geometryBufferId = _impl->graphicsDevice->CreateGeometryBuffer(geometryData);
+		geometry.Reset(geometryBufferId, geometryData->VertexCount(), geometryData->HasNormals(), geometryData->HasTexCoords());
+	}
 
 	Model* model = new Model(name, geometry);
 	model->SetBoundingBox(modelData.GetBoundingBox());
@@ -78,6 +82,15 @@ Model* rModelManager::LoadFromData(const ModelData& modelData, const rString& na
 
 		uint32_t bufferId = _impl->graphicsDevice->CreateElementBuffer(meshData->GetBufferData(), meshData->GetBufferDataSize());
 		Mesh* mesh = model->CreateTriangleMesh(bufferId, meshData->GetElementCount(), materials[meshData->GetMaterialId()]);
+		mesh->SetName(meshData->GetName());
+		mesh->SetBoundingBox(meshData->GetBoundingBox());
+	}
+
+	for (size_t i = 0; i < modelData.GetLineMeshCount(); i++) {
+		const MeshData* meshData = modelData.GetLineMesh(i);
+
+		uint32_t bufferId = _impl->graphicsDevice->CreateElementBuffer(meshData->GetBufferData(), meshData->GetBufferDataSize());
+		Mesh* mesh = model->CreateLineMesh(bufferId, meshData->GetElementCount(), materials[meshData->GetMaterialId()]);
 		mesh->SetName(meshData->GetName());
 		mesh->SetBoundingBox(meshData->GetBoundingBox());
 	}

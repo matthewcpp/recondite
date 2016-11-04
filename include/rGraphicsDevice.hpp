@@ -46,7 +46,9 @@ public:
 	
 	virtual void ActivateGeometryBuffer(const recondite::Geometry* geometry) = 0;
 	virtual void DeactivateGeometryBuffer(const recondite::Geometry* geometry) = 0;
-	virtual void RenderMesh(const recondite::Mesh* mesh, const rMatrix4& projection, const rMatrix4& modelview) = 0;
+
+	virtual void RenderTriangleMesh(const recondite::Mesh* mesh, const rMatrix4& projection, const rMatrix4& modelview) = 0;
+	virtual void RenderLineMesh(const recondite::Mesh* mesh, const rMatrix4& projection, const rMatrix4& modelview) = 0;
 
 	virtual void RenderImmediate(const rImmediateBuffer& geometry, const rMatrix4& transform, rMaterial* material) = 0;
 	

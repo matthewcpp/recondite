@@ -1,80 +1,53 @@
-#ifndef R_SKELETON_HPP
-#define R_SKELETON_HPP
+#pragma once
 
 #include <map>
 #include <vector>
 
 #include "rBuild.hpp"
-#include "rTypes.hpp"
-#include "rDefs.hpp"
+#include "rString.hpp"
+#include "rMatrix4.hpp"
 
-#include "rVector3.hpp"
+#include "stream/rIStream.hpp"
+#include "stream/rOStream.hpp"
 
-#include "rAnimation.hpp"
+namespace recondite {
+	struct RECONDITE_API Bone {
+		uint32_t id;
+		uint32_t parentId;
+		rString name;
+		rMatrix4 transform;
 
-struct rBone;
+		bool IsRoot() const;
+	};
 
-typedef std::vector<rBone*> rBoneArray;
+	class RECONDITE_API Skeleton {
+	public:
+		Skeleton();
+		~Skeleton();
 
-struct RECONDITE_API rBone{
-public:
-	rBone(){}
-	rBone(int ID, const rString& n);
+	public:
+		Bone* CreateBone(const rString& name);
+		Bone* GetBoneByName(const rString& name);
+		Bone* GetBone(uint32_t id) const;
+		size_t GetBoneCount() const;
 
-public:
+		void AllocateVertexWeightData(size_t numVertices);
+		bool AddVertexWeight(size_t vertexIndex, size_t boneIndex, float weight);
+		size_t GetNumVertexBoneWeights() const;
+		size_t GetVertexBoneWeightsDataSize() const;
+		const char* GetVertexBoneWeightData() const;
 
-	void AddChild(rBone* bone);
-	rVector3 WoldPosition() const;
-	void CalculateInverseBindTransform();
+		void SetGlobalSkeletonTransform(const rMatrix4& matrix);
 
-public:
+		size_t GetMaxBoneWeightsPerVertex() const;
 
-	int id;
-	rBone* parent;
-	rString name;
-	rVector3 position;
-	rQuaternion rotation;
+		rMatrix4 GetGlobalTransform(const Bone* bone) const;
 
-	rBoneArray children;
-	rMatrix4 inverseBindTransform;
-};
+		int Write(rOStream& stream);
+		int Read(rIStream& stream);
 
-typedef std::map<int, rBone*> rBoneMap;
-
-class RECONDITE_API rSkeleton {
-public:
-	rSkeleton();
-	~rSkeleton();
-
-public:
-
-	rBone* CreateBone(const rString& name);
-	rBone* CreateBone(int id, const rString& name);
-
-	rBone* GetBone(const rString& name) const;
-	rBone* GetBone(int id) const;
-
-	void GetTopLevelBones(rBoneArray& bones) const;
-	void CalculateInverseBoneTransformations();
-
-	size_t NumBones() const;
-
-	void Clear();
-	
-	rAnimation* CreateAnimation(const rString& name);
-	rAnimation* GetAnimation(const rString& name) const;
-	void DeleteAnimation(const rString& name);
-	size_t NumAnimations() const;
-	void GetAnimationNames(rArrayString& names) const;
-
-private:
-	void CalculateInverseBoneTransformationsRec(rBone* parent);
-
-private:
-	rBoneMap m_bones;
-	rAnimationMap m_animations;
-};
-
-typedef std::map<rString, rSkeleton*> rSkeletonMap;
-
-#endif
+	private:
+		struct Impl;
+		Impl* _impl;
+	};
+}

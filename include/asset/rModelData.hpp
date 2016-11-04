@@ -14,13 +14,15 @@
 #include "rAlignedBox3.hpp"
 #include "rGeometryData.hpp"
 #include "rTextureData.hpp"
+#include "rSkeleton.hpp"
 
 namespace recondite {
 	struct RECONDITE_API MaterialData {
+		uint32_t id;
 		uint32_t diffuseTextureId;
 		rColor diffuseColor;
 
-		MaterialData() : diffuseTextureId(UINT_MAX), diffuseColor(rColor::White) {}
+		MaterialData(uint32_t i) : id(i), diffuseTextureId(UINT_MAX), diffuseColor(rColor::White) {}
 	};
 
 	class RECONDITE_API MeshData {
@@ -164,9 +166,12 @@ namespace recondite {
 		MaterialData* CreateMaterial();
 		size_t GetNumMaterials() const;
 		MaterialData* GetMaterial(size_t index) const;
+		Skeleton* CreateSkeleton();
+		Skeleton* GetSkeleton() const;
+
+
 
 		int Read(rIStream& stream);
-
 		int Write(rOStream& stream);
 
 	private:

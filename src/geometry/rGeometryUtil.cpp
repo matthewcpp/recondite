@@ -143,43 +143,6 @@ void rGeometryUtil::CreateWireAlignedBoxVerticies(const rAlignedBox3& box,  rImm
 	geometry.PushVertex(box.min.x, box.min.y, box.min.z);
 }
 
-
-
-void rGeometryUtil::Create2DText(const rString& str, const Font::Face* font, const rRect& bounding, rImmediateBuffer& geometry){
-	
-}
-
-void BuildBoneGeometry(rImmediateBuffer& pointData, rImmediateBuffer& lineData, rBone* bone, unsigned short parentVertexIndex){
-	rVector3 worldPos = bone->WoldPosition();
-	size_t index = bone->id;
-
-	lineData.SetVertex(index, worldPos);
-	pointData.SetVertex(index, worldPos);
-	pointData.PushIndex(index);
-
-	if (parentVertexIndex != USHRT_MAX){
-		lineData.PushIndex(index, parentVertexIndex);
-	}
-
-	for (size_t i = 0; i < bone->children.size(); i++){
-		BuildBoneGeometry(pointData, lineData, bone->children[i], index);
-	}
-}
-
-void rGeometryUtil::CreateSkeletonGeometry(const rSkeleton* skeleton, rImmediateBuffer& pointData, rImmediateBuffer& lineData){
-	rBoneArray bones;
-	skeleton->GetTopLevelBones(bones);
-
-	pointData.Reset(rGeometryType::Points, 3, false);
-	pointData.Allocate(skeleton->NumBones());
-	lineData.Reset(rGeometryType::Lines, 3, false);
-	lineData.Allocate(skeleton->NumBones());
-
-	for (size_t i = 0; i < bones.size(); i++){
-		BuildBoneGeometry(pointData, lineData, bones[i], USHRT_MAX);
-	}
-}
-
 void GenerateRoundedBorders(rRect rect, float radius, int detail, rImmediateBuffer& geometry, float zValue, CircleIndexFunc& indexFunc){
 	CircleSweep(rect.Right() - radius, rect.Top() + radius, radius, 0.0f, 90.0f, detail, geometry, zValue, indexFunc);
 	CircleSweep(rect.Left() + radius, rect.Top() + radius, radius, 90.0f, 180.0f, detail, geometry, zValue, indexFunc);

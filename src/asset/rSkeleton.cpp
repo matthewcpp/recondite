@@ -1,160 +1,199 @@
 #include "rSkeleton.hpp"
 
-rSkeleton::rSkeleton(){
-}
+#include <map>
+#include <memory>
 
-rSkeleton::~rSkeleton(){
-	Clear();
-}
+namespace recondite {
+#define MaxBoneWightsPerVertex 4
+#define RootBoneId UINT32_MAX
 
-rBone* rSkeleton::CreateBone(const rString& name){
-	int boneId = m_bones.size();
-
-	return CreateBone(boneId, name);
-}
-
-rBone* rSkeleton::CreateBone(int id, const rString& name){
-	if (m_bones.count(id)){
-		return NULL;
-	}
-	else{
-		rBone* bone = new rBone(id, name);
-		m_bones[id] = bone;
-		return bone;
-	}
-}
-
-rBone* rSkeleton::GetBone(const rString& name) const{
-	for (rBoneMap::const_iterator it = m_bones.begin(); it != m_bones.end(); ++it){
-		if (it->second->name == name)
-			return it->second;
+	bool Bone::IsRoot() const {
+		return parentId == RootBoneId;
 	}
 
-	return NULL;
-}
+	struct VertexBoneWeights {
+		uint32_t boneIndex[MaxBoneWightsPerVertex];
+		float weight[MaxBoneWightsPerVertex];
 
-rBone* rSkeleton::GetBone(int id) const{
-	rBoneMap::const_iterator result = m_bones.find(id);
+		VertexBoneWeights();
+	};
 
-	if (result == m_bones.end()){
-		return NULL;
-	}
-	else{
-		return result->second;
-	}
-}
-
-void rSkeleton::GetTopLevelBones(rBoneArray& bones) const{
-	bones.clear();
-
-	for (rBoneMap::const_iterator it = m_bones.begin(); it != m_bones.end(); ++it){
-		if (!it->second->parent)
-			bones.push_back(it->second);
-	}
-}
-
-void rSkeleton::Clear(){
-	for (rBoneMap::iterator it = m_bones.begin(); it != m_bones.end(); ++it)
-		delete it->second;
-
-	m_bones.clear();
-}
-
-size_t rSkeleton::NumBones() const{
-	return m_bones.size();
-}
-
-rAnimation* rSkeleton::CreateAnimation(const rString& name){
-	if (m_animations.count(name)){
-		return NULL;
-	}
-	else{
-		rAnimation* animation = new rAnimation(name);
-		m_animations[name] = animation;
-		return animation;
-	}
-}
-
-rAnimation* rSkeleton::GetAnimation(const rString& name) const{
-	rAnimationMap::const_iterator result = m_animations.find(name);
-	
-	if (result == m_animations.end()){
-		return NULL;
-	}
-	else{
-		return result->second;
-	}
-}
-
-void rSkeleton::DeleteAnimation(const rString& name){
-	m_animations.erase(name);
-}
-
-size_t rSkeleton::NumAnimations() const{
-	return m_animations.size();
-}
-	
-void rSkeleton::GetAnimationNames(rArrayString& names) const{
-	names.clear();
-	
-	for (rAnimationMap::const_iterator it = m_animations.begin(); it != m_animations.end(); ++it)
-		names.push_back(it->first);
-}
-
-void rSkeleton::CalculateInverseBoneTransformations(){
-	rBoneArray topLevelBones;
-	GetTopLevelBones(topLevelBones);
-
-	for (size_t i = 0; i < topLevelBones.size(); i++){
-		topLevelBones[i]->CalculateInverseBindTransform();
-		CalculateInverseBoneTransformationsRec(topLevelBones[i]);
-	}
-}
-
-void rSkeleton::CalculateInverseBoneTransformationsRec(rBone* parent){
-	for (size_t i = 0; i < parent->children.size(); i++){
-		parent->children[i]->CalculateInverseBindTransform();
-		CalculateInverseBoneTransformationsRec(parent->children[i]);
-	}
-}
-//--------------
-
-rBone::rBone(int ID, const rString& n){
-	id = ID;
-	name = n;
-	parent = NULL;
-	position = rVector3::ZeroVector;
-	rotation = rQuaternion::Identity;
-}
-
-void rBone::AddChild(rBone* bone){
-	bone->parent = this;
-	children.push_back(bone);
-}
-
-rVector3 rBone::WoldPosition() const{
-	rVector3 worldPos = position;
-
-	rBone* parentBone = parent;
-	while (parentBone){
-		worldPos += parentBone->position;
-		parentBone = parentBone->parent;
+	VertexBoneWeights::VertexBoneWeights() {
+		for (size_t i = 0; i < 4; i++) {
+			boneIndex[i] = 0;
+			weight[i] = 0.0f;
+		}
 	}
 
-	return worldPos;
-}
+	struct SkeletonFileHeader {
+		uint32_t numBones;
+		uint32_t numVertexBoneWeights;
+	};
 
-void rBone::CalculateInverseBindTransform(){
-	rMatrix4 rotMatrix, transMatrix, xform;
-	rMatrixUtil::QuaterionToMatrix(rotation, rotMatrix);
-	transMatrix.SetTranslate(position);
+	struct Skeleton::Impl {
+		std::vector <std::unique_ptr<Bone>> bones;
+		std::map<rString, Bone*> bonesByName;
+		std::vector<VertexBoneWeights> vertexBoneWeights;
+		rMatrix4 globalTransform;
 
-	xform = transMatrix * rotMatrix;
-	xform.Invert();
+		void InitHeader(SkeletonFileHeader& header);
+	};
 
-	if (parent)
-		inverseBindTransform = parent->inverseBindTransform * xform;
-	else
-		inverseBindTransform = xform;
+	Skeleton::Skeleton() {
+		_impl = new Impl();
+	}
+
+	Skeleton::~Skeleton() {
+		delete _impl;
+	}
+
+	Bone* Skeleton::CreateBone(const rString& name) {
+		if (_impl->bonesByName.count(name)) {
+			return nullptr;
+		}
+		else {
+			Bone* boneData = new Bone();
+
+			_impl->bones.emplace_back(boneData);
+			_impl->bonesByName[name] = boneData;
+
+			boneData->name = name;
+			boneData->id = _impl->bonesByName.size() - 1;
+			boneData->parentId = UINT32_MAX;
+
+			return boneData;
+		}
+	}
+
+
+	void Skeleton::AllocateVertexWeightData(size_t numVertices) {
+		_impl->vertexBoneWeights.resize(_impl->vertexBoneWeights.size() + numVertices);
+	}
+
+	bool Skeleton::AddVertexWeight(size_t vertexIndex, size_t boneIndex, float weight) {
+		VertexBoneWeights& boneWeights = _impl->vertexBoneWeights[vertexIndex];
+
+		for (size_t i = 0; i < MaxBoneWightsPerVertex; i++) {
+			if (boneWeights.weight[i] == 0.0f) {
+				boneWeights.boneIndex[i] = boneIndex;
+				boneWeights.weight[i] = weight;
+
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	Bone* Skeleton::GetBoneByName(const rString& name) {
+		auto result = _impl->bonesByName.find(name);
+
+		if (result == _impl->bonesByName.end())
+			return nullptr;
+		else
+			return result->second;
+	}
+
+	Bone* Skeleton::GetBone(uint32_t id) const{
+		if (id < _impl->bones.size())
+			return _impl->bones[id].get();
+		else
+			return nullptr;
+	}
+
+	size_t Skeleton::GetBoneCount() const {
+		return _impl->bones.size();
+	}
+
+	size_t Skeleton::GetMaxBoneWeightsPerVertex() const {
+		return MaxBoneWightsPerVertex;
+	}
+
+	size_t Skeleton::GetNumVertexBoneWeights() const {
+		return _impl->vertexBoneWeights.size();
+	}
+
+	size_t Skeleton::GetVertexBoneWeightsDataSize() const {
+		return _impl->vertexBoneWeights.size() * sizeof(VertexBoneWeights);
+	}
+
+	const char* Skeleton::GetVertexBoneWeightData() const {
+		return (const char*)_impl->vertexBoneWeights.data();
+	}
+
+	void Skeleton::SetGlobalSkeletonTransform(const rMatrix4& matrix) {
+		_impl->globalTransform = matrix;
+	}
+
+	void Skeleton::Impl::InitHeader(SkeletonFileHeader& header) {
+		header.numBones = bonesByName.size();
+		header.numVertexBoneWeights = vertexBoneWeights.size();
+	}
+
+	rMatrix4 Skeleton::GetGlobalTransform(const Bone* bone) const {
+		if (bone->IsRoot()) {
+			return bone->transform;
+		}
+		else {
+			rMatrix4 globalTransform = bone->transform;
+
+			do {
+				bone = GetBone(bone->parentId);
+				globalTransform = globalTransform * bone->transform;
+			} while (!bone->IsRoot());
+
+			return globalTransform;
+		}
+		
+	}
+
+	int Skeleton::Write(rOStream& stream) {
+
+		SkeletonFileHeader header;
+		_impl->InitHeader(header);
+		stream.Write((const char *)&header, sizeof(SkeletonFileHeader));
+
+		for (size_t i = 0; i < _impl->bones.size(); i++) {
+			Bone* boneData = _impl->bones[i].get();
+			
+			uint32_t nameSize = boneData->name.size();
+			stream.Write((const char*)&nameSize, sizeof(uint32_t));
+			stream.Write(boneData->name.c_str(), nameSize);
+
+			stream.Write((const char*)&boneData->parentId, sizeof(uint32_t));
+			stream.Write((const char*)&boneData->transform.m, sizeof(float) * 16);
+		}
+
+		uint32_t vertexBoneWeightSize = _impl->vertexBoneWeights.size();
+		stream.Write((const char*)&vertexBoneWeightSize, sizeof(uint32_t));
+		stream.Write(GetVertexBoneWeightData(), GetVertexBoneWeightsDataSize());
+
+		return 0;
+	}
+
+	int Skeleton::Read(rIStream& stream) {
+		SkeletonFileHeader header;
+		stream.Read((char *)&header, sizeof(SkeletonFileHeader));
+
+		for (uint32_t i = 0; i < header.numBones; i++) {
+			uint32_t nameSize;
+			stream.Read((char*)&nameSize, sizeof(uint32_t));
+			std::vector<char> nameBuffer(nameSize);
+			stream.Read(nameBuffer.data(), nameSize);
+			rString boneName(nameBuffer.data(), nameSize);
+
+			Bone* boneData = CreateBone(boneName);
+
+			stream.Read((char*)&boneData->parentId, sizeof(uint32_t));
+			stream.Read((char*)&boneData->transform.m, sizeof(float) * 16);
+		}
+
+		uint32_t vertexBoneWeightSize;
+		stream.Read((char*)&vertexBoneWeightSize, sizeof(uint32_t));
+		_impl->vertexBoneWeights.resize(vertexBoneWeightSize);
+		stream.Read((char*)_impl->vertexBoneWeights.data(), GetVertexBoneWeightsDataSize());
+
+		return 0;
+	}
 }
 

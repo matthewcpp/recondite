@@ -25,8 +25,6 @@ namespace rGeometryUtil{
 	bool CreateCircleVerticies(const rCircle2& circle, size_t segments, rImmediateBuffer& geometry, float zValue = 0.0f);
 
 	void CreateWireAlignedBoxVerticies(const rAlignedBox3& box, rImmediateBuffer& geometry);
-	void Create2DText(const rString& str, const Font::Face* font, const rRect& bounding, rImmediateBuffer& geometry);
-	void CreateSkeletonGeometry(const rSkeleton* skeleton, rImmediateBuffer& geometryData, rImmediateBuffer& lineData);
 };
 
 #endif

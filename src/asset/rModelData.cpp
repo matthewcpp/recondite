@@ -84,6 +84,7 @@ namespace recondite {
 
 	struct ModelData::Impl {
 		GeometryData geometryData;
+
 		rAlignedBox3 boundingBox;
 
 		typedef std::vector<std::unique_ptr<MeshData>> MeshDataRefArray;
@@ -93,6 +94,8 @@ namespace recondite {
 
 		std::vector<std::unique_ptr<rTextureData>> textures;
 		std::vector<std::unique_ptr<MaterialData>> materials;
+
+		std::unique_ptr<Skeleton> skeleton;
 
 		void CalculateMeshBounding(MeshDataRefArray& refArray);
 		void InitHeader(ModelFileHeader& header);
@@ -109,6 +112,7 @@ namespace recondite {
 	void ModelData::Clear() {
 		_impl->geometryData.Clear();
 		_impl->triangleMeshes.clear();
+		_impl->lineMeshes.clear();
 	}
 
 	MeshData* ModelData::CreateTriangleMesh() {
@@ -197,7 +201,7 @@ namespace recondite {
 	}
 
 	MaterialData* ModelData::CreateMaterial() {
-		MaterialData* material = new MaterialData();
+		MaterialData* material = new MaterialData(_impl->materials.size());
 		_impl->materials.emplace_back(material);
 		return material;
 	}
@@ -210,6 +214,15 @@ namespace recondite {
 		return _impl->materials[index].get();
 	}
 
+	Skeleton* ModelData::CreateSkeleton() {
+		_impl->skeleton.reset(new Skeleton());
+		return _impl->skeleton.get();
+	}
+
+	Skeleton* ModelData::GetSkeleton() const {
+		return _impl->skeleton.get();
+	}
+
 	const uint32_t MagicNumber = 1984; //rmdl
 	const uint32_t CurrentVersion = 1;
 
@@ -219,10 +232,34 @@ namespace recondite {
 		uint32_t numTextures;
 		uint32_t numMaterials;
 		uint32_t numVertices;
-		uint32_t numNormals;
-		uint32_t numTexCoords;
 		uint32_t triangleMeshCount;
+		uint32_t lineMeshCount;
+		uint32_t animated;
 	};
+
+	void ReadMesh(MeshData* meshData, rIStream& stream) {
+		uint32_t elementCount;
+		stream.Read((char*)&elementCount, sizeof(uint32_t));
+		meshData->AllocateBuffer(elementCount);
+		stream.Read(meshData->GetBufferData(), meshData->GetBufferDataSize());
+
+		rAlignedBox3 boundingBox;
+		stream.Read((char*)&boundingBox, sizeof(rAlignedBox3));
+
+		uint32_t materialId;
+		stream.Read((char*)&materialId, sizeof(uint32_t));
+		meshData->SetMaterialId(materialId);
+
+		uint32_t nameLength;
+		stream.Read((char*)&nameLength, sizeof(uint32_t));
+
+		if (nameLength > 0) {
+			std::vector<char> nameBuffer(nameLength);
+			stream.Read(nameBuffer.data(), nameLength);
+			rString nameStr(nameBuffer.data(), nameLength);
+			meshData->SetName(nameStr);
+		}
+	}
 
 	int ModelData::Read(rIStream& stream) {
 		if (stream.IsOk()) {
@@ -240,14 +277,13 @@ namespace recondite {
 				stream.Read((char*)materialData, sizeof(MaterialData));
 			}
 
-			_impl->geometryData.AllocateVertices(header.numVertices);
-			stream.Read(_impl->geometryData.VertexData(), _impl->geometryData.VertexDataSize());
+			if (header.numVertices > 0) {
+				_impl->geometryData.AllocateVertices(header.numVertices);
+				_impl->geometryData.AllocateNormals(header.numVertices);
+				_impl->geometryData.AllocateTexCoords(header.numVertices);
 
-			_impl->geometryData.AllocateNormals(header.numNormals);
-			stream.Read(_impl->geometryData.NormalData(), _impl->geometryData.NormalDataSize());
-
-			if (header.numTexCoords > 0) {
-				_impl->geometryData.AllocateTexCoords(header.numTexCoords);
+				stream.Read(_impl->geometryData.VertexData(), _impl->geometryData.VertexDataSize());
+				stream.Read(_impl->geometryData.NormalData(), _impl->geometryData.NormalDataSize());
 				stream.Read(_impl->geometryData.TexCoordData(), _impl->geometryData.TexCoordDataSize());
 			}
 
@@ -255,34 +291,42 @@ namespace recondite {
 
 			for (size_t i = 0; i < header.triangleMeshCount; i++) {
 				MeshData* meshData = CreateTriangleMesh();
-
-				uint32_t elementCount;
-				stream.Read((char*)&elementCount, sizeof(uint32_t));
-				meshData->AllocateBuffer(elementCount);
-				stream.Read(meshData->GetBufferData(), meshData->GetBufferDataSize());
-
-				rAlignedBox3 boundingBox;
-				stream.Read((char*)&boundingBox, sizeof(rAlignedBox3));
-
-				uint32_t materialId;
-				stream.Read((char*)&materialId, sizeof(uint32_t));
-				meshData->SetMaterialId(materialId);
-
-				uint32_t nameLength;
-				stream.Read((char*)&nameLength, sizeof(uint32_t));
-
-				if (nameLength > 0) {
-					std::vector<char> nameBuffer(nameLength);
-					stream.Read(nameBuffer.data(), nameLength);
-					rString nameStr(nameBuffer.data(), nameLength);
-					meshData->SetName(nameStr);
-				}
+				ReadMesh(meshData, stream);
 			}
+
+			for (size_t i = 0; i < header.lineMeshCount; i++) {
+				MeshData* meshData = CreateLineMesh();
+				ReadMesh(meshData, stream);
+			}
+
+			if (header.animated)
+				CreateSkeleton()->Read(stream);
 
 			return 0;
 		}
 		else {
 			return 1;
+		}
+	}
+
+	void WriteMesh(const MeshData* meshData, rOStream& stream) {
+		uint32_t elementCount = meshData->GetElementCount();
+
+		stream.Write((const char*)&elementCount, sizeof(uint32_t));
+		stream.Write(meshData->GetBufferData(), meshData->GetBufferDataSize());
+
+		rAlignedBox3 boundingBox = meshData->GetBoundingBox();
+		stream.Write((const char*)&boundingBox, sizeof(rAlignedBox3));
+
+		uint32_t materialIndex = meshData->GetMaterialId();
+		stream.Write((const char*)&materialIndex, sizeof(uint32_t));
+
+		rString meshName = meshData->GetName();
+		uint32_t nameLength = meshName.size();
+		stream.Write((const char*)&nameLength, sizeof(uint32_t));
+
+		if (nameLength > 0) {
+			stream.Write(meshName.c_str(), nameLength);
 		}
 	}
 
@@ -300,35 +344,27 @@ namespace recondite {
 			stream.Write((const char*)_impl->materials[i].get(), sizeof(MaterialData));
 		}
 
-		stream.Write(_impl->geometryData.VertexData(), _impl->geometryData.VertexDataSize());
-		stream.Write(_impl->geometryData.NormalData(), _impl->geometryData.NormalDataSize());
-
-		if (_impl->geometryData.HasTexCoords())
+		if (_impl->geometryData.VertexCount() > 0) {
+			stream.Write(_impl->geometryData.VertexData(), _impl->geometryData.VertexDataSize());
+			stream.Write(_impl->geometryData.NormalData(), _impl->geometryData.NormalDataSize());
 			stream.Write(_impl->geometryData.TexCoordData(), _impl->geometryData.TexCoordDataSize());
+		}
+			
 
 		stream.Write((const char*)&_impl->boundingBox, sizeof(rAlignedBox3));
 
 		for (size_t i = 0; i < _impl->triangleMeshes.size(); i++) {
 			MeshData* meshData = _impl->triangleMeshes[i].get();
-			uint32_t faceElementCount = meshData->GetElementCount();
-
-			stream.Write((const char*)&faceElementCount, sizeof(uint32_t));
-			stream.Write(meshData->GetBufferData(), meshData->GetBufferDataSize());
-
-			rAlignedBox3 boundingBox = meshData->GetBoundingBox();
-			stream.Write((const char*)&boundingBox, sizeof(rAlignedBox3));
-
-			uint32_t materialIndex = meshData->GetMaterialId();
-			stream.Write((const char*)&materialIndex, sizeof(uint32_t));
-
-			rString meshName = meshData->GetName();
-			uint32_t nameLength = meshName.size();
-			stream.Write((const char*)&nameLength, sizeof(uint32_t));
-
-			if (nameLength > 0) {
-				stream.Write(meshName.c_str(), nameLength);
-			}
+			WriteMesh(meshData, stream);
 		}
+
+		for (size_t i = 0; i < _impl->lineMeshes.size(); i++) {
+			MeshData* meshData = _impl->lineMeshes[i].get();
+			WriteMesh(meshData, stream);
+		}
+
+		if (header.animated)
+			_impl->skeleton->Write(stream);
 
 		return 0;
 	}
@@ -338,12 +374,13 @@ namespace recondite {
 		header.version = CurrentVersion;
 
 		header.numVertices = geometryData.VertexCount();
-		header.numNormals = geometryData.VertexCount();
-		header.numTexCoords = geometryData.HasTexCoords() ? geometryData.VertexCount() : 0;
 
 		header.triangleMeshCount = triangleMeshes.size();
+		header.lineMeshCount = lineMeshes.size();
 
 		header.numTextures = textures.size();
 		header.numMaterials = materials.size();
+
+		header.animated = skeleton.get() ? 1 : 0;
 	}
 }

@@ -2,6 +2,13 @@
 
 namespace recondite {
 
+	void Geometry::Reset(uint32_t bufferId, uint32_t vertexCount, bool hasNormals, bool hasTexCoords) {
+		_bufferId = bufferId;
+		_vertexCount = vertexCount;
+		_hasNormals = hasNormals;
+		_hasTexCoords = hasTexCoords;
+	}
+
 	struct Model::Impl {
 		Geometry geometry;
 		rString name;
@@ -9,7 +16,7 @@ namespace recondite {
 		std::vector<std::unique_ptr<Mesh>> triangleMeshes;
 		std::vector<std::unique_ptr<Mesh>> lineMeshes;
 
-		Impl(const rString& n, const Geometry& geo) : name(n), geometry(geo) {}
+		Impl(const rString& n, const Geometry& geo) : name(n), geometry(geo){}
 	};
 
 	Model::Model(const rString& name, const Geometry& geometry) {

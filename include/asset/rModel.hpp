@@ -113,10 +113,12 @@ namespace recondite {
 
 	class RECONDITE_API Geometry {
 	public:
-		Geometry() : _bufferId(0), _hasNormals(false), _hasTexCoords(false) {}
+		Geometry() : _bufferId(0), _vertexCount(0), _hasNormals(false), _hasTexCoords(false) {}
 
 		Geometry(uint32_t bufferId, uint32_t vertexCount, bool hasNormals, bool hasTexCoords)
 			: _bufferId(bufferId), _vertexCount(vertexCount), _hasNormals(hasNormals), _hasTexCoords(hasTexCoords) {}
+
+		void Reset(uint32_t bufferId, uint32_t vertexCount, bool hasNormals, bool hasTexCoords);
 
 	public:
 		inline uint32_t GetBufferId() const;

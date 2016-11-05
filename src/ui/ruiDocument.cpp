@@ -9,7 +9,9 @@
 #include "ui/ruiMenuManager.hpp"
 
 struct ruiDocument::Impl{
-	std::multimap<rString, std::unique_ptr<ruiWidget>> widgets;
+	std::vector<std::unique_ptr<ruiWidget>> widgets;
+	std::multimap<rString, ruiWidget*> widgetsByName;
+
 	std::map<uint32_t, UpdateFunc> everyUpdateFuncs;
 	std::map<uint32_t, UpdateFunc> nextUpdateFuncs;
 	uint32_t updateFuncHandle;
@@ -33,9 +35,9 @@ struct ruiDocument::Impl{
 ruiDocument::ruiDocument(rEngine* engine, rViewport* viewport){
 	_impl = new Impl(engine, viewport);
 
-	_impl->activeWidget = NULL;
-	_impl->focusedWidget = NULL;
-	_impl->layout = NULL;
+	_impl->activeWidget = nullptr;
+	_impl->focusedWidget = nullptr;
+	_impl->layout = nullptr;
 	_impl->viewport = viewport;
 }
 
@@ -48,7 +50,9 @@ void ruiDocument::WidgetUpdated(ruiWidget* widget){
 }
 
 void ruiDocument::AddWidget(ruiWidget* widget){
-	_impl->widgets.emplace(widget->Id(), widget);
+	_impl->widgets.emplace_back(widget);
+	_impl->widgetsByName.insert(std::make_pair(widget->Id(), widget));
+
 	_impl->layoutNeedsUpdate = true;
 }
 
@@ -57,10 +61,10 @@ ruiWidget* ruiDocument::GetActiveWidget() {
 }
 
 ruiWidget* ruiDocument::GetWidgetById(const rString& id){
-	auto result = _impl->widgets.find(id);
+	auto result = _impl->widgetsByName.equal_range(id);
 
-	if (result != _impl->widgets.end())
-		return result->second.get();
+	if (result.first != result.second)
+		return result.first->second;
 	else
 		return nullptr;
 }
@@ -99,14 +103,20 @@ void ruiDocument::Draw(){
 
 void ruiDocument::Clear(){
 	_impl->widgets.clear();
+	_impl->widgetsByName.clear();
+
+	_impl->layoutNeedsUpdate = true;
+	_impl->activeWidget = nullptr;
+	_impl->focusedWidget = nullptr;
+	_impl->layout = nullptr;
 }
 
 ruiWidget* ruiDocument::SelectWidget(const rPoint& position){
 	rRect boundingBox;
 	ruiWidget* widget;
 
-	for (auto& it : _impl->widgets){
-		widget = it.second.get();
+	for (size_t i = _impl->widgets.size()-1; i > 0; i--) {
+		widget = _impl->widgets[i].get();
 		boundingBox = widget->BoundingBox();
 
 		if (boundingBox.ContainsPoint(position)){
@@ -132,7 +142,7 @@ void ruiDocument::SetLayout(ruiLayout* layout){
 
 rString ruiDocument::GetDefaultId () const{
 	rOStringStream str("item");
-	str << _impl->widgets.size();
+	str << _impl->widgetsByName.size();
 
 	return str.Str();
 }

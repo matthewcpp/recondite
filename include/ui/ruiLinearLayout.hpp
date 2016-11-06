@@ -35,9 +35,12 @@ public:
 
 	virtual void SetPosition(const rPoint& position);
 
+protected:
+	virtual rSize ComputeSize();
+
 private:
-	rSize LayoutHorizontal(rRect& rect);
-	rSize LayoutVertical(rRect& rect);
+	rSize LayoutHorizontal(rRect& rect, bool setPosition = true);
+	rSize LayoutVertical(rRect& rect, bool setPosition = true);
 
 	void DetermineMargins(ruiWidget* widget, rIntArray& margins);
 

@@ -22,7 +22,18 @@ rSize ruiLinearLayout::Layout(rRect& rect){
 	return size;
 }
 
-rSize ruiLinearLayout::LayoutHorizontal(rRect& rect){
+rSize ruiLinearLayout::ComputeSize() {
+	rRect testRect(0, 0, INT_MAX, INT_MAX);
+
+	if (m_layoutDirection == ruiLAYOUT_HORIZONTAL) {
+		return LayoutHorizontal(testRect, false);
+	}
+	else {
+		return LayoutVertical(testRect, false);
+	}
+}
+
+rSize ruiLinearLayout::LayoutHorizontal(rRect& rect, bool setPosition){
 	rSize m_cachedSize(0, 0);
 	rSize currentItemSize(0, 0);
 	
@@ -37,7 +48,8 @@ rSize ruiLinearLayout::LayoutHorizontal(rRect& rect){
 		rPoint finalPosition = layoutPos;
 		finalPosition.x += margins[ruiMARGIN_LEFT];
 		finalPosition.y += margins[ruiMARGIN_TOP];
-		widget->SetPosition(finalPosition);
+		if (setPosition)
+			widget->SetPosition(finalPosition);
 
 		currentItemSize = widget->Size();
 		m_cachedSize.x += currentItemSize.x + margins[ruiMARGIN_LEFT] + margins[ruiMARGIN_RIGHT];
@@ -48,7 +60,7 @@ rSize ruiLinearLayout::LayoutHorizontal(rRect& rect){
 	return m_cachedSize;
 }
 
-rSize ruiLinearLayout::LayoutVertical(rRect& rect){
+rSize ruiLinearLayout::LayoutVertical(rRect& rect, bool setPosition){
 	rSize m_cachedSize(0, 0);
 	rSize currentItemSize(0, 0);
 
@@ -63,11 +75,13 @@ rSize ruiLinearLayout::LayoutVertical(rRect& rect){
 		rPoint finalPosition = layoutPos;
 		finalPosition.x += margins[ruiMARGIN_LEFT];
 		finalPosition.y += margins[ruiMARGIN_TOP];
-		widget->SetPosition(finalPosition);
+
+		if (setPosition)
+			widget->SetPosition(finalPosition);
 
 		currentItemSize = widget->Size();
-		m_cachedSize.x += std::max(m_cachedSize.x, currentItemSize.x + margins[ruiMARGIN_LEFT] + margins[ruiMARGIN_RIGHT]);
-		m_cachedSize.y = currentItemSize.y + margins[ruiMARGIN_TOP] + margins[ruiMARGIN_BOTTOM];
+		m_cachedSize.x = std::max(m_cachedSize.x, currentItemSize.x + margins[ruiMARGIN_LEFT] + margins[ruiMARGIN_RIGHT]);
+		m_cachedSize.y += currentItemSize.y + margins[ruiMARGIN_TOP] + margins[ruiMARGIN_BOTTOM];
 		layoutPos.y += currentItemSize.y + margins[ruiMARGIN_TOP] + margins[ruiMARGIN_BOTTOM];
 	}
 

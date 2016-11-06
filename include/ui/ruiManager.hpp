@@ -2,6 +2,7 @@
 #define RUI_MANAGER_HPP
 
 #include <map>
+#include <functional>
 
 #include "rBuild.hpp"
 
@@ -24,8 +25,8 @@ public:
 	virtual ruiDocument* LoadUiDocument(const rString& filePath, rViewport* viewport) = 0;
 	virtual ruiDocument* GetUiDocument(rViewport* viewport) const = 0;
 
-	typedef ruiController*(*ControllerCreateFunction)(const rString& className, rEngine*, ruiDocument*);
-	typedef void(*ControllerDeleteFunction)(ruiController* controller);
+	typedef std::function<ruiController*(const rString&, rEngine*, ruiDocument*)> ControllerCreateFunction;
+	typedef std::function<void(ruiController*)> ControllerDeleteFunction;
 
 	virtual bool RegisterControllerClass(const rString& name, ControllerCreateFunction createFunc, ControllerDeleteFunction deleteFunc) = 0;
 	virtual void UnregisterControllerClass(const rString& name) = 0;

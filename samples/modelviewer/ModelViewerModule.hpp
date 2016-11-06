@@ -3,6 +3,7 @@
 #include <map>
 
 #include "rModule.hpp"
+#include "ModelViewerSettings.hpp"
 
 class ModelViewerModule : public rModule {
 public:
@@ -21,10 +22,9 @@ private:
 private:
 	rEngine* _engine;
 
+	ModelViewerSettings settings;
 
 	std::map<rString, rVector3> boneLabelPoints;
-	bool renderSkeleton;
 	rImmediateBuffer skeletonBuffer;
-	rColor skeletonLineColor;
-	rColor skeletonTextColor;
+
 };

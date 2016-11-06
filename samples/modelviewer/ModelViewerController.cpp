@@ -1,16 +1,18 @@
 #include "ModelViewerController.hpp"
 
 #include "ui/ruiText.hpp"
+#include "ui/ruiCheckbox.hpp"
 #include "ui/ruiLinearLayout.hpp"
 #include "ui/ruiAbsoluteLayout.hpp"
 
 #include "stream/rOStringStream.hpp"
 
-ModelViewerController::ModelViewerController(const rString& name, rEngine* engine, ruiDocument* document)
+ModelViewerController::ModelViewerController(ModelViewerSettings* settings, const rString& name, rEngine* engine, ruiDocument* document)
 	:ruiController(name)
 {
 	_engine = engine;
 	_document = document;
+	_settings = settings;
 }
 
 void ModelViewerController::SetColorForWidgetEvent(rEvent& event, const rColor& color) {
@@ -38,6 +40,12 @@ void ModelViewerController::OnDocumentLoaded() {
 	ruiLayout* meshList = (ruiLayout*)_document->GetWidgetById("mesh-list");
 	ruiLayout* boneList = (ruiLayout*)_document->GetWidgetById("bone-list");
 
+	ruiCheckbox* displaySkeletonCheckbox = (ruiCheckbox*)_document->GetWidgetById("display-skeleton");
+	displaySkeletonCheckbox->Bind(ruiEVENT_CHECKBOX_CHANGE, this, &ModelViewerController::OnShowSkeletonClick);
+
+	ruiCheckbox* displayBoneNames = (ruiCheckbox*)_document->GetWidgetById("display-bone-names");
+	displayBoneNames->Bind(ruiEVENT_CHECKBOX_CHANGE, this, &ModelViewerController::OnShowBoneNamesClick);
+
 	
 	for (size_t i = 0; i < model->GetTriangleMeshCount(); i++) {
 		rString meshName = model->GetTriangleMesh(i)->GetName();
@@ -56,5 +64,18 @@ void ModelViewerController::OnDocumentLoaded() {
 
 		meshList->AddItem(text);
 	}
-	
+}
+
+void ModelViewerController::OnShowSkeletonClick(rEvent& event) {
+	ruiWidgetEvent& evt = (ruiWidgetEvent&)event;
+	ruiCheckbox* checkbox = (ruiCheckbox*)evt.Widget();
+
+	_settings->renderSkeleton = checkbox->IsChecked();
+}
+
+void ModelViewerController::OnShowBoneNamesClick(rEvent& event) {
+	ruiWidgetEvent& evt = (ruiWidgetEvent&)event;
+	ruiCheckbox* checkbox = (ruiCheckbox*)evt.Widget();
+
+	_settings->renderBoneNames = checkbox->IsChecked();
 }

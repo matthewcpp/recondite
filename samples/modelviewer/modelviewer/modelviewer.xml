@@ -7,6 +7,15 @@
     <absoluteLayout>
       <linearLayout id="mesh-list" direction="vertical"></linearLayout>
       <linearLayout id="bone-list" direction="vertical"></linearLayout>
+      <linearLayout id="skeleton-options" direction="vertical">
+        <linearlayout direction="horizontal">
+          <text>Display Skeleton: </text><checkbox id="display-skeleton" checked="checked" />
+        </linearlayout>
+        <linearlayout direction="horizontal">
+          <text>Display Bone Names: </text><checkbox id="display-bone-names" checked="checked" />
+        </linearlayout>
+      </linearLayout>
+      <logtext id="logtext" />
     </absoluteLayout>
   </body>
 </document>

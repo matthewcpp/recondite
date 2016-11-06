@@ -5,22 +5,11 @@
 #include "rCamera.hpp"
 #include "rProp.hpp"
 
-ruiController* CreateUiController(const rString& name, rEngine* engine, ruiDocument* document) {
-	return new ModelViewerController(name, engine, document);
-}
-
-void DeleteUiController(ruiController* controller) {
-	delete controller;
-}
 
 ModelViewerModule::ModelViewerModule(rEngine* engine)
 	:rModule("Model Viewer Sample") 
 {
 	_engine = engine;
-
-	renderSkeleton = true;
-	skeletonLineColor = rColor::Green;
-	skeletonTextColor = rColor::White;
 }
 
 rViewport* CreateView(Model* model, rEngine* engine) {
@@ -51,7 +40,15 @@ rViewport* CreateView(Model* model, rEngine* engine) {
 }
 
 void ModelViewerModule::Init(const rArrayString& args) {
-	_engine->ui->RegisterControllerClass("ModelViewerController", &CreateUiController, &DeleteUiController);
+	auto createControllerFunc = [&](const rString& name, rEngine* engine, ruiDocument* document) {
+		return new ModelViewerController(&settings, name, engine, document);
+	};
+
+	auto deleteControllerFunc = [](ruiController* controller) {
+		delete controller;
+	};
+
+	_engine->ui->RegisterControllerClass("ModelViewerController", createControllerFunc, deleteControllerFunc);
 
 	auto fileSystemRed = _engine->content->FileSystem()->GetReadFileRef(args[0]);
 	ModelData modelData;
@@ -109,32 +106,34 @@ void ModelViewerModule::LoadScene(const rString& sceneName) {
 }
 
 void ModelViewerModule::DeleteActor(rActor3* actor) {
-
+	delete actor;
 }
 
 void ModelViewerModule::AfterRenderScene(rViewport* viewport) {
-	if (skeletonBuffer.VertexCount() > 0 && renderSkeleton) {
+	if (skeletonBuffer.VertexCount() > 0 && settings.renderSkeleton) {
 		_engine->renderer->EnableDepthTesting(false);
-		_engine->renderer->RenderImmediateLines(skeletonBuffer, skeletonLineColor);
+		_engine->renderer->RenderImmediateLines(skeletonBuffer, settings.skeletonLineColor);
 		_engine->renderer->EnableDepthTesting(true);
 	}
 }
 
 void ModelViewerModule::BeforeRenderUi(rViewport* viewport) {
-	rRect screenRect = viewport->GetScreenRect();
+	if (settings.renderSkeleton && settings.renderBoneNames) {
+		rRect screenRect = viewport->GetScreenRect();
 
-	rMatrix4 viewMatrix, projectionMatrix;
-	viewport->GetViewMatrix(viewMatrix);
-	viewport->GetProjectionMatrix(projectionMatrix);
+		rMatrix4 viewMatrix, projectionMatrix;
+		viewport->GetViewMatrix(viewMatrix);
+		viewport->GetProjectionMatrix(projectionMatrix);
 
-	rSpriteBatch* sb = _engine->renderer->SpriteBatch();
+		rSpriteBatch* sb = _engine->renderer->SpriteBatch();
 
-	for (auto& boneLabel : boneLabelPoints) {
-		rVector2 projectedPoint;
-		rMatrixUtil::Project(boneLabel.second, viewMatrix, projectionMatrix, screenRect, projectedPoint);
-		projectedPoint.y = float(screenRect.height) - projectedPoint.y;
+		for (auto& boneLabel : boneLabelPoints) {
+			rVector2 projectedPoint;
+			rMatrixUtil::Project(boneLabel.second, viewMatrix, projectionMatrix, screenRect, projectedPoint);
+			projectedPoint.y = float(screenRect.height) - projectedPoint.y;
 
-		sb->RenderString(boneLabel.first, _engine->content->Fonts()->SystemDefault(), rPoint(projectedPoint.x, projectedPoint.y), skeletonTextColor);
+			sb->RenderString(boneLabel.first, _engine->content->Fonts()->SystemDefault(), rPoint(projectedPoint.x, projectedPoint.y), settings.skeletonTextColor);
+		}
 	}
 }
 

@@ -181,26 +181,24 @@ void ruiDocument::ProcessMouseDownEvent(ruiMouseEvent& event){
 
 void ruiDocument::ProcessMouseMotionEvent(ruiMouseEvent& event){
 	rPoint position = event.Position();
-	if (_impl->activeWidget){
-		rRect boundingBox = _impl->activeWidget->BoundingBox();
+	ruiWidget* selectedWidget = SelectWidget(position);
 
-		if (boundingBox.ContainsPoint(position)){
+	if (_impl->activeWidget){
+
+		if (selectedWidget == _impl->activeWidget) {
 			_impl->activeWidget->Trigger(ruiEVT_MOUSE_MOTION, event);
 		}
-		else if (_impl->activeWidget->UiState() == "hover"){
+		else {
 			_impl->activeWidget->Trigger(ruiEVT_MOUSE_LEAVE, event);
 			_impl->activeWidget->UiState("");
 			_impl->activeWidget = nullptr;
 		}
 	}
-	else {
-		ruiWidget* selectedWidget = SelectWidget(position);
-
-		if (selectedWidget){
-			selectedWidget->UiState("hover");
-			_impl->activeWidget = selectedWidget;
-			selectedWidget->Trigger(ruiEVT_MOUSE_ENTER, event);
-		}
+	
+	if (selectedWidget){
+		selectedWidget->UiState("hover");
+		_impl->activeWidget = selectedWidget;
+		selectedWidget->Trigger(ruiEVT_MOUSE_ENTER, event);
 	}
 }
 

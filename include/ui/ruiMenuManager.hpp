@@ -13,7 +13,7 @@ public:
 	ruiMenuManager(rEngine* engine);
 
 public:
-	bool ShowContextMenu(ruiMenu* menu, ruiStyle* style, const rPoint& position, rEventHandler* handler);
+	bool ShowContextMenu(rViewport* viewport, ruiMenu* menu, ruiStyle* style, const rPoint& position, rEventHandler* handler);
 	void CancelContextMenu();
 
 	void Update();
@@ -24,6 +24,7 @@ public:
 private:
 	bool PickMenuItem(const rPoint& position);
 	void CalculateMenuSize();
+	void AdjustMenuPosition();
 
 private:
 	ruiMenu* m_menu;
@@ -34,6 +35,7 @@ private:
 	rSize m_menuSize;
 	size_t m_rowHeight;
 	rEngine* m_engine;
+	rViewport* m_viewport;
 };
 
 #endif

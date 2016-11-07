@@ -51,11 +51,13 @@ protected: //style related utility methods
 protected:
 	virtual rSize ComputeSize() = 0;
 	void InvalidateSize();
+	
 	rPoint ContentOffset();
 	void RenderWidgetBase(ruiStyle* style, const rRect& boundingBox);
 
 private:
 	int GetClassIndex(const rString& className) const;
+	void RecomputeContentOffset();
 	void RecomputeStyle();
 	void ExtendStyle(const rString& selector);
 	

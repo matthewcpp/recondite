@@ -41,6 +41,8 @@ void ruiLayout::Update() {
 }
 
 void ruiLayout::Draw() {
+	RenderWidgetBase(ComputedStyle(), BoundingBox());
+
 	for (size_t i = 0; i < m_layoutItems.size(); i++)
 		m_layoutItems[i]->Draw();
 }

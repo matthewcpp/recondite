@@ -126,6 +126,23 @@ ruiStyle* ruiWidget::ComputedStyle(){
 	return &m_computedStyle;
 }
 
+void ruiWidget::RecomputeContentOffset() {
+	ruiStyle* style = ComputedStyle();
+	m_contentOffset.Set(0, 0);
+
+	int padding[4] = { 0, 0};
+	style->GetInt("padding-top", padding[0]);
+	style->GetInt("padding-left", padding[1]);
+
+	m_contentOffset.x += padding[0];
+	m_contentOffset.y += padding[1];
+
+	if (style->HasKey("border-color")) {
+		m_contentOffset.x += 1;
+		m_contentOffset.y += 1;
+	}
+}
+
 void ruiWidget::RecomputeSize(bool force){
 	if (force || m_size == rSize::Default){
 		m_size = ComputeSize();
@@ -141,15 +158,9 @@ void ruiWidget::RecomputeSize(bool force){
 		m_size.x += padding[1] + padding[3];
 		m_size.y += padding[0] + padding[2];
 
-		m_contentOffset.x += padding[3];
-		m_contentOffset.y += padding[0];
-
 		if (style->HasKey("border-color")){
 			m_size.x += 2;
 			m_size.y += 2;
-
-			m_contentOffset.x += 1;
-			m_contentOffset.x += 1;
 		}
 	}
 }
@@ -160,7 +171,7 @@ rSize ruiWidget::Size(){
 }
 
 rPoint ruiWidget::ContentOffset(){
-	RecomputeSize();
+	RecomputeContentOffset();
 	return m_contentOffset;
 }
 

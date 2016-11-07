@@ -37,7 +37,7 @@ void ruiPicker::ShowOptionsMenu(){
 }
 
 rSize ruiPicker::ComputeSize(){
-	Font::Face* font = DetermineFont();;
+	Font::Face* font = DetermineFont();
 	rSize computedSize(0,0);
 
 	if (font){
@@ -72,11 +72,13 @@ void ruiPicker::Draw(){
 
 void ruiPicker::AddOption(const rString& option){
 	m_options.push_back(option);
+	InvalidateSize();
 }
 
 void ruiPicker::SetOptions(const rArrayString& options){
 	m_selectionIndex = 0;
 	m_options = options;
+	InvalidateSize();
 }
 
 size_t ruiPicker::NumOptions() const{

@@ -7,7 +7,7 @@ ruiMenuManager::ruiMenuManager(rEngine* engine){
 	CancelContextMenu();
 }
 
-bool ruiMenuManager::ShowContextMenu(ruiMenu* menu, ruiStyle* style, const rPoint& position, rEventHandler* handler){
+bool ruiMenuManager::ShowContextMenu(rViewport* viewport, ruiMenu* menu, ruiStyle* style, const rPoint& position, rEventHandler* handler){
 	if (m_menu){
 		return false;
 	}
@@ -16,6 +16,10 @@ bool ruiMenuManager::ShowContextMenu(ruiMenu* menu, ruiStyle* style, const rPoin
 		m_position = position;
 		m_handler = handler;
 		m_style = style;
+		m_viewport = viewport;
+
+		CalculateMenuSize();
+
 		return true;
 	}
 }
@@ -27,6 +31,7 @@ void ruiMenuManager::CancelContextMenu(){
 	m_style = NULL;
 	m_menuSize = rSize::Default;
 	m_rowHeight = 0;
+	m_viewport = nullptr;
 }
 
 void ruiMenuManager::Update(){}
@@ -46,6 +51,19 @@ void ruiMenuManager::CalculateMenuSize(){
 		m_menuSize.x = std::max(m_menuSize.x, strSize.x);
 		m_menuSize.y += font->GetLineHeight();
 	}
+
+	AdjustMenuPosition();
+}
+
+void ruiMenuManager::AdjustMenuPosition() {
+	rRect screenRect = m_viewport->GetScreenRect();
+
+	int menuBottom = m_position.y + m_menuSize.y;
+	int screenBottom = screenRect.Bottom();
+
+	if (menuBottom > screenBottom) {
+		m_position.y -= menuBottom - screenBottom;
+	}
 }
 
 void ruiMenuManager::Draw(){
@@ -53,9 +71,6 @@ void ruiMenuManager::Draw(){
 
 	Font::Face* font = m_engine->content->Fonts()->SystemDefault();
 	if (!font) return;
-
-	if (m_menuSize == rSize::Default)
-		CalculateMenuSize();
 
 	size_t menuItemCount = m_menu->NumItems();
 	rColor color = rColor::White;

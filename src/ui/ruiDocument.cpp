@@ -152,7 +152,7 @@ ruiStyleManager* ruiDocument::Styles(){
 }
 
 bool ruiDocument::ShowContextMenu(ruiMenu* menu, ruiStyle* style, const rPoint& position, rEventHandler* handler){
-	return _impl->menuManager.ShowContextMenu(menu, style, position, handler);
+	return _impl->menuManager.ShowContextMenu(_impl->viewport, menu, style, position, handler);
 }
 
 void ruiDocument::CancelContextMenu(){

@@ -38,7 +38,8 @@ rSize ruiLinearLayout::LayoutHorizontal(rRect& rect, bool setPosition){
 	rSize currentItemSize(0, 0);
 	
 	ruiWidget* widget = nullptr;
-	rPoint layoutPos(rect.x, rect.y);
+	rPoint contentOffset = ContentOffset();
+	rPoint layoutPos(rect.x + contentOffset.x, rect.y+ contentOffset.y);
 	rIntArray margins(4);
 
 	for (size_t i = 0; i < m_layoutItems.size(); i++){
@@ -65,7 +66,8 @@ rSize ruiLinearLayout::LayoutVertical(rRect& rect, bool setPosition){
 	rSize currentItemSize(0, 0);
 
 	ruiWidget* widget = nullptr;
-	rPoint layoutPos(rect.x, rect.y);
+	rPoint contentOffset = ContentOffset();
+	rPoint layoutPos(rect.x + contentOffset.x, rect.y + contentOffset.y);
 	rIntArray margins(4);
 
 	for (size_t i = 0; i < m_layoutItems.size(); i++){

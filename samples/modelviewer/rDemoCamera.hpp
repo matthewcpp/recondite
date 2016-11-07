@@ -16,11 +16,15 @@ public:
 	float OrbitSpeed() const;
 	void SetOrbitSpeed(float speed);
 
+	void SetPanSpeed(float speed);
+	float PanSpeed() const;
+
 private:
 	int CalculateZoomDirection(int wheelValue);
 
 	void DoZoom(int zoomDirection);
 	void DoOrbit (const rPoint& position, float timeDelta);
+	void DoPan(const rPoint& position, float timeDelta);
 
 	bool ProcessMouse();
 	bool ProcessTouch();
@@ -31,8 +35,9 @@ private:
 
 	float m_pinchAmount;
 
-	bool m_orbiting;
+	bool m_dragging;
 	float m_orbitSpeed;
+	float m_panSpeed;
 };
 
 #endif

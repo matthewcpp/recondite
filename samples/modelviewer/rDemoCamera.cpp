@@ -4,7 +4,8 @@ rDemoCamera::rDemoCamera(const rString& name , rEngine* engine)
 	:rOrbitCamera(name, engine)
 {
 	m_orbitSpeed = 180.0f;
-	m_orbiting = false;
+	m_panSpeed = 10.0;
+	m_dragging = false;
 
 	m_lastWheelValue = INT_MIN;
 	m_pinchAmount = 0.0f;
@@ -16,9 +17,14 @@ float rDemoCamera::OrbitSpeed() const{
 
 void rDemoCamera::SetOrbitSpeed(float speed){
 	m_orbitSpeed = speed;
+}
 
-	if (m_orbitSpeed < 1.0f)
-		m_orbitSpeed = 1.0f;
+void rDemoCamera::SetPanSpeed(float speed) {
+	m_panSpeed = speed;
+}
+
+float rDemoCamera::PanSpeed() const {
+	return m_panSpeed;
 }
 
 int rDemoCamera::CalculateZoomDirection(int wheelValue){
@@ -40,18 +46,27 @@ bool rDemoCamera::ProcessMouse(){
 	DoZoom(CalculateZoomDirection(state->GetWheelValue()));
 
 	if (state->GetButtonState(rMOUSE_BUTTON_LEFT) == rBUTTON_STATE_DOWN){
-		if (m_orbiting){
+		if (m_dragging){
 			DoOrbit(state->Position(), m_engine->time.TimeDeltaSeconds());
 		}
 		else {
 			m_lastUpdatePos = state->Position();
-			m_orbiting = true;
+			m_dragging = true;
 		}
 
 		return true;
 	}
+	else if (state->GetButtonState(rMOUSE_BUTTON_RIGHT) == rBUTTON_STATE_DOWN) {
+		if (m_dragging) {
+			DoPan(state->Position(), m_engine->time.TimeDeltaSeconds());
+		}
+		else {
+			m_lastUpdatePos = state->Position();
+			m_dragging = true;
+		}
+	}
 	else {
-		m_orbiting = false;
+		m_dragging = false;
 		return false;
 	}
 }
@@ -106,6 +121,24 @@ void rDemoCamera::DoOrbit (const rPoint& position, float timeDelta){
 		SetRoll(Roll() + amount);
 	else if (delta.y < 0)
 		SetRoll(Roll() - amount);
+
+	m_lastUpdatePos = position;
+}
+
+void rDemoCamera::DoPan(const rPoint& position, float timeDelta) {
+	float amount = m_panSpeed * timeDelta;
+	rPoint positionDelta = position - m_lastUpdatePos;
+
+	rVector3 right = Right();
+	right *= positionDelta.x * amount;
+
+	rVector3 up = Up();
+	up *= positionDelta.y * amount;
+
+	rVector3 cameraDelta = right + up;
+
+	SetPosition(Position() + cameraDelta);
+	SetTarget(Target() + cameraDelta);
 
 	m_lastUpdatePos = position;
 }

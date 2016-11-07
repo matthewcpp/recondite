@@ -4,10 +4,13 @@
 ruiWidget::ruiWidget(const rString& id, ruiIDocument* document, rEngine* engine)
 	:rObject(id, engine)
 {
+	m_parent = nullptr;
+
 	m_document = document;
 	m_document->AddWidget(this);
 
 	m_style.MarkChanged();
+	
 	InvalidateSize();
 }
 
@@ -103,7 +106,6 @@ void ruiWidget::Update(){
 
 	if (m_size == rSize::Default)
 		RecomputeSize();
-
 }
 
 int ruiWidget::GetClassIndex(const rString& className) const{
@@ -178,6 +180,9 @@ rPoint ruiWidget::ContentOffset(){
 void ruiWidget::InvalidateSize(){
 	m_size = rSize::Default;
 	m_document->WidgetUpdated(this);
+
+	if (m_parent)
+		m_parent->ChildUpdated(this);
 }
 
 Font::Face* ruiWidget::DetermineFont(){
@@ -215,4 +220,10 @@ rPoint ruiWidget::ContentPosition(){
 
 rPropertyCollection& ruiWidget::Properties() {
 	return m_properties;
+}
+
+void ruiWidget::ChildUpdated(ruiWidget* child) {}
+
+void ruiWidget::SetParent(ruiWidget* parent) {
+	m_parent = parent;
 }

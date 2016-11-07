@@ -13,6 +13,7 @@ void ruiLayout::Clear(){
 
 void ruiLayout::AddItem(ruiWidget* widget){
 	m_layoutItems.push_back(widget);
+	widget->SetParent(this);
 	InvalidateSize();
 }
 
@@ -45,4 +46,8 @@ void ruiLayout::Draw() {
 
 	for (size_t i = 0; i < m_layoutItems.size(); i++)
 		m_layoutItems[i]->Draw();
+}
+
+void ruiLayout::ChildUpdated(ruiWidget* child) {
+	InvalidateSize();
 }

@@ -34,7 +34,7 @@ rSize ruiLinearLayout::ComputeSize() {
 }
 
 rSize ruiLinearLayout::LayoutHorizontal(rRect& rect, bool setPosition){
-	rSize m_cachedSize(0, 0);
+	rSize layoutSize(0, 0);
 	rSize currentItemSize(0, 0);
 	
 	ruiWidget* widget = nullptr;
@@ -53,16 +53,16 @@ rSize ruiLinearLayout::LayoutHorizontal(rRect& rect, bool setPosition){
 			widget->SetPosition(finalPosition);
 
 		currentItemSize = widget->Size();
-		m_cachedSize.x += currentItemSize.x + margins[ruiMARGIN_LEFT] + margins[ruiMARGIN_RIGHT];
-		m_cachedSize.y = std::max(m_cachedSize.y, currentItemSize.y + margins[ruiMARGIN_TOP] + margins[ruiMARGIN_BOTTOM]);
+		layoutSize.x += currentItemSize.x + margins[ruiMARGIN_LEFT] + margins[ruiMARGIN_RIGHT];
+		layoutSize.y = std::max(layoutSize.y, currentItemSize.y + margins[ruiMARGIN_TOP] + margins[ruiMARGIN_BOTTOM]);
 		layoutPos.x += currentItemSize.x + margins[ruiMARGIN_LEFT] + margins[ruiMARGIN_RIGHT];
 	}
 
-	return m_cachedSize;
+	return layoutSize;
 }
 
 rSize ruiLinearLayout::LayoutVertical(rRect& rect, bool setPosition){
-	rSize m_cachedSize(0, 0);
+	rSize layoutSize(0, 0);
 	rSize currentItemSize(0, 0);
 
 	ruiWidget* widget = nullptr;
@@ -82,12 +82,12 @@ rSize ruiLinearLayout::LayoutVertical(rRect& rect, bool setPosition){
 			widget->SetPosition(finalPosition);
 
 		currentItemSize = widget->Size();
-		m_cachedSize.x = std::max(m_cachedSize.x, currentItemSize.x + margins[ruiMARGIN_LEFT] + margins[ruiMARGIN_RIGHT]);
-		m_cachedSize.y += currentItemSize.y + margins[ruiMARGIN_TOP] + margins[ruiMARGIN_BOTTOM];
+		layoutSize.x = std::max(layoutSize.x, currentItemSize.x + margins[ruiMARGIN_LEFT] + margins[ruiMARGIN_RIGHT]);
+		layoutSize.y += currentItemSize.y + margins[ruiMARGIN_TOP] + margins[ruiMARGIN_BOTTOM];
 		layoutPos.y += currentItemSize.y + margins[ruiMARGIN_TOP] + margins[ruiMARGIN_BOTTOM];
 	}
 
-	return m_cachedSize;
+	return layoutSize;
 }
 
 void ruiLinearLayout::DetermineMargins(ruiWidget* widget, rIntArray& margins){

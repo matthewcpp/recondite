@@ -45,6 +45,12 @@ public:
 
 	void RecomputeSize(bool force = false);
 
+	/**
+	Sets the parent for this element.  This method should not be called directly.
+	\param parent the new parent for this element
+	*/
+	void SetParent(ruiWidget* parent);
+
 protected: //style related utility methods
 	Font::Face* DetermineFont();
 
@@ -54,6 +60,9 @@ protected:
 	
 	rPoint ContentOffset();
 	void RenderWidgetBase(ruiStyle* style, const rRect& boundingBox);
+
+	virtual void ChildUpdated(ruiWidget* child);
+	
 
 private:
 	int GetClassIndex(const rString& className) const;
@@ -77,6 +86,8 @@ private:
 	rSize m_size;
 	rPoint m_contentOffset;
 	rPropertyCollection m_properties;
+
+	ruiWidget* m_parent;
 };
 
 #endif

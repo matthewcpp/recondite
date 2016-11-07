@@ -31,6 +31,8 @@ public:
 	
 protected:
 	virtual rSize ComputeSize();
+	virtual void ChildUpdated(ruiWidget* child);
+
 	typedef std::vector<ruiWidget*> ruiLayoutItemVector;
 	
 protected:

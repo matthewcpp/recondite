@@ -143,14 +143,14 @@ void rGeometryUtil::CreateWireAlignedBoxVerticies(const rAlignedBox3& box,  rImm
 	geometry.PushVertex(box.min.x, box.min.y, box.min.z);
 }
 
-void GenerateRoundedBorders(rRect rect, float radius, int detail, rImmediateBuffer& geometry, float zValue, CircleIndexFunc& indexFunc){
+void GenerateRoundedBorders(rRect rect, float radius, size_t detail, rImmediateBuffer& geometry, float zValue, CircleIndexFunc& indexFunc){
 	CircleSweep(rect.Right() - radius, rect.Top() + radius, radius, 0.0f, 90.0f, detail, geometry, zValue, indexFunc);
 	CircleSweep(rect.Left() + radius, rect.Top() + radius, radius, 90.0f, 180.0f, detail, geometry, zValue, indexFunc);
 	CircleSweep(rect.Left() + radius, rect.Bottom() - radius, radius, 180.0f, 270.0f, detail, geometry, zValue, indexFunc);
 	CircleSweep(rect.Right() - radius, rect.Bottom() - radius, radius, 270.0f, 360.0f, detail, geometry, zValue, indexFunc);
 }
 
-bool rGeometryUtil::CreateRoundedWireRectVerticies(const rRect& rect, float radius, int detail, rImmediateBuffer& geometry, float zValue){
+bool rGeometryUtil::CreateRoundedWireRectVerticies(const rRect& rect, float radius, size_t detail, rImmediateBuffer& geometry, float zValue){
 	if (geometry.GeometryType() != rGeometryType::Lines) return false;
 
 	CircleIndexFunc indexFunc = [&](uint16_t centerIndex, uint16_t vertexNum, uint16_t currentIndex){
@@ -158,13 +158,14 @@ bool rGeometryUtil::CreateRoundedWireRectVerticies(const rRect& rect, float radi
 			geometry.PushIndex(currentIndex - 1, currentIndex);
 	};
 
-	GenerateRoundedBorders(rect, radius, detail, geometry, zValue, indexFunc);
+	size_t offset = geometry.VertexCount();
 
-	rRect r(rect.x + radius, rect.y, rect.width - (2 * radius), rect.height);
-	unsigned short offset = geometry.VertexCount();
-	CreateRectVerticies(r, geometry, zValue);
-	geometry.PushIndex(offset, offset + 1);
-	geometry.PushIndex(offset+2, offset + 3);
+	GenerateRoundedBorders(rect, radius, detail, geometry, zValue, indexFunc);
+	
+	geometry.PushIndex(offset + detail + 1, offset + detail + 3);
+	geometry.PushIndex(offset + (2 * detail) + 3, offset + (2 * detail) + 5);
+	geometry.PushIndex(offset + (3 * detail) + 5, offset + (3 * detail) + 7);
+	geometry.PushIndex(offset + (4 * detail) + 7, offset + 1);
 
 	return true;
 }

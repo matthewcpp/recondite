@@ -208,12 +208,12 @@ void rSpriteBatch::RenderRectangle(const rRect& rect, const rColor& color, float
 }
 
 void rSpriteBatch::RenderWireRectangle(const rRect& rect, const rColor& color, float zValue){
-	rImmediateBuffer* buffer = _impl->EnsureDrawingBatchBuffer(_impl->drawingBatches, color, rGeometryType::Lines);
+	rImmediateBuffer* buffer = _impl->EnsureDrawingBatchBuffer(_impl->lineBatches, color, rGeometryType::Lines);
 	rGeometryUtil::CreateWireRectVerticies(rect, *buffer, zValue);
 }
 
 void rSpriteBatch::RenderWireRoundedRectangle(const rRect& rect, float radius, const rColor& color, float zValue){
-	rImmediateBuffer* buffer = _impl->EnsureDrawingBatchBuffer(_impl->drawingBatches, color, rGeometryType::Lines);
+	rImmediateBuffer* buffer = _impl->EnsureDrawingBatchBuffer(_impl->lineBatches, color, rGeometryType::Lines);
 	rGeometryUtil::CreateRoundedWireRectVerticies(rect, radius, 16, *buffer, zValue);
 
 }

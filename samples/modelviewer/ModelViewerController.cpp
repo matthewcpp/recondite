@@ -4,8 +4,11 @@
 #include "ui/ruiCheckbox.hpp"
 #include "ui/ruiLinearLayout.hpp"
 #include "ui/ruiAbsoluteLayout.hpp"
+#include "ui/ruiPicker.hpp"
 
 #include "stream/rOStringStream.hpp"
+
+#include "rDemoCamera.hpp"
 
 ModelViewerController::ModelViewerController(ModelViewerSettings* settings, const rString& name, rEngine* engine, ruiDocument* document)
 	:ruiController(name)
@@ -34,11 +37,28 @@ void ModelViewerController::OnMouseLeave(rEvent& event) {
 	SetColorForWidgetEvent(event, rColor::White);
 }
 
+void ModelViewerController::CameraDebug() {
+	rDemoCamera* camera = (rDemoCamera*)_engine->scene->GetActor("main_camera");
+	rVector3 pos = camera->Position();
+	rVector3 tar = camera->Target();
+
+	ruiText* cameraPos = (ruiText*)_document->GetWidgetById("camera-pos");
+	
+	rOStringStream posStr;
+	posStr << "Pos: " << pos.x << ", " << pos.y << ", " << pos.z;
+	cameraPos->SetText(posStr.Str());
+
+
+	ruiText* cameraTar = (ruiText*)_document->GetWidgetById("camera-tar");
+	rOStringStream tarStr;
+	tarStr << "Tar: " << tar.x << ", " << tar.y << ", " << tar.z;
+	cameraTar->SetText(tarStr.Str());
+}
+
 void ModelViewerController::OnDocumentLoaded() {
 	recondite::Model* model = _engine->content->Models()->Get("model");
 
 	ruiLayout* meshList = (ruiLayout*)_document->GetWidgetById("mesh-list");
-	ruiLayout* boneList = (ruiLayout*)_document->GetWidgetById("bone-list");
 
 	ruiCheckbox* displaySkeletonCheckbox = (ruiCheckbox*)_document->GetWidgetById("display-skeleton");
 	displaySkeletonCheckbox->Bind(ruiEVENT_CHECKBOX_CHANGE, this, &ModelViewerController::OnShowSkeletonClick);
@@ -64,6 +84,21 @@ void ModelViewerController::OnDocumentLoaded() {
 
 		meshList->AddItem(text);
 	}
+
+	ruiPicker* animationPicker = (ruiPicker*)_document->GetWidgetById("animation-picker");
+
+	recondite::Skeleton* skeleton = model->GetSkeleton();
+	if (skeleton) {
+		for (size_t i = 0; i < skeleton->NumAnimations(); i++) {
+			recondite::Animation* animation = skeleton->GetAnimation(i);
+
+			animationPicker->AddOption(animation->Name());
+		}
+	}
+
+	_document->RunEveryUpdate([&]() {
+		CameraDebug();
+	});
 }
 
 void ModelViewerController::OnShowSkeletonClick(rEvent& event) {

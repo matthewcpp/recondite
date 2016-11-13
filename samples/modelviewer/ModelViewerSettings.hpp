@@ -13,6 +13,6 @@ public:
 	ModelViewerSettings() : 
 		skeletonLineColor(rColor::Green), 
 		skeletonTextColor(rColor::White), 
-		renderSkeleton(true),
-		renderBoneNames(true) {}
+		renderSkeleton(false),
+		renderBoneNames(false) {}
 };

@@ -5,17 +5,37 @@
   </head>
   <body>
     <absoluteLayout>
-      <linearLayout id="mesh-list" direction="vertical"></linearLayout>
-      <linearLayout id="bone-list" direction="vertical"></linearLayout>
+      <linearLayout id="mesh-list" direction="vertical">
+        <text>Meshes:</text>
+      </linearLayout>
       <linearLayout id="skeleton-options" direction="vertical">
         <linearlayout direction="horizontal">
-          <text>Display Skeleton: </text><checkbox id="display-skeleton" checked="checked" />
+          <text>Display Skeleton: </text><checkbox id="display-skeleton"/>
         </linearlayout>
         <linearlayout direction="horizontal">
-          <text>Display Bone Names: </text><checkbox id="display-bone-names" checked="checked" />
+          <text>Display Bone Names: </text><checkbox id="display-bone-names" />
         </linearlayout>
       </linearLayout>
       <logtext id="logtext" />
+
+      <linearLayout id="animation-controls" direction="vertical">
+        <linearLayout class="animation-control-group">
+          <text>Animation:</text>
+          <picker id="animation-picker" />
+        </linearLayout>
+        <linearLayout class="animation-control-group">
+          <button id="animation-play">Play</button>
+          <button id="animation-pause">Pause</button>
+          <button id="animation-stop">Stop</button>
+          <text>Loop:</text>
+          <checkbox id="animation-loop" checked="checked" />
+        </linearLayout>
+      </linearLayout>
+
+      <linearLayout id="camera-debug" direction="vertical">
+        <text id="camera-pos"></text>
+        <text id="camera-tar"></text>
+      </linearLayout>
     </absoluteLayout>
   </body>
 </document>

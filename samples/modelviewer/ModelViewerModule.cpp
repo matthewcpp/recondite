@@ -18,7 +18,7 @@ rViewport* CreateView(Model* model, rEngine* engine) {
 	rAlignedBox3 boundingBox = model->GetBoundingBox();
 	rVector3 center = boundingBox.Center();
 
-	rDemoCamera* camera = new rDemoCamera("main", engine);
+	rDemoCamera* camera = new rDemoCamera("main_camera", engine);
 	engine->scene->AddActor(camera);
 	mainViewport->SetCamera(camera);
 

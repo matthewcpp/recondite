@@ -21,6 +21,8 @@ private:
 
 	void SetColorForWidgetEvent(rEvent& event, const rColor& color);
 
+	void CameraDebug();
+
 private:
 	ModelViewerSettings* _settings;
 	rEngine* _engine;

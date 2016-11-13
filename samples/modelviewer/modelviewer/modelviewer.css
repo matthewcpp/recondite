@@ -3,7 +3,7 @@
     left: 10;
 }
 
-#bone-list{
+#camera-debug{
     top: 10;
     right: 10;
 }
@@ -16,4 +16,44 @@
 #logtext{
     bottom: 10;
     left: 10;
+}
+
+#animation-controls{
+    border-color: 255 255 255 255;
+    border-radius: 9;
+    bottom: 10;
+    left: 300;
+    padding: 5;
+}
+
+text{
+    margin-right: 5;
+}
+
+picker{
+    border-color: 255 255 255 255;
+    
+    padding: 3;
+}
+
+button{
+    border-radius: 3;
+    border-color: 255 255 255 255;
+    margin-right: 5;
+    padding: 3;
+}
+
+button:active{
+	background-color: 255 255 255 255;
+    color: 0 0 0 255;
+}
+
+linearlayout{
+    margin-top: 5;
+    margin-bottom: 5;
+}
+
+.animation-control-group{
+    margin-top: 5;
+    margin-bottom: 10;
 }

@@ -28,11 +28,16 @@ namespace recondite {
 	struct SkeletonFileHeader {
 		uint32_t numBones;
 		uint32_t numVertexBoneWeights;
+		uint32_t numAnimations;
 	};
 
 	struct Skeleton::Impl {
 		std::vector <std::unique_ptr<Bone>> bones;
 		std::map<rString, Bone*> bonesByName;
+
+		std::vector <std::unique_ptr<Animation>> animations;
+		std::map<rString, Animation*> animationsByName;
+
 		std::vector<VertexBoneWeights> vertexBoneWeights;
 		rMatrix4 globalTransform;
 
@@ -126,7 +131,8 @@ namespace recondite {
 	}
 
 	void Skeleton::Impl::InitHeader(SkeletonFileHeader& header) {
-		header.numBones = bonesByName.size();
+		header.numBones = bones.size();
+		header.numAnimations = animations.size();
 		header.numVertexBoneWeights = vertexBoneWeights.size();
 	}
 
@@ -147,6 +153,42 @@ namespace recondite {
 		
 	}
 
+	Animation* Skeleton::CreateAnimation(const rString& name) {
+		if (_impl->animationsByName.count(name)) {
+			return nullptr;
+		}
+		else {
+			Animation* animation = new Animation(name, _impl->animations.size());
+			_impl->animations.emplace_back(animation);
+			_impl->animationsByName[name] = animation;
+
+			return animation;
+		}
+	}
+
+	Animation* Skeleton::GetAnimationByName(const rString& name) {
+		auto result = _impl->animationsByName.find(name);
+
+		if (result == _impl->animationsByName.end())
+			return nullptr;
+		else
+			return result->second;
+	}
+
+	Animation* Skeleton::GetAnimation(size_t id) {
+		return _impl->animations[id].get();
+	}
+
+	size_t Skeleton::NumAnimations() const {
+		return _impl->animations.size();
+	}
+
+	void WriteString(const rString& str, rOStream& stream) {
+		uint32_t strSize = str.size();
+		stream.Write((const char*)&strSize, sizeof(uint32_t));
+		stream.Write(str.c_str(), strSize);
+	}
+
 	int Skeleton::Write(rOStream& stream) {
 
 		SkeletonFileHeader header;
@@ -155,13 +197,17 @@ namespace recondite {
 
 		for (size_t i = 0; i < _impl->bones.size(); i++) {
 			Bone* boneData = _impl->bones[i].get();
-			
-			uint32_t nameSize = boneData->name.size();
-			stream.Write((const char*)&nameSize, sizeof(uint32_t));
-			stream.Write(boneData->name.c_str(), nameSize);
+			WriteString(boneData->name, stream);
 
 			stream.Write((const char*)&boneData->parentId, sizeof(uint32_t));
 			stream.Write((const char*)&boneData->transform.m, sizeof(float) * 16);
+		}
+
+		for (size_t i = 0; i < _impl->animations.size(); i++) {
+			Animation* animation = _impl->animations[i].get();
+
+			rString animName = animation->Name();
+			WriteString(animName, stream);
 		}
 
 		uint32_t vertexBoneWeightSize = _impl->vertexBoneWeights.size();
@@ -171,21 +217,31 @@ namespace recondite {
 		return 0;
 	}
 
+	rString ReadName(rIStream& stream) {
+		uint32_t nameSize;
+		stream.Read((char*)&nameSize, sizeof(uint32_t));
+		std::vector<char> nameBuffer(nameSize);
+		stream.Read(nameBuffer.data(), nameSize);
+		rString nameStr(nameBuffer.data(), nameSize);
+
+		return nameStr;
+	}
+
 	int Skeleton::Read(rIStream& stream) {
 		SkeletonFileHeader header;
 		stream.Read((char *)&header, sizeof(SkeletonFileHeader));
 
 		for (uint32_t i = 0; i < header.numBones; i++) {
-			uint32_t nameSize;
-			stream.Read((char*)&nameSize, sizeof(uint32_t));
-			std::vector<char> nameBuffer(nameSize);
-			stream.Read(nameBuffer.data(), nameSize);
-			rString boneName(nameBuffer.data(), nameSize);
-
+			rString boneName = ReadName(stream);
 			Bone* boneData = CreateBone(boneName);
 
 			stream.Read((char*)&boneData->parentId, sizeof(uint32_t));
 			stream.Read((char*)&boneData->transform.m, sizeof(float) * 16);
+		}
+
+		for (uint32_t i = 0; i < header.numAnimations; i++) {
+			rString animName = ReadName(stream);
+			Animation* animation = CreateAnimation(animName);
 		}
 
 		uint32_t vertexBoneWeightSize;

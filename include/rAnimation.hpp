@@ -1,48 +1,70 @@
-#ifndef R_ANIMATION_HPP
-#define R_ANIMATION_HPP
+#pragma once
 
+#include <cstdint>
 #include <vector>
 #include <map>
+#include <memory>
 
 #include "rBuild.hpp"
+#include "rDefs.hpp"
 #include "rString.hpp"
 
 #include "rVector3.hpp"
 #include "rQuaternion.hpp"
-#include "rMatrix4.hpp"
 
+namespace recondite {
+	struct RECONDITE_API BoneAnimation {
+		BoneAnimation(uint32_t _id) : id(_id) {}
 
-#include "rAnimationTrack.hpp"
+		struct VectorKey {
+			VectorKey() : time(0.0f), value(rVector3::ZeroVector) {}
+			VectorKey(float t, float x, float y, float z) : time(t), value(x,y,z) {}
 
-typedef std::map<unsigned short, rAnimationTrack*> rAnimationTrackMap;
+			float time;
+			rVector3 value;
+		};
 
-class RECONDITE_API rAnimation{
-public:
-	rAnimation(const rString& name);
-	rAnimation(const rString& name, float duration);
-	~rAnimation();
-	
-public:
-	void Clear();
-	rString Name() const;
-	
-	rAnimationTrack* GetTrack(unsigned short handle) const;
-	rAnimationTrack* CreateTrack(unsigned short handle);
-	void DeleteTrack(unsigned short handle);
-	size_t NumTracks() const;
+		struct QuaternionKey {
+			QuaternionKey() : time(0.0f), value(rQuaternion::Identity) {}
+			QuaternionKey(float t, float x, float y, float z, float w) : time(t), value(x,y,z,w) {}
 
-	float Duration() const;
-	void SetDuration(float duration);
+			float time;
+			rQuaternion value;
+		};
 
-	void Finalize();
-	
-private:
-	rString m_name;
-	float m_duration;
-	
-	rAnimationTrackMap m_tracks;
-};
+		uint32_t id;
 
-typedef std::map<rString, rAnimation*> rAnimationMap;
+		std::vector<VectorKey> translationKeys;
+		std::vector<VectorKey> scaleKeys;
+		std::vector<QuaternionKey> rotationKeys;
+	};
 
-#endif
+	class RECONDITE_API Animation {
+	public:
+		Animation(const rString& name, uint32_t id);
+
+	public:
+		inline rString Name() const;
+		inline uint32_t Id() const;
+
+		BoneAnimation* CreateBoneAnimation(uint32_t id);
+		BoneAnimation* GetBoneAnimation(uint32_t id);
+
+	private:
+		rString _name;
+		uint32_t _id;
+
+		std::map<uint32_t, std::unique_ptr<BoneAnimation>> _boneAnimations;
+
+		rNO_COPY_CLASS(Animation)
+	};
+
+	inline rString Animation::Name() const {
+		return _name;
+	}
+
+	inline uint32_t Animation::Id() const {
+		return _id;
+	}
+}
+

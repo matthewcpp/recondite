@@ -166,9 +166,25 @@ namespace recondite {
 		MaterialData* CreateMaterial();
 		size_t GetNumMaterials() const;
 		MaterialData* GetMaterial(size_t index) const;
+
+		/**
+		Creates a skeleton associated with this model data.  Calling this function will dete any skeleton currently associated with this model data.
+		\returns the newly created skeleton object assocated with this model data.
+		*/
 		Skeleton* CreateSkeleton();
+
+		/**
+		Gets the skeleton object associated with this data.  Create a skeleton using CreateSkeleton().
+		\returns the skeleton object.
+		*/
 		Skeleton* GetSkeleton() const;
 
+		/**
+		Relinquishes control of the skeleton object associated with this the model data.  The caller will be responsible for freeing the data.  
+		After this call, GetSkeleton() will return null and CreateSkeleton will need to be called once more.
+		\returns Skeleton pointer.
+		*/
+		Skeleton* DetachSkeleton();
 
 
 		int Read(rIStream& stream);

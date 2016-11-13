@@ -152,7 +152,7 @@ namespace recondite {
 
 	class RECONDITE_API Model {
 	public:
-		Model(const rString& name, const Geometry& geometry);
+		Model(const rString& name, const Geometry& geometry, Skeleton* skeleton);
 		~Model();
 
 	public:
@@ -220,6 +220,8 @@ namespace recondite {
 		rAlignedBox3 GetBoundingBox() const;
 
 		void SetBoundingBox(const rAlignedBox3& box);
+
+		Skeleton* GetSkeleton() const;
 	private:
 		struct Impl;
 		Impl* _impl;

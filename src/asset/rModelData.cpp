@@ -113,6 +113,10 @@ namespace recondite {
 		_impl->geometryData.Clear();
 		_impl->triangleMeshes.clear();
 		_impl->lineMeshes.clear();
+		_impl->textures.clear();
+		_impl->materials.clear();
+
+		_impl->skeleton.reset(nullptr);
 	}
 
 	MeshData* ModelData::CreateTriangleMesh() {
@@ -221,6 +225,10 @@ namespace recondite {
 
 	Skeleton* ModelData::GetSkeleton() const {
 		return _impl->skeleton.get();
+	}
+
+	Skeleton* ModelData::DetachSkeleton() {
+		return _impl->skeleton.release();
 	}
 
 	const uint32_t MagicNumber = 1984; //rmdl

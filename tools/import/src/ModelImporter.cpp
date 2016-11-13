@@ -21,6 +21,7 @@ namespace recondite { namespace import {
 		void ImportMeshes(const aiScene* scene, ModelData& modelData);
 		void ImportMeshBones(const aiScene* scene, aiMesh* mesh, ModelData& modelData);
 		void CreateSkeletonHierarchy(const aiScene* scene, ModelData& modelData);
+		void ImportAnimations(const aiScene* scene, ModelData& modelData);
 		void NodeDump(const rString& path, const aiScene* scene);
 		void NodeWalk(rOStream& stream, size_t indent, aiNode* node);
 
@@ -69,6 +70,7 @@ namespace recondite { namespace import {
 		if (scene->mNumAnimations > 0) {
 			modelData.CreateSkeleton();
 			_impl->CreateSkeletonHierarchy(scene, modelData);
+			_impl->ImportAnimations(scene, modelData);
 		}
 
 		_impl->ImportMaterials(scene, modelData);
@@ -170,6 +172,39 @@ namespace recondite { namespace import {
 		//extract bone hierarchy from assimp node tree
 		for (size_t i = 0; i < skeletonContainer->mNumChildren; i++) {
 			GatherBones(skeletonContainer->mChildren[i], modelData.GetSkeleton());
+		}
+	}
+
+	void ModelImporter::Impl::ImportAnimations(const aiScene* scene, ModelData& modelData) {
+		Skeleton* skeleton = modelData.GetSkeleton();
+
+		for (size_t i = 0; i < scene->mNumAnimations; i++) {
+			aiAnimation* sourceAnimation = scene->mAnimations[i];
+			Animation* animation = skeleton->CreateAnimation(sourceAnimation->mName.C_Str());
+
+			for (size_t i = 0; i < sourceAnimation->mNumChannels; i++) {
+				aiNodeAnim* nodeAnim = sourceAnimation->mChannels[i];
+				Bone* bone = skeleton->GetBoneByName(nodeAnim->mNodeName.C_Str());
+
+				if (bone) {
+					BoneAnimation* boneAnimation = animation->CreateBoneAnimation(bone->id);
+
+					for (size_t i = 0; i < nodeAnim->mNumPositionKeys; i++) {
+						aiVectorKey* k = nodeAnim->mPositionKeys + i;
+						boneAnimation->translationKeys.emplace_back(k->mTime, k->mValue.x, k->mValue.y, k->mValue.z);
+					}
+
+					for (size_t i = 0; i < nodeAnim->mNumScalingKeys; i++) {
+						aiVectorKey* k = nodeAnim->mScalingKeys + i;
+						boneAnimation->scaleKeys.emplace_back(k->mTime, k->mValue.x, k->mValue.y, k->mValue.z);
+					}
+
+					for (size_t i = 0; i < nodeAnim->mNumRotationKeys; i++) {
+						aiQuatKey* k = nodeAnim->mRotationKeys + i;
+						boneAnimation->rotationKeys.emplace_back(k->mTime, k->mValue.x, k->mValue.y, k->mValue.z, k->mValue.w);
+					}
+				}
+			}
 		}
 	}
 

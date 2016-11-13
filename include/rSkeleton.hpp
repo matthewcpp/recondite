@@ -7,6 +7,8 @@
 #include "rString.hpp"
 #include "rMatrix4.hpp"
 
+#include "rAnimation.hpp"
+
 #include "stream/rIStream.hpp"
 #include "stream/rOStream.hpp"
 
@@ -46,6 +48,10 @@ namespace recondite {
 		int Write(rOStream& stream);
 		int Read(rIStream& stream);
 
+		Animation* CreateAnimation(const rString& name);
+		Animation* GetAnimationByName(const rString& name);
+		Animation* GetAnimation(size_t id);
+		size_t NumAnimations() const;
 	private:
 		struct Impl;
 		Impl* _impl;

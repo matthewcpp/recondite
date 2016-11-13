@@ -16,11 +16,13 @@ namespace recondite {
 		std::vector<std::unique_ptr<Mesh>> triangleMeshes;
 		std::vector<std::unique_ptr<Mesh>> lineMeshes;
 
-		Impl(const rString& n, const Geometry& geo) : name(n), geometry(geo){}
+		std::unique_ptr<Skeleton> skeleton;
+
+		Impl(const rString& n, const Geometry& geo, Skeleton* skel) : name(n), geometry(geo), skeleton(skel){}
 	};
 
-	Model::Model(const rString& name, const Geometry& geometry) {
-		_impl = new Impl(name, geometry);
+	Model::Model(const rString& name, const Geometry& geometry, Skeleton* skeleton) {
+		_impl = new Impl(name, geometry, skeleton);
 	}
 
 	rString Model::GetName() const {
@@ -73,5 +75,7 @@ namespace recondite {
 		_impl->boundingBox = box;
 	}
 
-
+	Skeleton* Model::GetSkeleton() const {
+		return _impl->skeleton.get();
+	}
 }

@@ -60,7 +60,7 @@ void rModelManager::Impl::CreateMaterialsForModel(const ModelData& modelData, co
 	}
 }
 
-Model* rModelManager::LoadFromData(const ModelData& modelData, const rString& name) {
+Model* rModelManager::LoadFromData(ModelData& modelData, const rString& name) {
 	if (_impl->models.count(name)) return nullptr;
 
 	std::vector<rMaterial*> materials;
@@ -74,7 +74,7 @@ Model* rModelManager::LoadFromData(const ModelData& modelData, const rString& na
 		geometry.Reset(geometryBufferId, geometryData->VertexCount(), geometryData->HasNormals(), geometryData->HasTexCoords());
 	}
 
-	Model* model = new Model(name, geometry);
+	Model* model = new Model(name, geometry, modelData.DetachSkeleton());
 	model->SetBoundingBox(modelData.GetBoundingBox());
 
 	for (size_t i = 0; i < modelData.GetTriangleMeshCount(); i++) {

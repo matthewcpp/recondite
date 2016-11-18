@@ -4,44 +4,30 @@
 #include <memory>
 
 namespace recondite {
-#define MaxBoneWightsPerVertex 4
 #define RootBoneId UINT32_MAX
 
 	bool Bone::IsRoot() const {
 		return parentId == RootBoneId;
 	}
 
-	struct VertexBoneWeights {
-		uint32_t boneIndex[MaxBoneWightsPerVertex];
-		float weight[MaxBoneWightsPerVertex];
-
-		VertexBoneWeights();
-	};
-
-	VertexBoneWeights::VertexBoneWeights() {
-		for (size_t i = 0; i < 4; i++) {
-			boneIndex[i] = 0;
-			weight[i] = 0.0f;
-		}
-	}
-
 	struct SkeletonFileHeader {
 		uint32_t numBones;
-		uint32_t numVertexBoneWeights;
 		uint32_t numAnimations;
 	};
 
 	struct Skeleton::Impl {
 		std::vector <std::unique_ptr<Bone>> bones;
+		uint32_t rootBone;
 		std::map<rString, Bone*> bonesByName;
 
 		std::vector <std::unique_ptr<Animation>> animations;
 		std::map<rString, Animation*> animationsByName;
 
-		std::vector<VertexBoneWeights> vertexBoneWeights;
 		rMatrix4 globalTransform;
 
 		void InitHeader(SkeletonFileHeader& header);
+
+		Impl():rootBone(RootBoneId) {}
 	};
 
 	Skeleton::Skeleton() {
@@ -70,26 +56,6 @@ namespace recondite {
 		}
 	}
 
-
-	void Skeleton::AllocateVertexWeightData(size_t numVertices) {
-		_impl->vertexBoneWeights.resize(_impl->vertexBoneWeights.size() + numVertices);
-	}
-
-	bool Skeleton::AddVertexWeight(size_t vertexIndex, size_t boneIndex, float weight) {
-		VertexBoneWeights& boneWeights = _impl->vertexBoneWeights[vertexIndex];
-
-		for (size_t i = 0; i < MaxBoneWightsPerVertex; i++) {
-			if (boneWeights.weight[i] == 0.0f) {
-				boneWeights.boneIndex[i] = boneIndex;
-				boneWeights.weight[i] = weight;
-
-				return true;
-			}
-		}
-
-		return false;
-	}
-
 	Bone* Skeleton::GetBoneByName(const rString& name) {
 		auto result = _impl->bonesByName.find(name);
 
@@ -110,22 +76,6 @@ namespace recondite {
 		return _impl->bones.size();
 	}
 
-	size_t Skeleton::GetMaxBoneWeightsPerVertex() const {
-		return MaxBoneWightsPerVertex;
-	}
-
-	size_t Skeleton::GetNumVertexBoneWeights() const {
-		return _impl->vertexBoneWeights.size();
-	}
-
-	size_t Skeleton::GetVertexBoneWeightsDataSize() const {
-		return _impl->vertexBoneWeights.size() * sizeof(VertexBoneWeights);
-	}
-
-	const char* Skeleton::GetVertexBoneWeightData() const {
-		return (const char*)_impl->vertexBoneWeights.data();
-	}
-
 	void Skeleton::SetGlobalSkeletonTransform(const rMatrix4& matrix) {
 		_impl->globalTransform = matrix;
 	}
@@ -133,7 +83,6 @@ namespace recondite {
 	void Skeleton::Impl::InitHeader(SkeletonFileHeader& header) {
 		header.numBones = bones.size();
 		header.numAnimations = animations.size();
-		header.numVertexBoneWeights = vertexBoneWeights.size();
 	}
 
 	rMatrix4 Skeleton::GetGlobalTransform(const Bone* bone) const {
@@ -153,12 +102,31 @@ namespace recondite {
 		
 	}
 
-	Animation* Skeleton::CreateAnimation(const rString& name) {
+	void Skeleton::CacheBoneData() {
+		for (size_t i = 0; i < _impl->bones.size(); i++) {
+			Bone* bone = _impl->bones[i].get();
+
+			bone->invWorldTransform = GetGlobalTransform(bone);
+			bone->invWorldTransform.Invert();
+
+			if (bone->IsRoot())
+				_impl->rootBone = bone->id;
+		}
+	}
+
+	Bone* Skeleton::GetRootBone() {
+		if (_impl->rootBone == RootBoneId) //root is unset
+			return nullptr;
+		else
+			return _impl->bones[_impl->rootBone].get();
+	}
+
+	Animation* Skeleton::CreateAnimation(const rString& name, float duration) {
 		if (_impl->animationsByName.count(name)) {
 			return nullptr;
 		}
 		else {
-			Animation* animation = new Animation(name, _impl->animations.size());
+			Animation* animation = new Animation(name, duration, _impl->animations.size());
 			_impl->animations.emplace_back(animation);
 			_impl->animationsByName[name] = animation;
 
@@ -179,7 +147,7 @@ namespace recondite {
 		return _impl->animations[id].get();
 	}
 
-	size_t Skeleton::NumAnimations() const {
+	size_t Skeleton::GetAnimationCount() const {
 		return _impl->animations.size();
 	}
 
@@ -195,12 +163,23 @@ namespace recondite {
 		_impl->InitHeader(header);
 		stream.Write((const char *)&header, sizeof(SkeletonFileHeader));
 
+		stream.Write((const char *)&_impl->rootBone, sizeof(uint32_t));
+
 		for (size_t i = 0; i < _impl->bones.size(); i++) {
 			Bone* boneData = _impl->bones[i].get();
 			WriteString(boneData->name, stream);
 
 			stream.Write((const char*)&boneData->parentId, sizeof(uint32_t));
-			stream.Write((const char*)&boneData->transform.m, sizeof(float) * 16);
+
+			uint32_t childCount = boneData->children.size();
+			stream.Write((const char*)&childCount, sizeof(uint32_t));
+
+			if (childCount > 0) {
+				stream.Write((const char*)boneData->children.data(), sizeof(uint32_t) * childCount);
+			}
+
+			stream.Write((const char*)&boneData->transform.m, sizeof(rMatrix4));
+			stream.Write((const char*)&boneData->invWorldTransform.m, sizeof(rMatrix4));
 		}
 
 		for (size_t i = 0; i < _impl->animations.size(); i++) {
@@ -208,11 +187,40 @@ namespace recondite {
 
 			rString animName = animation->Name();
 			WriteString(animName, stream);
-		}
 
-		uint32_t vertexBoneWeightSize = _impl->vertexBoneWeights.size();
-		stream.Write((const char*)&vertexBoneWeightSize, sizeof(uint32_t));
-		stream.Write(GetVertexBoneWeightData(), GetVertexBoneWeightsDataSize());
+			float duration = animation->Duration();
+			stream.Write((const char*)&duration, sizeof(float));
+
+			uint32_t channelCount = animation->GetChannelCount();
+			stream.Write((const char*)&channelCount, sizeof(uint32_t));
+
+			for (size_t i = 0; i < channelCount; i++) {
+				AnimationChannel* channel = animation->GetChannelByIndex(i);
+
+				stream.Write((const char*)&channel->boneId, sizeof(uint32_t));
+
+				uint32_t count = channel->translationKeys.times.size();
+				stream.Write((const char*)&count, sizeof(uint32_t));
+				if (count > 0) {
+					stream.Write((const char*)channel->translationKeys.times.data(), sizeof(float) * count);
+					stream.Write((const char*)channel->translationKeys.values.data(), sizeof(rVector3) * count);
+				}
+
+				count = channel->scaleKeys.times.size();
+				stream.Write((const char*)&count, sizeof(uint32_t));
+				if (count > 0) {
+					stream.Write((const char*)channel->scaleKeys.times.data(), sizeof(float) * count);
+					stream.Write((const char*)channel->scaleKeys.values.data(), sizeof(rVector3) * count);
+				}
+				
+				count = channel->rotationKeys.times.size();
+				stream.Write((const char*)&count, sizeof(uint32_t));
+				if (count > 0) {
+					stream.Write((const char*)channel->rotationKeys.times.data(), sizeof(float) * count);
+					stream.Write((const char*)channel->rotationKeys.values.data(), sizeof(rQuaternion) * count);
+				}
+			}
+		}
 
 		return 0;
 	}
@@ -231,23 +239,66 @@ namespace recondite {
 		SkeletonFileHeader header;
 		stream.Read((char *)&header, sizeof(SkeletonFileHeader));
 
+		stream.Read((char *)&_impl->rootBone, sizeof(uint32_t));
+
 		for (uint32_t i = 0; i < header.numBones; i++) {
 			rString boneName = ReadName(stream);
 			Bone* boneData = CreateBone(boneName);
 
 			stream.Read((char*)&boneData->parentId, sizeof(uint32_t));
-			stream.Read((char*)&boneData->transform.m, sizeof(float) * 16);
+
+			uint32_t childCount;
+			stream.Read((char*)&childCount, sizeof(uint32_t));
+			if (childCount > 0) {
+				boneData->children.resize(childCount);
+				stream.Read((char*)boneData->children.data(), sizeof(uint32_t) * childCount);
+			}
+
+			stream.Read((char*)&boneData->transform.m, sizeof(rMatrix4));
+			stream.Read((char*)&boneData->invWorldTransform.m, sizeof(rMatrix4));
 		}
 
 		for (uint32_t i = 0; i < header.numAnimations; i++) {
 			rString animName = ReadName(stream);
-			Animation* animation = CreateAnimation(animName);
-		}
+			float duration;
+			stream.Read((char*)&duration, sizeof(float));
+			Animation* animation = CreateAnimation(animName, duration);
 
-		uint32_t vertexBoneWeightSize;
-		stream.Read((char*)&vertexBoneWeightSize, sizeof(uint32_t));
-		_impl->vertexBoneWeights.resize(vertexBoneWeightSize);
-		stream.Read((char*)_impl->vertexBoneWeights.data(), GetVertexBoneWeightsDataSize());
+			uint32_t channelCount;
+			stream.Read((char*)&channelCount, sizeof(uint32_t));
+
+			for (uint32_t i = 0; i < channelCount; i++) {
+				uint32_t boneId;
+				stream.Read((char*)&boneId, sizeof(uint32_t));
+				AnimationChannel* channel = animation->CreateChannelForBone(boneId);
+
+				uint32_t count;
+				stream.Read((char*)&count, sizeof(uint32_t));
+
+				if (count > 0) {
+					channel->translationKeys.times.resize(count);
+					channel->translationKeys.values.resize(count);
+					stream.Read((char*)channel->translationKeys.times.data(), sizeof(float) * count);
+					stream.Read((char*)channel->translationKeys.values.data(), sizeof(rVector3) * count);
+				}
+			
+				stream.Read((char*)&count, sizeof(uint32_t));
+				if (count > 0) {
+					channel->scaleKeys.times.resize(count);
+					channel->scaleKeys.values.resize(count);
+					stream.Read((char*)channel->scaleKeys.times.data(), sizeof(float) * count);
+					stream.Read((char*)channel->scaleKeys.values.data(), sizeof(rVector3) * count);
+				}
+
+				stream.Read((char*)&count, sizeof(uint32_t));
+				if (count > 0) {
+					channel->rotationKeys.times.resize(count);
+					channel->rotationKeys.values.resize(count);
+					stream.Read((char*)channel->rotationKeys.times.data(), sizeof(float) * count);
+					stream.Read((char*)channel->rotationKeys.values.data(), sizeof(rQuaternion) * count);
+				}
+			}
+		}
 
 		return 0;
 	}

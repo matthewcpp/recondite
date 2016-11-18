@@ -285,16 +285,6 @@ namespace recondite {
 				stream.Read((char*)materialData, sizeof(MaterialData));
 			}
 
-			if (header.numVertices > 0) {
-				_impl->geometryData.AllocateVertices(header.numVertices);
-				_impl->geometryData.AllocateNormals(header.numVertices);
-				_impl->geometryData.AllocateTexCoords(header.numVertices);
-
-				stream.Read(_impl->geometryData.VertexData(), _impl->geometryData.VertexDataSize());
-				stream.Read(_impl->geometryData.NormalData(), _impl->geometryData.NormalDataSize());
-				stream.Read(_impl->geometryData.TexCoordData(), _impl->geometryData.TexCoordDataSize());
-			}
-
 			stream.Read((char*)&_impl->boundingBox, sizeof(rAlignedBox3));
 
 			for (size_t i = 0; i < header.triangleMeshCount; i++) {
@@ -306,6 +296,8 @@ namespace recondite {
 				MeshData* meshData = CreateLineMesh();
 				ReadMesh(meshData, stream);
 			}
+
+			_impl->geometryData.Read(stream);
 
 			if (header.animated)
 				CreateSkeleton()->Read(stream);
@@ -352,13 +344,6 @@ namespace recondite {
 			stream.Write((const char*)_impl->materials[i].get(), sizeof(MaterialData));
 		}
 
-		if (_impl->geometryData.VertexCount() > 0) {
-			stream.Write(_impl->geometryData.VertexData(), _impl->geometryData.VertexDataSize());
-			stream.Write(_impl->geometryData.NormalData(), _impl->geometryData.NormalDataSize());
-			stream.Write(_impl->geometryData.TexCoordData(), _impl->geometryData.TexCoordDataSize());
-		}
-			
-
 		stream.Write((const char*)&_impl->boundingBox, sizeof(rAlignedBox3));
 
 		for (size_t i = 0; i < _impl->triangleMeshes.size(); i++) {
@@ -370,6 +355,8 @@ namespace recondite {
 			MeshData* meshData = _impl->lineMeshes[i].get();
 			WriteMesh(meshData, stream);
 		}
+
+		_impl->geometryData.Write(stream);
 
 		if (header.animated)
 			_impl->skeleton->Write(stream);

@@ -2,11 +2,12 @@
 
 namespace recondite {
 
-	void Geometry::Reset(uint32_t bufferId, uint32_t vertexCount, bool hasNormals, bool hasTexCoords) {
+	void Geometry::Reset(uint32_t bufferId, uint32_t vertexCount, bool hasNormals, bool hasTexCoords, bool hasVertexBoneWeights) {
 		_bufferId = bufferId;
 		_vertexCount = vertexCount;
 		_hasNormals = hasNormals;
 		_hasTexCoords = hasTexCoords;
+		_hasVertexBoneWeights = hasVertexBoneWeights;
 	}
 
 	struct Model::Impl {

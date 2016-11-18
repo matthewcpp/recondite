@@ -66,12 +66,12 @@ Model* rModelManager::LoadFromData(ModelData& modelData, const rString& name) {
 	std::vector<rMaterial*> materials;
 	_impl->CreateMaterialsForModel(modelData, name, materials);
 
-	Geometry geometry, lineGeometry;
+	Geometry geometry;
 
 	const GeometryData* geometryData = modelData.GetGeometryData();
 	if (geometryData->VertexCount()) {
 		uint32_t geometryBufferId = _impl->graphicsDevice->CreateGeometryBuffer(geometryData);
-		geometry.Reset(geometryBufferId, geometryData->VertexCount(), geometryData->HasNormals(), geometryData->HasTexCoords());
+		geometry.Reset(geometryBufferId, geometryData->VertexCount(), geometryData->HasNormals(), geometryData->HasTexCoords(), geometryData->HasVertexBoneWeights());
 	}
 
 	Model* model = new Model(name, geometry, modelData.DetachSkeleton());

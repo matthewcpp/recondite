@@ -16,7 +16,8 @@
 #include "rVector3.hpp"
 #include "rMatrix4.hpp"
 
-#include "rVertexBoneLink.hpp"
+#include "stream/rIStream.hpp"
+#include "stream/rOStream.hpp"
 
 namespace recondite {
 	class RECONDITE_API GeometryData {
@@ -178,6 +179,23 @@ namespace recondite {
 		\returns value whether this geometry contains normals 
 		*/
 		bool HasNormals() const;
+
+		/**
+		Gets whether this geometry data contains vertex bone weights
+		\returns whether this geometry contains vertex bone weights
+		*/
+		bool HasVertexBoneWeights() const;
+
+		void AllocateVertexWeightData(size_t numVertices);
+		bool AddVertexWeight(size_t vertexIndex, size_t boneIndex, float weight);
+		size_t VertexBoneWeightsDataSize() const;
+		size_t VertexBoneIndicesDataSize() const;
+
+		const char* VertexBoneWeightData() const;
+		const char* VertexBoneIndicesData() const;
+
+		int Read(rIStream& stream);
+		int Write(rOStream& stream);
 
 		/**
 		Removes all data from the object.

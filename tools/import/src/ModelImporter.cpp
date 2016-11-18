@@ -15,11 +15,12 @@ namespace recondite { namespace import {
 
 	struct ModelImporter::Impl{
 		Assimp::Importer importer;
+		ModelImporterOptions options;
 		rString path;
 
 		int ImportMaterials(const aiScene* scene, ModelData& modelData);
 		void ImportMeshes(const aiScene* scene, ModelData& modelData);
-		void ImportMeshBones(const aiScene* scene, aiMesh* mesh, ModelData& modelData);
+		void ImportVertexWeights(const aiScene* scene, aiMesh* mesh, ModelData& modelData, size_t baseIndex);
 		void CreateSkeletonHierarchy(const aiScene* scene, ModelData& modelData);
 		void ImportAnimations(const aiScene* scene, ModelData& modelData);
 		void NodeDump(const rString& path, const aiScene* scene);
@@ -53,8 +54,10 @@ namespace recondite { namespace import {
 		}
 	}
 
-	int ModelImporter::ImportModel(const rString& path, ModelData& modelData){
+	int ModelImporter::ImportModel(const rString& path, ModelData& modelData, const ModelImporterOptions& options){
 		_impl->path = path;
+		_impl->options = options;
+
 		const aiScene* scene = _impl->importer.ReadFile(path.c_str(),
 			aiProcess_CalcTangentSpace |
 			aiProcess_Triangulate |
@@ -67,16 +70,20 @@ namespace recondite { namespace import {
 
 		_impl->NodeDump("C:/temp/node_dump.txt", scene);
 
-		if (scene->mNumAnimations > 0) {
+		if (_impl->options.importSkeleton) {
 			modelData.CreateSkeleton();
 			_impl->CreateSkeletonHierarchy(scene, modelData);
+		}
+
+		if (scene->mNumAnimations > 0 && _impl->options.importAnimations) {
 			_impl->ImportAnimations(scene, modelData);
 		}
 
-		_impl->ImportMaterials(scene, modelData);
-		_impl->ImportMeshes(scene, modelData);
-		
-		modelData.CalculateBoundings();
+		if (_impl->options.importMeshData) {
+			_impl->ImportMaterials(scene, modelData);
+			_impl->ImportMeshes(scene, modelData);
+			modelData.CalculateBoundings();
+		}
 
 		return 0;
 	}
@@ -113,29 +120,27 @@ namespace recondite { namespace import {
 
 			meshData->SetMaterialId(mesh->mMaterialIndex);
 
-			if (scene->mNumAnimations > 0)
-				ImportMeshBones(scene, mesh, modelData);
+			if (scene->mNumAnimations > 0 && options.importSkeleton)
+				ImportVertexWeights(scene, mesh, modelData, baseIndex);
 
 			baseIndex += mesh->mNumVertices;
 		}
 	}
 
-	void ModelImporter::Impl::ImportMeshBones(const aiScene* scene, aiMesh* mesh, ModelData& modelData) {
-		size_t baseIndex = modelData.GetGeometryData()->VertexCount() - mesh->mNumVertices;
-		
+	void ModelImporter::Impl::ImportVertexWeights(const aiScene* scene, aiMesh* mesh, ModelData& modelData, size_t baseIndex) {
+		GeometryData* geometryData = modelData.GetGeometryData();
+		geometryData->AllocateVertexWeightData(mesh->mNumVertices);
 
 		Skeleton* skeleton = modelData.GetSkeleton();
-		skeleton->AllocateVertexWeightData(mesh->mNumVertices);
+
 
 		for (size_t i = 0; i < mesh->mNumBones; i++) {
 			aiBone* bone = mesh->mBones[i];
 
 			Bone* boneData = skeleton->GetBoneByName(bone->mName.C_Str());
 
-			rMatrix4 globalTransform = skeleton->GetGlobalTransform(boneData);
-
 			for (uint32_t j = 0; j < bone->mNumWeights; j++)
-				skeleton->AddVertexWeight(baseIndex + bone->mWeights[j].mVertexId, boneData->id, bone->mWeights[j].mWeight);
+				geometryData->AddVertexWeight(baseIndex + bone->mWeights[j].mVertexId, boneData->id, bone->mWeights[j].mWeight);
 		}
 	}
 
@@ -150,6 +155,7 @@ namespace recondite { namespace import {
 
 		if (parentBone) {
 			bone->parentId = parentBone->id;
+			parentBone->children.push_back(bone->id);
 		}
 
 		for (size_t i = 0; i < node->mNumChildren; i++) {
@@ -161,6 +167,7 @@ namespace recondite { namespace import {
 		//Need to find child of root node which does not refer to meshes.  This will be the Skeleton Container.
 		aiNode* rootNode = scene->mRootNode;
 		aiNode* skeletonContainer = nullptr;
+		Skeleton* skeleton = modelData.GetSkeleton();
 
 		for (size_t i = 0; i < rootNode->mNumChildren; i++) {
 			if (rootNode->mChildren[i]->mNumMeshes == 0) {
@@ -171,8 +178,10 @@ namespace recondite { namespace import {
 
 		//extract bone hierarchy from assimp node tree
 		for (size_t i = 0; i < skeletonContainer->mNumChildren; i++) {
-			GatherBones(skeletonContainer->mChildren[i], modelData.GetSkeleton());
+			GatherBones(skeletonContainer->mChildren[i], skeleton);
 		}
+
+		skeleton->CacheBoneData();
 	}
 
 	void ModelImporter::Impl::ImportAnimations(const aiScene* scene, ModelData& modelData) {
@@ -180,28 +189,33 @@ namespace recondite { namespace import {
 
 		for (size_t i = 0; i < scene->mNumAnimations; i++) {
 			aiAnimation* sourceAnimation = scene->mAnimations[i];
-			Animation* animation = skeleton->CreateAnimation(sourceAnimation->mName.C_Str());
+			Animation* animation = skeleton->CreateAnimation(sourceAnimation->mName.C_Str(), sourceAnimation->mDuration);
+
+			if (!animation) continue;
 
 			for (size_t i = 0; i < sourceAnimation->mNumChannels; i++) {
 				aiNodeAnim* nodeAnim = sourceAnimation->mChannels[i];
 				Bone* bone = skeleton->GetBoneByName(nodeAnim->mNodeName.C_Str());
 
 				if (bone) {
-					BoneAnimation* boneAnimation = animation->CreateBoneAnimation(bone->id);
+					AnimationChannel* boneAnimation = animation->CreateChannelForBone(bone->id);
 
 					for (size_t i = 0; i < nodeAnim->mNumPositionKeys; i++) {
 						aiVectorKey* k = nodeAnim->mPositionKeys + i;
-						boneAnimation->translationKeys.emplace_back(k->mTime, k->mValue.x, k->mValue.y, k->mValue.z);
+						boneAnimation->translationKeys.times.push_back(k->mTime);
+						boneAnimation->translationKeys.values.emplace_back(k->mValue.x, k->mValue.y, k->mValue.z);
 					}
 
 					for (size_t i = 0; i < nodeAnim->mNumScalingKeys; i++) {
 						aiVectorKey* k = nodeAnim->mScalingKeys + i;
-						boneAnimation->scaleKeys.emplace_back(k->mTime, k->mValue.x, k->mValue.y, k->mValue.z);
+						boneAnimation->scaleKeys.times.push_back(k->mTime);
+						boneAnimation->scaleKeys.values.emplace_back(k->mValue.x, k->mValue.y, k->mValue.z);
 					}
 
 					for (size_t i = 0; i < nodeAnim->mNumRotationKeys; i++) {
 						aiQuatKey* k = nodeAnim->mRotationKeys + i;
-						boneAnimation->rotationKeys.emplace_back(k->mTime, k->mValue.x, k->mValue.y, k->mValue.z, k->mValue.w);
+						boneAnimation->rotationKeys.times.push_back(k->mTime);
+						boneAnimation->rotationKeys.values.emplace_back(k->mValue.x, k->mValue.y, k->mValue.z, k->mValue.w);
 					}
 				}
 			}

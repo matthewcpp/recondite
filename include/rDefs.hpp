@@ -59,6 +59,8 @@ enum class rSeekMode{
 	End
 };
 
+#define rMAX_BONE_WEIGHTS_PER_VERTEX 4
+
 #define rNO_COPY_CLASS(classname)								\
 		public:													\
 			classname(const classname&) = delete;				\

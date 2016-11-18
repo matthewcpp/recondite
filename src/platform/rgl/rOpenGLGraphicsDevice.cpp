@@ -211,10 +211,13 @@ unsigned int rOpenGLGraphicsDevice::CreateGeometryBuffer(const recondite::Geomet
 	size_t vertexDataSize = geometryData->VertexDataSize();
 	size_t normalDataSize = geometryData->NormalDataSize();
 	size_t texCoordDataSize = geometryData->TexCoordDataSize();
+	size_t vertexBoneIndicesDataSize = geometryData->VertexBoneIndicesDataSize();
+	size_t vertexBoneWeightDataSize = geometryData->VertexBoneWeightsDataSize();
 
+	size_t bufferSize = vertexDataSize + normalDataSize + texCoordDataSize + vertexBoneIndicesDataSize + vertexBoneWeightDataSize;
 	size_t offset = 0;
 
-	glBufferData(GL_ARRAY_BUFFER, vertexDataSize + normalDataSize + texCoordDataSize, 0, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, bufferSize, 0, GL_STATIC_DRAW);
 
 	glBufferSubData(GL_ARRAY_BUFFER, offset, vertexDataSize, geometryData->VertexData());
 	offset += vertexDataSize;
@@ -227,6 +230,14 @@ unsigned int rOpenGLGraphicsDevice::CreateGeometryBuffer(const recondite::Geomet
 	if (geometryData->HasTexCoords()) {
 		glBufferSubData(GL_ARRAY_BUFFER, offset, texCoordDataSize, geometryData->TexCoordData());
 		offset += normalDataSize;
+	}
+
+	if (geometryData->HasVertexBoneWeights()) {
+		glBufferSubData(GL_ARRAY_BUFFER, offset, vertexBoneIndicesDataSize, geometryData->VertexBoneIndicesData());
+		offset += vertexBoneIndicesDataSize;
+
+		glBufferSubData(GL_ARRAY_BUFFER, offset, vertexBoneWeightDataSize, geometryData->VertexBoneWeightData());
+		offset += vertexBoneWeightDataSize;
 	}
 
 	return bufferId;
@@ -242,7 +253,7 @@ void rOpenGLGraphicsDevice::ActivateGeometryBuffer(const recondite::Geometry* ge
 	glVertexAttribPointer(gPositionLoc, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid *)offset);
 	glEnableVertexAttribArray(gPositionLoc);
 
-	offset += geometry->GetVertexCount() * 12;
+	offset += geometry->GetVertexCount() * sizeof(rVector3);
 
 	if (geometry->GetHasNormals()) {
 		GLuint gNormalLoc = glGetAttribLocation(m_activeShaderProgram, "recNormal");
@@ -250,7 +261,7 @@ void rOpenGLGraphicsDevice::ActivateGeometryBuffer(const recondite::Geometry* ge
 		glVertexAttribPointer(gNormalLoc, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid *)offset);
 		glEnableVertexAttribArray(gNormalLoc);
 
-		offset += geometry->GetVertexCount() * 12;
+		offset += geometry->GetVertexCount() * sizeof(rVector3);
 	}
 
 	if (geometry->GetHasTexCoords()) {
@@ -258,8 +269,9 @@ void rOpenGLGraphicsDevice::ActivateGeometryBuffer(const recondite::Geometry* ge
 
 		glVertexAttribPointer(gTexCoordLoc, 2, GL_FLOAT, GL_FALSE, 0, (GLvoid *)offset);
 		glEnableVertexAttribArray(gTexCoordLoc);
-	}
 
+		offset += geometry->GetVertexCount() * sizeof(rVector2);
+	}
 }
 
 void rOpenGLGraphicsDevice::DeactivateGeometryBuffer(const recondite::Geometry* geometry) {

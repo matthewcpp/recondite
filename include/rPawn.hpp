@@ -3,7 +3,7 @@
 
 #include "rBuild.hpp"
 #include "rActor3.hpp"
-#include "rAnimationPlayer.hpp"
+#include "rAnimationController.hpp"
 #include "asset/rModel.hpp"
 
 class RECONDITE_API rPawn : public rActor3{
@@ -14,14 +14,20 @@ public:
 	Model* Model() const;
 	void SetModel(recondite::Model* model);
 	
-	rAnimationPlayer* AnimationPlayer();
+	inline recondite::AnimationController* AnimationController();
+
+	virtual rString ClassName() const;
 	
 	virtual int Update();
 	virtual void Draw();
 	
 private:
 	recondite::Model* m_model;
-	rAnimationPlayer m_animationPlayer;
+	recondite::AnimationController m_animationController;
 };
+
+inline recondite::AnimationController* rPawn::AnimationController() {
+	return &m_animationController;
+}
 
 #endif

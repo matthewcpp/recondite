@@ -28,18 +28,13 @@ size_t rRenderer::ObjectsRendered() const{
 	return m_objectsRendered;
 }
 
-void rRenderer::RenderModel(const recondite::Model* model, const rMatrix4& matrix) {
+void rRenderer::_RenderModel(const Model* model, const rMatrix4& matrix) {
 	rMatrix4 modelView = m_viewMatrix * matrix;
 
 	const recondite::Geometry* geometry = model->GetGeometry();
 
 	size_t triangleMeshCount = model->GetTriangleMeshCount();
 	if (triangleMeshCount > 0) {
-		
-		if (geometry->GetHasTexCoords())
-			m_graphicsDevice->ActivateShader(m_contentManager->Shaders()->DefaultModelShader()->ProgramId());
-		else
-			m_graphicsDevice->ActivateShader(m_contentManager->Shaders()->DefaultPrimitiveShader()->ProgramId());
 
 		m_graphicsDevice->ActivateGeometryBuffer(geometry);
 
@@ -51,20 +46,38 @@ void rRenderer::RenderModel(const recondite::Model* model, const rMatrix4& matri
 		}
 	}
 
-
 	size_t lineMeshCount = model->GetLineMeshCount();
 	if (lineMeshCount > 0) {
 		m_graphicsDevice->ActivateShader(m_contentManager->Shaders()->DefaultLineShader()->ProgramId());
 
 		for (size_t i = 0; i < lineMeshCount; i++) {
 			const recondite::Mesh* mesh = model->GetLineMesh(i);
-			
+
 			m_graphicsDevice->SetActiveMaterial(mesh->GetMaterial());
 			m_graphicsDevice->RenderLineMesh(mesh, m_projectionMatrix, modelView);
 		}
 	}
 
 	m_graphicsDevice->DeactivateGeometryBuffer(geometry);
+}
+
+void rRenderer::RenderModel(const recondite::Model* model, const rMatrix4& matrix) {
+	const recondite::Geometry* geometry = model->GetGeometry();
+
+	rShader* shader = nullptr;
+
+	if (geometry->GetHasTexCoords())
+		m_graphicsDevice->ActivateShader(m_contentManager->Shaders()->DefaultModelShader()->ProgramId());
+	else
+		m_graphicsDevice->ActivateShader(m_contentManager->Shaders()->DefaultPrimitiveShader()->ProgramId());
+
+	_RenderModel(model, matrix);
+}
+
+void rRenderer::RenderAnimatedModel(const Model* model, const rMatrix4& matrix, const recondite::AnimationController* animationController) {
+	m_graphicsDevice->ActivateShader(m_contentManager->Shaders()->DefaultSkinnedShader()->ProgramId());
+	m_graphicsDevice->SetSkinningData(animationController->GetBoneTransformData(), animationController->GetBoneTransformCount());
+	_RenderModel(model, matrix);
 }
 
 void rRenderer::RenderImmediateLines(const rImmediateBuffer& buffer, rColor color) {

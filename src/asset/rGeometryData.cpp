@@ -143,8 +143,8 @@ namespace recondite {
 	}
 
 	void GeometryData::AllocateVertexWeightData(size_t numVertices) {
-		_impl->vertexBoneIndices.resize(_impl->vertexBoneIndices.size() + (numVertices * rMAX_BONE_WEIGHTS_PER_VERTEX));
-		_impl->vertexBoneWeights.resize(_impl->vertexBoneWeights.size() + (numVertices * rMAX_BONE_WEIGHTS_PER_VERTEX));
+		_impl->vertexBoneIndices.resize(_impl->vertexBoneIndices.size() + (numVertices * rMAX_BONE_WEIGHTS_PER_VERTEX), 0);
+		_impl->vertexBoneWeights.resize(_impl->vertexBoneWeights.size() + (numVertices * rMAX_BONE_WEIGHTS_PER_VERTEX), 0.0);
 	}
 
 	bool GeometryData::AddVertexWeight(size_t vertexIndex, size_t boneIndex, float weight) {

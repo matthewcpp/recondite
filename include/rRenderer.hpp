@@ -24,6 +24,7 @@
 
 #include "asset/rModel.hpp"
 #include "asset/rMaterial.hpp"
+#include "rAnimationController.hpp"
 
 using namespace recondite;
 
@@ -46,10 +47,12 @@ public:
 	rSpriteBatch* SpriteBatch();
 
 	void RenderModel(const Model* model, const rMatrix4& matrix);
+	void RenderAnimatedModel(const Model* model, const rMatrix4& matrix, const recondite::AnimationController* animationController);
 
 	void RenderImmediateLines(const rImmediateBuffer& buffer, rColor color);
 
 private:
+	void _RenderModel(const Model* model, const rMatrix4& matrix);
 	void RenderSpriteBatch();
 
 private:

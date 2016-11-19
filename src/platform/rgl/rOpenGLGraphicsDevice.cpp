@@ -165,6 +165,11 @@ void rOpenGLGraphicsDevice::ActivateShader(unsigned int shaderId){
 	glUseProgram(m_activeShaderProgram);
 }
 
+void rOpenGLGraphicsDevice::SetSkinningData(const rMatrix4* matrices, size_t count) {
+	GLint uniformHandle = glGetUniformLocation(m_activeShaderProgram, "recBoneMatrices");
+	glUniformMatrix4fv(uniformHandle, count, GL_FALSE, (GLfloat*)matrices);
+}
+
 void rOpenGLGraphicsDevice::SetActiveMaterial(rMaterial* material){
 	GLint uniformHandle = glGetUniformLocation(m_activeShaderProgram, "fragColor");
 	if (uniformHandle != -1){
@@ -229,7 +234,7 @@ unsigned int rOpenGLGraphicsDevice::CreateGeometryBuffer(const recondite::Geomet
 
 	if (geometryData->HasTexCoords()) {
 		glBufferSubData(GL_ARRAY_BUFFER, offset, texCoordDataSize, geometryData->TexCoordData());
-		offset += normalDataSize;
+		offset += texCoordDataSize;
 	}
 
 	if (geometryData->HasVertexBoneWeights()) {
@@ -247,30 +252,40 @@ void rOpenGLGraphicsDevice::ActivateGeometryBuffer(const recondite::Geometry* ge
 	uint32_t offset = 0;
 	GLuint vertexBufferId = geometry->GetBufferId();
 
-	GLuint gPositionLoc = glGetAttribLocation(m_activeShaderProgram, "recPosition");
+	GLint gPositionLoc = glGetAttribLocation(m_activeShaderProgram, "recPosition");
 
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBufferId);
-	glVertexAttribPointer(gPositionLoc, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid *)offset);
 	glEnableVertexAttribArray(gPositionLoc);
+	glVertexAttribPointer(gPositionLoc, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid *)offset);
 
 	offset += geometry->GetVertexCount() * sizeof(rVector3);
 
 	if (geometry->GetHasNormals()) {
-		GLuint gNormalLoc = glGetAttribLocation(m_activeShaderProgram, "recNormal");
-
+		GLint gNormalLoc = glGetAttribLocation(m_activeShaderProgram, "recNormal");
+		glEnableVertexAttribArray(gNormalLoc);	
 		glVertexAttribPointer(gNormalLoc, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid *)offset);
-		glEnableVertexAttribArray(gNormalLoc);
 
 		offset += geometry->GetVertexCount() * sizeof(rVector3);
 	}
 
 	if (geometry->GetHasTexCoords()) {
-		GLuint gTexCoordLoc = glGetAttribLocation(m_activeShaderProgram, "recTexCoord");
-
-		glVertexAttribPointer(gTexCoordLoc, 2, GL_FLOAT, GL_FALSE, 0, (GLvoid *)offset);
+		GLint gTexCoordLoc = glGetAttribLocation(m_activeShaderProgram, "recTexCoord");
 		glEnableVertexAttribArray(gTexCoordLoc);
+		glVertexAttribPointer(gTexCoordLoc, 2, GL_FLOAT, GL_FALSE, 0, (GLvoid *)offset);
 
 		offset += geometry->GetVertexCount() * sizeof(rVector2);
+	}
+
+	if (geometry->GetHasVertexBoneWeights()) {
+		GLint gVertexBoneIndices = glGetAttribLocation(m_activeShaderProgram, "recBoneIndices");
+		glEnableVertexAttribArray(gVertexBoneIndices);
+		glVertexAttribIPointer(gVertexBoneIndices, 4, GL_INT, 0, (GLvoid *)offset);
+		
+		offset += geometry->GetVertexCount() * rMAX_BONE_WEIGHTS_PER_VERTEX * sizeof(uint32_t);
+
+		GLint gVertexBoneWeights = glGetAttribLocation(m_activeShaderProgram, "recBoneWeights");
+		glEnableVertexAttribArray(gVertexBoneWeights);
+		glVertexAttribPointer(gVertexBoneWeights, 4, GL_FLOAT, GL_FALSE, 0, (GLvoid*)offset);
 	}
 }
 
@@ -288,6 +303,13 @@ void rOpenGLGraphicsDevice::DeactivateGeometryBuffer(const recondite::Geometry* 
 		glDisableVertexAttribArray(gTexCoordLoc);
 	}
 
+	if (geometry->GetHasVertexBoneWeights()) {
+		GLuint gVertexBoneIndices = glGetAttribLocation(m_activeShaderProgram, "recBoneIndices");
+		glDisableVertexAttribArray(gVertexBoneIndices);
+
+		GLuint gVertexBoneWeights = glGetAttribLocation(m_activeShaderProgram, "recBoneWeights");
+		glDisableVertexAttribArray(gVertexBoneWeights);
+	}
 }
 
 unsigned int rOpenGLGraphicsDevice::CreateElementBuffer(const char* elementData, size_t elementDataSize){

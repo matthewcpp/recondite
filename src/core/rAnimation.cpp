@@ -2,31 +2,41 @@
 
 namespace recondite{
 
-	Animation::Animation(const rString& name, uint32_t id) {
+	Animation::Animation(const rString& name, float duration, uint32_t id) {
 		_name = name;
 		_id = id;
+		_duration = duration;
 	}
 
-	BoneAnimation* Animation::CreateBoneAnimation(uint32_t id) {
-		if (_boneAnimations.count(id)) {
+	AnimationChannel* Animation::CreateChannelForBone(uint32_t boneId) {
+		if (_boneChannelMap.count(boneId)) {
 			return nullptr;
 		}
 		else {
-			BoneAnimation* boneAnimation = new BoneAnimation(id);
-			_boneAnimations.emplace(id, boneAnimation);
+			AnimationChannel* boneAnimation = new AnimationChannel(boneId, _animationChannels.size());
+			_animationChannels.emplace_back(boneAnimation);
+			_boneChannelMap[boneId] = boneAnimation;
 
 			return boneAnimation;
 		}
 	}
 
-	BoneAnimation* Animation::GetBoneAnimation(uint32_t id) {
-		auto result = _boneAnimations.find(id);
+	AnimationChannel* Animation::GetChannelForBone(uint32_t id) {
+		auto result = _boneChannelMap.find(id);
 
-		if (result == _boneAnimations.end()) {
+		if (result == _boneChannelMap.end()) {
 			return nullptr;
 		}
 		else {
-			return result->second.get();
+			return result->second;
 		}
+	}
+
+	AnimationChannel* Animation::GetChannelByIndex(size_t index) {
+		return _animationChannels[index].get();
+	}
+
+	size_t Animation::GetChannelCount() const {
+		return _animationChannels.size();
 	}
 }

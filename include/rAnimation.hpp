@@ -13,48 +13,85 @@
 #include "rQuaternion.hpp"
 
 namespace recondite {
-	struct RECONDITE_API BoneAnimation {
-		BoneAnimation(uint32_t _id) : id(_id) {}
+	struct RECONDITE_API AnimationChannel {
+		AnimationChannel(uint32_t _boneId, uint32_t _channelId) : boneId(_boneId), channelId(_channelId) {}
 
-		struct VectorKey {
-			VectorKey() : time(0.0f), value(rVector3::ZeroVector) {}
-			VectorKey(float t, float x, float y, float z) : time(t), value(x,y,z) {}
-
-			float time;
-			rVector3 value;
+		struct VectorKeyList {
+			std::vector<float> times;
+			std::vector<rVector3> values;
 		};
 
-		struct QuaternionKey {
-			QuaternionKey() : time(0.0f), value(rQuaternion::Identity) {}
-			QuaternionKey(float t, float x, float y, float z, float w) : time(t), value(x,y,z,w) {}
-
-			float time;
-			rQuaternion value;
+		struct QuaternionKeyList {
+			std::vector<float> times;
+			std::vector<rQuaternion> values;
 		};
 
-		uint32_t id;
+		uint32_t boneId;
+		uint32_t channelId;
 
-		std::vector<VectorKey> translationKeys;
-		std::vector<VectorKey> scaleKeys;
-		std::vector<QuaternionKey> rotationKeys;
+		VectorKeyList translationKeys;
+		VectorKeyList scaleKeys;
+		QuaternionKeyList rotationKeys;
 	};
 
 	class RECONDITE_API Animation {
 	public:
-		Animation(const rString& name, uint32_t id);
+		Animation(const rString& name, float duration, uint32_t id);
 
 	public:
+		/**
+		Family Friendly name for this animation
+		\returns the animation's name
+		*/
 		inline rString Name() const;
+
+		/**
+		Identifier for this animation
+		\returns the animations numerical identifier.
+		*/
 		inline uint32_t Id() const;
 
-		BoneAnimation* CreateBoneAnimation(uint32_t id);
-		BoneAnimation* GetBoneAnimation(uint32_t id);
+		/**
+		Length of the animation
+		\returns the animation length
+		*/
+		inline float Duration() const;
+
+		/**
+		Creates a new Animation for a given bone id.
+		\param boneId the id of the bone this Animation references
+		\returns new bone animation container if one does not exist for the supplied bone id or null if one already exists.
+		*/
+		AnimationChannel* CreateChannelForBone(uint32_t boneId);
+
+		/**
+		Gets a bone animation for a given id
+		\param boneId the id of the bone to get animation for
+		\returns animation for the given bone id or null if one does not exist
+		*/
+		AnimationChannel* GetChannelForBone(uint32_t boneId);
+
+		/**
+		Gets a bone animation by its given index in the animation collection.
+		\param index index of the animation to retrieve
+		\returns the bone animation for the given index
+		*/
+		AnimationChannel* GetChannelByIndex(size_t index);
+
+		/**
+		Gets the total number of bone animations contained in this object
+		\returns bone animation count
+		*/
+		size_t GetChannelCount() const;
 
 	private:
 		rString _name;
 		uint32_t _id;
 
-		std::map<uint32_t, std::unique_ptr<BoneAnimation>> _boneAnimations;
+		float _duration;
+
+		std::vector<std::unique_ptr<AnimationChannel>> _animationChannels;
+		std::map<uint32_t, AnimationChannel*> _boneChannelMap;
 
 		rNO_COPY_CLASS(Animation)
 	};
@@ -65,6 +102,10 @@ namespace recondite {
 
 	inline uint32_t Animation::Id() const {
 		return _id;
+	}
+
+	inline float Animation::Duration() const {
+		return _duration;
 	}
 }
 

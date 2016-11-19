@@ -14,27 +14,24 @@ Model* rPawn::Model() const{
 void rPawn::SetModel(recondite::Model* model){
 	m_model = model;
 	
-	/*
 	if (model)
-		m_animationPlayer.SetSkeleton(model->Skeleton());
-	else
-		m_animationPlayer.SetSkeleton(NULL);
-	*/
-}
-	
-rAnimationPlayer* rPawn::AnimationPlayer(){
-	return &m_animationPlayer;
+		m_animationController.SetSkeleton(model->GetSkeleton());
+
 }
 
 int rPawn::Update(){
-	m_animationPlayer.Update(m_engine->time);
+	m_animationController.Update(m_engine->time);
 
 	return 0;
+}
+
+rString rPawn::ClassName() const {
+	return "Pawn";
 }
 
 void rPawn::Draw(){
 	if (m_model){
 		rMatrix4 transform;
-		//m_engine->renderer->RenderModel(m_model, RenderingOptions(), transform);
+		m_engine->renderer->RenderAnimatedModel(m_model, transform, &m_animationController);
 	}
 }

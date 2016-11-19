@@ -62,6 +62,7 @@ public:
 	virtual unsigned int CreateShaderProgram(const rString& vertex, const rString& fragment);
 	virtual void DeleteShaderProgram(unsigned int shaderId);
 	virtual void ActivateShader(unsigned int shaderId);
+	virtual void SetSkinningData(const rMatrix4* matrices, size_t count);
 	
 	virtual unsigned int CreateArrayBuffer(const char* data, size_t dataSize);
 	virtual unsigned int CreateElementBuffer(const char* elementData, size_t elementDataSize);

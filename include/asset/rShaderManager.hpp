@@ -27,6 +27,7 @@ public:
 	rShader* DefaultSpriteShader();
 	rShader* DefaultTextShader();
 	rShader* DefaultDrawingShader();
+	rShader* DefaultSkinnedShader();
 
 private:
 	struct Impl;

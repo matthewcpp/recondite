@@ -17,6 +17,9 @@ list(APPEND rgl_shaders ${CMAKE_CURRENT_SOURCE_DIR}/shaders/__default_line__.fra
 list(APPEND rgl_shaders ${CMAKE_CURRENT_SOURCE_DIR}/shaders/__default_model__.vert)
 list(APPEND rgl_shaders ${CMAKE_CURRENT_SOURCE_DIR}/shaders/__default_model__.frag)
 
+list(APPEND rgl_shaders ${CMAKE_CURRENT_SOURCE_DIR}/shaders/__default_skinned__.vert)
+list(APPEND rgl_shaders ${CMAKE_CURRENT_SOURCE_DIR}/shaders/__default_skinned__.frag)
+
 list(APPEND rgl_shaders ${CMAKE_CURRENT_SOURCE_DIR}/shaders/__default_primitive__.vert)
 list(APPEND rgl_shaders ${CMAKE_CURRENT_SOURCE_DIR}/shaders/__default_primitive__.frag)
 

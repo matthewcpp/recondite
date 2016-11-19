@@ -134,3 +134,7 @@ rShader* rShaderManager::DefaultTextShader(){
 rShader* rShaderManager::DefaultDrawingShader(){
 	return Get("__default_drawing__");
 }
+
+rShader* rShaderManager::DefaultSkinnedShader() {
+	return Get("__default_skinned__");
+}

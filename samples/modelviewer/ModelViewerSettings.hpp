@@ -9,10 +9,13 @@ struct ModelViewerSettings {
 	bool renderSkeleton;
 	bool renderBoneNames;
 
+	bool animatedModel;
+
 public:
 	ModelViewerSettings() : 
 		skeletonLineColor(rColor::Green), 
 		skeletonTextColor(rColor::White), 
 		renderSkeleton(false),
-		renderBoneNames(false) {}
+		renderBoneNames(false),
+		animatedModel(false) {}
 };

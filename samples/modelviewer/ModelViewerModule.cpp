@@ -4,6 +4,7 @@
 
 #include "rCamera.hpp"
 #include "rProp.hpp"
+#include "rPawn.hpp"
 
 
 ModelViewerModule::ModelViewerModule(rEngine* engine)
@@ -58,8 +59,16 @@ void ModelViewerModule::Init(const rArrayString& args) {
 
 	Model* model =_engine->content->Models()->LoadFromData(modelData, "model");
 	
-	rProp* prop = new rProp(model, "prop", _engine);
-	_engine->scene->AddActor(prop);
+	rActor3* actor = nullptr;
+	if (model->GetSkeleton()) {
+		actor = new rPawn(model, "model", _engine);
+		settings.animatedModel = true;
+	}
+	else {
+		actor = new rProp(model, "model", _engine);
+		settings.animatedModel = false;
+	}
+	_engine->scene->AddActor(actor);
 
 	rViewport* mainViewport = CreateView(model, _engine);
 

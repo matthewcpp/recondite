@@ -19,6 +19,11 @@ private:
 	void OnShowSkeletonClick(rEvent& event);
 	void OnShowBoneNamesClick(rEvent& event);
 
+	void OnAnimationPickerChange(rEvent& event);
+	void OnAnimationPlayButtonClick(rEvent& event);
+	void OnAnimationPauseButtonClick(rEvent& event);
+	void OnAnimationStopButtonClick(rEvent& event);
+
 	void SetColorForWidgetEvent(rEvent& event, const rColor& color);
 
 	void CameraDebug();

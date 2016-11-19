@@ -5,10 +5,13 @@
 #include "ui/ruiLinearLayout.hpp"
 #include "ui/ruiAbsoluteLayout.hpp"
 #include "ui/ruiPicker.hpp"
+#include "ui/ruiButton.hpp"
 
 #include "stream/rOStringStream.hpp"
 
 #include "rDemoCamera.hpp"
+
+#include "rPawn.hpp"
 
 ModelViewerController::ModelViewerController(ModelViewerSettings* settings, const rString& name, rEngine* engine, ruiDocument* document)
 	:ruiController(name)
@@ -89,12 +92,29 @@ void ModelViewerController::OnDocumentLoaded() {
 
 	recondite::Skeleton* skeleton = model->GetSkeleton();
 	if (skeleton) {
-		for (size_t i = 0; i < skeleton->NumAnimations(); i++) {
+		for (size_t i = 0; i < skeleton->GetAnimationCount(); i++) {
 			recondite::Animation* animation = skeleton->GetAnimation(i);
 
 			animationPicker->AddOption(animation->Name());
 		}
 	}
+
+
+	if (_settings->animatedModel && skeleton->GetAnimationCount() > 0) {
+		rPawn* pawn = (rPawn*)_engine->scene->GetActor("model");
+		pawn->AnimationController()->SetAnimation(animationPicker->Options()[0]);
+	}
+
+	animationPicker->Bind(ruiEVENT_PICKER_CHANGE, this, &ModelViewerController::OnAnimationPickerChange);
+
+	ruiButton* playButton = (ruiButton*)_document->GetWidgetById("animation-play");
+	playButton->Bind(ruiEVENT_BUTTON_CLICK, this, &ModelViewerController::OnAnimationPlayButtonClick);
+
+	ruiButton* pauseButton = (ruiButton*)_document->GetWidgetById("animation-pause");
+	pauseButton->Bind(ruiEVENT_BUTTON_CLICK, this, &ModelViewerController::OnAnimationPauseButtonClick);
+
+	ruiButton* stopButton = (ruiButton*)_document->GetWidgetById("animation-stop");
+	stopButton->Bind(ruiEVENT_BUTTON_CLICK, this, &ModelViewerController::OnAnimationStopButtonClick);
 
 	_document->RunEveryUpdate([&]() {
 		CameraDebug();
@@ -113,4 +133,26 @@ void ModelViewerController::OnShowBoneNamesClick(rEvent& event) {
 	ruiCheckbox* checkbox = (ruiCheckbox*)evt.Widget();
 
 	_settings->renderBoneNames = checkbox->IsChecked();
+}
+
+void ModelViewerController::OnAnimationPickerChange(rEvent& event) {
+	rPawn* pawn = (rPawn*)_engine->scene->GetActor("model");
+	ruiPicker* animationPicker = (ruiPicker*)_document->GetWidgetById("animation-picker");
+
+	pawn->AnimationController()->SetAnimation(animationPicker->SelectionText());
+}
+
+void ModelViewerController::OnAnimationPlayButtonClick(rEvent& event) {
+	rPawn* pawn = (rPawn*)_engine->scene->GetActor("model");
+	pawn->AnimationController()->Play();
+}
+
+void ModelViewerController::OnAnimationPauseButtonClick(rEvent& event) {
+	rPawn* pawn = (rPawn*)_engine->scene->GetActor("model");
+	pawn->AnimationController()->Pause();
+}
+
+void ModelViewerController::OnAnimationStopButtonClick(rEvent& event) {
+	rPawn* pawn = (rPawn*)_engine->scene->GetActor("model");
+	pawn->AnimationController()->Stop();
 }

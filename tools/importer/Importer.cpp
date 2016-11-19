@@ -12,6 +12,8 @@
 #include "FontImporter.hpp"
 #include "ModelImporter.hpp"
 
+#include "xml/rXMLDocument.hpp"
+
 #include <iostream>
 
 namespace recondite { namespace tools {
@@ -34,6 +36,10 @@ namespace recondite { namespace tools {
 
 		opts.AddOption(Keyword("model", "m"), [&](std::string inputFile){
 			this->ConvertModel(inputFile.c_str());
+		});
+
+		opts.AddOption(Keyword("wmv", "w"), [&](std::string inputFile) {
+			this->ImportWowModelViewer(inputFile.c_str());
 		});
 
 		auto parseContext = opts.CreateParseContext(argv + 1, argv + argc);
@@ -146,16 +152,89 @@ namespace recondite { namespace tools {
 		return error;
 	}
 
+	void OutputModelStats(const recondite::ModelData& modelData) {
+		size_t faceCount = 0;
+		for (size_t i = 0; i < modelData.GetTriangleMeshCount(); i++) {
+			faceCount += modelData.GetTriangleMesh(i)->GetElementCount() / 3;
+		}
+
+		size_t lineCount = 0;
+		for (size_t i = 0; i < modelData.GetLineMeshCount(); i++) {
+			lineCount += modelData.GetLineMesh(i)->GetElementCount() / 2;
+		}
+
+		std::cout << "Model Stats:" << std::endl;
+		std::cout << "\tVertices: " << modelData.GetGeometryData()->VertexCount() << std::endl;
+		std::cout << "\tFaces: " << faceCount << std::endl;
+		std::cout << "\tLines: " << lineCount << std::endl;
+		std::cout << std::endl;
+
+		std::cout << "\tMeshes: " << modelData.GetTriangleMeshCount() + modelData.GetLineMeshCount() << std::endl;
+		std::cout << "\tTextures: " << modelData.GetNumTextures() << std::endl;
+		std::cout << std::endl;
+
+		recondite::Skeleton* skeleton = modelData.GetSkeleton();
+		if (skeleton) {
+			std::cout << "\tAnimations: " << skeleton->GetAnimationCount() << std::endl;
+			std::cout << "\tBones: " << skeleton->GetBoneCount() << std::endl;
+		}
+	}
+
+	int Importer::ImportWowModelViewer(const rString& path) {
+		import::ModelImporter modelImporter;
+		import::ModelImporterOptions options;
+		options.importAnimations = false;
+
+		ModelData modelData;
+		int error = modelImporter.ImportModel(path, modelData, options);
+
+		options.importAnimations = true;
+		options.importMeshData = false;
+		options.importSkeleton = false;
+
+		rString dirName, fileName;
+		rPath::Split(path, &dirName, &fileName);
+		rString animFile = rPath::Assemble(dirName, "animations", "xml");
+		rXMLDocument xml;
+		xml.LoadFromFile(animFile);
+
+		rXMLElement* root = xml.GetRoot();
+		for (size_t i = 0; i < root->NumChildren(); i++) {
+			rString fbxFile = rPath::Combine(dirName, root->GetChild(i)->Text());
+			int error = modelImporter.ImportModel(fbxFile, modelData, options);
+
+			if (error) {
+				std::cout << "Error reading animations from: " << fbxFile.c_str() << std::endl;
+				return 1;
+			}
+			else {
+				std::cout << "Read animation data from: " << fbxFile.c_str() << std::endl;
+			}
+		}
+
+		OutputModelStats(modelData);
+
+		rString modelOutPath = rPath::Assemble(dirName, fileName, "rmdl");
+		auto modelOutFile = m_fileSystem.GetWriteFileRef(modelOutPath);
+
+		modelData.Write(*modelOutFile);
+
+
+		return 0;
+	}
+
 	int Importer::ConvertModel(const rString& path){
 		std:: cout << "Generate model from file: " << path << std::endl;
 
 		import::ModelImporter modelImporter;
+		import::ModelImporterOptions options;
 		ModelData modelData;
-
-		int error = modelImporter.ImportModel(path, modelData);
+		
+		int error = modelImporter.ImportModel(path, modelData, options);
 
 		if (!error){
 			std::cout << "Model import successful." << std::endl;
+			OutputModelStats(modelData);
 
 			rString outDir, outName;
 			rPath::Split(path, &outDir, &outName, nullptr);

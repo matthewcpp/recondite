@@ -139,8 +139,10 @@ namespace recondite { namespace import {
 
 			Bone* boneData = skeleton->GetBoneByName(bone->mName.C_Str());
 
-			for (uint32_t j = 0; j < bone->mNumWeights; j++)
+			for (uint32_t j = 0; j < bone->mNumWeights; j++) {
 				geometryData->AddVertexWeight(baseIndex + bone->mWeights[j].mVertexId, boneData->id, bone->mWeights[j].mWeight);
+			}
+				
 		}
 	}
 

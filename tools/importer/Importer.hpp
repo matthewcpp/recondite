@@ -17,6 +17,7 @@ namespace recondite { namespace tools {
 		int CreateTextureAtlas(const rString& path);
 		int ConvertFont(const rString& path);
 		int ConvertModel(const rString& path);
+		int ImportWowModelViewer(const rString& path);
 
 	private:
 		rFileSystem m_fileSystem;

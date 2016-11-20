@@ -30,6 +30,12 @@
           <text>Loop:</text>
           <checkbox id="animation-loop" />
         </linearLayout>
+        <linearLayout class="animation-control-group">
+          <slider id="animation-progress"></slider>
+          <text>Speed: </text>
+          <textbox id="animation-speed">1.0</textbox>
+        </linearLayout>
+        
       </linearLayout>
 
       <linearLayout id="camera-debug" direction="vertical">

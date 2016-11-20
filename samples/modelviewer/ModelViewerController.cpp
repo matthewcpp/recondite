@@ -1,13 +1,16 @@
 #include "ModelViewerController.hpp"
 
 #include "ui/ruiText.hpp"
+#include "ui/ruiTextBox.hpp"
 #include "ui/ruiCheckbox.hpp"
 #include "ui/ruiLinearLayout.hpp"
 #include "ui/ruiAbsoluteLayout.hpp"
 #include "ui/ruiPicker.hpp"
 #include "ui/ruiButton.hpp"
+#include "ui/ruiSlider.hpp"
 
 #include "stream/rOStringStream.hpp"
+#include "stream/rIStringStream.hpp"
 
 #include "rDemoCamera.hpp"
 
@@ -119,9 +122,38 @@ void ModelViewerController::OnDocumentLoaded() {
 	ruiCheckbox* loopCheckBox = (ruiCheckbox*)_document->GetWidgetById("animation-loop");
 	loopCheckBox->Bind(ruiEVENT_CHECKBOX_CHANGE, this, &ModelViewerController::OnAnimationLoopCheckboxClick);
 
+	ruiSlider* animationProgress = (ruiSlider*)_document->GetWidgetById("animation-progress");
+	animationProgress->Bind(ruiEVENT_SLIDER_DRAG_MOVE, this, &ModelViewerController::OnAnimationProgressDrag);
+
+	ruiTextBox* animationSpeed = (ruiTextBox*)_document->GetWidgetById("animation-speed");
+	animationSpeed->Bind(ruiEVT_KEY_UP, this, &ModelViewerController::OnAnimationSpeedKey);
+
 	_document->RunEveryUpdate([&]() {
-		CameraDebug();
+		OnUpdate();
 	});
+
+
+}
+
+void ModelViewerController::OnAnimationProgressDrag(rEvent& event) {
+	rPawn* pawn = (rPawn*)_engine->scene->GetActor("model");
+	auto animationController = pawn->AnimationController();
+
+	ruiSlider* slider = (ruiSlider*)_document->GetWidgetById("animation-progress");
+
+	animationController->SetAnimationTime(animationController->GetAnimation()->Duration() * slider->GetValue());
+}
+
+void ModelViewerController::OnUpdate() {
+	CameraDebug();
+
+	rPawn* pawn = (rPawn*)_engine->scene->GetActor("model");
+	auto animationController = pawn->AnimationController();
+
+	if (animationController->IsPlaying()) {
+		ruiSlider* slider = (ruiSlider*)_document->GetWidgetById("animation-progress");
+		slider->SetValue(animationController->GetAnimationTime() / animationController->GetAnimation()->Duration());
+	}
 }
 
 void ModelViewerController::OnShowSkeletonClick(rEvent& event) {
@@ -141,8 +173,13 @@ void ModelViewerController::OnShowBoneNamesClick(rEvent& event) {
 void ModelViewerController::OnAnimationPickerChange(rEvent& event) {
 	rPawn* pawn = (rPawn*)_engine->scene->GetActor("model");
 	ruiPicker* animationPicker = (ruiPicker*)_document->GetWidgetById("animation-picker");
+	recondite::AnimationController* animationController = pawn->AnimationController();
 
-	pawn->AnimationController()->SetAnimation(animationPicker->SelectionText());
+	bool wasPlaying = animationController->IsPlaying();
+	animationController->SetAnimation(animationPicker->SelectionText());
+
+	if (wasPlaying)
+		animationController->Play();
 }
 
 void ModelViewerController::OnAnimationPlayButtonClick(rEvent& event) {
@@ -164,4 +201,23 @@ void ModelViewerController::OnAnimationLoopCheckboxClick(rEvent& event) {
 	ruiCheckbox* animationLoop = (ruiCheckbox*)_document->GetWidgetById("animation-loop");
 	rPawn* model = (rPawn*)_engine->scene->GetActor("model");
 	model->AnimationController()->SetLoop(animationLoop->IsChecked());
+}
+
+void ModelViewerController::OnAnimationSpeedKey(rEvent& event) {
+	ruiKeyEvent& keyEvent = (ruiKeyEvent&)event;
+	char key = char(keyEvent.Key());
+
+	if (key == rKEY_ENTER) {
+		ruiTextBox* animationSpeed = (ruiTextBox*)_document->GetWidgetById("animation-speed");
+		rIStringStream str(animationSpeed->GetText());
+
+		float newSpeed = 0;
+		str >> newSpeed;
+
+		rPawn* pawn = (rPawn*)_engine->scene->GetActor("model");
+		pawn->AnimationController()->SetSpeed(newSpeed);
+	}
+	
+
+	
 }

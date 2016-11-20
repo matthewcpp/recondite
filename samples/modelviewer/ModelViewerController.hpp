@@ -24,8 +24,11 @@ private:
 	void OnAnimationPauseButtonClick(rEvent& event);
 	void OnAnimationStopButtonClick(rEvent& event);
 	void OnAnimationLoopCheckboxClick(rEvent& event);
+	void OnAnimationProgressDrag(rEvent& event);
+	void OnAnimationSpeedKey(rEvent& event);
 
 	void SetColorForWidgetEvent(rEvent& event, const rColor& color);
+	void OnUpdate();
 
 	void CameraDebug();
 

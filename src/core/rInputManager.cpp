@@ -96,9 +96,9 @@ rController* rInputManager::GetController(size_t index) const{
 }
 
 void rInputManager::CreateKeyboardEvent(rKey key, rKeyState state){
-	m_keyboard.SetKeyState(key, state);
-
-	m_ui->InsertKeyEvent(key, state);
+	if (!m_ui->InsertKeyEvent(key, state)) {
+		m_keyboard.SetKeyState(key, state);
+	}
 }
 
 const rKeyboardState* rInputManager::Keyboard() const{
@@ -106,21 +106,22 @@ const rKeyboardState* rInputManager::Keyboard() const{
 }
 
 void rInputManager::CreateMouseMotionEvent(int x, int y){
-	m_mouse.SetPosition(x,y);
-	m_ui->InsertMouseMotionEvent(rPoint(x,y));
+	if (!m_ui->InsertMouseMotionEvent(rPoint(x, y))) {
+		m_mouse.SetPosition(x, y);
+	}
 }
 
 void rInputManager::CreateMouseButtonEvent(rMouseButton button, rButtonState state, const rPoint& position){
-	m_mouse.SetPosition(position);
-	m_mouse.SetButtonState(button, state);
-
-	m_ui->InsertMouseButtonEvent(button, state, position);
+	if (!m_ui->InsertMouseButtonEvent(button, state, position)) {
+		m_mouse.SetPosition(position);
+		m_mouse.SetButtonState(button, state);
+	}
 }
 
 void rInputManager::CreateMouseWheelEvent(rMouseWheelDirection direction){
-	m_mouse.UpdateWheelValue(direction);
-
-	m_ui->InsertMouseWheelEvent(m_mouse.Position(), direction);
+	if (!m_ui->InsertMouseWheelEvent(m_mouse.Position(), direction)) {
+		m_mouse.UpdateWheelValue(direction);
+	}
 }
 
 const rMouseState* rInputManager::GetMouseState() const{

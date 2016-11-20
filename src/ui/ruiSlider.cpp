@@ -159,6 +159,10 @@ bool ruiSlider::OnPointerMove(const rPoint& position){
 
 		UpdateValueFromHandlePosition(newPosition);
 		m_prevDragPos = position;
+
+		ruiWidgetEvent event(this);
+		Trigger(ruiEVENT_SLIDER_DRAG_MOVE, event);
+
 		return true;
 	}
 	else{

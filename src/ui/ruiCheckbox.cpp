@@ -47,6 +47,10 @@ bool ruiCheckbox::OnPointerUp(const rPoint& position){
 	}
 }
 
+bool ruiCheckbox::OnPointerDown(const rPoint& position) {
+	return true;
+}
+
 rSize ruiCheckbox::ComputeSize(){
 	//temporary
 	return rSize(15,15);

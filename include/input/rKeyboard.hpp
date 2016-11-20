@@ -13,7 +13,8 @@ enum rKeyState{
 };
 
 enum rKeyCode{
-	rKEY_BACKSPACE = 8
+	rKEY_BACKSPACE = 8,
+	rKEY_ENTER = 13
 };
 
 class RECONDITE_API rKeyboardState{

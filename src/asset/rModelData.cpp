@@ -196,6 +196,10 @@ namespace recondite {
 		return textureData;
 	}
 
+	void ModelData::DeleteLastTexture() {
+		_impl->textures.pop_back();
+	}
+
 	size_t ModelData::GetNumTextures() const {
 		return _impl->textures.size();
 	}

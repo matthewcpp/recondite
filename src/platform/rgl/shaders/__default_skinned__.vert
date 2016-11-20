@@ -1,4 +1,4 @@
-#define rMAX_BONE_TRANSFORMS 50
+#define rMAX_BONE_TRANSFORMS 200
 
 attribute vec4 recPosition;
 attribute vec4 recNormal;

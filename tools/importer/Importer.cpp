@@ -186,7 +186,10 @@ namespace recondite { namespace tools {
 
 		rXMLDocument xml;
 		int error = xml.LoadFromFile(path);
-		if (error) return 1;
+		if (error) {
+			std::cout << "Error parsing WMV input XML File." << std::endl;
+			return 1;
+		}
 
 		rXMLElement* geometry = xml.GetRoot()->GetFirstChildNamed("geometry");
 		rString geometryFile;

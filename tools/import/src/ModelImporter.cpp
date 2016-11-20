@@ -9,6 +9,7 @@
 #include "rPath.hpp"
 
 #include "stream/rOFileStream.hpp"
+#include "stream/rIStringStream.hpp"
 
 namespace recondite { namespace import {
 	
@@ -47,7 +48,7 @@ namespace recondite { namespace import {
 		for (size_t i = 0; i < indent; i++)
 			stream << ' ';
 
-		stream << node->mName.C_Str() << '\n';
+		stream << node->mName.C_Str() << "\r\n";
 
 		for (size_t i = 0; i < node->mNumChildren; i++) {
 			NodeWalk(stream, indent + 2, node->mChildren[i]);
@@ -227,9 +228,14 @@ namespace recondite { namespace import {
 	int ModelImporter::Impl::ImportMaterials(const aiScene* scene, ModelData& modelData) {
 		std::map<rString, size_t> textureMap;
 
+		
+
 		for (unsigned int m = 0; m<scene->mNumMaterials; ++m)
 		{
 			MaterialData* materialData = modelData.CreateMaterial();
+
+			aiString name;
+			scene->mMaterials[m]->Get(AI_MATKEY_NAME, name);
 
 			int texIndex = 0; // for now just get first texture index, however there can be multiple
 			aiString texturePath;  
@@ -241,12 +247,18 @@ namespace recondite { namespace import {
 
 				if (textureMap.count(texPath) == 0) { //texture file not already loaded
 					size_t textureId = modelData.GetNumTextures();
+
 					rTextureData* textureData = modelData.CreateTexture();
+
 					ImageImporter imageImporter;
 					int result = 0;
 
 					if (texPath[0] == '*') { //signals embedded texture
-						aiTexture* texture = scene->mTextures[0];
+						rIStringStream str(texPath.substr(1));
+						uint32_t texIndex;
+						str >> texIndex;
+
+						aiTexture* texture = scene->mTextures[texIndex];
 						result = imageImporter.ImportImage((const char *)texture->pcData, texture->mWidth, *textureData);
 					}
 					else { //load the texture from File
@@ -255,10 +267,13 @@ namespace recondite { namespace import {
 					}
 
 
-					if (result != 0) continue;
-					else {
+					if (result == 0) {
 						textureMap[texPath] = textureId;
 						materialData->diffuseTextureId = textureId;
+					}
+					else {
+						modelData.DeleteLastTexture();
+						continue;
 					}
 				}
 				else { //file already loaded in this model

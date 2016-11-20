@@ -160,6 +160,7 @@ namespace recondite {
 		rAlignedBox3 GetBoundingBox() const;
 
 		rTextureData* CreateTexture();
+		void DeleteLastTexture();
 		size_t GetNumTextures() const;
 		rTextureData* GetTexture(size_t index) const;
 

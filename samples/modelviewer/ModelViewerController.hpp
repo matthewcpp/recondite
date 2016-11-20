@@ -23,6 +23,7 @@ private:
 	void OnAnimationPlayButtonClick(rEvent& event);
 	void OnAnimationPauseButtonClick(rEvent& event);
 	void OnAnimationStopButtonClick(rEvent& event);
+	void OnAnimationLoopCheckboxClick(rEvent& event);
 
 	void SetColorForWidgetEvent(rEvent& event, const rColor& color);
 

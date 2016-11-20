@@ -28,7 +28,7 @@
           <button id="animation-pause">Pause</button>
           <button id="animation-stop">Stop</button>
           <text>Loop:</text>
-          <checkbox id="animation-loop" checked="checked" />
+          <checkbox id="animation-loop" />
         </linearLayout>
       </linearLayout>
 

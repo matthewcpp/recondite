@@ -13,6 +13,7 @@ namespace recondite {
 		_animationSpeed = 1.0f;
 		_animationTime = 0.0f;
 		_animation = nullptr;
+		_loop = false;
 	}
 
 	void AnimationController::Stop() {
@@ -90,7 +91,14 @@ namespace recondite {
 	void AnimationController::SetAnimationTime(float time) {
 		if (_animation) {
 			float duration = _animation->Duration();
-			float newTime = std::min(time, duration);
+			float newTime;
+
+			if (_loop) {
+				newTime = time > duration ? time - duration : time;
+			}
+			else {
+				newTime = std::min(time, duration);
+			}
 
 			if (newTime != _animationTime) {
 				_animationTime = newTime;

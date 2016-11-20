@@ -54,6 +54,18 @@ namespace recondite {
 		void Stop();
 
 		/**
+		Sets wheter the active animation should loop.
+		\param loop value indicating wheter animation should loop
+		*/
+		inline void SetLoop(bool loop);
+
+		/**
+		Gets wheter the active animation will loop when the end is reached.  Default value is false.
+		\returns boolean value indicating wheter the current animation will loop
+		*/
+		inline bool GetLoop() const;
+
+		/**
 		Sets speed modidifer for the animation
 		\param speed animation speed multiple
 		*/
@@ -111,6 +123,7 @@ namespace recondite {
 		bool _isPlaying;
 		float _animationSpeed;
 		float _animationTime;
+		bool _loop;
 		Animation* _animation;
 	};
 
@@ -144,5 +157,13 @@ namespace recondite {
 
 	inline size_t AnimationController::GetBoneTransformCount() const {
 		return _boneTransforms.size();
+	}
+
+	inline void AnimationController::SetLoop(bool loop) {
+		_loop = loop;
+	}
+
+	inline bool AnimationController::GetLoop() const {
+		return _loop;
 	}
 }

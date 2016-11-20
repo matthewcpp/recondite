@@ -116,6 +116,9 @@ void ModelViewerController::OnDocumentLoaded() {
 	ruiButton* stopButton = (ruiButton*)_document->GetWidgetById("animation-stop");
 	stopButton->Bind(ruiEVENT_BUTTON_CLICK, this, &ModelViewerController::OnAnimationStopButtonClick);
 
+	ruiCheckbox* loopCheckBox = (ruiCheckbox*)_document->GetWidgetById("animation-loop");
+	loopCheckBox->Bind(ruiEVENT_CHECKBOX_CHANGE, this, &ModelViewerController::OnAnimationLoopCheckboxClick);
+
 	_document->RunEveryUpdate([&]() {
 		CameraDebug();
 	});
@@ -155,4 +158,10 @@ void ModelViewerController::OnAnimationPauseButtonClick(rEvent& event) {
 void ModelViewerController::OnAnimationStopButtonClick(rEvent& event) {
 	rPawn* pawn = (rPawn*)_engine->scene->GetActor("model");
 	pawn->AnimationController()->Stop();
+}
+
+void ModelViewerController::OnAnimationLoopCheckboxClick(rEvent& event) {
+	ruiCheckbox* animationLoop = (ruiCheckbox*)_document->GetWidgetById("animation-loop");
+	rPawn* model = (rPawn*)_engine->scene->GetActor("model");
+	model->AnimationController()->SetLoop(animationLoop->IsChecked());
 }

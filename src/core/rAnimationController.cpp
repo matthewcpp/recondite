@@ -69,7 +69,7 @@ namespace recondite {
 			scale.SetScale(scaleLerp);
 			rMatrixUtil::QuaterionToMatrix(rotationSlerp, rotate);
 
-			transform = scale * rotate * translate;
+			transform = translate * rotate * scale;
 		}
 
 		rMatrix4 boneTransform = parentTransform * transform ;
@@ -104,6 +104,9 @@ namespace recondite {
 				_animationTime = newTime;
 				rMatrix4 ident;
 				CalculateBoneTransform(_skeleton->GetRootBone()->id, ident);
+			}
+			else if (!_loop){
+				Pause();
 			}
 		}
 	}

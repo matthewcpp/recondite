@@ -81,31 +81,12 @@ void ModelViewerModule::CreateSkeletonGeometry(recondite::ModelData& modelData) 
 
 	if (skeleton) {
 		skeletonBuffer.Reset(rGeometryType::Lines, 3, false);
+		skeletonWorldPoints.resize(skeleton->GetBoneCount());
+		skeletonTransformedPoints.resize(skeleton->GetBoneCount());
 
-		recondite::MaterialData* skeletonMaterial = modelData.CreateMaterial();
-		skeletonMaterial->diffuseColor = rColor::Green;
-
-		std::vector<rVector3> points;
-
-		size_t boneCount = skeleton->GetBoneCount();
-		for (size_t i = 0; i < boneCount; i++) {
+		for (size_t i = 0; i < skeleton->GetBoneCount(); i++) {
 			recondite::Bone* bone = skeleton->GetBone(i);
-
-			rVector3 bonePos = skeleton->GetGlobalTransform(bone).GetTranslate();
-			boneLabelPoints[bone->name] = bonePos;
-
-			if (!bone->IsRoot()) {
-				recondite::Bone* parent = skeleton->GetBone(bone->parentId);
-
-				rVector3 parentPos = skeleton->GetGlobalTransform(parent).GetTranslate();
-
-				skeletonBuffer.PushVertex(bonePos);
-				skeletonBuffer.PushVertex(parentPos);
-
-
-				size_t indexCount = skeletonBuffer.IndexCount();
-				skeletonBuffer.PushIndex(indexCount, indexCount + 1);
-			}
+			skeletonWorldPoints[i] = skeleton->GetGlobalTransform(bone).GetTranslate();
 		}
 	}
 }
@@ -118,8 +99,34 @@ void ModelViewerModule::DeleteActor(rActor3* actor) {
 	delete actor;
 }
 
+void ModelViewerModule::GenerateCurrentSkeletonBuffer(uint32_t boneId, Skeleton* skeleton, const rMatrix4* boneTransforms) {
+	Bone* bone = skeleton->GetBone(boneId);
+
+	const rMatrix4* matrix = boneTransforms + boneId;
+	skeletonTransformedPoints[boneId] = matrix->GetTransformedVector3(skeletonWorldPoints[boneId]);
+
+	if (!bone->IsRoot()) {
+		skeletonBuffer.PushIndex(skeletonBuffer.VertexCount(), skeletonBuffer.VertexCount() + 1);
+
+		skeletonBuffer.PushVertex(skeletonTransformedPoints[boneId]);
+		skeletonBuffer.PushVertex(skeletonTransformedPoints[bone->parentId]);
+	}
+
+	for (size_t i = 0; i < bone->children.size(); i++) {
+		GenerateCurrentSkeletonBuffer(bone->children[i], skeleton, boneTransforms);
+	}
+	
+}
+
 void ModelViewerModule::AfterRenderScene(rViewport* viewport) {
-	if (skeletonBuffer.VertexCount() > 0 && settings.renderSkeleton) {
+	if (settings.renderSkeleton) {
+		rPawn* model = (rPawn*)_engine->scene->GetActor("model");
+		Skeleton* skeleton = model->Model()->GetSkeleton();
+		const rMatrix4* boneTransforms = model->AnimationController()->GetBoneTransformData();
+		
+		skeletonBuffer.Clear();
+		GenerateCurrentSkeletonBuffer(skeleton->GetRootBone()->id, skeleton, boneTransforms);
+
 		_engine->renderer->EnableDepthTesting(false);
 		_engine->renderer->RenderImmediateLines(skeletonBuffer, settings.skeletonLineColor);
 		_engine->renderer->EnableDepthTesting(true);
@@ -136,12 +143,17 @@ void ModelViewerModule::BeforeRenderUi(rViewport* viewport) {
 
 		rSpriteBatch* sb = _engine->renderer->SpriteBatch();
 
-		for (auto& boneLabel : boneLabelPoints) {
+		rPawn* model = (rPawn*)_engine->scene->GetActor("model");
+		Skeleton* skeleton = model->Model()->GetSkeleton();
+
+		for (size_t i = 0; i < skeleton->GetBoneCount(); i++) {
+			Bone* bone = skeleton->GetBone(i);
+
 			rVector2 projectedPoint;
-			rMatrixUtil::Project(boneLabel.second, viewMatrix, projectionMatrix, screenRect, projectedPoint);
+			rMatrixUtil::Project(skeletonTransformedPoints[bone->id], viewMatrix, projectionMatrix, screenRect, projectedPoint);
 			projectedPoint.y = float(screenRect.height) - projectedPoint.y;
 
-			sb->RenderString(boneLabel.first, _engine->content->Fonts()->SystemDefault(), rPoint(projectedPoint.x, projectedPoint.y), settings.skeletonTextColor);
+			sb->RenderString(bone->name, _engine->content->Fonts()->SystemDefault(), rPoint(projectedPoint.x, projectedPoint.y), settings.skeletonTextColor);
 		}
 	}
 }

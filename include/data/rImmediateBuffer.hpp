@@ -53,6 +53,7 @@ public:
 	void AppendIndexBuffer(const unsigned short* indices, size_t indexCount);
 
 	void Reset(rGeometryType geometryType, size_t vertexSize, bool texCoords);
+	void Clear();
 
 private:
 	size_t VertexDataArrayIndex(size_t index) const;

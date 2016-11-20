@@ -181,26 +181,32 @@ namespace recondite { namespace tools {
 	}
 
 	int Importer::ImportWowModelViewer(const rString& path) {
+		rString dirName, fileName, ext;
+		rPath::Split(path, &dirName, &fileName, &ext);
+
+		rXMLDocument xml;
+		int error = xml.LoadFromFile(path);
+		if (error) return 1;
+
+		rXMLElement* geometry = xml.GetRoot()->GetFirstChildNamed("geometry");
+		rString geometryFile;
+		geometry->GetText(geometryFile);
+		geometryFile = rPath::Combine(dirName, geometryFile);
+
 		import::ModelImporter modelImporter;
 		import::ModelImporterOptions options;
 		options.importAnimations = false;
 
 		ModelData modelData;
-		int error = modelImporter.ImportModel(path, modelData, options);
+		error = modelImporter.ImportModel(geometryFile, modelData, options);
 
 		options.importAnimations = true;
 		options.importMeshData = false;
 		options.importSkeleton = false;
 
-		rString dirName, fileName;
-		rPath::Split(path, &dirName, &fileName);
-		rString animFile = rPath::Assemble(dirName, "animations", "xml");
-		rXMLDocument xml;
-		xml.LoadFromFile(animFile);
-
-		rXMLElement* root = xml.GetRoot();
-		for (size_t i = 0; i < root->NumChildren(); i++) {
-			rString fbxFile = rPath::Combine(dirName, root->GetChild(i)->Text());
+		rXMLElement* animations = xml.GetRoot()->GetFirstChildNamed("animations");
+		for (size_t i = 0; i < animations->NumChildren(); i++) {
+			rString fbxFile = rPath::Combine(dirName, animations->GetChild(i)->Text());
 			int error = modelImporter.ImportModel(fbxFile, modelData, options);
 
 			if (error) {

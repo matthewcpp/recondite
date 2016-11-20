@@ -1,6 +1,6 @@
 #pragma once
 
-#include <map>
+#include <vector>
 
 #include "rModule.hpp"
 #include "ModelViewerSettings.hpp"
@@ -18,13 +18,15 @@ public:
 
 private:
 	void CreateSkeletonGeometry(recondite::ModelData& modelData);
+	void GenerateCurrentSkeletonBuffer(uint32_t boneId, Skeleton* skeleton, const rMatrix4* boneTransforms);
 
 private:
 	rEngine* _engine;
 
 	ModelViewerSettings settings;
 
-	std::map<rString, rVector3> boneLabelPoints;
+	std::vector<rVector3> skeletonWorldPoints;
+	std::vector<rVector3> skeletonTransformedPoints;
 	rImmediateBuffer skeletonBuffer;
 
 };

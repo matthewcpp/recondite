@@ -13,6 +13,10 @@ void rImmediateBuffer::Reset(rGeometryType geometryType, size_t vertexSize, bool
 	m_vertexSize = vertexSize;
 	m_texCoords = texCoords;
 
+	Clear();
+}
+
+void rImmediateBuffer::Clear() {
 	m_vertexData.clear();
 	m_indexData.clear();
 }

@@ -35,6 +35,8 @@ void rwxComponent::RenderScene(rViewport* viewport){
 	viewport->GetProjectionMatrix(projection);
 	viewport->GetViewMatrix(view);
 
+	m_engine.renderer->SetDefaultRenderMode(viewport->RenderMode());
+
 	m_engine.renderer->Begin(projection, view);
 	m_scene->Draw();
 	m_engine.renderer->End();

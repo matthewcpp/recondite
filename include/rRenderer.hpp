@@ -51,6 +51,8 @@ public:
 
 	void RenderImmediateLines(const rImmediateBuffer& buffer, rColor color);
 
+	void SetDefaultRenderMode(rRenderMode renderMode);
+
 private:
 	void _RenderModel(const Model* model, const rMatrix4& matrix);
 	void RenderSpriteBatch();
@@ -66,7 +68,9 @@ private:
 
 		size_t m_objectsRendered;
 		std::unique_ptr<rSpriteBatch> m_spriteBatch;
+		
 		bool m_depthTestEnabled;
+		rRenderMode m_defaultRenderMode;
 };
 
 #endif

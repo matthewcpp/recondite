@@ -34,6 +34,7 @@ void rApplicationBase::Draw(){
 	for (rViewportMap::iterator it = m_viewports.begin(); it != end; ++it){
 		rViewport* viewport = it->second;
 
+		m_engine.renderer->SetDefaultRenderMode(viewport->RenderMode());
 		rRect window = viewport->GetScreenRect();
 		m_graphicsDevice->SetViewport(window.x, window.y, window.width, window.height);
 

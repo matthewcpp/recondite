@@ -6,6 +6,12 @@ rRenderer::rRenderer(rGraphicsDevice* graphicsDevice, rContentManager* contentMa
 
 	m_spriteBatch.reset(new rSpriteBatch(graphicsDevice, contentManager));
 	m_depthTestEnabled = true;
+
+	m_defaultRenderMode = rRenderMode::WireframeOnShaded;
+}
+
+void rRenderer::SetDefaultRenderMode(rRenderMode renderMode) {
+	m_defaultRenderMode = renderMode;
 }
 
 void rRenderer::Begin(const rMatrix4 projection, const rMatrix4& view){
@@ -32,11 +38,10 @@ void rRenderer::_RenderModel(const Model* model, const rMatrix4& matrix) {
 	rMatrix4 modelView = m_viewMatrix * matrix;
 
 	const recondite::Geometry* geometry = model->GetGeometry();
+	m_graphicsDevice->ActivateGeometryBuffer(geometry);
 
 	size_t triangleMeshCount = model->GetTriangleMeshCount();
-	if (triangleMeshCount > 0) {
-
-		m_graphicsDevice->ActivateGeometryBuffer(geometry);
+	if (m_defaultRenderMode != rRenderMode::Wireframe && triangleMeshCount > 0) {
 
 		for (size_t i = 0; i < model->GetTriangleMeshCount(); i++) {
 			const recondite::Mesh* mesh = model->GetTriangleMesh(i);
@@ -47,7 +52,7 @@ void rRenderer::_RenderModel(const Model* model, const rMatrix4& matrix) {
 	}
 
 	size_t lineMeshCount = model->GetLineMeshCount();
-	if (lineMeshCount > 0) {
+	if (m_defaultRenderMode != rRenderMode::Shaded && lineMeshCount > 0) {
 		m_graphicsDevice->ActivateShader(m_contentManager->Shaders()->DefaultLineShader()->ProgramId());
 
 		for (size_t i = 0; i < lineMeshCount; i++) {

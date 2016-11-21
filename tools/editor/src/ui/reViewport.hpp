@@ -50,6 +50,7 @@ private:
 	void OnCanvasKeypress(wxKeyEvent& event);
 
 	void OnEnterCanvas(wxMouseEvent& event);
+	void OnLeaveCanvas(wxMouseEvent& event);
 	void OnTimer(wxTimerEvent& event);
 
 private:

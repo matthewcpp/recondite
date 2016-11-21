@@ -35,7 +35,7 @@ void rScene::Draw(){
 }
 
 bool rScene::RenameActor(const rString& oldId, const rString& newId){
-	if (m_actors.count(oldId) == 0 || m_actors.count(newId) ==1)
+	if (m_actors.count(oldId) == 0 || m_actors.count(newId) == 1)
 		return false;
 
 	rActor3* actor = m_actors[oldId];
@@ -66,7 +66,7 @@ void rScene::AddActor(rActor3* actor){
 }
 
 rActor3* rScene::GetActor(const rString& name) const{
-	rActor3* actor = NULL;
+	rActor3* actor = nullptr;
 
 	rActorMap::const_iterator result = m_actors.find(name);
 
@@ -103,7 +103,6 @@ void rScene::DeleteActors(std::function<bool(rActor3*)> shouldDelete){
 }
 
 void rScene::Clear(){
-	
 	rActorMap::iterator end = m_actors.end();
 
 	for (rActorMap::iterator it = m_actors.begin(); it != end; ++it){
@@ -133,21 +132,25 @@ rString rScene::GetDefaultActorId(const rString& prefix){
 }
 
 rActor3* rScene::RayPick(const rRay3& ray){
+	rVector3 point;
+	return RayPick(ray, point);
+}
+
+rActor3* rScene::RayPick(const rRay3& ray, rVector3& pickPoint) {
 	rActor3* selectedActor = NULL;
 	float selectedActorDistance = FLT_MAX;
-	rVector3 selectionPoint;
-	
+
 
 	rActorMap::iterator end = m_actors.end();
-	for (rActorMap::iterator it = m_actors.begin(); it != end; ++it){
+	for (rActorMap::iterator it = m_actors.begin(); it != end; ++it) {
 		rActor3* currentActor = it->second;
 		if (!currentActor->Pickable()) continue;
 
 		riBoundingVolume* boundingVolume = currentActor->BoundingVolume();
 
-		if (boundingVolume && boundingVolume->IntersectsRay(ray, &selectionPoint)){
-			float currentActorDistance = ray.origin.Distance(selectionPoint);
-			if (currentActorDistance < selectedActorDistance){
+		if (boundingVolume && boundingVolume->IntersectsRay(ray, &pickPoint)) {
+			float currentActorDistance = ray.origin.Distance(pickPoint);
+			if (currentActorDistance < selectedActorDistance) {
 				selectedActor = currentActor;
 				selectedActorDistance = currentActorDistance;
 			}
@@ -190,7 +193,13 @@ bool rScene::Save(riSerializationTarget* target, std::function<bool(rActor3*)> a
 }
 
 bool rScene::Save(riSerializationTarget* target){
-	return Save(target, [](rActor3* actor)->bool{return true; });
+	riSerializationTarget* actorTarget = target->SubObject("actors");
+
+	for (auto& actor : m_actors) {
+		actor.second->Save(actorTarget);
+	}
+
+	return true;
 }
 
 bool rScene::Load(riSerializationTarget* target){

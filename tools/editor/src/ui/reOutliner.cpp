@@ -86,25 +86,29 @@ void reOutliner::OnActorSelected(rEvent& event){
 	}
 }
 
-void reOutliner::OutlineLevel(){
-
-}
-
-void reOutliner::OnLevelBeginLoad(rEvent& event){
+void reOutliner::ClearOutliner() {
 	DeleteAllItems();
 	m_actorIdMap.clear();
 }
 
-void reOutliner::OnLevelEndLoad(rEvent& event){
+void reOutliner::OutlineLevel(){
 	rArrayString actorNames;
 	m_component->GetScene()->GetActors(actorNames);
 
-	for (auto& actorId : actorNames){
-		if (!m_component->IsReservedActor(actorId)){
+	for (auto& actorId : actorNames) {
+		if (!m_component->IsReservedActor(actorId)) {
 			wxDataViewItem item = AppendItem(wxDataViewItem(0), actorId.c_str());
 			m_actorIdMap[actorId] = item;
 		}
 	}
+}
+
+void reOutliner::OnLevelBeginLoad(rEvent& event){
+	ClearOutliner();
+}
+
+void reOutliner::OnLevelEndLoad(rEvent& event){
+	OutlineLevel();
 }
 
 void reOutliner::OnContext(wxDataViewEvent& event){

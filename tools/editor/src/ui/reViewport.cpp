@@ -70,6 +70,7 @@ void reViewport::BindEvents(){
 	m_glCanvas->Bind(wxEVT_KEY_UP, &reViewport::OnCanvasKeypress, this);
 
 	m_glCanvas->Bind(wxEVT_ENTER_WINDOW, &reViewport::OnEnterCanvas, this);
+	m_glCanvas->Bind(wxEVT_LEAVE_WINDOW, &reViewport::OnLeaveCanvas, this);
 
 	m_minMaxButton->Bind(wxEVT_BUTTON, &reViewport::OnMinMaxButtonPress, this);
 
@@ -169,7 +170,7 @@ wxString reViewport::GetViewportName(){
 }
 
 void reViewport::OnTimer(wxTimerEvent& event){
-	if (m_interaction->UpdateKeyboardInteraction())
+	if (m_glCanvas->HasFocus() && m_interaction->UpdateKeyboardInteraction())
 		m_glCanvas->Refresh();
 }
 
@@ -177,6 +178,11 @@ void reViewport::OnEnterCanvas(wxMouseEvent& event){
 	s_inputTimer->SetOwner(this);
 	s_inputTimer->Start(25);
 	m_glCanvas->SetFocus();
+}
+
+void reViewport::OnLeaveCanvas(wxMouseEvent& event) {
+	s_inputTimer->Stop();
+	m_glCanvas->GetParent()->SetFocus();
 }
 
 void reViewport::OnMinMaxButtonPress(wxCommandEvent& event){

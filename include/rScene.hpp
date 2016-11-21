@@ -43,6 +43,7 @@ public:
 	virtual rString GetDefaultActorId(const rString& prefix);
 
 	virtual rActor3* RayPick(const rRay3& ray);
+	virtual rActor3* RayPick(const rRay3& ray, rVector3& pickPoint);
 	virtual rActor3* ViewportPick(const rString& viewportName, int x, int y);
 
 	void Clear();

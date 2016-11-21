@@ -20,6 +20,7 @@ public:
 
 	virtual void DeleteActor(const rString& name) = 0;
 	virtual rActor3* RayPick(const rRay3& ray) = 0;
+	virtual rActor3* RayPick(const rRay3& ray, rVector3& pickPoint) = 0;
 	virtual rActor3* ViewportPick(const rString& viewportName, int x, int y) = 0;
 };
 

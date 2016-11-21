@@ -270,7 +270,8 @@ void reMainFrame::NewLevel(){
 
 		if (created){
 			m_propertyInspector->StopInspecting();
-			m_outliner->DeleteAllItems();
+			m_outliner->ClearOutliner();
+			m_outliner->OutlineLevel();
 
 			m_projectExplorer->AddLevel(levelName);
 			EnsureViewportDisplayVisible();

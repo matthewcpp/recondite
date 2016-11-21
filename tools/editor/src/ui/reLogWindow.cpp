@@ -7,6 +7,7 @@ reLogWindow::reLogWindow(reComponent* component, wxWindow* parent, wxWindowID id
 
 	InitControls();
 
+	Log::Init();
 	Log::AddTarget(this);
 }
 

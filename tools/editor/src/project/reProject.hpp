@@ -37,6 +37,7 @@ public:
 
 private:
 	bool CheckForValidNewLevelName(const wxString& name);
+	void CreateDefaultActors();
 
 private:
 	wxFileName m_projectDir;

@@ -13,7 +13,7 @@ void rOpenGLContentManager::InitDefaultAssets(const rString& defaultAssetPath){
 	shaderManager->LoadFromPath(defaultAssetPath, "__default_text__");
 	shaderManager->LoadFromPath(defaultAssetPath, "__default_drawing__");
 	shaderManager->LoadFromPath(defaultAssetPath, "__default_primitive__");
-	//shaderManager->LoadFromPath(defaultAssetPath, "__default_model__");
+	shaderManager->LoadFromPath(defaultAssetPath, "__default_model__");
 	shaderManager->LoadFromPath(defaultAssetPath, "__default_line__");
 	shaderManager->LoadFromPath(defaultAssetPath, "__default_skinned__");
 

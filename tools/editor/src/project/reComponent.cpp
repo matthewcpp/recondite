@@ -60,42 +60,19 @@ bool reComponent::IsReservedActor(const rString& id){
 }
 
 bool reComponent::SaveScene(const rString& path){
-	const std::set<rString>& reservedActors = m_reservedActors;
-
-	return SaveSceneXML(path, [reservedActors](rActor3* actor)->bool {
-		return reservedActors.count(actor->Id()) == 0;
+	return SaveSceneXML(path, [&](rActor3* actor)->bool {
+		return m_reservedActors.count(actor->Id()) == 0;
 	});
 }
 
 void reComponent::ClearScene(){
-	const std::set<rString>& reservedActors = m_reservedActors;
-
-	m_scene->DeleteActors([reservedActors](rActor3* actor)->bool {
-		return reservedActors.count(actor->Id()) == 0;
+	m_scene->DeleteActors([&](rActor3* actor)->bool {
+		return m_reservedActors.count(actor->Id()) == 0;
 	});
 }
 
 void reComponent::OnSceneLoad(rEvent& event){
-	rString groundPlaneId = "__groundPlane__";
-	if (m_scene->GetActor(groundPlaneId) == nullptr){
-		rPrimitiveGrid* groundPlane = new rPrimitiveGrid(groundPlaneId, &m_engine);
-		groundPlane->SetEdgeColor(rColor::Blue);
-		groundPlane->SetWidth(100);
-		groundPlane->SetDepth(100);
-		groundPlane->SetRows(25);
-		groundPlane->SetColumns(25);
-		groundPlane->SetPickable(false);
 
-		AddReservedActor(groundPlane);
-
-		groundPlane->RecreateGeometry();
-		groundPlane->RenderingOptions()->SetForceRender(true);
-
-		/*
-		rModel* model = groundPlane->Model();
-		model->DeleteMesh("faces");
-		*/
-	}
 }
 
 bool reComponent::Init(wxGLCanvas* canvas){

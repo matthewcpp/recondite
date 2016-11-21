@@ -18,6 +18,7 @@ public:
 
 public:
 	void OutlineLevel();
+	void ClearOutliner();
 
 private:
 	void OnItemSelected(wxDataViewEvent& event);

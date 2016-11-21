@@ -1,5 +1,8 @@
 #include "reProject.hpp"
 
+#include "primitive/rPrimitiveGrid.hpp"
+#include "primitive/rPrimitiveBox.hpp"
+
 reProject::reProject(rwxComponent* component){
 	m_component = component;
 }
@@ -114,6 +117,25 @@ bool reProject::CheckForValidNewLevelName(const wxString& name){
 	return true;
 }
 
+void reProject::CreateDefaultActors() {
+	rEngine* engine = m_component->GetEngine();
+
+	rString groundPlaneId = engine->scene->GetDefaultActorId("PrimitivePlane");
+	rPrimitiveGrid* groundPlane = new rPrimitiveGrid(groundPlaneId, engine);
+	groundPlane->SetEdgeColor(rColor::Blue);
+	groundPlane->SetWidth(100);
+	groundPlane->SetDepth(100);
+
+	rString boxId = engine->scene->GetDefaultActorId("PrimitiveBox");
+	rPrimitiveBox* box = new rPrimitiveBox(boxId, engine);
+	box->SetDepth(5);
+	box->SetWidth(5);
+	box->SetHeight(5);
+
+	engine->scene->AddActor(groundPlane);
+	engine->scene->AddActor(box);
+}
+
 bool reProject::CreateLevel(const wxString& name){
 	if (!CheckForValidNewLevelName(name)) return false;
 
@@ -121,6 +143,8 @@ bool reProject::CreateLevel(const wxString& name){
 	m_activeLevel = name;
 
 	m_component->ClearScene();
+
+	CreateDefaultActors();
 
 	SaveActiveLevel();
 	SaveProjectFile();

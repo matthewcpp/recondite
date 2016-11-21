@@ -67,5 +67,5 @@ wxGLContext* rwxComponent::GetContext(){
 rString rwxComponent::GetBasePath(){
 	wxFileName exePath(wxStandardPaths::Get().GetExecutablePath());
 
-	return exePath.GetPath().c_str().AsChar();
+	return exePath.GetPath(wxPATH_GET_SEPARATOR).c_str().AsChar();
 }

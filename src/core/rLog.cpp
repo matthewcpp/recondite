@@ -10,7 +10,7 @@ namespace Log {
 		LogImpl() : enabled(true){}
 	};
 
-	LogImpl* _impl;
+	LogImpl* _impl = nullptr;
 	
 	rString FormatString(const rString format, va_list args);
 
@@ -104,7 +104,10 @@ namespace Log {
 	}
 
 	void Init(){
-		_impl = new LogImpl();
+		if (_impl == nullptr) {
+			_impl = new LogImpl();
+		}
+		
 	}
 
 	void SetEnabled(bool enabled){

@@ -51,7 +51,8 @@ public:
 
 	void RenderImmediateLines(const rImmediateBuffer& buffer, rColor color);
 
-	void SetDefaultRenderMode(rRenderMode renderMode);
+	void SetModelRenderMode(rRenderMode renderMode);
+	rRenderMode GetModelRenderMode() const;
 
 private:
 	void _RenderModel(const Model* model, const rMatrix4& matrix);

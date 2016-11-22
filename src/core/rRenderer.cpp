@@ -10,8 +10,12 @@ rRenderer::rRenderer(rGraphicsDevice* graphicsDevice, rContentManager* contentMa
 	m_defaultRenderMode = rRenderMode::WireframeOnShaded;
 }
 
-void rRenderer::SetDefaultRenderMode(rRenderMode renderMode) {
+void rRenderer::SetModelRenderMode(rRenderMode renderMode) {
 	m_defaultRenderMode = renderMode;
+}
+
+rRenderMode rRenderer::GetModelRenderMode() const {
+	return m_defaultRenderMode;
 }
 
 void rRenderer::Begin(const rMatrix4 projection, const rMatrix4& view){

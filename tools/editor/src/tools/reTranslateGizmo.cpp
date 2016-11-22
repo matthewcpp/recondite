@@ -75,9 +75,6 @@ void SetMeshDiffuseColors(recondite::Model* model, const rColor& color){
 }
 
 void reTranslateGizmo::SetInitialHandleRenderingOptions(){
-	m_xHandle->RenderingOptions()->SetForceRender(true);
-	m_yHandle->RenderingOptions()->SetForceRender(true);
-	m_zHandle->RenderingOptions()->SetForceRender(true);
 
 	m_xHandle->RenderingOptions()->SetOverdraw(true);
 	m_yHandle->RenderingOptions()->SetOverdraw(true);

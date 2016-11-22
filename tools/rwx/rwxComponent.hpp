@@ -32,6 +32,10 @@ public:
 public:
 	virtual bool Init(wxGLCanvas* canvas);
 
+protected:
+	virtual void BeforeSceneRendered(rViewport* viewport) {}
+	virtual void AfterSceneRendered(rViewport* viewport) {}
+
 private:
 	rwxOpenGLGraphicsDevice* m_rwxGraphicsDevice;
 	rOpenGLContentManager* m_rglContentManager;

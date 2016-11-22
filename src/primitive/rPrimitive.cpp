@@ -1,12 +1,11 @@
 #include "primitive/rPrimitive.hpp"
 
 rPrimitive::rPrimitive(const rString& id, rEngine* engine)
-	:rActor3(id, engine)
+	:rDrawable(id, engine)
 {
 	m_edgeColor = rColor(200, 200, 200, 255);
 	m_faceColor = rColor::White;
 
-	m_model = nullptr;
 	m_geometryInvalid = true;
 	m_renderingOptions.reset(new rRenderingOptions());
 }
@@ -33,8 +32,8 @@ void rPrimitive::InvalidateGeometry(){
 void rPrimitive::RecreateGeometry(){
 	if (!m_geometryInvalid) return;
 
-	if (m_model)
-		m_engine->content->Models()->Delete(m_model->GetName());
+	if (_model)
+		m_engine->content->Models()->Delete(_model->GetName());
 
 	recondite::ModelData modelData;
 
@@ -55,29 +54,29 @@ void rPrimitive::RecreateGeometry(){
 	}
 
 	rString assetName = Id() + "_model";
-	m_model = m_engine->content->Models()->LoadFromData(modelData, assetName);
+	_model = m_engine->content->Models()->LoadFromData(modelData, assetName);
 
 	m_geometryInvalid = false;
 }
 
 void rPrimitive::UpdateMaterials(){
-	if (m_model){
+	if (_model){
 
-		size_t meshCount = m_model->GetTriangleMeshCount();
+		size_t meshCount = _model->GetTriangleMeshCount();
 		for (size_t i = 0; i < meshCount; i++) {
-			m_model->GetTriangleMesh(i)->GetMaterial()->SetDiffuseColor(m_faceColor);
+			_model->GetTriangleMesh(i)->GetMaterial()->SetDiffuseColor(m_faceColor);
 		}
 
-		meshCount = m_model->GetLineMeshCount();
+		meshCount = _model->GetLineMeshCount();
 		for (size_t i = 0; i < meshCount; i++) {
-			m_model->GetLineMesh(i)->GetMaterial()->SetDiffuseColor(m_edgeColor);
+			_model->GetLineMesh(i)->GetMaterial()->SetDiffuseColor(m_edgeColor);
 		}
 	}
 }
 
 void rPrimitive::OnDelete(){
-	if (m_model)
-		m_engine->content->Models()->Delete(m_model->GetName());
+	if (_model)
+		m_engine->content->Models()->Delete(_model->GetName());
 }
 
 void rPrimitive::Draw(){
@@ -85,9 +84,9 @@ void rPrimitive::Draw(){
 		RecreateGeometry();
 	}
 		
-	if (RenderingOptions()->Visible()){
+	if (RenderingOptions()->GetVisibility()){
 		rMatrix4& transform = TransformMatrix();
-		m_engine->renderer->RenderModel(m_model, transform);
+		m_engine->renderer->RenderModel(_model, transform);
 	}
 }
 
@@ -112,6 +111,4 @@ void rPrimitive::OnLoad(){
 	rActor3::OnLoad();
 	InvalidateGeometry();
 }
-Model* rPrimitive::Model() const{
-	return m_model;
-}
+

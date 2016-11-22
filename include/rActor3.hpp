@@ -62,6 +62,8 @@ public:
 	rVector3 Up() const;
 	rVector3 Down() const;
 
+	virtual bool IsDrawable() const;
+
 public:
 	virtual bool Save(riSerializationTarget* target) final;
 	virtual bool Load(riSerializationTarget* target) final;

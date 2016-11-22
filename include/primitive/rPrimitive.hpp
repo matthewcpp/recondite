@@ -2,14 +2,14 @@
 #define R_PRIMITIVE_HPP
 
 #include "rBuild.hpp"
-#include "rActor3.hpp"
+#include "rDrawable.hpp"
 
 #include "asset/rModelData.hpp"
 #include "asset/rModel.hpp"
 
 using namespace recondite;
 
-class RECONDITE_API rPrimitive : public rActor3{
+class RECONDITE_API rPrimitive : public rDrawable {
 public:
 	rPrimitive(const rString& id, rEngine* engine);
 
@@ -20,7 +20,6 @@ public:
 	rColor EdgeColor() const;
 	rColor FaceColor() const;
 
-	Model* Model() const;
 	void RecreateGeometry();
 
 	virtual void Draw();
@@ -40,8 +39,6 @@ private:
 	rColor m_edgeColor;
 	rColor m_faceColor;
 	bool m_geometryInvalid;
-
-	recondite::Model* m_model;
 };
 
 #endif

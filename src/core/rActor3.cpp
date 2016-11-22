@@ -249,3 +249,7 @@ bool rActor3::Pickable() const{
 void rActor3::SetPickable(bool pickable){
 	m_pickable = pickable;
 }
+
+bool rActor3::IsDrawable() const {
+	return false;
+}

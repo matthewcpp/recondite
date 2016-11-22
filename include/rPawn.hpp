@@ -2,17 +2,16 @@
 #define R_PAWN_HPP
 
 #include "rBuild.hpp"
-#include "rActor3.hpp"
+#include "rDrawable.hpp"
 #include "rAnimationController.hpp"
 #include "asset/rModel.hpp"
 
-class RECONDITE_API rPawn : public rActor3{
+class RECONDITE_API rPawn : public rDrawable {
 public:
 	rPawn(recondite::Model* model, const rString& id , rEngine* engine);
 	
 public:
-	Model* Model() const;
-	void SetModel(recondite::Model* model);
+	virtual void SetModel(recondite::Model* model) override;
 	
 	inline recondite::AnimationController* AnimationController();
 

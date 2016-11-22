@@ -1,14 +1,9 @@
 #include "rPawn.hpp"
 
 rPawn::rPawn(recondite::Model* model, const rString& id , rEngine* engine)
-:rActor3(id, engine)
+:rDrawable(model, id, engine)
 {
-	SetModel(model);
 	m_renderingOptions.reset(new rRenderingOptions());
-}
-
-Model* rPawn::Model() const{
-	return m_model;
 }
 
 void rPawn::SetModel(recondite::Model* model){

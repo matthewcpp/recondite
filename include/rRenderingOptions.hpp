@@ -1,5 +1,4 @@
-#ifndef R_RENDERINGOPTIONS_HPP
-#define R_RENDERINGOPTIONS_HPP
+#pragma once
 
 #include <queue>
 #include <stdint.h>
@@ -7,50 +6,71 @@
 #include "rBuild.hpp"
 #include "rColor.hpp"
 
-class RECONDITE_API rPickingColorManager{
-public:
-	rPickingColorManager() : r(0), g(0), b(0), a(UINT8_MAX) {}
+#include "asset/rMaterial.hpp"
 
-	bool GetNextColor(rColor& color);
-	void ReturnColor(const rColor& color);
 
-private:
-	typedef std::queue<rColor> PickingColorQueue;
-
-private:
-	uint8_t r;
-	uint8_t g;
-	uint8_t b;
-	uint8_t a;
-
-	PickingColorQueue m_availableColors;
-};
 
 class RECONDITE_API rRenderingOptions{
 public:
-	rRenderingOptions();
-	virtual ~rRenderingOptions();
-
 public:
-	bool ForceRender() const;
-	void SetForceRender(bool forceRender);
+	rRenderingOptions();
+	~rRenderingOptions();
+public:
 
-	bool Visible() const;
-	void SetVisibility(bool visible);
+	/**
+	Gets the color used for viewport picking.
+	\returns viewport picking color.
+	*/
+	inline rColor PickingColor() const;
 
-	bool Overdraw() const;
-	void SetOverdraw(bool overdraw);
+	/**
+	Sets the visibility state for this object.
+	\param visibility new visibility for this object
+	*/
+	inline void SetVisibility(bool visibility);
 
-	rColor PickingColor() const;
+	/**
+	Gets the visibility state for this object
+	\returns the visibility state for this object
+	*/
+	inline bool GetVisibility() const;
+
+	/**
+	Sets whether this object will ignore the depth buffer when rendering.
+	\param overdraw value indicating if this object will ignore the depth buffer when rendering.
+	*/
+	inline void SetOverdraw(bool overdraw);
+
+	/**
+	Gets whether this object has overdraw enabled.
+	\returns value indicating whether overdraw is enabled.
+	*/
+	inline bool GetOverdraw() const;
 
 private:
-	bool m_forceRender;
-	bool m_overdraw;
-	bool m_visibility;
 
 	rColor m_pickingColor;
 
-	static rPickingColorManager s_pickingColorManager;
+	bool m_visibility;
+	bool m_overdraw;
 };
 
-#endif
+inline rColor rRenderingOptions::PickingColor() const {
+	return m_pickingColor;
+}
+
+inline void rRenderingOptions::SetVisibility(bool visibility) {
+	m_visibility = visibility;
+}
+
+inline bool rRenderingOptions::GetVisibility() const {
+	return m_visibility;
+}
+
+inline void rRenderingOptions::SetOverdraw(bool overdraw) {
+	m_overdraw = overdraw;
+}
+
+inline bool rRenderingOptions::GetOverdraw() const {
+	return m_overdraw;
+}

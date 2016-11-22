@@ -121,7 +121,7 @@ void ModelViewerModule::GenerateCurrentSkeletonBuffer(uint32_t boneId, Skeleton*
 void ModelViewerModule::AfterRenderScene(rViewport* viewport) {
 	if (settings.renderSkeleton) {
 		rPawn* model = (rPawn*)_engine->scene->GetActor("model");
-		Skeleton* skeleton = model->Model()->GetSkeleton();
+		Skeleton* skeleton = model->GetModel()->GetSkeleton();
 		const rMatrix4* boneTransforms = model->AnimationController()->GetBoneTransformData();
 		
 		skeletonBuffer.Clear();
@@ -144,7 +144,7 @@ void ModelViewerModule::BeforeRenderUi(rViewport* viewport) {
 		rSpriteBatch* sb = _engine->renderer->SpriteBatch();
 
 		rPawn* model = (rPawn*)_engine->scene->GetActor("model");
-		Skeleton* skeleton = model->Model()->GetSkeleton();
+		Skeleton* skeleton = model->GetModel()->GetSkeleton();
 
 		for (size_t i = 0; i < skeleton->GetBoneCount(); i++) {
 			Bone* bone = skeleton->GetBone(i);

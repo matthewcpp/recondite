@@ -1,6 +1,23 @@
 #include "rRenderingOptions.hpp"
 
-rPickingColorManager rRenderingOptions::s_pickingColorManager;
+class RECONDITE_API rPickingColorManager {
+public:
+	rPickingColorManager() : r(0), g(0), b(0), a(UINT8_MAX) {}
+
+	bool GetNextColor(rColor& color);
+	void ReturnColor(const rColor& color);
+
+private:
+	typedef std::queue<rColor> PickingColorQueue;
+
+private:
+	uint8_t r;
+	uint8_t g;
+	uint8_t b;
+	uint8_t a;
+
+	PickingColorQueue m_availableColors;
+};
 
 bool rPickingColorManager::GetNextColor(rColor& color){
 	if (m_availableColors.size() > 0){
@@ -24,44 +41,20 @@ bool rPickingColorManager::GetNextColor(rColor& color){
 	return true;
 }
 
+rPickingColorManager s_pickingColorManager;
+
 void rPickingColorManager::ReturnColor(const rColor& color){
 	m_availableColors.push(color);
 }
 
 rRenderingOptions::rRenderingOptions(){
-	m_visibility = true;
-	m_forceRender = false;
 	s_pickingColorManager.GetNextColor(m_pickingColor);
+
+	m_visibility = true;
+	m_overdraw = false;
 }
 
 rRenderingOptions::~rRenderingOptions(){
 	s_pickingColorManager.ReturnColor(m_pickingColor);
 }
 
-bool rRenderingOptions::ForceRender() const{
-	return m_forceRender;
-}
-
-void rRenderingOptions::SetForceRender(bool forceRender){
-	m_forceRender = forceRender;
-}
-
-bool rRenderingOptions::Visible() const{
-	return m_visibility;
-}
-
-void rRenderingOptions::SetVisibility(bool visible){
-	m_visibility = visible;
-}
-
-bool rRenderingOptions::Overdraw() const{
-	return m_overdraw;
-}
-
-void rRenderingOptions::SetOverdraw(bool overdraw){
-	m_overdraw = overdraw;
-}
-
-rColor rRenderingOptions::PickingColor() const{
-	return m_pickingColor;
-}

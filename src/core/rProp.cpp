@@ -1,9 +1,8 @@
 #include "rProp.hpp"
 
 rProp::rProp(recondite::Model* model, const rString& id, rEngine* engine)
-	:rActor3(id, engine)
+	:rDrawable(id, engine)
 {
-	m_model = model;
 	m_renderingOptions.reset(new rRenderingOptions());
 }
 
@@ -11,21 +10,14 @@ rString rProp::ClassName() const{
 	return "Prop";
 }
 
-recondite::Model* rProp::Model(){
-	return m_model;
-}
-
-void rProp::SetModel(recondite::Model* model){
-	m_model = model;
-}
 void rProp::Draw(){
 	rMatrix4& transform = TransformMatrix();
 
-	m_engine->renderer->RenderModel(m_model, transform);
+	m_engine->renderer->RenderModel(_model, transform);
 }
 
 void rProp::DoRecalculateBoundingVolume() {
-	rAlignedBox3 modelBounding = m_model->GetBoundingBox();
+	rAlignedBox3 modelBounding = _model->GetBoundingBox();
 	const rMatrix4& transform = TransformMatrix();
 
 	transform.TransformVector3(modelBounding.min);

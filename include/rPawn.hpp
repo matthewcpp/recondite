@@ -21,7 +21,6 @@ public:
 	virtual void Draw();
 	
 private:
-	recondite::Model* m_model;
 	recondite::AnimationController m_animationController;
 };
 

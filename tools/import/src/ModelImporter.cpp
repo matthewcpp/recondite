@@ -119,7 +119,7 @@ namespace recondite { namespace import {
 				meshData->Push(face.mIndices[0] + baseIndex, face.mIndices[1] + baseIndex, face.mIndices[2] + baseIndex);
 			}
 
-			meshData->SetMaterialId(mesh->mMaterialIndex);
+			meshData->SetMaterialDataId(mesh->mMaterialIndex);
 
 			if (scene->mNumAnimations > 0 && options.importSkeleton)
 				ImportVertexWeights(scene, mesh, modelData, baseIndex);

@@ -22,6 +22,7 @@ public:
 
 	void RecreateGeometry();
 
+	virtual recondite::Model* GetModel() override;
 	virtual void Draw();
 
 	virtual void OnDelete() override;

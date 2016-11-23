@@ -43,11 +43,28 @@ namespace recondite {
 		void SetName(const rString& name);
 
 		/**
-		Gets the material Id for this mesh.
-		\returns the material Id
+		Gets the material data id for this mesh.
+		\returns the material data id.
 		*/
-		uint32_t GetMaterialId() const;
-		void SetMaterialId(uint32_t id);
+		uint32_t GetMaterialDataId() const;
+
+		/**
+		Sets the material data id for this mesh.  This will instruct the model loader to use the material data at the specified index.
+		\param id the material data id to use for this mesh.
+		*/
+		void SetMaterialDataId(uint32_t id);
+
+		/**
+		Sets the material that will be assigned to this mesh is created.  This material will take precidence over any material data id that is set.
+		\param material the material to use for this mesh
+		*/
+		void SetMaterial(rMaterial* material);
+
+		/**
+		Gets the material that will be assigned to this mesh when it is created.
+		\returns the material that will be used when the mesh is created
+		*/
+		rMaterial* GetMaterial() const;
 
 		/**
 		Gets geometry type for this mesh.

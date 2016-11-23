@@ -32,26 +32,36 @@ void rPrimitive::InvalidateGeometry(){
 void rPrimitive::RecreateGeometry(){
 	if (!m_geometryInvalid) return;
 
-	if (_model)
+	//reuse existing materials if necessary
+	rMaterial* currentFaceMaterial = nullptr;
+	rMaterial* currentLineMaterial = nullptr;
+
+	if (_model) {
+		currentFaceMaterial = _model->GetTriangleMesh(0)->GetMaterial();
+		currentLineMaterial = _model->GetLineMesh(0)->GetMaterial();
+
 		m_engine->content->Models()->Delete(_model->GetName());
+	}
 
 	recondite::ModelData modelData;
 
 	CreateGeometry(modelData);
 
-	MaterialData* faceMaterial = modelData.CreateMaterial();
-	faceMaterial->diffuseColor = m_faceColor;
+	if (currentFaceMaterial == nullptr) { // first time creating geometry
+		MaterialData* faceMaterial = modelData.CreateMaterial();
+		MaterialData* lineMaterial = modelData.CreateMaterial();
 
-	MaterialData* lineMaterial = modelData.CreateMaterial();
-	lineMaterial->diffuseColor = m_edgeColor;
+		faceMaterial->diffuseColor = m_faceColor;
+		lineMaterial->diffuseColor = m_edgeColor;
 
-	for (size_t i = 0; i < modelData.GetTriangleMeshCount(); i++) {
-		modelData.GetTriangleMesh(i)->SetMaterialId(0);
+		modelData.GetTriangleMesh(0)->SetMaterialDataId(faceMaterial->id);
+		modelData.GetLineMesh(0)->SetMaterialDataId(lineMaterial->id);
+	}
+	else { // assign old materials
+		modelData.GetTriangleMesh(0)->SetMaterial(currentFaceMaterial);
+		modelData.GetLineMesh(0)->SetMaterial(currentLineMaterial);
 	}
 
-	for (size_t i = 0; i < modelData.GetLineMeshCount(); i++) {
-		modelData.GetLineMesh(i)->SetMaterialId(1);
-	}
 
 	rString assetName = Id() + "_model";
 	_model = m_engine->content->Models()->LoadFromData(modelData, assetName);
@@ -79,10 +89,14 @@ void rPrimitive::OnDelete(){
 		m_engine->content->Models()->Delete(_model->GetName());
 }
 
+recondite::Model* rPrimitive::GetModel() {
+	RecreateGeometry();
+
+	return _model;
+}
+
 void rPrimitive::Draw(){
-	if (m_geometryInvalid){
-		RecreateGeometry();
-	}
+	RecreateGeometry();
 		
 	if (RenderingOptions()->GetVisibility()){
 		rMatrix4& transform = TransformMatrix();

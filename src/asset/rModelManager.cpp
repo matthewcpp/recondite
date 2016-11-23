@@ -81,7 +81,13 @@ Model* rModelManager::LoadFromData(ModelData& modelData, const rString& name) {
 		const MeshData* meshData = modelData.GetTriangleMesh(i);
 
 		uint32_t bufferId = _impl->graphicsDevice->CreateElementBuffer(meshData->GetBufferData(), meshData->GetBufferDataSize());
-		Mesh* mesh = model->CreateTriangleMesh(bufferId, meshData->GetElementCount(), materials[meshData->GetMaterialId()]);
+
+		rMaterial* material = meshData->GetMaterial();
+		if (!material) {
+			material = materials[meshData->GetMaterialDataId()];
+		}
+
+		Mesh* mesh = model->CreateTriangleMesh(bufferId, meshData->GetElementCount(), material);
 		mesh->SetName(meshData->GetName());
 		mesh->SetBoundingBox(meshData->GetBoundingBox());
 	}
@@ -90,7 +96,13 @@ Model* rModelManager::LoadFromData(ModelData& modelData, const rString& name) {
 		const MeshData* meshData = modelData.GetLineMesh(i);
 
 		uint32_t bufferId = _impl->graphicsDevice->CreateElementBuffer(meshData->GetBufferData(), meshData->GetBufferDataSize());
-		Mesh* mesh = model->CreateLineMesh(bufferId, meshData->GetElementCount(), materials[meshData->GetMaterialId()]);
+		
+		rMaterial* material = meshData->GetMaterial();
+		if (!material) {
+			material = materials[meshData->GetMaterialDataId()];
+		}
+		
+		Mesh* mesh = model->CreateLineMesh(bufferId, meshData->GetElementCount(), material);
 		mesh->SetName(meshData->GetName());
 		mesh->SetBoundingBox(meshData->GetBoundingBox());
 	}
@@ -119,6 +131,10 @@ void rModelManager::Impl::DeleteModelData(Model* model) {
 
 	for (size_t i = 0; i < model->GetTriangleMeshCount(); i++) {
 		graphicsDevice->DeleteBuffer(model->GetTriangleMesh(i)->GetElementBufferId());
+	}
+
+	for (size_t i = 0; i < model->GetLineMeshCount(); i++) {
+		graphicsDevice->DeleteBuffer(model->GetLineMesh(i)->GetElementBufferId());
 	}
 }
 

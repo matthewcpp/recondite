@@ -8,6 +8,7 @@ namespace recondite {
 		std::vector<uint16_t> elements;
 		rGeometryType geometryType;
 		rAlignedBox3 boundingBox;
+		rMaterial* material;
 	};
 
 	MeshData::MeshData(rGeometryType geometryType) {
@@ -15,6 +16,7 @@ namespace recondite {
 		_impl->geometryType = geometryType;
 		_impl->boundingBox.Empty();
 		_impl->materialId = UINT32_MAX;
+		_impl->material = nullptr;
 	}
 
 	MeshData::~MeshData() {
@@ -33,12 +35,20 @@ namespace recondite {
 		_impl->name = name;
 	}
 
-	uint32_t MeshData::GetMaterialId() const{
+	uint32_t MeshData::GetMaterialDataId() const{
 		return _impl->materialId;
 	}
 
-	void MeshData::SetMaterialId(uint32_t id) {
+	void MeshData::SetMaterialDataId(uint32_t id) {
 		_impl->materialId = id;
+	}
+
+	void MeshData::SetMaterial(rMaterial* material) {
+		_impl->material = material;
+	}
+
+	rMaterial* MeshData::GetMaterial() const {
+		return _impl->material;
 	}
 
 	char* MeshData::GetBufferData() const {
@@ -260,7 +270,7 @@ namespace recondite {
 
 		uint32_t materialId;
 		stream.Read((char*)&materialId, sizeof(uint32_t));
-		meshData->SetMaterialId(materialId);
+		meshData->SetMaterialDataId(materialId);
 
 		uint32_t nameLength;
 		stream.Read((char*)&nameLength, sizeof(uint32_t));
@@ -322,7 +332,7 @@ namespace recondite {
 		rAlignedBox3 boundingBox = meshData->GetBoundingBox();
 		stream.Write((const char*)&boundingBox, sizeof(rAlignedBox3));
 
-		uint32_t materialIndex = meshData->GetMaterialId();
+		uint32_t materialIndex = meshData->GetMaterialDataId();
 		stream.Write((const char*)&materialIndex, sizeof(uint32_t));
 
 		rString meshName = meshData->GetName();

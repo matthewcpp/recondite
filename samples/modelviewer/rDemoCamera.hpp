@@ -4,20 +4,41 @@
 #include "rTypes.hpp"
 #include "rDefs.hpp"
 
-#include "rOrbitCamera.hpp"
+#include "rCamera.hpp"
 #include "rPoint.hpp"
 
-class rDemoCamera : public rOrbitCamera{
+class rDemoCamera : public rCamera{
 public:
 	rDemoCamera(const rString& name, rEngine* engine);
 
 	virtual int Update() override;
+
+	void SetYaw(float yaw);
+	float Yaw() const;
+
+	void SetRoll(float roll);
+	float Roll() const;
+
+	float Radius() const;
+	void SetRadius(float radius);
+
+	float Distance() const;
+	void SetDistance(float distance);
+
+	void MoveCloserIn();
+	void MoveFartherAway();
+
+	void Reset(const rVector3 target, float radius, float yaw, float roll);
+	void UpdatePosition();
 
 	float OrbitSpeed() const;
 	void SetOrbitSpeed(float speed);
 
 	void SetPanSpeed(float speed);
 	float PanSpeed() const;
+
+	virtual void SetTarget(const rVector3& target);
+	virtual rVector3 Target() const;
 
 private:
 	int CalculateZoomDirection(int wheelValue);
@@ -38,6 +59,11 @@ private:
 	bool m_dragging;
 	float m_orbitSpeed;
 	float m_panSpeed;
+
+	float m_radius;
+	float m_distance;
+
+	bool m_needsUpdate;
 };
 
 #endif

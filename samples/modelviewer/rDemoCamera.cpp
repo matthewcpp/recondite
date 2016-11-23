@@ -1,7 +1,7 @@
 #include "rDemoCamera.hpp"
 
 rDemoCamera::rDemoCamera(const rString& name , rEngine* engine)
-	:rOrbitCamera(name, engine)
+	:rCamera(name, engine)
 {
 	m_orbitSpeed = 180.0f;
 	m_panSpeed = 10.0;
@@ -9,6 +9,8 @@ rDemoCamera::rDemoCamera(const rString& name , rEngine* engine)
 
 	m_lastWheelValue = INT_MIN;
 	m_pinchAmount = 0.0f;
+
+	Reset(rVector3::ZeroVector, 1.0f, 0.0f, 0.0f);
 }
 
 float rDemoCamera::OrbitSpeed() const{
@@ -94,7 +96,8 @@ int rDemoCamera::Update(){
 	if (!processed)
 		ProcessTouch();
 
-	rOrbitCamera::Update();
+	if (m_needsUpdate)
+		UpdatePosition();
 
 	return 0;
 }
@@ -141,4 +144,84 @@ void rDemoCamera::DoPan(const rPoint& position, float timeDelta) {
 	SetTarget(Target() + cameraDelta);
 
 	m_lastUpdatePos = position;
+}
+
+void rDemoCamera::Reset(const rVector3 target, float radius, float yaw, float roll) {
+	m_target = target;
+	m_radius = radius;
+	m_distance = radius;
+	m_rotation.y = yaw;
+	m_rotation.x = roll;
+
+	UpdatePosition();
+}
+
+void rDemoCamera::UpdatePosition() {
+	rQuaternion xform(m_rotation);
+	rVector3 cameraVector = rVector3::ForwardVector;
+	xform.TransformVector3(cameraVector);
+	cameraVector *= m_distance;
+	m_position = m_target + cameraVector;
+
+	m_needsUpdate = false;
+}
+
+void rDemoCamera::SetYaw(float yaw) {
+	m_rotation.y = yaw;
+	m_needsUpdate = true;
+}
+
+float rDemoCamera::Yaw() const {
+	return m_rotation.y;
+}
+
+void rDemoCamera::SetRoll(float roll) {
+	m_rotation.x = roll;
+	m_needsUpdate = true;
+}
+
+float rDemoCamera::Roll() const {
+	return m_rotation.x;
+}
+
+float rDemoCamera::Radius() const {
+	return m_radius;
+}
+
+void rDemoCamera::SetRadius(float radius) {
+	m_radius = radius;
+	m_needsUpdate = true;
+}
+
+float rDemoCamera::Distance() const {
+	return m_distance;
+}
+
+void rDemoCamera::SetDistance(float distance) {
+	m_distance = distance;
+
+	float minDistance = m_radius / 10.0f;
+	if (m_distance < minDistance)
+		m_distance = minDistance;
+
+	m_needsUpdate = true;
+}
+
+void rDemoCamera::MoveCloserIn() {
+	float step = m_radius / 10.0f;
+	SetDistance(m_distance - step);
+}
+
+void rDemoCamera::MoveFartherAway() {
+	float step = m_radius / 10.0f;
+	SetDistance(m_distance + step);
+}
+
+void rDemoCamera::SetTarget(const rVector3& target) {
+	m_target = target;
+	m_needsUpdate = true;
+}
+
+rVector3 rDemoCamera::Target() const {
+	return m_target;
 }

@@ -3,12 +3,12 @@
 //common
 
 void EnsureBuffers(const rPrimitiveGeometry::rPrimitiveParams& params, ModelData& modelData){
-	if (params.createFaceMesh) {
+	if (params.createFaceMesh && modelData.GetTriangleMeshCount() == 0) {
 		MeshData* mesh = modelData.CreateTriangleMesh();
 		mesh->SetName(params.faceMeshName);
 	}
 
-	if (params.createWireMesh) {
+	if (params.createWireMesh && modelData.GetLineMeshCount() == 0) {
 		MeshData* mesh = modelData.CreateLineMesh();
 		mesh->SetName(params.wireMeshName);
 	}
@@ -359,7 +359,7 @@ void rPrimitiveGeometry::CreateCylinder(const rPrimitiveGeometry::rPrimitiveCyli
 
 	CreateCircle(circleParams, modelData);
 
-	circleParams.center = rVector3::UpVector;
+	circleParams.center = rVector3::UpVector * params.height;
 	circleParams.normal = rVector3::UpVector;
 
 	CreateCircle(circleParams, modelData);

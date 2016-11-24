@@ -1,6 +1,6 @@
-#include "rDemoCamera.hpp"
+#include "ModelViewerCamera.hpp"
 
-rDemoCamera::rDemoCamera(recondite::Camera* camera, const rString& name , rEngine* engine)
+ModelViewerCamera::ModelViewerCamera(recondite::Camera* camera, const rString& name , rEngine* engine)
 	:rActor3(name, engine)
 {
 	m_camera = camera;
@@ -16,23 +16,23 @@ rDemoCamera::rDemoCamera(recondite::Camera* camera, const rString& name , rEngin
 	Reset(rVector3::ZeroVector, 1.0f, 0.0f, 0.0f);
 }
 
-float rDemoCamera::OrbitSpeed() const{
+float ModelViewerCamera::OrbitSpeed() const{
 	return m_orbitSpeed;
 }
 
-void rDemoCamera::SetOrbitSpeed(float speed){
+void ModelViewerCamera::SetOrbitSpeed(float speed){
 	m_orbitSpeed = speed;
 }
 
-void rDemoCamera::SetPanSpeed(float speed) {
+void ModelViewerCamera::SetPanSpeed(float speed) {
 	m_panSpeed = speed;
 }
 
-float rDemoCamera::PanSpeed() const {
+float ModelViewerCamera::PanSpeed() const {
 	return m_panSpeed;
 }
 
-int rDemoCamera::CalculateZoomDirection(int wheelValue){
+int ModelViewerCamera::CalculateZoomDirection(int wheelValue){
 	int ret = 0;
 	if (m_lastWheelValue != INT_MIN){
 		if (wheelValue > m_lastWheelValue)
@@ -45,7 +45,7 @@ int rDemoCamera::CalculateZoomDirection(int wheelValue){
 	return ret;
 }
 
-bool rDemoCamera::ProcessMouse(){
+bool ModelViewerCamera::ProcessMouse(){
 	const rMouseState* state = m_engine->input->GetMouseState();
 
 	DoZoom(CalculateZoomDirection(state->GetWheelValue()));
@@ -69,6 +69,8 @@ bool rDemoCamera::ProcessMouse(){
 			m_lastUpdatePos = state->Position();
 			m_dragging = true;
 		}
+
+		return true;
 	}
 	else {
 		m_dragging = false;
@@ -76,7 +78,7 @@ bool rDemoCamera::ProcessMouse(){
 	}
 }
 
-bool rDemoCamera::ProcessTouch(){
+bool ModelViewerCamera::ProcessTouch(){
 	float amount = m_engine->input->Gestures()->AmountDelta("pinch");
 
 	if (amount != m_pinchAmount){
@@ -92,7 +94,7 @@ bool rDemoCamera::ProcessTouch(){
 	return false;
 }
 
-int rDemoCamera::Update(){
+int ModelViewerCamera::Update(){
 
 	bool processed = ProcessMouse();
 
@@ -105,7 +107,7 @@ int rDemoCamera::Update(){
 	return 0;
 }
 
-void rDemoCamera::DoZoom(int zoomDirection){
+void ModelViewerCamera::DoZoom(int zoomDirection){
 
 	if (zoomDirection > 0)
 		MoveCloserIn();
@@ -113,7 +115,7 @@ void rDemoCamera::DoZoom(int zoomDirection){
 		MoveFartherAway();
 }
 
-void rDemoCamera::DoOrbit (const rPoint& position, float timeDelta){
+void ModelViewerCamera::DoOrbit (const rPoint& position, float timeDelta){
 	float amount = m_orbitSpeed * timeDelta;
 
 	rPoint delta = position - m_lastUpdatePos;
@@ -131,26 +133,35 @@ void rDemoCamera::DoOrbit (const rPoint& position, float timeDelta){
 	m_lastUpdatePos = position;
 }
 
-void rDemoCamera::DoPan(const rPoint& position, float timeDelta) {
+void ModelViewerCamera::DoPan(const rPoint& position, float timeDelta) {
+	rQuaternion xform(m_cameraAngle);
+
 	float amount = m_panSpeed * timeDelta;
 	rPoint positionDelta = position - m_lastUpdatePos;
 
-	rVector3 right = Right();
+	rVector3 right = rVector3::RightVector;
+	xform.TransformVector3(right);
+
 	right *= positionDelta.x * amount;
 
-	rVector3 up = Up();
+	rVector3 up = rVector3::UpVector;
+	xform.TransformVector3(up);
+
 	up *= positionDelta.y * amount;
 
 	rVector3 cameraDelta = right + up;
 
-	SetPosition(Position() + cameraDelta);
-	SetTarget(Target() + cameraDelta);
+	m_camera->SetPosition(m_camera->GetPosition() + cameraDelta);
+	m_center += cameraDelta;
+	m_needsUpdate = true;
 
 	m_lastUpdatePos = position;
+	
+
 }
 
-void rDemoCamera::Reset(const rVector3 target, float radius, float yaw, float roll) {
-	m_camera->SetTarget(target);
+void ModelViewerCamera::Reset(const rVector3 target, float radius, float yaw, float roll) {
+	m_center = target;
 	m_radius = radius;
 	m_distance = radius;
 	m_cameraAngle.y = yaw;
@@ -159,50 +170,59 @@ void rDemoCamera::Reset(const rVector3 target, float radius, float yaw, float ro
 	UpdatePosition();
 }
 
-void rDemoCamera::UpdatePosition() {
+void ModelViewerCamera::UpdatePosition() {
 	rQuaternion xform(m_cameraAngle);
-	rVector3 cameraVector = rVector3::BackwardVector;
+
+	rVector3 cameraVector = rVector3::ForwardVector;
 	xform.TransformVector3(cameraVector);
-	rQuaternion::ToEuler(xform, m_rotation);
+
+	rVector3 up = rVector3::UpVector;
+	xform.TransformVector3(up);
 
 	cameraVector *= m_distance;
-	m_camera->SetPosition(m_camera->GetTarget() + cameraVector);
+	m_camera->SetPosition(m_center + cameraVector);
+	m_camera->SetUp(up);
+
+	rVector3 direction = m_center - m_camera->GetPosition();
+	direction.Normalize();
+
+	m_camera->SetTarget(m_camera->GetPosition() + direction);
 
 	m_needsUpdate = false;
 }
 
-void rDemoCamera::SetYaw(float yaw) {
+void ModelViewerCamera::SetYaw(float yaw) {
 	m_cameraAngle.y = yaw;
 	m_needsUpdate = true;
 }
 
-float rDemoCamera::Yaw() const {
+float ModelViewerCamera::Yaw() const {
 	return m_cameraAngle.y;
 }
 
-void rDemoCamera::SetRoll(float roll) {
+void ModelViewerCamera::SetRoll(float roll) {
 	m_cameraAngle.x = roll;
 	m_needsUpdate = true;
 }
 
-float rDemoCamera::Roll() const {
+float ModelViewerCamera::Roll() const {
 	return m_cameraAngle.x;
 }
 
-float rDemoCamera::Radius() const {
+float ModelViewerCamera::Radius() const {
 	return m_radius;
 }
 
-void rDemoCamera::SetRadius(float radius) {
+void ModelViewerCamera::SetRadius(float radius) {
 	m_radius = radius;
 	m_needsUpdate = true;
 }
 
-float rDemoCamera::Distance() const {
+float ModelViewerCamera::Distance() const {
 	return m_distance;
 }
 
-void rDemoCamera::SetDistance(float distance) {
+void ModelViewerCamera::SetDistance(float distance) {
 	m_distance = distance;
 
 	float minDistance = m_radius / 10.0f;
@@ -212,25 +232,21 @@ void rDemoCamera::SetDistance(float distance) {
 	m_needsUpdate = true;
 }
 
-void rDemoCamera::MoveCloserIn() {
+void ModelViewerCamera::MoveCloserIn() {
 	float step = m_radius / 10.0f;
 	SetDistance(m_distance - step);
 }
 
-void rDemoCamera::MoveFartherAway() {
+void ModelViewerCamera::MoveFartherAway() {
 	float step = m_radius / 10.0f;
 	SetDistance(m_distance + step);
 }
 
-void rDemoCamera::SetTarget(const rVector3& target) {
-	m_camera->SetTarget(target);
+void ModelViewerCamera::SetTarget(const rVector3& target) {
+	m_center = target;
 	m_needsUpdate = true;
 }
 
-rVector3 rDemoCamera::Target() const {
-	return m_camera->GetTarget();
-}
-
-rString rDemoCamera::ClassName() const {
+rString ModelViewerCamera::ClassName() const {
 	return "Temp";
 }

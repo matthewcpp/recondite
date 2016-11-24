@@ -1,5 +1,4 @@
-#ifndef R_DEMO_CAMERA_HPP
-#define R_DEMO_CAMERA_HPP
+#pragma once
 
 #include "rTypes.hpp"
 #include "rDefs.hpp"
@@ -9,9 +8,9 @@
 
 #include "rActor3.hpp"
 
-class rDemoCamera: public rActor3{
+class ModelViewerCamera : public rActor3{
 public:
-	rDemoCamera(recondite::Camera* camera, const rString& name, rEngine* engine);
+	ModelViewerCamera(recondite::Camera* camera, const rString& name, rEngine* engine);
 
 	virtual int Update() override;
 
@@ -40,7 +39,6 @@ public:
 	float PanSpeed() const;
 
 	virtual void SetTarget(const rVector3& target);
-	virtual rVector3 Target() const;
 
 	virtual rString ClassName() const;
 
@@ -70,7 +68,6 @@ private:
 	bool m_needsUpdate;
 
 	rVector3 m_cameraAngle;
+	rVector3 m_center;
 	recondite::Camera* m_camera;
 };
-
-#endif

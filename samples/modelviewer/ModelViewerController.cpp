@@ -12,7 +12,7 @@
 #include "stream/rOStringStream.hpp"
 #include "stream/rIStringStream.hpp"
 
-#include "rDemoCamera.hpp"
+#include "ModelViewerCamera.hpp"
 
 #include "rPawn.hpp"
 
@@ -44,9 +44,9 @@ void ModelViewerController::OnMouseLeave(rEvent& event) {
 }
 
 void ModelViewerController::CameraDebug() {
-	rDemoCamera* camera = (rDemoCamera*)_engine->scene->GetActor("main_camera");
-	rVector3 pos = camera->Position();
-	rVector3 tar = camera->Target();
+	recondite::Camera* camera = _document->GetViewport()->Camera();
+	rVector3 pos = camera->GetPosition();
+	rVector3 tar = camera->GetTarget();
 
 	ruiText* cameraPos = (ruiText*)_document->GetWidgetById("camera-pos");
 	

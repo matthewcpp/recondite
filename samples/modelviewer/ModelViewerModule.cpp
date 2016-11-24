@@ -1,6 +1,6 @@
 #include "ModelViewerModule.hpp"
 #include "ModelViewerController.hpp"
-#include "rDemoCamera.hpp"
+#include "ModelViewerCamera.hpp"
 
 #include "rCamera.hpp"
 #include "rProp.hpp"
@@ -20,7 +20,7 @@ rViewport* CreateView(Model* model, rEngine* engine) {
 	rVector3 center = boundingBox.Center();
 
 	recondite::Camera* camera = new recondite::Camera();
-	rDemoCamera* demoCamera = new rDemoCamera(camera, "main_camera", engine);
+	ModelViewerCamera* demoCamera = new ModelViewerCamera(camera, "main_camera", engine);
 	engine->scene->AddActor(demoCamera);
 	mainViewport->SetCamera(camera);
 

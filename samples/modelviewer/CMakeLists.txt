@@ -11,8 +11,8 @@ list(APPEND modelviewer_files ${CMAKE_CURRENT_SOURCE_DIR}/ModelViewerModule.cpp)
 
 list(APPEND modelviewer_files ${CMAKE_CURRENT_SOURCE_DIR}/ModelViewerSettings.hpp)
 
-list(APPEND modelviewer_files ${CMAKE_CURRENT_SOURCE_DIR}/rDemoCamera.hpp)
-list(APPEND modelviewer_files ${CMAKE_CURRENT_SOURCE_DIR}/rDemoCamera.cpp)
+list(APPEND modelviewer_files ${CMAKE_CURRENT_SOURCE_DIR}/ModelViewerCamera.hpp)
+list(APPEND modelviewer_files ${CMAKE_CURRENT_SOURCE_DIR}/ModelViewerCamera.cpp)
 
 list(APPEND layout_files ${CMAKE_CURRENT_SOURCE_DIR}/modelviewer/modelviewer.xml)
 list(APPEND layout_files ${CMAKE_CURRENT_SOURCE_DIR}/modelviewer/modelviewer.css)

@@ -14,9 +14,10 @@
 
 #include "rLine3.hpp"
 
-#include "interface/riCamera.hpp"
-
 #include "rFrustrum.hpp"
+#include "rVector3.hpp"
+
+#include "rCamera.hpp"
 
 enum rViewportType{
 	rVIEWPORT_PERSP,
@@ -30,8 +31,8 @@ public:
 
 	int GetSelectionRay(const rPoint& pos , rRay3& selectionRay) const;
 
-	riCamera* Camera() const;
-	void SetCamera(riCamera* camera);
+	recondite::Camera* Camera() const;
+	void SetCamera(recondite::Camera* camera);
 	
 	void SetViewportType(rViewportType type);
 	rViewportType ViewportType() const;
@@ -71,7 +72,7 @@ public:
 private:
 	rViewportType m_type;
 	rRect m_rect;
-	riCamera* m_camera;
+	recondite::Camera* m_camera;
 
 	rString m_name;
 	

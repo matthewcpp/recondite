@@ -1,12 +1,13 @@
 #include "rwxGLCanvas.hpp"
 
-rwxGLCanvas::rwxGLCanvas(rwxComponent* component, rCamera* camera, const wxString& name, wxWindow *parent, wxWindowID id)
+rwxGLCanvas::rwxGLCanvas(rwxComponent* component, const wxString& name, wxWindow *parent, wxWindowID id)
 	:wxGLCanvas(parent, id, 0, wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE)
 {
 	m_component = component;
 	m_name = name;
 	m_viewport = nullptr;
-	m_camera = camera;
+	m_camera = new recondite::Camera();
+	m_camera->SetPosition(rVector3(0, 0, 10));
 
 	Bind(wxEVT_PAINT, &rwxGLCanvas::OnPaint, this);
 }
@@ -36,15 +37,10 @@ void rwxGLCanvas::CreateViewport(){
 	m_viewport->SetCamera(m_camera);
 }
 
-void rwxGLCanvas::SetCamera(rCamera* camera){
-	m_camera = camera;
-	m_viewport->SetCamera(m_camera);
-}
-
 rViewport* rwxGLCanvas::GetViewport(){
 	return m_viewport;
 }
 
-rCamera* rwxGLCanvas::GetCamera(){
+recondite::Camera* rwxGLCanvas::GetCamera(){
 	return m_camera;
 }

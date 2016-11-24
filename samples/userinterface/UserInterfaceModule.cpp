@@ -28,8 +28,8 @@ void UserInterfaceModule::Init(const rArrayString& args) {
 	_engine->ui->RegisterControllerClass("UserInterfaceController", &CreateUiController, &DeleteUiController);
 	rViewport* mainViewport = _engine->component->CreateViewport("main");
 
-	rCamera* camera = new rCamera("main", _engine);
-	camera->SetPosition(0, 6, 10);
+	recondite::Camera* camera = new recondite::Camera();
+	camera->SetPosition(rVector3(0, 6, 10));
 	camera->SetTarget(rVector3::ZeroVector);
 	mainViewport->SetCamera(camera);
 

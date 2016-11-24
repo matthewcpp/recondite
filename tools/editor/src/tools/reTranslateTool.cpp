@@ -116,7 +116,7 @@ void reTranslateTool::SetDragPlaneFromSelectedAxis(){
 }
 
 bool reTranslateTool::GetWorldSpaceDragPosition(rwxGLCanvas* canvas, rVector3& result){
-	rCamera* camera = canvas->GetCamera();
+	recondite::Camera* camera = canvas->GetCamera();
 	rViewport* viewport = canvas->GetViewport();
 
 	rPoint pt(m_currentPoint.x, m_currentPoint.y);

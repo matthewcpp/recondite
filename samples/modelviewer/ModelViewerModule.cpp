@@ -19,15 +19,16 @@ rViewport* CreateView(Model* model, rEngine* engine) {
 	rAlignedBox3 boundingBox = model->GetBoundingBox();
 	rVector3 center = boundingBox.Center();
 
-	rDemoCamera* camera = new rDemoCamera("main_camera", engine);
-	engine->scene->AddActor(camera);
+	recondite::Camera* camera = new recondite::Camera();
+	rDemoCamera* demoCamera = new rDemoCamera(camera, "main_camera", engine);
+	engine->scene->AddActor(demoCamera);
 	mainViewport->SetCamera(camera);
 
 	//set up decent clipping values
 	rAlignedBox3 box = model->GetBoundingBox();
 	
 	float diagonal = box.min.Distance(box.max);
-	camera->Reset(center, diagonal * 3, 0, 0);
+	demoCamera->Reset(center, diagonal * 3, 0, 0);
 
 	mainViewport->SetFarClip(diagonal * 10);
 
@@ -157,4 +158,5 @@ void ModelViewerModule::BeforeRenderUi(rViewport* viewport) {
 		}
 	}
 }
+
 

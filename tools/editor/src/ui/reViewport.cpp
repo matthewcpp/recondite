@@ -17,13 +17,7 @@ reViewport::reViewport(reComponent* component, reToolManager* toolManager, reVie
 }
 
 void reViewport::CreateViewportElements(){
-	wxString cameraName = m_viewportName + "_camera";
-	rCamera* camera = new rCamera(cameraName.c_str().AsChar(), m_component->GetEngine());
-	camera->SetPosition(0, 0, 10);
-
-	m_component->AddReservedActor(camera);
-
-	m_glCanvas = new rwxGLCanvas(m_component, camera, m_viewportName, this, s_nextCanvasId++);
+	m_glCanvas = new rwxGLCanvas(m_component, m_viewportName, this, s_nextCanvasId++);
 
 	m_viewMenuText = new wxStaticText(this, reViewportViewMenuId, "View");
 	m_viewMenuText->Bind(wxEVT_LEFT_DOWN, &reViewport::OnViewMenuClick, this);
@@ -144,23 +138,25 @@ void reViewport::OnViewMenuClick(wxMouseEvent& event){
 	m_viewMenuText->GetPopupMenuSelectionFromUser(m_viewMenu);
 }
 
+void reViewport::SetRenderMode(rRenderMode renderMode) {
+	m_glCanvas->GetViewport()->SetRenderMode(renderMode);
+	Refresh();
+}
+
 void reViewport::OnShadingMenuClick(wxMouseEvent& event){
 	int shadingMenuChoice = m_shadingMenuText->GetPopupMenuSelectionFromUser(m_shadingMenu);
-
+	
 	switch (shadingMenuChoice){
 	case reVIEWPORT_MENU_WIREFRAME:
-		m_glCanvas->GetViewport()->SetRenderMode(rRenderMode::Wireframe);
-		Refresh();
+		SetRenderMode(rRenderMode::Wireframe);
 		break;
 
 	case reVIEWPORT_MENU_SHADED:
-		m_glCanvas->GetViewport()->SetRenderMode(rRenderMode::Shaded);
-		Refresh();
+		SetRenderMode(rRenderMode::Shaded);
 		break;
 
 	case reVIEWPORT_MENU_WIREFRAME_ON_SHADED:
-		m_glCanvas->GetViewport()->SetRenderMode(rRenderMode::WireframeOnShaded);
-		Refresh();
+		SetRenderMode(rRenderMode::WireframeOnShaded);
 		break;
 	}
 }
@@ -208,6 +204,59 @@ void reViewport::SetViewportIsMaximized(bool maximized){
 
 void reViewport::DisableInputTimer() {
 	s_inputTimer->Stop();
+}
+
+void reViewport::SetViewOrientation(reViewOrientation viewOrientation) {
+	rAlignedBox3 sceneBounding = m_component->GetScene()->GetBounding();
+	SetViewOrientation(viewOrientation, sceneBounding);
+}
+
+void reViewport::SetViewOrientation(reViewOrientation viewOrientation, const rAlignedBox3& bounding) {
+	rVector3 center = bounding.Center();
+	float distance = bounding.max.Distance(bounding.min) / 2;
+	
+	
+	recondite::Camera* camera = m_glCanvas->GetCamera();
+	rVector3 position;
+	rVector3 up = rVector3::UpVector;
+	rVector3 target = center;
+
+	switch (viewOrientation) {
+		case reViewOrientation::Top:
+			position.Set(center.x, bounding.max.y + distance, center.z);
+			up = rVector3::RightVector;
+			break;
+
+		case reViewOrientation::Bottom:
+			position.Set(center.x, bounding.min.y - distance, center.z);
+			up = rVector3::RightVector;
+			break;
+
+		case reViewOrientation::Right:
+			position.Set(bounding.max.x + distance, center.y, center.z);
+			break;
+
+		case reViewOrientation::Left:
+			position.Set(bounding.min.x - distance, center.y, center.z);
+			break;
+
+		case reViewOrientation::Front:
+			position.Set(center.x, center.y, bounding.max.z + distance);
+			break;
+
+		case reViewOrientation::Back:
+			position.Set(center.x, center.y, bounding.min.z - distance);
+			break;
+
+		case reViewOrientation::Iso: {
+			position = bounding.max;
+			break;
+		}
+	};
+
+	camera->SetPosition(position);
+	camera->SetTarget(target);
+	camera->SetUp(up);
 }
 
 wxTimer* reViewport::s_inputTimer = nullptr;

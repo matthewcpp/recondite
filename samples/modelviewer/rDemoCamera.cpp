@@ -1,11 +1,14 @@
 #include "rDemoCamera.hpp"
 
-rDemoCamera::rDemoCamera(const rString& name , rEngine* engine)
-	:rCamera(name, engine)
+rDemoCamera::rDemoCamera(recondite::Camera* camera, const rString& name , rEngine* engine)
+	:rActor3(name, engine)
 {
+	m_camera = camera;
 	m_orbitSpeed = 180.0f;
 	m_panSpeed = 10.0;
 	m_dragging = false;
+
+	m_cameraAngle = rVector3::ZeroVector;
 
 	m_lastWheelValue = INT_MIN;
 	m_pinchAmount = 0.0f;
@@ -147,41 +150,43 @@ void rDemoCamera::DoPan(const rPoint& position, float timeDelta) {
 }
 
 void rDemoCamera::Reset(const rVector3 target, float radius, float yaw, float roll) {
-	m_target = target;
+	m_camera->SetTarget(target);
 	m_radius = radius;
 	m_distance = radius;
-	m_rotation.y = yaw;
-	m_rotation.x = roll;
+	m_cameraAngle.y = yaw;
+	m_cameraAngle.x = roll;
 
 	UpdatePosition();
 }
 
 void rDemoCamera::UpdatePosition() {
-	rQuaternion xform(m_rotation);
-	rVector3 cameraVector = rVector3::ForwardVector;
+	rQuaternion xform(m_cameraAngle);
+	rVector3 cameraVector = rVector3::BackwardVector;
 	xform.TransformVector3(cameraVector);
+	rQuaternion::ToEuler(xform, m_rotation);
+
 	cameraVector *= m_distance;
-	m_position = m_target + cameraVector;
+	m_camera->SetPosition(m_camera->GetTarget() + cameraVector);
 
 	m_needsUpdate = false;
 }
 
 void rDemoCamera::SetYaw(float yaw) {
-	m_rotation.y = yaw;
+	m_cameraAngle.y = yaw;
 	m_needsUpdate = true;
 }
 
 float rDemoCamera::Yaw() const {
-	return m_rotation.y;
+	return m_cameraAngle.y;
 }
 
 void rDemoCamera::SetRoll(float roll) {
-	m_rotation.x = roll;
+	m_cameraAngle.x = roll;
 	m_needsUpdate = true;
 }
 
 float rDemoCamera::Roll() const {
-	return m_rotation.x;
+	return m_cameraAngle.x;
 }
 
 float rDemoCamera::Radius() const {
@@ -218,10 +223,14 @@ void rDemoCamera::MoveFartherAway() {
 }
 
 void rDemoCamera::SetTarget(const rVector3& target) {
-	m_target = target;
+	m_camera->SetTarget(target);
 	m_needsUpdate = true;
 }
 
 rVector3 rDemoCamera::Target() const {
-	return m_target;
+	return m_camera->GetTarget();
+}
+
+rString rDemoCamera::ClassName() const {
+	return "Temp";
 }

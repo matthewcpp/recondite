@@ -6,7 +6,7 @@ rViewport::rViewport(const rString& name, rViewportType type){
 	
 	m_rect.Set(0,0,0,0);
 	m_name = name;
-	SetClipping(1.0f, 100.0f);
+	SetClipping(0.2f, 5000.0f);
 	m_fovY = 45.0f;
 
 	m_renderMode = rRenderMode::Shaded;
@@ -79,7 +79,7 @@ void rViewport::GetProjectionMatrix(rMatrix4& matrix) const{
 
 void rViewport::GetViewMatrix(rMatrix4& matrix) const{
 	if (m_camera)
-		rMatrixUtil::LookAt(m_camera->Position(), m_camera->Target(), m_camera->Up(), matrix);
+		rMatrixUtil::LookAt(m_camera->GetPosition(), m_camera->GetTarget(), m_camera->GetUp(), matrix);
 }
 
 void rViewport::GetViewProjectionMatrix(rMatrix4& matrix) const{
@@ -91,11 +91,11 @@ void rViewport::GetViewProjectionMatrix(rMatrix4& matrix) const{
 	matrix = projection * view;
 }
 
-riCamera* rViewport::Camera() const{
+recondite::Camera* rViewport::Camera() const{
 	return m_camera;
 }
 
-void rViewport::SetCamera(riCamera* camera){
+void rViewport::SetCamera(recondite::Camera* camera){
 	m_camera = camera;
 }
 

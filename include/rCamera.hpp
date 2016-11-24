@@ -1,26 +1,50 @@
-#ifndef R_CAMERA_HPP
-#define R_CAMERA_HPP
+#pragma once
 
 #include "rBuild.hpp"
-#include "rActor3.hpp"
+#include "rVector3.hpp"
 
-#include "interface/riCamera.hpp"
-#include "rMathUtil.hpp"
+namespace recondite {
+	class Camera {
+	public:
+		Camera() :
+			m_position(rVector3::ZeroVector), m_target(rVector3::ForwardVector), m_up(rVector3::UpVector) {}
 
-class RECONDITE_API rCamera : public rActor3, public riCamera{
-public:
-	rCamera(const rString& id , rEngine* engine);
+		inline void SetPosition(const rVector3& position);
+		inline rVector3 GetPosition() const;
 
-	virtual rVector3 Position() const;
-	virtual rVector3 Up() const;
+		inline void SetTarget(const rVector3& target);
+		inline rVector3 GetTarget() const;
 
-	rVector3 Target() const;
-	void SetTarget(const rVector3& target);
-	virtual rString ClassName() const;
+		inline void SetUp(const rVector3& up);
+		inline rVector3 GetUp() const;
 
-protected:
+	private:
+		rVector3 m_position;
+		rVector3 m_target;
+		rVector3 m_up;
+	};
 
-	rVector3 m_target;
-};
+	inline void Camera::SetPosition(const rVector3& position) {
+		m_position = position;
+	}
 
-#endif
+	inline rVector3 Camera::GetPosition() const {
+		return m_position;
+	}
+
+	inline void Camera::SetTarget(const rVector3& target) {
+		m_target = target;
+	}
+
+	inline rVector3 Camera::GetTarget() const {
+		return m_target;
+	}
+
+	inline void Camera::SetUp(const rVector3& up) {
+		m_up = up;
+	}
+
+	inline rVector3 Camera::GetUp() const {
+		return m_up;
+	}
+}

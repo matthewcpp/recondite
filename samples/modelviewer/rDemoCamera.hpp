@@ -7,9 +7,11 @@
 #include "rCamera.hpp"
 #include "rPoint.hpp"
 
-class rDemoCamera : public rCamera{
+#include "rActor3.hpp"
+
+class rDemoCamera: public rActor3{
 public:
-	rDemoCamera(const rString& name, rEngine* engine);
+	rDemoCamera(recondite::Camera* camera, const rString& name, rEngine* engine);
 
 	virtual int Update() override;
 
@@ -40,6 +42,8 @@ public:
 	virtual void SetTarget(const rVector3& target);
 	virtual rVector3 Target() const;
 
+	virtual rString ClassName() const;
+
 private:
 	int CalculateZoomDirection(int wheelValue);
 
@@ -64,6 +68,9 @@ private:
 	float m_distance;
 
 	bool m_needsUpdate;
+
+	rVector3 m_cameraAngle;
+	recondite::Camera* m_camera;
 };
 
 #endif

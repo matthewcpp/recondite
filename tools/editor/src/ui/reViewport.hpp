@@ -24,6 +24,16 @@ enum reViewportMenuId{
 	reVIEWPORT_MENU_WIREFRAME_ON_SHADED
 };
 
+enum class reViewOrientation {
+	Front,
+	Back,
+	Left,
+	Right,
+	Top,
+	Bottom,
+	Iso
+};
+
 class reViewport : public wxPanel{
 public:
 	reViewport(reComponent* component, reToolManager* toolManager, reViewportManager* viewportManager, const wxString& name, wxWindow *parent, wxWindowID id = wxID_ANY);
@@ -36,6 +46,10 @@ public:
 	rwxGLCanvas* GetCanvas();
 
 	static void DisableInputTimer();
+
+	void SetViewOrientation(reViewOrientation viewOrientation);
+	void SetViewOrientation(reViewOrientation viewOrientation, const rAlignedBox3& bounding);
+	void SetRenderMode(rRenderMode renderMode);
 
 private:
 	void CreateViewportElements();

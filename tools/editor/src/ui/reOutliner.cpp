@@ -16,9 +16,16 @@ reOutliner::reOutliner(reComponent* component, rePropertyInspector* propertyInsp
 }
 
 void reOutliner::OnItemSelected(wxDataViewEvent& event){
-	wxString itemName = GetItemText(event.GetItem());
+	wxDataViewItem item = event.GetItem();
 
-	m_component->SelectionManager()->Select(itemName);
+	if (item.IsOk()){
+		wxString itemName = GetItemText(item);
+		m_component->SelectionManager()->Select(itemName);
+		m_component->GetViewportManager()->UpdateAllViewports();
+	}
+	else {
+		event.Veto();
+	}
 }
 
 void reOutliner::OnActorAddedToScene(rEvent& event){

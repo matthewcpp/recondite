@@ -6,6 +6,8 @@ reMainFrame::reMainFrame(reComponent* component, const wxString& title, const wx
 	m_component = component;
 
 	CreateUIElements();
+
+	m_component->SetViewportManager(m_viewportDisplay);
 }
 
 void reMainFrame::CreateUIElements(){

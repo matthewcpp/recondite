@@ -1,12 +1,11 @@
 #ifndef RE_VIEWPORTDISPLAY_HPP
 #define RE_VIEWPORTDISPLAY_HPP
 
-#include "project/reComponent.hpp"
-
-#include "reViewport.hpp"
-
 #include <wx/wx.h>
 #include <wx/splitter.h>
+
+#include "project/reComponent.hpp"
+#include "ui/reViewport.hpp"
 
 #include "tools/reToolManager.hpp"
 #include "rePaletteDropTarget.hpp"
@@ -20,7 +19,7 @@ public:
 	reViewport* GetActiveViewport();
 
 	virtual void UpdateAllViewports();
-	virtual void MaximizeViewport(reViewport* viewport);
+	virtual void MaximizeViewport(int id);
 	virtual void RestoreViewports();
 
 	void SetDefaultViewOrientations();

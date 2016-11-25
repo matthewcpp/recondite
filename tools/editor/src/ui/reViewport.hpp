@@ -13,14 +13,6 @@
 
 #include "controllers/reCameraController.hpp"
 
-class reViewport;
-class reViewportManager {
-public:
-	virtual void UpdateAllViewports() = 0;
-	virtual void MaximizeViewport(reViewport* viewport) = 0;
-	virtual void RestoreViewports() = 0;
-};
-
 enum reViewportMenuId{
 	reVIEWPORT_MENU_WIREFRAME = 10000,
 	reVIEWPORT_MENU_SHADED,

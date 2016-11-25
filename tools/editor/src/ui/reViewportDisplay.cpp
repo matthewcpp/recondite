@@ -135,24 +135,24 @@ void reViewportDisplay::OnCommandProcessed(rEvent& event){
 	UpdateAllViewports();
 }
 
-void reViewportDisplay::MaximizeViewport(reViewport* viewport){
+void reViewportDisplay::MaximizeViewport(int id){
 	if (m_isMaximized) return;
 
 	SaveViewportLayout();
 
-	if (viewport == m_topLeftViewport){
+	if (id == m_topLeftViewport->GetCanvas()->GetId()){
 		m_leftSplitter->Unsplit(m_bottomLeftViewport);
 		m_mainSplitter->Unsplit(m_rightSplitter);
 	}
-	else if (viewport == m_bottomLeftViewport){
+	else if (id == m_bottomLeftViewport->GetCanvas()->GetId()){
 		m_leftSplitter->Unsplit(m_topLeftViewport);
 		m_mainSplitter->Unsplit(m_rightSplitter);
 	}
-	else if (viewport == m_topRightViewport){
+	else if (id == m_topRightViewport->GetCanvas()->GetId()){
 		m_rightSplitter->Unsplit(m_bottomRightViewport);
 		m_mainSplitter->Unsplit(m_leftSplitter);
 	}
-	else if (viewport == m_bottomRightViewport){
+	else if (id == m_bottomRightViewport->GetCanvas()->GetId()){
 		m_rightSplitter->Unsplit(m_topRightViewport);
 		m_mainSplitter->Unsplit(m_leftSplitter);
 	}

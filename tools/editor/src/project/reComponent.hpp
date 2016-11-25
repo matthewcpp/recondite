@@ -12,7 +12,12 @@
 #include "reSelectionManager.hpp"
 #include "reProject.hpp"
 
-#include "primitive/rPrimitiveGrid.hpp"
+class reViewportManager {
+public:
+	virtual void UpdateAllViewports() = 0;
+	virtual void MaximizeViewport(int id) = 0;
+	virtual void RestoreViewports() = 0;
+};
 
 enum reComponentEvent{
 	reCommandProcessed = 7000,
@@ -33,6 +38,7 @@ enum class reViewOrientation {
 class reComponent : public rwxComponent{
 public:
 	reComponent();
+
 	reSelectionManager* SelectionManager();
 	reProject* GetProject();
 
@@ -47,6 +53,9 @@ public:
 	virtual void ClearScene() override;
 	virtual void AfterSceneRendered(rViewport* viewport) override;
 
+	void SetViewportManager(reViewportManager* viewportManager);
+	reViewportManager* GetViewportManager();
+
 	void AddReservedActor(rActor3* actor);
 	bool IsReservedActor(const rString& id);
 
@@ -57,6 +66,7 @@ private:
 	std::unique_ptr<reSelectionManager> m_selectionManager;
 	std::unique_ptr<reProject> m_project;
 	std::set<rString> m_reservedActors;
+	reViewportManager* m_viewportManager;
 
 	wxCommandProcessor m_commandProcessor;
 };

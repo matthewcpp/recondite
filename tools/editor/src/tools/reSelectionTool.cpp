@@ -20,7 +20,7 @@ bool reSelectionTool::OnMouseUp(wxMouseEvent& event, rwxGLCanvas* canvas){
 			return DoActorSelection(actor, event);
 		}
 		else{
-			DoClearSelection();
+			return DoClearSelection();
 		}
 	}
 

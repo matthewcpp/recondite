@@ -2,11 +2,9 @@
 #define RE_SELECTIONMANAGER_HPP
 
 #include <map>
-
-#include "rwxComponent.hpp"
-
 #include <wx/wx.h>
 
+#include "rwxComponent.hpp"
 #include "rEventHandler.hpp"
 
 class reSelectionEvent : public rEvent{

@@ -88,3 +88,11 @@ bool reComponent::Init(wxGLCanvas* canvas){
 void reComponent::AfterSceneRendered(rViewport* viewport){
 	m_selectionManager->RenderSelection();
 }
+
+void reComponent::SetViewportManager(reViewportManager* viewportManager) {
+	m_viewportManager = viewportManager;
+}
+
+reViewportManager* reComponent::GetViewportManager() {
+	return m_viewportManager;
+}

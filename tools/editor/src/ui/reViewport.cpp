@@ -190,7 +190,7 @@ void reViewport::OnMinMaxButtonPress(wxCommandEvent& event){
 		SetViewportIsMaximized(false);
 	}
 	else{
-		m_viewportManager->MaximizeViewport(this);
+		m_viewportManager->MaximizeViewport(m_glCanvas->GetId());
 		SetViewportIsMaximized(true);
 	}
 	

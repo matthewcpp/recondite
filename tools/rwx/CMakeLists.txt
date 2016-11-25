@@ -9,9 +9,6 @@ list(APPEND rwx_files ${CMAKE_CURRENT_SOURCE_DIR}/rwxGLCanvas.cpp)
 list(APPEND rwx_files ${CMAKE_CURRENT_SOURCE_DIR}/rwxOpenGLGraphicsDevice.hpp)
 list(APPEND rwx_files ${CMAKE_CURRENT_SOURCE_DIR}/rwxOpenGLGraphicsDevice.cpp)
 
-list(APPEND rwx_files ${CMAKE_CURRENT_SOURCE_DIR}/rwxViewCameraInteraction.hpp)
-list(APPEND rwx_files ${CMAKE_CURRENT_SOURCE_DIR}/rwxViewCameraInteraction.cpp)
-
 add_library( rwx SHARED ${rwx_files})
 
 add_definitions(-DWXUSINGDLL)

@@ -48,13 +48,6 @@ public:
 
 	rPropertyCollection& CustomProperties();
 
-	void MoveForward(float amount);
-	void MoveBackward(float amount);
-	void MoveLeft(float amount);
-	void MoveRight(float amount);
-	void MoveUp(float amount);
-	void MoveDown(float amount);
-
 	rVector3 Forward() const;
 	rVector3 Backward() const;
 	rVector3 Left() const;

@@ -113,6 +113,19 @@ void rScene::Clear(){
 	m_actors.clear();
 }
 
+rAlignedBox3 rScene::GetBounding() {
+	rAlignedBox3 bounding;
+	rActorMap::iterator end = m_actors.end();
+
+	for (rActorMap::iterator it = m_actors.begin(); it != end; ++it) {
+		riBoundingVolume* boundingVolume = it->second->BoundingVolume();
+		if (boundingVolume) bounding.AddBox(boundingVolume->FitBox());
+	}
+
+	return bounding;
+}
+
+
 size_t rScene::NumActors () const{
 	return m_actors.size();
 }

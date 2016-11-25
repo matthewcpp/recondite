@@ -143,6 +143,10 @@ void rAlignedBox3::Empty(){
 	*this = rAlignedBox3::NullBox;
 }
 
+rVector3 rAlignedBox3::Extent() const {
+	return max - min;
+}
+
 void rAlignedBox3::Invalidate(){
 	max.Set(-FLT_MAX, -FLT_MAX, -FLT_MAX);
 	min.Set(FLT_MAX, FLT_MAX, FLT_MAX);

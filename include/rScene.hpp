@@ -55,6 +55,8 @@ public:
 
 	bool IsLoading() const;
 
+	rAlignedBox3 GetBounding();
+
 private:
 
 	typedef std::map<rString, rActor3*> rActorMap;

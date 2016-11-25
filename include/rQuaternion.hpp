@@ -23,11 +23,16 @@ struct RECONDITE_API rQuaternion{
 	void TransformVector3(rVector3& v) const;
 	rVector3 GetTransformedVector3(const rVector3& v) const;
 
+	rQuaternion operator* (const rQuaternion& q);
+	
+
 	float Length() const;
 	float LengthSquared() const;
 
 	void Normalize();
 
+	static rQuaternion CreateRotationFromVectors(const rVector3& v1, const rVector3& v2);
+	static void ToEuler(const rQuaternion& q1, rVector3& v);
 	static rQuaternion Slerp(const rQuaternion& q1 , const rQuaternion& q2, float t);
 
 	bool operator==(const rQuaternion& q) const;

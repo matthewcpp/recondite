@@ -23,6 +23,8 @@ public:
 	virtual void MaximizeViewport(reViewport* viewport);
 	virtual void RestoreViewports();
 
+	void SetDefaultViewOrientations();
+
 private:
 	void OnComponentInitialized(rEvent& event);
 	void OnDisplayShouldUpdate(rEvent& event);
@@ -30,6 +32,7 @@ private:
 
 	void BindCanvasEvents(rwxGLCanvas* canvas);
 	void OnViewportActivate(wxMouseEvent& event);
+	void OnSceneLoadComplete(rEvent& event);
 
 private:
 	void CreateViewportDisplay();

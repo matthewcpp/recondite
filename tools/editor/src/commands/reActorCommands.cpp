@@ -48,11 +48,11 @@ bool reDeleteActorCommand::Do() {
 
 	rScene* scene = m_component->GetScene();
 
+	m_component->SelectionManager()->ClearSelection();
+
 	for (size_t i = 0; i < m_actorList.size(); i++){
 		scene->DeleteActor(m_actorList[i].c_str().AsChar());
 	}
-
-	m_component->SelectionManager()->ClearSelection();
 
 	return true;
 }

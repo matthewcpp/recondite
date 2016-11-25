@@ -87,7 +87,31 @@ void rQuaternion::Normalize(){
 	w /= l;
 }
 
-//based on code from euclideanspace.com
+void rQuaternion::ToEuler(const rQuaternion& q1, rVector3& v) {
+	double sqw = q1.w*q1.w;
+	double sqx = q1.x*q1.x;
+	double sqy = q1.y*q1.y;
+	double sqz = q1.z*q1.z;
+	double unit = sqx + sqy + sqz + sqw; // if normalised is one, otherwise is correction factor
+	double test = q1.x*q1.y + q1.z*q1.w;
+
+	if (test > 0.499*unit) { // singularity at north pole
+		v.y = 2 * std::atan2(q1.x, q1.w);
+		v.z = M_PI / 2;
+		v.x = 0;
+		return;
+	}
+	if (test < -0.499*unit) { // singularity at south pole
+		v.y = -2 * std::atan2(q1.x, q1.w);
+		v.z = -M_PI / 2;
+		v.x = 0;
+		return;
+	}
+
+	v.y = atan2(2 * q1.y*q1.w - 2 * q1.x*q1.z, sqx - sqy - sqz + sqw);
+	v.z = asin(2 * test / unit);
+	v.x = atan2(2 * q1.x*q1.w - 2 * q1.y*q1.z, -sqx + sqy - sqz + sqw);
+}
 
 rQuaternion rQuaternion::Slerp(const rQuaternion& pStart , const rQuaternion& pEnd, float pFactor){
 	{
@@ -131,6 +155,29 @@ rQuaternion rQuaternion::Slerp(const rQuaternion& pStart , const rQuaternion& pE
 
 		return pOut;
 	}
+}
+
+rQuaternion rQuaternion::operator* (const rQuaternion& q) {
+	// NOTE:  Multiplication is not generally commutative, so in most
+	// cases p*q != q*p.
+
+	return rQuaternion
+	(
+		w * q.w - x * q.x - y * q.y - z * q.z,
+		w * q.x + x * q.w + y * q.z - z * q.y,
+		w * q.y + y * q.w + z * q.x - x * q.z,
+		w * q.z + z * q.w + x * q.y - y * q.x
+	);
+}
+
+rQuaternion rQuaternion::CreateRotationFromVectors(const rVector3& v1, const rVector3& v2) {
+	rVector3 v1n = v1.GetNormalized();
+	rVector3 v2n = v2.GetNormalized();
+
+	rVector3 rotationAxis = v1n.Cross(v2n);
+	float angle = std::acos(v1n.Dot(v2n));
+
+	return rQuaternion(rotationAxis, angle);
 }
 
 bool rQuaternion::operator==(const rQuaternion& q) const{

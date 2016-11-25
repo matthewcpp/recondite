@@ -19,48 +19,6 @@ int rActor3::Update(){
 void rActor3::Draw(){
 }
 
-void rActor3::MoveForward(float amount){
-	rVector3 forward = Forward();
-	forward *= amount;
-	m_position += forward;
-	SetTransformed(true);
-}
-
-void rActor3::MoveBackward(float amount){
-	rVector3 backward = Backward();
-	backward *= amount;
-	m_position += backward;
-	SetTransformed(true);
-}
-
-void rActor3::MoveLeft(float amount){
-	rVector3 left = Left();
-	left *= amount;
-	m_position += left;
-	SetTransformed(true);
-}
-
-void rActor3::MoveRight(float amount){
-	rVector3 right = Right();
-	right *= amount;
-	m_position += right;
-	SetTransformed(true);
-}
-
-void rActor3::MoveUp(float amount){
-	rVector3 up = Up();
-	up *= amount;
-	m_position += up;
-	SetTransformed(true);
-}
-
-void rActor3::MoveDown(float amount){
-	rVector3 down = Down();
-	down *= amount;
-	m_position += down;
-	SetTransformed(true);
-}
-
 rVector3 rActor3::Forward() const{
 	rVector3 forward = rVector3::ForwardVector;
 	rQuaternion q(m_rotation);

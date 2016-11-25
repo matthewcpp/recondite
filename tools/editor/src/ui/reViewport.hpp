@@ -1,6 +1,8 @@
 #ifndef RE_VIEWPORT_HPP
 #define RE_VIEWPORT_HPP
 
+#include <memory>
+
 #include "project/reComponent.hpp"
 
 #include "rwxGLCanvas.hpp"
@@ -8,7 +10,8 @@
 #include <wx/timer.h>
 
 #include "tools/reToolManager.hpp"
-#include "rwxViewCameraInteraction.hpp"
+
+#include "controllers/reCameraController.hpp"
 
 class reViewport;
 class reViewportManager {
@@ -22,16 +25,6 @@ enum reViewportMenuId{
 	reVIEWPORT_MENU_WIREFRAME = 10000,
 	reVIEWPORT_MENU_SHADED,
 	reVIEWPORT_MENU_WIREFRAME_ON_SHADED
-};
-
-enum class reViewOrientation {
-	Front,
-	Back,
-	Left,
-	Right,
-	Top,
-	Bottom,
-	Iso
 };
 
 class reViewport : public wxPanel{
@@ -94,7 +87,7 @@ private:
 	static wxTimer* s_inputTimer;
 	static wxWindowID s_nextCanvasId;
 
-	std::unique_ptr<rwxViewCameraInteraction> m_interaction;
+	std::unique_ptr<reCameraController> m_cameraController;
 };
 
 #endif

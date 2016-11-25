@@ -40,6 +40,8 @@ struct RECONDITE_API rAlignedBox3{
 	rVector3 Center() const;
 	void SetCenter(const rVector3& center);
 
+	rVector3 Extent() const;
+
 	rVector3 max;
 	rVector3 min;
 

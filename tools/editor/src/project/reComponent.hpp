@@ -20,6 +20,16 @@ enum reComponentEvent{
 	reExternalPropertyChange
 };
 
+enum class reViewOrientation {
+	Front,
+	Back,
+	Left,
+	Right,
+	Top,
+	Bottom,
+	User
+};
+
 class reComponent : public rwxComponent{
 public:
 	reComponent();

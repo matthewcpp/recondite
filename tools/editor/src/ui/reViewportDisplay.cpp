@@ -91,7 +91,7 @@ void reViewportDisplay::OnComponentInitialized(rEvent& event){
 
 	scene->Bind(rEVT_SCENE_ACTOR_ADDED, this, &reViewportDisplay::OnDisplayShouldUpdate);
 	scene->Bind(rEVT_SCENE_ACTOR_REMOVED, this, &reViewportDisplay::OnDisplayShouldUpdate);
-	scene->Bind(rEVT_SCENE_LOAD_END, this, &reViewportDisplay::OnDisplayShouldUpdate);
+	scene->Bind(rEVT_SCENE_LOAD_END, this, &reViewportDisplay::OnSceneLoadComplete);
 
 	m_component->Bind(reCommandProcessed, this, &reViewportDisplay::OnCommandProcessed);
 
@@ -99,6 +99,25 @@ void reViewportDisplay::OnComponentInitialized(rEvent& event){
 	BindCanvasEvents(m_topRightViewport->GetCanvas());
 	BindCanvasEvents(m_bottomLeftViewport->GetCanvas());
 	BindCanvasEvents(m_bottomRightViewport->GetCanvas());
+}
+
+void reViewportDisplay::SetDefaultViewOrientations() {
+	rAlignedBox3 bounding = m_component->GetScene()->GetBounding();
+	m_topLeftViewport->SetViewOrientation(reViewOrientation::User, bounding);
+
+	m_topRightViewport->SetViewOrientation(reViewOrientation::Top, bounding);
+	m_topRightViewport->SetRenderMode(rRenderMode::Wireframe);
+
+	m_bottomLeftViewport->SetViewOrientation(reViewOrientation::Right, bounding);
+	m_bottomLeftViewport->SetRenderMode(rRenderMode::Wireframe);
+
+	m_bottomRightViewport->SetViewOrientation(reViewOrientation::Front, bounding);
+	m_bottomRightViewport->SetRenderMode(rRenderMode::Wireframe);
+}
+
+void reViewportDisplay::OnSceneLoadComplete(rEvent& event) {
+	SetDefaultViewOrientations();
+	UpdateAllViewports();
 }
 
 void reViewportDisplay::UpdateAllViewports(){

@@ -1,5 +1,8 @@
 #include "reViewport.hpp"
 
+#include "controllers/reCameraOrientationController.hpp"
+#include "controllers/reCameraUserController.hpp"
+
 reViewport::reViewport(reComponent* component, reToolManager* toolManager, reViewportManager* viewportManager, const wxString& name, wxWindow *parent, wxWindowID id)
 	:wxPanel(parent, id)
 {
@@ -49,7 +52,7 @@ void reViewport::CreateViewportElements(){
 }
 
 void reViewport::BindEvents(){
-	m_interaction.reset(new rwxViewCameraInteraction(m_glCanvas->GetCamera()));
+	m_cameraController.reset(new reCameraController(m_glCanvas->GetCamera(), m_component));
 
 	m_glCanvas->Bind(wxEVT_LEFT_DOWN, &reViewport::OnCanvasMouseEvent, this);
 	m_glCanvas->Bind(wxEVT_LEFT_UP, &reViewport::OnCanvasMouseEvent, this);
@@ -89,28 +92,28 @@ void reViewport::OnCanvasMouseEvent(wxMouseEvent& event){
 			m_viewportManager->UpdateAllViewports();
 		}
 		else{
-			if (m_interaction->OnMouseMotion(event))
+			if (m_cameraController->OnMouseMotion(event))
 				m_glCanvas->Refresh();
 		}
 	}
 	else if (eventType == wxEVT_MIDDLE_DOWN){
-		if (m_interaction->OnMiddleDown(event))
+		if (m_cameraController->OnMiddleDown(event))
 			m_glCanvas->Refresh();
 	}
 	else if (eventType == wxEVT_MIDDLE_UP){
-		if (m_interaction->OnMiddleUp(event))
+		if (m_cameraController->OnMiddleUp(event))
 			m_glCanvas->Refresh();
 	}
 	else if (eventType == wxEVT_RIGHT_DOWN){
-		if (m_interaction->OnRightDown(event))
+		if (m_cameraController->OnRightDown(event))
 			m_glCanvas->Refresh();
 	}
 	else if (eventType == wxEVT_RIGHT_UP){
-		if (m_interaction->OnRightUp(event))
+		if (m_cameraController->OnRightUp(event))
 			m_glCanvas->Refresh();
 	}
 	else if (eventType == wxEVT_MOUSEWHEEL){
-		if (m_interaction->OnMousewheel(event))
+		if (m_cameraController->OnMousewheel(event))
 			m_glCanvas->Refresh();
 	}
 }
@@ -166,7 +169,7 @@ wxString reViewport::GetViewportName(){
 }
 
 void reViewport::OnTimer(wxTimerEvent& event){
-	if (m_glCanvas->HasFocus() && m_interaction->UpdateKeyboardInteraction())
+	if (m_glCanvas->HasFocus() && m_cameraController->UpdateKeyboardInteraction())
 		m_glCanvas->Refresh();
 }
 
@@ -222,10 +225,10 @@ void reViewport::SetViewOrientation(reViewOrientation viewOrientation, const rAl
 	rVector3 target = center;
 
 	switch (viewOrientation) {
-		case reViewOrientation::Top:
-			position.Set(center.x, bounding.max.y + distance, center.z);
-			up = rVector3::RightVector;
-			break;
+	case reViewOrientation::Top: 
+		position.Set(center.x, bounding.max.y + distance, center.z);
+		up = rVector3::RightVector;
+		break;
 
 		case reViewOrientation::Bottom:
 			position.Set(center.x, bounding.min.y - distance, center.z);
@@ -248,8 +251,12 @@ void reViewport::SetViewOrientation(reViewOrientation viewOrientation, const rAl
 			position.Set(center.x, center.y, bounding.min.z - distance);
 			break;
 
-		case reViewOrientation::Iso: {
+		case reViewOrientation::User: {
 			position = bounding.max;
+			rVector3 forward = target - position;
+			forward.Normalize();
+			rVector3 right = forward.Cross(up);
+			up = right.Cross(forward);
 			break;
 		}
 	};
@@ -257,6 +264,11 @@ void reViewport::SetViewOrientation(reViewOrientation viewOrientation, const rAl
 	camera->SetPosition(position);
 	camera->SetTarget(target);
 	camera->SetUp(up);
+
+	if (viewOrientation != reViewOrientation::User)
+		m_cameraController.reset(new reCameraOrientationController(viewOrientation, m_glCanvas->GetCamera(), m_component));
+	else
+		m_cameraController.reset(new reCameraUserController(m_glCanvas->GetCamera(), m_component));
 }
 
 wxTimer* reViewport::s_inputTimer = nullptr;

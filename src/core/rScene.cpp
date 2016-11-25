@@ -194,17 +194,6 @@ rActor3* rScene::ViewportPick(const rString& viewportName, int x, int y){
 	return nullptr;
 }
 
-bool rScene::Save(riSerializationTarget* target, std::function<bool(rActor3*)> actorFilter){
-	riSerializationTarget* actorTarget = target->SubObject("actors");
-
-	for (auto& actor : m_actors){
-		if (actorFilter(actor.second))
-			actor.second->Save(actorTarget);
-	}
-
-	return true;
-}
-
 bool rScene::Save(riSerializationTarget* target){
 	riSerializationTarget* actorTarget = target->SubObject("actors");
 

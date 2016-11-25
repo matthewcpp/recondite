@@ -33,10 +33,8 @@ void reOutliner::OnActorAddedToScene(rEvent& event){
 
 	rString actorId = actorEvent.Actor()->Id();
 
-	if (!m_component->IsReservedActor(actorId)){
-		wxDataViewItem item = AppendItem(wxDataViewItem(0), actorId.c_str());
-		m_actorIdMap[actorId] = item;
-	}
+	wxDataViewItem item = AppendItem(wxDataViewItem(0), actorId.c_str());
+	m_actorIdMap[actorId] = item;
 }
 
 void reOutliner::OnActorRemovedFromScene(rEvent& event){
@@ -103,10 +101,8 @@ void reOutliner::OutlineLevel(){
 	m_component->GetScene()->GetActors(actorNames);
 
 	for (auto& actorId : actorNames) {
-		if (!m_component->IsReservedActor(actorId)) {
-			wxDataViewItem item = AppendItem(wxDataViewItem(0), actorId.c_str());
-			m_actorIdMap[actorId] = item;
-		}
+		wxDataViewItem item = AppendItem(wxDataViewItem(0), actorId.c_str());
+		m_actorIdMap[actorId] = item;
 	}
 }
 

@@ -50,27 +50,6 @@ void reComponent::InitCommandProcessor(wxMenu* editMenu){
 	m_commandProcessor.SetEditMenu(editMenu);
 }
 
-void reComponent::AddReservedActor(rActor3* actor){
-	m_reservedActors.insert(actor->Id());
-	m_scene->AddActor(actor);
-}
-
-bool reComponent::IsReservedActor(const rString& id){
-	return m_reservedActors.count(id) > 0;
-}
-
-bool reComponent::SaveScene(const rString& path){
-	return SaveSceneXML(path, [&](rActor3* actor)->bool {
-		return m_reservedActors.count(actor->Id()) == 0;
-	});
-}
-
-void reComponent::ClearScene(){
-	m_scene->DeleteActors([&](rActor3* actor)->bool {
-		return m_reservedActors.count(actor->Id()) == 0;
-	});
-}
-
 void reComponent::OnSceneLoad(rEvent& event){
 
 }

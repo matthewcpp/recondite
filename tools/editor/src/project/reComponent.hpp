@@ -49,15 +49,10 @@ public:
 	bool RedoCommand();
 	void InitCommandProcessor(wxMenu* editMenu);
 
-	virtual bool SaveScene(const rString& path) override;
-	virtual void ClearScene() override;
 	virtual void AfterSceneRendered(rViewport* viewport) override;
 
 	void SetViewportManager(reViewportManager* viewportManager);
 	reViewportManager* GetViewportManager();
-
-	void AddReservedActor(rActor3* actor);
-	bool IsReservedActor(const rString& id);
 
 private:
 	void OnSceneLoad(rEvent& event);
@@ -65,7 +60,6 @@ private:
 private:
 	std::unique_ptr<reSelectionManager> m_selectionManager;
 	std::unique_ptr<reProject> m_project;
-	std::set<rString> m_reservedActors;
 	reViewportManager* m_viewportManager;
 
 	wxCommandProcessor m_commandProcessor;

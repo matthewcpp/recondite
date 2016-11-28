@@ -13,7 +13,7 @@
 
 class ruiIDocument;
 
-class RECONDITE_API ruiWidget : public rObject, public ruiDefaultEventHandler{
+class RECONDITE_API ruiWidget : public ruiDefaultEventHandler{
 public:
 	ruiWidget(const rString& id, ruiIDocument* document, rEngine* engine);
 
@@ -51,6 +51,8 @@ public:
 	*/
 	void SetParent(ruiWidget* parent);
 
+	rString Id() const;
+
 protected: //style related utility methods
 	Font::Face* DetermineFont();
 
@@ -76,6 +78,8 @@ protected:
 
 	rPoint ContentPosition();
 	rPoint m_position;
+	rEngine* m_engine;
+	rString m_id;
 
 private:
 	ruiStyle m_style;

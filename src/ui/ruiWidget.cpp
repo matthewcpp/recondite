@@ -1,9 +1,9 @@
 #include "ui/ruiWidget.hpp"
 #include "ui/ruiDocument.hpp"
 
-ruiWidget::ruiWidget(const rString& id, ruiIDocument* document, rEngine* engine)
-	:rObject(id, engine)
-{
+ruiWidget::ruiWidget(const rString& id, ruiIDocument* document, rEngine* engine){
+	m_engine = engine;
+	m_id = id;
 	m_parent = nullptr;
 
 	m_document = document;
@@ -226,4 +226,8 @@ void ruiWidget::ChildUpdated(ruiWidget* child) {}
 
 void ruiWidget::SetParent(ruiWidget* parent) {
 	m_parent = parent;
+}
+
+rString ruiWidget::Id() const {
+	return m_id;
 }

@@ -27,7 +27,9 @@ bool reInsertActorCommand::Do() {
 }
 
 bool reInsertActorCommand::Undo() {
-	m_component->GetScene()->DeleteActor(m_actorId);
+	rActor3* actor = m_component->GetScene()->GetActor(m_actorId);
+	m_component->GetScene()->DeleteActor(actor);
+	m_component->GetScene()->Flush();
 	return true;
 }
 
@@ -51,8 +53,11 @@ bool reDeleteActorCommand::Do() {
 	m_component->SelectionManager()->ClearSelection();
 
 	for (size_t i = 0; i < m_actorList.size(); i++){
-		scene->DeleteActor(m_actorList[i].c_str().AsChar());
+		rActor3* actor = scene->GetActor(m_actorList[i].c_str().AsChar());
+		scene->DeleteActor(actor);
 	}
+
+	scene->Flush();
 
 	return true;
 }

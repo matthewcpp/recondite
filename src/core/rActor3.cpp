@@ -12,10 +12,6 @@ rActor3::rActor3(const rString& id, rEngine* engine)
 	SetTransformed(true);
 }
 
-int rActor3::Update(){
-	return 0;
-}
-
 void rActor3::Draw(){
 }
 
@@ -187,8 +183,6 @@ bool rActor3::Load(riSerializationTarget* target){
 void rActor3::OnLoad(){
 	SetTransformed(true);
 }
-
-void rActor3::OnDelete(){}
 
 bool rActor3::DoSerialize(riSerializationTarget* target){
 	target->Category("Actor");

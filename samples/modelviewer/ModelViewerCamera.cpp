@@ -94,7 +94,7 @@ bool ModelViewerCamera::ProcessTouch(){
 	return false;
 }
 
-int ModelViewerCamera::Update(){
+void ModelViewerCamera::Update(){
 
 	bool processed = ProcessMouse();
 
@@ -103,8 +103,6 @@ int ModelViewerCamera::Update(){
 
 	if (m_needsUpdate)
 		UpdatePosition();
-
-	return 0;
 }
 
 void ModelViewerCamera::DoZoom(int zoomDirection){

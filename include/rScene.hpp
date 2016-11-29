@@ -31,12 +31,12 @@ public:
 	void Update();
 	void Draw();
 
-	virtual void AddActor(rActor3* actor);
+	virtual bool AddActor(rActor3* actor) override;
 	virtual rActor3* GetActor(const rString& name) const;
 	virtual size_t NumActors () const;
 	virtual void GetActors(rArrayString& names) const;
 
-	virtual void DeleteActor(const rString& name);
+	virtual void DeleteActor(rActor3* actor);
 	void DeleteActors(std::function<bool(rActor3*)> shouldDelete);
 	bool RenameActor(const rString& oldId, const rString& newId);
 
@@ -54,15 +54,18 @@ public:
 
 	bool IsLoading() const;
 
+	void Flush();
+
 	rAlignedBox3 GetBounding();
 
 private:
 
 	typedef std::map<rString, rActor3*> rActorMap;
-	typedef std::vector<rActor3*> rActorArray;
 
 private:
 	rActorMap m_actors;
+	std::set<rActor3*> m_ActorsToDelete;
+
 	rEngine* m_engine;
 
 	bool m_isLoading;

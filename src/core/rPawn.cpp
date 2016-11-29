@@ -15,10 +15,8 @@ void rPawn::SetModel(recondite::Model* model){
 
 }
 
-int rPawn::Update(){
+void rPawn::Update(){
 	m_animationController.Update(m_engine->time);
-
-	return 0;
 }
 
 rString rPawn::ClassName() const {

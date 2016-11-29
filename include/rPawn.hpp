@@ -17,7 +17,7 @@ public:
 
 	virtual rString ClassName() const;
 	
-	virtual int Update();
+	virtual void Update();
 	virtual void Draw();
 	
 private:

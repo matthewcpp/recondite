@@ -12,7 +12,7 @@ class ModelViewerCamera : public rActor3{
 public:
 	ModelViewerCamera(recondite::Camera* camera, const rString& name, rEngine* engine);
 
-	virtual int Update() override;
+	virtual void Update() override;
 
 	void SetYaw(float yaw);
 	float Yaw() const;

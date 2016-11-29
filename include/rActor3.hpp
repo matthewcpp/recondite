@@ -17,11 +17,13 @@
 
 #include "interface/riSerialization.hpp"
 
+/**
+This is the base class for all objects that occupy space in the scene.
+*/
 class RECONDITE_API rActor3 : public rObject{
 public:
 	rActor3(const rString& id, rEngine* engine);
 
-	virtual int Update();
 	virtual void Draw();
 
 	virtual void SetPosition(const rVector3& position);
@@ -36,7 +38,6 @@ public:
 	virtual rVector3 Scale() const;
 
 	virtual rString ClassName() const = 0;
-	virtual void OnDelete();
 
 	virtual rMatrix4& TransformMatrix();
 	virtual riBoundingVolume* BoundingVolume();
@@ -56,6 +57,8 @@ public:
 	rVector3 Down() const;
 
 	virtual bool IsDrawable() const;
+
+
 
 public:
 	virtual bool Save(riSerializationTarget* target) final;

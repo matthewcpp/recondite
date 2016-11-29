@@ -11,19 +11,13 @@ rScene::~rScene(){
 }
 
 void rScene::Update(){
-	rActorArray actorsToDelete;
 	rActorMap::iterator end = m_actors.end();
-	int remove;
 
 	for (rActorMap::iterator it = m_actors.begin(); it != end; ++it){
-		remove = it->second->Update();
-
-		if (remove)
-			actorsToDelete.push_back(it->second);
+		it->second->Update();
 	}
 
-	for (size_t i = 0; i < actorsToDelete.size(); i++)
-		DeleteActor(actorsToDelete[i]->Id());
+	Flush();
 }
 
 void rScene::Draw(){
@@ -49,20 +43,22 @@ bool rScene::RenameActor(const rString& oldId, const rString& newId){
 	return true;
 }
 
-void rScene::AddActor(rActor3* actor){
+bool rScene::AddActor(rActor3* actor){
 	rString name = actor->Id();
-	
-	if (m_actors.count(name)){
-		DeleteActor(name);
+
+	if (m_actors.count(name)) {
+		return false;
 	}
+	else {
+		m_actors[name] = actor;
 
-	m_actors[name] = actor;
+		if (!m_isLoading) {
+			rActor3Event event(actor);
+			Trigger(rEVT_SCENE_ACTOR_ADDED, event);
+		}
 
-	if (!m_isLoading){
-		rActor3Event event(actor);
-		Trigger(rEVT_SCENE_ACTOR_ADDED, event);
+		return true;
 	}
-
 }
 
 rActor3* rScene::GetActor(const rString& name) const{
@@ -76,17 +72,21 @@ rActor3* rScene::GetActor(const rString& name) const{
 	return actor;
 }
 
-void rScene::DeleteActor(const rString& name){
-	rActorMap::iterator result = m_actors.find(name);
+void rScene::DeleteActor(rActor3* actor) {
+	m_ActorsToDelete.insert(actor);
+}
 
-	if (result != m_actors.end()){
-		rActor3Event event(result->second);
+void rScene::Flush() {
+	for (rActor3* actor : m_ActorsToDelete) {
+		rActor3Event event(actor);
 		Trigger(rEVT_SCENE_ACTOR_REMOVED, event);
 
-		result->second->OnDelete();
-		delete result->second;
-		m_actors.erase(result);
+		m_actors.erase(actor->Id());
+		actor->OnDelete();
+		delete actor;
 	}
+
+	m_ActorsToDelete.clear();
 }
 
 void rScene::DeleteActors(std::function<bool(rActor3*)> shouldDelete){

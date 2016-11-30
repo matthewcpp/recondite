@@ -16,12 +16,12 @@
 
 #include "rPawn.hpp"
 
-ModelViewerController::ModelViewerController(ModelViewerSettings* settings, const rString& name, rEngine* engine, ruiDocument* document)
+ModelViewerController::ModelViewerController(SkeletonGeometry* skeletonGeometry, const rString& name, rEngine* engine, ruiDocument* document)
 	:ruiController(name)
 {
 	_engine = engine;
 	_document = document;
-	_settings = settings;
+	_skeletonGeometry = skeletonGeometry;
 }
 
 void ModelViewerController::SetColorForWidgetEvent(rEvent& event, const rColor& color) {
@@ -103,7 +103,7 @@ void ModelViewerController::OnDocumentLoaded() {
 	}
 
 
-	if (_settings->animatedModel && skeleton->GetAnimationCount() > 0) {
+	if (_skeletonGeometry && skeleton->GetAnimationCount() > 0) {
 		rPawn* pawn = (rPawn*)_engine->scene->GetActor("model");
 		pawn->AnimationController()->SetAnimation(animationPicker->Options()[0]);
 	}
@@ -160,14 +160,14 @@ void ModelViewerController::OnShowSkeletonClick(rEvent& event) {
 	ruiWidgetEvent& evt = (ruiWidgetEvent&)event;
 	ruiCheckbox* checkbox = (ruiCheckbox*)evt.Widget();
 
-	_settings->renderSkeleton = checkbox->IsChecked();
+	_skeletonGeometry->SetRenderBones( checkbox->IsChecked());
 }
 
 void ModelViewerController::OnShowBoneNamesClick(rEvent& event) {
 	ruiWidgetEvent& evt = (ruiWidgetEvent&)event;
 	ruiCheckbox* checkbox = (ruiCheckbox*)evt.Widget();
 
-	_settings->renderBoneNames = checkbox->IsChecked();
+	_skeletonGeometry->SetRenderBoneNames(checkbox->IsChecked());
 }
 
 void ModelViewerController::OnAnimationPickerChange(rEvent& event) {

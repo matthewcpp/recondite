@@ -4,8 +4,8 @@
 #include <memory>
 
 #include "rModule.hpp"
-#include "ModelViewerSettings.hpp"
 #include "ModelViewerCamera.hpp"
+#include "SkeletonGeometry.hpp"
 
 class ModelViewerModule : public rModule {
 public:
@@ -21,16 +21,10 @@ public:
 
 private:
 	rViewport* CreateView(Model* model, rEngine* engine);
-	void CreateSkeletonGeometry(recondite::ModelData& modelData);
-	void GenerateCurrentSkeletonBuffer(uint32_t boneId, Skeleton* skeleton, const rMatrix4* boneTransforms);
 
 private:
 	rEngine* _engine;
 
-	ModelViewerSettings settings;
-
-	std::vector<rVector3> skeletonWorldPoints;
-	std::vector<rVector3> skeletonTransformedPoints;
-	rImmediateBuffer skeletonBuffer;
 	std::unique_ptr<ModelViewerCamera> _demoCamera;
+	std::unique_ptr<SkeletonGeometry> _skeletonGeometry;
 };

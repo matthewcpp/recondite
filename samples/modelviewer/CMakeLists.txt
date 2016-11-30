@@ -9,8 +9,6 @@ list(APPEND modelviewer_files ${CMAKE_CURRENT_SOURCE_DIR}/ModelViewerController.
 list(APPEND modelviewer_files ${CMAKE_CURRENT_SOURCE_DIR}/ModelViewerModule.hpp)
 list(APPEND modelviewer_files ${CMAKE_CURRENT_SOURCE_DIR}/ModelViewerModule.cpp)
 
-list(APPEND modelviewer_files ${CMAKE_CURRENT_SOURCE_DIR}/ModelViewerSettings.hpp)
-
 list(APPEND modelviewer_files ${CMAKE_CURRENT_SOURCE_DIR}/ModelViewerCamera.hpp)
 list(APPEND modelviewer_files ${CMAKE_CURRENT_SOURCE_DIR}/ModelViewerCamera.cpp)
 

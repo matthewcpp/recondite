@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ModelViewerSettings.hpp"
+#include "SkeletonGeometry.hpp"
 
 #include "rEngine.hpp"
 
@@ -9,7 +9,7 @@
 
 class ModelViewerController : public ruiController {
 public:
-	ModelViewerController(ModelViewerSettings* settings, const rString& name, rEngine* engine, ruiDocument* document);
+	ModelViewerController(SkeletonGeometry* skeletonGeometry, const rString& name, rEngine* engine, ruiDocument* document);
 	virtual void OnDocumentLoaded();
 
 private:
@@ -33,7 +33,7 @@ private:
 	void CameraDebug();
 
 private:
-	ModelViewerSettings* _settings;
+	SkeletonGeometry* _skeletonGeometry;
 	rEngine* _engine;
 	ruiDocument* _document;
 };

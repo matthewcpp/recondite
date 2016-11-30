@@ -20,9 +20,6 @@ public:
 	inline void SetRenderBones(bool renderBones);
 	inline void SetRenderBoneNames(bool renderBoneNames);
 
-	inline bool GetRenderBones() const;
-	inline bool GetRenderBoneNames() const;
-
 private:
 	void Init();
 	void GenerateCurrentSkeletonBuffer(uint32_t boneId, Skeleton* skeleton, const rMatrix4* boneTransforms);
@@ -46,14 +43,7 @@ inline void SkeletonGeometry::SetRenderBones(bool renderBones) {
 	_renderBones = renderBones;
 }
 
-inline bool SkeletonGeometry::GetRenderBones() const {
-	return _renderBones;
-}
 
 inline void SkeletonGeometry::SetRenderBoneNames(bool renderBoneNames) {
 	_renderBoneNames = renderBoneNames;
-}
-
-inline bool SkeletonGeometry::GetRenderBoneNames() const {
-	return _renderBoneNames;
 }

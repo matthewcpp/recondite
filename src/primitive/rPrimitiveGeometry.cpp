@@ -392,9 +392,9 @@ void rPrimitiveGeometry::CreateSphere(const rPrimitiveSphereParams& params, Mode
 
 	for (r = 0; r < params.rings; r++){
 		for (s = 0; s < params.sectors; s++) {
-			float y = std::sin(-M_PI_2 + M_PI * r * R);
-			float x = std::cos(2 * M_PI * s * S) * std::sin(M_PI * r * R);
-			float z = std::sin(2 * M_PI * s * S) * std::sin(M_PI * r * R);
+			float y = std::sin(-rPI_2 + rPI * r * R);
+			float x = std::cos(2 * rPI * s * S) * std::sin(rPI * r * R);
+			float z = std::sin(2 * rPI * s * S) * std::sin(rPI * r * R);
 
 			position.Set(x, y + params.radius, z);
 			normal = position - center;

@@ -97,13 +97,13 @@ void rQuaternion::ToEuler(const rQuaternion& q1, rVector3& v) {
 
 	if (test > 0.499*unit) { // singularity at north pole
 		v.y = 2 * std::atan2(q1.x, q1.w);
-		v.z = M_PI / 2;
+		v.z = rPI / 2;
 		v.x = 0;
 		return;
 	}
 	if (test < -0.499*unit) { // singularity at south pole
 		v.y = -2 * std::atan2(q1.x, q1.w);
-		v.z = -M_PI / 2;
+		v.z = -rPI / 2;
 		v.x = 0;
 		return;
 	}

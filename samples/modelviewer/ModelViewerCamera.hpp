@@ -8,11 +8,11 @@
 
 #include "rActor3.hpp"
 
-class ModelViewerCamera : public rActor3{
+class ModelViewerCamera{
 public:
-	ModelViewerCamera(recondite::Camera* camera, const rString& name, rEngine* engine);
+	ModelViewerCamera(recondite::Camera* camera, rEngine* engine);
 
-	virtual void Update() override;
+	virtual void Update();
 
 	void SetYaw(float yaw);
 	float Yaw() const;
@@ -70,4 +70,5 @@ private:
 	rVector3 m_cameraAngle;
 	rVector3 m_center;
 	recondite::Camera* m_camera;
+	rEngine* m_engine;
 };

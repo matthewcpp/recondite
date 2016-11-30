@@ -1,8 +1,8 @@
 #include "ModelViewerCamera.hpp"
 
-ModelViewerCamera::ModelViewerCamera(recondite::Camera* camera, const rString& name , rEngine* engine)
-	:rActor3(name, engine)
+ModelViewerCamera::ModelViewerCamera(recondite::Camera* camera, rEngine* engine)
 {
+	m_engine = engine;
 	m_camera = camera;
 	m_orbitSpeed = 180.0f;
 	m_panSpeed = 10.0;

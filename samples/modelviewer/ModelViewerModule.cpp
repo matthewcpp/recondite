@@ -13,22 +13,21 @@ ModelViewerModule::ModelViewerModule(rEngine* engine)
 	_engine = engine;
 }
 
-rViewport* CreateView(Model* model, rEngine* engine) {
+rViewport* ModelViewerModule::CreateView(Model* model, rEngine* engine) {
 	rViewport* mainViewport = engine->component->CreateViewport("main");
 
 	rAlignedBox3 boundingBox = model->GetBoundingBox();
 	rVector3 center = boundingBox.Center();
 
 	recondite::Camera* camera = new recondite::Camera();
-	ModelViewerCamera* demoCamera = new ModelViewerCamera(camera, "main_camera", engine);
-	engine->scene->AddActor(demoCamera);
+	_demoCamera.reset(new ModelViewerCamera(camera, engine));
 	mainViewport->SetCamera(camera);
 
 	//set up decent clipping values
 	rAlignedBox3 box = model->GetBoundingBox();
 	
 	float diagonal = box.min.Distance(box.max);
-	demoCamera->Reset(center, diagonal * 3, 0, 0);
+	_demoCamera->Reset(center, diagonal * 3, 0, 0);
 
 	mainViewport->SetFarClip(diagonal * 10);
 
@@ -90,6 +89,10 @@ void ModelViewerModule::CreateSkeletonGeometry(recondite::ModelData& modelData) 
 			skeletonWorldPoints[i] = skeleton->GetGlobalTransform(bone).GetTranslate();
 		}
 	}
+}
+
+void ModelViewerModule::AfterUpdateScene() {
+	_demoCamera->Update();
 }
 
 void ModelViewerModule::LoadScene(const rString& sceneName) {

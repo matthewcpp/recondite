@@ -10,8 +10,7 @@
 
 class RECONDITE_API rSphereBoundingVolume : public riBoundingVolume{
 public:
-	virtual bool IntersectsRay(const rRay3& ray) const;
-	virtual bool IntersectsRay(const rRay3& ray, rVector3* position) const;
+	virtual bool IntersectsRay(const rRay3& ray, rPickResult& pickResult) const;
 	virtual rAlignedBox3 FitBox() const;
 
 	void SetSphere(const rSphere& sphere);

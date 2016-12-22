@@ -144,54 +144,25 @@ rString rScene::GetDefaultActorId(const rString& prefix){
 	return defaultActorId;
 }
 
-rActor3* rScene::RayPick(const rRay3& ray){
-	rVector3 point;
-	return RayPick(ray, point);
-}
-
-rActor3* rScene::RayPick(const rRay3& ray, rVector3& pickPoint) {
-	rActor3* selectedActor = NULL;
+void rScene::RayPick(const rRay3& ray, rPickResult& pickResult) {
+	rPickResult currentResult, bestResult;
 	float selectedActorDistance = FLT_MAX;
-
 
 	rActorMap::iterator end = m_actors.end();
 	for (rActorMap::iterator it = m_actors.begin(); it != end; ++it) {
 		rActor3* currentActor = it->second;
-		if (!currentActor->Pickable()) continue;
 
-		riBoundingVolume* boundingVolume = currentActor->BoundingVolume();
+		if (currentActor->RayPick(ray, currentResult)) {
+			float currentActorDistance = ray.origin.DistanceSquared(currentResult.point);
 
-		if (boundingVolume && boundingVolume->IntersectsRay(ray, &pickPoint)) {
-			float currentActorDistance = ray.origin.Distance(pickPoint);
 			if (currentActorDistance < selectedActorDistance) {
-				selectedActor = currentActor;
+				bestResult = currentResult;
 				selectedActorDistance = currentActorDistance;
 			}
 		}
 	}
 
-	return selectedActor;
-}
-
-rActor3* rScene::ViewportPick(const rString& viewportName, int x, int y){
-	/*
-	rActor3* selectedActor = NULL;
-
-	rViewport* viewport = m_component->GetViewport("main");
-	rSize size = viewport->Size();
-
-	unsigned int renderBufferId = m_graphicsDevice->CreateRenderbuffer(size.x, size.y);
-
-	//render for selection
-	m_graphicsDevice->Clear();
-	int pixelColor = m_graphicsDevice->ReadRenderbufferPixel(1,1);
-
-	m_graphicsDevice->DeleteRenderbuffer(renderBufferId);
-
-	return selectedActor;
-	*/
-
-	return nullptr;
+	pickResult = bestResult;
 }
 
 bool rScene::Save(riSerializationTarget* target){
@@ -240,7 +211,6 @@ bool rScene::ParseActors(riSerializationTarget* target){
 
 	return true;
 }
-
 
 bool rScene::IsLoading() const{
 	return m_isLoading;

@@ -1,11 +1,9 @@
 #include "rSphereBoundingVolume.hpp"
 
-bool rSphereBoundingVolume::IntersectsRay(const rRay3& ray) const{
-	return rIntersection::RayIntersectsSphere(ray, m_sphere);
-}
+bool rSphereBoundingVolume::IntersectsRay(const rRay3& ray, rPickResult& pickResult) const{
+	pickResult.hit = rIntersection::RayIntersectsSphere(ray, m_sphere, &pickResult.point);
 
-bool rSphereBoundingVolume::IntersectsRay(const rRay3& ray, rVector3* position) const{
-	return rIntersection::RayIntersectsSphere(ray, m_sphere, position);
+	return pickResult.hit;
 }
 
 rAlignedBox3 rSphereBoundingVolume::FitBox() const{

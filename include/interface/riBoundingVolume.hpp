@@ -6,10 +6,12 @@
 #include "rLine3.hpp"
 #include "rAlignedBox3.hpp"
 
+#include "rPickResult.hpp"
+
 class RECONDITE_API riBoundingVolume {
 public:
-	virtual bool IntersectsRay(const rRay3& ray) const = 0;
-	virtual bool IntersectsRay(const rRay3& ray, rVector3* position) const = 0;
+	virtual ~riBoundingVolume() {}
+	virtual bool IntersectsRay(const rRay3& ray, rPickResult& pickResult) const = 0;
 	virtual rAlignedBox3 FitBox() const = 0;
 };
 

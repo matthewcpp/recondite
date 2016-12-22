@@ -39,7 +39,10 @@ rActor3* reToolBase::PickActor(wxMouseEvent& event, rwxGLCanvas* canvas){
 	rRay3 selectionRay;
 	viewport->GetSelectionRay(pt, selectionRay);
 
-	return scene->RayPick(selectionRay);
+	rPickResult result;
+	scene->RayPick(selectionRay, result);
+
+	return result.actor;
 }
 
 bool reToolBase::DoClearSelection(){

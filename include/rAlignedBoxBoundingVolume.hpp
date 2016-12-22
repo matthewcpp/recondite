@@ -13,8 +13,7 @@ class RECONDITE_API rAlignedBoxBoundingVolume : public riBoundingVolume{
 public:
 	void SetBox(rAlignedBox3& box);
 
-	virtual bool IntersectsRay(const rRay3& ray) const;
-	virtual bool IntersectsRay(const rRay3& ray, rVector3* position) const;
+	virtual bool IntersectsRay(const rRay3& ray, rPickResult& pickResult) const;
 	virtual rAlignedBox3 FitBox() const;
 
 private:

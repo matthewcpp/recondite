@@ -1,5 +1,7 @@
 #include "rePaletteDropTarget.hpp"
 
+#include "rPickResult.hpp"
+
 rePaletteDropTarget::rePaletteDropTarget(reComponent* component, rwxGLCanvas* canvas){
 	m_component = component;
 	m_canvas = canvas;
@@ -29,14 +31,10 @@ bool rePaletteDropTarget::OnDropText(wxCoord x, wxCoord y, const wxString &data)
 	rRay3 selectionRay;
 	viewport->GetSelectionRay(pt, selectionRay);
 
-	rActor3* target = scene->RayPick(selectionRay);
-	if (target) {
-		riBoundingVolume* boundingVolume = target->BoundingVolume();
-		
-		rVector3 selectionPos;
-		boundingVolume->IntersectsRay(selectionRay, &selectionPos);
-
-		reInsertActorCommand* insertActorCommand = new reInsertActorCommand(data, selectionPos, m_component);
+	rPickResult result;
+	scene->RayPick(selectionRay, result);
+	if (result.hit) {
+		reInsertActorCommand* insertActorCommand = new reInsertActorCommand(data, result.point, m_component);
 		m_component->SubmitCommand(insertActorCommand);
 		return true;
 	}

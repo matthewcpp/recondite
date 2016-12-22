@@ -205,3 +205,13 @@ void rActor3::SetPickable(bool pickable){
 bool rActor3::IsDrawable() const {
 	return false;
 }
+
+bool rActor3::RayPick(const rRay3& ray, rPickResult& result) {
+	riBoundingVolume* boundingVolume = BoundingVolume();
+	result.actor = this;
+
+	if (boundingVolume)
+		return boundingVolume->IntersectsRay(ray, result);
+	else 
+		return false;
+}

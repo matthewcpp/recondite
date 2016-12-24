@@ -4,10 +4,10 @@ namespace recondite {
 	ModelInstance::ModelInstance(Model* model) {
 		_model = model;
 
-		Init();
+		_Init();
 	}
 
-	void ModelInstance::Init() {
+	void ModelInstance::_Init() {
 		size_t traingleMeshCount = _model->GetTriangleMeshCount();
 		size_t lineMeshCount = _model->GetLineMeshCount();
 
@@ -28,6 +28,18 @@ namespace recondite {
 		}
 	}
 
+	void ModelInstance::_Remove(rMaterial* material) {
+		for (size_t i = 0; i < _instanceMaterials.size(); i++) {
+			if (_instanceMaterials[i].get() == material) {
+				auto it = _instanceMaterials.begin();
+				std::advance(it, i);
+				_instanceMaterials.erase(it);
+
+				return;
+			}
+		}
+	}
+
 	rMaterial* ModelInstance::GetTriangleMeshInstanceMaterial(size_t index) {
 		if (_triangleMeshInstanceMaterials[index] == _model->GetTriangleMesh(index)->GetMaterial()) {
 			rMaterial* instanceMaterial = new rMaterial();
@@ -43,8 +55,19 @@ namespace recondite {
 		}
 	}
 
+	void ModelInstance::DeleteTriangleMeshInstanceMaterial(size_t index) {
+		rMaterial* material = _triangleMeshInstanceMaterials[index];
+		_triangleMeshInstanceMaterials[index] = _model->GetTriangleMesh(index)->GetMaterial();
+
+		_Remove(material);
+	}
+
 	const rMaterial* ModelInstance::GetTriangleMeshMaterial(size_t index) const {
 		return _triangleMeshInstanceMaterials[index];
+	}
+
+	bool ModelInstance::HasTriangleInstanceMaterialSet(size_t index) const {
+		return _triangleMeshInstanceMaterials[index] != _model->GetTriangleMesh(index)->GetMaterial();
 	}
 
 	rMaterial* ModelInstance::GetLineMeshInstanceMaterial(size_t index) {
@@ -64,6 +87,17 @@ namespace recondite {
 
 	const rMaterial* ModelInstance::GetLineMeshMaterial(size_t index) const {
 		return _lineMeshInstanceMaterials[index];
+	}
+
+	bool ModelInstance::HasLineInstanceMaterialSet(size_t index) const {
+		return _lineMeshInstanceMaterials[index] != _model->GetLineMesh(index)->GetMaterial();
+	}
+
+	void ModelInstance::DeleteLineMeshInstanceMaterial(size_t index) {
+		rMaterial* material = _lineMeshInstanceMaterials[index];
+		_lineMeshInstanceMaterials[index] = _model->GetLineMesh(index)->GetMaterial();
+
+		_Remove(material);
 	}
 }
 

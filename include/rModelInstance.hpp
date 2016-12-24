@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <memory>
+#include <set>
 
 #include "rBuild.hpp"
 
@@ -16,12 +17,17 @@ namespace recondite {
 
 		rMaterial* GetTriangleMeshInstanceMaterial(size_t index);
 		const rMaterial* GetTriangleMeshMaterial(size_t index) const;
+		bool HasTriangleInstanceMaterialSet(size_t index) const;
+		void DeleteTriangleMeshInstanceMaterial(size_t index);
 
 		rMaterial* GetLineMeshInstanceMaterial(size_t index);
 		const rMaterial* GetLineMeshMaterial(size_t index) const;
+		bool HasLineInstanceMaterialSet(size_t index) const;
+		void DeleteLineMeshInstanceMaterial(size_t index);
 
 	private:
-		void Init();
+		void _Init();
+		void _Remove(rMaterial* material);
 
 	private:
 		Model* _model;

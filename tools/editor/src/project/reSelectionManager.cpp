@@ -33,7 +33,6 @@ void reSelectionManager::Select(const wxString& name){
 
 void reSelectionManager::AddSelection(const wxString& name){
 	m_selectionList.push_back(name);
-	ApplySelectionMaterial(name);
 	reSelectionEvent event(name, m_selectionList);
 	m_component->Trigger(reSELECTION_SELECT, event);
 }
@@ -41,7 +40,6 @@ void reSelectionManager::AddSelection(const wxString& name){
 bool reSelectionManager::Deselect(const wxString& name){
 	for (size_t i = 0; i < m_selectionList.size(); i++){
 		if (m_selectionList[i] == name){
-			ReapplyOriginalMaterials(m_selectionList[i]);
 			m_selectionList.RemoveAt(i);
 			return true;
 		}
@@ -61,9 +59,6 @@ bool reSelectionManager::IsSelected(const wxString& name){
 
 void reSelectionManager::ClearSelection(){
 	if (m_selectionList.size() > 0){
-		for (size_t i = 0; i < m_selectionList.size(); i++) {
-			ReapplyOriginalMaterials(m_selectionList[i]);
-		}
 
 		m_selectionList.clear();
 
@@ -77,53 +72,43 @@ const wxArrayString& reSelectionManager::GetSelection() const{
 	return m_selectionList;
 }
 
-void reSelectionManager::ApplySelectionMaterial(const wxString& name) {
-	rActor3* actor = m_component->GetScene()->GetActor(name.c_str().AsChar());
-
-	if (actor->IsDrawable()) {
-		rDrawable* drawable = (rDrawable*)actor;
-
-		recondite::ModelInstance* modelInstance = drawable->GetModelInstance();
-
-		for (size_t i = 0; i < modelInstance->GetModel()->GetLineMeshCount(); i++) {
-			const rMaterial* material = modelInstance->GetLineMeshMaterial(i);
-
-			m_cachedColorMap[material] = material->DiffuseColor();
-			modelInstance->GetLineMeshInstanceMaterial(i)->SetDiffuseColor(m_selectionColor);
-		}
-	}
-}
-
-void reSelectionManager::ReapplyOriginalMaterials(const wxString& name) {
-	rActor3* actor = m_component->GetScene()->GetActor(name.c_str().AsChar());
-
-	if (actor->IsDrawable()) {
-		rDrawable* drawable = (rDrawable*)actor;
-
-		recondite::ModelInstance* modelInstance = drawable->GetModelInstance();
-
-		for (size_t i = 0; i < modelInstance->GetModel()->GetLineMeshCount(); i++) {
-			rMaterial* material = modelInstance->GetLineMeshInstanceMaterial(i);
-			material->SetDiffuseColor(m_cachedColorMap[material]);
-			m_cachedColorMap.erase(material);
-		}
-	}
-}
-
 void reSelectionManager::RenderSelection() {
 	rRenderer* renderer = m_component->GetEngine()->renderer;
+
 	rRenderMode renderMode = renderer->GetModelRenderMode();
+	rGraphicsDevice::DepthFunction depthFunction = renderer->GetDepthFunction();
 
-	if (renderMode == rRenderMode::Shaded) {
-		renderer->SetModelRenderMode(rRenderMode::Wireframe);
+	renderer->SetModelRenderMode(rRenderMode::Wireframe);
+	renderer->SetDepthFunction(rGraphicsDevice::DepthFunction::LessEqual);
 
-		for (size_t i = 0; i < m_selectionList.size(); i++) {
-			rDrawable* drawable = (rDrawable*)m_component->GetScene()->GetActor(m_selectionList[i].c_str().AsChar());
+	std::vector<rColor> colorCache;
+	std::vector<bool> instanceSet;
 
-			renderer->RenderModel(drawable->GetModelInstance(), drawable->TransformMatrix());
+	for (size_t i = 0; i < m_selectionList.size(); i++) {
+		rDrawable* drawable = (rDrawable*)m_component->GetScene()->GetActor(m_selectionList[i].c_str().AsChar());
+		recondite::ModelInstance* modelInstance = drawable->GetModelInstance();
+
+		const recondite::Model* model = drawable->GetModelInstance()->GetModel();
+
+		for (size_t i = 0; i < model->GetLineMeshCount(); i++) {
+			instanceSet.push_back(modelInstance->HasTriangleInstanceMaterialSet(i));
+			colorCache.push_back(modelInstance->GetLineMeshMaterial(i)->DiffuseColor());
+
+			modelInstance->GetLineMeshInstanceMaterial(i)->SetDiffuseColor(m_selectionColor);
 		}
 
-		renderer->SetModelRenderMode(renderMode);
+		renderer->RenderModel(modelInstance, drawable->TransformMatrix());
+
+		for (size_t i = 0; i < model->GetLineMeshCount(); i++) {
+			if (instanceSet[i]) {
+				modelInstance->GetLineMeshInstanceMaterial(i)->SetDiffuseColor(colorCache[i]);
+			}
+			else {
+				modelInstance->DeleteLineMeshInstanceMaterial(i);
+			}
+		}
 	}
 
+	renderer->SetModelRenderMode(renderMode);
+	renderer->SetDepthFunction(depthFunction);
 }

@@ -24,7 +24,6 @@ bool rOpenGLGraphicsDevice::Init(){
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	glGetIntegerv(GL_FRAMEBUFFER_BINDING, &m_defaultFramebuffer);
-
 	m_isInit = true;
     return m_isInit;
 }
@@ -46,14 +45,15 @@ void rOpenGLGraphicsDevice::EnableDepthTesting(bool enable){
 	}
 }
 
-void rOpenGLGraphicsDevice::EnablePolygonFillOffset(bool enable){
-	if (enable){
-		glEnable(GL_POLYGON_OFFSET_FILL);
-		glPolygonOffset(1.0f, 1.0f);
-	}
-	else{
-		glDisable(GL_POLYGON_OFFSET_FILL);
-		glPolygonOffset(0.0f, 1.0f);
+void rOpenGLGraphicsDevice::SetDepthFunction(DepthFunction depthFunction) {
+	switch (depthFunction)
+	{
+	case rGraphicsDevice::DepthFunction::LessEqual:
+		glDepthFunc(GL_LEQUAL);
+		break;
+	default:
+		glDepthFunc(GL_LESS);
+		break;
 	}
 }
 

@@ -41,7 +41,7 @@ void rPrimitive::RecreateGeometry(){
 
 	recondite::MaterialData* lineMaterialData = modelData.CreateMaterial();
 	lineMaterialData->diffuseColor = m_edgeColor;
-	modelData.GetLineMesh(0)->SetMaterialDataId(faceMaterialData->id);
+	modelData.GetLineMesh(0)->SetMaterialDataId(lineMaterialData->id);
 
 	rString assetName = Id() + "_model";
 	m_engine->content->Models()->Delete(assetName);

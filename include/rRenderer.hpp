@@ -43,6 +43,9 @@ public:
 
 	void EnableDepthTesting(bool enable);
 	bool DepthTestEnabled() const;
+
+	void SetDepthFunction(rGraphicsDevice::DepthFunction depthFunc);
+	rGraphicsDevice::DepthFunction GetDepthFunction() const;
 	
 	rSpriteBatch* SpriteBatch();
 
@@ -72,6 +75,7 @@ private:
 		
 		bool m_depthTestEnabled;
 		rRenderMode m_defaultRenderMode;
+		rGraphicsDevice::DepthFunction depthFunction;
 };
 
 #endif

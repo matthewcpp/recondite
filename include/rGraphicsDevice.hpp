@@ -18,6 +18,11 @@
 
 class RECONDITE_API rGraphicsDevice{
 public:
+	enum class DepthFunction {
+		Less,
+		LessEqual
+	};
+public:
 	virtual ~rGraphicsDevice(){}
 
 	virtual bool Init() = 0;
@@ -30,7 +35,8 @@ public:
 	virtual void Clear() = 0;
 	
 	virtual void EnableDepthTesting(bool enable) = 0;
-	virtual void EnablePolygonFillOffset(bool enable) = 0;
+	virtual void SetDepthFunction(DepthFunction depthFunction) = 0;
+	
 
 	virtual unsigned int CreateTexture(int width, int height, int bpp , const unsigned char* data) = 0;
 	virtual void UnregisterTexture(int textureID) = 0;

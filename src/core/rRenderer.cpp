@@ -119,3 +119,12 @@ void rRenderer::EnableDepthTesting(bool enable){
 bool rRenderer::DepthTestEnabled() const {
 	return m_depthTestEnabled;
 }
+
+void rRenderer::SetDepthFunction(rGraphicsDevice::DepthFunction depthFunc) {
+	depthFunction = depthFunc;
+	m_graphicsDevice->SetDepthFunction(depthFunc);
+}
+
+rGraphicsDevice::DepthFunction rRenderer::GetDepthFunction() const {
+	return depthFunction;
+}

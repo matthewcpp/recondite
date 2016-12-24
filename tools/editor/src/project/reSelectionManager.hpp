@@ -2,6 +2,7 @@
 #define RE_SELECTIONMANAGER_HPP
 
 #include <map>
+#include <vector>
 #include <wx/wx.h>
 
 #include "rwxComponent.hpp"
@@ -42,8 +43,6 @@ public:
 	const wxArrayString& GetSelection() const;
 
 public:
-	void ApplySelectionMaterial(const wxString& name);
-	void ReapplyOriginalMaterials(const wxString& name);
 
 	void RenderSelection();
 
@@ -51,7 +50,6 @@ private:
 	wxArrayString m_selectionList;
 
 	rwxComponent* m_component;
-	std::map<const rMaterial*, rColor> m_cachedColorMap;
 	rColor m_selectionColor;
 };
 

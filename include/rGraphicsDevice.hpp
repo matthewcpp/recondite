@@ -54,7 +54,7 @@ public:
 	virtual void RenderImmediate(const rImmediateBuffer& geometry, const rMatrix4& transform, rMaterial* material) = 0;
 	
 	virtual void SetViewport(int x , int y, int width, int height) = 0;
-	virtual void SetActiveMaterial(rMaterial* material) = 0;
+	virtual void SetActiveMaterial(const rMaterial* material) = 0;
 
 	virtual unsigned int CreateRenderbuffer(int width, int height) = 0;
 	virtual void DeleteRenderbuffer(unsigned int id) = 0;

@@ -170,7 +170,7 @@ void rOpenGLGraphicsDevice::SetSkinningData(const rMatrix4* matrices, size_t cou
 	glUniformMatrix4fv(uniformHandle, count, GL_FALSE, (GLfloat*)matrices);
 }
 
-void rOpenGLGraphicsDevice::SetActiveMaterial(rMaterial* material){
+void rOpenGLGraphicsDevice::SetActiveMaterial(const rMaterial* material){
 	GLint uniformHandle = glGetUniformLocation(m_activeShaderProgram, "fragColor");
 	if (uniformHandle != -1){
 		rColor diffuseColor = material->DiffuseColor();

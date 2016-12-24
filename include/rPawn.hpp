@@ -22,6 +22,8 @@ public:
 	
 private:
 	recondite::AnimationController m_animationController;
+
+	rNO_COPY_CLASS(rPawn)
 };
 
 inline recondite::AnimationController* rPawn::AnimationController() {

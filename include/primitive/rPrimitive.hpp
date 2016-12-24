@@ -5,7 +5,7 @@
 #include "rDrawable.hpp"
 
 #include "asset/rModelData.hpp"
-#include "asset/rModel.hpp"
+#include "rModelInstance.hpp"
 
 using namespace recondite;
 
@@ -22,7 +22,7 @@ public:
 
 	void RecreateGeometry();
 
-	virtual recondite::Model* GetModel() override;
+	virtual recondite::ModelInstance* GetModelInstance() override;
 	virtual void Draw();
 
 	virtual void OnDelete() override;

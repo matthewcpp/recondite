@@ -1,23 +1,32 @@
 #pragma once
 
+#include <memory>
+
 #include "rBuild.hpp"
 
 #include "rString.hpp"
 #include "rEngine.hpp"
 
 #include "rActor3.hpp"
-#include "asset/rModel.hpp"
+#include "rModelInstance.hpp"
 
 class RECONDITE_API rDrawable : public rActor3 {
 public:
-	rDrawable(const rString& id, rEngine* engine) : rActor3(id, engine), _model(nullptr) {}
-	rDrawable(recondite::Model* model, const rString& id, rEngine* engine) : rActor3(id, engine), _model(model) {}
+	rDrawable(const rString& id, rEngine* engine) : rActor3(id, engine), _modelInstance(nullptr) {}
+	rDrawable(recondite::ModelInstance* model, const rString& id, rEngine* engine) : rActor3(id, engine), _modelInstance(model) {}
 	
 	virtual bool IsDrawable() const override { return true; }
 
-	virtual recondite::Model* GetModel() { return _model; };
-	virtual void SetModel(recondite::Model* model) { _model = model; }
+	virtual recondite::ModelInstance* GetModelInstance() { 
+		return _modelInstance.get(); 
+	}
+
+	virtual void SetModel(recondite::Model* model) { 
+		_modelInstance.reset(new recondite::ModelInstance(model));
+	}
 
 protected:
-	recondite::Model* _model;
+	std::unique_ptr<recondite::ModelInstance> _modelInstance;
+
+	rNO_COPY_CLASS(rDrawable)
 };

@@ -32,67 +32,51 @@ void rPrimitive::InvalidateGeometry(){
 void rPrimitive::RecreateGeometry(){
 	if (!m_geometryInvalid) return;
 
-	//reuse existing materials if necessary
-	rMaterial* currentFaceMaterial = nullptr;
-	rMaterial* currentLineMaterial = nullptr;
-
-	if (_model) {
-		currentFaceMaterial = _model->GetTriangleMesh(0)->GetMaterial();
-		currentLineMaterial = _model->GetLineMesh(0)->GetMaterial();
-
-		m_engine->content->Models()->Delete(_model->GetName());
-	}
-
 	recondite::ModelData modelData;
-
 	CreateGeometry(modelData);
 
-	if (currentFaceMaterial == nullptr) { // first time creating geometry
-		MaterialData* faceMaterial = modelData.CreateMaterial();
-		MaterialData* lineMaterial = modelData.CreateMaterial();
+	recondite::MaterialData* faceMaterialData = modelData.CreateMaterial();
+	faceMaterialData->diffuseColor = m_faceColor;
+	modelData.GetTriangleMesh(0)->SetMaterialDataId(faceMaterialData->id);
 
-		faceMaterial->diffuseColor = m_faceColor;
-		lineMaterial->diffuseColor = m_edgeColor;
-
-		modelData.GetTriangleMesh(0)->SetMaterialDataId(faceMaterial->id);
-		modelData.GetLineMesh(0)->SetMaterialDataId(lineMaterial->id);
-	}
-	else { // assign old materials
-		modelData.GetTriangleMesh(0)->SetMaterial(currentFaceMaterial);
-		modelData.GetLineMesh(0)->SetMaterial(currentLineMaterial);
-	}
-
+	recondite::MaterialData* lineMaterialData = modelData.CreateMaterial();
+	lineMaterialData->diffuseColor = m_edgeColor;
+	modelData.GetLineMesh(0)->SetMaterialDataId(faceMaterialData->id);
 
 	rString assetName = Id() + "_model";
-	_model = m_engine->content->Models()->LoadFromData(modelData, assetName);
+	m_engine->content->Models()->Delete(assetName);
+	recondite::Model* model = m_engine->content->Models()->LoadFromData(modelData, assetName);
+
+	SetModel(model);
 
 	m_geometryInvalid = false;
 }
 
 void rPrimitive::UpdateMaterials(){
-	if (_model){
+	if (_modelInstance){
+		const recondite::Model* model = _modelInstance->GetModel();
 
-		size_t meshCount = _model->GetTriangleMeshCount();
+		size_t meshCount = model->GetTriangleMeshCount();
 		for (size_t i = 0; i < meshCount; i++) {
-			_model->GetTriangleMesh(i)->GetMaterial()->SetDiffuseColor(m_faceColor);
+			_modelInstance->GetTriangleMeshInstanceMaterial(i)->SetDiffuseColor(m_faceColor);
 		}
 
-		meshCount = _model->GetLineMeshCount();
+		meshCount = model->GetLineMeshCount();
 		for (size_t i = 0; i < meshCount; i++) {
-			_model->GetLineMesh(i)->GetMaterial()->SetDiffuseColor(m_edgeColor);
+			_modelInstance->GetLineMeshInstanceMaterial(i)->SetDiffuseColor(m_edgeColor);
 		}
 	}
 }
 
 void rPrimitive::OnDelete(){
-	if (_model)
-		m_engine->content->Models()->Delete(_model->GetName());
+	if (_modelInstance)
+		m_engine->content->Models()->Delete(_modelInstance->GetModel()->GetName());
 }
 
-recondite::Model* rPrimitive::GetModel() {
+recondite::ModelInstance* rPrimitive::GetModelInstance() {
 	RecreateGeometry();
 
-	return _model;
+	return _modelInstance.get();
 }
 
 void rPrimitive::Draw(){
@@ -100,7 +84,7 @@ void rPrimitive::Draw(){
 		
 	if (RenderingOptions()->GetVisibility()){
 		rMatrix4& transform = TransformMatrix();
-		m_engine->renderer->RenderModel(_model, transform);
+		m_engine->renderer->RenderModel(_modelInstance.get(), transform);
 	}
 }
 

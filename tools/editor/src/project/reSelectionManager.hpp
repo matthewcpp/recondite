@@ -51,7 +51,7 @@ private:
 	wxArrayString m_selectionList;
 
 	rwxComponent* m_component;
-	std::map<rMaterial*, rColor> m_cachedColorMap;
+	std::map<const rMaterial*, rColor> m_cachedColorMap;
 	rColor m_selectionColor;
 };
 

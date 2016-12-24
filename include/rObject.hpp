@@ -43,7 +43,7 @@ protected:
 private:
 	rString m_id;
 
-rNO_COPY_CLASS(rObject)
+	rNO_COPY_CLASS(rObject)
 };
 
 #endif

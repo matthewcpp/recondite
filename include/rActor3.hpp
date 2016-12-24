@@ -93,6 +93,8 @@ private:
 
 	bool m_hasTransformed;
 	bool m_pickable;
+
+	rNO_COPY_CLASS(rActor3)
 };
 
 #endif

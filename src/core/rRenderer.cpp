@@ -38,7 +38,9 @@ size_t rRenderer::ObjectsRendered() const{
 	return m_objectsRendered;
 }
 
-void rRenderer::_RenderModel(const Model* model, const rMatrix4& matrix) {
+void rRenderer::_RenderModel(const ModelInstance* modelInstance, const rMatrix4& matrix) {
+	const recondite::Model* model = modelInstance->GetModel();
+
 	rMatrix4 modelView = m_viewMatrix * matrix;
 
 	const recondite::Geometry* geometry = model->GetGeometry();
@@ -50,7 +52,7 @@ void rRenderer::_RenderModel(const Model* model, const rMatrix4& matrix) {
 		for (size_t i = 0; i < model->GetTriangleMeshCount(); i++) {
 			const recondite::Mesh* mesh = model->GetTriangleMesh(i);
 
-			m_graphicsDevice->SetActiveMaterial(mesh->GetMaterial());
+			m_graphicsDevice->SetActiveMaterial(modelInstance->GetTriangleMeshMaterial(i));
 			m_graphicsDevice->RenderTriangleMesh(mesh, m_projectionMatrix, modelView);
 		}
 	}
@@ -62,7 +64,7 @@ void rRenderer::_RenderModel(const Model* model, const rMatrix4& matrix) {
 		for (size_t i = 0; i < lineMeshCount; i++) {
 			const recondite::Mesh* mesh = model->GetLineMesh(i);
 
-			m_graphicsDevice->SetActiveMaterial(mesh->GetMaterial());
+			m_graphicsDevice->SetActiveMaterial(modelInstance->GetLineMeshMaterial(i));
 			m_graphicsDevice->RenderLineMesh(mesh, m_projectionMatrix, modelView);
 		}
 	}
@@ -70,8 +72,8 @@ void rRenderer::_RenderModel(const Model* model, const rMatrix4& matrix) {
 	m_graphicsDevice->DeactivateGeometryBuffer(geometry);
 }
 
-void rRenderer::RenderModel(const recondite::Model* model, const rMatrix4& matrix) {
-	const recondite::Geometry* geometry = model->GetGeometry();
+void rRenderer::RenderModel(const recondite::ModelInstance* modelInstance, const rMatrix4& matrix) {
+	const recondite::Geometry* geometry = modelInstance->GetModel()->GetGeometry();
 
 	rShader* shader = nullptr;
 
@@ -80,10 +82,10 @@ void rRenderer::RenderModel(const recondite::Model* model, const rMatrix4& matri
 	else
 		m_graphicsDevice->ActivateShader(m_contentManager->Shaders()->DefaultPrimitiveShader()->ProgramId());
 
-	_RenderModel(model, matrix);
+	_RenderModel(modelInstance, matrix);
 }
 
-void rRenderer::RenderAnimatedModel(const Model* model, const rMatrix4& matrix, const recondite::AnimationController* animationController) {
+void rRenderer::RenderAnimatedModel(const ModelInstance* model, const rMatrix4& matrix, const recondite::AnimationController* animationController) {
 	m_graphicsDevice->ActivateShader(m_contentManager->Shaders()->DefaultSkinnedShader()->ProgramId());
 	m_graphicsDevice->SetSkinningData(animationController->GetBoneTransformData(), animationController->GetBoneTransformCount());
 	_RenderModel(model, matrix);

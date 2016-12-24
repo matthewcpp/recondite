@@ -20,6 +20,8 @@ protected:
 
 private:
 	rAlignedBoxBoundingVolume m_boundingVolume;
+
+	rNO_COPY_CLASS(rProp)
 };
 
 #endif

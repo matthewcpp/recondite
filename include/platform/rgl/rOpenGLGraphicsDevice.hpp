@@ -70,7 +70,7 @@ public:
 	virtual void DeleteBuffer(unsigned int bufferId);
 
 	virtual void SetViewport(int x , int y, int width, int height) ;
-	virtual void SetActiveMaterial(rMaterial* material);
+	virtual void SetActiveMaterial(const rMaterial* material);
 
 	virtual void RenderTriangleMesh(const recondite::Mesh* mesh, const rMatrix4& projection, const rMatrix4& modelview);
 	virtual void RenderLineMesh(const recondite::Mesh* mesh, const rMatrix4& projection, const rMatrix4& modelview);

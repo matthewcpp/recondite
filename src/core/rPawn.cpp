@@ -1,14 +1,16 @@
 #include "rPawn.hpp"
 
 rPawn::rPawn(recondite::Model* model, const rString& id , rEngine* engine)
-:rDrawable(model, id, engine)
+:rDrawable(id, engine)
 {
+	SetModel(model);
+
 	m_renderingOptions.reset(new rRenderingOptions());
-	m_animationController.SetSkeleton(_model->GetSkeleton());
+	m_animationController.SetSkeleton(model->GetSkeleton());
 }
 
 void rPawn::SetModel(recondite::Model* model){
-	_model = model;
+	rDrawable::SetModel(model);
 	
 	if (model)
 		m_animationController.SetSkeleton(model->GetSkeleton());
@@ -24,8 +26,8 @@ rString rPawn::ClassName() const {
 }
 
 void rPawn::Draw(){
-	if (_model){
-		rMatrix4 transform;
-		m_engine->renderer->RenderAnimatedModel(_model, transform, &m_animationController);
+	if (_modelInstance){
+		rMatrix4 transform = TransformMatrix();
+		m_engine->renderer->RenderAnimatedModel(_modelInstance.get(), transform, &m_animationController);
 	}
 }

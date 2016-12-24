@@ -14,7 +14,7 @@ SkeletonGeometry::SkeletonGeometry(rEngine* engine, rPawn* pawn) {
 }
 
 void SkeletonGeometry::Init() {
-	recondite::Skeleton* skeleton = _pawn->GetModel()->GetSkeleton();
+	recondite::Skeleton* skeleton = _pawn->GetModelInstance()->GetModel()->GetSkeleton();
 
 	_skeletonBuffer.Reset(rGeometryType::Lines, 3, false);
 	_skeletonWorldPoints.resize(skeleton->GetBoneCount());
@@ -28,7 +28,7 @@ void SkeletonGeometry::Init() {
 
 void SkeletonGeometry::Update() {
 	if (_renderBones) {
-		Skeleton* skeleton = _pawn->GetModel()->GetSkeleton();
+		Skeleton* skeleton = _pawn->GetModelInstance()->GetModel()->GetSkeleton();
 		const rMatrix4* boneTransforms = _pawn->AnimationController()->GetBoneTransformData();
 
 		_skeletonBuffer.Clear();
@@ -54,7 +54,7 @@ void SkeletonGeometry::DrawLabels(rViewport* viewport) {
 
 		rSpriteBatch* sb = _engine->renderer->SpriteBatch();
 
-		Skeleton* skeleton = _pawn->GetModel()->GetSkeleton();
+		Skeleton* skeleton = _pawn->GetModelInstance()->GetModel()->GetSkeleton();
 
 		for (size_t i = 0; i < skeleton->GetBoneCount(); i++) {
 			Bone* bone = skeleton->GetBone(i);

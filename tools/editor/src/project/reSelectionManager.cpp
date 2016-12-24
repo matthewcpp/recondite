@@ -83,14 +83,13 @@ void reSelectionManager::ApplySelectionMaterial(const wxString& name) {
 	if (actor->IsDrawable()) {
 		rDrawable* drawable = (rDrawable*)actor;
 
-		recondite::Model* model = drawable->GetModel();
+		recondite::ModelInstance* modelInstance = drawable->GetModelInstance();
 
-		for (size_t i = 0; i < model->GetLineMeshCount(); i++) {
-			recondite::Mesh* mesh = model->GetLineMesh(i);
-			rMaterial* material = mesh->GetMaterial();
+		for (size_t i = 0; i < modelInstance->GetModel()->GetLineMeshCount(); i++) {
+			const rMaterial* material = modelInstance->GetLineMeshMaterial(i);
 
 			m_cachedColorMap[material] = material->DiffuseColor();
-			material->SetDiffuseColor(m_selectionColor);
+			modelInstance->GetLineMeshInstanceMaterial(i)->SetDiffuseColor(m_selectionColor);
 		}
 	}
 }
@@ -101,12 +100,10 @@ void reSelectionManager::ReapplyOriginalMaterials(const wxString& name) {
 	if (actor->IsDrawable()) {
 		rDrawable* drawable = (rDrawable*)actor;
 
-		recondite::Model* model = drawable->GetModel();
+		recondite::ModelInstance* modelInstance = drawable->GetModelInstance();
 
-		for (size_t i = 0; i < model->GetLineMeshCount(); i++) {
-			recondite::Mesh* mesh = model->GetLineMesh(i);
-			rMaterial* material = mesh->GetMaterial();
-
+		for (size_t i = 0; i < modelInstance->GetModel()->GetLineMeshCount(); i++) {
+			rMaterial* material = modelInstance->GetLineMeshInstanceMaterial(i);
 			material->SetDiffuseColor(m_cachedColorMap[material]);
 			m_cachedColorMap.erase(material);
 		}
@@ -123,7 +120,7 @@ void reSelectionManager::RenderSelection() {
 		for (size_t i = 0; i < m_selectionList.size(); i++) {
 			rDrawable* drawable = (rDrawable*)m_component->GetScene()->GetActor(m_selectionList[i].c_str().AsChar());
 
-			renderer->RenderModel(drawable->GetModel(), drawable->TransformMatrix());
+			renderer->RenderModel(drawable->GetModelInstance(), drawable->TransformMatrix());
 		}
 
 		renderer->SetModelRenderMode(renderMode);

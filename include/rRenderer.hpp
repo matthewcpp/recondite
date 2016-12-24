@@ -22,7 +22,7 @@
 #include "rRenderingOptions.hpp"
 #include "rSpriteBatch.hpp"
 
-#include "asset/rModel.hpp"
+#include "rModelInstance.hpp"
 #include "asset/rMaterial.hpp"
 #include "rAnimationController.hpp"
 
@@ -46,8 +46,8 @@ public:
 	
 	rSpriteBatch* SpriteBatch();
 
-	void RenderModel(const Model* model, const rMatrix4& matrix);
-	void RenderAnimatedModel(const Model* model, const rMatrix4& matrix, const recondite::AnimationController* animationController);
+	void RenderModel(const ModelInstance* modelInstance, const rMatrix4& matrix);
+	void RenderAnimatedModel(const ModelInstance* modelInstance, const rMatrix4& matrix, const recondite::AnimationController* animationController);
 
 	void RenderImmediateLines(const rImmediateBuffer& buffer, rColor color);
 
@@ -55,7 +55,7 @@ public:
 	rRenderMode GetModelRenderMode() const;
 
 private:
-	void _RenderModel(const Model* model, const rMatrix4& matrix);
+	void _RenderModel(const ModelInstance* modelInstance, const rMatrix4& matrix);
 	void RenderSpriteBatch();
 
 private:

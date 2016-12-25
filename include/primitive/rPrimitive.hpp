@@ -32,6 +32,7 @@ protected:
 	virtual void OnLoad();
 
 	virtual void CreateGeometry(ModelData& modelData) = 0;
+	virtual void RecalculateBoundingVolume() = 0;
 	void InvalidateGeometry();
 
 	void UpdateMaterials();

@@ -32,6 +32,10 @@ bool rStaticMeshBoundingVolume::IntersectsRay(const rRay3& ray, rPickResult& pic
 	return false;
 }
 
+rStaticMeshBoundingVolume::rStaticMeshBoundingVolume(recondite::Model* model) {
+	SetModel(model);
+}
+
 void rStaticMeshBoundingVolume::SetModel(recondite::Model* model) {
 	_model = model;
 }

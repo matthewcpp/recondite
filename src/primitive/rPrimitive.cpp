@@ -47,7 +47,6 @@ void rPrimitive::RecreateGeometry(){
 	recondite::Model* model = m_engine->content->Models()->LoadFromData(modelData, assetName);
 
 	SetModel(model);
-
 	m_geometryInvalid = false;
 }
 
@@ -107,5 +106,6 @@ bool rPrimitive::DoSerialize(riSerializationTarget* target){
 void rPrimitive::OnLoad(){
 	rActor3::OnLoad();
 	InvalidateGeometry();
+	RecalculateBoundingVolume();
 }
 

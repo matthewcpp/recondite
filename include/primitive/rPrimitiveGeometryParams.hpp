@@ -58,7 +58,7 @@ namespace rPrimitiveGeometry{
 
 	struct RECONDITE_API rPrimitiveCylinderParams : public rPrimitiveParams{
 		rPrimitiveCylinderParams()
-			:radius(1.0f), height(1.0f) {}
+			:radius(1.0f), height(1.0f), segmentCount(20) {}
 		rPrimitiveCylinderParams(float _radius, float _height, size_t _segmentCount)
 			:radius(_radius), height(_height), segmentCount(_segmentCount) {}
 

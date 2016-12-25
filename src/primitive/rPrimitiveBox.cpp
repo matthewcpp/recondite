@@ -10,6 +10,9 @@ rPrimitiveBox::rPrimitiveBox(const rString& id, rEngine* engine)
 	m_widthSegments = 1;
 	m_heightSegments = 1;
 	m_depthSegments = 1;
+
+	SetBoundingVolume(new rAlignedBoxBoundingVolume());
+	RecalculateBoundingVolume();
 }
 
 void rPrimitiveBox::CreateGeometry(ModelData& modelData){
@@ -27,6 +30,7 @@ float rPrimitiveBox::Width() const{
 
 void rPrimitiveBox::SetWidth(float width){
 	m_width = width;
+	RecalculateBoundingVolume();
 	InvalidateGeometry();
 }
 
@@ -45,6 +49,7 @@ float rPrimitiveBox::Height() const{
 
 void rPrimitiveBox::SetHeight(float height){
 	m_height = height;
+	RecalculateBoundingVolume();
 	InvalidateGeometry();
 }
 
@@ -75,13 +80,8 @@ void rPrimitiveBox::SetDepthSegments(int depthSegments){
 	InvalidateGeometry();
 }
 
-riBoundingVolume* rPrimitiveBox::DoGetBoundingVolume(){
-	return &m_boundingVolume;
-}
 
-void rPrimitiveBox::DoRecalculateBoundingVolume(){
-	rMatrix4 transform = TransformMatrix();
-
+void rPrimitiveBox::RecalculateBoundingVolume(){
 	float halfWidth = m_width / 2.0f;
 	float halfDepth = m_depth / 2.0f;
 	
@@ -89,38 +89,31 @@ void rPrimitiveBox::DoRecalculateBoundingVolume(){
 	rAlignedBox3 b;
 
 	pt.Set(-halfWidth, m_height, halfDepth);
-	transform.TransformVector3(pt);
 	b.min = pt;	b.max = pt;
 
 	pt.Set(halfWidth, m_height, halfDepth);
-	transform.TransformVector3(pt);
 	b.AddPoint(pt);
 
 	pt.Set(halfWidth, 0, halfDepth);
-	transform.TransformVector3(pt);
 	b.AddPoint(pt);
 
 	pt.Set(-halfWidth, 0, halfDepth);
-	transform.TransformVector3(pt);
 	b.AddPoint(pt);
 
 	pt.Set(-halfWidth, m_height, -halfDepth);
-	transform.TransformVector3(pt);
 	b.AddPoint(pt);
 
 	pt.Set(halfWidth, m_height, -halfDepth);
-	transform.TransformVector3(pt);
 	b.AddPoint(pt);
 
 	pt.Set(halfWidth, 0, -halfDepth);
-	transform.TransformVector3(pt);
 	b.AddPoint(pt);
 
 	pt.Set(-halfWidth, 0, -halfDepth);
-	transform.TransformVector3(pt);
 	b.AddPoint(pt);
 
-	m_boundingVolume.SetBox(b);
+	rAlignedBoxBoundingVolume* boundingVolume = (rAlignedBoxBoundingVolume*)BoundingVolume();
+	boundingVolume->SetBox(b);
 }
 
 bool rPrimitiveBox::DoSerialize(riSerializationTarget* target){

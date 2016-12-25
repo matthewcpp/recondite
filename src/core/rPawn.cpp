@@ -1,18 +1,11 @@
 #include "rPawn.hpp"
+#include "rStaticMeshBoundingVolume.hpp"
 
 rPawn::rPawn(recondite::Model* model, const rString& id , rEngine* engine)
 :rDrawable(id, engine)
 {
 	SetModel(model);
 	m_animationController.SetSkeleton(model->GetSkeleton());
-}
-
-void rPawn::SetModel(recondite::Model* model){
-	rDrawable::SetModel(model);
-	
-	if (model)
-		m_animationController.SetSkeleton(model->GetSkeleton());
-
 }
 
 void rPawn::Update(){
@@ -28,4 +21,12 @@ void rPawn::Draw(){
 		rMatrix4 transform = TransformMatrix();
 		m_engine->renderer->RenderAnimatedModel(_modelInstance.get(), transform, &m_animationController);
 	}
+}
+
+void rPawn::SetModel(recondite::Model* model) {
+	rDrawable::SetModel(model);
+	m_animationController.SetSkeleton(model->GetSkeleton());
+
+	//todo handle bounding for animated model
+	SetBoundingVolume(new rStaticMeshBoundingVolume(model));
 }

@@ -6,6 +6,9 @@ rPrimitiveCylinder::rPrimitiveCylinder(const rString& id, rEngine* engine)
 	m_radius = 1.0f;
 	m_height = 1.0f;
 	m_segmentCount = 20;
+
+	SetBoundingVolume(new rAlignedBoxBoundingVolume());
+	RecalculateBoundingVolume();
 }
 
 bool rPrimitiveCylinder::DoSerialize(riSerializationTarget* target){
@@ -25,6 +28,7 @@ float rPrimitiveCylinder::Radius() const{
 
 void rPrimitiveCylinder::SetRadius(float radius){
 	m_radius = radius;
+	RecalculateBoundingVolume();
 	InvalidateGeometry();
 }
 
@@ -34,6 +38,7 @@ float rPrimitiveCylinder::Height() const{
 
 void rPrimitiveCylinder::SetHeight(float height){
 	m_height = height;
+	RecalculateBoundingVolume();
 	InvalidateGeometry();
 }
 
@@ -55,35 +60,26 @@ void rPrimitiveCylinder::CreateGeometry(ModelData& modelData){
 	rPrimitiveGeometry::CreateCylinder(params, modelData);
 }
 
-riBoundingVolume* rPrimitiveCylinder::DoGetBoundingVolume(){
-	return &m_boundingVolume;
-}
-
-void AddCircle(const rVector3& center, float radius, const rMatrix4& transform, rAlignedBox3& b){
+void AddCircle(const rVector3& center, float radius, rAlignedBox3& b){
 	rVector3 pt = center + (rVector3::ForwardVector * radius);
-	transform.TransformVector3(pt);
 	b.AddPoint(pt);
 
 	pt = center + (rVector3::BackwardVector * radius);
-	transform.TransformVector3(pt);
 	b.AddPoint(pt);
 
 	pt = center + (rVector3::LeftVector * radius);
-	transform.TransformVector3(pt);
 	b.AddPoint(pt);
 
 	pt = center + (rVector3::RightVector * radius);
-	transform.TransformVector3(pt);
 	b.AddPoint(pt);
 }
 
-void rPrimitiveCylinder::DoRecalculateBoundingVolume(){
-	rMatrix4 transform = TransformMatrix();
-
+void rPrimitiveCylinder::RecalculateBoundingVolume(){
 	rAlignedBox3 b;
 
-	AddCircle(rVector3::ZeroVector, m_radius, transform, b);
-	AddCircle(rVector3::UpVector * m_height, m_radius, transform, b);
+	AddCircle(rVector3::ZeroVector, m_radius, b);
+	AddCircle(rVector3::UpVector * m_height, m_radius, b);
 
-	m_boundingVolume.SetBox(b);
+	rAlignedBoxBoundingVolume* boundingVolume = (rAlignedBoxBoundingVolume*)BoundingVolume();
+	boundingVolume->SetBox(b);
 }

@@ -1,4 +1,5 @@
 #include "rProp.hpp"
+#include "rStaticMeshBoundingVolume.hpp"
 
 rProp::rProp(recondite::Model* model, const rString& id, rEngine* engine)
 	:rDrawable(id, engine)
@@ -18,20 +19,7 @@ void rProp::Draw(){
 	}
 }
 
-void rProp::DoRecalculateBoundingVolume() {
-	rAlignedBox3 modelBounding = _modelInstance->GetModel()->GetBoundingBox();
-	const rMatrix4& transform = TransformMatrix();
-
-	transform.TransformVector3(modelBounding.min);
-	transform.TransformVector3(modelBounding.max);
-
-	rAlignedBox3 transformedBounding;
-	transformedBounding.AddPoint(modelBounding.min);
-	transformedBounding.AddPoint(modelBounding.max);
-
-	m_boundingVolume.SetBox(transformedBounding);
-}
-
-riBoundingVolume* rProp::DoGetBoundingVolume() {
-	return &m_boundingVolume;
+void rProp::SetModel(recondite::Model* model) {
+	rDrawable::SetModel(model);
+	SetBoundingVolume(new rStaticMeshBoundingVolume(model));
 }

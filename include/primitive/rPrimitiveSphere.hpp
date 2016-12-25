@@ -31,15 +31,12 @@ public:
 
 protected:
 	virtual void CreateGeometry(ModelData& modelData);
-	virtual void DoRecalculateBoundingVolume();
-	virtual riBoundingVolume* DoGetBoundingVolume();
+	virtual void RecalculateBoundingVolume() override;
 
 private:
 	float m_radius;
 	int m_rings;
 	int m_sectors;
-
-	rSphereBoundingVolume m_boundingVolume;
 };
 
 #endif

@@ -84,7 +84,11 @@ Model* rModelManager::LoadFromData(ModelData& modelData, const rString& name) {
 
 		rMaterial* material = meshData->GetMaterial();
 		if (!material) {
-			material = materials[meshData->GetMaterialDataId()];
+			uint32_t materialId = meshData->GetMaterialDataId();
+			if (materialId == UINT32_MAX)
+				material = new rMaterial();
+			else
+				material = materials[materialId];
 		}
 
 		Mesh* mesh = model->CreateTriangleMesh(bufferId, meshData->GetElementCount(), material);
@@ -99,7 +103,11 @@ Model* rModelManager::LoadFromData(ModelData& modelData, const rString& name) {
 		
 		rMaterial* material = meshData->GetMaterial();
 		if (!material) {
-			material = materials[meshData->GetMaterialDataId()];
+			uint32_t materialId = meshData->GetMaterialDataId();
+			if (materialId == UINT32_MAX)
+				material = new rMaterial();
+			else
+				material = materials[materialId];
 		}
 		
 		Mesh* mesh = model->CreateLineMesh(bufferId, meshData->GetElementCount(), material);

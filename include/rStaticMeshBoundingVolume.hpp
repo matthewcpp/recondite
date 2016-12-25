@@ -10,6 +10,7 @@
 
 class RECONDITE_API rStaticMeshBoundingVolume : public riBoundingVolume {
 public:
+	rStaticMeshBoundingVolume(recondite::Model* model);
 	virtual bool IntersectsRay(const rRay3& ray, rPickResult& pickResult) const;
 	virtual rAlignedBox3 FitBox() const;
 

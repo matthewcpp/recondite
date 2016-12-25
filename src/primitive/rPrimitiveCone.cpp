@@ -7,6 +7,9 @@ rPrimitiveCone::rPrimitiveCone(const rString& id, rEngine* engine)
 	m_radius = 1.0f;
 	
 	m_segmentCount = 15;
+
+	SetBoundingVolume(new rAlignedBoxBoundingVolume());
+	RecalculateBoundingVolume();
 }
 
 float rPrimitiveCone::Radius() const{
@@ -15,6 +18,7 @@ float rPrimitiveCone::Radius() const{
 
 void rPrimitiveCone::SetRadius(float radius){
 	m_radius = radius;
+	RecalculateBoundingVolume();
 	InvalidateGeometry();
 }
 
@@ -24,6 +28,7 @@ float rPrimitiveCone::Height() const{
 
 void rPrimitiveCone::SetHeight(float height){
 	m_height = height;
+	RecalculateBoundingVolume();
 	InvalidateGeometry();
 }
 
@@ -56,33 +61,23 @@ bool rPrimitiveCone::DoSerialize(riSerializationTarget* target){
 	return rPrimitive::DoSerialize(target);
 }
 
-riBoundingVolume* rPrimitiveCone::DoGetBoundingVolume(){
-	return &m_boundingVolume;
-}
-
-void rPrimitiveCone::DoRecalculateBoundingVolume(){
-	rMatrix4 transform = TransformMatrix();
-
+void rPrimitiveCone::RecalculateBoundingVolume(){
 	rAlignedBox3 b;
 	rVector3 pt = rVector3::ForwardVector * m_radius;
-	transform.TransformVector3(pt);
 	b.AddPoint(pt);
 
 	pt = rVector3::BackwardVector * m_radius;
-	transform.TransformVector3(pt);
 	b.AddPoint(pt);
 
 	pt = rVector3::LeftVector * m_radius;
-	transform.TransformVector3(pt);
 	b.AddPoint(pt);
 
 	pt = rVector3::RightVector * m_radius;
-	transform.TransformVector3(pt);
 	b.AddPoint(pt);
 
 	pt = rVector3::UpVector * m_height;
-	transform.TransformVector3(pt);
 	b.AddPoint(pt);
 
-	m_boundingVolume.SetBox(b);
+	rAlignedBoxBoundingVolume* boundingVolume = (rAlignedBoxBoundingVolume*)BoundingVolume();
+	boundingVolume->SetBox(b);
 }

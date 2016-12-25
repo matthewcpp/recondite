@@ -119,8 +119,6 @@ void rActor3::RecalculateTransform(){
 		m_transform = translate * rotate * scale;
 
 		m_hasTransformed = false;
-
-		DoRecalculateBoundingVolume();
 	}
 }
 
@@ -129,15 +127,12 @@ rMatrix4& rActor3::TransformMatrix(){
 	return m_transform;
 }
 
-riBoundingVolume* rActor3::BoundingVolume(){
-	RecalculateTransform();
-	return DoGetBoundingVolume();
+riBoundingVolume* rActor3::BoundingVolume() const{
+	return m_boundingVolume.get();
 }
 
-void rActor3::DoRecalculateBoundingVolume(){}
-
-riBoundingVolume* rActor3::DoGetBoundingVolume(){
-	return NULL;
+void rActor3::SetBoundingVolume(riBoundingVolume* boundingVolume) {
+	m_boundingVolume.reset(boundingVolume);
 }
 
 void rActor3::SetTransformed(bool transformed){
@@ -207,11 +202,26 @@ bool rActor3::IsDrawable() const {
 }
 
 bool rActor3::RayPick(const rRay3& ray, rPickResult& result) {
+	const rMatrix4& transformMatrix = TransformMatrix();
+	rMatrix4 inverseTransform; 
+	transformMatrix.GetInvertedMatrix(inverseTransform);
+
+	rRay3 modelSpaceRay = ray;
+	inverseTransform.TransformVector3(modelSpaceRay.origin);
+	inverseTransform.TransformNormal(modelSpaceRay.direction);
+	modelSpaceRay.direction.Normalize();
+
 	riBoundingVolume* boundingVolume = BoundingVolume();
 	result.actor = this;
 
-	if (boundingVolume)
-		return boundingVolume->IntersectsRay(ray, result);
+	if (boundingVolume) {
+		bool intersects = boundingVolume->IntersectsRay(modelSpaceRay, result);
+
+		if (intersects)
+			transformMatrix.TransformVector3(result.point);
+
+		return intersects;
+	}
 	else 
 		return false;
 }

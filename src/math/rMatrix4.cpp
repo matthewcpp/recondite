@@ -64,6 +64,20 @@ void rMatrix4::TransformVector3(rVector3& v)const{
 	v = r;
 }
 
+rVector3 rMatrix4::GetTransformedNormal(const rVector3& v) const {
+	rVector3 r = v;
+	TransformNormal(r);
+	return r;
+}
+
+void rMatrix4::TransformNormal(rVector3& v) const {
+	rVector3 r;
+	r.x = m[0] * v.x + m[4] * v.y + m[8] * v.z;
+	r.y = m[1] * v.x + m[5] * v.y + m[9] * v.z;
+	r.z = m[2] * v.x + m[6] * v.y + m[10] * v.z;
+	v = r;
+}
+
 rVector4 rMatrix4::GetTransformedVector4(const rVector4& v) const{
 	rVector4 r = v;
 	TransformVector4(r);

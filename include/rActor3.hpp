@@ -40,7 +40,8 @@ public:
 	virtual rString ClassName() const = 0;
 
 	virtual rMatrix4& TransformMatrix();
-	virtual riBoundingVolume* BoundingVolume();
+	virtual riBoundingVolume* BoundingVolume() const;
+	void SetBoundingVolume(riBoundingVolume* boundingVolume);
 
 	bool Pickable() const;
 	void SetPickable(bool pickable);
@@ -76,9 +77,6 @@ protected:
 
 	void RecalculateTransform();
 
-	virtual void DoRecalculateBoundingVolume();
-	virtual riBoundingVolume* DoGetBoundingVolume();
-
 protected:
 
 	rVector3 m_position;
@@ -88,6 +86,8 @@ protected:
 	rMatrix4 m_transform;
 	rPropertyCollection m_customProperties;
 	rRenderingOptions m_renderingOptions;
+
+	std::unique_ptr<riBoundingVolume> m_boundingVolume;
 
 private:
 

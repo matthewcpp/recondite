@@ -6,6 +6,9 @@ rPrimitiveSphere::rPrimitiveSphere(const rString& id, rEngine* engine)
 	m_radius = 1.0f;
 	m_rings = 15;
 	m_sectors = 15;
+
+	SetBoundingVolume(new rSphereBoundingVolume());
+	RecalculateBoundingVolume();
 }
 
 float rPrimitiveSphere::Radius() const{
@@ -14,6 +17,7 @@ float rPrimitiveSphere::Radius() const{
 
 void rPrimitiveSphere::SetRadius(float radius){
 	m_radius = radius;
+	RecalculateBoundingVolume();
 	InvalidateGeometry();
 }
 
@@ -44,16 +48,9 @@ void rPrimitiveSphere::CreateGeometry(ModelData& modelData){
 	rPrimitiveGeometry::CreateSphere(params, modelData);
 }
 
-riBoundingVolume* rPrimitiveSphere::DoGetBoundingVolume(){
-	return &m_boundingVolume;
-}
+void rPrimitiveSphere::RecalculateBoundingVolume(){
+	rSphere s(0, m_radius, 0, m_radius);
 
-void rPrimitiveSphere::DoRecalculateBoundingVolume(){
-	rMatrix4 transform = TransformMatrix();
-
-	//todo: handle non uniform scale for sphere?
-	float sphereRadius = m_scale.x * m_radius;
-	rSphere s(m_position.x, m_position.y + sphereRadius, m_position.z, sphereRadius);
-
-	m_boundingVolume.SetSphere(s);
+	rSphereBoundingVolume* boundingVolume = (rSphereBoundingVolume*)BoundingVolume();
+	boundingVolume->SetSphere(s);
 }

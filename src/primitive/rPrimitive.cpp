@@ -7,7 +7,6 @@ rPrimitive::rPrimitive(const rString& id, rEngine* engine)
 	m_faceColor = rColor::White;
 
 	m_geometryInvalid = true;
-	m_renderingOptions.reset(new rRenderingOptions());
 }
 
 void rPrimitive::SetColor(const rColor& color){

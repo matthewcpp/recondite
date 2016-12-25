@@ -4,8 +4,6 @@ rPawn::rPawn(recondite::Model* model, const rString& id , rEngine* engine)
 :rDrawable(id, engine)
 {
 	SetModel(model);
-
-	m_renderingOptions.reset(new rRenderingOptions());
 	m_animationController.SetSkeleton(model->GetSkeleton());
 }
 
@@ -26,7 +24,7 @@ rString rPawn::ClassName() const {
 }
 
 void rPawn::Draw(){
-	if (_modelInstance){
+	if (m_renderingOptions.GetVisibility()){
 		rMatrix4 transform = TransformMatrix();
 		m_engine->renderer->RenderAnimatedModel(_modelInstance.get(), transform, &m_animationController);
 	}

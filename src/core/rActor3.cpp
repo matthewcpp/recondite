@@ -116,7 +116,7 @@ void rActor3::RecalculateTransform(){
 		rQuaternion q(m_rotation);
 		rMatrixUtil::QuaterionToMatrix(q, rotate);
 
-		m_transform = translate * scale * rotate;
+		m_transform = translate * rotate * scale;
 
 		m_hasTransformed = false;
 
@@ -145,7 +145,7 @@ void rActor3::SetTransformed(bool transformed){
 }
 
 rRenderingOptions* rActor3::RenderingOptions(){
-	return m_renderingOptions.get();
+	return &m_renderingOptions;
 }
 
 rPropertyCollection& rActor3::CustomProperties(){

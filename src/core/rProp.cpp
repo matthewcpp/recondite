@@ -4,7 +4,6 @@ rProp::rProp(recondite::Model* model, const rString& id, rEngine* engine)
 	:rDrawable(id, engine)
 {
 	SetModel(model);
-	m_renderingOptions.reset(new rRenderingOptions());
 }
 
 rString rProp::ClassName() const{
@@ -12,9 +11,11 @@ rString rProp::ClassName() const{
 }
 
 void rProp::Draw(){
-	rMatrix4& transform = TransformMatrix();
+	if (m_renderingOptions.GetVisibility()) {
+		rMatrix4& transform = TransformMatrix();
 
-	m_engine->renderer->RenderModel(_modelInstance.get(), transform);
+		m_engine->renderer->RenderModel(_modelInstance.get(), transform);
+	}
 }
 
 void rProp::DoRecalculateBoundingVolume() {

@@ -87,7 +87,7 @@ protected:
 
 	rMatrix4 m_transform;
 	rPropertyCollection m_customProperties;
-	std::shared_ptr<rRenderingOptions> m_renderingOptions;
+	rRenderingOptions m_renderingOptions;
 
 private:
 

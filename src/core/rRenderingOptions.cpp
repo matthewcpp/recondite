@@ -46,15 +46,3 @@ rPickingColorManager s_pickingColorManager;
 void rPickingColorManager::ReturnColor(const rColor& color){
 	m_availableColors.push(color);
 }
-
-rRenderingOptions::rRenderingOptions(){
-	s_pickingColorManager.GetNextColor(m_pickingColor);
-
-	m_visibility = true;
-	m_overdraw = false;
-}
-
-rRenderingOptions::~rRenderingOptions(){
-	s_pickingColorManager.ReturnColor(m_pickingColor);
-}
-

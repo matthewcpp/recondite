@@ -15,8 +15,6 @@ public:
 	virtual bool OnRightUp(wxMouseEvent& event) { return false; }
 	virtual bool OnMousewheel(wxMouseEvent& event) { return false; }
 
-	virtual bool UpdateKeyboardInteraction() { return false; }
-
 protected:
 	reComponent* _component;
 	recondite::Camera* _camera;

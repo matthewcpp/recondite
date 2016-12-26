@@ -30,8 +30,6 @@ public:
 
 	rwxGLCanvas* GetCanvas();
 
-	static void DisableInputTimer();
-
 	void SetViewOrientation(reViewOrientation viewOrientation);
 	void SetViewOrientation(reViewOrientation viewOrientation, const rAlignedBox3& bounding);
 	void SetRenderMode(rRenderMode renderMode);
@@ -47,10 +45,6 @@ private:
 
 	void OnCanvasMouseEvent(wxMouseEvent& event);
 	void OnCanvasKeypress(wxKeyEvent& event);
-
-	void OnEnterCanvas(wxMouseEvent& event);
-	void OnLeaveCanvas(wxMouseEvent& event);
-	void OnTimer(wxTimerEvent& event);
 
 private:
 
@@ -76,7 +70,6 @@ private:
 
 	wxString m_viewportName;
 
-	static wxTimer* s_inputTimer;
 	static wxWindowID s_nextCanvasId;
 
 	std::unique_ptr<reCameraController> m_cameraController;

@@ -56,6 +56,8 @@ private:
 	std::pair<bool, int> m_splitterInfo[3];
 	int m_sashPositions[3];
 	bool m_isMaximized;
+
+	wxLongLong m_lastUpdateTime;
 };
 
 #endif

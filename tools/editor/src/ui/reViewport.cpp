@@ -13,8 +13,6 @@ reViewport::reViewport(reComponent* component, reToolManager* toolManager, reVie
 
 	m_isMaximized = false;
 
-	if (!s_inputTimer) s_inputTimer = new wxTimer();
-
 	CreateViewportElements();
 	BindEvents();
 }
@@ -66,12 +64,7 @@ void reViewport::BindEvents(){
 	this->Bind(wxEVT_KEY_DOWN, &reViewport::OnCanvasKeypress, this);
 	m_glCanvas->Bind(wxEVT_KEY_UP, &reViewport::OnCanvasKeypress, this);
 
-	m_glCanvas->Bind(wxEVT_ENTER_WINDOW, &reViewport::OnEnterCanvas, this);
-	m_glCanvas->Bind(wxEVT_LEAVE_WINDOW, &reViewport::OnLeaveCanvas, this);
-
 	m_minMaxButton->Bind(wxEVT_BUTTON, &reViewport::OnMinMaxButtonPress, this);
-
-	Bind(wxEVT_TIMER, &reViewport::OnTimer, this);
 }
 
 void reViewport::OnCanvasMouseEvent(wxMouseEvent& event){
@@ -168,22 +161,6 @@ wxString reViewport::GetViewportName(){
 	return m_viewportName;
 }
 
-void reViewport::OnTimer(wxTimerEvent& event){
-	if (m_glCanvas->HasFocus() && m_cameraController->UpdateKeyboardInteraction())
-		m_glCanvas->Refresh();
-}
-
-void reViewport::OnEnterCanvas(wxMouseEvent& event){
-	s_inputTimer->SetOwner(this);
-	s_inputTimer->Start(25);
-	m_glCanvas->SetFocus();
-}
-
-void reViewport::OnLeaveCanvas(wxMouseEvent& event) {
-	s_inputTimer->Stop();
-	m_glCanvas->GetParent()->SetFocus();
-}
-
 void reViewport::OnMinMaxButtonPress(wxCommandEvent& event){
 	if (m_isMaximized){
 		m_viewportManager->RestoreViewports();
@@ -203,10 +180,6 @@ void reViewport::SetViewportIsMaximized(bool maximized){
 		m_minMaxButton->SetBitmap(wxBitmap("assets/action-maximize.png", wxBITMAP_TYPE_PNG));
 
 	m_isMaximized = maximized;
-}
-
-void reViewport::DisableInputTimer() {
-	s_inputTimer->Stop();
 }
 
 void reViewport::SetViewOrientation(reViewOrientation viewOrientation) {
@@ -271,5 +244,4 @@ void reViewport::SetViewOrientation(reViewOrientation viewOrientation, const rAl
 		m_cameraController.reset(new reCameraUserController(m_glCanvas->GetCamera(), m_component));
 }
 
-wxTimer* reViewport::s_inputTimer = nullptr;
 wxWindowID reViewport::s_nextCanvasId = 17000;

@@ -13,6 +13,7 @@ reViewportDisplay::reViewportDisplay(reComponent* component, reToolManager* tool
 	m_component->Bind(rEVT_COMPONENT_INITIALIZED, this, &reViewportDisplay::OnComponentInitialized);
 
 	m_isMaximized = false;
+	m_lastUpdateTime = 0;
 }
 
 reViewport* reViewportDisplay::GetActiveViewport(){
@@ -121,10 +122,16 @@ void reViewportDisplay::OnSceneLoadComplete(rEvent& event) {
 }
 
 void reViewportDisplay::UpdateAllViewports(){
-	m_topLeftViewport->GetCanvas()->Refresh();
-	m_topRightViewport->GetCanvas()->Refresh();
-	m_bottomLeftViewport->GetCanvas()->Refresh();
-	m_bottomRightViewport->GetCanvas()->Refresh();
+	wxLongLong updateTime = wxGetUTCTimeMillis();
+
+	if (updateTime - m_lastUpdateTime > 33) {
+		m_topLeftViewport->GetCanvas()->Refresh();
+		m_topRightViewport->GetCanvas()->Refresh();
+		m_bottomLeftViewport->GetCanvas()->Refresh();
+		m_bottomRightViewport->GetCanvas()->Refresh();
+
+		m_lastUpdateTime = updateTime;
+	}
 }
 
 void reViewportDisplay::OnDisplayShouldUpdate(rEvent& event){

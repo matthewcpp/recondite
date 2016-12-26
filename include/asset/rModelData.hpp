@@ -144,10 +144,12 @@ namespace recondite {
 		\returns the triangle mesh at the given index.
 		*/
 		MeshData* GetTriangleMesh(size_t index);
+		void DeleteTriangleMesh(size_t index);
 
 		MeshData* CreateLineMesh();
 		size_t GetLineMeshCount() const;
 		MeshData* GetLineMesh(size_t index) const;
+		void DeleteLineMesh(size_t index);
 
 		/**
 		Gets a triangle mesh by index.

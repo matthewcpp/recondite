@@ -19,6 +19,7 @@ public:
 	~reToolManager();
 
 	void CreateToolbars();
+	void OnComponentInit(rEvent& event);
 
 public:
 	bool OnMouseDown(wxMouseEvent& event, rwxGLCanvas* canvas);
@@ -36,7 +37,7 @@ private:
 
 	void ActivateTool(reToolId toolId);
 
-	void InitTools();
+	void CreateTools();
 	
 	void Destroy();
 

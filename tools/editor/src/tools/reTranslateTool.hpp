@@ -26,7 +26,10 @@ public:
 
 	virtual wxString GetToolName() const override;
 	virtual void OnActivate() override;
+	virtual void OnDeactivate() override;
 	virtual void OnUpdate() override;
+
+	virtual void Init() override;
 
 private:
 	void SetDragPlaneFromSelectedAxis();
@@ -41,6 +44,8 @@ public:
 	rVector3 m_previousWorldPosition;
 
 	reTranslateCommand* m_command;
+
+	rNO_COPY_CLASS(reTranslateTool)
 };
 
 #endif

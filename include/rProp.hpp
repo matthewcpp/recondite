@@ -11,15 +11,9 @@ public:
 	rProp(recondite::Model* model, const rString& id, rEngine* engine);
 
 	virtual rString ClassName() const override;
+	virtual void SetModel(recondite::Model* model) override;
 
 	virtual void Draw() override;
-
-protected:
-	virtual void DoRecalculateBoundingVolume() override;
-	virtual riBoundingVolume* DoGetBoundingVolume() override;
-
-private:
-	rAlignedBoxBoundingVolume m_boundingVolume;
 
 	rNO_COPY_CLASS(rProp)
 };

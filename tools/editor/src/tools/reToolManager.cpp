@@ -12,15 +12,16 @@ reToolManager::reToolManager(reComponent* component, wxFrame* owner, wxAuiManage
 	m_activeToolId = reTOOL_NONE;
 
 	m_component->Bind(reCommandProcessed, this, &reToolManager::OnCommandProcessed);
+	m_component->Bind(rEVT_COMPONENT_INITIALIZED, this, &reToolManager::OnComponentInit);
 
-	InitTools();
+	CreateTools();
 }
 
 reToolManager::~reToolManager(){
 	Destroy();
 }
 
-void reToolManager::InitTools(){
+void reToolManager::CreateTools(){
 
 	m_tools[reTOOL_SELECT] = new reSelectionTool(m_component, m_owner);
 	m_tools[reTOOL_TRANSLATE] = new reTranslateTool(m_component, m_owner);
@@ -118,6 +119,12 @@ void reToolManager::CreateToolbars(){
 		.Gripper(false));
 
 
+}
+
+void reToolManager::OnComponentInit(rEvent& event) {
+	for (auto& tool : m_tools) {
+		tool.second->Init();
+	}
 }
 
 

@@ -131,6 +131,26 @@ riBoundingVolume* rActor3::BoundingVolume() const{
 	return m_boundingVolume.get();
 }
 
+rAlignedBox3 rActor3::WorldBounding(){
+	riBoundingVolume* boundingVolume = BoundingVolume();
+
+	if (boundingVolume) {
+		const rMatrix4& transform = TransformMatrix();
+		rAlignedBox3 modelSpaceBounding = boundingVolume->FitBox();
+
+		transform.TransformVector3(modelSpaceBounding.min);
+		transform.TransformVector3(modelSpaceBounding.max);
+
+		rAlignedBox3 worldBounding;
+		worldBounding.AddBox(modelSpaceBounding);
+
+		return worldBounding;
+	}
+	else {
+		return rAlignedBox3::NullBox;
+	}
+}
+
 void rActor3::SetBoundingVolume(riBoundingVolume* boundingVolume) {
 	m_boundingVolume.reset(boundingVolume);
 }

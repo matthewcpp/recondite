@@ -32,6 +32,8 @@ protected:
 	wxPoint m_firstPoint;
 	wxPoint m_previousPoint;
 	wxPoint m_currentPoint;
+
+	rNO_COPY_CLASS(reToolBase)
 };
 
 #endif

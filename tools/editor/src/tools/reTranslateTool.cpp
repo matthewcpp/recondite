@@ -3,7 +3,6 @@
 reTranslateTool::reTranslateTool(reComponent* component, wxFrame* owner)
 	: reToolBase(component, owner)
 {
-	m_gizmo.reset(new reTranslateGizmo(component));
 	m_command = nullptr;
 	m_selectedAxis = reGizmoAxis::NONE;
 }
@@ -25,6 +24,7 @@ bool reTranslateTool::OnMouseDown(wxMouseEvent& event, rwxGLCanvas* canvas){
 			m_gizmo->Update();
 		}
 		else{
+			m_gizmo->HighlightAxis(m_selectedAxis);
 			m_gizmo->Update();
 			SetDragPlaneFromSelectedAxis();
 			GetWorldSpaceDragPosition(canvas, m_previousWorldPosition);
@@ -45,8 +45,10 @@ bool reTranslateTool::OnMouseUp(wxMouseEvent& event, rwxGLCanvas* canvas){
 	if (m_command){
 		m_component->SubmitCommand(m_command);
 
+		m_gizmo->UnhighlightAxis(m_selectedAxis);
 		m_selectedAxis = reGizmoAxis::NONE;
 		m_command = nullptr;
+		
 		return true;
 	}
 
@@ -94,6 +96,10 @@ void reTranslateTool::OnActivate(){
 	m_gizmo->Update();
 }
 
+void reTranslateTool::OnDeactivate() {
+	m_gizmo->SetVisibility(false);
+}
+
 void reTranslateTool::OnUpdate(){
 	m_gizmo->Update();
 }
@@ -124,5 +130,9 @@ bool reTranslateTool::GetWorldSpaceDragPosition(rwxGLCanvas* canvas, rVector3& r
 	viewport->GetSelectionRay(pt, selectionRay);
 	
 	return rIntersection::RayIntersectsPlane(selectionRay, m_dragPlane, &result);
+}
+
+void reTranslateTool::Init() {
+	m_gizmo.reset(new reTranslateGizmo(m_component));
 }
 

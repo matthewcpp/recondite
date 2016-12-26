@@ -80,6 +80,12 @@ namespace recondite {
 		memcpy(&_impl->vertices[size], vertices, sizeof(rVector3) * count);
 	}
 
+	void GeometryData::TransformVertices(size_t start, size_t count, const rMatrix4& matrix) {
+		for (size_t i = 0; i < count; i++) {
+			matrix.TransformVector3(_impl->vertices[start + count]);
+		}
+	}
+
 	size_t GeometryData::VertexDataSize() const {
 		return _impl->vertices.size() * sizeof(rVector3);
 	}

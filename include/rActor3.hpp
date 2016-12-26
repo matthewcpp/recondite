@@ -42,6 +42,7 @@ public:
 	virtual rMatrix4& TransformMatrix();
 	virtual riBoundingVolume* BoundingVolume() const;
 	void SetBoundingVolume(riBoundingVolume* boundingVolume);
+	rAlignedBox3 WorldBounding();
 
 	bool Pickable() const;
 	void SetPickable(bool pickable);
@@ -59,8 +60,6 @@ public:
 	rVector3 Down() const;
 
 	virtual bool IsDrawable() const;
-
-
 
 public:
 	virtual bool Save(riSerializationTarget* target) final;

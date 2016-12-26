@@ -213,6 +213,68 @@ bool rIntersection::RayIntersectsAlignedBox(const rRay3& ray, const rAlignedBox3
 	if (tzmax < tmax)
 		tmax = tzmax;
 
-	if ( (tmin < t1) && (tmax > t0) ){		if (intersectionPoint) *intersectionPoint = ray.origin + (ray.direction * tmin);		return true;	}
+	if ( (tmin < t1) && (tmax > t0) ){
+		if (intersectionPoint) *intersectionPoint = ray.origin + (ray.direction * tmin);
+		return true;
+	}
+
 	return false;
+}
+
+
+int rIntersection::RayIntersectsTriangle(const rRay3& ray, const rVector3& p0, const rVector3& p1, const rVector3& p2, rVector3* intersectionPoint) {
+	rVector3    u, v, n, I;              // triangle vectors
+	rVector3    dir, w0, w;           // ray vectors
+	float     r, a, b;              // params to calc ray-plane intersect
+
+									// get triangle edge vectors and plane normal
+	u = p1 - p0;
+	v = p2 - p0;
+	n = u.Cross(v);              // cross product
+
+	if (n == rVector3::ZeroVector)   // triangle is degenerate
+		return -1;                  // do not deal with this case
+
+	           // ray direction vector
+	w0 = ray.origin - p0;
+	a = -n.Dot(w0);
+	b = n.Dot(dir);
+	if (fabs(b) < 0.00001f) {     // ray is  parallel to triangle plane
+		if (a == 0) { // ray lies in triangle plane
+			*intersectionPoint = ray.origin;
+			return 2;
+		}
+		else 
+			return 0;              // ray disjoint from plane
+	}
+
+	// get intersect point of ray with triangle plane
+	r = a / b;
+	if (r < 0.0)                    // ray goes away from triangle
+		return 0;                   // => no intersect
+									// for a segment, also test if (r > 1.0) => no intersect
+
+	I = ray.origin + dir * r;            // intersect point of ray and plane
+
+	// is I inside T?
+	float    uu, uv, vv, wu, wv, D;
+	uu = u.Dot(u);
+	uv = u.Dot(v);
+	vv = v.Dot(v);
+	w = I - p0;
+	wu = w.Dot(u);
+	wv = w.Dot(v);
+	D = uv * uv - uu * vv;
+
+	// get and test parametric coords
+	float s, t;
+	s = (uv * wv - vv * wu) / D;
+	if (s < 0.0 || s > 1.0)         // I is outside T
+		return 0;
+	t = (uv * wu - uu * wv) / D;
+	if (t < 0.0 || (s + t) > 1.0)  // I is outside T
+		return 0;
+
+	*intersectionPoint = I;
+	return 1;                       // I is in T
 }

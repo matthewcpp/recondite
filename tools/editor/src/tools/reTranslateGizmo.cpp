@@ -1,5 +1,7 @@
 #include "reTranslateGizmo.hpp"
 
+#include "primitive/rPrimitiveGeometry.hpp"
+
 reTranslateGizmo::reTranslateGizmo(reComponent* component){
 	m_component = component;
 
@@ -39,7 +41,7 @@ rVector3 reTranslateGizmo::GetPosition(){
 
 void reTranslateGizmo::Update(){
 	if (!m_xHandle)
-		CreateGizmo();
+		CreateGeometry();
 
 	//the origin of the gizmo should be in the center of the selection
 	const wxArrayString& selection = m_component->SelectionManager()->GetSelection();
@@ -53,7 +55,7 @@ void reTranslateGizmo::Update(){
 
 		for (size_t i = 0; i < selection.size(); i++){
 			rActor3* actor = scene->GetActor(selection[i].c_str().AsChar());
-			actorBounding = actor->BoundingVolume()->FitBox();
+			actorBounding = actor->WorldBounding();
 			selectionBounding.AddBox(actorBounding);
 		}
 
@@ -62,116 +64,72 @@ void reTranslateGizmo::Update(){
 	}
 }
 
-void SetMeshDiffuseColors(recondite::Model* model, const rColor& color){
-	/*
-	rArrayString meshNames;
-	model->GetMeshNames(meshNames);
-
-	for (size_t i = 0; i < meshNames.size(); i++){
-	rMesh* mesh = model->GetMesh(meshNames[i]);
-	mesh->Material()->SetDiffuseColor(color);
-	}
-	*/
-}
-
-void reTranslateGizmo::SetInitialHandleRenderingOptions(){
-
-	m_xHandle->RenderingOptions()->SetOverdraw(true);
-	m_yHandle->RenderingOptions()->SetOverdraw(true);
-	m_zHandle->RenderingOptions()->SetOverdraw(true);
-}
-
 using namespace recondite;
 
-void reTranslateGizmo::CreateGizmo(){
-	/*
+void reTranslateGizmo::CreateGeometry(){
 	rEngine* engine = m_component->GetEngine();
+	recondite::ModelData modelData;
+	rPrimitiveGeometry::rPrimitiveCylinderParams params(0.5f, 5, 20);
+	rPrimitiveGeometry::CreateCylinder(params, modelData);
 
-	rMatrix4 xform, translate, rotate;
-	ModelData gizmoData(rGeometryProfile::Primitive);
-	rGeometryData* geometryData = gizmoData.GetGeometryData();
-	rQuaternion q;
+	while (modelData.GetLineMeshCount() > 0) {
+		modelData.DeleteLineMesh(modelData.GetLineMeshCount() - 1);
+	}
 
-	rPrimitiveGeometry::rPrimitiveConeParams gizmoParams(0.15f, 0.6f, 15);
-	float gizmoStemLength = 1.5f;
+	modelData.CalculateBoundings();
 
-	//create Y Handle
-	rPrimitiveGeometry::CreateCone(gizmoParams, *geometryData);
-	translate.SetTranslate(0, gizmoStemLength, 0);
-	geometryData->TransformVertices(0, translate);
+	recondite::Model* handleModel = engine->content->Models()->LoadFromData(modelData, "__translate_gizmo_handle__");
 
-	gizmoData.CreateMeshDataFromGeometry();
+	m_xHandle = new rProp(handleModel, "__translate_x_handle__", engine);
+	m_xHandle->SetRotation(rVector3(0.0, 0.0f, 90.0f));
+	m_xHandle->GetModelInstance()->GetTriangleMeshInstanceMaterial(0)->SetDiffuseColor(rColor::Red);
 
-	rElementBufferData* wire = geometryData->GetElementBuffer(gizmoParams.wireMeshName);
-	wire->ClearElementData();
+	m_yHandle = new rProp(handleModel, "__translate_y_handle__", engine);
+	m_yHandle->GetModelInstance()->GetTriangleMeshInstanceMaterial(0)->SetDiffuseColor(rColor::Green);
 
-	size_t startingIndex = geometryData->VertexCount();
-	rVector3 handleBase(0, gizmoStemLength, 0);
-	geometryData->PushVertex(rVector3::ZeroVector, rVector3::ZeroVector);
-	geometryData->PushVertex(handleBase, rVector3::ZeroVector);
-	wire->Push(startingIndex, startingIndex + 1);
+	m_zHandle = new rProp(handleModel, "__translate_z_handle__", engine);
+	m_zHandle->SetRotation(rVector3(90.0, 0.0f, 0.0f));
+	m_zHandle->GetModelInstance()->GetTriangleMeshInstanceMaterial(0)->SetDiffuseColor(rColor::Blue);
 
-	rModel* handleModel = engine->content->Models()->LoadFromData(gizmoData, "__reTranslateGizmoYHandle");
-	SetMeshDiffuseColors(handleModel, rColor::Green);
+	engine->scene->AddActor(m_xHandle);
+	engine->scene->AddActor(m_yHandle);
+	engine->scene->AddActor(m_zHandle);
+}
 
-	m_yHandle = new rProp(handleModel, "__reTranslateGizmoYHandle", m_component->GetEngine());
-	m_component->AddReservedActor(m_yHandle);
-	
+void reTranslateGizmo::HighlightAxis(reGizmoAxis axis) {
+	rProp* handle = nullptr;
 
-	//create X Handle
-	gizmoData.Clear();
-	
-	rPrimitiveGeometry::CreateCone(gizmoParams, *geometryData);
-	translate.SetTranslate(gizmoStemLength, 0, 0);
-	rotate.LoadIdentity();
-	rotate.SetRotationZ(-90.0f);
-	xform = translate * rotate;
-	geometryData->TransformVertices(0, xform);
+	switch (axis) {
+		case reGizmoAxis::X:
+			handle = m_xHandle;
+			break;
 
-	gizmoData.CreateMeshDataFromGeometry();
+		case reGizmoAxis::Y:
+			handle = m_yHandle;
+			break;
 
-	wire = geometryData->GetElementBuffer(gizmoParams.wireMeshName);
-	wire->ClearElementData();
+		case reGizmoAxis::Z:
+			handle = m_zHandle;
+			break;
+	};
 
-	startingIndex = geometryData->VertexCount();
-	handleBase.Set(gizmoStemLength, 0, 0);
-	geometryData->PushVertex(rVector3::ZeroVector, rVector3::ZeroVector);
-	geometryData->PushVertex(handleBase, rVector3::ZeroVector);
-	wire->Push(startingIndex, startingIndex + 1);
+	if (handle) {
+		handle->GetModelInstance()->GetTriangleMeshInstanceMaterial(0)->SetDiffuseColor(rColor(255,255,0,255));
+	}
+}
 
-	handleModel = m_component->GetEngine()->content->Models()->LoadFromData(gizmoData, "__reTranslateGizmoXHandle");
-	SetMeshDiffuseColors(handleModel, rColor::Blue);
+void reTranslateGizmo::UnhighlightAxis(reGizmoAxis axis) {
+	switch (axis) {
+	case reGizmoAxis::X:
+		m_xHandle->GetModelInstance()->GetTriangleMeshInstanceMaterial(0)->SetDiffuseColor(rColor::Red);
+		break;
 
-	m_xHandle = new rProp(handleModel, "__reTranslateGizmoXHandle", m_component->GetEngine());
-	m_component->AddReservedActor(m_xHandle);
+	case reGizmoAxis::Y:
+		m_yHandle->GetModelInstance()->GetTriangleMeshInstanceMaterial(0)->SetDiffuseColor(rColor::Green);
+		break;
 
-	//create Z Handle
-	gizmoData.Clear();
-	rPrimitiveGeometry::CreateCone(gizmoParams, *geometryData);
-	translate.SetTranslate(0, 0, gizmoStemLength);
-	rotate.LoadIdentity();
-	rotate.SetRotationX(90.0f);
-	xform = translate * rotate;
-	geometryData->TransformVertices(0, xform);
-
-	wire = geometryData->GetElementBuffer(gizmoParams.wireMeshName);
-	wire->ClearElementData();
-
-	gizmoData.CreateMeshDataFromGeometry();
-
-	startingIndex = geometryData->VertexCount();
-	handleBase.Set(0, 0, gizmoStemLength);
-	geometryData->PushVertex(rVector3::ZeroVector, rVector3::ZeroVector);
-	geometryData->PushVertex(handleBase, rVector3::ZeroVector);
-	wire->Push(startingIndex, startingIndex + 1);
-
-	handleModel = m_component->GetEngine()->content->Models()->LoadFromData(gizmoData, "__reTranslateGizmoZHandle");
-	m_zHandle = new rProp(handleModel, "__reTranslateGizmoZHandle", m_component->GetEngine());
-	SetMeshDiffuseColors(handleModel, rColor::Red);
-
-	m_component->AddReservedActor(m_zHandle);
-	SetVisibility(false);
-
-	SetInitialHandleRenderingOptions();
-	*/
+	case reGizmoAxis::Z:
+		m_zHandle->GetModelInstance()->GetTriangleMeshInstanceMaterial(0)->SetDiffuseColor(rColor::Blue);
+		break;
+	};
 }

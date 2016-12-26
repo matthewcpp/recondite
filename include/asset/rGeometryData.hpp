@@ -115,6 +115,14 @@ namespace recondite {
 		void PushVertices(rVector3* vertices, size_t count);
 
 		/**
+		Transforms the range of vertices by the given matrix
+		\param start the starting vertex index
+		\param count the number of vertices to transform
+		\param matrix the matrix to use for transforming vertices
+		*/
+		void TransformVertices(size_t start, size_t count, const rMatrix4& matrix);
+
+		/**
 		Adds a tex coord to the geometry data.
 		\param texCoord the tex coord to add.
 		*/

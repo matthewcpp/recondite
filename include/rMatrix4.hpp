@@ -37,6 +37,9 @@ struct RECONDITE_API rMatrix4{
 
 	rVector3 GetTransformedVector3(const rVector3& v) const;
 	void TransformVector3(rVector3& v) const;
+
+	void TransformNormal(rVector3& v) const;
+	rVector3 GetTransformedNormal(const rVector3& v) const;
 	
 	rVector4 GetTransformedVector4(const rVector4& v) const;
 	void TransformVector4(rVector4& v) const;

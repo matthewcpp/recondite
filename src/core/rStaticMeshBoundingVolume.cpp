@@ -28,8 +28,11 @@ bool rStaticMeshBoundingVolume::IntersectsRay(const rRay3& ray, rPickResult& pic
 			}
 		}
 	}
+	else {
+		pickResult.hit = false;
+	}
 
-	return false;
+	return pickResult.hit;
 }
 
 rStaticMeshBoundingVolume::rStaticMeshBoundingVolume(recondite::Model* model) {

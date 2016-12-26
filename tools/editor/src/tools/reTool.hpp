@@ -25,13 +25,15 @@ public:
 	virtual void OnDeactivate() {}
 	virtual void OnUpdate() {}
 
+	virtual void Init() {}
+
 	virtual wxString GetToolName() const = 0;
 
 protected:
 	wxFrame* m_owner;
 	reComponent* m_component;
 
-rNO_COPY_CLASS(reTool)
+	rNO_COPY_CLASS(reTool)
 };
 
 #endif

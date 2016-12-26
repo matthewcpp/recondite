@@ -11,9 +11,9 @@ public:
 	rPawn(recondite::Model* model, const rString& id , rEngine* engine);
 	
 public:
-	virtual void SetModel(recondite::Model* model) override;
-	
 	inline recondite::AnimationController* AnimationController();
+
+	virtual void SetModel(recondite::Model* model) override;
 
 	virtual rString ClassName() const;
 	

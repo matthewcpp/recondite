@@ -109,6 +109,7 @@ namespace recondite {
 
 		void CalculateMeshBounding(MeshDataRefArray& refArray);
 		void InitHeader(ModelFileHeader& header);
+		void DeleteMeshData(MeshDataRefArray& meshDataArray, size_t index);
 	};
 
 	ModelData::ModelData() {
@@ -139,7 +140,23 @@ namespace recondite {
 		return _impl->triangleMeshes.size();
 	}
 
-	MeshData*  ModelData::GetTriangleMesh(size_t index) {
+	void ModelData::Impl::DeleteMeshData(MeshDataRefArray& meshDataArray, size_t index) {
+		if (index < meshDataArray.size()) {
+			auto it = meshDataArray.begin();
+			std::advance(it, index);
+			meshDataArray.erase(it);
+		}
+	}
+
+	void ModelData::DeleteTriangleMesh(size_t index) {
+		_impl->DeleteMeshData(_impl->triangleMeshes, index);
+	}
+
+	void ModelData::DeleteLineMesh(size_t index) {
+		_impl->DeleteMeshData(_impl->lineMeshes, index);
+	}
+
+	MeshData* ModelData::GetTriangleMesh(size_t index) {
 		return _impl->triangleMeshes[index].get();
 	}
 

@@ -17,9 +17,11 @@ public:
 	reGizmoAxis GetGizmoAxis(rActor3* actor);
 	rVector3 GetPosition();
 
+	void HighlightAxis(reGizmoAxis axis);
+	void UnhighlightAxis(reGizmoAxis axis);
+
 private:
-	void CreateGizmo();
-	void SetInitialHandleRenderingOptions();
+	void CreateGeometry();
 
 	void SetPosition(const rVector3& pos);
 	

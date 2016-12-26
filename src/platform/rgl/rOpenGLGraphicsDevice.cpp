@@ -32,8 +32,18 @@ void rOpenGLGraphicsDevice::DeleteShaderProgram(unsigned int shaderId){
 	glDeleteProgram(shaderId);
 }
 
-void rOpenGLGraphicsDevice::Clear(){
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+void rOpenGLGraphicsDevice::Clear(ClearFlags flags){
+	GLbitfield clearFlags = 0;
+
+	if ((flags & ClearFlags::Color) == ClearFlags::Color) {
+		clearFlags |= GL_COLOR_BUFFER_BIT;
+	}
+
+	if ((flags & ClearFlags::Depth) == ClearFlags::Depth) {
+		clearFlags |= GL_DEPTH_BUFFER_BIT;
+	}
+
+	glClear(clearFlags);
 }
 
 void rOpenGLGraphicsDevice::EnableDepthTesting(bool enable){

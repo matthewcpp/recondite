@@ -51,7 +51,7 @@ public:
 	virtual void Uninit();
 	
 	virtual void SetClearColor(const rColor& color);
-	virtual void Clear();
+	virtual void Clear(ClearFlags flags = ClearFlags::All) override;
 	
 	virtual void EnableDepthTesting(bool enable);
 	virtual void SetDepthFunction(DepthFunction depthFunction);

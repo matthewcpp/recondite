@@ -22,6 +22,12 @@ public:
 		Less,
 		LessEqual
 	};
+
+	enum ClearFlags {
+		Color = 1,
+		Depth = 2,
+		All = 0xFFFF
+	};
 public:
 	virtual ~rGraphicsDevice(){}
 
@@ -32,7 +38,7 @@ public:
 	virtual void SwapBuffers() = 0;
 	
 	virtual void SetClearColor(const rColor& color) = 0;
-	virtual void Clear() = 0;
+	virtual void Clear(ClearFlags flags = ClearFlags::All) = 0;
 	
 	virtual void EnableDepthTesting(bool enable) = 0;
 	virtual void SetDepthFunction(DepthFunction depthFunction) = 0;

@@ -147,12 +147,14 @@ void ModelViewerController::OnAnimationProgressDrag(rEvent& event) {
 void ModelViewerController::OnUpdate() {
 	CameraDebug();
 
-	rPawn* pawn = (rPawn*)_engine->scene->GetActor("model");
-	auto animationController = pawn->AnimationController();
+	if (_skeletonGeometry) {
+		rPawn* pawn = (rPawn*)_engine->scene->GetActor("model");
+		auto animationController = pawn->AnimationController();
 
-	if (animationController->IsPlaying()) {
-		ruiSlider* slider = (ruiSlider*)_document->GetWidgetById("animation-progress");
-		slider->SetValue(animationController->GetAnimationTime() / animationController->GetAnimation()->Duration());
+		if (animationController->IsPlaying()) {
+			ruiSlider* slider = (ruiSlider*)_document->GetWidgetById("animation-progress");
+			slider->SetValue(animationController->GetAnimationTime() / animationController->GetAnimation()->Duration());
+		}
 	}
 }
 

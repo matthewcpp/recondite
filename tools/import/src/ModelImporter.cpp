@@ -72,7 +72,6 @@ namespace recondite { namespace import {
 		_impl->NodeDump("C:/temp/node_dump.txt", scene);
 
 		if (_impl->options.importSkeleton) {
-			modelData.CreateSkeleton();
 			_impl->CreateSkeletonHierarchy(scene, modelData);
 		}
 
@@ -170,7 +169,6 @@ namespace recondite { namespace import {
 		//Need to find child of root node which does not refer to meshes.  This will be the Skeleton Container.
 		aiNode* rootNode = scene->mRootNode;
 		aiNode* skeletonContainer = nullptr;
-		Skeleton* skeleton = modelData.GetSkeleton();
 
 		for (size_t i = 0; i < rootNode->mNumChildren; i++) {
 			if (rootNode->mChildren[i]->mNumMeshes == 0) {
@@ -179,12 +177,16 @@ namespace recondite { namespace import {
 			}
 		}
 
-		//extract bone hierarchy from assimp node tree
-		for (size_t i = 0; i < skeletonContainer->mNumChildren; i++) {
-			GatherBones(skeletonContainer->mChildren[i], skeleton);
-		}
+		if (skeletonContainer) {
+			Skeleton* skeleton = modelData.CreateSkeleton();
 
-		skeleton->CacheBoneData();
+			//extract bone hierarchy from assimp node tree
+			for (size_t i = 0; i < skeletonContainer->mNumChildren; i++) {
+				GatherBones(skeletonContainer->mChildren[i], skeleton);
+			}
+
+			skeleton->CacheBoneData();
+		}
 	}
 
 	void ModelImporter::Impl::ImportAnimations(const aiScene* scene, ModelData& modelData) {

@@ -57,15 +57,14 @@ void ModelViewerModule::Init(const rArrayString& args) {
 
 	Model* model =_engine->content->Models()->LoadFromData(modelData, "model");
 	
-	rActor3* actor = nullptr;
 	if (model->GetSkeleton()) {
 		rPawn* pawn = new rPawn(model, "model", _engine);
 		_skeletonGeometry.reset(new SkeletonGeometry(_engine, pawn));
 		_engine->scene->AddActor(pawn);
 	}
 	else {
-		actor = new rProp(model, "model", _engine);
-		_engine->scene->AddActor(actor);
+		rProp* prop = new rProp(model, "model", _engine);
+		_engine->scene->AddActor(prop);
 	}
 	
 	rViewport* mainViewport = CreateView(model, _engine);

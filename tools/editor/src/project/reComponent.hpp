@@ -14,7 +14,7 @@
 
 class reViewportManager {
 public:
-	virtual void UpdateAllViewports() = 0;
+	virtual void UpdateAllViewports(bool force = false) = 0;
 	virtual void MaximizeViewport(int id) = 0;
 	virtual void RestoreViewports() = 0;
 };

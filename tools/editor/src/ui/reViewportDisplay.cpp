@@ -121,10 +121,10 @@ void reViewportDisplay::OnSceneLoadComplete(rEvent& event) {
 	UpdateAllViewports();
 }
 
-void reViewportDisplay::UpdateAllViewports(){
+void reViewportDisplay::UpdateAllViewports(bool force){
 	wxLongLong updateTime = wxGetUTCTimeMillis();
 
-	if (updateTime - m_lastUpdateTime > 33) {
+	if ((updateTime - m_lastUpdateTime > 33) || force) {
 		m_topLeftViewport->GetCanvas()->Refresh();
 		m_topRightViewport->GetCanvas()->Refresh();
 		m_bottomLeftViewport->GetCanvas()->Refresh();

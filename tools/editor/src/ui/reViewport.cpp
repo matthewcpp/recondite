@@ -76,7 +76,7 @@ void reViewport::OnCanvasMouseEvent(wxMouseEvent& event){
 	}
 	else if (eventType == wxEVT_LEFT_UP){
 		if(m_toolManager->OnMouseUp(event, m_glCanvas))
-			m_viewportManager->UpdateAllViewports();
+			m_viewportManager->UpdateAllViewports(true);
 	}
 	else if (eventType == wxEVT_MOTION){
 		bool result = m_toolManager->OnMouseMotion(event, m_glCanvas);

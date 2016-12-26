@@ -18,7 +18,7 @@ public:
 	reViewport* GetViewport(const wxString& name);
 	reViewport* GetActiveViewport();
 
-	virtual void UpdateAllViewports();
+	virtual void UpdateAllViewports(bool force = false) override;
 	virtual void MaximizeViewport(int id);
 	virtual void RestoreViewports();
 

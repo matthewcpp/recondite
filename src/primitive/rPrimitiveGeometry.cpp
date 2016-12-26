@@ -237,14 +237,14 @@ void rPrimitiveGeometry::CreateCircle(const rPrimitiveGeometry::rPrimitiveCircle
 	geometry.PushVertex(params.center);
 	geometry.PushNormal(params.normal);
 
-	for (size_t i = 0; i < params.segmentCount; i++){
+	for (size_t i = 0; i <= params.segmentCount; i++){
 		float angle = float(i) * step;
 		float radians = rMath::DegreeToRad(angle);
 
 		position.Set(std::cos(radians), 0.0f, std::sin(radians));
-		position += params.center;
 		position *= params.radius;
-
+		position += params.center;
+		
 		geometry.PushVertex(position);
 		geometry.PushNormal(params.normal);
 
@@ -253,9 +253,6 @@ void rPrimitiveGeometry::CreateCircle(const rPrimitiveGeometry::rPrimitiveCircle
 			shaded->Push(baseIndex, baseIndex + i, baseIndex + i + 1);
 		}
 	}
-
-	wireframe->Push(baseIndex + params.segmentCount, baseIndex + 1);
-	shaded->Push(baseIndex, baseIndex + params.segmentCount, baseIndex + 1);
 }
 
 //Cone
@@ -311,66 +308,52 @@ void rPrimitiveGeometry::CreateCone(const rPrimitiveGeometry::rPrimitiveConePara
 	CreateConeFace(modelData, baseIndex + params.segmentCount, baseIndex + 1, params, coneAngle);
 }
 
-//Cylinder
-void CreateCylinderFace(const rPrimitiveGeometry::rPrimitiveCylinderParams& params, ModelData& modelData, int i1, int i2, int i3, int i4){
-	GeometryData& geometry = *modelData.GetGeometryData();
-	MeshData* shaded = modelData.GetTriangleMesh(modelData.GetTriangleMeshCount() - 1);
-
-	rVector3 v1, v2, v3, v4, n1, n2, n3, n4;
-	size_t baseIndex = geometry.VertexCount();
-
-	geometry.GetVertex(i1, v1);
-	n1 = v1;
-
-	geometry.GetVertex(i2, v2);
-	n2 = v2;
-
-	geometry.GetVertex(i3, v3);
-	n3 = v3;
-
-	geometry.GetVertex(i4, v4);
-	n4 = v4;
-
-	geometry.PushVertex(v1);
-	geometry.PushNormal(n1);
-
-	geometry.PushVertex(v2);
-	geometry.PushNormal(n2);
-
-	geometry.PushVertex(v3);
-	geometry.PushNormal(n3);
-
-	geometry.PushVertex(v4);
-	geometry.PushNormal(n4);
-
-	shaded->Push(baseIndex, baseIndex + 2, baseIndex + 3);
-	shaded->Push(baseIndex, baseIndex + 1, baseIndex + 3);
-}
-
-
 void rPrimitiveGeometry::CreateCylinder(const rPrimitiveGeometry::rPrimitiveCylinderParams& params, ModelData& modelData){
 	EnsureBuffers(params, modelData);
-
-	MeshData* wireframe = modelData.GetLineMesh(modelData.GetLineMeshCount() - 1);
 
 	rPrimitiveCircleParams circleParams(rVector3::ZeroVector, rVector3::DownVector, params.radius, params.segmentCount);
 	circleParams.faceMeshName = params.faceMeshName;
 	circleParams.wireMeshName = params.wireMeshName;
 
+	recondite::GeometryData* geometryData = modelData.GetGeometryData();
+	size_t bottomIndex = geometryData->VertexCount() + 1;
 	CreateCircle(circleParams, modelData);
 
 	circleParams.center = rVector3::UpVector * params.height;
 	circleParams.normal = rVector3::UpVector;
 
+	size_t topIndex = geometryData->VertexCount() + 1;
 	CreateCircle(circleParams, modelData);
 
-	for (int i = 1; i <= params.segmentCount; i++){
-		wireframe->Push(i, i + params.segmentCount + 1);
+	MeshData* shaded = modelData.GetTriangleMesh(modelData.GetTriangleMeshCount() - 1);
+	MeshData* wireframe = modelData.GetLineMesh(modelData.GetLineMeshCount() - 1);
 
-		if (i > 1) CreateCylinderFace(params, modelData, i - 1, i, i + params.segmentCount, i + params.segmentCount + 1);
+	size_t baseIndex = geometryData->VertexCount();
+
+	rVector3 v1, v2, n;
+	float step = 360.0f / (float)params.segmentCount;
+	for (size_t i = 0; i <= params.segmentCount; i++) {
+		float angle = float(i) * step;
+		float radians = rMath::DegreeToRad(angle);
+		uint16_t ref = (i * 2) + baseIndex;
+
+		n.Set(std::cos(radians), 0.0f, std::sin(radians));
+		geometryData->GetVertex(bottomIndex + i, v1);
+		geometryData->GetVertex(topIndex + i, v2);
+		
+		geometryData->PushVertex(v1);
+		geometryData->PushNormal(n);
+
+		geometryData->PushVertex(v2);
+		geometryData->PushNormal(n);
+
+		wireframe->Push(ref, ref + 1);
+
+		if (i > 0) {
+			shaded->Push(ref - 2, ref, ref + 1);
+			shaded->Push(ref - 2, ref + 1, ref - 1);
+		}
 	}
-
-	CreateCylinderFace(params, modelData, params.segmentCount, 2 * params.segmentCount + 1, 1, params.segmentCount + 2);
 }
 
 //Sphere

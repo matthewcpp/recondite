@@ -8,6 +8,10 @@ public:
 
 public:
 	virtual void Draw() override;
+	virtual bool RayPick(const rRay3& ray, rPickResult& result) override;
+
+private:
+	void UpdateScale();
 };
 
 reGizmoHandle::reGizmoHandle(recondite::Model* model, const rString& id, rEngine* engine)
@@ -17,12 +21,35 @@ reGizmoHandle::reGizmoHandle(recondite::Model* model, const rString& id, rEngine
 }
 
 void reGizmoHandle::Draw() {
+	UpdateScale();
+
 	rRenderMode renderMode = m_engine->renderer->GetModelRenderMode();
 	m_engine->renderer->SetModelRenderMode(rRenderMode::Shaded);
 
 	rProp::Draw();
 
 	m_engine->renderer->SetModelRenderMode(renderMode);
+}
+
+bool reGizmoHandle::RayPick(const rRay3& ray, rPickResult& result) {
+	UpdateScale();
+
+	return rProp::RayPick(ray, result);
+}
+
+void reGizmoHandle::UpdateScale() {
+	rVector3 updatedScale = rVector3::OneVector;
+
+	rViewport* activeViewport = m_engine->component->GetActiveViewport();
+
+	if (activeViewport) {
+		rVector3 center = WorldBounding().Center();
+		float distance = center.Distance(activeViewport->Camera()->GetPosition());
+		distance /= 100.0f;
+		updatedScale.Set(distance, distance, distance);
+	}
+
+	SetScale(updatedScale);
 }
 
 
@@ -116,8 +143,19 @@ using namespace recondite;
 void reTranslateGizmo::CreateGeometry(){
 	rEngine* engine = m_component->GetEngine();
 	recondite::ModelData modelData;
-	rPrimitiveGeometry::rPrimitiveCylinderParams params(0.5f, 5, 20);
-	rPrimitiveGeometry::CreateCylinder(params, modelData);
+	rPrimitiveGeometry::rPrimitiveCylinderParams cylinderParams(0.3f, 7, 20);
+	rPrimitiveGeometry::CreateCylinder(cylinderParams, modelData);
+
+	recondite::GeometryData* geometryData = modelData.GetGeometryData();
+	size_t vertexOffset = geometryData->VertexCount();
+
+	rPrimitiveGeometry::rPrimitiveConeParams coneParams(1.0, 2.5, 20);
+	rPrimitiveGeometry::CreateCone(coneParams, modelData);
+	
+	rMatrix4 transform;
+	transform.SetTranslate(0.0f, cylinderParams.height, 0.0f);
+
+	geometryData->TransformVertices(vertexOffset, geometryData->VertexCount() - vertexOffset, transform);
 
 	while (modelData.GetLineMeshCount() > 0) {
 		modelData.DeleteLineMesh(modelData.GetLineMeshCount() - 1);

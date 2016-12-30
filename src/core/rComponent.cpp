@@ -6,6 +6,7 @@ rComponent::rComponent(){
 	m_scene = new rScene(&m_engine);
 	m_engine.actors = &m_actorFactory;
 	m_engine.scene = m_scene;
+	m_activeViewport = nullptr;
 
 	InitDefaultActorClasses();
 }
@@ -122,6 +123,14 @@ void rComponent::DeleteViewport(const rString& name){
 		delete it->second;
 		m_viewports.erase(it);
 	}
+}
+
+void rComponent::SetActiveViewport(rViewport* viewport) {
+	m_activeViewport = viewport;
+}
+
+rViewport* rComponent::GetActiveViewport() {
+	return m_activeViewport;
 }
 
 size_t rComponent::NumViewports() const{

@@ -46,7 +46,7 @@ public:
 
 	bool Pickable() const;
 	void SetPickable(bool pickable);
-	bool RayPick(const rRay3& ray, rPickResult& result);
+	virtual bool RayPick(const rRay3& ray, rPickResult& result);
 
 	rRenderingOptions* RenderingOptions();
 

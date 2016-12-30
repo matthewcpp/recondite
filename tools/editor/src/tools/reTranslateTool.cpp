@@ -14,6 +14,8 @@ reTranslateTool::~reTranslateTool(){
 bool reTranslateTool::OnMouseDown(wxMouseEvent& event, rwxGLCanvas* canvas){
 	reToolBase::OnMouseDown(event, canvas);
 
+	m_component->SetActiveViewport(canvas->GetViewport());
+
 	rRay3 selectionRay = GetSelectionRay(event, canvas);
 	m_selectedAxis = m_gizmo->PickAxis(selectionRay);
 

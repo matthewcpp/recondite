@@ -18,6 +18,9 @@ public:
 
 	virtual void LoadScene(const rString& name) = 0;
 
+	virtual void SetActiveViewport(rViewport* viewport) = 0;
+	virtual rViewport* GetActiveViewport() = 0;
+
 	//temporary
 	virtual rSize DisplaySize() const = 0;
 	virtual rString GetBasePath() = 0;

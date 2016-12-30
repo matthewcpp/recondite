@@ -43,6 +43,9 @@ public:
 	virtual void DeleteViewport(const rString& name);
 	virtual size_t NumViewports() const;
 
+	virtual void SetActiveViewport(rViewport* viewport);
+	virtual rViewport* GetActiveViewport();
+
 public:
 	virtual void AddActorClass(const rString& name, rActorFactory::ActorFunction func);
 
@@ -64,6 +67,7 @@ protected:
 	rFileSystem* m_fileSystem;
 
 	rViewportMap m_viewports;
+	rViewport* m_activeViewport;
 
 	bool m_isReady;
 

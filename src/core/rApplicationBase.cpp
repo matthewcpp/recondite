@@ -33,6 +33,7 @@ void rApplicationBase::Draw(){
 	m_graphicsDevice->EnableDepthTesting(true);
 	for (rViewportMap::iterator it = m_viewports.begin(); it != end; ++it){
 		rViewport* viewport = it->second;
+		SetActiveViewport(viewport);
 
 		m_engine.renderer->SetModelRenderMode(viewport->RenderMode());
 		rRect window = viewport->GetScreenRect();
@@ -65,6 +66,7 @@ void rApplicationBase::Draw(){
 	}
 
 	m_graphicsDevice->SwapBuffers();
+	SetActiveViewport(nullptr);
 
 	m_frameCount++;
 }

@@ -46,7 +46,7 @@ namespace rPrimitiveGeometry{
 
 	struct RECONDITE_API rPrimitiveConeParams : public rPrimitiveParams{
 		rPrimitiveConeParams()
-			:radius(1), height(1) {}
+			:radius(1), height(1), segmentCount(20) {}
 		rPrimitiveConeParams(float _radius, float _height, size_t _segmentCount)
 			:radius(_radius), height(_height), segmentCount(_segmentCount) {}
 

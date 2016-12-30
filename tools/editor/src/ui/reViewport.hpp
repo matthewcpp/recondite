@@ -46,6 +46,9 @@ private:
 	void OnCanvasMouseEvent(wxMouseEvent& event);
 	void OnCanvasKeypress(wxKeyEvent& event);
 
+	void OnEnterCanvas(wxMouseEvent& event);
+	void OnLeaveCanvas(wxMouseEvent& event);
+
 private:
 
 	enum reViewportId{

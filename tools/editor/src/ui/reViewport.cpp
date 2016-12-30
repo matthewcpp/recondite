@@ -65,6 +65,9 @@ void reViewport::BindEvents(){
 	m_glCanvas->Bind(wxEVT_KEY_UP, &reViewport::OnCanvasKeypress, this);
 
 	m_minMaxButton->Bind(wxEVT_BUTTON, &reViewport::OnMinMaxButtonPress, this);
+
+	m_glCanvas->Bind(wxEVT_ENTER_WINDOW, &reViewport::OnEnterCanvas, this);
+	m_glCanvas->Bind(wxEVT_LEAVE_WINDOW, &reViewport::OnLeaveCanvas, this);
 }
 
 void reViewport::OnCanvasMouseEvent(wxMouseEvent& event){
@@ -124,6 +127,14 @@ void reViewport::OnCanvasKeypress(wxKeyEvent& event){
 	if (!handled){
 		event.Skip();
 	}
+}
+
+void reViewport::OnEnterCanvas(wxMouseEvent& event) {
+	m_glCanvas->SetFocus();
+}
+
+void reViewport::OnLeaveCanvas(wxMouseEvent& event) {
+	m_glCanvas->GetParent()->SetFocus();
 }
 
 rwxGLCanvas* reViewport::GetCanvas(){

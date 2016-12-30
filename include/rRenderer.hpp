@@ -3,6 +3,7 @@
 
 #include <climits>
 #include <memory>
+#include <map>
 
 #include "rBuild.hpp"
 #include "rDefs.hpp"
@@ -26,6 +27,8 @@
 #include "asset/rMaterial.hpp"
 #include "rAnimationController.hpp"
 
+class rDrawable;
+
 using namespace recondite;
 
 class RECONDITE_API rRenderer {
@@ -37,6 +40,7 @@ public:
 	void SetClearColor(const rColor& color);
 
 	void Begin(const rMatrix4 projection, const rMatrix4& view);
+	void Add(rDrawable* drawable);
 	void End();
 
 	size_t ObjectsRendered() const;
@@ -76,6 +80,8 @@ private:
 		bool m_depthTestEnabled;
 		rRenderMode m_defaultRenderMode;
 		rGraphicsDevice::DepthFunction depthFunction;
+
+		std::multimap<uint32_t, rDrawable*> m_renderList;
 };
 
 #endif

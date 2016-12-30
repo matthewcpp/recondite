@@ -2,6 +2,30 @@
 
 #include "primitive/rPrimitiveGeometry.hpp"
 
+class reGizmoHandle : public rProp {
+public: 
+	reGizmoHandle(recondite::Model* model, const rString& id, rEngine* engine);
+
+public:
+	virtual void Draw() override;
+};
+
+reGizmoHandle::reGizmoHandle(recondite::Model* model, const rString& id, rEngine* engine)
+	:rProp(model, id, engine)
+{
+	RenderingOptions()->SetLayer(1);
+}
+
+void reGizmoHandle::Draw() {
+	rRenderMode renderMode = m_engine->renderer->GetModelRenderMode();
+	m_engine->renderer->SetModelRenderMode(rRenderMode::Shaded);
+
+	rProp::Draw();
+
+	m_engine->renderer->SetModelRenderMode(renderMode);
+}
+
+
 reTranslateGizmo::reTranslateGizmo(reComponent* component){
 	m_component = component;
 
@@ -10,12 +34,35 @@ reTranslateGizmo::reTranslateGizmo(reComponent* component){
 	m_zHandle = nullptr;
 }
 
-reGizmoAxis reTranslateGizmo::GetGizmoAxis(rActor3* actor){
-	if (actor == m_xHandle)
+reGizmoAxis reTranslateGizmo::PickAxis(const rRay3& ray) {
+	rPickResult xResult, yResult, zResult;
+	rActor3* best = nullptr;
+	float bestDistance = FLT_MAX;
+
+	m_xHandle->RayPick(ray, xResult);
+	m_yHandle->RayPick(ray, yResult);
+	m_zHandle->RayPick(ray, zResult);
+
+	if (xResult.hit && xResult.distanceSquared < bestDistance) {
+		best = m_xHandle;
+		bestDistance = xResult.distanceSquared;
+	}
+
+	if (yResult.hit && yResult.distanceSquared < bestDistance) {
+		best = m_yHandle;
+		bestDistance = yResult.distanceSquared;
+	}
+
+	if (zResult.hit && zResult.distanceSquared < bestDistance) {
+		best = m_zHandle;
+		bestDistance = zResult.distanceSquared;
+	}
+
+	if (best == m_xHandle)
 		return reGizmoAxis::X;
-	else if (actor == m_yHandle)
+	else if (best == m_yHandle)
 		return reGizmoAxis::Y;
-	else if (actor == m_zHandle)
+	else if (best == m_zHandle)
 		return reGizmoAxis::Z;
 	else
 		return reGizmoAxis::NONE;
@@ -80,16 +127,19 @@ void reTranslateGizmo::CreateGeometry(){
 
 	recondite::Model* handleModel = engine->content->Models()->LoadFromData(modelData, "__translate_gizmo_handle__");
 
-	m_xHandle = new rProp(handleModel, "__translate_x_handle__", engine);
-	m_xHandle->SetRotation(rVector3(0.0, 0.0f, 90.0f));
+	m_xHandle = new reGizmoHandle(handleModel, "__translate_x_handle__", engine);
+	m_xHandle->SetRotation(rVector3(0.0, 0.0f, -90.0f));
 	m_xHandle->GetModelInstance()->GetTriangleMeshInstanceMaterial(0)->SetDiffuseColor(rColor::Red);
+	m_xHandle->SetPickable(false);
 
-	m_yHandle = new rProp(handleModel, "__translate_y_handle__", engine);
+	m_yHandle = new reGizmoHandle(handleModel, "__translate_y_handle__", engine);
 	m_yHandle->GetModelInstance()->GetTriangleMeshInstanceMaterial(0)->SetDiffuseColor(rColor::Green);
+	m_yHandle->SetPickable(false);
 
-	m_zHandle = new rProp(handleModel, "__translate_z_handle__", engine);
+	m_zHandle = new reGizmoHandle(handleModel, "__translate_z_handle__", engine);
 	m_zHandle->SetRotation(rVector3(90.0, 0.0f, 0.0f));
 	m_zHandle->GetModelInstance()->GetTriangleMeshInstanceMaterial(0)->SetDiffuseColor(rColor::Blue);
+	m_zHandle->SetPickable(false);
 
 	engine->scene->AddActor(m_xHandle);
 	engine->scene->AddActor(m_yHandle);

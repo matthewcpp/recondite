@@ -237,8 +237,11 @@ bool rActor3::RayPick(const rRay3& ray, rPickResult& result) {
 	if (boundingVolume) {
 		bool intersects = boundingVolume->IntersectsRay(modelSpaceRay, result);
 
-		if (intersects)
+		if (intersects) {
 			transformMatrix.TransformVector3(result.point);
+			result.distanceSquared = result.point.DistanceSquared(ray.origin);
+		}
+			
 
 		return intersects;
 	}

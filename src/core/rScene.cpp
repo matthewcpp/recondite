@@ -24,8 +24,12 @@ void rScene::Draw(){
 	//todo: view frustrum culling
 	rActorMap::iterator end = m_actors.end();
 
-	for (rActorMap::iterator it = m_actors.begin(); it != end; ++it)
-		it->second->Draw();
+	for (rActorMap::iterator it = m_actors.begin(); it != end; ++it) {
+		if (it->second->IsDrawable()) {
+			m_engine->renderer->Add((rDrawable*)it->second);
+		}
+	}
+		
 }
 
 bool rScene::RenameActor(const rString& oldId, const rString& newId){
@@ -152,13 +156,14 @@ void rScene::RayPick(const rRay3& ray, rPickResult& pickResult) {
 	for (rActorMap::iterator it = m_actors.begin(); it != end; ++it) {
 		rActor3* currentActor = it->second;
 
-		if (currentActor->RayPick(ray, currentResult)) {
-			float currentActorDistance = ray.origin.DistanceSquared(currentResult.point);
+		if (!currentActor->Pickable()) { 
+			continue; 
+		}
 
-			if (currentActorDistance < selectedActorDistance) {
-				bestResult = currentResult;
-				selectedActorDistance = currentActorDistance;
-			}
+		currentActor->RayPick(ray, currentResult);
+		if (currentResult.hit && currentResult.distanceSquared < selectedActorDistance) {
+			bestResult = currentResult;
+			selectedActorDistance = currentResult.distanceSquared;
 		}
 	}
 

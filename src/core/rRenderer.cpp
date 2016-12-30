@@ -1,5 +1,7 @@
 #include "rRenderer.hpp"
 
+#include "rDrawable.hpp"
+
 rRenderer::rRenderer(rGraphicsDevice* graphicsDevice, rContentManager* contentManager){
 	m_graphicsDevice = graphicsDevice;
 	m_contentManager = contentManager;
@@ -26,7 +28,21 @@ void rRenderer::Begin(const rMatrix4 projection, const rMatrix4& view){
 	m_viewMatrix = view;
 }
 
+void rRenderer::Add(rDrawable* drawable) {
+	m_renderList.emplace(drawable->RenderingOptions()->GetLayer(), drawable);
+}
+
 void rRenderer::End(){
+	for (auto it = m_renderList.begin(), end = m_renderList.end(); it != end; it = m_renderList.upper_bound(it->first)) {
+		auto layer = m_renderList.equal_range(it->first);
+
+		for (auto i = layer.first; i != layer.second; ++i) {
+			i->second->Draw();
+		}
+
+		m_graphicsDevice->Clear(rGraphicsDevice::ClearFlags::Depth);
+	}
+	m_renderList.clear();
 	RenderSpriteBatch();
 }
 

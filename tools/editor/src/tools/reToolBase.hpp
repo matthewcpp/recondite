@@ -21,6 +21,7 @@ protected:
 	bool IsClick();
 	void UpdatePoints(wxMouseEvent& event);
 
+	rRay3 GetSelectionRay(wxMouseEvent& event, rwxGLCanvas* canvas);
 	rActor3* PickActor(wxMouseEvent& event, rwxGLCanvas* canvas);
 
 	bool DoActorSelection(rActor3* actor, wxMouseEvent& event);

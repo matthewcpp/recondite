@@ -14,28 +14,31 @@ reTranslateTool::~reTranslateTool(){
 bool reTranslateTool::OnMouseDown(wxMouseEvent& event, rwxGLCanvas* canvas){
 	reToolBase::OnMouseDown(event, canvas);
 
-	rActor3* actor = PickActor(event, canvas);
+	rRay3 selectionRay = GetSelectionRay(event, canvas);
+	m_selectedAxis = m_gizmo->PickAxis(selectionRay);
 
-	if (actor){
-		m_selectedAxis = m_gizmo->GetGizmoAxis(actor);
-
-		if (m_selectedAxis == reGizmoAxis::NONE){
-			bool result = DoActorSelection(actor, event);
-			m_gizmo->Update();
-		}
-		else{
-			m_gizmo->HighlightAxis(m_selectedAxis);
-			m_gizmo->Update();
-			SetDragPlaneFromSelectedAxis();
-			GetWorldSpaceDragPosition(canvas, m_previousWorldPosition);
-			m_command = new reTranslateCommand(m_component->SelectionManager()->GetSelection(), m_component);
-		}
+	if (m_selectedAxis != reGizmoAxis::NONE) {
+		m_gizmo->HighlightAxis(m_selectedAxis);
+		m_gizmo->Update();
+		SetDragPlaneFromSelectedAxis();
+		GetWorldSpaceDragPosition(canvas, m_previousWorldPosition);
+		m_command = new reTranslateCommand(m_component->SelectionManager()->GetSelection(), m_component);
 
 		return true;
 	}
-	else{
-		m_gizmo->SetVisibility(false);
-		return DoClearSelection();
+	else {
+		rActor3* actor = PickActor(event, canvas);
+
+		if (actor) {
+			bool result = DoActorSelection(actor, event);
+			m_gizmo->Update();
+			
+			return true;
+		}
+		else {
+			m_gizmo->SetVisibility(false);
+			return DoClearSelection();
+		}
 	}
 }
 

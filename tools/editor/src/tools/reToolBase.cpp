@@ -31,6 +31,17 @@ void reToolBase::UpdatePoints(wxMouseEvent& event){
 	m_currentPoint = event.GetPosition();
 }
 
+rRay3 reToolBase::GetSelectionRay(wxMouseEvent& event, rwxGLCanvas* canvas) {
+	rViewport* viewport = canvas->GetViewport();
+	rScene* scene = m_component->GetScene();
+
+	rPoint pt(m_currentPoint.x, m_currentPoint.y);
+	rRay3 selectionRay;
+	viewport->GetSelectionRay(pt, selectionRay);
+
+	return selectionRay;
+}
+
 rActor3* reToolBase::PickActor(wxMouseEvent& event, rwxGLCanvas* canvas){
 	rViewport* viewport = canvas->GetViewport();
 	rScene* scene = m_component->GetScene();

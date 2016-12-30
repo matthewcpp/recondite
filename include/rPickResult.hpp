@@ -16,6 +16,7 @@ struct RECONDITE_API rPickResult {
 	recondite::Mesh* mesh;
 	rVector3 point;
 	uint32_t triangleId;
+	float distanceSquared;
 
-	rPickResult() : hit(false), actor(nullptr), model(nullptr), mesh(nullptr), point(rVector3::ZeroVector), triangleId(UINT32_MAX) {}
+	rPickResult() : hit(false), actor(nullptr), model(nullptr), mesh(nullptr), point(rVector3::ZeroVector), triangleId(UINT32_MAX), distanceSquared(0.0f) {}
 };

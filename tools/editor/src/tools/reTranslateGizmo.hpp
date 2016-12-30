@@ -14,7 +14,7 @@ public:
 	void SetVisibility(bool visibility);
 	void Update();
 
-	reGizmoAxis GetGizmoAxis(rActor3* actor);
+	reGizmoAxis PickAxis(const rRay3& ray);
 	rVector3 GetPosition();
 
 	void HighlightAxis(reGizmoAxis axis);

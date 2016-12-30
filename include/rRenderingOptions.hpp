@@ -12,7 +12,7 @@
 
 class RECONDITE_API rRenderingOptions{
 public:
-	rRenderingOptions() : m_visibility(true) {}
+	rRenderingOptions() : m_visibility(true), m_layer(0) {}
 
 public:
 
@@ -28,10 +28,13 @@ public:
 	*/
 	inline bool GetVisibility() const;
 
+	inline uint32_t GetLayer() const;
+	inline void SetLayer(uint32_t layer);
 
 private:
 
 	bool m_visibility;
+	uint32_t m_layer;
 };
 
 
@@ -41,4 +44,12 @@ inline void rRenderingOptions::SetVisibility(bool visibility) {
 
 inline bool rRenderingOptions::GetVisibility() const {
 	return m_visibility;
+}
+
+inline uint32_t rRenderingOptions::GetLayer() const {
+	return m_layer;
+}
+
+inline void rRenderingOptions::SetLayer(uint32_t layer) {
+	m_layer = layer;
 }

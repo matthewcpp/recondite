@@ -1,10 +1,12 @@
 #include "tools/reTranslateTool.hpp"
 
+
+
 reTranslateTool::reTranslateTool(reComponent* component, wxFrame* owner)
 	: reToolBase(component, owner)
 {
 	m_command = nullptr;
-	m_selectedAxis = reGizmoAxis::NONE;
+	m_selectedAxis = reGizmo::Axis::NONE;
 }
 
 reTranslateTool::~reTranslateTool(){
@@ -19,7 +21,7 @@ bool reTranslateTool::OnMouseDown(wxMouseEvent& event, rwxGLCanvas* canvas){
 	rRay3 selectionRay = GetSelectionRay(event, canvas);
 	m_selectedAxis = m_gizmo->PickAxis(selectionRay);
 
-	if (m_selectedAxis != reGizmoAxis::NONE) {
+	if (m_selectedAxis != reGizmo::Axis::NONE) {
 		m_gizmo->HighlightAxis(m_selectedAxis);
 		m_gizmo->Update();
 		SetDragPlaneFromSelectedAxis();
@@ -51,7 +53,7 @@ bool reTranslateTool::OnMouseUp(wxMouseEvent& event, rwxGLCanvas* canvas){
 		m_component->SubmitCommand(m_command);
 
 		m_gizmo->UnhighlightAxis(m_selectedAxis);
-		m_selectedAxis = reGizmoAxis::NONE;
+		m_selectedAxis = reGizmo::Axis::NONE;
 		m_command = nullptr;
 		
 		return true;
@@ -63,7 +65,7 @@ bool reTranslateTool::OnMouseUp(wxMouseEvent& event, rwxGLCanvas* canvas){
 bool reTranslateTool::OnMouseMotion(wxMouseEvent& event, rwxGLCanvas* canvas){
 	reToolBase::OnMouseMotion(event, canvas);
 
-	if (m_selectedAxis == reGizmoAxis::NONE){
+	if (m_selectedAxis == reGizmo::Axis::NONE){
 		return false;
 	}
 	else{
@@ -72,15 +74,15 @@ bool reTranslateTool::OnMouseMotion(wxMouseEvent& event, rwxGLCanvas* canvas){
 		rVector3 delta = currentWorldSpacePosition - m_previousWorldPosition;
 
 		switch (m_selectedAxis){
-		case reGizmoAxis::X:
+		case reGizmo::Axis::X:
 			delta.Set(delta.x, 0.0f, 0.0f);
 			break;
 
-		case reGizmoAxis::Y:
+		case reGizmo::Axis::Y:
 			delta.Set(0.0f, delta.y, 0.0f);
 			break;
 
-		case reGizmoAxis::Z:
+		case reGizmo::Axis::Z:
 			delta.Set(0.0f, 0.0f, delta.z);
 			break;
 		}
@@ -115,12 +117,12 @@ wxString reTranslateTool::GetToolName() const{
 
 void reTranslateTool::SetDragPlaneFromSelectedAxis(){
 	switch (m_selectedAxis){
-	case reGizmoAxis::X:
-	case reGizmoAxis::Y:
+	case reGizmo::Axis::X:
+	case reGizmo::Axis::Y:
 		m_dragPlane.SetFromPointAndNormal(m_gizmo->GetPosition(), rVector3::BackwardVector);
 		break;
 
-	case reGizmoAxis::Z:
+	case reGizmo::Axis::Z:
 		m_dragPlane.SetFromPointAndNormal(m_gizmo->GetPosition(), rVector3::RightVector);
 		break;
 	}
@@ -138,6 +140,28 @@ bool reTranslateTool::GetWorldSpaceDragPosition(rwxGLCanvas* canvas, rVector3& r
 }
 
 void reTranslateTool::Init() {
-	m_gizmo.reset(new reTranslateGizmo(m_component));
+	m_gizmo.reset(new Gizmo(m_component));
 }
 
+reTranslateTool::Gizmo::Gizmo(reComponent* component)
+	:reGizmo(component)
+{
+
+}
+
+void reTranslateTool::Gizmo::CreateGizmoHandle(recondite::ModelData& modelData) {
+	rPrimitiveGeometry::rPrimitiveCylinderParams cylinderParams(0.3f, 7, 20);
+	rPrimitiveGeometry::CreateCylinder(cylinderParams, modelData);
+
+	recondite::GeometryData* geometryData = modelData.GetGeometryData();
+	size_t vertexOffset = geometryData->VertexCount();
+
+	rPrimitiveGeometry::rPrimitiveConeParams coneParams(1.0, 2.5, 20);
+	rPrimitiveGeometry::CreateCone(coneParams, modelData);
+
+	rMatrix4 transform;
+	transform.SetTranslate(0.0f, cylinderParams.height, 0.0f);
+
+	geometryData->TransformVertices(vertexOffset, geometryData->VertexCount() - vertexOffset, transform);
+
+}

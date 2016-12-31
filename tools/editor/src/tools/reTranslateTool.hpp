@@ -8,12 +8,12 @@
 #include <wx/wx.h>
 
 #include "tools/reToolBase.hpp"
-#include "tools/reTranslateGizmo.hpp"
 #include "commands/reTranslateCommand.hpp"
 
 #include "asset/rModelData.hpp"
 #include "primitive/rPrimitiveGeometry.hpp"
 #include "rProp.hpp"
+#include "reGizmo.hpp"
 
 class reTranslateTool : public reToolBase {
 public:
@@ -35,15 +35,25 @@ private:
 	void SetDragPlaneFromSelectedAxis();
 	bool GetWorldSpaceDragPosition(rwxGLCanvas* canvas, rVector3& result);
 
-public:
-	std::unique_ptr<reTranslateGizmo> m_gizmo;
+private:
 
-	reGizmoAxis m_selectedAxis;
+	reGizmo::Axis m_selectedAxis;
 
 	rPlane m_dragPlane;
 	rVector3 m_previousWorldPosition;
 
 	reTranslateCommand* m_command;
+
+private:
+	class Gizmo : public reGizmo {
+	public:
+		Gizmo(reComponent* component);
+
+	protected:
+		virtual void CreateGizmoHandle(recondite::ModelData& modelData);
+	};
+
+	std::unique_ptr<Gizmo> m_gizmo;
 
 	rNO_COPY_CLASS(reTranslateTool)
 };

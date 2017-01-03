@@ -70,14 +70,16 @@ namespace rPrimitiveGeometry{
 
 	struct RECONDITE_API rPrimitiveCircleParams : public rPrimitiveParams{
 		rPrimitiveCircleParams()
-			: center(rVector3::ZeroVector), normal(rVector3::UpVector), radius(1.0f), segmentCount(15){}
-		rPrimitiveCircleParams(const rVector3& _center, const rVector3& _normal, float _radius, size_t _segmentCount)
-			: center(_center), normal(_normal), radius(_radius), segmentCount(_segmentCount){}
+			: center(rVector3::ZeroVector), normal(rVector3::UpVector), radius(1.0f), segmentCount(15), start(0.0f), end(360.0f){}
+		rPrimitiveCircleParams(const rVector3& _center, const rVector3& _normal, float _radius, size_t _segmentCount, float _start = 0.0f, float _end = 360.0f)
+			: center(_center), normal(_normal), radius(_radius), segmentCount(_segmentCount), start(_start), end(_end) {}
 
 		rVector3 center;
 		rVector3 normal;
 		float radius;
 		size_t segmentCount;
+		float start;
+		float end;
 	};
 
 	struct RECONDITE_API rPrimitiveSphereParams : public rPrimitiveParams{

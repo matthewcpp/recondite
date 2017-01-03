@@ -229,7 +229,7 @@ void rPrimitiveGeometry::CreateCircle(const rPrimitiveGeometry::rPrimitiveCircle
 	MeshData* shaded = modelData.GetTriangleMesh(modelData.GetTriangleMeshCount() - 1);
 	MeshData* wireframe = modelData.GetLineMesh(modelData.GetLineMeshCount() - 1);
 
-	float step = 360.0f / (float)params.segmentCount;
+	float step = (params.end - params.start) / (float)params.segmentCount;
 
 	rVector3 position;
 
@@ -238,7 +238,7 @@ void rPrimitiveGeometry::CreateCircle(const rPrimitiveGeometry::rPrimitiveCircle
 	geometry.PushNormal(params.normal);
 
 	for (size_t i = 0; i <= params.segmentCount; i++){
-		float angle = float(i) * step;
+		float angle = params.start + (float(i) * step);
 		float radians = rMath::DegreeToRad(angle);
 
 		position.Set(std::cos(radians), 0.0f, std::sin(radians));

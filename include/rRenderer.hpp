@@ -61,6 +61,11 @@ public:
 	void SetModelRenderMode(rRenderMode renderMode);
 	rRenderMode GetModelRenderMode() const;
 
+	rMatrix4 GetProjectionMatrix() const;
+	void SetProjectionMatrix(const rMatrix4& projectionMatrix);
+
+	rMatrix4 GetViewMatrix() const;
+
 private:
 	void _RenderModel(const ModelInstance* modelInstance, const rMatrix4& matrix);
 	void RenderSpriteBatch();

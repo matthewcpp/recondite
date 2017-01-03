@@ -5,34 +5,39 @@
 
 bool rStaticMeshBoundingVolume::IntersectsRay(const rRay3& ray, rPickResult& pickResult) const {
 	rAlignedBox3 box = _model->GetBoundingBox();
-	rVector3 position;
-	float closestPickDistance = FLT_MAX;
 
-	if (rIntersection::RayIntersectsAlignedBox(ray, box, &position)) {
+	if (rIntersection::RayIntersectsAlignedBox(ray, box)) {
+		for (size_t i = 0; i < _model->GetLineMeshCount(); i++) {
+			rPickResult current;
+			_CheckMesh(_model->GetLineMesh(i), ray, current);
+
+			if (current.hit && current.distanceSquared < pickResult.distanceSquared) {
+				pickResult = current;
+			}
+		}
+
 		for (size_t i = 0; i < _model->GetTriangleMeshCount(); i++) {
-			recondite::Mesh* mesh = _model->GetTriangleMesh(i);
-			box = mesh->GetBoundingBox();
+			rPickResult current;
+			_CheckMesh(_model->GetTriangleMesh(i), ray, current);
 
-			if (rIntersection::RayIntersectsAlignedBox(ray, box, &position)) {
-				float pickDistance = position.Distance(ray.origin);
-
-				if (pickResult.hit && closestPickDistance < pickDistance) {
-					continue;
-				}
-				else {
-					pickResult.model = _model;
-					pickResult.mesh = mesh;
-					pickResult.point = position;
-					pickResult.hit = true;
-				}
+			if (current.hit && current.distanceSquared < pickResult.distanceSquared) {
+				pickResult = current;
 			}
 		}
 	}
-	else {
-		pickResult.hit = false;
-	}
 
 	return pickResult.hit;
+}
+
+void rStaticMeshBoundingVolume::_CheckMesh(recondite::Mesh* mesh, const rRay3& ray, rPickResult& pickResult) const{
+	rAlignedBox3 box = mesh->GetBoundingBox();
+
+	if (rIntersection::RayIntersectsAlignedBox(ray, box, &pickResult.point)) {
+		pickResult.distanceSquared = pickResult.point.DistanceSquared(ray.origin);
+		pickResult.model = _model;
+		pickResult.mesh = mesh;
+		pickResult.hit = true;
+	}
 }
 
 rStaticMeshBoundingVolume::rStaticMeshBoundingVolume(recondite::Model* model) {

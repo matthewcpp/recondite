@@ -28,4 +28,28 @@ private:
 	bool m_firstCommand;
 };
 
+class reRotateCommand : public wxCommand {
+public:
+	reRotateCommand(const wxArrayString& actors, reComponent* component);
+
+public:
+	virtual bool Do() override;
+	virtual bool Undo() override;
+
+public:
+
+	void Update(const rVector3& rotationDelta);
+
+private:
+	void AddActorRotation(const rVector3& rotationDelta);
+
+private:
+	wxArrayString m_actors;
+
+	bool m_firstCommand;
+	reComponent* m_component;
+
+	rVector3 m_rotationDelta;
+};
+
 #endif

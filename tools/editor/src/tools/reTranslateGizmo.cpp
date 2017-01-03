@@ -2,64 +2,9 @@
 
 #include "primitive/rPrimitiveGeometry.hpp"
 
-class reGizmoHandle : public rProp {
-public: 
-	reGizmoHandle(recondite::Model* model, const rString& id, rEngine* engine);
-
-public:
-	virtual void Draw() override;
-	virtual bool RayPick(const rRay3& ray, rPickResult& result) override;
-
-private:
-	void UpdateScale();
-};
-
-reGizmoHandle::reGizmoHandle(recondite::Model* model, const rString& id, rEngine* engine)
-	:rProp(model, id, engine)
-{
-	RenderingOptions()->SetLayer(1);
-}
-
-void reGizmoHandle::Draw() {
-	UpdateScale();
-
-	rRenderMode renderMode = m_engine->renderer->GetModelRenderMode();
-	m_engine->renderer->SetModelRenderMode(rRenderMode::Shaded);
-
-	rProp::Draw();
-
-	m_engine->renderer->SetModelRenderMode(renderMode);
-}
-
-bool reGizmoHandle::RayPick(const rRay3& ray, rPickResult& result) {
-	UpdateScale();
-
-	return rProp::RayPick(ray, result);
-}
-
-void reGizmoHandle::UpdateScale() {
-	rVector3 updatedScale = rVector3::OneVector;
-
-	rViewport* activeViewport = m_engine->component->GetActiveViewport();
-
-	if (activeViewport) {
-		rVector3 center = WorldBounding().Center();
-		float distance = center.Distance(activeViewport->Camera()->GetPosition());
-		distance /= 100.0f;
-		updatedScale.Set(distance, distance, distance);
-	}
-
-	SetScale(updatedScale);
-}
-
-
-reTranslateGizmo::reTranslateGizmo(reComponent* component){
-	m_component = component;
-
-	m_xHandle = nullptr;
-	m_yHandle = nullptr;
-	m_zHandle = nullptr;
-}
+reTranslateGizmo::reTranslateGizmo(reComponent* component) 
+	:reTransformGizmoBase(component)
+{}
 
 reGizmoAxis reTranslateGizmo::PickAxis(const rRay3& ray) {
 	rPickResult xResult, yResult, zResult;
@@ -93,24 +38,6 @@ reGizmoAxis reTranslateGizmo::PickAxis(const rRay3& ray) {
 		return reGizmoAxis::Z;
 	else
 		return reGizmoAxis::NONE;
-}
-
-void reTranslateGizmo::SetVisibility(bool visibility){
-	m_xHandle->RenderingOptions()->SetVisibility(visibility);
-	m_yHandle->RenderingOptions()->SetVisibility(visibility);
-	m_zHandle->RenderingOptions()->SetVisibility(visibility);
-}
-
-void reTranslateGizmo::SetPosition(const rVector3& pos){
-	m_currentPosition = pos;
-
-	m_xHandle->SetPosition(pos);
-	m_yHandle->SetPosition(pos);
-	m_zHandle->SetPosition(pos);
-}
-
-rVector3 reTranslateGizmo::GetPosition(){
-	return m_currentPosition;
 }
 
 void reTranslateGizmo::Update(){
@@ -182,42 +109,4 @@ void reTranslateGizmo::CreateGeometry(){
 	engine->scene->AddActor(m_xHandle);
 	engine->scene->AddActor(m_yHandle);
 	engine->scene->AddActor(m_zHandle);
-}
-
-void reTranslateGizmo::HighlightAxis(reGizmoAxis axis) {
-	rProp* handle = nullptr;
-
-	switch (axis) {
-		case reGizmoAxis::X:
-			handle = m_xHandle;
-			break;
-
-		case reGizmoAxis::Y:
-			handle = m_yHandle;
-			break;
-
-		case reGizmoAxis::Z:
-			handle = m_zHandle;
-			break;
-	};
-
-	if (handle) {
-		handle->GetModelInstance()->GetTriangleMeshInstanceMaterial(0)->SetDiffuseColor(rColor(255,255,0,255));
-	}
-}
-
-void reTranslateGizmo::UnhighlightAxis(reGizmoAxis axis) {
-	switch (axis) {
-	case reGizmoAxis::X:
-		m_xHandle->GetModelInstance()->GetTriangleMeshInstanceMaterial(0)->SetDiffuseColor(rColor::Red);
-		break;
-
-	case reGizmoAxis::Y:
-		m_yHandle->GetModelInstance()->GetTriangleMeshInstanceMaterial(0)->SetDiffuseColor(rColor::Green);
-		break;
-
-	case reGizmoAxis::Z:
-		m_zHandle->GetModelInstance()->GetTriangleMeshInstanceMaterial(0)->SetDiffuseColor(rColor::Blue);
-		break;
-	};
 }

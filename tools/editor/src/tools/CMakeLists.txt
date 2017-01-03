@@ -12,10 +12,19 @@ list(APPEND tool_files ${CMAKE_CURRENT_SOURCE_DIR}/reToolBase.cpp)
 list(APPEND tool_files ${CMAKE_CURRENT_SOURCE_DIR}/reSelectionTool.hpp)
 list(APPEND tool_files ${CMAKE_CURRENT_SOURCE_DIR}/reSelectionTool.cpp)
 
+list(APPEND tool_files ${CMAKE_CURRENT_SOURCE_DIR}/reGizmo.hpp)
+list(APPEND tool_files ${CMAKE_CURRENT_SOURCE_DIR}/reGizmo.cpp)
+
 list(APPEND tool_files ${CMAKE_CURRENT_SOURCE_DIR}/reTranslateTool.hpp)
 list(APPEND tool_files ${CMAKE_CURRENT_SOURCE_DIR}/reTranslateTool.cpp)
 
 list(APPEND tool_files ${CMAKE_CURRENT_SOURCE_DIR}/reTranslateGizmo.hpp)
 list(APPEND tool_files ${CMAKE_CURRENT_SOURCE_DIR}/reTranslateGizmo.cpp)
+
+list(APPEND tool_files ${CMAKE_CURRENT_SOURCE_DIR}/reRotateTool.hpp)
+list(APPEND tool_files ${CMAKE_CURRENT_SOURCE_DIR}/reRotateTool.cpp)
+
+list(APPEND tool_files ${CMAKE_CURRENT_SOURCE_DIR}/reRotateGizmo.hpp)
+list(APPEND tool_files ${CMAKE_CURRENT_SOURCE_DIR}/reRotateGizmo.cpp)
 
 set(tool_sources ${tool_files} PARENT_SCOPE)

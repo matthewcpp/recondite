@@ -3,6 +3,7 @@
 
 #include "reSelectionTool.hpp"
 #include "reTranslateTool.hpp"
+#include "reRotateTool.hpp"
 
 enum reToolId{
 	reTOOL_ID_BEGIN = 10000,

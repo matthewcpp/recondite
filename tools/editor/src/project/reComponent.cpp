@@ -3,6 +3,7 @@
 reComponent::reComponent(){
 	m_project.reset(new reProject(this));
 	m_selectionManager.reset(new reSelectionManager(this));
+	m_viewportManager = nullptr;
 }
 
 reSelectionManager* reComponent::SelectionManager(){

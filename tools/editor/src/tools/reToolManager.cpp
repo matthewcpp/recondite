@@ -1,4 +1,5 @@
 #include "reToolManager.hpp"
+#include "reTools.hpp"
 
 reToolManager::reToolManager(reComponent* component, wxFrame* owner, wxAuiManager* manager){
 	m_owner = owner;
@@ -25,6 +26,7 @@ void reToolManager::CreateTools(){
 
 	m_tools[reTOOL_SELECT] = new reSelectionTool(m_component, m_owner);
 	m_tools[reTOOL_TRANSLATE] = new reTranslateTool(m_component, m_owner);
+	m_tools[reTOOL_ROTATE] = new reRotateTool(m_component, m_owner);
 
 	ActivateTool(reTOOL_SELECT);
 }
@@ -52,7 +54,9 @@ void reToolManager::ActivateTool(reToolId toolId){
 		m_activeTool = nullptr;
 		m_activeToolId = reTOOL_NONE;
 	}
-		
+
+	if (m_component->GetViewportManager())
+	m_component->GetViewportManager()->UpdateAllViewports(true);
 }
 
 bool reToolManager::OnMouseDown(wxMouseEvent& event, rwxGLCanvas* canvas){

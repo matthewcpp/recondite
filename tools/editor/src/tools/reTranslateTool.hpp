@@ -9,9 +9,8 @@
 
 #include "tools/reToolBase.hpp"
 #include "tools/reTranslateGizmo.hpp"
-#include "commands/reTranslateCommand.hpp"
+#include "commands/reTransformCommands.hpp"
 
-#include "asset/rModelData.hpp"
 #include "primitive/rPrimitiveGeometry.hpp"
 #include "rProp.hpp"
 

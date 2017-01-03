@@ -13,6 +13,7 @@
 #include "reTool.hpp"
 #include "reTools.hpp"
 
+
 class reToolManager{
 public:
 	reToolManager(reComponent* component, wxFrame* owner, wxAuiManager* manager);

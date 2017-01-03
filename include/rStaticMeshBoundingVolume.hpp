@@ -15,6 +15,10 @@ public:
 	virtual rAlignedBox3 FitBox() const;
 
 	void SetModel(recondite::Model* model);
+
+private:
+	void _CheckMesh(recondite::Mesh* mesh, const rRay3& ray, rPickResult& pickResult) const;
+
 private:
 	recondite::Model* _model;
 };

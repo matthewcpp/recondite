@@ -144,3 +144,15 @@ void rRenderer::SetDepthFunction(rGraphicsDevice::DepthFunction depthFunc) {
 rGraphicsDevice::DepthFunction rRenderer::GetDepthFunction() const {
 	return depthFunction;
 }
+
+rMatrix4 rRenderer::GetProjectionMatrix() const {
+	return m_projectionMatrix;
+}
+
+void rRenderer::SetProjectionMatrix(const rMatrix4& projectionMatrix) {
+	m_projectionMatrix = projectionMatrix;
+}
+
+rMatrix4 rRenderer::GetViewMatrix() const {
+	return m_viewMatrix;
+}

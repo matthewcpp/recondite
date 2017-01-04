@@ -4,9 +4,69 @@
 #include "primitive/rPrimitiveGeometry.hpp"
 #include "reGizmo.hpp"
 
-reScaleGizmo::reScaleGizmo(reComponent* component) {
-	m_component = component;
+#define BOX_SIZE 2.5f
+#define DEFAULT_STEM_LENGTH 7.0f
 
+reScaleGizmoHandle::reScaleGizmoHandle(const rVector3& direction, recondite::Model* model, const rString& id, rEngine* engine)
+:reGizmoHandle(model, id, engine)
+{
+	_direction = direction;
+	_stemLength = DEFAULT_STEM_LENGTH;
+}
+
+inline void reScaleGizmoHandle::SetAnchor(const rVector3& anchor) {
+	_anchor = anchor;
+}
+
+void reScaleGizmoHandle::UpdatePosition() {
+	UpdateScale();
+
+	SetPosition(_anchor + (_direction * (_stemLength * _scaleFactor)));
+}
+
+bool reScaleGizmoHandle::RayPick(const rRay3& ray, rPickResult& result) {
+	UpdatePosition();
+
+	return rProp::RayPick(ray, result);
+}
+
+void reScaleGizmoHandle::Draw() {
+	if (RenderingOptions()->GetVisibility()) {
+		UpdatePosition();
+
+		reGizmoHandle::Draw();
+
+		rAlignedBox3 worldBounding = WorldBounding();
+		rImmediateBuffer stemBuffer(rGeometryType::Lines, 3, false);
+		stemBuffer.PushVertex(_anchor);
+		stemBuffer.PushVertex(worldBounding.Center());
+
+		stemBuffer.PushIndex(0, 1);
+
+		rColor stemColor = GetModelInstance()->GetTriangleMeshInstanceMaterial(0)->DiffuseColor();
+		m_engine->renderer->RenderImmediateLines(stemBuffer, stemColor);
+	}
+}
+
+void reScaleGizmoHandle::UpdateScale() {
+	rVector3 updatedScale = rVector3::OneVector;
+
+	rViewport* activeViewport = m_engine->component->GetActiveViewport();
+
+	if (activeViewport) {
+		float distance = _anchor.Distance(activeViewport->Camera()->GetPosition());
+		distance /= 100.0f;
+		updatedScale.Set(distance, distance, distance);
+
+		_scaleFactor = distance;
+	}
+
+	SetScale(updatedScale);
+}
+
+reScaleGizmo::reScaleGizmo(reComponent* component) 
+:reTransformGizmoBase(component)
+{
 	m_uniformScaleHandle = nullptr;
 }
 
@@ -29,12 +89,16 @@ void reScaleGizmo::Update() {
 			selectionBounding.AddBox(actorBounding);
 		}
 
-		SetPosition(selectionBounding.Center());
+		rVector3 gizmoPosition = selectionBounding.Center();
+		gizmoPosition.y = selectionBounding.min.y;
+		SetPosition(gizmoPosition);
 		SetVisibility(true);
 	}
 }
 void reScaleGizmo::SetVisibility(bool visibility) {
 	m_uniformScaleHandle->RenderingOptions()->SetVisibility(visibility);
+
+	reTransformGizmoBase::SetVisibility(visibility);
 }
 
 void reScaleGizmo::CreateGeometry() {
@@ -42,6 +106,7 @@ void reScaleGizmo::CreateGeometry() {
 
 	recondite::ModelData modelData;
 	rPrimitiveGeometry::rPrimitiveBoxParams box;
+	box.extents.Set(BOX_SIZE, BOX_SIZE, BOX_SIZE);
 	rPrimitiveGeometry::CreateBox(box, modelData);
 
 	rMatrix4 translateMatrix;
@@ -50,19 +115,53 @@ void reScaleGizmo::CreateGeometry() {
 	recondite::GeometryData* geometryData = modelData.GetGeometryData();
 	geometryData->TransformVertices(0, geometryData->VertexCount(), translateMatrix);
 
+	while (modelData.GetLineMeshCount() > 0) {
+		modelData.DeleteLineMesh(modelData.GetLineMeshCount() - 1);
+	}
+
 	modelData.CalculateBoundings();
 
-	recondite::Model* handleModel = engine->content->Models()->LoadFromData(modelData, "__rotate_gizmo_handle__");
+	recondite::Model* handleModel = engine->content->Models()->LoadFromData(modelData, "__scale_gizmo_handle__");
 
-	m_uniformScaleHandle = new reGizmoHandle(handleModel, "__rotate_uniform_handle__", engine);
+	m_uniformScaleHandle = new reGizmoHandle(handleModel, "__scale_uniform_handle__", engine);
 	m_uniformScaleHandle->GetModelInstance()->GetTriangleMeshInstanceMaterial(0)->SetDiffuseColor(rColor(130,130,130,255));
 	m_uniformScaleHandle->SetPickable(false);
+
+	m_xHandle = new reScaleGizmoHandle(rVector3::RightVector, handleModel, "__scale_x_handle__", engine);
+	m_xHandle->GetModelInstance()->GetTriangleMeshInstanceMaterial(0)->SetDiffuseColor(rColor::Red);
+	m_xHandle->SetPickable(false);
+
+	m_yHandle = new reScaleGizmoHandle(rVector3::UpVector, handleModel, "__scale_y_handle__", engine);
+	m_yHandle->GetModelInstance()->GetTriangleMeshInstanceMaterial(0)->SetDiffuseColor(rColor::Green);
+	m_yHandle->SetPickable(false);
+
+	m_zHandle = new reScaleGizmoHandle(rVector3::BackwardVector, handleModel, "__scale_z_handle__", engine);
+	m_zHandle->GetModelInstance()->GetTriangleMeshInstanceMaterial(0)->SetDiffuseColor(rColor::Blue);
+	m_zHandle->SetPickable(false);
+
+	engine->scene->AddActor(m_xHandle);
+	engine->scene->AddActor(m_yHandle);
+	engine->scene->AddActor(m_zHandle);
 
 	engine->scene->AddActor(m_uniformScaleHandle);
 }
 
 void reScaleGizmo::SetPosition(const rVector3& position) {
-	m_uniformScaleHandle->SetPosition(position);
+	m_currentPosition = position;
+
+	m_uniformScaleHandle->SetPosition(m_currentPosition);
+
+	reinterpret_cast<reScaleGizmoHandle*>(m_xHandle)->SetAnchor(m_currentPosition);
+	reinterpret_cast<reScaleGizmoHandle*>(m_yHandle)->SetAnchor(m_currentPosition);
+	reinterpret_cast<reScaleGizmoHandle*>(m_zHandle)->SetAnchor(m_currentPosition);
+}
+
+void reScaleGizmo::ResetStems() {
+	reinterpret_cast<reScaleGizmoHandle*>(m_uniformScaleHandle)->SetStemLength(DEFAULT_STEM_LENGTH);
+
+	reinterpret_cast<reScaleGizmoHandle*>(m_xHandle)->SetStemLength(DEFAULT_STEM_LENGTH);
+	reinterpret_cast<reScaleGizmoHandle*>(m_yHandle)->SetStemLength(DEFAULT_STEM_LENGTH);
+	reinterpret_cast<reScaleGizmoHandle*>(m_zHandle)->SetStemLength(DEFAULT_STEM_LENGTH);
 }
 
 reGizmoAxis reScaleGizmo::PickAxis(const rRay3& ray) {
@@ -71,35 +170,65 @@ reGizmoAxis reScaleGizmo::PickAxis(const rRay3& ray) {
 	float bestDistance = FLT_MAX;
 
 	m_uniformScaleHandle->RayPick(ray, uniformResult);
+	m_xHandle->RayPick(ray, xResult);
+	m_yHandle->RayPick(ray, yResult);
+	m_zHandle->RayPick(ray, zResult);
 
 	if (uniformResult.hit && uniformResult.distanceSquared < bestDistance) {
 		best = m_uniformScaleHandle;
 		bestDistance = xResult.distanceSquared;
 	}
 
+	if (xResult.hit && xResult.distanceSquared < bestDistance) {
+		best = m_xHandle;
+		bestDistance = xResult.distanceSquared;
+	}
+
+	if (yResult.hit && yResult.distanceSquared < bestDistance) {
+		best = m_yHandle;
+		bestDistance = yResult.distanceSquared;
+	}
+
+	if (zResult.hit && zResult.distanceSquared < bestDistance) {
+		best = m_zHandle;
+		bestDistance = zResult.distanceSquared;
+	}
+
 	if (best == m_uniformScaleHandle)
 		return reGizmoAxis::ALL;
+	else if (best == m_xHandle)
+		return reGizmoAxis::X;
+	else if (best == m_yHandle)
+		return reGizmoAxis::Y;
+	else if (best == m_zHandle)
+		return reGizmoAxis::Z;
 	else
 		return reGizmoAxis::NONE;
 }
 
 void reScaleGizmo::HighlightAxis(reGizmoAxis axis) {
-	rProp* handle = nullptr;
-
-	switch (axis) {
-	case reGizmoAxis::ALL:
-		handle = m_uniformScaleHandle;
-	};
-
-	if (handle) {
-		handle->GetModelInstance()->GetTriangleMeshInstanceMaterial(0)->SetDiffuseColor(rColor(255, 255, 0, 255));
+	if (axis == reGizmoAxis::ALL) {
+		SetModelInstanceColor(m_uniformScaleHandle, rColor(255, 255, 0, 255));
+	}
+	else {
+		reTransformGizmoBase::HighlightAxis(axis);
 	}
 }
 
 void reScaleGizmo::UnhighlightAxis(reGizmoAxis axis) {
-	switch (axis) {
-	case reGizmoAxis::ALL:
-		m_uniformScaleHandle->GetModelInstance()->GetTriangleMeshInstanceMaterial(0)->SetDiffuseColor(rColor(130, 130, 130, 255));
-		break;
-	};
+	if (axis == reGizmoAxis::ALL) {
+		SetModelInstanceColor(m_uniformScaleHandle, rColor(130, 130, 130, 255));
+	}
+	else {
+		reTransformGizmoBase::UnhighlightAxis(axis);
+	}
+}
+
+reGizmoHandle* reScaleGizmo::GetHandle(reGizmoAxis axis) {
+	if (axis == reGizmoAxis::ALL) {
+		return m_uniformScaleHandle;
+	}
+	else {
+		return reTransformGizmoBase::GetHandle(axis);
+	}
 }

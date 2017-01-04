@@ -52,7 +52,23 @@ reTransformGizmoBase::reTransformGizmoBase(reComponent* component) {
 	m_zHandle = nullptr;
 }
 
-void SetModelInstanceColor(rProp* handle, const rColor& color) {
+reGizmoHandle* reTransformGizmoBase::GetHandle(reGizmoAxis axis) {
+	switch (axis) {
+	case reGizmoAxis::X:
+		return m_xHandle;
+
+	case reGizmoAxis::Y:
+		return m_yHandle;
+
+	case reGizmoAxis::Z:
+		return m_zHandle;
+
+	default:
+		return nullptr;
+	}
+}
+
+void reTransformGizmoBase::SetModelInstanceColor(rProp* handle, const rColor& color) {
 	recondite::ModelInstance* modelInstance = handle->GetModelInstance();
 	const recondite::Model* model = modelInstance->GetModel();
 

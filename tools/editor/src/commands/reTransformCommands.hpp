@@ -5,9 +5,9 @@
 
 #include <wx/cmdproc.h>
 
-class reTranslateCommand : public wxCommand{
+class reTransformCommnad : public wxCommand {
 public:
-	reTranslateCommand(const wxArrayString& actors, reComponent* component);
+	reTransformCommnad(const wxArrayString& actors, reComponent* component, const wxString& name);
 
 public:
 	virtual bool Do() override;
@@ -16,40 +16,40 @@ public:
 public:
 	void Update(const rVector3& delta);
 
-private:
-	void AddActorPositions(const rVector3& delta);
+protected:
+	virtual void _ApplyDelta(const rVector3& delta) = 0;
 
-private:
-	wxArrayString m_actors;
-	rVector3 translateVector;
+protected:
+	wxArrayString _actors;
+	rVector3 _transformDelta;
 
-	reComponent* m_component;
+	reComponent* _component;
 
-	bool m_firstCommand;
+	bool _firstCommand;
 };
 
-class reRotateCommand : public wxCommand {
+class reTranslateCommand : public reTransformCommnad {
+public:
+	reTranslateCommand(const wxArrayString& actors, reComponent* component);
+
+protected:
+	virtual void _ApplyDelta(const rVector3& delta) override;
+};
+
+class reRotateCommand : public reTransformCommnad {
 public:
 	reRotateCommand(const wxArrayString& actors, reComponent* component);
 
+protected:
+	void _ApplyDelta(const rVector3& rotationDelta) override;
+};
+
+class reScaleCommand : public reTransformCommnad {
 public:
-	virtual bool Do() override;
-	virtual bool Undo() override;
+	reScaleCommand(const wxArrayString& actors, reComponent* component);
 
-public:
-
-	void Update(const rVector3& rotationDelta);
-
-private:
-	void AddActorRotation(const rVector3& rotationDelta);
-
-private:
-	wxArrayString m_actors;
-
-	bool m_firstCommand;
-	reComponent* m_component;
-
-	rVector3 m_rotationDelta;
+protected:
+	virtual void _ApplyDelta(const rVector3& scaleDelta) override;
 };
 
 #endif

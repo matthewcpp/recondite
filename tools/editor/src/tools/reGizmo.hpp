@@ -17,9 +17,9 @@ public:
 	inline rRenderMode GetRenderModeOverride() const;
 	inline float GetScaleFactor() const;
 
-	void UpdateScale();
+	virtual void UpdateScale();
 
-private:
+protected:
 	rRenderMode _renderModeOverride;
 	float _scaleFactor;
 };
@@ -46,6 +46,11 @@ public:
 	virtual void SetVisibility(bool visibility);
 	virtual void SetPosition(const rVector3& position);
 	rVector3 GetPosition() const;
+
+	virtual reGizmoHandle* GetHandle(reGizmoAxis axis);
+
+protected:
+	static void SetModelInstanceColor(rProp* handle, const rColor& color);
 
 protected:
 	reComponent* m_component;

@@ -60,7 +60,9 @@ void reTranslateGizmo::Update(){
 			selectionBounding.AddBox(actorBounding);
 		}
 
-		SetPosition(selectionBounding.Center());
+		rVector3 gizmoPosition = selectionBounding.Center();
+		gizmoPosition.y = selectionBounding.min.y;
+		SetPosition(gizmoPosition);
 		SetVisibility(true);
 	}
 }

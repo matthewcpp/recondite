@@ -27,6 +27,7 @@ void reToolManager::CreateTools(){
 	m_tools[reTOOL_SELECT] = new reSelectionTool(m_component, m_owner);
 	m_tools[reTOOL_TRANSLATE] = new reTranslateTool(m_component, m_owner);
 	m_tools[reTOOL_ROTATE] = new reRotateTool(m_component, m_owner);
+	m_tools[reTOOL_SCALE] = new reScaleTool(m_component, m_owner);
 
 	ActivateTool(reTOOL_SELECT);
 }

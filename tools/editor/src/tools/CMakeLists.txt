@@ -27,4 +27,10 @@ list(APPEND tool_files ${CMAKE_CURRENT_SOURCE_DIR}/reRotateTool.cpp)
 list(APPEND tool_files ${CMAKE_CURRENT_SOURCE_DIR}/reRotateGizmo.hpp)
 list(APPEND tool_files ${CMAKE_CURRENT_SOURCE_DIR}/reRotateGizmo.cpp)
 
+list(APPEND tool_files ${CMAKE_CURRENT_SOURCE_DIR}/reScaleTool.hpp)
+list(APPEND tool_files ${CMAKE_CURRENT_SOURCE_DIR}/reScaleTool.cpp)
+
+list(APPEND tool_files ${CMAKE_CURRENT_SOURCE_DIR}/reScaleGizmo.hpp)
+list(APPEND tool_files ${CMAKE_CURRENT_SOURCE_DIR}/reScaleGizmo.cpp)
+
 set(tool_sources ${tool_files} PARENT_SCOPE)

@@ -1,44 +1,50 @@
 #include "commands/reTransformCommands.hpp"
 
+//transform
+reTransformCommnad::reTransformCommnad(const wxArrayString& actors, reComponent* component, const wxString& name) 
+:wxCommand(true, name)
+{
+	_actors = actors;
+	_component = component;
+
+	_transformDelta = rVector3::ZeroVector;
+	_firstCommand = true;
+}
+
+void reTransformCommnad::Update(const rVector3& delta) {
+	_transformDelta += delta;
+	_ApplyDelta(delta);
+}
+
+bool reTransformCommnad::Do() {
+	if (_firstCommand)
+		_firstCommand = false;
+	else
+		_ApplyDelta(_transformDelta);
+
+	return true;
+}
+
+bool reTransformCommnad::Undo() {
+	_ApplyDelta(-_transformDelta);
+
+	return true;
+}
+
+
 //translate
 
 reTranslateCommand::reTranslateCommand(const wxArrayString& actors, reComponent* component)
-	:wxCommand(true, "Translate")
-{
-	m_actors = actors;
-	m_component = component;
+	:reTransformCommnad(actors, component, "Translate")
+{}
 
-	m_firstCommand = true;
 
-	translateVector = rVector3::ZeroVector;
-}
-
-void reTranslateCommand::Update(const rVector3& delta){
-	translateVector += delta;
-	AddActorPositions(delta);
-}
-
-bool reTranslateCommand::Do() {
-	if (m_firstCommand)
-		m_firstCommand = false;
-	else
-		AddActorPositions(translateVector);
-	
-	return true;
-}
-
-bool reTranslateCommand::Undo() {
-	AddActorPositions(-translateVector);
-
-	return true;
-}
-
-void reTranslateCommand::AddActorPositions(const rVector3& delta){
-	rScene* scene = m_component->GetScene();
+void reTranslateCommand::_ApplyDelta(const rVector3& delta){
+	rScene* scene = _component->GetScene();
 	rVector3 position;
 
-	for (size_t i = 0; i < m_actors.size(); i++){
-		rActor3* actor = scene->GetActor(m_actors[i].c_str().AsChar());
+	for (size_t i = 0; i < _actors.size(); i++){
+		rActor3* actor = scene->GetActor(_actors[i].c_str().AsChar());
 		position = actor->Position();
 		position += delta;
 		actor->SetPosition(position);
@@ -48,38 +54,8 @@ void reTranslateCommand::AddActorPositions(const rVector3& delta){
 //rotate
 
 reRotateCommand::reRotateCommand(const wxArrayString& actors, reComponent* component)
-	:wxCommand("Rotate") 
-{
-	m_actors = actors;
-	m_component = component;
-
-	m_firstCommand = true;
-
-	m_rotationDelta = rVector3::ZeroVector;
-}
-
-bool reRotateCommand::Do() {
-	if (m_firstCommand)
-		m_firstCommand = false;
-	else
-		AddActorRotation(m_rotationDelta);
-
-	return true;
-}
-
-bool reRotateCommand::Undo() {
-	if (m_firstCommand)
-		m_firstCommand = false;
-	else
-		AddActorRotation(-m_rotationDelta);
-
-	return true;
-}
-
-void reRotateCommand::Update(const rVector3& rotationDelta) {
-	m_rotationDelta += rotationDelta;
-	AddActorRotation(rotationDelta);
-}
+	:reTransformCommnad(actors, component, "Rotate")
+{}
 
 void CheckRotation(float& rotation) {
 	if (rotation < -365.0f)
@@ -88,12 +64,12 @@ void CheckRotation(float& rotation) {
 		rotation -= 365.0f;
 }
 
-void reRotateCommand::AddActorRotation(const rVector3& rotationDelta) {
-	rScene* scene = m_component->GetScene();
+void reRotateCommand::_ApplyDelta(const rVector3& rotationDelta) {
+	rScene* scene = _component->GetScene();
 	rVector3 rotation;
 
-	for (size_t i = 0; i < m_actors.size(); i++) {
-		rActor3* actor = scene->GetActor(m_actors[i].c_str().AsChar());
+	for (size_t i = 0; i < _actors.size(); i++) {
+		rActor3* actor = scene->GetActor(_actors[i].c_str().AsChar());
 		rotation = actor->Rotation();
 		rotation += rotationDelta;
 
@@ -102,5 +78,23 @@ void reRotateCommand::AddActorRotation(const rVector3& rotationDelta) {
 		CheckRotation(rotation.z);
 
 		actor->SetRotation(rotation);
+	}
+}
+
+//scale
+reScaleCommand::reScaleCommand(const wxArrayString& actors, reComponent* component)
+	:reTransformCommnad(actors, component, "Scale")
+{}
+
+void reScaleCommand::_ApplyDelta(const rVector3& scaleDelta) {
+	rScene* scene = _component->GetScene();
+	rVector3 scale;
+
+	for (size_t i = 0; i < _actors.size(); i++) {
+		rActor3* actor = scene->GetActor(_actors[i].c_str().AsChar());
+		scale = actor->Scale();
+		scale += scaleDelta;
+
+		actor->SetScale(scale);
 	}
 }

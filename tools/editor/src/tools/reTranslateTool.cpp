@@ -63,6 +63,8 @@ bool reTranslateTool::OnMouseUp(wxMouseEvent& event, rwxGLCanvas* canvas){
 bool reTranslateTool::OnMouseMotion(wxMouseEvent& event, rwxGLCanvas* canvas){
 	reToolBase::OnMouseMotion(event, canvas);
 
+	m_component->SetActiveViewport(canvas->GetViewport());
+
 	if (m_selectedAxis == reGizmoAxis::NONE){
 		return false;
 	}

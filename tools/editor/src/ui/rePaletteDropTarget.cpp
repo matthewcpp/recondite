@@ -8,22 +8,6 @@ rePaletteDropTarget::rePaletteDropTarget(reComponent* component, rwxGLCanvas* ca
 }
 
 bool rePaletteDropTarget::OnDropText(wxCoord x, wxCoord y, const wxString &data){
-	/*
-	
-	rCamera* camera = m_canvas->GetCamera();
-	rVector3 target = camera->Target();
-	rVector3 viewDir = camera->Position() - target;
-	viewDir.Normalize();
-
-	rPlane targetPlane(target, viewDir);
-	rRay3 selectionRay;
-	rPoint p(x, y);
-	m_canvas->GetViewport()->GetSelectionRay(p, selectionRay);
-
-	rVector3 planePos;
-	rIntersection::RayIntersectsPlane(selectionRay, targetPlane, &planePos);
-	*/
-
 	rViewport* viewport = m_canvas->GetViewport();
 	rScene* scene = m_component->GetScene();
 

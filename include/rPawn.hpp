@@ -19,6 +19,10 @@ public:
 	
 	virtual void Update();
 	virtual void Draw();
+
+public:
+	virtual size_t GetNumAssets() const override;
+	virtual bool GetAsset(size_t index, rAssetType& assetType, rString& name) const override;
 	
 private:
 	recondite::AnimationController m_animationController;

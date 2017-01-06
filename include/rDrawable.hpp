@@ -22,7 +22,12 @@ public:
 	}
 
 	virtual void SetModel(recondite::Model* model) { 
-		_modelInstance.reset(new recondite::ModelInstance(model));
+		if (model) {
+			_modelInstance.reset(new recondite::ModelInstance(model));
+		}
+		else {
+			_modelInstance.reset(nullptr);
+		}
 	}
 
 protected:

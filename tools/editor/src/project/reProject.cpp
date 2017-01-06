@@ -1,10 +1,14 @@
 #include "reProject.hpp"
 
+#include <wx/filefn.h> 
+
 #include "primitive/rPrimitiveGrid.hpp"
 #include "primitive/rPrimitiveBox.hpp"
 
+
 reProject::reProject(rwxComponent* component){
 	m_component = component;
+	m_assets.reset(new reProjectAssets(m_component));
 }
 
 void reProject::Create(const wxString& directory, const wxString& name){
@@ -14,6 +18,7 @@ void reProject::Create(const wxString& directory, const wxString& name){
 
 	m_projectDir.AssignDir(directory);
 	m_projectDir.AppendDir(name);
+	m_assets->SetBasePath(m_projectDir.GetFullPath());
 
 	wxMkDir(m_projectDir.GetPath(), wxS_DIR_DEFAULT);
 	wxMkDir(LevelDirPath(), wxS_DIR_DEFAULT);
@@ -26,6 +31,7 @@ bool reProject::Open(const wxString& path){
 
 	wxFileName projPath(path);
 	m_projectDir.AssignDir(projPath.GetPath());
+	m_assets->SetBasePath(m_projectDir.GetFullPath());
 
 	wxXmlDocument doc(path);
 
@@ -209,6 +215,25 @@ void reProject::SaveActiveLevel(){
 	if (!m_activeLevel.IsEmpty()){
 		wxString levelPath = LevelFilePath(m_activeLevel);
 		m_component->SaveScene(levelPath.c_str().AsChar());
+
+		wxString assetFilePath = levelPath + ".assets";
+		recondite::AssetManifest assetManifest;
+
+		m_component->GetScene()->EachActor([&](rActor3* actor) {
+			size_t assetCount = actor->GetNumAssets();
+			rAssetType type;
+			rString name;
+
+			for (size_t i = 0; i < assetCount; i++) {
+				actor->GetAsset(i, type, name);
+				wxString assetPath = m_assets->GetAssetPath(type, name.c_str());
+
+				assetManifest.Add(type, name, assetPath.c_str().AsChar());
+			}
+		});
+		
+		rOFileStream stream(assetFilePath.c_str().AsChar());
+		assetManifest.Write(stream);
 	}
 }
 
@@ -219,4 +244,8 @@ bool reProject::HasLevelNamed(const wxString& name){
 	}
 
 	return false;
+}
+
+reProjectAssets* reProject::Assets() {
+	return m_assets.get();
 }

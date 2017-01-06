@@ -1,8 +1,8 @@
 #include "rgl/rOpenGLContentManager.hpp"
 #include "rPath.hpp"
 
-rOpenGLContentManager::rOpenGLContentManager(rGraphicsDevice* graphicsDevice, rFileSystem* fileSystem)
-	:rContentManager(graphicsDevice, fileSystem)
+rOpenGLContentManager::rOpenGLContentManager(rGraphicsDevice* graphicsDevice, rFileSystem* fileSystem, iResourceManager* resourceManager)
+	:rContentManager(graphicsDevice, fileSystem, resourceManager)
 {}
 
 void rOpenGLContentManager::InitDefaultAssets(const rString& defaultAssetPath){

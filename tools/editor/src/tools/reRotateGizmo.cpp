@@ -55,17 +55,20 @@ void reRotateGizmo::CreateGeometry() {
 	m_xHandle->SetRotation(rVector3(90.0, 90.0f, 0.0f));
 	m_xHandle->GetModelInstance()->GetLineMeshInstanceMaterial(0)->SetDiffuseColor(rColor::Red);
 	m_xHandle->SetPickable(false);
+	m_xHandle->SetShouldPersist(false);
 
 	m_yHandle = new reGizmoHandle(handleModel, "__rotate_y_handle__", engine);
 	m_yHandle->SetRenderModeOverride(rRenderMode::Wireframe);
 	m_yHandle->GetModelInstance()->GetLineMeshInstanceMaterial(0)->SetDiffuseColor(rColor::Green);
 	m_yHandle->SetPickable(false);
+	m_yHandle->SetShouldPersist(false);
 
 	m_zHandle = new reGizmoHandle(handleModel, "__rotate_z_handle__", engine);
 	m_zHandle->SetRenderModeOverride(rRenderMode::Wireframe);
 	m_zHandle->SetRotation(rVector3(90.0, 0.0f, 0.0f));
 	m_zHandle->GetModelInstance()->GetLineMeshInstanceMaterial(0)->SetDiffuseColor(rColor::Blue);
 	m_zHandle->SetPickable(false);
+	m_zHandle->SetShouldPersist(false);
 
 	engine->scene->AddActor(m_xHandle);
 	engine->scene->AddActor(m_yHandle);

@@ -11,6 +11,7 @@
 
 #include "rComponent.hpp"
 #include "platform/rgl/rOpenGLContentManager.hpp"
+#include "interface/riResourceManager.hpp"
 
 class RECONDITE_RWX_CLASS rwxComponent : public rComponent{
 public:
@@ -28,6 +29,7 @@ public:
 	virtual void RenderScene(rViewport* viewport);
 
 	virtual rString GetBasePath();
+	void SetResourceManager(recondite::iResourceManager* resourceManager);
 
 public:
 	virtual bool Init(wxGLCanvas* canvas);
@@ -40,6 +42,7 @@ private:
 	rwxOpenGLGraphicsDevice* m_rwxGraphicsDevice;
 	rOpenGLContentManager* m_rglContentManager;
 	rInputManager* m_rInputManager;
+	recondite::iResourceManager* m_resourceManager;
 };
 
 #endif

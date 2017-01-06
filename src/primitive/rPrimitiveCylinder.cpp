@@ -11,7 +11,7 @@ rPrimitiveCylinder::rPrimitiveCylinder(const rString& id, rEngine* engine)
 	RecalculateBoundingVolume();
 }
 
-bool rPrimitiveCylinder::DoSerialize(riSerializationTarget* target){
+bool rPrimitiveCylinder::DoSerialize(riSerializationTarget* target, rSerializeAction action){
 	target->Category(ClassName());
 
 	target->Float("radius", m_radius);
@@ -19,7 +19,7 @@ bool rPrimitiveCylinder::DoSerialize(riSerializationTarget* target){
 
 	target->Int("segmentCount", m_segmentCount);
 
-	return rPrimitive::DoSerialize(target);
+	return rPrimitive::DoSerialize(target, action);
 }
 
 float rPrimitiveCylinder::Radius() const{

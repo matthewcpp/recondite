@@ -1,9 +1,13 @@
 #include "reMainFrame.hpp"
 
+#include <wx/filedlg.h>
+#include <wx/textdlg.h>
+
 reMainFrame::reMainFrame(reComponent* component, const wxString& title, const wxPoint& pos, const wxSize& size)
 	:wxFrame(NULL, wxID_ANY, title, pos, size)
 {
 	m_component = component;
+	m_fileHistory = new wxFileHistory(10);
 
 	CreateUIElements();
 
@@ -127,6 +131,7 @@ void reMainFrame::OnProjectAction(wxCommandEvent& event){
 
 reMainFrame::~reMainFrame(){
 	m_wxAuiManager.UnInit();
+	delete m_fileHistory;
 }
 
 wxMenuBar* reMainFrame::CreateEditorMenuBar(){
@@ -140,6 +145,14 @@ wxMenuBar* reMainFrame::CreateEditorMenuBar(){
 	fileMenu->AppendSubMenu(newMenu, "New");
 
 	fileMenu->Append(reMainFrame_OpenProject, "Open Project...");
+	wxMenu* recentMenu = new wxMenu();
+	fileMenu->AppendSubMenu(recentMenu, "Recent Projects");
+
+	m_fileHistory->Load(*m_component->GetConfig());
+	m_fileHistory->UseMenu(recentMenu);
+	m_fileHistory->AddFilesToMenu();
+	
+
 	fileMenu->Append(reMainFrame_CloseProject, "Close");
 
 	fileMenu->AppendSeparator();
@@ -151,6 +164,10 @@ wxMenuBar* reMainFrame::CreateEditorMenuBar(){
 	editMenu->Append(wxID_REDO, "Redo\tCtrl+Y");
 	menuBar->Append(editMenu, "&Edit");
 	m_component->InitCommandProcessor(editMenu);
+
+	wxMenu* assetMenu = new wxMenu();
+	assetMenu->Append(reMainFrame_Asset_ImportModel, "Import Model...");
+	menuBar->Append(assetMenu, "&Assets");
 
 	wxMenu* viewMenu = new wxMenu();
 	viewMenu->Append(reMainFrame_ViewPropertyInspector, "Property Inspector");
@@ -166,8 +183,27 @@ wxMenuBar* reMainFrame::CreateEditorMenuBar(){
 
 	Bind(wxEVT_MENU, &reMainFrame::OnProjectAction, this, reMainFrame_ProjectBegin, reMainFrame_ProjectEnd);
 	Bind(wxEVT_MENU, &reMainFrame::OnViewWindowSelection, this, reMainFrame_IdUIBegin, reMainFrame_IdUIEnd);
+	Bind(wxEVT_MENU, &reMainFrame::OnOpenRecentProject, this, wxID_FILE1, wxID_FILE9);
+
+	Bind(wxEVT_MENU, &reMainFrame::OnAssetImportModel, this, reMainFrame_Asset_ImportModel);
 
 	return menuBar;
+}
+
+void reMainFrame::OnAssetImportModel(wxCommandEvent& event) {
+	wxFileDialog importModelDialog(this, "Open Model", wxEmptyString, wxEmptyString, wxEmptyString, wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+
+	if (importModelDialog.ShowModal() == wxID_OK) {
+		recondite::Model* model = m_component->GetProject()->Assets()->ImportModel(importModelDialog.GetPath());
+
+		if (model) {
+			rString modelName = model->GetName();
+			rString createString = "rProp:" + modelName;
+
+			m_palette->AddSceneActor("Models", wxBitmap("assets/tool-box.png", wxBITMAP_TYPE_PNG), modelName.c_str(), createString.c_str());
+			m_projectExplorer->AddModel(model->GetName().c_str());
+		}
+	}
 }
 
 void reMainFrame::OnViewWindowSelection(wxCommandEvent& event){
@@ -196,6 +232,12 @@ void reMainFrame::OnViewWindowSelection(wxCommandEvent& event){
 	m_wxAuiManager.Update();
 }
 
+void reMainFrame::OnOpenRecentProject(wxCommandEvent& event) {
+	wxString recentProject = m_fileHistory->GetHistoryFile(event.GetId() - wxID_FILE1);
+	bool opened = m_component->GetProject()->Open(recentProject);
+	ProcessProjectOpen(recentProject);
+}
+
 void reMainFrame::OnFileExit(wxCommandEvent& event){
 	CloseFrame();
 }
@@ -209,6 +251,7 @@ void reMainFrame::OnRedoCommand(wxCommandEvent& event){
 }
 
 void reMainFrame::CloseFrame(){
+	m_fileHistory->Save(*m_component->GetConfig());
 	Close();
 }
 
@@ -222,17 +265,20 @@ void reMainFrame::EnsureViewportDisplayVisible(const wxString& caption){
 	m_wxAuiManager.Update();
 }
 
-void reMainFrame::ProcessProjectOpen(){
+void reMainFrame::ProcessProjectOpen(const wxString& path){
 	m_projectExplorer->ShowProject();
 	SetTitle("Recondite Editor - " + m_component->GetProject()->Name());
+	m_fileHistory->AddFileToHistory(path);
 }
 
 void reMainFrame::NewProject(){
 	reNewProjectDialog dialog;
 
 	if (dialog.ShowModal() == wxID_OK){
-		m_component->GetProject()->Create(dialog.GetProjectDir(), dialog.GetProjectName());
-		ProcessProjectOpen();
+		reProject* project = m_component->GetProject();
+
+		project->Create(dialog.GetProjectDir(), dialog.GetProjectName());
+		ProcessProjectOpen(project->ProjectFilePath());
 	}
 }
 
@@ -240,10 +286,11 @@ void reMainFrame::OpenProject(){
 	wxFileDialog projectDialog(this, "Open Project", wxEmptyString, wxEmptyString, "Recondite Projects (*.rprj)|*.rprj", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
 
 	if (projectDialog.ShowModal() == wxID_OK){
-		bool opened = m_component->GetProject()->Open(projectDialog.GetPath());
+		wxString projectPath = projectDialog.GetPath();
+		bool opened = m_component->GetProject()->Open(projectPath);
 
 		if (opened){
-			ProcessProjectOpen();
+			ProcessProjectOpen(projectPath);
 		}
 	}
 }

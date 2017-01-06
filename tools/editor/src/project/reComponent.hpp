@@ -8,9 +8,11 @@
 
 #include <wx/wx.h>
 #include <wx/cmdproc.h>
+#include <wx/fileconf.h>
 
 #include "reSelectionManager.hpp"
 #include "reProject.hpp"
+#include "reProjectResourceManager.hpp"
 
 class reViewportManager {
 public:
@@ -42,7 +44,7 @@ public:
 	reSelectionManager* SelectionManager();
 	reProject* GetProject();
 
-	bool Init(wxGLCanvas* canvas) override;
+	virtual bool Init(wxGLCanvas* canvas);
 
 	bool SubmitCommand(wxCommand* command);
 	bool UndoCommand();
@@ -54,12 +56,17 @@ public:
 	void SetViewportManager(reViewportManager* viewportManager);
 	reViewportManager* GetViewportManager();
 
+	wxConfigBase* GetConfig();
+
 private:
 	void OnSceneLoad(rEvent& event);
 
 private:
 	std::unique_ptr<reSelectionManager> m_selectionManager;
 	std::unique_ptr<reProject> m_project;
+	std::unique_ptr<reProjectResourceManager> m_resourceManager;
+	std::unique_ptr<wxFileConfig> m_config;
+
 	reViewportManager* m_viewportManager;
 
 	wxCommandProcessor m_commandProcessor;

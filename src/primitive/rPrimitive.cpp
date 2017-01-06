@@ -94,13 +94,13 @@ rColor rPrimitive::FaceColor() const{
 	return m_faceColor;
 }
 
-bool rPrimitive::DoSerialize(riSerializationTarget* target){
+bool rPrimitive::DoSerialize(riSerializationTarget* target, rSerializeAction action){
 	target->Category("Primitive");
 
 	target->Color("faceColor", m_faceColor);
 	target->Color("edgeColor", m_edgeColor);
 
-	return rActor3::DoSerialize(target);
+	return rActor3::DoSerialize(target, action);
 }
 
 void rPrimitive::OnLoad(){
@@ -109,3 +109,10 @@ void rPrimitive::OnLoad(){
 	RecalculateBoundingVolume();
 }
 
+size_t rPrimitive::GetNumAssets() const {
+	return 0U;
+}
+
+bool rPrimitive::GetAsset(size_t index, rAssetType& assetType, rString& name) const {
+	return false;
+}

@@ -14,6 +14,7 @@ public:
 
 	void ShowProject();
 	void AddLevel(const wxString& name);
+	void AddModel(const wxString& name);
 
 private:
 	void OnItemActivated(wxDataViewEvent& event);
@@ -34,6 +35,7 @@ private:
 
 	wxDataViewItem m_projectRoot;
 	wxDataViewItem m_levelsRoot;
+	wxDataViewItem m_modelsRoot;
 };
 
 #endif

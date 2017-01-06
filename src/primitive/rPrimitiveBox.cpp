@@ -116,7 +116,7 @@ void rPrimitiveBox::RecalculateBoundingVolume(){
 	boundingVolume->SetBox(b);
 }
 
-bool rPrimitiveBox::DoSerialize(riSerializationTarget* target){
+bool rPrimitiveBox::DoSerialize(riSerializationTarget* target, rSerializeAction action){
 	target->Category(ClassName());
 
 	target->Float("width", m_width);
@@ -127,5 +127,5 @@ bool rPrimitiveBox::DoSerialize(riSerializationTarget* target){
 	target->Int("heightSegments", m_heightSegments);
 	target->Int("depthSegments", m_depthSegments);
 
-	return rPrimitive::DoSerialize(target);
+	return rPrimitive::DoSerialize(target, action);
 }

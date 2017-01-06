@@ -26,7 +26,7 @@ public:
 	void SetColumns( int columns);
 
 protected:
-	virtual bool DoSerialize(riSerializationTarget* target) override;
+	virtual bool DoSerialize(riSerializationTarget* target, rSerializeAction action) override;
 	virtual void CreateGeometry(ModelData& modelData) override;
 	virtual void RecalculateBoundingVolume() override;
 

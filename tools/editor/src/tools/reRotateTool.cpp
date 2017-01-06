@@ -30,7 +30,18 @@ bool reRotateTool::OnMouseDown(wxMouseEvent& event, rwxGLCanvas* canvas) {
 		return true;
 	}
 	else {
-		return false;
+		rActor3* actor = PickActor(event, canvas);
+
+		if (actor) {
+			bool result = DoActorSelection(actor, event);
+			m_gizmo->Update();
+
+			return true;
+		}
+		else {
+			m_gizmo->SetVisibility(false);
+			return DoClearSelection();
+		}
 	}
 	
 }

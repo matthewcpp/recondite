@@ -37,8 +37,9 @@ set_target_properties(editor PROPERTIES FOLDER Tools)
 include(${wxWidgets_USE_FILE})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../rwx)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../import/include)
 
-target_link_libraries (editor recondite rgl rwx) 
+target_link_libraries (editor recondite rgl rwx rimport) 
 target_link_libraries(editor ${wxWidgets_LIBRARIES})
 
 add_definitions(-DWXUSINGDLL)

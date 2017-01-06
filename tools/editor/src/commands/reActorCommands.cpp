@@ -1,5 +1,9 @@
 #include "commands/reActorCommands.hpp"
 
+#include <wx/tokenzr.h>
+
+#include "rProp.hpp"
+
 //Insert
 
 reInsertActorCommand::reInsertActorCommand(const wxString& actorCreateStr, const rVector3& position, reComponent* component)
@@ -13,14 +17,26 @@ reInsertActorCommand::reInsertActorCommand(const wxString& actorCreateStr, const
 
 bool reInsertActorCommand::Do() {
 	rEngine* engine = m_component->GetEngine();
-	const char* actorStr = m_actorCreateStr.c_str().AsChar();
+	rActor3* actor = nullptr;
 
-	m_actorId = engine->scene->GetDefaultActorId(actorStr);
-	rActor3* actor = engine->actors->GetActorClass(actorStr, engine, m_actorId);
+	//TEMP
+	if (m_actorCreateStr.Find(':') >= 0) {
+		wxStringTokenizer tokenizer(m_actorCreateStr, ":");
+		tokenizer.GetNextToken();
+		wxString modelName = tokenizer.GetNextToken();
+
+		recondite::Model* model = m_component->GetEngine()->content->Models()->Get(modelName.c_str().AsChar());
+		m_actorId = engine->scene->GetDefaultActorId(modelName.c_str().AsChar());
+		actor = new rProp(model, m_actorId, engine);
+	}
+	else {
+		const char* actorStr = m_actorCreateStr.c_str().AsChar();
+		m_actorId = engine->scene->GetDefaultActorId(actorStr);
+		actor = engine->actors->GetActorClass(actorStr, engine, m_actorId);
+	}
+
 	engine->scene->AddActor(actor);
-
 	actor->SetPosition(m_position);
-
 	m_component->SelectionManager()->Select(m_actorId.c_str());
 
 	return true;

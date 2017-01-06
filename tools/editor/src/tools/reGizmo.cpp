@@ -21,6 +21,14 @@ void reGizmoHandle::Draw() {
 	m_engine->renderer->SetModelRenderMode(renderMode);
 }
 
+size_t reGizmoHandle::GetNumAssets() const {
+	return 0;
+}
+
+bool reGizmoHandle::GetAsset(size_t index, rAssetType& assetType, rString& name) {
+	return false;
+}
+
 bool reGizmoHandle::RayPick(const rRay3& ray, rPickResult& result) {
 	UpdateScale();
 

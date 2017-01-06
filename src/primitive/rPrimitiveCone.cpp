@@ -50,7 +50,7 @@ void rPrimitiveCone::SetSegmentCount(int segmentCount){
 	InvalidateGeometry();
 }
 
-bool rPrimitiveCone::DoSerialize(riSerializationTarget* target){
+bool rPrimitiveCone::DoSerialize(riSerializationTarget* target, rSerializeAction action){
 	target->Category(ClassName());
 
 	target->Float("radius", m_radius);
@@ -58,7 +58,7 @@ bool rPrimitiveCone::DoSerialize(riSerializationTarget* target){
 
 	target->Int("segmentCount", m_segmentCount);
 
-	return rPrimitive::DoSerialize(target);
+	return rPrimitive::DoSerialize(target, action);
 }
 
 void rPrimitiveCone::RecalculateBoundingVolume(){

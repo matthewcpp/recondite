@@ -61,12 +61,16 @@ public:
 
 	virtual bool IsDrawable() const;
 
+	virtual size_t GetNumAssets() const = 0;
+	virtual bool GetAsset(size_t index, rAssetType& assetType, rString& name) const = 0;
+	virtual bool ShouldPersist() const;
+	virtual void SetShouldPersist(bool shouldPersist);
 public:
 	virtual bool Save(riSerializationTarget* target) final;
 	virtual bool Load(riSerializationTarget* target) final;
 
 protected:
-	virtual bool DoSerialize(riSerializationTarget* target);
+	virtual bool DoSerialize(riSerializationTarget* target, rSerializeAction action);
 	virtual void OnSave();
 	virtual void OnLoad();
 
@@ -92,6 +96,7 @@ private:
 
 	bool m_hasTransformed;
 	bool m_pickable;
+	bool m_persist;
 
 	rNO_COPY_CLASS(rActor3)
 };

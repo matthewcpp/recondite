@@ -19,6 +19,9 @@ public:
 
 	virtual void UpdateScale();
 
+	virtual size_t GetNumAssets() const;
+	virtual bool GetAsset(size_t index, rAssetType& assetType, rString& name);
+
 protected:
 	rRenderMode _renderModeOverride;
 	float _scaleFactor;

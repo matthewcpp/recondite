@@ -27,8 +27,12 @@ public:
 
 	virtual void OnDelete() override;
 
+public:
+	virtual size_t GetNumAssets() const override;
+	virtual bool GetAsset(size_t index, rAssetType& assetType, rString& name) const override;
+
 protected:
-	virtual bool DoSerialize(riSerializationTarget* target);
+	virtual bool DoSerialize(riSerializationTarget* target, rSerializeAction action);
 	virtual void OnLoad();
 
 	virtual void CreateGeometry(ModelData& modelData) = 0;

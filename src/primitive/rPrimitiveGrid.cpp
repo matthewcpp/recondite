@@ -58,7 +58,7 @@ void rPrimitiveGrid::SetColumns( int columns){
 	InvalidateGeometry();
 }
 
-bool rPrimitiveGrid::DoSerialize(riSerializationTarget* target){
+bool rPrimitiveGrid::DoSerialize(riSerializationTarget* target, rSerializeAction action){
 	target->Category(ClassName());
 
 	target->Float("width", m_width);
@@ -67,7 +67,7 @@ bool rPrimitiveGrid::DoSerialize(riSerializationTarget* target){
 	target->Int("rows", m_rows);
 	target->Int("columns", m_columns);
 
-	return rPrimitive::DoSerialize(target);
+	return rPrimitive::DoSerialize(target, action);
 }
 
 void rPrimitiveGrid::RecalculateBoundingVolume(){

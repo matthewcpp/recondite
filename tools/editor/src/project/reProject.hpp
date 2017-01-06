@@ -1,12 +1,16 @@
 #ifndef RE_PROJECT_HPP
 #define RE_PROJECT_HPP
 
+#include <memory>
+
 #include "rwxComponent.hpp"
 
 #include <wx/wx.h>
 #include <wx/filename.h>
-#include <wx/filefn.h> 
+
 #include <wx/xml/xml.h>
+
+#include "reProjectAssets.hpp"
 
 class reProject{
 public:
@@ -35,6 +39,8 @@ public:
 
 	const wxArrayString& Levels() const;
 
+	reProjectAssets* Assets();
+
 private:
 	bool CheckForValidNewLevelName(const wxString& name);
 	void CreateDefaultActors();
@@ -47,6 +53,10 @@ private:
 
 	wxArrayString m_levels;
 	wxString m_activeLevel;
+
+	std::unique_ptr<reProjectAssets> m_assets;
+
+	rNO_COPY_CLASS(reProject);
 };
 
 #endif

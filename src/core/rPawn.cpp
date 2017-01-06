@@ -30,3 +30,18 @@ void rPawn::SetModel(recondite::Model* model) {
 	//todo handle bounding for animated model
 	SetBoundingVolume(new rStaticMeshBoundingVolume(model));
 }
+
+size_t rPawn::GetNumAssets() const {
+	return 1U;
+}
+
+bool rPawn::GetAsset(size_t index, rAssetType& assetType, rString& name) const {
+	if (index == 0) {
+		assetType = rAssetType::Model;
+		name = _modelInstance->GetModel()->GetName();
+		return true;
+	}
+	else {
+		return false;
+	}
+}

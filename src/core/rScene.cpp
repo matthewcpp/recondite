@@ -1,5 +1,9 @@
 #include "rScene.hpp"
 
+#include <map>
+
+#include "stream/rOStringStream.hpp"
+
 rScene::rScene(rEngine* engine){
 	m_isLoading = false;
 
@@ -93,19 +97,6 @@ void rScene::Flush() {
 	m_ActorsToDelete.clear();
 }
 
-void rScene::DeleteActors(std::function<bool(rActor3*)> shouldDelete){
-	for (auto it = m_actors.cbegin(); it != m_actors.cend();){
-		if (shouldDelete(it->second)){
-			it->second->OnDelete();
-			delete it->second;
-			m_actors.erase(it++);
-		}
-		else{
-			++it;
-		}
-	}
-}
-
 void rScene::Clear(){
 	rActorMap::iterator end = m_actors.end();
 
@@ -149,11 +140,11 @@ rString rScene::GetDefaultActorId(const rString& prefix){
 }
 
 void rScene::RayPick(const rRay3& ray, rPickResult& pickResult) {
-	rPickResult currentResult, bestResult;
-	float selectedActorDistance = FLT_MAX;
+	rPickResult bestResult;
 
 	rActorMap::iterator end = m_actors.end();
 	for (rActorMap::iterator it = m_actors.begin(); it != end; ++it) {
+		rPickResult currentResult;
 		rActor3* currentActor = it->second;
 
 		if (!currentActor->Pickable()) { 
@@ -161,20 +152,24 @@ void rScene::RayPick(const rRay3& ray, rPickResult& pickResult) {
 		}
 
 		currentActor->RayPick(ray, currentResult);
-		if (currentResult.hit && currentResult.distanceSquared < selectedActorDistance) {
+		if (currentResult.hit && currentResult.distanceSquared < bestResult.distanceSquared) {
 			bestResult = currentResult;
-			selectedActorDistance = currentResult.distanceSquared;
 		}
 	}
 
 	pickResult = bestResult;
 }
 
+
 bool rScene::Save(riSerializationTarget* target){
 	riSerializationTarget* actorTarget = target->SubObject("actors");
+	
+	for (auto& a : m_actors) {
+		rActor3* actor = a.second;
 
-	for (auto& actor : m_actors) {
-		actor.second->Save(actorTarget);
+		if (actor->ShouldPersist()) {
+			actor->Save(actorTarget);
+		}
 	}
 
 	return true;
@@ -224,4 +219,10 @@ bool rScene::IsLoading() const{
 void rScene::GetActors(rArrayString& names) const{
 	for (auto& entry : m_actors)
 		names.push_back(entry.first);
+}
+
+void rScene::EachActor(std::function<void(rActor3*)> func) {
+	for (auto& entry : m_actors) {
+		func(entry.second);
+	}
 }

@@ -30,8 +30,20 @@ bool reScaleTool::OnMouseDown(wxMouseEvent& event, rwxGLCanvas* canvas) {
 
 		return true;
 	}
-	
-	return false;
+	else {
+		rActor3* actor = PickActor(event, canvas);
+
+		if (actor) {
+			bool result = DoActorSelection(actor, event);
+			m_gizmo->Update();
+
+			return true;
+		}
+		else {
+			m_gizmo->SetVisibility(false);
+			return DoClearSelection();
+		}
+	}
 }
 
 bool reScaleTool::OnMouseMotion(wxMouseEvent& event, rwxGLCanvas* canvas) {

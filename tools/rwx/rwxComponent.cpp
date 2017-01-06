@@ -2,15 +2,16 @@
 #include "wx/filename.h"
 
 rwxComponent::rwxComponent(){
-	m_rwxGraphicsDevice = NULL;
-	m_rglContentManager = NULL;
-	m_rInputManager = NULL;
+	m_rwxGraphicsDevice = nullptr;
+	m_rglContentManager = nullptr;
+	m_rInputManager = nullptr;
+	m_resourceManager = nullptr;
 }
 
 bool rwxComponent::Init(wxGLCanvas* canvas){
 	rFileSystem* fileSystem = new rFileSystem();
 	m_rwxGraphicsDevice = new rwxOpenGLGraphicsDevice();
-	m_rglContentManager = new rOpenGLContentManager(m_rwxGraphicsDevice, fileSystem);
+	m_rglContentManager = new rOpenGLContentManager(m_rwxGraphicsDevice, fileSystem, m_resourceManager);
 	m_rInputManager = new rInputManager();
 
 	m_rwxGraphicsDevice->Init(canvas);
@@ -74,4 +75,8 @@ rString rwxComponent::GetBasePath(){
 	wxFileName exePath(wxStandardPaths::Get().GetExecutablePath());
 
 	return exePath.GetPath(wxPATH_GET_SEPARATOR).c_str().AsChar();
+}
+
+void rwxComponent::SetResourceManager(recondite::iResourceManager* resourceManager) {
+	m_resourceManager = resourceManager;
 }

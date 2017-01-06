@@ -10,7 +10,6 @@
 #include "interface/riScene.hpp"
 #include "rActorFactory.hpp"
 
-#include "stream/rOStringStream.hpp"
 #include "xml/rXMLDocument.hpp"
 
 #include "rActor3.hpp"
@@ -36,8 +35,9 @@ public:
 	virtual size_t NumActors () const;
 	virtual void GetActors(rArrayString& names) const;
 
+	virtual void EachActor(std::function<void(rActor3*)> func);
+
 	virtual void DeleteActor(rActor3* actor);
-	void DeleteActors(std::function<bool(rActor3*)> shouldDelete);
 	bool RenameActor(const rString& oldId, const rString& newId);
 
 	virtual rString GetDefaultActorId(const rString& prefix);

@@ -6,6 +6,7 @@
 bool rStaticMeshBoundingVolume::IntersectsRay(const rRay3& ray, rPickResult& pickResult) const {
 	rAlignedBox3 box = _model->GetBoundingBox();
 
+
 	if (rIntersection::RayIntersectsAlignedBox(ray, box)) {
 		for (size_t i = 0; i < _model->GetLineMeshCount(); i++) {
 			rPickResult current;
@@ -18,6 +19,8 @@ bool rStaticMeshBoundingVolume::IntersectsRay(const rRay3& ray, rPickResult& pic
 
 		for (size_t i = 0; i < _model->GetTriangleMeshCount(); i++) {
 			rPickResult current;
+			current.actor = pickResult.actor;
+
 			_CheckMesh(_model->GetTriangleMesh(i), ray, current);
 
 			if (current.hit && current.distanceSquared < pickResult.distanceSquared) {

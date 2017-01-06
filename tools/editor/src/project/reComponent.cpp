@@ -2,8 +2,12 @@
 
 reComponent::reComponent(){
 	m_project.reset(new reProject(this));
+	m_resourceManager.reset(new reProjectResourceManager(m_project.get()));
+	SetResourceManager(m_resourceManager.get());
 	m_selectionManager.reset(new reSelectionManager(this));
 	m_viewportManager = nullptr;
+
+	m_config.reset(new wxFileConfig("recondite_editor"));
 }
 
 reSelectionManager* reComponent::SelectionManager(){
@@ -75,4 +79,8 @@ void reComponent::SetViewportManager(reViewportManager* viewportManager) {
 
 reViewportManager* reComponent::GetViewportManager() {
 	return m_viewportManager;
+}
+
+wxConfigBase* reComponent::GetConfig() {
+	return m_config.get();
 }

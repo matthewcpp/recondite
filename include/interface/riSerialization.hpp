@@ -8,6 +8,11 @@
 #include "rVector3.hpp"
 #include "rColor.hpp"
 
+enum class rSerializeAction {
+	Save,
+	Load
+};
+
 class RECONDITE_API riSerializationTarget{
 public:
 	virtual bool Boolean(const rString& name, bool& val) = 0;

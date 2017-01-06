@@ -26,7 +26,7 @@ protected:
 	virtual void CreateGeometry(ModelData& modelData) override;
 
 	virtual void RecalculateBoundingVolume() override;
-	bool DoSerialize(riSerializationTarget* target) override;
+	bool DoSerialize(riSerializationTarget* target, rSerializeAction action) override;
 
 private:
 	float m_radius;

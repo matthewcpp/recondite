@@ -14,6 +14,8 @@ void reProjectExplorer::ShowProject(){
 
 	m_projectRoot = AppendContainer(wxDataViewItem(0), m_component->GetProject()->Name());
 	m_levelsRoot = AppendContainer(m_projectRoot, "Levels");
+	m_modelsRoot = AppendContainer(m_projectRoot, "Models");
+
 	Expand(m_projectRoot);
 
 	const wxArrayString& levels = m_component->GetProject()->Levels();
@@ -26,7 +28,10 @@ void reProjectExplorer::ShowProject(){
 void reProjectExplorer::AddLevel(const wxString& name){
 	wxDataViewItem item = AppendItem(m_levelsRoot, name);
 	Select(item);
-	
+}
+
+void reProjectExplorer::AddModel(const wxString& name) {
+	AppendItem(m_modelsRoot, name);
 }
 
 void reProjectExplorer::OnItemActivated(wxDataViewEvent& event){

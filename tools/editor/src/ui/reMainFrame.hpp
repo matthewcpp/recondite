@@ -3,8 +3,7 @@
 
 #include <wx/wx.h>
 #include <wx/aui/aui.h>
-#include <wx/filedlg.h>
-#include <wx/textdlg.h>
+#include <wx/filehistory.h>
 
 
 
@@ -34,7 +33,7 @@ private:
 
 private:
 	void EnsureViewportDisplayVisible(const wxString& capption = wxEmptyString);
-	void ProcessProjectOpen();
+	void ProcessProjectOpen(const wxString& path);
 
 private:
 	void OnViewWindowSelection(wxCommandEvent& event);
@@ -51,6 +50,9 @@ private:
 	void SaveProject();
 
 	void OnProjectAction(wxCommandEvent& event);
+	void OnOpenRecentProject(wxCommandEvent& event);
+
+	void OnAssetImportModel(wxCommandEvent& event);
 
 	enum reMainFrameId{
 		reMainFrameIdBegin = 20000,
@@ -63,6 +65,8 @@ private:
 
 		reMainFrame_NewLevel,
 		reMainFrame_ProjectEnd,
+
+		reMainFrame_Asset_ImportModel,
 
 		reMainFrame_IdUIBegin,
 		reMainFrame_ViewPropertyInspector,
@@ -85,6 +89,9 @@ private:
 	reLogWindow* m_logWindow;
 
 	wxAuiManager m_wxAuiManager;
+
+	wxFileConfig* m_config;
+	wxFileHistory* m_fileHistory;
 };
 
 #endif

@@ -13,6 +13,12 @@ bool reApplication::OnInit(){
 	return true;
 }
 
+int reApplication::OnExit() {
+	delete m_reComponent;
+
+	return 0;
+}
+
 void reApplication::SetupPaths(){
 	wxStandardPaths& standardPaths = wxStandardPaths::Get();
 	wxString appPath = standardPaths.GetExecutablePath();

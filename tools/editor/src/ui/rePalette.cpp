@@ -31,13 +31,12 @@ void rePalette::AddSceneActor(const wxString& category, const wxBitmap& icon, co
 	wxStaticBitmap* bitmapIcon = new wxStaticBitmap(this, id, icon);
 	bitmapIcon->Bind(wxEVT_LEFT_DOWN, &rePalette::StartItemDrag, this);
 	categorySizer->Add(bitmapIcon, 0, wxALL, 5);
+	GetSizer()->Layout();
 
 	m_actorMapping[id] = createStr;
 }
 
 void rePalette::CreateSceneView(){
-	wxBoxSizer* sizer =new wxBoxSizer(wxHORIZONTAL);
-
 	AddSceneActor("Primitives", wxBitmap("assets/tool-box.png", wxBITMAP_TYPE_PNG), "Box", "PrimitiveBox");
 	AddSceneActor("Primitives", wxBitmap("assets/tool-cone.png", wxBITMAP_TYPE_PNG), "Cone", "PrimitiveCone");
 	AddSceneActor("Primitives", wxBitmap("assets/tool-plane.png", wxBITMAP_TYPE_PNG), "Plane", "PrimitiveGrid");

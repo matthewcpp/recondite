@@ -3,12 +3,13 @@
 #include "stream/rOStringStream.hpp"
 
 struct rModelManager::Impl{
-	Impl(rFileSystem* fs, rGraphicsDevice* gd, rTextureManager* tm) 
-		: fileSysytem(fs), graphicsDevice(gd), textureManager(tm){}
+	Impl(rFileSystem* fs, iResourceManager* rm, rGraphicsDevice* gd, rTextureManager* tm)
+		: fileSysytem(fs), resourceManager(rm), graphicsDevice(gd), textureManager(tm) {}
 
 	rFileSystem* fileSysytem;
 	rGraphicsDevice* graphicsDevice;
 	rTextureManager* textureManager;
+	iResourceManager* resourceManager;
 	std::map<rString, std::unique_ptr<Model>> models;
 
 	void DeleteModelData(Model* model);
@@ -16,8 +17,8 @@ struct rModelManager::Impl{
 };
 
 
-rModelManager::rModelManager(rFileSystem* fileSysytem, rGraphicsDevice* graphicsDevice, rTextureManager* textureManager){
-	_impl = new Impl(fileSysytem, graphicsDevice, textureManager);
+rModelManager::rModelManager(rFileSystem* fileSysytem, iResourceManager* resourceManager, rGraphicsDevice* graphicsDevice, rTextureManager* textureManager){
+	_impl = new Impl(fileSysytem, resourceManager, graphicsDevice, textureManager);
 }
 
 rModelManager::~rModelManager(){
@@ -58,6 +59,24 @@ void rModelManager::Impl::CreateMaterialsForModel(const ModelData& modelData, co
 		
 		materials.push_back(material);
 	}
+}
+
+Model* rModelManager::LoadFromResource(const rString& handle, const rString& name) {
+	rIStream* stream = _impl->resourceManager->Open(handle);
+	Model* result = nullptr;
+
+	if (stream) {
+		ModelData modelData;
+		int error = modelData.Read(*stream);
+
+		if (!error) {
+			result = LoadFromData(modelData, name);
+		}
+
+		_impl->resourceManager->Close(stream);
+	}
+
+	return result;
 }
 
 Model* rModelManager::LoadFromData(ModelData& modelData, const rString& name) {

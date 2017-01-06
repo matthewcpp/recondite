@@ -8,6 +8,7 @@ rActor3::rActor3(const rString& id, rEngine* engine)
 	m_scale = rVector3::OneVector;
 
 	m_pickable = true;
+	m_persist = true;
 
 	SetTransformed(true);
 }
@@ -176,8 +177,7 @@ bool rActor3::Save(riSerializationTarget* target){
 	classTarget->String("class", className);
 	classTarget->String("id", id);
 	
-
-	bool result = DoSerialize(classTarget);
+	bool result = DoSerialize(classTarget, rSerializeAction::Save);
 
 	OnSave();
 
@@ -187,7 +187,7 @@ bool rActor3::Save(riSerializationTarget* target){
 void rActor3::OnSave(){ }
 
 bool rActor3::Load(riSerializationTarget* target){
-	bool result =  DoSerialize(target);
+	bool result =  DoSerialize(target, rSerializeAction::Load);
 
 	OnLoad();
 
@@ -199,7 +199,7 @@ void rActor3::OnLoad(){
 	SetTransformed(true);
 }
 
-bool rActor3::DoSerialize(riSerializationTarget* target){
+bool rActor3::DoSerialize(riSerializationTarget* target, rSerializeAction action){
 	target->Category("Actor");
 
 	target->Vector3("position", m_position);
@@ -247,4 +247,12 @@ bool rActor3::RayPick(const rRay3& ray, rPickResult& result) {
 	}
 	else 
 		return false;
+}
+
+bool rActor3::ShouldPersist() const {
+	return m_persist;
+}
+
+void rActor3::SetShouldPersist(bool shouldPersist) {
+	m_persist = shouldPersist;
 }

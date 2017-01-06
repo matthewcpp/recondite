@@ -8,12 +8,8 @@ enum class rContentError{
 
 enum class rAssetType{
 	Texture,
-	Shader,
-	Material,
-	Geometry,
 	Model,
-	Font,
-	Sound
+	Count
 };
 
 enum rAssetSource{

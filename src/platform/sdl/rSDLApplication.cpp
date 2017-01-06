@@ -45,8 +45,9 @@ bool rApplication::Init(){
 	}
 
 	rFileSystem* fileSystem = new rFileSystem();
+	m_resourceManager = new recondite::ResourceManager();
 	 m_graphicsDevice = new rSDLGraphicsDevice(m_window);
-	 m_contentManager = new rOpenGLContentManager(m_graphicsDevice, fileSystem);
+	 m_contentManager = new rOpenGLContentManager(m_graphicsDevice, fileSystem, m_resourceManager);
 	 m_inputManager = new rSDLInputManager();
 
 	 InitEngine(m_graphicsDevice, m_contentManager, m_inputManager, fileSystem);

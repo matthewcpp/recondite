@@ -9,16 +9,18 @@
 
 #include "rGraphicsDevice.hpp"
 #include "rTextureManager.hpp"
+#include "interface/riResourceManager.hpp"
 
 using namespace recondite;
 
 class RECONDITE_API rModelManager{
 public:
-	rModelManager(rFileSystem* fileSysytem, rGraphicsDevice* graphicsDevice, rTextureManager* textureManager);
+	rModelManager(rFileSystem* fileSysytem, iResourceManager* resourceManager, rGraphicsDevice* graphicsDevice, rTextureManager* textureManager);
 	~rModelManager();
 
 	void Clear();
 	Model* LoadFromData(ModelData& modelData, const rString& name);
+	Model* LoadFromResource(const rString& handle, const rString& name);
 	bool Delete(const rString& name);
 	Model* Get(const rString& name);
 

@@ -1,4 +1,5 @@
 #include "rComponent.hpp"
+#include "asset/rAssetManifest.hpp"
 
 rComponent::rComponent(){
 	m_isReady = false;
@@ -11,7 +12,6 @@ rComponent::rComponent(){
 	InitDefaultActorClasses();
 }
 
-#include "primitive/rPrimitiveBox.hpp"
 bool rComponent::Init(){
 	Log::Init();
 
@@ -23,11 +23,20 @@ void rComponent::Uninit(){
 }
 
 void rComponent::LoadScene(const rString& name){
-	auto stream = m_engine.content->FileSystem()->GetReadFileRef(name);
+	auto assetStream = m_engine.content->FileSystem()->GetReadFileRef(name + ".assets");
+	if (assetStream) {
+		recondite::AssetManifest assetManifest;
+		int error = assetManifest.Read(*assetStream);
+		if (!error) {
+			m_engine.content->LoadFromManifest(assetManifest);
+		}
+	}
 
-	if (stream){
+	auto levelStream = m_engine.content->FileSystem()->GetReadFileRef(name);
+
+	if (levelStream){
 		rXMLDocument doc;
-		doc.LoadFromStream(*stream);
+		doc.LoadFromStream(*levelStream);
 
 		rXMLElement* element = doc.GetRoot();
 		rXMLSerializationSource* source = new rXMLSerializationSource(element);
@@ -37,14 +46,14 @@ void rComponent::LoadScene(const rString& name){
 }
 
 bool rComponent::SaveScene(const rString& path){
-	return SaveSceneXML(path, [](rActor3* actor)->bool{return true; });
+	return SaveSceneXML(path);
 }
 
 void rComponent::ClearScene(){
 	m_scene->Clear();
 }
 
-bool rComponent::SaveSceneXML(const rString& path, std::function<bool(rActor3*)> filterFunc){
+bool rComponent::SaveSceneXML(const rString& path){
 	rXMLDocument doc;
 	rXMLElement* element = doc.CreateRoot("level");
 
@@ -159,6 +168,7 @@ void rComponent::AddActorClass(const rString& name, rActorFactory::ActorFunction
 #include "primitive/rPrimitiveCone.hpp"
 #include "primitive/rPrimitiveCylinder.hpp"
 #include "primitive/rPrimitiveSphere.hpp"
+#include "rProp.hpp"
 
 void rComponent::InitDefaultActorClasses(){
 	m_actorFactory.AddActorClass("PrimitiveBox",
@@ -184,5 +194,10 @@ void rComponent::InitDefaultActorClasses(){
 	m_actorFactory.AddActorClass("PrimitiveSphere",
 		[](rEngine* engine, const rString& id)->rActor3*{
 		return new rPrimitiveSphere(id, engine);
+	});
+
+	m_actorFactory.AddActorClass("Prop",
+		[](rEngine* engine, const rString& id)->rActor3* {
+		return new rProp(id, engine);
 	});
 }

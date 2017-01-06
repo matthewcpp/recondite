@@ -8,10 +8,13 @@
 #include "rGraphicsDevice.hpp"
 #include "rContentManager.hpp"
 #include "rFileSystem.hpp"
+#include "interface/riResourceManager.hpp"
+
+using namespace recondite;
 
 class RECONDITE_GL_API rOpenGLContentManager : public rContentManager {
 public:
-	rOpenGLContentManager(rGraphicsDevice* graphicsDevice, rFileSystem* fileSystem);
+	rOpenGLContentManager(rGraphicsDevice* graphicsDevice, rFileSystem* fileSystem, iResourceManager* resourceManager);
 
 public:
 	virtual void InitDefaultAssets(const rString& defaultAssetPath);

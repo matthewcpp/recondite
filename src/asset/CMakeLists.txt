@@ -23,5 +23,7 @@ add_rec_src(asset_files "rFontManager" "asset")
 
 add_rec_src(asset_files "rSkeleton")
 
+add_rec_src(asset_files "rAssetManifest" "asset")
+
 set(recondite_files ${recondite_files} ${asset_files} PARENT_SCOPE)
 set(asset_sources ${asset_files} PARENT_SCOPE)

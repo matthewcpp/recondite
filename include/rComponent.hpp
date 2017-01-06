@@ -52,7 +52,7 @@ public:
 protected:
 	virtual void InitEngine(rGraphicsDevice* graphics, rContentManager* content, rInputManager* input, rFileSystem* fileSystem);
 	virtual void InitDefaultActorClasses();
-	bool SaveSceneXML(const rString& path, std::function<bool(rActor3*)> filterFunc);
+	bool SaveSceneXML(const rString& path);
 
 protected:
 	typedef std::map<rString, rViewport*> rViewportMap;

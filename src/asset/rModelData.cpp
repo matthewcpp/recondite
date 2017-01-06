@@ -284,6 +284,7 @@ namespace recondite {
 
 		rAlignedBox3 boundingBox;
 		stream.Read((char*)&boundingBox, sizeof(rAlignedBox3));
+		meshData->SetBoundingBox(boundingBox);
 
 		uint32_t materialId;
 		stream.Read((char*)&materialId, sizeof(uint32_t));
@@ -361,7 +362,7 @@ namespace recondite {
 		}
 	}
 
-	int ModelData::Write(rOStream& stream) {
+	int ModelData::Write(rOStream& stream) const{
 		ModelFileHeader header;
 
 		_impl->InitHeader(header);

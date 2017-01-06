@@ -208,7 +208,7 @@ namespace recondite {
 
 
 		int Read(rIStream& stream);
-		int Write(rOStream& stream);
+		int Write(rOStream& stream) const;
 
 	private:
 		struct Impl;

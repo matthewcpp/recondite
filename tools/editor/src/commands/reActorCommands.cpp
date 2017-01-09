@@ -26,8 +26,22 @@ bool reInsertActorCommand::Do() {
 		wxString modelName = tokenizer.GetNextToken();
 
 		recondite::Model* model = m_component->GetEngine()->content->Models()->Get(modelName.c_str().AsChar());
-		m_actorId = engine->scene->GetDefaultActorId(modelName.c_str().AsChar());
-		actor = new rProp(model, m_actorId, engine);
+
+		if (!model) {
+			wxString assetPath = m_component->GetProject()->Assets()->GetAssetPath(rAssetType::Model, modelName);
+			model = m_component->GetEngine()->content->Models()->LoadFromResource(assetPath.c_str().AsChar(), modelName.c_str().AsChar());
+		}
+
+		if (model) {
+			m_actorId = engine->scene->GetDefaultActorId(modelName.c_str().AsChar());
+			actor = new rProp(model, m_actorId, engine);
+		}
+		else {
+			wxMessageBox("Enable to load model asset: " + modelName, "Error", wxOK|wxCENTRE|wxICON_ERROR);
+			return false;
+		}
+
+		
 	}
 	else {
 		const char* actorStr = m_actorCreateStr.c_str().AsChar();

@@ -1,7 +1,5 @@
 #include "asset/rAssetManifest.hpp"
 
-#include "xml/rXMLDocument.hpp"
-
 namespace recondite {
 	void AssetManifest::Add(rAssetType type, const rString& name, const rString& path) {
 		auto& content = const_cast<ContentVector&>(_Content(type));
@@ -95,33 +93,68 @@ namespace recondite {
 		int error = document.LoadFromStream(stream);
 
 		if (!error) {
-			rXMLElement* assets = document.GetRoot()->GetFirstChildNamed("assets");
+			return Read(document);
+		}
+		else {
+			return error;
+		}
+		
+	}
 
+	int AssetManifest::Read(const rXMLDocument& document) {
+		rXMLElement* assets = document.GetRoot()->GetFirstChildNamed("assets");
+
+		if (assets) {
 			for (size_t i = 0; i < assets->NumChildren(); i++) {
 				ReadAsset(this, assets->GetChild(i));
 			}
+
+			return 0;
 		}
 
-		return error;
+		return 1;
 	}
 
-	void WriteContentVector(const std::vector<AssetManifest::ContentEntry>& contentVector, rXMLElement* parent, const rString& type) {
+	int AssetManifest::Write(rXMLDocument& document) const{
+		rXMLElement* root = document.GetRoot();
+
+		if (root) {
+			rXMLElement* assets = root->GetFirstChildNamed("assets");
+
+			if (!assets) {
+				assets = document.GetRoot()->CreateChild("assets");
+			}
+
+			WriteNodes(_models, "model", assets);
+
+			return 0;
+		}
+
+		return 1;
+	}
+
+	int AssetManifest::Write(rOStream& stream) const {
+		rXMLDocument document;
+
+		rXMLElement* assets = document.CreateRoot("manifest");
+		Write(document);
+
+		return document.WriteToStream(stream);
+	}
+
+	void AssetManifest::WriteNodes(const std::vector<AssetManifest::ContentEntry>& contentVector, const rString& type, rXMLElement* assetsNode) const{
 		for (size_t i = 0; i < contentVector.size(); i++) {
 			auto& entry = contentVector[i];
 
-			rXMLElement* asset = parent->CreateChild("asset");
+			rXMLElement* asset = assetsNode->CreateChild("asset");
 			asset->AddAttribute("type", type);
 			asset->CreateChild("name", entry.name);
 			asset->CreateChild("path", entry.path);
 		}
 	}
 
-	int AssetManifest::Write(rOStream& stream) const {
-		rXMLDocument document;
+	void AssetManifest::ReadNodes(rXMLElement* element) {
 
-		rXMLElement* assets = document.CreateRoot("manifest")->CreateChild("assets");
-		WriteContentVector(_models, assets, "model");
-
-		return document.WriteToStream(stream);
 	}
 }
+

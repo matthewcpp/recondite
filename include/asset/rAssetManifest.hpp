@@ -10,6 +10,9 @@
 #include "stream/rIStream.hpp"
 #include "stream/rOStream.hpp"
 
+#include "xml/rXMLDocument.hpp"
+
+
 namespace recondite {
 	/**
 	Encapsulates a set of Assets
@@ -76,11 +79,26 @@ namespace recondite {
 		int Read(rIStream& stream);
 
 		/**
+		Reads manifest data from an XML Document.  This method assumes that that the supplied document's root element has a child element named <assets>.
+		\param document XML document to read from.
+		\returns 0 on success, non 0 on failure
+		*/
+		int Read(const rXMLDocument& document);
+
+		/**
 		Writes manifest data to an output stream
 		\param stream an output stream to write to
 		\returns 0 on success, non 0 on failure
 		*/
 		int Write(rOStream& stream) const;
+
+		/**
+		Writes manifest data to an XML Document.  This method assumes that the document already has a root node created.  
+		A new element titles <assets> will be created to contain asset data.
+		\param stream an output stream to write to
+		\returns 0 on success, non 0 on failure
+		*/
+		int Write(rXMLDocument& document) const;
 	
 		struct ContentEntry {
 			rString name;
@@ -93,6 +111,8 @@ namespace recondite {
 		typedef std::vector<ContentEntry> ContentVector;
 		const ContentVector& _Content(rAssetType type) const;
 
+		void WriteNodes(const std::vector<AssetManifest::ContentEntry>& contentVector, const rString& type, rXMLElement* assetsNode) const;
+		void ReadNodes(rXMLElement* parentElement);
 
 	private:
 		std::vector<ContentEntry> _models;

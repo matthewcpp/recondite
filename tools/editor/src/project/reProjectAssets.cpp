@@ -52,6 +52,9 @@ recondite::Model* reProjectAssets::ImportModel(const wxString& path) {
 
 		WriteModel(modelData, modelName);
 
+		wxString modelHandle = GetAssetPath(rAssetType::Model, modelName);
+		_manifest.Add(rAssetType::Model, modelName.c_str().AsChar(), modelHandle.c_str().AsChar());
+
 		return model;
 	}
 
@@ -63,5 +66,23 @@ wxString reProjectAssets::GetDirectoryPath() {
 }
 
 wxString reProjectAssets::GetAssetPath(rAssetType assetType, const wxString& name) {
+	//TODO: TEMP
 	return "models/" + name + ".rmdl";
+}
+
+wxString reProjectAssets::GetAssetPreviewIcon(rAssetType assetType, const wxString& name) {
+	//TODO: TEMP
+	return "assets/tool-box.png";
+}
+
+void reProjectAssets::Save(rXMLDocument& document) {
+	_manifest.Write(document);
+}
+
+void reProjectAssets::Load(rXMLDocument& document) {
+	_manifest.Read(document);
+}
+
+const recondite::AssetManifest* reProjectAssets::Manifest() const{
+	return &_manifest;
 }

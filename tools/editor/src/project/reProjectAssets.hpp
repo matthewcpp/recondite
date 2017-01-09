@@ -4,6 +4,8 @@
 #include "asset/rModel.hpp"
 
 #include <wx/filename.h>
+#include "xml/rXMLDocument.hpp"
+#include "asset/rAssetManifest.hpp"
 
 class reProjectAssets {
 public:
@@ -16,6 +18,12 @@ public:
 	wxString GetDirectoryPath();
 
 	wxString GetAssetPath(rAssetType assetType, const wxString& name);
+	wxString GetAssetPreviewIcon(rAssetType assetType, const wxString& name);
+
+	void Save(rXMLDocument& document);
+	void Load(rXMLDocument& document);
+
+	const recondite::AssetManifest* Manifest() const;
 
 private:
 	void WriteModel(const recondite::ModelData& modelData, const wxString& name);
@@ -23,4 +31,5 @@ private:
 private:
 	wxFileName m_assetsDir;
 	rwxComponent* _component;
+	recondite::AssetManifest _manifest;
 };

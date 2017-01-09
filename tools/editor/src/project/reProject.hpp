@@ -8,8 +8,6 @@
 #include <wx/wx.h>
 #include <wx/filename.h>
 
-#include <wx/xml/xml.h>
-
 #include "reProjectAssets.hpp"
 
 class reProject{

@@ -15,10 +15,16 @@ public:
 public:
 	void AddSceneActor(const wxString& category, const wxBitmap& icon, const wxString& label, const wxString createStr);
 	void StartItemDrag(wxMouseEvent& event);
+
+public:
+	void OnProjectOpen();
+
 private:
 	void CreateSceneView();
 
 private:
+	reComponent* m_component;
+
 	std::map<int, wxString> m_actorMapping;
 	std::map<wxString, wxSizer*> m_categories;
 	int m_nextPaletteId;

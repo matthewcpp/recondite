@@ -194,7 +194,8 @@ void reMainFrame::OnAssetImportModel(wxCommandEvent& event) {
 	wxFileDialog importModelDialog(this, "Open Model", wxEmptyString, wxEmptyString, wxEmptyString, wxFD_OPEN | wxFD_FILE_MUST_EXIST);
 
 	if (importModelDialog.ShowModal() == wxID_OK) {
-		recondite::Model* model = m_component->GetProject()->Assets()->ImportModel(importModelDialog.GetPath());
+		reProject* project = m_component->GetProject();
+		recondite::Model* model = project->Assets()->ImportModel(importModelDialog.GetPath());
 
 		if (model) {
 			rString modelName = model->GetName();
@@ -202,6 +203,8 @@ void reMainFrame::OnAssetImportModel(wxCommandEvent& event) {
 
 			m_palette->AddSceneActor("Models", wxBitmap("assets/tool-box.png", wxBITMAP_TYPE_PNG), modelName.c_str(), createString.c_str());
 			m_projectExplorer->AddModel(model->GetName().c_str());
+
+			project->SaveProjectFile();
 		}
 	}
 }
@@ -267,7 +270,10 @@ void reMainFrame::EnsureViewportDisplayVisible(const wxString& caption){
 
 void reMainFrame::ProcessProjectOpen(const wxString& path){
 	m_projectExplorer->ShowProject();
+	m_palette->OnProjectOpen();
+
 	SetTitle("Recondite Editor - " + m_component->GetProject()->Name());
+
 	m_fileHistory->AddFileToHistory(path);
 }
 

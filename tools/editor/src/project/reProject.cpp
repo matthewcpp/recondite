@@ -1,6 +1,8 @@
 #include "reProject.hpp"
 
 #include <wx/filefn.h> 
+#include "stream/rOFileStream.hpp"
+#include "stream/rIFileStream.hpp"
 
 #include "primitive/rPrimitiveGrid.hpp"
 #include "primitive/rPrimitiveBox.hpp"
@@ -33,27 +35,22 @@ bool reProject::Open(const wxString& path){
 	m_projectDir.AssignDir(projPath.GetPath());
 	m_assets->SetBasePath(m_projectDir.GetFullPath());
 
-	wxXmlDocument doc(path);
+	rXMLDocument document;
+	rIFileStream projectStream(path.c_str().AsChar());
+	document.LoadFromStream(projectStream);
 
-	wxXmlNode* child = doc.GetRoot()->GetChildren();
+	rString textVal;
+	document.GetRoot()->GetFirstChildNamed("name")->GetText(textVal);
+	m_name = textVal.c_str();
 
-	while (child){
-		if (child->GetName() == "name") {
-			m_name = child->GetNodeContent();
-		}
-		if (child->GetName() == "levels") {
-			wxXmlNode* level = child->GetChildren();
+	rXMLElement* levels = document.GetRoot()->GetFirstChildNamed("levels");
 
-			if (level){
-				while (level){
-					m_levels.push_back(level->GetNodeContent());
-					level = level->GetNext();
-				}
-			}
-		}
-
-		child = child->GetNext();
+	for (size_t i = 0; i < levels->NumChildren(); i++) {
+		levels->GetChild(i)->GetText(textVal);
+		m_levels.push_back(textVal.c_str());
 	}
+
+	m_assets->Load(document);
 
 	return true;
 }
@@ -73,21 +70,20 @@ void reProject::Close(){
 }
 
 void reProject::SaveProjectFile(){
-	wxXmlNode* root = new wxXmlNode(wxXML_ELEMENT_NODE, "project");
-	wxXmlNode* nameElement = new wxXmlNode(root, wxXML_ELEMENT_NODE, "name");
-	wxXmlNode* nameNode = new wxXmlNode(nameElement, wxXML_TEXT_NODE, "name", m_name);
+	rXMLDocument document;
+	rXMLElement* root = document.CreateRoot("project");
+	root->CreateChild("name", m_name.c_str().AsChar());
 
-	wxXmlNode* levelsElement = new wxXmlNode(root, wxXML_ELEMENT_NODE, "levels");
-	for (auto& levelname : m_levels){
-		wxXmlNode* levelElement = new wxXmlNode(levelsElement, wxXML_ELEMENT_NODE, "level");
-		wxXmlNode* nameNode = new wxXmlNode(levelElement, wxXML_TEXT_NODE, "level", levelname);
+	m_assets->Save(document);
+
+	rXMLElement* levels = root->CreateChild("levels");
+	for (auto& levelname : m_levels) {
+		levels->CreateChild("level", levelname.c_str().AsChar());
 	}
 
-	wxXmlDocument document;
-	document.SetRoot(root);
-
 	wxString projFile = ProjectFilePath();
-	document.Save(projFile);
+	rOFileStream outStream(projFile.c_str().AsChar());
+	document.WriteToStream(outStream);
 }
 
 wxString reProject::Directory() const{

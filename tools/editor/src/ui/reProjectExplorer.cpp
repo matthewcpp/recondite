@@ -14,7 +14,8 @@ void reProjectExplorer::ShowProject(){
 
 	m_projectRoot = AppendContainer(wxDataViewItem(0), m_component->GetProject()->Name());
 	m_levelsRoot = AppendContainer(m_projectRoot, "Levels");
-	m_modelsRoot = AppendContainer(m_projectRoot, "Models");
+	wxDataViewItem assetContainer = AppendContainer(m_projectRoot, "Assets");
+	m_modelsRoot = AppendContainer(assetContainer, "Models");
 
 	Expand(m_projectRoot);
 
@@ -23,6 +24,8 @@ void reProjectExplorer::ShowProject(){
 	for (auto& level : levels){
 		AppendItem(m_levelsRoot, level);
 	}
+
+	ShowAssets(rAssetType::Model, m_modelsRoot);
 }
 
 void reProjectExplorer::AddLevel(const wxString& name){
@@ -88,4 +91,16 @@ void reProjectExplorer::DeleteLevel(wxDataViewItem target){
 	bool result = m_component->GetProject()->DeleteLevel(levelName);
 	if (result) DeleteItem(target);
 	
+}
+
+void reProjectExplorer::ShowAssets(rAssetType assetType, wxDataViewItem parent) {
+	const recondite::AssetManifest* assets = m_component->GetProject()->Assets()->Manifest();
+
+	size_t count = assets->Count(assetType);
+
+	rString name, path;
+	for (size_t i = 0; i < count; i++) {
+		assets->Get(assetType, i, name, path);
+		AppendItem(parent, name.c_str());
+	}
 }

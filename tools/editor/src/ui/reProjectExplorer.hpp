@@ -20,6 +20,8 @@ private:
 	void OnItemActivated(wxDataViewEvent& event);
 	void OnContext(wxDataViewEvent& event);
 
+	void ShowAssets(rAssetType assetType, wxDataViewItem parent);
+
 private:
 	enum reProjectExplorerId{
 		reProjectExplorerRenameLevel = 6000,

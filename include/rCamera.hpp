@@ -7,7 +7,7 @@ namespace recondite {
 	class Camera {
 	public:
 		Camera() :
-			m_position(rVector3::ZeroVector), m_target(rVector3::ForwardVector), m_up(rVector3::UpVector) {}
+			m_position(rVector3::ZeroVector), m_target(rVector3::ForwardVector), m_up(rVector3::UpVector), m_width(10), m_height(10) {}
 
 		inline void SetPosition(const rVector3& position);
 		inline void SetPosition(float x, float y, float z);
@@ -21,10 +21,19 @@ namespace recondite {
 		inline void SetUp(float x, float y, float z);
 		inline rVector3 GetUp() const;
 
+		inline void SetWidth(float width);
+		inline float GetWidth() const;
+
+		inline void SetHeight(float height);
+		inline float GetHeight() const;
+
 	private:
 		rVector3 m_position;
 		rVector3 m_target;
 		rVector3 m_up;
+
+		float m_width;
+		float m_height;
 	};
 
 	inline void Camera::SetPosition(const rVector3& position) {
@@ -61,5 +70,21 @@ namespace recondite {
 
 	inline rVector3 Camera::GetUp() const {
 		return m_up;
+	}
+
+	inline void Camera::SetWidth(float width) {
+		m_width = width;
+	}
+
+	inline float Camera::GetWidth() const {
+		return m_width;
+	}
+
+	inline void Camera::SetHeight(float height) {
+		m_height = height;
+	}
+
+	inline float Camera::GetHeight() const {
+		return m_height;
 	}
 }

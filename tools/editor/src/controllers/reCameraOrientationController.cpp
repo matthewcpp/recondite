@@ -98,3 +98,24 @@ rVector2 reCameraOrientationController::GetMovementValues(const wxPoint& delta) 
 
 	return move;
 }
+
+bool reCameraOrientationController::OnMousewheel(wxMouseEvent& event) {
+	float width = _camera->GetWidth();
+	float height = _camera->GetHeight();
+	
+	float aspect = height / width;
+
+	float widthDelta = 0.05f * width;
+
+	if (event.GetWheelRotation() < 0) {
+		widthDelta *= -1.0f;
+	}
+
+	width += widthDelta;
+	height = aspect * width;
+	
+	_camera->SetWidth(width);
+	_camera->SetHeight(height);
+
+	return true;
+}

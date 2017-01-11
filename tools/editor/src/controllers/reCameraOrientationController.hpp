@@ -10,6 +10,8 @@ public:
 	virtual bool OnMouseMotion(wxMouseEvent& event);
 	virtual bool OnRightUp(wxMouseEvent& event);
 
+	virtual bool OnMousewheel(wxMouseEvent& event) override;
+
 private:
 	rVector2 GetMovementValues(const wxPoint& delta);
 

@@ -16,7 +16,10 @@
 enum reViewportMenuId{
 	reVIEWPORT_MENU_WIREFRAME = 10000,
 	reVIEWPORT_MENU_SHADED,
-	reVIEWPORT_MENU_WIREFRAME_ON_SHADED
+	reVIEWPORT_MENU_WIREFRAME_ON_SHADED,
+
+	reVIEWPORT_MENU_PERSPECTIVE,
+	reVIEWPORT_MENU_ORTHOGRAPHIC,
 };
 
 class reViewport : public wxPanel{
@@ -33,6 +36,7 @@ public:
 	void SetViewOrientation(reViewOrientation viewOrientation);
 	void SetViewOrientation(reViewOrientation viewOrientation, const rAlignedBox3& bounding);
 	void SetRenderMode(rRenderMode renderMode);
+	void SetProjection(rViewportType viewportType);
 
 private:
 	void CreateViewportElements();

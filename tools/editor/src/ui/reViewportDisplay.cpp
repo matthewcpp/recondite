@@ -108,12 +108,15 @@ void reViewportDisplay::SetDefaultViewOrientations() {
 
 	m_topRightViewport->SetViewOrientation(reViewOrientation::Top, bounding);
 	m_topRightViewport->SetRenderMode(rRenderMode::Wireframe);
+	m_topRightViewport->SetProjection(rViewportType::rVIEWPORT_ORTHO);
 
 	m_bottomLeftViewport->SetViewOrientation(reViewOrientation::Right, bounding);
 	m_bottomLeftViewport->SetRenderMode(rRenderMode::Wireframe);
+	m_bottomLeftViewport->SetProjection(rViewportType::rVIEWPORT_ORTHO);
 
 	m_bottomRightViewport->SetViewOrientation(reViewOrientation::Front, bounding);
 	m_bottomRightViewport->SetRenderMode(rRenderMode::Wireframe);
+	m_bottomRightViewport->SetProjection(rViewportType::rVIEWPORT_ORTHO);
 }
 
 void reViewportDisplay::OnSceneLoadComplete(rEvent& event) {

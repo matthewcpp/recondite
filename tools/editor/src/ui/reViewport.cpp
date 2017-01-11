@@ -23,8 +23,8 @@ void reViewport::CreateViewportElements(){
 	m_viewMenuText = new wxStaticText(this, reViewportViewMenuId, "View");
 	m_viewMenuText->Bind(wxEVT_LEFT_DOWN, &reViewport::OnViewMenuClick, this);
 
-	m_viewMenu.AppendRadioItem(10000, "Perspective");
-	m_viewMenu.AppendRadioItem(10001, "Orthographic");
+	m_viewMenu.AppendRadioItem(reVIEWPORT_MENU_PERSPECTIVE, "Perspective");
+	m_viewMenu.AppendRadioItem(reVIEWPORT_MENU_ORTHOGRAPHIC, "Orthographic");
 
 	m_shadingMenuText = new wxStaticText(this, reViewportShadingMenuId, "Shading");
 	m_shadingMenuText->Bind(wxEVT_LEFT_DOWN, &reViewport::OnShadingMenuClick, this);
@@ -142,10 +142,46 @@ rwxGLCanvas* reViewport::GetCanvas(){
 }
 
 void reViewport::OnViewMenuClick(wxMouseEvent& event){
-	m_viewMenuText->GetPopupMenuSelectionFromUser(m_viewMenu);
+	int viewMenuChoice = m_viewMenuText->GetPopupMenuSelectionFromUser(m_viewMenu);
+
+	switch (viewMenuChoice)
+	{
+	case reVIEWPORT_MENU_PERSPECTIVE:
+		SetProjection(rViewportType::rVIEWPORT_PERSP);
+		break;
+
+	case reVIEWPORT_MENU_ORTHOGRAPHIC:
+		SetProjection(rViewportType::rVIEWPORT_ORTHO);
+		break;
+	}
+}
+
+void reViewport::SetProjection(rViewportType viewportType) {
+	m_glCanvas->GetViewport()->SetViewportType(viewportType);
+	Refresh();
 }
 
 void reViewport::SetRenderMode(rRenderMode renderMode) {
+	switch (renderMode)
+	{
+	case rRenderMode::Shaded:
+		m_shadingMenu.FindItemByPosition(0)->Check(false);
+		m_shadingMenu.FindItemByPosition(1)->Check(true);
+		m_shadingMenu.FindItemByPosition(2)->Check(false);
+		break;
+
+	case rRenderMode::Wireframe:
+		m_shadingMenu.FindItemByPosition(0)->Check(true);
+		m_shadingMenu.FindItemByPosition(1)->Check(false);
+		m_shadingMenu.FindItemByPosition(2)->Check(false);
+		break;
+
+	case rRenderMode::WireframeOnShaded:
+		m_shadingMenu.FindItemByPosition(0)->Check(false);
+		m_shadingMenu.FindItemByPosition(1)->Check(false);
+		m_shadingMenu.FindItemByPosition(2)->Check(true);
+		break;
+	}
 	m_glCanvas->GetViewport()->SetRenderMode(renderMode);
 	Refresh();
 }
@@ -200,6 +236,7 @@ void reViewport::SetViewOrientation(reViewOrientation viewOrientation) {
 
 void reViewport::SetViewOrientation(reViewOrientation viewOrientation, const rAlignedBox3& bounding) {
 	rVector3 center = bounding.Center();
+	float extentLength = bounding.Extent().Length();
 	float distance = bounding.max.Distance(bounding.min) / 2;
 	
 	
@@ -248,6 +285,9 @@ void reViewport::SetViewOrientation(reViewOrientation viewOrientation, const rAl
 	camera->SetPosition(position);
 	camera->SetTarget(target);
 	camera->SetUp(up);
+
+	camera->SetWidth(extentLength);
+	camera->SetHeight(extentLength);
 
 	if (viewOrientation != reViewOrientation::User)
 		m_cameraController.reset(new reCameraOrientationController(viewOrientation, m_glCanvas->GetCamera(), m_component));

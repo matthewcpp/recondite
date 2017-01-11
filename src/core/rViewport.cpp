@@ -67,9 +67,13 @@ void rViewport::GetProjectionMatrix(rMatrix4& matrix) const{
 		rMatrixUtil::Perspective(m_fovY, (float)m_rect.width / m_rect.height, m_nearClip, m_farClip, matrix);
 		break;
 		
-	case rVIEWPORT_ORTHO:
-		rMatrixUtil::Ortho(m_rect.Left(), m_rect.Right(), m_rect.Bottom(), m_rect.Top(), m_nearClip, m_farClip, matrix);
+	case rVIEWPORT_ORTHO: {
+		float viewportWidth = m_camera->GetWidth() / 2;
+		float viewportHeight = m_camera->GetHeight() / 2;
+
+		rMatrixUtil::Ortho(-viewportWidth, viewportWidth, -viewportHeight, viewportHeight, m_nearClip, m_farClip, matrix);
 		break;
+	}
 		
 	case rVIEWPORT_2D:
 		rMatrixUtil::Ortho2D(m_rect.Left(), m_rect.Right(), m_rect.Bottom(), m_rect.Top(), matrix);

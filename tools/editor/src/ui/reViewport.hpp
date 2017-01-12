@@ -20,6 +20,14 @@ enum reViewportMenuId{
 
 	reVIEWPORT_MENU_PERSPECTIVE,
 	reVIEWPORT_MENU_ORTHOGRAPHIC,
+
+	reVIEWPORT_MENU_USER,
+	reVIEWPORT_MENU_TOP,
+	reVIEWPORT_MENU_BOTTOM,
+	reVIEWPORT_MENU_LEFT,
+	reVIEWPORT_MENU_RIGHT,
+	reVIEWPORT_MENU_FRONT,
+	reVIEWPORT_MENU_BACK
 };
 
 class reViewport : public wxPanel{
@@ -33,8 +41,8 @@ public:
 
 	rwxGLCanvas* GetCanvas();
 
-	void SetViewOrientation(reViewOrientation viewOrientation);
-	void SetViewOrientation(reViewOrientation viewOrientation, const rAlignedBox3& bounding);
+	void SetViewOrientation(reViewOrientation viewOrientation, bool updateMenu = true);
+	void SetViewOrientation(reViewOrientation viewOrientation, const rAlignedBox3& bounding, bool updateMenu = true);
 	void SetRenderMode(rRenderMode renderMode);
 	void SetProjection(rViewportType viewportType);
 

@@ -12,7 +12,7 @@
 
 class RECONDITE_API rRenderingOptions{
 public:
-	rRenderingOptions() : m_visibility(true), m_layer(0) {}
+	rRenderingOptions() : m_visibility(true), m_layer(0), m_renderingMask(1U){}
 
 public:
 
@@ -31,10 +31,14 @@ public:
 	inline uint32_t GetLayer() const;
 	inline void SetLayer(uint32_t layer);
 
+	inline uint16_t GetRenderingMask() const;
+	inline void SetRenderingMask(uint16_t renderingMask);
+
 private:
 
 	bool m_visibility;
 	uint32_t m_layer;
+	uint16_t m_renderingMask;
 };
 
 
@@ -52,4 +56,11 @@ inline uint32_t rRenderingOptions::GetLayer() const {
 
 inline void rRenderingOptions::SetLayer(uint32_t layer) {
 	m_layer = layer;
+}
+
+inline uint16_t rRenderingOptions::GetRenderingMask() const {
+	return m_renderingMask;
+}
+inline void rRenderingOptions::SetRenderingMask(uint16_t renderingMask) {
+	m_renderingMask = renderingMask;
 }

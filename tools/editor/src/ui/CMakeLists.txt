@@ -9,6 +9,9 @@ list(APPEND ui_files ${CMAKE_CURRENT_SOURCE_DIR}/reLogWindow.cpp)
 list(APPEND ui_files ${CMAKE_CURRENT_SOURCE_DIR}/reMainFrame.hpp)
 list(APPEND ui_files ${CMAKE_CURRENT_SOURCE_DIR}/reMainFrame.cpp)
 
+list(APPEND ui_files ${CMAKE_CURRENT_SOURCE_DIR}/reModelViewer.hpp)
+list(APPEND ui_files ${CMAKE_CURRENT_SOURCE_DIR}/reModelViewer.cpp)
+
 list(APPEND ui_files ${CMAKE_CURRENT_SOURCE_DIR}/reOutliner.hpp)
 list(APPEND ui_files ${CMAKE_CURRENT_SOURCE_DIR}/reOutliner.cpp)
 

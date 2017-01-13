@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdint>
+
 #include "rBuild.hpp"
 #include "rVector3.hpp"
 
@@ -7,7 +9,8 @@ namespace recondite {
 	class Camera {
 	public:
 		Camera() :
-			m_position(rVector3::ZeroVector), m_target(rVector3::ForwardVector), m_up(rVector3::UpVector), m_width(10), m_height(10) {}
+			m_position(rVector3::ZeroVector), m_target(rVector3::ForwardVector), m_up(rVector3::UpVector), 
+			m_width(10), m_height(10), m_renderingMask(1U) {}
 
 		inline void SetPosition(const rVector3& position);
 		inline void SetPosition(float x, float y, float z);
@@ -27,6 +30,9 @@ namespace recondite {
 		inline void SetHeight(float height);
 		inline float GetHeight() const;
 
+		inline uint16_t GetRenderingMask() const;
+		inline void SetRenderingMask(uint16_t renderingMask);
+
 	private:
 		rVector3 m_position;
 		rVector3 m_target;
@@ -34,6 +40,8 @@ namespace recondite {
 
 		float m_width;
 		float m_height;
+
+		uint16_t m_renderingMask;
 	};
 
 	inline void Camera::SetPosition(const rVector3& position) {
@@ -86,5 +94,12 @@ namespace recondite {
 
 	inline float Camera::GetHeight() const {
 		return m_height;
+	}
+
+	inline uint16_t Camera::GetRenderingMask() const {
+		return m_renderingMask;
+	}
+	inline void Camera::SetRenderingMask(uint16_t renderingMask) {
+		m_renderingMask = renderingMask;
 	}
 }

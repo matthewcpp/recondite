@@ -17,13 +17,16 @@ reMainFrame::reMainFrame(reComponent* component, const wxString& title, const wx
 void reMainFrame::CreateUIElements(){
 	m_wxAuiManager.SetManagedWindow(this);
 
+	m_modelViewer = new reModelViewerFrame(m_component, this);
 	m_logWindow = new reLogWindow(m_component, this);
 	m_toolManager = new reToolManager(m_component, this, &m_wxAuiManager);
 	m_viewportDisplay = new reViewportDisplay(m_component, m_toolManager, this);
 	m_propertyInspector = new rePropertyInspector(m_component, m_viewportDisplay, this);
-	m_projectExplorer = new reProjectExplorer(m_component, this);
+	m_projectExplorer = new reProjectExplorer(m_modelViewer, m_component, this);
 	m_outliner = new reOutliner(m_component, m_propertyInspector, this);
 	m_palette = new rePalette(m_component, this);
+
+	
 
 	SetMenuBar(CreateEditorMenuBar());
 	CreateStatusBar();

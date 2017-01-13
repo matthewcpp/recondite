@@ -7,10 +7,11 @@
 #include <wx/dataview.h>
 
 #include "project/reProject.hpp"
+#include "reModelViewer.hpp"
 
 class reProjectExplorer : public wxDataViewTreeCtrl{
 public:
-	reProjectExplorer(reComponent* component, wxWindow* parent, wxWindowID id = wxID_ANY);
+	reProjectExplorer(reModelViewerFrame* modelViewer, reComponent* component, wxWindow* parent, wxWindowID id = wxID_ANY);
 
 	void ShowProject();
 	void AddLevel(const wxString& name);
@@ -34,6 +35,7 @@ private:
 
 private:
 	reComponent* m_component;
+	reModelViewerFrame* m_modelViewer;
 
 	wxDataViewItem m_projectRoot;
 	wxDataViewItem m_levelsRoot;

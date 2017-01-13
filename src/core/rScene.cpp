@@ -3,6 +3,7 @@
 #include <map>
 
 #include "stream/rOStringStream.hpp"
+#include "rDrawable.hpp"
 
 rScene::rScene(rEngine* engine){
 	m_isLoading = false;
@@ -28,12 +29,18 @@ void rScene::Draw(){
 	//todo: view frustrum culling
 	rActorMap::iterator end = m_actors.end();
 
+	uint16_t cameraRenderingMask = m_engine->component->GetActiveViewport()->Camera()->GetRenderingMask();
+
 	for (rActorMap::iterator it = m_actors.begin(); it != end; ++it) {
 		if (it->second->IsDrawable()) {
-			m_engine->renderer->Add((rDrawable*)it->second);
+			rDrawable* actor = (rDrawable*)it->second;
+
+			uint16_t actorRenderingMask = actor->RenderingOptions()->GetRenderingMask();
+			if ((actorRenderingMask & cameraRenderingMask) == actorRenderingMask) {
+				m_engine->renderer->Add(actor);
+			}
 		}
 	}
-		
 }
 
 bool rScene::RenameActor(const rString& oldId, const rString& newId){

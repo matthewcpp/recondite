@@ -19,6 +19,8 @@
 
 #include "dialogs/reNewProjectDialog.hpp"
 
+#include "reModelViewer.hpp"
+
 
 class reMainFrame : public wxFrame{
 public:
@@ -92,6 +94,8 @@ private:
 
 	wxFileConfig* m_config;
 	wxFileHistory* m_fileHistory;
+
+	reModelViewerFrame* m_modelViewer;
 };
 
 #endif

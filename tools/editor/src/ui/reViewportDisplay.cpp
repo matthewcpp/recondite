@@ -13,6 +13,7 @@ reViewportDisplay::reViewportDisplay(reComponent* component, reToolManager* tool
 	m_component->Bind(rEVT_COMPONENT_INITIALIZED, this, &reViewportDisplay::OnComponentInitialized);
 
 	m_isMaximized = false;
+	m_hoverCanvas = nullptr;
 	m_lastUpdateTime = 0;
 }
 
@@ -194,5 +195,14 @@ void reViewportDisplay::SaveViewportLayout(){
 
 	m_splitterInfo[2].first = m_mainSplitter->IsSplit();
 	m_splitterInfo[2].second = m_mainSplitter->GetSashPosition();
+}
 
+void reViewportDisplay::CharHook(wxKeyEvent& event) {
+	if (m_hoverCanvas) {
+		m_toolManager->OnKeyPress(event, m_hoverCanvas);
+	}
+}
+
+void reViewportDisplay::HoverCanvas(rwxGLCanvas* canvas) {
+	m_hoverCanvas = canvas;
 }

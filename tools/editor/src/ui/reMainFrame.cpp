@@ -190,6 +190,8 @@ wxMenuBar* reMainFrame::CreateEditorMenuBar(){
 
 	Bind(wxEVT_MENU, &reMainFrame::OnAssetImportModel, this, reMainFrame_Asset_ImportModel);
 
+	Bind(wxEVT_CHAR_HOOK, &reMainFrame::OnCharHook, this);
+
 	return menuBar;
 }
 
@@ -339,4 +341,10 @@ void reMainFrame::NewLevel(){
 
 void reMainFrame::SaveProject(){
 	m_component->GetProject()->SaveActiveLevel();
+}
+
+void reMainFrame::OnCharHook(wxKeyEvent& event) {
+	m_viewportDisplay->CharHook(event);
+
+	event.Skip();
 }

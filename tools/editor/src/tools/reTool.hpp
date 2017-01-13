@@ -18,8 +18,7 @@ public:
 	virtual bool OnMouseUp(wxMouseEvent& event, rwxGLCanvas* canvas) { return false; }
 	virtual bool OnMouseMotion(wxMouseEvent& event, rwxGLCanvas* canvas) { return false; }
 
-	virtual bool OnKeyDown(wxKeyEvent& event, rwxGLCanvas* canvas){ return false; }
-	virtual bool OnKeyUp(wxKeyEvent& event, rwxGLCanvas* canvas){ return false; }
+	virtual bool OnKeyPress(wxKeyEvent& event, rwxGLCanvas* canvas){ return false; }
 
 	virtual void OnActivate() {}
 	virtual void OnDeactivate() {}

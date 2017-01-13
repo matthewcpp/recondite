@@ -73,7 +73,7 @@ bool reToolBase::DoActorSelection(rActor3* actor, wxMouseEvent& event){
 	return true;
 }
 
-bool reToolBase::OnKeyUp(wxKeyEvent& event, rwxGLCanvas* canvas){
+bool reToolBase::OnKeyPress(wxKeyEvent& event, rwxGLCanvas* canvas){
 	if (event.GetKeyCode() == WXK_DELETE){
 		return DeleteSelection();
 	}

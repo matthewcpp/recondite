@@ -27,8 +27,7 @@ public:
 	bool OnMouseUp(wxMouseEvent& event, rwxGLCanvas* canvas);
 	bool OnMouseMotion(wxMouseEvent& event, rwxGLCanvas* canvas);
 
-	bool OnKeyDown(wxKeyEvent& event, rwxGLCanvas* canvas);
-	bool OnKeyUp(wxKeyEvent& event, rwxGLCanvas* canvas);
+	bool OnKeyPress(wxKeyEvent& event, rwxGLCanvas* canvas);
 
 	void OnCommandProcessed(rEvent& event);
 

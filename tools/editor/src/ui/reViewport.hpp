@@ -56,10 +56,9 @@ private:
 	void OnMinMaxButtonPress(wxCommandEvent& event);
 
 	void OnCanvasMouseEvent(wxMouseEvent& event);
-	void OnCanvasKeypress(wxKeyEvent& event);
 
-	void OnEnterCanvas(wxMouseEvent& event);
-	void OnLeaveCanvas(wxMouseEvent& event);
+	void OnMouseEnter(wxMouseEvent& event);
+	void OnMouseLeave(wxMouseEvent& event);
 
 private:
 

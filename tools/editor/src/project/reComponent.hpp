@@ -14,11 +14,14 @@
 #include "reProject.hpp"
 #include "reProjectResourceManager.hpp"
 
+class rwxGLCanvas;
+
 class reViewportManager {
 public:
 	virtual void UpdateAllViewports(bool force = false) = 0;
 	virtual void MaximizeViewport(int id) = 0;
 	virtual void RestoreViewports() = 0;
+	virtual void HoverCanvas(rwxGLCanvas* canvas) = 0;
 };
 
 enum reComponentEvent{

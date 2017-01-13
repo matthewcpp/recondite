@@ -44,6 +44,7 @@ private:
 
 	void OnUndoCommand(wxCommandEvent& event);
 	void OnRedoCommand(wxCommandEvent& event);
+	void OnCharHook(wxKeyEvent& event);
 
 	void NewProject();
 	void OpenProject();

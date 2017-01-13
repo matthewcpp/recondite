@@ -21,8 +21,11 @@ public:
 	virtual void UpdateAllViewports(bool force = false) override;
 	virtual void MaximizeViewport(int id);
 	virtual void RestoreViewports();
+	virtual void HoverCanvas(rwxGLCanvas* canvas);
 
 	void SetDefaultViewOrientations();
+
+	void CharHook(wxKeyEvent& event);
 
 private:
 	void OnComponentInitialized(rEvent& event);
@@ -56,6 +59,7 @@ private:
 	std::pair<bool, int> m_splitterInfo[3];
 	int m_sashPositions[3];
 	bool m_isMaximized;
+	rwxGLCanvas* m_hoverCanvas;
 
 	wxLongLong m_lastUpdateTime;
 };

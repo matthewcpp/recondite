@@ -15,7 +15,7 @@ public:
 	virtual bool OnMouseDown(wxMouseEvent& event, rwxGLCanvas* canvas);
 	virtual bool OnMouseUp(wxMouseEvent& event, rwxGLCanvas* canvas);
 	virtual bool OnMouseMotion(wxMouseEvent& event, rwxGLCanvas* canvas);
-	virtual bool OnKeyUp(wxKeyEvent& event, rwxGLCanvas* canvas);
+	virtual bool OnKeyPress(wxKeyEvent& event, rwxGLCanvas* canvas);
 
 protected:
 	bool IsClick();

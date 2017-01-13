@@ -69,13 +69,10 @@ void reViewport::BindEvents(){
 	m_glCanvas->Bind(wxEVT_MOUSEWHEEL, &reViewport::OnCanvasMouseEvent, this);
 	m_glCanvas->Bind(wxEVT_MOTION, &reViewport::OnCanvasMouseEvent, this);
 
-	this->Bind(wxEVT_KEY_DOWN, &reViewport::OnCanvasKeypress, this);
-	m_glCanvas->Bind(wxEVT_KEY_UP, &reViewport::OnCanvasKeypress, this);
-
 	m_minMaxButton->Bind(wxEVT_BUTTON, &reViewport::OnMinMaxButtonPress, this);
 
-	m_glCanvas->Bind(wxEVT_ENTER_WINDOW, &reViewport::OnEnterCanvas, this);
-	m_glCanvas->Bind(wxEVT_LEAVE_WINDOW, &reViewport::OnLeaveCanvas, this);
+	m_glCanvas->Bind(wxEVT_ENTER_WINDOW, &reViewport::OnMouseEnter, this);
+	m_glCanvas->Bind(wxEVT_LEAVE_WINDOW, &reViewport::OnMouseLeave, this);
 }
 
 void reViewport::OnCanvasMouseEvent(wxMouseEvent& event){
@@ -122,27 +119,12 @@ void reViewport::OnCanvasMouseEvent(wxMouseEvent& event){
 	}
 }
 
-void reViewport::OnCanvasKeypress(wxKeyEvent& event){
-	wxEventType eventType = event.GetEventType();
-
-	bool handled = false;
-
-	if (eventType == wxEVT_KEY_DOWN)
-		handled = m_toolManager->OnKeyDown(event, m_glCanvas);
-	else
-		handled = m_toolManager->OnKeyUp(event, m_glCanvas);
-
-	if (!handled){
-		event.Skip();
-	}
+void reViewport::OnMouseEnter(wxMouseEvent& event) {
+	m_viewportManager->HoverCanvas(m_glCanvas);
 }
 
-void reViewport::OnEnterCanvas(wxMouseEvent& event) {
-	m_glCanvas->SetFocus();
-}
-
-void reViewport::OnLeaveCanvas(wxMouseEvent& event) {
-	m_glCanvas->GetParent()->SetFocus();
+void reViewport::OnMouseLeave(wxMouseEvent& event) {
+	m_viewportManager->HoverCanvas(nullptr);
 }
 
 rwxGLCanvas* reViewport::GetCanvas(){

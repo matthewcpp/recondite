@@ -1,6 +1,7 @@
 #include "reProjectAssets.hpp"
 
 #include <wx/filename.h>
+#include <wx/filefn.h>
 
 #include "ModelImporter.hpp"
 #include "stream/rOFileStream.hpp"
@@ -85,4 +86,17 @@ void reProjectAssets::Load(rXMLDocument& document) {
 
 const recondite::AssetManifest* reProjectAssets::Manifest() const{
 	return &_manifest;
+}
+
+bool reProjectAssets::DeleteModel(const wxString& name) {
+	if (_manifest.RemoveByName(rAssetType::Model, name.c_str().AsChar())) {
+		_component->GetEngine()->content->Models()->Delete(name.c_str().AsChar());
+		wxString assetPath = GetAssetPath(rAssetType::Model, name);
+
+		wxString modelFile = GetDirectoryPath() + assetPath;
+		wxRemoveFile(modelFile);
+		return true;
+	}
+
+	return false;
 }

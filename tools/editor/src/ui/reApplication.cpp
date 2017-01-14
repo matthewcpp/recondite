@@ -13,10 +13,8 @@ bool reApplication::OnInit(){
 	return true;
 }
 
-int reApplication::OnExit() {
+reApplication::~reApplication() {
 	delete m_reComponent;
-
-	return 0;
 }
 
 void reApplication::SetupPaths(){

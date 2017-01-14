@@ -203,13 +203,20 @@ void reMainFrame::OnAssetImportModel(wxCommandEvent& event) {
 		recondite::Model* model = project->Assets()->ImportModel(importModelDialog.GetPath());
 
 		if (model) {
-			rString modelName = model->GetName();
-			rString createString = "rProp:" + modelName;
+			reModelViewerDialog dialog(m_component, model->GetName().c_str());
 
-			m_palette->AddSceneActor("Models", wxBitmap("assets/tool-box.png", wxBITMAP_TYPE_PNG), modelName.c_str(), createString.c_str());
-			m_projectExplorer->AddModel(model->GetName().c_str());
+			if (dialog.ShowModal() == wxID_OK) {
+				rString modelName = model->GetName();
+				rString createString = "rProp:" + modelName;
 
-			project->SaveProjectFile();
+				m_palette->AddSceneActor("Models", wxBitmap("assets/tool-box.png", wxBITMAP_TYPE_PNG), modelName.c_str(), createString.c_str());
+				m_projectExplorer->AddModel(model->GetName().c_str());
+
+				project->SaveProjectFile();
+			}
+			else {
+				project->Assets()->DeleteModel(model->GetName().c_str());
+			}
 		}
 	}
 }

@@ -12,6 +12,13 @@ rwxGLCanvas::rwxGLCanvas(rwxComponent* component, const wxString& name, wxWindow
 	Bind(wxEVT_PAINT, &rwxGLCanvas::OnPaint, this);
 }
 
+rwxGLCanvas::~rwxGLCanvas() {
+	if (m_viewport) {
+		m_component->GetEngine()->component->DeleteViewport(m_viewport->Name());
+		delete m_camera;
+	}
+}
+
 void rwxGLCanvas::OnPaint(wxPaintEvent& event){
 	wxPaintDC dc(this);
 
@@ -43,4 +50,8 @@ rViewport* rwxGLCanvas::GetViewport(){
 
 recondite::Camera* rwxGLCanvas::GetCamera(){
 	return m_camera;
+}
+
+wxString rwxGLCanvas::GetCanvasName() const {
+	return m_name;
 }

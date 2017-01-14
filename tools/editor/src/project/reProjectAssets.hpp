@@ -13,6 +13,7 @@ public:
 
 public:
 	recondite::Model* ImportModel(const wxString& path);
+	bool DeleteModel(const wxString& name);
 
 	void SetBasePath(const wxString& path);
 	wxString GetDirectoryPath();

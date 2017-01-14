@@ -12,10 +12,14 @@
 class RECONDITE_RWX_CLASS rwxGLCanvas : public wxGLCanvas{
 public:
 	rwxGLCanvas(rwxComponent* component, const wxString& name, wxWindow *parent, wxWindowID id = wxID_ANY);
+	~rwxGLCanvas();
+
 	void OnPaint(wxPaintEvent& event);
 
 	rViewport* GetViewport();
 	recondite::Camera* GetCamera();
+
+	wxString GetCanvasName() const;
 
 private:
 	void CreateViewport();

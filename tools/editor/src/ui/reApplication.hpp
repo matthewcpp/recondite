@@ -12,8 +12,10 @@
 
 class reApplication : public wxApp{
 public:
+	~reApplication();
+
+public:
 	virtual bool OnInit();
-	virtual int OnExit();
 
 private:
 	void SetupPaths();

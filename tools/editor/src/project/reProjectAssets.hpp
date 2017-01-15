@@ -19,7 +19,8 @@ public:
 	wxString GetDirectoryPath();
 
 	wxString GetAssetPath(rAssetType assetType, const wxString& name);
-	wxString GetAssetPreviewIcon(rAssetType assetType, const wxString& name);
+	wxString GetAssetIconPath(rAssetType assetType, const wxString& name);
+	void SetAssetIcon(const wxImage& image, rAssetType assetType, const wxString& name);
 
 	void Save(rXMLDocument& document);
 	void Load(rXMLDocument& document);
@@ -28,6 +29,9 @@ public:
 
 private:
 	void WriteModel(const recondite::ModelData& modelData, const wxString& name);
+
+	void EnsureAssetDir(const wxString& dirName);
+	
 
 private:
 	wxFileName m_assetsDir;

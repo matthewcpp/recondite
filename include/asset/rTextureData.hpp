@@ -30,7 +30,7 @@ public:
 	int Bpp() const;
 	rSize TextureSize() const;
 
-	const unsigned char* Data() const;
+	unsigned char* Data() const;
 	size_t DataSize() const;
 
 	void Clear();

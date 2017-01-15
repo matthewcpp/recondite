@@ -31,6 +31,14 @@ void reModelViewerPanel::ClearModel() {
 	}
 }
 
+rViewport* reModelViewerPanel::GetViewport() {
+	return _glCanvas->GetViewport();
+}
+
+rActor3* reModelViewerPanel::GetActor() {
+	return _currentActor;
+}
+
 bool reModelViewerPanel::ViewModel(const wxString& name) {
 	rScene* scene = _component->GetScene();
 	recondite::Model* model = _component->GetEngine()->content->Models()->Get(name.c_str().AsChar());
@@ -110,15 +118,22 @@ void reModelViewerFrame::OnClose(wxCloseEvent& event) {
 reModelViewerDialog::reModelViewerDialog(reComponent* component, const wxString& name)
 	:wxDialog(nullptr, wxID_ANY, name, wxDefaultPosition, wxSize(640, 480))
 {
-	CreateElements(component);
-	_modelViewer->ViewModel(name);
+	CreateElements(component, name);
 }
 
-void reModelViewerDialog::CreateElements(reComponent* component) {
-	wxBoxSizer* boxSizer = new wxBoxSizer(wxVERTICAL);
+void reModelViewerDialog::CreateElements(reComponent* component, const wxString& name) {
 	_modelViewer = new reModelViewerPanel(component, "Model Viewer Dialog", this);
+	_modelViewer->ViewModel(name);
 
+	_thumbnailCanvas = new rwxGLImageCanvas(component, "Thumbnail 1", this);
+	_thumbnailCanvas->SetMinSize(wxSize(64, 64));
+	SyncThumbnail();
+	
+	wxBoxSizer* boxSizer = new wxBoxSizer(wxVERTICAL);
 	boxSizer->Add(_modelViewer, 1, wxALL | wxEXPAND);
+	wxBoxSizer* thumbnailSizer = new wxBoxSizer(wxHORIZONTAL);
+	thumbnailSizer->Add(_thumbnailCanvas);
+	boxSizer->Add(thumbnailSizer, 0, wxEXPAND | wxALL, 5);
 	boxSizer->Add(CreateStdDialogButtonSizer(wxOK | wxCANCEL | wxOK_DEFAULT), 0, wxEXPAND);
 
 	SetSizer(boxSizer);
@@ -136,4 +151,18 @@ void reModelViewerDialog::OnClose(wxCloseEvent& event) {
 void reModelViewerDialog::OnButton(wxCommandEvent& event) {
 	_modelViewer->ClearModel();
 	event.Skip();
+}
+
+void reModelViewerDialog::SyncThumbnail() {
+	recondite::Camera* srcCamera = _modelViewer->GetViewport()->Camera();
+	recondite::Camera* thumbCamera = _thumbnailCanvas->GetCamera();
+	thumbCamera->SetRenderingMask(srcCamera->GetRenderingMask());
+
+	thumbCamera->SetPosition(srcCamera->GetPosition());
+	thumbCamera->SetTarget(srcCamera->GetTarget());
+	thumbCamera->SetUp(srcCamera->GetUp());
+}
+
+wxImage reModelViewerDialog::GetThumbnail() {
+	return _thumbnailCanvas->GetImage();
 }

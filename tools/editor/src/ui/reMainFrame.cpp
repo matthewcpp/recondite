@@ -208,8 +208,9 @@ void reMainFrame::OnAssetImportModel(wxCommandEvent& event) {
 			if (dialog.ShowModal() == wxID_OK) {
 				rString modelName = model->GetName();
 				rString createString = "rProp:" + modelName;
-
-				m_palette->AddSceneActor("Models", wxBitmap("assets/tool-box.png", wxBITMAP_TYPE_PNG), modelName.c_str(), createString.c_str());
+				wxImage icon = dialog.GetThumbnail();
+				m_component->GetProject()->Assets()->SetAssetIcon(icon, rAssetType::Model, model->GetName().c_str());
+				m_palette->AddSceneActor("Models", wxBitmap(icon), modelName.c_str(), createString.c_str());
 				m_projectExplorer->AddModel(model->GetName().c_str());
 
 				project->SaveProjectFile();

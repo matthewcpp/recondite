@@ -66,7 +66,7 @@ void rePalette::OnProjectOpen() {
 	for (size_t i = 0; i < modelCount; i++) {
 		assets->Get(rAssetType::Model, i, name, path);
 
-		wxString previewIconPath = m_component->GetProject()->Assets()->GetAssetPreviewIcon(rAssetType::Model, name.c_str());
+		wxString previewIconPath = m_component->GetProject()->Assets()->GetAssetIconPath(rAssetType::Model, name.c_str());
 		rString createString = "rProp:" + name;
 		AddSceneActor("Models", wxBitmap(previewIconPath, wxBITMAP_TYPE_PNG), name.c_str(), createString.c_str());
 	}

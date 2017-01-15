@@ -19,23 +19,26 @@ rwxGLCanvas::~rwxGLCanvas() {
 	}
 }
 
-void rwxGLCanvas::OnPaint(wxPaintEvent& event){
+void rwxGLCanvas::Render() {
 	wxPaintDC dc(this);
 
-	if (!m_component->IsReady()){
+	if (!m_component->IsReady()) {
 		m_component->Init(this);
 	}
-	
+
 	SetCurrent(*m_component->GetContext());
 
 	if (m_viewport == nullptr)
 		CreateViewport();
 
-	const wxSize ClientSize = GetClientSize();
-	m_viewport->SetScreenRect(0, 0, ClientSize.x, ClientSize.y);
-	
-	m_component->RenderScene(m_viewport);
+	const wxSize clientSize = GetClientSize();
+	m_viewport->SetScreenRect(0, 0, clientSize.x, clientSize.y);
 
+	m_component->RenderScene(m_viewport);
+}
+
+void rwxGLCanvas::OnPaint(wxPaintEvent& event){
+	Render();
 	SwapBuffers();
 }
 
@@ -45,6 +48,9 @@ void rwxGLCanvas::CreateViewport(){
 }
 
 rViewport* rwxGLCanvas::GetViewport(){
+	if (m_viewport == nullptr)
+		CreateViewport();
+
 	return m_viewport;
 }
 
@@ -54,4 +60,24 @@ recondite::Camera* rwxGLCanvas::GetCamera(){
 
 wxString rwxGLCanvas::GetCanvasName() const {
 	return m_name;
+}
+
+rwxGLImageCanvas::rwxGLImageCanvas(rwxComponent* component, const wxString& name, wxWindow *parent, wxWindowID id)
+	:rwxGLCanvas(component, name, parent, id) 
+{
+
+}
+
+void rwxGLImageCanvas::Render() {
+	rwxGLCanvas::Render();
+
+	const wxSize clientSize = GetClientSize();
+	uint8_t* buffer = new uint8_t[clientSize.x * clientSize.y * 3];
+
+	m_component->GetEngine()->renderer->ReadActiveFramebuffer(m_viewport->GetScreenRect(), buffer);
+	_image.SetData(buffer, clientSize.x, clientSize.y);
+}
+
+wxImage rwxGLImageCanvas::GetImage() {
+	return _image.Mirror(false);
 }

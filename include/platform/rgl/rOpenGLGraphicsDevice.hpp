@@ -80,9 +80,12 @@ public:
 
 	virtual void RenderImmediate(const rImmediateBuffer& geometry, const rMatrix4& transform, rMaterial* material);
 
-	virtual unsigned int CreateRenderbuffer(int width, int height);
-	virtual void DeleteRenderbuffer(unsigned int id);
-	virtual unsigned int ReadRenderbufferPixel(unsigned int x, unsigned int y);
+	virtual unsigned int CreateFramebuffer(int width, int height);
+	virtual bool DeleteFramebuffer(unsigned int id);
+	virtual void ReadActiveFramebuffer(const rRect& rect, unsigned char* buffer);
+	virtual bool ActivateFramebuffer(unsigned int id) override;
+	virtual bool GetFramebufferSize(unsigned int id, rSize& size);
+	virtual unsigned int GetActiveFramebufferId();
 
 protected:
 	
@@ -102,6 +105,8 @@ private:
 
 		int width;
 		int height;
+
+		rglRenderbuffer() : framebufferId(0), renderbufferId(0), depthBufferId(0), width(0), height(0) {}
 	};
 
 	typedef std::map<unsigned int, rglRenderbuffer> rglRenderbufferMap;

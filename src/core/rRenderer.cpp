@@ -156,3 +156,30 @@ void rRenderer::SetProjectionMatrix(const rMatrix4& projectionMatrix) {
 rMatrix4 rRenderer::GetViewMatrix() const {
 	return m_viewMatrix;
 }
+
+uint32_t rRenderer::CreateFramebuffer(const rSize& size) {
+	return m_graphicsDevice->CreateFramebuffer(size.x, size.y);
+}
+
+bool rRenderer::DeleteFramebuffer(uint32_t id) {
+	return m_graphicsDevice->DeleteFramebuffer(id);
+}
+
+bool rRenderer::ActivateFramebuffer(uint32_t id) {
+	return m_graphicsDevice->ActivateFramebuffer(id);
+}
+
+bool rRenderer::ReadActiveFramebuffer(const rRect& rect, rTextureData& textureData) {
+	unsigned int activeFramebufferId = m_graphicsDevice->GetActiveFramebufferId();
+
+	textureData.Allocate(rect.width, rect.height, 3);
+	m_graphicsDevice->ReadActiveFramebuffer(rect, textureData.Data());
+
+	return true;
+}
+
+bool rRenderer::ReadActiveFramebuffer(const rRect& rect, unsigned char* buffer) {
+	m_graphicsDevice->ReadActiveFramebuffer(rect, buffer);
+
+	return true;
+}

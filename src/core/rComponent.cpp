@@ -1,6 +1,9 @@
 #include "rComponent.hpp"
 #include "asset/rAssetManifest.hpp"
 
+#include "xml/rXMLDocument.hpp"
+#include "xml/rXMLSerialization.hpp"
+
 rComponent::rComponent(){
 	m_isReady = false;
 

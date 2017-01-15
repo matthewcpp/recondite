@@ -68,9 +68,12 @@ public:
 	virtual void SetViewport(int x , int y, int width, int height) = 0;
 	virtual void SetActiveMaterial(const rMaterial* material) = 0;
 
-	virtual unsigned int CreateRenderbuffer(int width, int height) = 0;
-	virtual void DeleteRenderbuffer(unsigned int id) = 0;
-	virtual unsigned int ReadRenderbufferPixel(unsigned int x, unsigned int y) = 0;
+	virtual unsigned int CreateFramebuffer(int width, int height) = 0;
+	virtual bool DeleteFramebuffer(unsigned int id) = 0;
+	virtual void ReadActiveFramebuffer(const rRect& rect, unsigned char* buffer) = 0;
+	virtual bool ActivateFramebuffer(unsigned int id) = 0;
+	virtual bool GetFramebufferSize(unsigned int id, rSize& size) = 0;
+	virtual unsigned int GetActiveFramebufferId() = 0;
 };
 
 #endif

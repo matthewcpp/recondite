@@ -13,20 +13,25 @@ reProjectAssets::reProjectAssets(rwxComponent* component) {
 
 void reProjectAssets::SetBasePath(const wxString& path) {
 	m_assetsDir.SetPath(path);
+	EnsureAssetDir("assets");
 	m_assetsDir.AppendDir("assets");
 
-	if (!m_assetsDir.Exists()) {
-		wxMkDir(m_assetsDir.GetPath(), wxS_DIR_DEFAULT);
+	EnsureAssetDir("models");
+	EnsureAssetDir("icons");
+}
+
+void reProjectAssets::EnsureAssetDir(const wxString& dirName) {
+	wxFileName assetDir(m_assetsDir);
+	assetDir.AppendDir(dirName);
+
+	if (!assetDir.Exists()) {
+		wxMkDir(assetDir.GetPath(), wxS_DIR_DEFAULT);
 	}
 }
 
 void reProjectAssets::WriteModel(const recondite::ModelData& modelData, const wxString& name) {
 	wxFileName modelFile(m_assetsDir);
 	modelFile.AppendDir("models");
-
-	if (!modelFile.Exists()) {
-		wxMkDir(modelFile.GetPath(), wxS_DIR_DEFAULT);
-	}
 
 	modelFile.SetName(name);
 	modelFile.SetExt("rmdl");
@@ -71,9 +76,19 @@ wxString reProjectAssets::GetAssetPath(rAssetType assetType, const wxString& nam
 	return "models/" + name + ".rmdl";
 }
 
-wxString reProjectAssets::GetAssetPreviewIcon(rAssetType assetType, const wxString& name) {
-	//TODO: TEMP
-	return "assets/tool-box.png";
+wxString reProjectAssets::GetAssetIconPath(rAssetType assetType, const wxString& name) {
+	wxFileName previewFile(m_assetsDir);
+
+	previewFile.AppendDir("icons");
+	previewFile.SetName("model_" + name);
+	previewFile.SetExt("png");
+
+	return previewFile.GetFullPath();
+}
+
+void reProjectAssets::SetAssetIcon(const wxImage& image, rAssetType assetType, const wxString& name) {
+	wxString iconPath = GetAssetIconPath(assetType, name);
+	image.SaveFile(iconPath, wxBITMAP_TYPE_PNG);
 }
 
 void reProjectAssets::Save(rXMLDocument& document) {

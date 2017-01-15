@@ -66,6 +66,13 @@ public:
 
 	rMatrix4 GetViewMatrix() const;
 
+public:
+	uint32_t CreateFramebuffer(const rSize& size);
+	bool DeleteFramebuffer(uint32_t id);
+	bool ActivateFramebuffer(uint32_t id);
+	bool ReadActiveFramebuffer(const rRect& rect, rTextureData& textureData);
+	bool ReadActiveFramebuffer(const rRect& rect, unsigned char* buffer);
+
 private:
 	void _RenderModel(const ModelInstance* modelInstance, const rMatrix4& matrix);
 	void RenderSpriteBatch();

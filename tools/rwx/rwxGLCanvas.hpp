@@ -21,15 +21,33 @@ public:
 
 	wxString GetCanvasName() const;
 
+protected:
+	virtual void Render();
+
 private:
 	void CreateViewport();
 
-private:
+
+protected:
 	rwxComponent* m_component;
 
 	wxString m_name;
 	rViewport* m_viewport;
 	recondite::Camera* m_camera;
+};
+
+class RECONDITE_RWX_CLASS rwxGLImageCanvas : public rwxGLCanvas {
+public:
+	rwxGLImageCanvas(rwxComponent* component, const wxString& name, wxWindow *parent, wxWindowID id = wxID_ANY);
+
+public:
+	virtual wxImage GetImage();
+
+protected:
+	virtual void Render();
+
+private:
+	wxImage _image;
 };
 
 #endif

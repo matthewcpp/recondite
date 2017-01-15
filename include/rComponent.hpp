@@ -16,9 +16,6 @@
 #include "rEventHandler.hpp"
 #include "rEvents.hpp"
 
-#include "xml/rXMLDocument.hpp"
-#include "xml/rXMLSerialization.hpp"
-
 class RECONDITE_API rComponent : public rEventHandler, public riComponent{
 public:
 	rComponent();

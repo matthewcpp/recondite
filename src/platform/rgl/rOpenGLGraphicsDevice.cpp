@@ -452,7 +452,7 @@ GLenum rOpenGLGraphicsDevice::GLGeometryType(rGeometryType type) const{
 	}
 }
 
-unsigned int rOpenGLGraphicsDevice::CreateRenderbuffer(int width, int height){
+unsigned int rOpenGLGraphicsDevice::CreateFramebuffer(int width, int height){
 	rglRenderbuffer renderbuffer;
 	renderbuffer.width = width;
 	renderbuffer.height = height;
@@ -464,30 +464,35 @@ unsigned int rOpenGLGraphicsDevice::CreateRenderbuffer(int width, int height){
 	glBindFramebuffer(GL_FRAMEBUFFER, renderbuffer.framebufferId);
 	
 
+	//TODO: For now just use render buffer object.  In future option for texture
 	//todo: opengl es: GL_RGBA8_OES, GL_COLOR_ATTACHMENT0_OES? etc...
 	glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer.renderbufferId);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, width, height);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, renderbuffer.renderbufferId);
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
 	glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer.depthBufferId);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, width, height);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, renderbuffer.depthBufferId);
 
+	unsigned int result = 0;
 	GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
     if (status == GL_FRAMEBUFFER_COMPLETE) {
 		unsigned int targetId = ++m_nextRenderbufferId;
 
 		m_renderBuffers[targetId] = renderbuffer;
-		m_activeRenderBufferId = targetId;
-		return targetId;
+		result = targetId;
     }
 	else{
 		Log::Error("Error Creating Offscreen Renderbuffer: %d", status);
-        return 0;
 	}
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	return result;
 }
 
-void rOpenGLGraphicsDevice::DeleteRenderbuffer(unsigned int id){
+bool rOpenGLGraphicsDevice::DeleteFramebuffer(unsigned int id){
 	if (m_renderBuffers.count(id)){
 		rglRenderbuffer& renderbuffer = m_renderBuffers[id];
 
@@ -495,17 +500,48 @@ void rOpenGLGraphicsDevice::DeleteRenderbuffer(unsigned int id){
 		glDeleteRenderbuffers(1, &renderbuffer.depthBufferId);
 		glDeleteFramebuffers(1, &renderbuffer.framebufferId);
 		
+		if (m_activeRenderBufferId == id) {
+			glBindFramebuffer(GL_FRAMEBUFFER, m_defaultFramebuffer);
+			m_activeRenderBufferId = 0;
+		}
 
-		glBindFramebuffer(GL_FRAMEBUFFER, m_defaultFramebuffer);
-		m_activeRenderBufferId = 0;
+		m_renderBuffers.erase(id);
+		
+		return true;
+	}
+	else {
+		return false;
 	}
 }
 
-unsigned int rOpenGLGraphicsDevice::ReadRenderbufferPixel(unsigned int x, unsigned int y){
+void rOpenGLGraphicsDevice::ReadActiveFramebuffer(const rRect& rect, unsigned char* buffer) {
 	rglRenderbuffer& renderbuffer = m_renderBuffers[m_activeRenderBufferId];
-	y = renderbuffer.height - y;
 
-	unsigned char color[4] = {255,255,255,255};
-	glReadPixels(x, y, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, color);
-	return 0;
+	//TODO: Support GL_RGBA?
+	glReadPixels(rect.x, rect.y, rect.width, rect.height, GL_RGB, GL_UNSIGNED_BYTE, buffer);
+}
+
+bool rOpenGLGraphicsDevice::ActivateFramebuffer(unsigned int id) {
+	if (m_renderBuffers.count(id)) {
+		glBindFramebuffer(GL_FRAMEBUFFER, m_renderBuffers[id].framebufferId);
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+unsigned int rOpenGLGraphicsDevice::GetActiveFramebufferId() {
+	return m_activeRenderBufferId;
+}
+
+bool rOpenGLGraphicsDevice::GetFramebufferSize(unsigned int id, rSize& size) {
+	if (m_renderBuffers.count(id)) {
+		rglRenderbuffer& renderbuffer = m_renderBuffers[id];
+		size.Set(renderbuffer.width, renderbuffer.height);
+		return true;
+	}
+	else {
+		return false;
+	}
 }

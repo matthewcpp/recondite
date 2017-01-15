@@ -16,6 +16,9 @@ public:
 	bool ViewModel(const wxString& name);
 	void ClearModel();
 
+	rViewport* GetViewport();
+	rActor3* GetActor();
+
 private:
 	void CreateElements(const wxString& name);
 
@@ -46,11 +49,17 @@ class reModelViewerDialog : public wxDialog {
 public:
 	reModelViewerDialog(reComponent* component, const wxString& name);
 
+public:
+	wxImage GetThumbnail();
+
 private:
-	void CreateElements(reComponent* component);
+	void CreateElements(reComponent* component, const wxString& name);
 	void OnClose(wxCloseEvent& event);
 	void OnButton(wxCommandEvent& event);
 
+	void SyncThumbnail();
+
 private:
 	reModelViewerPanel* _modelViewer;
+	rwxGLImageCanvas* _thumbnailCanvas;
 };

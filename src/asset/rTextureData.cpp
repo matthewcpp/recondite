@@ -113,7 +113,7 @@ int rTextureData::Bpp() const{
 	return _impl->bpp;
 }
 
-const unsigned char* rTextureData::Data() const{
+unsigned char* rTextureData::Data() const{
 	return _impl->data.data();
 }
 

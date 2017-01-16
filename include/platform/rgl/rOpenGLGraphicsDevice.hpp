@@ -37,7 +37,7 @@
 #include "rGraphicsDevice.hpp"
 #include "rMatrix4.hpp"
 
-#include "data/rImmediateBuffer.hpp"
+#include "rImmediateBuffer.hpp"
 #include "asset/rGeometryData.hpp"
 
 #include "asset/rModel.hpp"

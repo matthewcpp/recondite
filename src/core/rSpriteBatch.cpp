@@ -4,7 +4,7 @@
 #include <map>
 #include <memory>
 
-#include "data/rImmediateBuffer.hpp"
+#include "rImmediateBuffer.hpp"
 #include "rGeometryUtil.hpp"
 #include "asset/rFont.hpp"
 

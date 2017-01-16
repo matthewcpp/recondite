@@ -1,4 +1,4 @@
-#include "data/rImmediateBuffer.hpp"
+#include "rImmediateBuffer.hpp"
 
 rImmediateBuffer::rImmediateBuffer(){
 	Reset(rGeometryType::Lines, 3, false);

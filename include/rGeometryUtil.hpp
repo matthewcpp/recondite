@@ -9,7 +9,7 @@
 #include "rRect.hpp"
 #include "rAlignedBox3.hpp"
 
-#include "data/rImmediateBuffer.hpp"
+#include "rImmediateBuffer.hpp"
 
 #include "asset/rFont.hpp"
 #include "rSkeleton.hpp"

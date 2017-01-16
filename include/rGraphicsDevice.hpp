@@ -14,7 +14,7 @@
 #include "asset/rModel.hpp"
 #include "asset/rGeometryData.hpp"
 
-#include "data/rImmediateBuffer.hpp"
+#include "rImmediateBuffer.hpp"
 
 class RECONDITE_API rGraphicsDevice{
 public:

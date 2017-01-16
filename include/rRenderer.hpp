@@ -13,7 +13,7 @@
 #include "rContentManager.hpp"
 
 #include "rGeometryUtil.hpp"
-#include "data/rImmediateBuffer.hpp"
+#include "rImmediateBuffer.hpp"
 #include "rMatrixUtil.hpp"
 
 #include "rCircle2.hpp"

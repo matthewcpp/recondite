@@ -113,6 +113,9 @@ void rScene::Clear(){
 	}
 	
 	m_actors.clear();
+
+	rEvent event;
+	Trigger(rEVT_SCENE_CLEAR, event);
 }
 
 rAlignedBox3 rScene::GetBounding() {

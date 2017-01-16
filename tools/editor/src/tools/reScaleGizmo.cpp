@@ -68,6 +68,12 @@ reScaleGizmo::reScaleGizmo(reComponent* component)
 :reTransformGizmoBase(component)
 {
 	m_uniformScaleHandle = nullptr;
+	component->GetScene()->Bind(rEVT_SCENE_CLEAR, this, &reScaleGizmo::OnSceneClear);
+}
+
+void reScaleGizmo::OnSceneClear(rEvent& event) {
+	reTransformGizmoBase::OnSceneClear(event);
+	m_uniformScaleHandle = nullptr;
 }
 
 void reScaleGizmo::Update() {
@@ -102,26 +108,30 @@ void reScaleGizmo::SetVisibility(bool visibility) {
 }
 
 void reScaleGizmo::CreateGeometry() {
+	const rString SCALE_GIZMO_HANDLE_NAME = "__scale_gizmo_handle__";
 	rEngine* engine = m_component->GetEngine();
 
-	recondite::ModelData modelData;
-	rPrimitiveGeometry::rPrimitiveBoxParams box;
-	box.extents.Set(BOX_SIZE, BOX_SIZE, BOX_SIZE);
-	rPrimitiveGeometry::CreateBox(box, modelData);
+	recondite::Model* handleModel = engine->content->Models()->Get(SCALE_GIZMO_HANDLE_NAME);
+	if (!handleModel) {
+		recondite::ModelData modelData;
+		rPrimitiveGeometry::rPrimitiveBoxParams box;
+		box.extents.Set(BOX_SIZE, BOX_SIZE, BOX_SIZE);
+		rPrimitiveGeometry::CreateBox(box, modelData);
 
-	rMatrix4 translateMatrix;
-	translateMatrix.SetTranslate(0, -0.5, 0);
+		rMatrix4 translateMatrix;
+		translateMatrix.SetTranslate(0, -0.5, 0);
 
-	recondite::GeometryData* geometryData = modelData.GetGeometryData();
-	geometryData->TransformVertices(0, geometryData->VertexCount(), translateMatrix);
+		recondite::GeometryData* geometryData = modelData.GetGeometryData();
+		geometryData->TransformVertices(0, geometryData->VertexCount(), translateMatrix);
 
-	while (modelData.GetLineMeshCount() > 0) {
-		modelData.DeleteLineMesh(modelData.GetLineMeshCount() - 1);
+		while (modelData.GetLineMeshCount() > 0) {
+			modelData.DeleteLineMesh(modelData.GetLineMeshCount() - 1);
+		}
+
+		modelData.CalculateBoundings();
+
+		handleModel = engine->content->Models()->LoadFromData(modelData, "__scale_gizmo_handle__");
 	}
-
-	modelData.CalculateBoundings();
-
-	recondite::Model* handleModel = engine->content->Models()->LoadFromData(modelData, "__scale_gizmo_handle__");
 
 	m_uniformScaleHandle = new reGizmoHandle(handleModel, "__scale_uniform_handle__", engine);
 	m_uniformScaleHandle->GetModelInstance()->GetTriangleMeshInstanceMaterial(0)->SetDiffuseColor(rColor(130,130,130,255));
@@ -145,7 +155,6 @@ void reScaleGizmo::CreateGeometry() {
 	engine->scene->AddActor(m_xHandle);
 	engine->scene->AddActor(m_yHandle);
 	engine->scene->AddActor(m_zHandle);
-
 	engine->scene->AddActor(m_uniformScaleHandle);
 }
 

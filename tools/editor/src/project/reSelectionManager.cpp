@@ -24,6 +24,8 @@ reSelectionManager::reSelectionManager(rwxComponent* component){
 	m_component = component;
 
 	m_selectionColor.Set(255, 255, 0, 255);
+
+	m_component->GetScene()->Bind(rEVT_SCENE_CLEAR, this, &reSelectionManager::OnSceneClear);
 }
 
 void reSelectionManager::Select(const wxString& name){
@@ -111,4 +113,8 @@ void reSelectionManager::RenderSelection() {
 
 	renderer->SetModelRenderMode(renderMode);
 	renderer->SetDepthFunction(depthFunction);
+}
+
+void reSelectionManager::OnSceneClear(rEvent& event) {
+	ClearSelection();
 }

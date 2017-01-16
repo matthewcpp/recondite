@@ -4,7 +4,9 @@
 
 reTranslateGizmo::reTranslateGizmo(reComponent* component) 
 	:reTransformGizmoBase(component)
-{}
+{
+	component->GetScene()->Bind(rEVT_SCENE_CLEAR, this, &reTranslateGizmo::OnSceneClear);
+}
 
 reGizmoAxis reTranslateGizmo::PickAxis(const rRay3& ray) {
 	rPickResult xResult, yResult, zResult;
@@ -70,29 +72,35 @@ void reTranslateGizmo::Update(){
 using namespace recondite;
 
 void reTranslateGizmo::CreateGeometry(){
+	const rString TRANSLATE_GIZMO_HANDLE_NAME = "__translate_gizmo_handle__";
 	rEngine* engine = m_component->GetEngine();
-	recondite::ModelData modelData;
-	rPrimitiveGeometry::rPrimitiveCylinderParams cylinderParams(0.3f, 7, 20);
-	rPrimitiveGeometry::CreateCylinder(cylinderParams, modelData);
-
-	recondite::GeometryData* geometryData = modelData.GetGeometryData();
-	size_t vertexOffset = geometryData->VertexCount();
-
-	rPrimitiveGeometry::rPrimitiveConeParams coneParams(1.0, 2.5, 20);
-	rPrimitiveGeometry::CreateCone(coneParams, modelData);
 	
-	rMatrix4 transform;
-	transform.SetTranslate(0.0f, cylinderParams.height, 0.0f);
+	recondite::Model* handleModel = engine->content->Models()->Get(TRANSLATE_GIZMO_HANDLE_NAME);
 
-	geometryData->TransformVertices(vertexOffset, geometryData->VertexCount() - vertexOffset, transform);
+	if (!handleModel) {
+		recondite::ModelData modelData;
+		rPrimitiveGeometry::rPrimitiveCylinderParams cylinderParams(0.3f, 7, 20);
+		rPrimitiveGeometry::CreateCylinder(cylinderParams, modelData);
 
-	while (modelData.GetLineMeshCount() > 0) {
-		modelData.DeleteLineMesh(modelData.GetLineMeshCount() - 1);
+		recondite::GeometryData* geometryData = modelData.GetGeometryData();
+		size_t vertexOffset = geometryData->VertexCount();
+
+		rPrimitiveGeometry::rPrimitiveConeParams coneParams(1.0, 2.5, 20);
+		rPrimitiveGeometry::CreateCone(coneParams, modelData);
+
+		rMatrix4 transform;
+		transform.SetTranslate(0.0f, cylinderParams.height, 0.0f);
+
+		geometryData->TransformVertices(vertexOffset, geometryData->VertexCount() - vertexOffset, transform);
+
+		while (modelData.GetLineMeshCount() > 0) {
+			modelData.DeleteLineMesh(modelData.GetLineMeshCount() - 1);
+		}
+
+		modelData.CalculateBoundings();
+
+		handleModel = engine->content->Models()->LoadFromData(modelData, TRANSLATE_GIZMO_HANDLE_NAME);
 	}
-
-	modelData.CalculateBoundings();
-
-	recondite::Model* handleModel = engine->content->Models()->LoadFromData(modelData, "__translate_gizmo_handle__");
 
 	m_xHandle = new reGizmoHandle(handleModel, "__translate_x_handle__", engine);
 	m_xHandle->SetRotation(rVector3(0.0, 0.0f, -90.0f));

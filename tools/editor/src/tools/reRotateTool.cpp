@@ -16,6 +16,7 @@ bool reRotateTool::OnMouseDown(wxMouseEvent& event, rwxGLCanvas* canvas) {
 	reToolBase::OnMouseDown(event, canvas);
 
 	m_component->SetActiveViewport(canvas->GetViewport());
+	m_gizmo->Update();
 
 	rRay3 selectionRay = GetSelectionRay(event, canvas);
 	m_selectedAxis = m_gizmo->PickAxis(selectionRay);
@@ -141,5 +142,6 @@ void reRotateTool::OnActivate() {
 }
 
 void reRotateTool::OnDeactivate() {
+	m_gizmo->Update();
 	m_gizmo->SetVisibility(false);
 }

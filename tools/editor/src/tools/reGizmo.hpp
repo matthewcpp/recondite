@@ -53,6 +53,8 @@ public:
 	virtual reGizmoHandle* GetHandle(reGizmoAxis axis);
 
 protected:
+	virtual void OnSceneClear(rEvent& event);
+
 	static void SetModelInstanceColor(rProp* handle, const rColor& color);
 
 protected:

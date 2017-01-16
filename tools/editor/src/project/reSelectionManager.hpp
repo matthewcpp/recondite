@@ -47,6 +47,9 @@ public:
 	void RenderSelection();
 
 private:
+	void OnSceneClear(rEvent& event);
+
+private:
 	wxArrayString m_selectionList;
 
 	rwxComponent* m_component;

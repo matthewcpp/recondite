@@ -25,6 +25,9 @@ public:
 
 	reGizmoAxis PickAxis(const rRay3& ray);
 
+protected:
+	virtual void OnSceneClear(rEvent& event);
+
 private:
 	reGizmoHandle* m_uniformScaleHandle;
 	float _activeStemLength;

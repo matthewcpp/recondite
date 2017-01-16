@@ -60,6 +60,12 @@ reTransformGizmoBase::reTransformGizmoBase(reComponent* component) {
 	m_zHandle = nullptr;
 }
 
+void reTransformGizmoBase::OnSceneClear(rEvent& event) {
+	m_xHandle = nullptr;
+	m_yHandle = nullptr;
+	m_zHandle = nullptr;
+}
+
 reGizmoHandle* reTransformGizmoBase::GetHandle(reGizmoAxis axis) {
 	switch (axis) {
 	case reGizmoAxis::X:

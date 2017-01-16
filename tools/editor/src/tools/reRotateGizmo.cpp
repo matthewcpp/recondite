@@ -8,7 +8,9 @@
 
 reRotateGizmo::reRotateGizmo(reComponent* component) 
 :reTransformGizmoBase(component)
-{}
+{
+	component->GetScene()->Bind(rEVT_SCENE_CLEAR, this, &reRotateGizmo::OnSceneClear);
+}
 
 void reRotateGizmo::Update() {
 	if (!m_xHandle)
@@ -35,20 +37,24 @@ void reRotateGizmo::Update() {
 }
 
 void reRotateGizmo::CreateGeometry() {
+	const rString ROTATE_GIZMO_HANDLE_MODEL_NAME = "__rotate_gizmo_handle__";
 	rEngine* engine = m_component->GetEngine();
 
-	recondite::ModelData modelData;
-	rPrimitiveGeometry::rPrimitiveCircleParams circle;
-	circle.radius = GIZMO_RADIUS;
-	rPrimitiveGeometry::CreateCircle(circle, modelData);
+	recondite::Model* handleModel = engine->content->Models()->Get(ROTATE_GIZMO_HANDLE_MODEL_NAME);
+	if (!handleModel) {
+		recondite::ModelData modelData;
+		rPrimitiveGeometry::rPrimitiveCircleParams circle;
+		circle.radius = GIZMO_RADIUS;
+		rPrimitiveGeometry::CreateCircle(circle, modelData);
 
-	while (modelData.GetTriangleMeshCount() > 0) {
-		modelData.DeleteTriangleMesh(modelData.GetTriangleMeshCount() - 1);
+		while (modelData.GetTriangleMeshCount() > 0) {
+			modelData.DeleteTriangleMesh(modelData.GetTriangleMeshCount() - 1);
+		}
+
+		modelData.CalculateBoundings();
+
+		handleModel = engine->content->Models()->LoadFromData(modelData, ROTATE_GIZMO_HANDLE_MODEL_NAME);
 	}
-
-	modelData.CalculateBoundings();
-
-	recondite::Model* handleModel = engine->content->Models()->LoadFromData(modelData, "__rotate_gizmo_handle__");
 
 	m_xHandle = new reGizmoHandle(handleModel, "__rotate_x_handle__", engine);
 	m_xHandle->SetRenderModeOverride(rRenderMode::Wireframe);

@@ -150,3 +150,10 @@ void reTransformGizmoBase::SetPosition(const rVector3& position) {
 rVector3 reTransformGizmoBase::GetPosition() const {
 	return m_currentPosition;
 }
+
+void reTransformGizmoBase::FinalizeAndAddHandle(reGizmoHandle* handle) {
+	handle->SetPickable(false);
+	handle->SetShouldPersist(false);
+	handle->CustomProperties().SetBool("__noutline", false);
+	m_component->GetEngine()->scene->AddActor(handle);
+}

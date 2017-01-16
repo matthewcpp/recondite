@@ -54,6 +54,7 @@ public:
 
 protected:
 	virtual void OnSceneClear(rEvent& event);
+	void FinalizeAndAddHandle(reGizmoHandle* handle);
 
 	static void SetModelInstanceColor(rProp* handle, const rColor& color);
 

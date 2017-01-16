@@ -135,27 +135,19 @@ void reScaleGizmo::CreateGeometry() {
 
 	m_uniformScaleHandle = new reGizmoHandle(handleModel, "__scale_uniform_handle__", engine);
 	m_uniformScaleHandle->GetModelInstance()->GetTriangleMeshInstanceMaterial(0)->SetDiffuseColor(rColor(130,130,130,255));
-	m_uniformScaleHandle->SetPickable(false);
+	FinalizeAndAddHandle(m_uniformScaleHandle);
 
 	m_xHandle = new reScaleGizmoHandle(rVector3::RightVector, handleModel, "__scale_x_handle__", engine);
 	m_xHandle->GetModelInstance()->GetTriangleMeshInstanceMaterial(0)->SetDiffuseColor(rColor::Red);
-	m_xHandle->SetPickable(false);
-	m_xHandle->SetShouldPersist(false);
+	FinalizeAndAddHandle(m_xHandle);
 
 	m_yHandle = new reScaleGizmoHandle(rVector3::UpVector, handleModel, "__scale_y_handle__", engine);
 	m_yHandle->GetModelInstance()->GetTriangleMeshInstanceMaterial(0)->SetDiffuseColor(rColor::Green);
-	m_yHandle->SetPickable(false);
-	m_yHandle->SetShouldPersist(false);
+	FinalizeAndAddHandle(m_yHandle);
 
 	m_zHandle = new reScaleGizmoHandle(rVector3::BackwardVector, handleModel, "__scale_z_handle__", engine);
 	m_zHandle->GetModelInstance()->GetTriangleMeshInstanceMaterial(0)->SetDiffuseColor(rColor::Blue);
-	m_zHandle->SetPickable(false);
-	m_zHandle->SetShouldPersist(false);
-
-	engine->scene->AddActor(m_xHandle);
-	engine->scene->AddActor(m_yHandle);
-	engine->scene->AddActor(m_zHandle);
-	engine->scene->AddActor(m_uniformScaleHandle);
+	FinalizeAndAddHandle(m_zHandle);
 }
 
 void reScaleGizmo::SetPosition(const rVector3& position) {

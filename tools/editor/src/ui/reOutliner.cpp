@@ -31,10 +31,17 @@ void reOutliner::OnItemSelected(wxDataViewEvent& event){
 void reOutliner::OnActorAddedToScene(rEvent& event){
 	rActor3Event& actorEvent = static_cast<rActor3Event&> (event);
 
-	rString actorId = actorEvent.Actor()->Id();
+	rActor3* actor = actorEvent.Actor();
 
-	wxDataViewItem item = AppendItem(wxDataViewItem(0), actorId.c_str());
-	m_actorIdMap[actorId] = item;
+	bool outline = true;
+	actor->CustomProperties().GetBool("__noutline", outline);
+
+	if (outline) {
+		rString actorId = actor->Id();
+
+		wxDataViewItem item = AppendItem(wxDataViewItem(0), actorId.c_str());
+		m_actorIdMap[actorId] = item;
+	}
 }
 
 void reOutliner::OnActorRemovedFromScene(rEvent& event){

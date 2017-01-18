@@ -29,6 +29,8 @@ protected:
 
 	bool DeleteSelection();
 
+	static rPlane GetDragPlaneFromRay(const rRay3& selectionRay);
+
 protected:
 	wxPoint m_firstPoint;
 	wxPoint m_previousPoint;

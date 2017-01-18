@@ -23,7 +23,7 @@ bool reTranslateTool::OnMouseDown(wxMouseEvent& event, rwxGLCanvas* canvas){
 	if (m_selectedAxis != reGizmoAxis::NONE) {
 		m_gizmo->HighlightAxis(m_selectedAxis);
 		m_gizmo->Update();
-		SetDragPlaneFromSelectedAxis();
+		m_dragPlane = reToolBase::GetDragPlaneFromRay(selectionRay);
 		GetWorldSpaceDragPosition(canvas, m_previousWorldPosition);
 		m_command = new reTranslateCommand(m_component->SelectionManager()->GetSelection(), m_component);
 
@@ -115,19 +115,6 @@ void reTranslateTool::OnUpdate(){
 
 wxString reTranslateTool::GetToolName() const{
 	return "Translate Tool";
-}
-
-void reTranslateTool::SetDragPlaneFromSelectedAxis(){
-	switch (m_selectedAxis){
-	case reGizmoAxis::X:
-	case reGizmoAxis::Y:
-		m_dragPlane.SetFromPointAndNormal(m_gizmo->GetPosition(), rVector3::BackwardVector);
-		break;
-
-	case reGizmoAxis::Z:
-		m_dragPlane.SetFromPointAndNormal(m_gizmo->GetPosition(), rVector3::RightVector);
-		break;
-	}
 }
 
 bool reTranslateTool::GetWorldSpaceDragPosition(rwxGLCanvas* canvas, rVector3& result){

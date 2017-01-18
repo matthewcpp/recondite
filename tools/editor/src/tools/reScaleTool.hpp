@@ -28,7 +28,7 @@ public:
 	virtual void Init() override;
 
 private:
-	void SetDragPlaneFromSelectedAxis();
+	void SetDragPlane(const rRay3& selectionRay);
 	bool GetWorldSpaceDragPosition(rwxGLCanvas* canvas, rVector3& result);
 
 private:

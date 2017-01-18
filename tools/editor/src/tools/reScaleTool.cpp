@@ -24,7 +24,7 @@ bool reScaleTool::OnMouseDown(wxMouseEvent& event, rwxGLCanvas* canvas) {
 	if (m_selectedAxis != reGizmoAxis::NONE) {
 		m_gizmo->HighlightAxis(m_selectedAxis);
 		
-		SetDragPlaneFromSelectedAxis();
+		SetDragPlane(selectionRay);
 		GetWorldSpaceDragPosition(canvas, m_previousWorldPosition);
 
 		m_command = new reScaleCommand(m_component->SelectionManager()->GetSelection(), m_component);
@@ -146,27 +146,19 @@ bool reScaleTool::OnMouseUp(wxMouseEvent& event, rwxGLCanvas* canvas) {
 	return false;
 }
 
-void reScaleTool::SetDragPlaneFromSelectedAxis() {
+void reScaleTool::SetDragPlane(const rRay3& selectionRay) {
 	rVector3 gizmoPosition = m_gizmo->GetPosition();
 
-	switch (m_selectedAxis){
-		case reGizmoAxis::ALL: {
-			recondite::Camera* camera = m_component->GetEngine()->component->GetActiveViewport()->Camera();
-			rVector3 direction = camera->GetPosition() - gizmoPosition;
-			direction.Normalize();
-			m_dragPlane.SetFromPointAndNormal(gizmoPosition, direction);
-			break;
-		}
-
-		case reGizmoAxis::Y:
-		case reGizmoAxis::X:
-			m_dragPlane.SetFromPointAndNormal(gizmoPosition, rVector3::BackwardVector);
-			break;
-
-		case reGizmoAxis::Z:
-			m_dragPlane.SetFromPointAndNormal(m_gizmo->GetPosition(), rVector3::RightVector);
-			break;
+	if (m_selectedAxis == reGizmoAxis::ALL){
+		recondite::Camera* camera = m_component->GetEngine()->component->GetActiveViewport()->Camera();
+		rVector3 direction = camera->GetPosition() - gizmoPosition;
+		direction.Normalize();
+		m_dragPlane.SetFromPointAndNormal(gizmoPosition, direction);
 	}
+	else {
+		m_dragPlane = reToolBase::GetDragPlaneFromRay(selectionRay);
+	}
+
 }
 
 bool reScaleTool::GetWorldSpaceDragPosition(rwxGLCanvas* canvas, rVector3& result) {

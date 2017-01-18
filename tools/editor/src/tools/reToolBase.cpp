@@ -92,3 +92,41 @@ bool reToolBase::DeleteSelection(){
 	
 	return false;
 }
+
+rPlane reToolBase::GetDragPlaneFromRay(const rRay3& selectionRay) {
+	float selectionDistance = FLT_MAX;
+	rVector3 selectionPoint;
+	rPlane bestPlane;
+
+	rPlane plane(rVector3::ZeroVector, rVector3::UpVector);
+	if (rIntersection::RayIntersectsPlane(selectionRay, plane, &selectionPoint)) {
+		float distance = selectionPoint.Distance(selectionRay.origin);
+
+		if (distance < selectionDistance) {
+			bestPlane = plane;
+			selectionDistance = distance;
+		}
+	}
+
+	plane.SetFromPointAndNormal(rVector3::ZeroVector, rVector3::RightVector);
+	if (rIntersection::RayIntersectsPlane(selectionRay, plane, &selectionPoint)) {
+		float distance = selectionPoint.Distance(selectionRay.origin);
+
+		if (distance < selectionDistance) {
+			bestPlane = plane;
+			selectionDistance = distance;
+		}
+	}
+
+	plane.SetFromPointAndNormal(rVector3::ZeroVector, rVector3::BackwardVector);
+	if (rIntersection::RayIntersectsPlane(selectionRay, plane, &selectionPoint)) {
+		float distance = selectionPoint.Distance(selectionRay.origin);
+
+		if (distance < selectionDistance) {
+			bestPlane = plane;
+			selectionDistance = distance;
+		}
+	}
+
+	return bestPlane;
+}

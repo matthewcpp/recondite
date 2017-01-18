@@ -199,7 +199,7 @@ namespace recondite { namespace import {
 		return error;
 	}
 
-	int FontImporter::GenerateFont(Font::Family& fontFamily, rTextureData& textureData){
+	int FontImporter::GenerateFont(FontData& fontData){
 		FT_Library freetypeLibrary;
 		
 		internal::RectPacker rectPacker;
@@ -208,15 +208,15 @@ namespace recondite { namespace import {
 		int error = FT_Init_FreeType(&freetypeLibrary);
 		if (error) return error;
 
-		error = _impl->InitFontFaces(freetypeLibrary, fontFamily);
+		error = _impl->InitFontFaces(freetypeLibrary, *fontData.GetFamily());
 		if (error) return error;
 
-		error = _impl->GenerateGlyphRects(freetypeLibrary, rectPacker, fontFamily);
+		error = _impl->GenerateGlyphRects(freetypeLibrary, rectPacker, *fontData.GetFamily());
 		if (error) return error;
 		
 		if (!rectPacker.Pack()) return 1;
 
-		error = _impl->GenerateGlyphBitmap(freetypeLibrary, rectPacker, fontFamily, textureData);
+		error = _impl->GenerateGlyphBitmap(freetypeLibrary, rectPacker, *fontData.GetFamily(), *fontData.GetTextureData());
 		if (error) return error;
 
 		error = _impl->UninitFontFaces(freetypeLibrary);

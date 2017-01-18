@@ -10,6 +10,7 @@
 #include "asset/rTextureAtlasData.hpp"
 
 #include "FontImporter.hpp"
+#include "asset/rFontData.hpp"
 #include "ModelImporter.hpp"
 
 #include "xml/rXMLDocument.hpp"
@@ -125,10 +126,8 @@ namespace recondite { namespace tools {
 			std::cout << "font file parse failed." << std::endl;
 		}
 		else{
-			Font::Family fontData;
-			rTextureData textureData;
-
-			error = fontImporter.GenerateFont(fontData, textureData);
+			FontData fontData;
+			error = fontImporter.GenerateFont(fontData);
 
 			if (error){
 				std::cout << "font generation failed." << std::endl;
@@ -139,13 +138,11 @@ namespace recondite { namespace tools {
 				rPath::Split(path, &outDir, &outName, nullptr);
 
 				rString fontOutPath = rPath::Assemble(outDir, outName, "rfnt");
-				rString textureOutPath = rPath::Assemble(outDir, outName, "rtex");
 
 				auto fontOutFile = m_fileSystem.GetWriteFileRef(fontOutPath);
 				fontData.Write(*fontOutFile);
 
-				auto texOutFile = m_fileSystem.GetWriteFileRef(textureOutPath);
-				textureData.Write(*texOutFile);
+				fontData.Write(*fontOutFile);
 			}
 		}
 

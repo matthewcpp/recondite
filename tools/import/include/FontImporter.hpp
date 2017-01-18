@@ -9,11 +9,13 @@
 #include "stream/rIFileStream.hpp"
 #include "asset/rFont.hpp"
 #include "asset/rTextureData.hpp"
+#include "asset/rFontData.hpp"
 
 namespace recondite { namespace import {
 
 	/**
-	<P>This class is used in order to import fonts.  A Font may be imported with one or more faces.  A face describes the size, style and path of the font.
+	<P>This class is used in order to import fonts.  A Font may be imported with one or more faces.  
+	A face describes the size, style and path of the font.
 	Faces may be either added manually or read from a manifest file.
 	</P>
 	<p>A Sample Manifest File is illustarted below:</p>
@@ -67,11 +69,10 @@ namespace recondite { namespace import {
 
 		/**
 		Generates the glyph and texture data for all specified faces.
-		\param fontFamily the family whos font data will be populated.
-		\param textureData texture data where glyph bitmaps will be written.
+		\param fontData data object which will be populated with font data
 		\returns zero on success non zero on error.
 		*/
-		int GenerateFont(Font::Family& fontFamily, rTextureData& textureData);
+		int GenerateFont(FontData& fontData);
 
 	private:
 		struct Impl;

@@ -7,6 +7,7 @@
 
 #include "rTextureManager.hpp"
 #include "rFont.hpp"
+#include "rFontData.hpp"
 
 class RECONDITE_API rFontManager {
 public:
@@ -14,6 +15,7 @@ public:
 	~rFontManager();
 
 public:
+	Font::Family* LoadFromData(recondite::FontData& fontData, const rString& name);
 	Font::Family* LoadFromPath(const rString& path, const rString& name);
 	Font::Family* Get(const rString& name);
 

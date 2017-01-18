@@ -24,32 +24,36 @@ rFontManager::~rFontManager(){
 	delete _impl;
 }
 
+Font::Family* rFontManager::LoadFromData(recondite::FontData& fontData, const rString& name) {
+	if (Get(name) == 0) {
+		rTexture* texture = _impl->textureManager->Load(*fontData.GetTextureData(), name + "::Texture");
+
+		if (texture) {
+			Font::Family* family = fontData.ReleaseFamily();
+			family->SetName(name);
+
+			_impl->fonts.emplace(name, family);
+
+			return family;
+		}
+	}
+	
+	return nullptr;
+}
+
 Font::Family* rFontManager::LoadFromPath(const rString& path, const rString& name){
 	if (Get(name)) return nullptr;
-
-	rString outDir, outName;
-	rPath::Split(path, &outDir, &outName, nullptr);
-
-	rString textureFilePath = rPath::Assemble(outDir, name, "rtex");
-	rString textureName = name + "::Texture";
-
-	if (_impl->textureManager->LoadFromPath(textureFilePath, textureName) == nullptr)
-		return nullptr;
 
 	auto fontFile = _impl->fileSystem->GetReadFileRef(path);
 	if (!fontFile) return nullptr;
 
-	std::unique_ptr<Font::Family> fontRef(new Font::Family());
-	int error = fontRef->Read(*fontFile);
-	if (!error){
-		fontRef->SetName(name);
-		_impl->fonts.insert(std::make_pair(name, std::move(fontRef)));
+	recondite::FontData fontData;
+	int error = fontData.Read(*fontFile);
 
-		return _impl->fonts[name].get();
+	if (!error) {
+		return LoadFromData(fontData, name);
 	}
-	else
-	{
-		_impl->textureManager->Delete(textureName);
+	else {
 		return nullptr;
 	}
 }

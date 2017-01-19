@@ -23,7 +23,7 @@ bool reTranslateTool::OnMouseDown(wxMouseEvent& event, rwxGLCanvas* canvas){
 	if (m_selectedAxis != reGizmoAxis::NONE) {
 		m_gizmo->HighlightAxis(m_selectedAxis);
 		m_gizmo->Update();
-		m_dragPlane = reToolBase::GetDragPlaneFromRay(selectionRay);
+		m_dragPlane = reToolBase::GetDragPlaneFromRay(selectionRay, m_gizmo->GetPosition());
 		GetWorldSpaceDragPosition(canvas, m_previousWorldPosition);
 		m_command = new reTranslateCommand(m_component->SelectionManager()->GetSelection(), m_component);
 

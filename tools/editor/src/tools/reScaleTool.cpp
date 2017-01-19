@@ -156,7 +156,7 @@ void reScaleTool::SetDragPlane(const rRay3& selectionRay) {
 		m_dragPlane.SetFromPointAndNormal(gizmoPosition, direction);
 	}
 	else {
-		m_dragPlane = reToolBase::GetDragPlaneFromRay(selectionRay);
+		m_dragPlane = reToolBase::GetDragPlaneFromRay(selectionRay, gizmoPosition);
 	}
 
 }

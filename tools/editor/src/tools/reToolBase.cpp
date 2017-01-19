@@ -93,12 +93,13 @@ bool reToolBase::DeleteSelection(){
 	return false;
 }
 
-rPlane reToolBase::GetDragPlaneFromRay(const rRay3& selectionRay) {
+rPlane reToolBase::GetDragPlaneFromRay(const rRay3& selectionRay, const rVector3& gizmoPosition) {
 	float selectionDistance = FLT_MAX;
 	rVector3 selectionPoint;
 	rPlane bestPlane;
+	
 
-	rPlane plane(rVector3::ZeroVector, rVector3::UpVector);
+	rPlane plane(gizmoPosition, rVector3::UpVector);
 	if (rIntersection::RayIntersectsPlane(selectionRay, plane, &selectionPoint)) {
 		float distance = selectionPoint.Distance(selectionRay.origin);
 
@@ -108,7 +109,7 @@ rPlane reToolBase::GetDragPlaneFromRay(const rRay3& selectionRay) {
 		}
 	}
 
-	plane.SetFromPointAndNormal(rVector3::ZeroVector, rVector3::RightVector);
+	plane.SetFromPointAndNormal(gizmoPosition, rVector3::RightVector);
 	if (rIntersection::RayIntersectsPlane(selectionRay, plane, &selectionPoint)) {
 		float distance = selectionPoint.Distance(selectionRay.origin);
 
@@ -118,7 +119,7 @@ rPlane reToolBase::GetDragPlaneFromRay(const rRay3& selectionRay) {
 		}
 	}
 
-	plane.SetFromPointAndNormal(rVector3::ZeroVector, rVector3::BackwardVector);
+	plane.SetFromPointAndNormal(gizmoPosition, rVector3::BackwardVector);
 	if (rIntersection::RayIntersectsPlane(selectionRay, plane, &selectionPoint)) {
 		float distance = selectionPoint.Distance(selectionRay.origin);
 

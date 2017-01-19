@@ -29,7 +29,7 @@ protected:
 
 	bool DeleteSelection();
 
-	static rPlane GetDragPlaneFromRay(const rRay3& selectionRay);
+	static rPlane GetDragPlaneFromRay(const rRay3& selectionRay, const rVector3& gizmoPosition);
 
 protected:
 	wxPoint m_firstPoint;

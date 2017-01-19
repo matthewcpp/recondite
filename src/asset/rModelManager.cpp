@@ -1,24 +1,27 @@
 #include "asset/rModelManager.hpp"
 
 #include "stream/rOStringStream.hpp"
+#include "rResourceEvent.hpp"
 
 struct rModelManager::Impl{
-	Impl(rFileSystem* fs, iResourceManager* rm, rGraphicsDevice* gd, rTextureManager* tm)
-		: fileSysytem(fs), resourceManager(rm), graphicsDevice(gd), textureManager(tm) {}
+	Impl(rFileSystem* fs, iResourceManager* rm, rGraphicsDevice* gd, rTextureManager* tm, rEventHandler* eh)
+		: fileSysytem(fs), resourceManager(rm), graphicsDevice(gd), textureManager(tm), eventHandler(eh){}
 
 	rFileSystem* fileSysytem;
 	rGraphicsDevice* graphicsDevice;
 	rTextureManager* textureManager;
 	iResourceManager* resourceManager;
+	rEventHandler* eventHandler;
 	std::map<rString, std::unique_ptr<Model>> models;
 
 	void DeleteModelData(Model* model);
 	void CreateMaterialsForModel(const ModelData& modelData, const rString& baseName, std::vector<rMaterial*>& materials);
 };
 
-
-rModelManager::rModelManager(rFileSystem* fileSysytem, iResourceManager* resourceManager, rGraphicsDevice* graphicsDevice, rTextureManager* textureManager){
-	_impl = new Impl(fileSysytem, resourceManager, graphicsDevice, textureManager);
+rModelManager::rModelManager(rFileSystem* fileSysytem, iResourceManager* resourceManager, rGraphicsDevice* graphicsDevice, 
+	rTextureManager* textureManager, rEventHandler* eventHandler)
+{
+	_impl = new Impl(fileSysytem, resourceManager, graphicsDevice, textureManager, eventHandler);
 }
 
 rModelManager::~rModelManager(){
@@ -33,8 +36,6 @@ Model* rModelManager::Get(const rString& name) {
 	else
 		return result->second.get();
 }
-
-
 
 void rModelManager::Impl::CreateMaterialsForModel(const ModelData& modelData, const rString& baseName, std::vector<rMaterial*>& materials) {
 	std::vector<rTexture*> textures;
@@ -70,6 +71,9 @@ Model* rModelManager::LoadFromResource(const rString& handle, const rString& nam
 		int error = modelData.Read(*stream);
 
 		if (!error) {
+			rResourceLoadedEvent event(&modelData);
+			_impl->eventHandler->Trigger(rEVT_MODEL_RESOURCE_LOADED, event);
+
 			result = LoadFromData(modelData, name);
 		}
 

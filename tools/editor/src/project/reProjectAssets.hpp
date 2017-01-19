@@ -27,10 +27,15 @@ public:
 
 	const recondite::AssetManifest* Manifest() const;
 
+	void Init();
+
 private:
 	void WriteModel(const recondite::ModelData& modelData, const wxString& name);
+	void CreateSelectionWireframeForModel(recondite::ModelData& modelData);
 
 	void EnsureAssetDir(const wxString& dirName);
+
+	void OnModelResourceLoaded(rEvent& event);
 	
 
 private:

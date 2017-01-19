@@ -78,6 +78,10 @@ namespace recondite {
 		_impl->elements.push_back(element3);
 	}
 
+	uint16_t MeshData::GetElement(size_t index) const {
+		return _impl->elements[index];
+	}
+
 	size_t MeshData::GetBufferDataSize() const {
 		return _impl->elements.size() * sizeof(uint16_t);
 	}

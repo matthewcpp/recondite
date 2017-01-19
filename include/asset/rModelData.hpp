@@ -111,6 +111,13 @@ namespace recondite {
 		*/
 		void Push(uint16_t element1, uint16_t element2, uint16_t element3);
 
+		/**
+		Returns a single element from the buffer.
+		\param index the index of the element to get
+		\returns the element at the given index
+		*/
+		uint16_t GetElement(size_t index) const;
+
 		void AllocateBuffer(size_t size);
 
 		rAlignedBox3 GetBoundingBox() const;

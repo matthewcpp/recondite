@@ -1,10 +1,15 @@
 #include "reProjectAssets.hpp"
 
+#include <map>
+#include <set>
+
 #include <wx/filename.h>
 #include <wx/filefn.h>
 
 #include "ModelImporter.hpp"
 #include "stream/rOFileStream.hpp"
+
+#include "rResourceEvent.hpp"
 
 
 reProjectAssets::reProjectAssets(rwxComponent* component) {
@@ -54,9 +59,13 @@ recondite::Model* reProjectAssets::ImportModel(const wxString& path) {
 
 		wxFileName modelPath(path);
 		wxString modelName = modelPath.GetName();
-		recondite::Model* model = _component->GetEngine()->content->Models()->LoadFromData(modelData, modelName.c_str().AsChar());
-
 		WriteModel(modelData, modelName);
+
+		if (modelData.GetLineMeshCount() == 0) {
+			CreateSelectionWireframeForModel(modelData);
+		}
+
+		recondite::Model* model = _component->GetEngine()->content->Models()->LoadFromData(modelData, modelName.c_str().AsChar());
 
 		wxString modelHandle = GetAssetPath(rAssetType::Model, modelName);
 		_manifest.Add(rAssetType::Model, modelName.c_str().AsChar(), modelHandle.c_str().AsChar());
@@ -65,6 +74,15 @@ recondite::Model* reProjectAssets::ImportModel(const wxString& path) {
 	}
 
 	return nullptr;
+}
+
+void reProjectAssets::OnModelResourceLoaded(rEvent& event) {
+	rResourceLoadedEvent& resourceLoadedEvent = (rResourceLoadedEvent&)event;
+	ModelData* modelData = resourceLoadedEvent.GetModelData();
+
+	if (modelData->GetLineMeshCount() == 0) {
+		CreateSelectionWireframeForModel(*modelData);
+	}
 }
 
 wxString reProjectAssets::GetDirectoryPath() {
@@ -114,4 +132,41 @@ bool reProjectAssets::DeleteModel(const wxString& name) {
 	}
 
 	return false;
+}
+
+
+
+void reProjectAssets::CreateSelectionWireframeForModel(recondite::ModelData& modelData) {
+	//temp implementation?
+	std::map<uint16_t, std::set<uint16_t>> lineSegmentMap;
+
+	//generate a wireframe representation
+	for (size_t m = 0; m < modelData.GetTriangleMeshCount(); m++) {
+		recondite::MeshData* meshData = modelData.GetTriangleMesh(m);
+
+		for (size_t i = 0; i < meshData->GetElementCount(); i+=3) {
+			uint16_t p0 = meshData->GetElement(i);
+			uint16_t p1 = meshData->GetElement(i+1);
+			uint16_t p2 = meshData->GetElement(i+2);
+
+			if (p0 < p1)  lineSegmentMap[p0].insert(p1); else  lineSegmentMap[p1].insert(p0);
+			if (p1 < p2)  lineSegmentMap[p1].insert(p2); else  lineSegmentMap[p2].insert(p1);
+			if (p2 < p0)  lineSegmentMap[p2].insert(p0); else  lineSegmentMap[p0].insert(p2);
+		}
+	}
+
+	//create a new line mesh and add generated wireframe
+	uint32_t newMaterialId = modelData.CreateMaterial()->id;
+	recondite::MeshData* lineMesh = modelData.CreateLineMesh();
+	lineMesh->SetMaterialDataId(newMaterialId);
+
+	for (auto& entry : lineSegmentMap) {
+		for (auto element : entry.second) {
+			lineMesh->Push(entry.first, element);
+		}
+	}
+}
+
+void reProjectAssets::Init() {
+	_component->GetEngine()->content->Events()->Bind(rEVT_MODEL_RESOURCE_LOADED, this, &reProjectAssets::OnModelResourceLoaded);
 }

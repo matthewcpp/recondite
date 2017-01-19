@@ -62,6 +62,8 @@ void reComponent::OnSceneLoad(rEvent& event){
 bool reComponent::Init(wxGLCanvas* canvas){
 	bool result = rwxComponent::Init(canvas);
 
+	m_project->Assets()->Init();
+
 	if (result){
 		m_scene->Bind(rEVT_SCENE_LOAD_END, this, &reComponent::OnSceneLoad);
 	}

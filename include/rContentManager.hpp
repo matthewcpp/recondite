@@ -22,6 +22,8 @@
 
 #include "asset/rAssetManifest.hpp"
 
+#include "rEventHandler.hpp"
+
 using namespace recondite;
 
 class RECONDITE_API rContentManager{
@@ -36,6 +38,7 @@ public:
 	rShaderManager* Shaders();
 	rFontManager* Fonts();
 	rModelManager* Models();
+	rEventHandler* Events();
 
 	bool LoadFromManifest(const recondite::AssetManifest& contentData);
 
@@ -48,6 +51,7 @@ private:
 	rGraphicsDevice* m_graphicsDevice;
 	rFileSystem* m_fileSystem;
 	iResourceManager* m_resourceManager;
+	rEventHandler m_eventHandler;
 
 	std::unique_ptr<rTextureManager> m_textures;
 	std::unique_ptr<rShaderManager> m_shaders;

@@ -8,7 +8,7 @@ rContentManager::rContentManager(rGraphicsDevice* graphicsDevice, rFileSystem* f
 	m_textures.reset(new rTextureManager(graphicsDevice, fileSystem));
 	m_shaders.reset(new rShaderManager(graphicsDevice, fileSystem));
 	m_fonts.reset(new rFontManager(fileSystem, m_textures.get()));
-	m_models.reset(new rModelManager(fileSystem, resourceManager, graphicsDevice, m_textures.get()));
+	m_models.reset(new rModelManager(fileSystem, resourceManager, graphicsDevice, m_textures.get(), &m_eventHandler));
 }
 
 void rContentManager::Clear(){
@@ -52,4 +52,8 @@ bool rContentManager::LoadFromManifest(const recondite::AssetManifest& contentDa
 	}
 
 	return true;
+}
+
+rEventHandler* rContentManager::Events() {
+	return &m_eventHandler;
 }

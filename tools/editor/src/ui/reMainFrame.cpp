@@ -342,6 +342,7 @@ void reMainFrame::NewLevel(){
 
 			m_projectExplorer->AddLevel(levelName);
 			EnsureViewportDisplayVisible();
+			m_viewportDisplay->SetDefaultViewOrientations();
 			m_viewportDisplay->UpdateAllViewports();
 		}
 	}

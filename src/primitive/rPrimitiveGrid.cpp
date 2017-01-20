@@ -28,6 +28,7 @@ float rPrimitiveGrid::Width() const{
 
 void rPrimitiveGrid::SetWidth(float width){
 	m_width = width;
+	RecalculateBoundingVolume();
 	InvalidateGeometry();
 }
 
@@ -37,6 +38,7 @@ float rPrimitiveGrid::Depth() const{
 
 void rPrimitiveGrid::SetDepth(float depth){
 	m_depth = depth;
+	RecalculateBoundingVolume();
 	InvalidateGeometry();
 }
 

@@ -120,11 +120,18 @@ void rScene::Clear(){
 
 rAlignedBox3 rScene::GetBounding() {
 	rAlignedBox3 bounding;
-	rActorMap::iterator end = m_actors.end();
 
-	for (rActorMap::iterator it = m_actors.begin(); it != end; ++it) {
-		riBoundingVolume* boundingVolume = it->second->BoundingVolume();
-		if (boundingVolume) bounding.AddBox(boundingVolume->FitBox());
+	if (m_actors.size() > 0) {
+		rActorMap::iterator end = m_actors.end();
+
+		for (rActorMap::iterator it = m_actors.begin(); it != end; ++it) {
+			rAlignedBox3 worldBounding = it->second->WorldBounding();
+			bounding.AddBox(worldBounding);
+		}
+	}
+	else {
+		bounding.min = rVector3::ZeroVector;
+		bounding.max = rVector3::ZeroVector;
 	}
 
 	return bounding;

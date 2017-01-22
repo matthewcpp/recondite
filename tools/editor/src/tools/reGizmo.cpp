@@ -154,6 +154,6 @@ rVector3 reTransformGizmoBase::GetPosition() const {
 void reTransformGizmoBase::FinalizeAndAddHandle(reGizmoHandle* handle) {
 	handle->SetPickable(false);
 	handle->SetShouldPersist(false);
-	handle->CustomProperties().SetBool("__noutline", false);
+	handle->CustomProperties().SetBool("__no_outline__", false);
 	m_component->GetEngine()->scene->AddActor(handle);
 }

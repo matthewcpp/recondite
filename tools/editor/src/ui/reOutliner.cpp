@@ -44,7 +44,7 @@ void reOutliner::OnActorAddedToScene(rEvent& event){
 	rActor3* actor = actorEvent.Actor();
 
 	bool outline = true;
-	actor->CustomProperties().GetBool("__noutline", outline);
+	actor->CustomProperties().GetBool("__no_outline__", outline);
 
 	if (outline) {
 		rString actorId = actor->Id();

@@ -57,6 +57,7 @@ bool reModelViewerPanel::ViewModel(const wxString& name) {
 	recondite::Camera* camera = _glCanvas->GetCamera();
 	wxString propName = _glCanvas->GetCanvasName() + ':' + name;
 	rProp* prop = new rProp(model, propName.c_str().AsChar(), _component->GetEngine());
+	prop->CustomProperties().SetBool("__no_outline__", false);
 	prop->RenderingOptions()->SetRenderingMask(16);
 	scene->AddActor(prop);
 

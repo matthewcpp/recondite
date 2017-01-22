@@ -86,14 +86,16 @@ void rComponent::InitEngine(rGraphicsDevice* graphics, rContentManager* content,
 
 	m_engine.scene = m_scene;
 
-	m_graphicsDevice->Init();
-
-	rString defaultAssetPath = GetBasePath() + "default/";
-	m_engine.content->InitDefaultAssets(defaultAssetPath);
-
 	m_fileSystem = fileSystem;
 
 	m_isReady = true;
+}
+
+bool rComponent::LoadDefaultResources() {
+	m_graphicsDevice->Init();
+
+	rString defaultAssetPath = GetBasePath() + "default/";
+	return m_engine.content->InitDefaultAssets(defaultAssetPath);
 }
 
 rViewport* rComponent::CreateViewport(const rString& name){

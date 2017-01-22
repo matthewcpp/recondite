@@ -20,7 +20,6 @@ public:
 	~reToolManager();
 
 	void CreateToolbars();
-	void OnComponentInit(rEvent& event);
 
 public:
 	bool OnMouseDown(wxMouseEvent& event, rwxGLCanvas* canvas);

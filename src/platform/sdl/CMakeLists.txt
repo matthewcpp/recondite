@@ -5,6 +5,7 @@ add_rec_platform_src(sdl_sources "rSDLGraphicsDevice" "sdl")
 add_rec_platform_src(sdl_sources "rSDLInputManager" "sdl")
 
 list(APPEND sdl_sources ${CMAKE_CURRENT_SOURCE_DIR}/../../../include/platform/sdl/rSDLBuild.hpp)
+list(APPEND sdl_sources ${CMAKE_CURRENT_SOURCE_DIR}/../../../include/platform/sdl/rSDLMain.hpp)
 
 add_library( rsdl SHARED ${sdl_sources})
 set_target_properties(rsdl PROPERTIES FOLDER Recondite)

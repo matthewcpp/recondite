@@ -31,8 +31,6 @@ private:
 	void OnActorSelected(rEvent& event);
 	void OnActorRenamed(rEvent& event);
 
-	void OnComponentInitialized(rEvent& event);
-
 	void OnLevelBeginLoad(rEvent& event);
 	void OnLevelEndLoad(rEvent& event);
 

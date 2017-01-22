@@ -32,7 +32,8 @@ public:
 	void SetResourceManager(recondite::iResourceManager* resourceManager);
 
 public:
-	virtual bool Init(wxGLCanvas* canvas);
+	virtual bool Init();
+	virtual void InitGraphics(wxGLCanvas* canvas);
 
 protected:
 	virtual void BeforeSceneRendered(rViewport* viewport) {}

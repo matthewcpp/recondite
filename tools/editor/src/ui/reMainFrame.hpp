@@ -5,7 +5,7 @@
 #include <wx/aui/aui.h>
 #include <wx/filehistory.h>
 
-
+#include "reUIController.hpp"
 
 #include "reViewportDisplay.hpp"
 #include "rePropertyInspector.hpp"
@@ -22,12 +22,14 @@
 #include "reModelViewer.hpp"
 
 
-class reMainFrame : public wxFrame{
+class reMainFrame : public wxFrame, public reUIController {
 public:
 	reMainFrame(reComponent* component, const wxString& title, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize);
 	~reMainFrame();
 
 	void CloseFrame();
+
+	void ActivateLevel(const wxString& levelName);
 
 private:
 	wxMenuBar* CreateEditorMenuBar();
@@ -45,6 +47,7 @@ private:
 	void OnUndoCommand(wxCommandEvent& event);
 	void OnRedoCommand(wxCommandEvent& event);
 	void OnCharHook(wxKeyEvent& event);
+	void OnAuiPaneCLose(wxAuiManagerEvent& event);
 
 	void NewProject();
 	void OpenProject();
@@ -95,6 +98,7 @@ private:
 
 	wxFileConfig* m_config;
 	wxFileHistory* m_fileHistory;
+	wxPanel* m_splashPanel;
 
 	reModelViewerFrame* m_modelViewer;
 };

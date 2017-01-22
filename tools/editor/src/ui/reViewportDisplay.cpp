@@ -10,8 +10,6 @@ reViewportDisplay::reViewportDisplay(reComponent* component, reToolManager* tool
 
 	CreateViewportDisplay();
 
-	m_component->Bind(rEVT_COMPONENT_INITIALIZED, this, &reViewportDisplay::OnComponentInitialized);
-
 	m_isMaximized = false;
 	m_hoverCanvas = nullptr;
 	m_lastUpdateTime = 0;
@@ -73,6 +71,19 @@ void reViewportDisplay::CreateViewportDisplay(){
 	wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
 	mainSizer->Add(m_mainSplitter, 1, wxEXPAND | wxALL, 2);
 	SetSizer(mainSizer);
+
+	rScene* scene = m_component->GetScene();
+
+	scene->Bind(rEVT_SCENE_ACTOR_ADDED, this, &reViewportDisplay::OnDisplayShouldUpdate);
+	scene->Bind(rEVT_SCENE_ACTOR_REMOVED, this, &reViewportDisplay::OnDisplayShouldUpdate);
+	scene->Bind(rEVT_SCENE_LOAD_END, this, &reViewportDisplay::OnSceneLoadComplete);
+
+	m_component->Bind(reCommandProcessed, this, &reViewportDisplay::OnCommandProcessed);
+
+	BindCanvasEvents(m_topLeftViewport->GetCanvas());
+	BindCanvasEvents(m_topRightViewport->GetCanvas());
+	BindCanvasEvents(m_bottomLeftViewport->GetCanvas());
+	BindCanvasEvents(m_bottomRightViewport->GetCanvas());
 }
 
 reViewport* reViewportDisplay::GetViewport(const wxString& name){
@@ -86,21 +97,6 @@ reViewport* reViewportDisplay::GetViewport(const wxString& name){
 		return m_bottomRightViewport;
 	else
 		return nullptr;
-}
-
-void reViewportDisplay::OnComponentInitialized(rEvent& event){
-	rScene* scene = m_component->GetScene();
-
-	scene->Bind(rEVT_SCENE_ACTOR_ADDED, this, &reViewportDisplay::OnDisplayShouldUpdate);
-	scene->Bind(rEVT_SCENE_ACTOR_REMOVED, this, &reViewportDisplay::OnDisplayShouldUpdate);
-	scene->Bind(rEVT_SCENE_LOAD_END, this, &reViewportDisplay::OnSceneLoadComplete);
-
-	m_component->Bind(reCommandProcessed, this, &reViewportDisplay::OnCommandProcessed);
-
-	BindCanvasEvents(m_topLeftViewport->GetCanvas());
-	BindCanvasEvents(m_topRightViewport->GetCanvas());
-	BindCanvasEvents(m_bottomLeftViewport->GetCanvas());
-	BindCanvasEvents(m_bottomRightViewport->GetCanvas());
 }
 
 void reViewportDisplay::SetDefaultViewOrientations() {

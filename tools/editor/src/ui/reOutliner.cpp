@@ -12,7 +12,17 @@ reOutliner::reOutliner(reComponent* component, rePropertyInspector* propertyInsp
 	Bind(wxEVT_DATAVIEW_ITEM_START_EDITING, &reOutliner::OnEditBegin, this);
 	Bind(wxEVT_DATAVIEW_ITEM_VALUE_CHANGED, &reOutliner::OnItemEdit, this);
 	
-	m_component->Bind(rEVT_COMPONENT_INITIALIZED, this, &reOutliner::OnComponentInitialized);
+	rScene* scene = m_component->GetScene();
+
+	//bind scene events
+	scene->Bind(rEVT_SCENE_ACTOR_ADDED, this, &reOutliner::OnActorAddedToScene);
+	scene->Bind(rEVT_SCENE_ACTOR_REMOVED, this, &reOutliner::OnActorRemovedFromScene);
+	scene->Bind(rEVT_SCENE_ACTOR_RENAMED, this, &reOutliner::OnActorRenamed);
+	scene->Bind(rEVT_SCENE_LOAD_BEGIN, this, &reOutliner::OnLevelBeginLoad);
+	scene->Bind(rEVT_SCENE_LOAD_END, this, &reOutliner::OnLevelEndLoad);
+
+	//bind selection events
+	m_component->Bind(reSELECTION_SELECT, this, &reOutliner::OnActorSelected);
 }
 
 void reOutliner::OnItemSelected(wxDataViewEvent& event){
@@ -69,20 +79,6 @@ void reOutliner::OnActorRenamed(rEvent& event){
 		m_actorIdMap[newName] = item;
 		SetItemText(item, newName.c_str());
 	}
-}
-
-void reOutliner::OnComponentInitialized(rEvent& event){
-	rScene* scene = m_component->GetScene();
-
-	//bind scene events
-	scene->Bind(rEVT_SCENE_ACTOR_ADDED, this, &reOutliner::OnActorAddedToScene);
-	scene->Bind(rEVT_SCENE_ACTOR_REMOVED, this, &reOutliner::OnActorRemovedFromScene);
-	scene->Bind(rEVT_SCENE_ACTOR_RENAMED, this, &reOutliner::OnActorRenamed);
-	scene->Bind(rEVT_SCENE_LOAD_BEGIN, this, &reOutliner::OnLevelBeginLoad);
-	scene->Bind(rEVT_SCENE_LOAD_END, this, &reOutliner::OnLevelEndLoad);
-
-	//bind selection events
-	m_component->Bind(reSELECTION_SELECT, this, &reOutliner::OnActorSelected);
 }
 
 void reOutliner::OnActorSelected(rEvent& event){

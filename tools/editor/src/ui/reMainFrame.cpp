@@ -22,11 +22,17 @@ void reMainFrame::CreateUIElements(){
 	m_toolManager = new reToolManager(m_component, this, &m_wxAuiManager);
 	m_viewportDisplay = new reViewportDisplay(m_component, m_toolManager, this);
 	m_propertyInspector = new rePropertyInspector(m_component, m_viewportDisplay, this);
-	m_projectExplorer = new reProjectExplorer(m_modelViewer, m_component, this);
+	m_projectExplorer = new reProjectExplorer(this, m_modelViewer, m_component, this);
 	m_outliner = new reOutliner(m_component, m_propertyInspector, this);
 	m_palette = new rePalette(m_component, this);
+	m_palette->Disable();
 
+	m_splashPanel = new wxPanel(this, wxID_ANY);
+	wxBoxSizer* boxSizer = new wxBoxSizer(wxVERTICAL);
+	boxSizer->Add(new wxStaticBitmap(m_splashPanel, wxID_ANY, wxBitmap("assets/r.png", wxBITMAP_TYPE_PNG)),1, wxALIGN_CENTER);
+	m_splashPanel->SetSizer(boxSizer);
 	
+	m_component->InitGraphics(m_viewportDisplay->GetViewport("Viewport 1")->GetCanvas());
 
 	SetMenuBar(CreateEditorMenuBar());
 	CreateStatusBar();
@@ -49,10 +55,15 @@ void reMainFrame::CreateUIElements(){
 		.Floatable(false)
 		.Gripper(false));
 
+	m_wxAuiManager.AddPane(m_splashPanel, wxAuiPaneInfo()
+		.Center()
+		.Caption("Splash")
+		.CloseButton(false));
+
 	m_wxAuiManager.AddPane(m_viewportDisplay, wxAuiPaneInfo()
 		.Center()
-		.Caption("Level View")
-		.CloseButton(false));
+		.Hide()
+		.Caption("Level View"));
 
 	m_wxAuiManager.AddPane(m_propertyInspector, wxAuiPaneInfo()
 		.Right()
@@ -105,6 +116,8 @@ void reMainFrame::CreateUIElements(){
 		.MinSize(250, 100));
 
 	m_toolManager->CreateToolbars();
+
+	m_wxAuiManager.Bind(wxEVT_AUI_PANE_CLOSE, &reMainFrame::OnAuiPaneCLose, this);
 
 	m_wxAuiManager.Update();
 }
@@ -277,7 +290,8 @@ void reMainFrame::EnsureViewportDisplayVisible(const wxString& caption){
 		str = str + " - " + caption;
 
 
-	m_wxAuiManager.GetPane(m_viewportDisplay).Show(true).Caption(str);
+	m_wxAuiManager.GetPane(m_viewportDisplay).Show(true).Position(0).Caption(str);
+	m_wxAuiManager.GetPane(m_splashPanel).Hide();
 	m_wxAuiManager.Update();
 }
 
@@ -356,4 +370,20 @@ void reMainFrame::OnCharHook(wxKeyEvent& event) {
 	m_viewportDisplay->CharHook(event);
 
 	event.Skip();
+}
+
+void reMainFrame::ActivateLevel(const wxString& levelName) {
+	m_component->ClearScene();
+	m_component->GetProject()->ActivateLevel(levelName);
+	EnsureViewportDisplayVisible();
+	m_palette->Enable();
+	m_viewportDisplay->SetDefaultViewOrientations();
+	m_viewportDisplay->UpdateAllViewports();
+	
+}
+
+void reMainFrame::OnAuiPaneCLose(wxAuiManagerEvent& event) {
+	m_wxAuiManager.GetPane(m_splashPanel).Show(true).Position(0);
+	m_palette->Disable();
+	m_wxAuiManager.Update();
 }

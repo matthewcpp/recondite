@@ -28,7 +28,6 @@ public:
 	void CharHook(wxKeyEvent& event);
 
 private:
-	void OnComponentInitialized(rEvent& event);
 	void OnDisplayShouldUpdate(rEvent& event);
 	void OnCommandProcessed(rEvent& event);
 

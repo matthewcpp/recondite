@@ -1,10 +1,11 @@
 #include "reProjectExplorer.hpp"
 
-reProjectExplorer::reProjectExplorer(reModelViewerFrame* modelViewer, reComponent* component, wxWindow* parent, wxWindowID id)
+reProjectExplorer::reProjectExplorer(reUIController* uiController, reModelViewerFrame* modelViewer, reComponent* component, wxWindow* parent, wxWindowID id)
 	:wxDataViewTreeCtrl(parent, id)
 {
 	m_component = component;
 	m_modelViewer = modelViewer;
+	m_uiController = uiController;
 
 	Bind(wxEVT_DATAVIEW_ITEM_ACTIVATED, &reProjectExplorer::OnItemActivated, this);
 	Bind(wxEVT_DATAVIEW_ITEM_CONTEXT_MENU, &reProjectExplorer::OnContext, this);
@@ -43,7 +44,7 @@ void reProjectExplorer::OnItemActivated(wxDataViewEvent& event){
 	wxDataViewItem parent = GetModel()->GetParent(target);
 
 	if (parent == m_levelsRoot){
-		m_component->GetProject()->ActivateLevel(GetItemText(target));
+		m_uiController->ActivateLevel(GetItemText(target));
 	}
 	else if (parent == m_modelsRoot) {
 		wxString modelName = GetItemText(target);

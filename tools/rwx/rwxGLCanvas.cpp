@@ -23,7 +23,7 @@ void rwxGLCanvas::Render() {
 	wxPaintDC dc(this);
 
 	if (!m_component->IsReady()) {
-		m_component->Init(this);
+		m_component->InitGraphics(this);
 	}
 
 	SetCurrent(*m_component->GetContext());

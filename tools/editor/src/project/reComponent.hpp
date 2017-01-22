@@ -47,7 +47,7 @@ public:
 	reSelectionManager* SelectionManager();
 	reProject* GetProject();
 
-	virtual bool Init(wxGLCanvas* canvas);
+	virtual bool Init();
 
 	bool SubmitCommand(wxCommand* command);
 	bool UndoCommand();
@@ -60,9 +60,6 @@ public:
 	reViewportManager* GetViewportManager();
 
 	wxConfigBase* GetConfig();
-
-private:
-	void OnSceneLoad(rEvent& event);
 
 private:
 	std::unique_ptr<reSelectionManager> m_selectionManager;

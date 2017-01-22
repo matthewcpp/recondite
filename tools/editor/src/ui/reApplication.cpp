@@ -7,6 +7,8 @@ bool reApplication::OnInit(){
 
 	SetupPaths();
 
+	m_reComponent->Init();
+
 	reMainFrame* mainFrame = new reMainFrame(m_reComponent, "Recondite Editor");
 	mainFrame->Show(true);
 	mainFrame->Maximize();

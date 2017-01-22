@@ -5,18 +5,34 @@ rOpenGLContentManager::rOpenGLContentManager(rGraphicsDevice* graphicsDevice, rF
 	:rContentManager(graphicsDevice, fileSystem, resourceManager)
 {}
 
-void rOpenGLContentManager::InitDefaultAssets(const rString& defaultAssetPath){
+bool rOpenGLContentManager::InitDefaultAssets(const rString& defaultAssetPath){
 	Log::Info("Loading Default OpengGL Shaders");
 
 	rShaderManager* shaderManager = Shaders();
-	shaderManager->LoadFromPath(defaultAssetPath, "__default_sprite__");
-	shaderManager->LoadFromPath(defaultAssetPath, "__default_text__");
-	shaderManager->LoadFromPath(defaultAssetPath, "__default_drawing__");
-	shaderManager->LoadFromPath(defaultAssetPath, "__default_primitive__");
-	shaderManager->LoadFromPath(defaultAssetPath, "__default_model__");
-	shaderManager->LoadFromPath(defaultAssetPath, "__default_line__");
-	shaderManager->LoadFromPath(defaultAssetPath, "__default_skinned__");
+	rShader* shader = shaderManager->LoadFromPath(defaultAssetPath, "__default_sprite__");
+	if (!shader) return false;
+
+	shader = shaderManager->LoadFromPath(defaultAssetPath, "__default_text__");
+	if (!shader) return false;
+
+	shader = shaderManager->LoadFromPath(defaultAssetPath, "__default_drawing__");
+	if (!shader) return false;
+
+	shader = shaderManager->LoadFromPath(defaultAssetPath, "__default_primitive__");
+	if (!shader) return false;
+
+	shader = shaderManager->LoadFromPath(defaultAssetPath, "__default_model__");
+	if (!shader) return false;
+
+	shader = shaderManager->LoadFromPath(defaultAssetPath, "__default_line__");
+	if (!shader) return false;
+
+	shader = shaderManager->LoadFromPath(defaultAssetPath, "__default_skinned__");
+	if (!shader) return false;
 
 	rString defaultFontPath = rPath::Combine(defaultAssetPath, "__default_font__.rfnt");
-	Fonts()->LoadFromPath(defaultFontPath, "__default_font__");
+	Font::Family* font = Fonts()->LoadFromPath(defaultFontPath, "__default_font__");
+	if(!font) return false;
+
+	return true;
 }

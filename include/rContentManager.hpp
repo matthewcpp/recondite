@@ -44,7 +44,7 @@ public:
 
 public:
 	void Clear();
-	virtual void InitDefaultAssets(const rString& defaultAssetPath) = 0;
+	virtual bool InitDefaultAssets(const rString& defaultAssetPath) = 0;
 
 private:
 

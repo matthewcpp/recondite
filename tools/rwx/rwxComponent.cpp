@@ -8,22 +8,24 @@ rwxComponent::rwxComponent(){
 	m_resourceManager = nullptr;
 }
 
-bool rwxComponent::Init(wxGLCanvas* canvas){
+bool rwxComponent::Init(){
 	rFileSystem* fileSystem = new rFileSystem();
 	m_rwxGraphicsDevice = new rwxOpenGLGraphicsDevice();
 	m_rglContentManager = new rOpenGLContentManager(m_rwxGraphicsDevice, fileSystem, m_resourceManager);
 	m_rInputManager = new rInputManager();
 
-	m_rwxGraphicsDevice->Init(canvas);
+	
 
 	InitEngine(m_rwxGraphicsDevice, m_rglContentManager, m_rInputManager, fileSystem);
 
 	rComponent::Init();
 
-	rEvent event;
-	Trigger(rEVT_COMPONENT_INITIALIZED, event);
-
 	return true;
+}
+
+void rwxComponent::InitGraphics(wxGLCanvas* canvas) {
+	m_rwxGraphicsDevice->Init(canvas);
+	LoadDefaultResources();
 }
 
 void rwxComponent::RenderScene(rViewport* viewport){

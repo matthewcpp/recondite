@@ -13,7 +13,6 @@ reToolManager::reToolManager(reComponent* component, wxFrame* owner, wxAuiManage
 	m_activeToolId = reTOOL_NONE;
 
 	m_component->Bind(reCommandProcessed, this, &reToolManager::OnCommandProcessed);
-	m_component->Bind(rEVT_COMPONENT_INITIALIZED, this, &reToolManager::OnComponentInit);
 
 	CreateTools();
 }
@@ -28,6 +27,10 @@ void reToolManager::CreateTools(){
 	m_tools[reTOOL_TRANSLATE] = new reTranslateTool(m_component, m_owner);
 	m_tools[reTOOL_ROTATE] = new reRotateTool(m_component, m_owner);
 	m_tools[reTOOL_SCALE] = new reScaleTool(m_component, m_owner);
+
+	for (auto& tool : m_tools) {
+		tool.second->Init();
+	}
 
 	ActivateTool(reTOOL_SELECT);
 }
@@ -118,13 +121,6 @@ void reToolManager::CreateToolbars(){
 
 
 }
-
-void reToolManager::OnComponentInit(rEvent& event) {
-	for (auto& tool : m_tools) {
-		tool.second->Init();
-	}
-}
-
 
 void reToolManager::OnToolbarToolClick(wxCommandEvent& event){
 	ActivateTool((reToolId)event.GetId());

@@ -22,6 +22,7 @@ public:
 	virtual unsigned long GetTimeMiliseconds() const = 0;
 
 	virtual bool Init();
+	virtual bool LoadDefaultResources();
 	virtual void Uninit();
 
 	bool IsReady() const;

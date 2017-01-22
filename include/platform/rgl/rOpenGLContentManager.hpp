@@ -17,7 +17,7 @@ public:
 	rOpenGLContentManager(rGraphicsDevice* graphicsDevice, rFileSystem* fileSystem, iResourceManager* resourceManager);
 
 public:
-	virtual void InitDefaultAssets(const rString& defaultAssetPath);
+	virtual bool InitDefaultAssets(const rString& defaultAssetPath) override;
 };
 
 #endif

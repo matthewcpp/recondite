@@ -36,4 +36,7 @@ list(APPEND ui_files ${CMAKE_CURRENT_SOURCE_DIR}/reViewport.cpp)
 list(APPEND ui_files ${CMAKE_CURRENT_SOURCE_DIR}/reViewportDisplay.hpp)
 list(APPEND ui_files ${CMAKE_CURRENT_SOURCE_DIR}/reViewportDisplay.cpp)
 
+list(APPEND ui_files ${CMAKE_CURRENT_SOURCE_DIR}/reUIController.hpp)
+list(APPEND ui_files ${CMAKE_CURRENT_SOURCE_DIR}/reUIController.cpp)
+
 set(ui_sources ${ui_files} PARENT_SCOPE)

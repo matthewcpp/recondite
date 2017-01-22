@@ -52,6 +52,9 @@ public:
 	bool SubmitCommand(wxCommand* command);
 	bool UndoCommand();
 	bool RedoCommand();
+	bool IsDirty();
+	void MarkSaved();
+	void ClearCommandList();
 	void InitCommandProcessor(wxMenu* editMenu);
 
 	virtual void AfterSceneRendered(rViewport* viewport) override;

@@ -42,7 +42,7 @@ void reMainFrame::CreateUIElements(){
 	projectToolbar->AddTool(reMainFrame_NewProject, "New Project", wxBitmap("assets/action-newproject.png", wxBITMAP_TYPE_PNG));
 	projectToolbar->AddTool(reMainFrame_OpenProject, "Open Project", wxBitmap("assets/action-openproject.png", wxBITMAP_TYPE_PNG));
 	projectToolbar->AddTool(reMainFrame_CloseProject, "Close Project", wxBitmap("assets/action-closeproject.png", wxBITMAP_TYPE_PNG));
-	projectToolbar->AddTool(reMainFrame_SaveProject, "Save Project", wxBitmap("assets/action-save.png", wxBITMAP_TYPE_PNG));
+	projectToolbar->AddTool(reMainFrame_SaveLevel, "Save Project", wxBitmap("assets/action-save.png", wxBITMAP_TYPE_PNG));
 	projectToolbar->AddTool(reMainFrame_NewLevel, "New Level", wxBitmap("assets/action-newlevel.png", wxBITMAP_TYPE_PNG));
 	projectToolbar->Realize();
 
@@ -57,7 +57,7 @@ void reMainFrame::CreateUIElements(){
 
 	m_wxAuiManager.AddPane(m_splashPanel, wxAuiPaneInfo()
 		.Center()
-		.Caption("Splash")
+		.Caption("Recondite Editor")
 		.CloseButton(false));
 
 	m_wxAuiManager.AddPane(m_viewportDisplay, wxAuiPaneInfo()
@@ -117,7 +117,7 @@ void reMainFrame::CreateUIElements(){
 
 	m_toolManager->CreateToolbars();
 
-	m_wxAuiManager.Bind(wxEVT_AUI_PANE_CLOSE, &reMainFrame::OnAuiPaneCLose, this);
+	m_wxAuiManager.Bind(wxEVT_AUI_PANE_CLOSE, &reMainFrame::OnAuiPaneClose, this);
 
 	m_wxAuiManager.Update();
 }
@@ -136,8 +136,8 @@ void reMainFrame::OnProjectAction(wxCommandEvent& event){
 		CloseProject();
 		break;
 
-	case reMainFrame_SaveProject:
-		SaveProject();
+	case reMainFrame_SaveLevel:
+		SaveActiveLevel();
 		break;
 	case reMainFrame_NewLevel:
 		NewLevel();
@@ -362,8 +362,9 @@ void reMainFrame::NewLevel(){
 	}
 }
 
-void reMainFrame::SaveProject(){
+void reMainFrame::SaveActiveLevel(){
 	m_component->GetProject()->SaveActiveLevel();
+	m_component->MarkSaved();
 }
 
 void reMainFrame::OnCharHook(wxKeyEvent& event) {
@@ -372,18 +373,53 @@ void reMainFrame::OnCharHook(wxKeyEvent& event) {
 	event.Skip();
 }
 
-void reMainFrame::ActivateLevel(const wxString& levelName) {
-	m_component->ClearScene();
+int UnsavedFilesPrompt() {
+	return wxMessageBox(
+		"Save changes before closing?",
+		"Unsaved Changes",
+		wxYES_NO | wxCANCEL | wxICON_QUESTION
+	);
+}
+
+bool reMainFrame::ActivateLevel(const wxString& levelName) {
+	if (m_component->IsDirty()) {
+		int result = UnsavedFilesPrompt();
+		if (result == wxCANCEL) {
+			return false;
+		}
+		else if (result == wxYES) {
+				SaveActiveLevel();
+		}
+	}
+
+	m_component->ClearCommandList();
 	m_component->GetProject()->ActivateLevel(levelName);
-	EnsureViewportDisplayVisible();
+	EnsureViewportDisplayVisible(levelName);
 	m_palette->Enable();
 	m_viewportDisplay->SetDefaultViewOrientations();
 	m_viewportDisplay->UpdateAllViewports();
-	
+
+	return true;
 }
 
-void reMainFrame::OnAuiPaneCLose(wxAuiManagerEvent& event) {
-	m_wxAuiManager.GetPane(m_splashPanel).Show(true).Position(0);
-	m_palette->Disable();
-	m_wxAuiManager.Update();
+
+void reMainFrame::OnAuiPaneClose(wxAuiManagerEvent& event) {
+	if (m_component->IsDirty()) {
+		int result = UnsavedFilesPrompt();
+		if (result == wxCANCEL) {
+			event.Veto();
+		}
+		else{
+			if (result == wxYES) {
+				SaveActiveLevel();
+			}
+
+			m_component->ClearCommandList();
+			m_wxAuiManager.GetPane(m_splashPanel).Show(true).Position(0);
+			m_palette->Disable();
+			m_wxAuiManager.Update();
+		}
+	}
+
+
 }

@@ -18,6 +18,18 @@ reProject* reComponent::GetProject(){
 	return m_project.get();
 }
 
+bool reComponent::IsDirty() {
+	return m_commandProcessor.IsDirty();
+}
+
+void reComponent::MarkSaved() {
+	m_commandProcessor.MarkAsSaved();
+}
+
+void reComponent::ClearCommandList() {
+	m_commandProcessor.ClearCommands();
+}
+
 bool reComponent::UndoCommand(){
 	bool result = m_commandProcessor.Undo();
 

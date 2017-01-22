@@ -29,7 +29,7 @@ public:
 
 	void CloseFrame();
 
-	void ActivateLevel(const wxString& levelName);
+	bool ActivateLevel(const wxString& levelName);
 
 private:
 	wxMenuBar* CreateEditorMenuBar();
@@ -47,16 +47,17 @@ private:
 	void OnUndoCommand(wxCommandEvent& event);
 	void OnRedoCommand(wxCommandEvent& event);
 	void OnCharHook(wxKeyEvent& event);
-	void OnAuiPaneCLose(wxAuiManagerEvent& event);
+	void OnAuiPaneClose(wxAuiManagerEvent& event);
 
 	void NewProject();
 	void OpenProject();
 	void CloseProject();
 	void NewLevel();
-	void SaveProject();
+	void SaveActiveLevel();
 
 	void OnProjectAction(wxCommandEvent& event);
 	void OnOpenRecentProject(wxCommandEvent& event);
+
 
 	void OnAssetImportModel(wxCommandEvent& event);
 
@@ -67,7 +68,7 @@ private:
 		reMainFrame_NewProject,
 		reMainFrame_OpenProject,
 		reMainFrame_CloseProject,
-		reMainFrame_SaveProject,
+		reMainFrame_SaveLevel,
 
 		reMainFrame_NewLevel,
 		reMainFrame_ProjectEnd,

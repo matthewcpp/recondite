@@ -44,7 +44,11 @@ void reProjectExplorer::OnItemActivated(wxDataViewEvent& event){
 	wxDataViewItem parent = GetModel()->GetParent(target);
 
 	if (parent == m_levelsRoot){
-		m_uiController->ActivateLevel(GetItemText(target));
+		bool result = m_uiController->ActivateLevel(GetItemText(target));
+
+		if (!result) {
+			event.Veto();
+		}
 	}
 	else if (parent == m_modelsRoot) {
 		wxString modelName = GetItemText(target);

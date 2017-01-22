@@ -198,13 +198,25 @@ wxString reProject::LevelFilePath(const wxString& levelName) const{
 }
 
 bool reProject::ActivateLevel(const wxString& name){
+	CloseActiveLevel();
+
 	m_activeLevel = name;
 	wxString levelPath = LevelFilePath(m_activeLevel);
 
-	m_component->ClearScene();
 	m_component->LoadScene(levelPath.c_str().AsChar());
 
 	return true;
+}
+
+wxString reProject::GetActiveLevel() {
+	return m_activeLevel;
+}
+
+void reProject::CloseActiveLevel() {
+	if (!m_activeLevel.empty()) {
+		m_activeLevel.clear();
+		m_component->ClearScene();
+	}
 }
 
 void reProject::SaveActiveLevel(){

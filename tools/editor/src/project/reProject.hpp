@@ -25,6 +25,8 @@ public:
 	bool DeleteLevel(const wxString& name);
 	bool ActivateLevel(const wxString& name);
 	void SaveActiveLevel();
+	wxString GetActiveLevel();
+	void CloseActiveLevel();
 	bool HasLevelNamed(const wxString& name);
 
 	wxString Directory() const;

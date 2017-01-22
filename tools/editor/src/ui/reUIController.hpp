@@ -5,6 +5,6 @@
 class reUIController {
 public:
 
-	virtual void ActivateLevel(const wxString& levelName) = 0;
+	virtual bool ActivateLevel(const wxString& levelName) = 0;
 
 };

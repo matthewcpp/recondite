@@ -2,7 +2,7 @@
 
 #include "rModule.hpp"
 
-class UserInterfaceModule : public rModule{
+class UserInterfaceModule : public recondite::Module{
 public:
 	UserInterfaceModule(rEngine* engine);
 

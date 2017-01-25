@@ -3,10 +3,10 @@
 
 class SelectionApplication : public rApplication {
 public:
-	rModule* CreateModule(rEngine* engine);
+	recondite::Module* CreateModule(rEngine* engine);
 };
 
-rModule* SelectionApplication::CreateModule(rEngine* engine) {
+recondite::Module* SelectionApplication::CreateModule(rEngine* engine) {
 	return new SelectionModule(engine);
 }
 

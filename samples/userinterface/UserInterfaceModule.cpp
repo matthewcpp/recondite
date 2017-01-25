@@ -19,7 +19,7 @@ void DeleteUiController(ruiController* controller){
 
 
 UserInterfaceModule::UserInterfaceModule(rEngine* engine)
-	:rModule("User Interface Sample")
+	:recondite::Module("User Interface Sample")
 {
 	_engine = engine;
 }

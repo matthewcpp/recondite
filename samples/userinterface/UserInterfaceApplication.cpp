@@ -3,10 +3,10 @@
 
 class UserInterfaceApplication : public rApplication {
 public:
-	rModule* CreateModule(rEngine* engine);
+	recondite::Module* CreateModule(rEngine* engine);
 };
 
-rModule* UserInterfaceApplication::CreateModule(rEngine* engine) {
+recondite::Module* UserInterfaceApplication::CreateModule(rEngine* engine) {
 	return new UserInterfaceModule(engine);
 }
 

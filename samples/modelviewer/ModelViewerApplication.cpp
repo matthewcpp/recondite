@@ -3,10 +3,10 @@
 
 class ModelViewerApplication : public rApplication {
 public:
-	rModule* CreateModule(rEngine* engine);
+	recondite::Module* CreateModule(rEngine* engine);
 };
 
-rModule* ModelViewerApplication::CreateModule(rEngine* engine) {
+recondite::Module* ModelViewerApplication::CreateModule(rEngine* engine) {
 	return new ModelViewerModule(engine);
 }
 

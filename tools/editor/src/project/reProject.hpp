@@ -9,6 +9,7 @@
 #include <wx/filename.h>
 
 #include "reProjectAssets.hpp"
+#include "reProjectCode.hpp"
 
 class reProject{
 public:
@@ -40,6 +41,7 @@ public:
 	const wxArrayString& Levels() const;
 
 	reProjectAssets* Assets();
+	reProjectCode* Code();
 
 private:
 	bool CheckForValidNewLevelName(const wxString& name);
@@ -55,6 +57,7 @@ private:
 	wxString m_activeLevel;
 
 	std::unique_ptr<reProjectAssets> m_assets;
+	std::unique_ptr<reProjectCode> m_code;
 
 	rNO_COPY_CLASS(reProject);
 };

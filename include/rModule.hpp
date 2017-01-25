@@ -7,31 +7,32 @@
 #include "ui/ruiManager.hpp"
 #include "rScene.hpp"
 
-class RECONDITE_API rModule {
-public:
-	rModule(const rString& name);
+namespace recondite {
+	class RECONDITE_API Module {
+	public:
+		Module(const rString& name) { m_moduleName = name; }
+		rString GetModuleName() const { return m_moduleName; }
 
-public:
+		virtual void BeforeUpdateScene() {};
+		virtual void AfterUpdateScene() {};
 
-	rString GetModuleName() const;
+		virtual void BeforeRenderScene(rViewport* viewInfo) {};
+		virtual void AfterRenderScene(rViewport* viewInfo) {};
 
-	virtual void BeforeUpdateScene() {};
-	virtual void AfterUpdateScene() {};
-	
-	virtual void BeforeRenderScene(rViewport* viewInfo) {};
-	virtual void AfterRenderScene(rViewport* viewInfo) {};
+		virtual void BeforeRenderUi(rViewport* viewInfo) {}
+		virtual void AfterRenderUi(rViewport* viewInfo) {}
 
-	virtual void BeforeRenderUi(rViewport* viewInfo) {}
-	virtual void AfterRenderUi(rViewport* viewInfo) {}
+		virtual void Init(const rArrayString& args) {};
+		virtual void Uninit() {};
+		virtual void LoadScene(const rString& sceneName) = 0;
+		virtual void DeleteActor(rActor3* actor) = 0;
 
-	virtual void Init(const rArrayString& args) {};
-	virtual void Uninit() {};
-	virtual void LoadScene(const rString& sceneName) = 0;
-	virtual void DeleteActor(rActor3* actor) = 0;
+	private:
+		rString m_moduleName;
+	};
+}
 
-private:
-	rString m_moduleName;
-};
+
 
 
 #endif

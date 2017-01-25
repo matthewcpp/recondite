@@ -6,7 +6,7 @@
 #include <random>
 
 SelectionModule::SelectionModule(rEngine* engine)
-	:rModule("Selection Example")
+	:recondite::Module("Selection Example")
 {
 	_engine = engine;
 }

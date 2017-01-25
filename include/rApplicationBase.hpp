@@ -34,7 +34,7 @@ public:
 	virtual size_t FrameCount() const;
 
 public:
-	virtual rModule* CreateModule(rEngine* engine) = 0;
+	virtual recondite::Module* CreateModule(rEngine* engine) = 0;
 	void SetArgs(int argc, char** argv);
 
 protected:
@@ -46,7 +46,7 @@ protected:
 	size_t m_frameCount;
 	rArrayString args;
 	
-	rModule* m_module;
+	recondite::Module* m_module;
 
 	rSize m_displaySize;
 

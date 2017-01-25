@@ -2,7 +2,7 @@
 
 #include "rModule.hpp"
 
-class SelectionModule : public rModule {
+class SelectionModule : public recondite::Module {
 public:
 	SelectionModule(rEngine* engine);
 

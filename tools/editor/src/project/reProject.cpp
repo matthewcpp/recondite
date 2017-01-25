@@ -11,6 +11,7 @@
 reProject::reProject(rwxComponent* component){
 	m_component = component;
 	m_assets.reset(new reProjectAssets(m_component));
+	m_code.reset(new reProjectCode());
 }
 
 void reProject::Create(const wxString& directory, const wxString& name){
@@ -21,6 +22,7 @@ void reProject::Create(const wxString& directory, const wxString& name){
 	m_projectDir.AssignDir(directory);
 	m_projectDir.AppendDir(name);
 	m_assets->SetBasePath(m_projectDir.GetFullPath());
+	m_code->SetBasePath(m_projectDir.GetFullPath());
 
 	wxMkDir(m_projectDir.GetPath(), wxS_DIR_DEFAULT);
 	wxMkDir(LevelDirPath(), wxS_DIR_DEFAULT);
@@ -34,6 +36,7 @@ bool reProject::Open(const wxString& path){
 	wxFileName projPath(path);
 	m_projectDir.AssignDir(projPath.GetPath());
 	m_assets->SetBasePath(m_projectDir.GetFullPath());
+	m_code->SetBasePath(m_projectDir.GetFullPath());
 
 	rXMLDocument document;
 	rIFileStream projectStream(path.c_str().AsChar());
@@ -51,6 +54,7 @@ bool reProject::Open(const wxString& path){
 	}
 
 	m_assets->Load(document);
+	m_code->CreateProject(m_name);
 
 	return true;
 }
@@ -256,4 +260,8 @@ bool reProject::HasLevelNamed(const wxString& name){
 
 reProjectAssets* reProject::Assets() {
 	return m_assets.get();
+}
+
+reProjectCode* reProject::Code() {
+	return m_code.get();
 }

@@ -7,7 +7,7 @@
 #include "ModelViewerCamera.hpp"
 #include "SkeletonGeometry.hpp"
 
-class ModelViewerModule : public rModule {
+class ModelViewerModule : public recondite::Module {
 public:
 	ModelViewerModule(rEngine* engine);
 

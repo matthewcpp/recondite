@@ -10,25 +10,23 @@
 namespace recondite {
 	class RECONDITE_API Module {
 	public:
-		Module(const rString& name) { m_moduleName = name; }
-		rString GetModuleName() const { return m_moduleName; }
+		Module(rEngine* engine, const rString& name) : _name(name) {}
+		rString GetModuleName() const { return _name; }
 
 		virtual void BeforeUpdateScene() {};
 		virtual void AfterUpdateScene() {};
 
-		virtual void BeforeRenderScene(rViewport* viewInfo) {};
-		virtual void AfterRenderScene(rViewport* viewInfo) {};
+		virtual void BeforeRenderScene(rViewport* viewport) {};
+		virtual void AfterRenderScene(rViewport* viewport) {};
 
-		virtual void BeforeRenderUi(rViewport* viewInfo) {}
-		virtual void AfterRenderUi(rViewport* viewInfo) {}
+		virtual void BeforeRenderUi(rViewport* viewport) {}
+		virtual void AfterRenderUi(rViewport* viewport) {}
 
 		virtual void Init(const rArrayString& args) {};
 		virtual void Uninit() {};
-		virtual void LoadScene(const rString& sceneName) = 0;
-		virtual void DeleteActor(rActor3* actor) = 0;
 
-	private:
-		rString m_moduleName;
+	protected:
+		rString const _name;
 	};
 }
 

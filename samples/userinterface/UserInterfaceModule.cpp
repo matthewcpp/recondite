@@ -19,14 +19,14 @@ void DeleteUiController(ruiController* controller){
 
 
 UserInterfaceModule::UserInterfaceModule(rEngine* engine)
-	:recondite::Module("User Interface Sample")
+	:recondite::Module(engine, "User Interface Sample")
 {
 	_engine = engine;
 }
 
 void UserInterfaceModule::Init(const rArrayString& args) {
 	_engine->ui->RegisterControllerClass("UserInterfaceController", &CreateUiController, &DeleteUiController);
-	rViewport* mainViewport = _engine->component->CreateViewport("main");
+	rViewport* mainViewport = _engine->viewports->CreateViewport("main");
 
 	recondite::Camera* camera = new recondite::Camera();
 	camera->SetPosition(rVector3(0, 6, 10));
@@ -58,16 +58,4 @@ void UserInterfaceModule::Init(const rArrayString& args) {
 	
 
 	_engine->ui->LoadUiDocument("C:/development/recondite/samples/userinterface/userinterface/userinterface.xml", mainViewport);
-}
-
-void UserInterfaceModule::AfterRenderScene(rViewport* viewInfo){
-
-}
-
-void UserInterfaceModule::LoadScene(const rString& sceneName) {
-
-}
-
-void UserInterfaceModule::DeleteActor(rActor3* actor) {
-	delete actor;
 }

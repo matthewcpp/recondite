@@ -12,8 +12,6 @@ public:
 	ModelViewerModule(rEngine* engine);
 
 	virtual void Init(const rArrayString& args);
-	virtual void LoadScene(const rString& sceneName) override;
-	virtual void DeleteActor(rActor3* actor) override;
 	virtual void AfterUpdateScene();
 
 	virtual void AfterRenderScene(rViewport* viewport);

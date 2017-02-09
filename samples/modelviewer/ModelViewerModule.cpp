@@ -8,13 +8,13 @@
 
 
 ModelViewerModule::ModelViewerModule(rEngine* engine)
-	:recondite::Module("Model Viewer")
+	:recondite::Module(engine, "Model Viewer")
 {
 	_engine = engine;
 }
 
 rViewport* ModelViewerModule::CreateView(Model* model, rEngine* engine) {
-	rViewport* mainViewport = engine->component->CreateViewport("main");
+	rViewport* mainViewport = engine->viewports->CreateViewport("main");
 
 	rAlignedBox3 boundingBox = model->GetBoundingBox();
 	rVector3 center = boundingBox.Center();
@@ -79,15 +79,6 @@ void ModelViewerModule::AfterUpdateScene() {
 	if (_skeletonGeometry)
 		_skeletonGeometry->Update();
 }
-
-void ModelViewerModule::LoadScene(const rString& sceneName) {
-
-}
-
-void ModelViewerModule::DeleteActor(rActor3* actor) {
-	delete actor;
-}
-
 
 void ModelViewerModule::AfterRenderScene(rViewport* viewport) {
 	if (_skeletonGeometry) {

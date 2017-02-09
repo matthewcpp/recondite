@@ -14,7 +14,7 @@ rwxGLCanvas::rwxGLCanvas(rwxComponent* component, const wxString& name, wxWindow
 
 rwxGLCanvas::~rwxGLCanvas() {
 	if (m_viewport) {
-		m_component->GetEngine()->component->DeleteViewport(m_viewport->Name());
+		m_component->GetEngine()->viewports->DeleteViewportByName(m_viewport->Name());
 		delete m_camera;
 	}
 }
@@ -43,7 +43,7 @@ void rwxGLCanvas::OnPaint(wxPaintEvent& event){
 }
 
 void rwxGLCanvas::CreateViewport(){
-	m_viewport = m_component->CreateViewport(m_name.c_str().AsChar());
+	m_viewport = m_component->GetEngine()->viewports->CreateViewport(m_name.c_str().AsChar());
 	m_viewport->SetCamera(m_camera);
 }
 

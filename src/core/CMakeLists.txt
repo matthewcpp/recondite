@@ -34,6 +34,7 @@ add_rec_src(core_files "rStaticMeshBoundingVolume")
 add_rec_src(core_files "rString")
 add_rec_src(core_files "rTime")
 add_rec_src(core_files "rViewport")
+add_rec_src(core_files "rViewportManager")
 
 #list(APPEND core_files ${CMAKE_CURRENT_SOURCE_DIR}/../../include/rAnimationCurve.hpp)
 list(APPEND core_files ${CMAKE_CURRENT_SOURCE_DIR}/../../include/rDefs.hpp)

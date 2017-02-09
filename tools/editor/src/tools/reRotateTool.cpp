@@ -15,7 +15,7 @@ reRotateTool::~reRotateTool() {
 bool reRotateTool::OnMouseDown(wxMouseEvent& event, rwxGLCanvas* canvas) {
 	reToolBase::OnMouseDown(event, canvas);
 
-	m_component->SetActiveViewport(canvas->GetViewport());
+	m_component->GetEngine()->viewports->SetActiveViewport(canvas->GetViewport());
 	m_gizmo->Update();
 
 	rRay3 selectionRay = GetSelectionRay(event, canvas);
@@ -50,7 +50,7 @@ bool reRotateTool::OnMouseDown(wxMouseEvent& event, rwxGLCanvas* canvas) {
 bool reRotateTool::OnMouseMotion(wxMouseEvent& event, rwxGLCanvas* canvas) {
 	reToolBase::OnMouseMotion(event, canvas);
 
-	m_component->SetActiveViewport(canvas->GetViewport());
+	m_component->GetEngine()->viewports->SetActiveViewport(canvas->GetViewport());
 
 	if (m_selectedAxis == reGizmoAxis::NONE) {
 		return false;

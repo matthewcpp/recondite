@@ -38,7 +38,7 @@ bool reGizmoHandle::RayPick(const rRay3& ray, rPickResult& result) {
 void reGizmoHandle::UpdateScale() {
 	rVector3 updatedScale = rVector3::OneVector;
 
-	rViewport* activeViewport = m_engine->component->GetActiveViewport();
+	rViewport* activeViewport = m_engine->viewports->GetActiveViewport();
 
 	if (activeViewport) {
 		rVector3 center = WorldBounding().Center();

@@ -29,7 +29,7 @@ void rScene::Draw(){
 	//todo: view frustrum culling
 	rActorMap::iterator end = m_actors.end();
 
-	uint16_t cameraRenderingMask = m_engine->component->GetActiveViewport()->Camera()->GetRenderingMask();
+	uint16_t cameraRenderingMask = m_engine->viewports->GetActiveViewport()->Camera()->GetRenderingMask();
 
 	for (rActorMap::iterator it = m_actors.begin(); it != end; ++it) {
 		if (it->second->IsDrawable()) {

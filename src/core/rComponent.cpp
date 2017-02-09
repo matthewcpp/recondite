@@ -10,7 +10,6 @@ rComponent::rComponent(){
 	m_scene = new rScene(&m_engine);
 	m_engine.actors = &m_actorFactory;
 	m_engine.scene = m_scene;
-	m_activeViewport = nullptr;
 
 	InitDefaultActorClasses();
 }
@@ -77,7 +76,7 @@ void rComponent::InitEngine(rGraphicsDevice* graphics, rContentManager* content,
 	input->SetUIManager(m_uiManager);
 	m_engine.ui = m_uiManager;
 
-	m_engine.component = this;
+	m_engine.viewports = new recondite::ViewportManager();
 
 	m_engine.content = content;
 	m_engine.input = input;
@@ -96,59 +95,6 @@ bool rComponent::LoadDefaultResources() {
 
 	rString defaultAssetPath = GetBasePath() + "default/";
 	return m_engine.content->InitDefaultAssets(defaultAssetPath);
-}
-
-rViewport* rComponent::CreateViewport(const rString& name){
-	if (m_viewports.count(name)){
-		return NULL;
-	}
-	else {
-		rViewport* viewport = new rViewport(name);
-		m_viewports[name] = viewport;
-
-		viewport->SetPosition(0, 0);
-		viewport->SetSize(DisplaySize());
-
-		return viewport;
-	}
-}
-
-rViewport* rComponent::GetViewport(const rString& name) const{
-	rViewportMap::const_iterator it = m_viewports.find(name);
-
-	if (it != m_viewports.end()){
-		return it->second;
-	}
-	else{
-		return NULL;
-	}
-}
-
-void rComponent::GetViewportNames(rArrayString& names) const{
-	for (auto& entry : m_viewports){
-		names.push_back(entry.first);
-	}
-}
-
-void rComponent::DeleteViewport(const rString& name){
-	auto it = m_viewports.find(name);
-
-	if (it != m_viewports.end()){
-		delete it->second;
-		m_viewports.erase(it);
-	}
-}
-
-void rComponent::SetActiveViewport(rViewport* viewport) {
-	m_activeViewport = viewport;
-}
-
-rViewport* rComponent::GetActiveViewport() {
-	return m_activeViewport;
-}
-
-size_t rComponent::NumViewports() const{
-	return m_viewports.size();
 }
 
 bool rComponent::IsReady() const{

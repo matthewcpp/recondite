@@ -9,8 +9,8 @@
 #include "rTime.hpp"
 #include "rInput.hpp"
 #include "rActorFactory.hpp"
+#include "rViewportManager.hpp"
 
-#include "interface/riComponent.hpp"
 #include "interface/riScene.hpp"
 
 class ruiIManager;
@@ -22,9 +22,9 @@ public:
 	rRenderer* renderer;
 	rInput* input;
 	rTime time;
-	riComponent* component;
 	riScene* scene;
 	ruiIManager* ui;
+	recondite::ViewportManager* viewports;
 };
 
 #endif

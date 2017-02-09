@@ -10,13 +10,12 @@
 #include "ui/ruiManager.hpp"
 #include "rActorFactory.hpp"
 
-#include "interface/riComponent.hpp"
 #include "interface/riSerialization.hpp"
 
 #include "rEventHandler.hpp"
 #include "rEvents.hpp"
 
-class RECONDITE_API rComponent : public rEventHandler, public riComponent{
+class RECONDITE_API rComponent : public rEventHandler{
 public:
 	rComponent();
 	virtual unsigned long GetTimeMiliseconds() const = 0;
@@ -34,15 +33,7 @@ public:
 	rEngine* GetEngine();
 	rScene* GetScene();
 
-public:
-	virtual rViewport* CreateViewport(const rString& name);
-	virtual rViewport* GetViewport(const rString& name) const;
-	virtual void GetViewportNames(rArrayString& names) const;
-	virtual void DeleteViewport(const rString& name);
-	virtual size_t NumViewports() const;
-
-	virtual void SetActiveViewport(rViewport* viewport);
-	virtual rViewport* GetActiveViewport();
+	virtual rString GetBasePath() = 0;
 
 public:
 	virtual void AddActorClass(const rString& name, rActorFactory::ActorFunction func);
@@ -53,9 +44,6 @@ protected:
 	bool SaveSceneXML(const rString& path);
 
 protected:
-	typedef std::map<rString, rViewport*> rViewportMap;
-
-protected:
 
 	rEngine m_engine;
 	rScene* m_scene;
@@ -63,9 +51,6 @@ protected:
 	rGraphicsDevice* m_graphicsDevice;
 	ruiManager* m_uiManager;
 	rFileSystem* m_fileSystem;
-
-	rViewportMap m_viewports;
-	rViewport* m_activeViewport;
 
 	bool m_isReady;
 

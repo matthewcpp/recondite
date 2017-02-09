@@ -26,14 +26,12 @@ void rApplicationBase::Update(){
 
 void rApplicationBase::Draw(){
 	m_graphicsDevice->Clear();
-
-	rViewportMap::iterator end = m_viewports.end();
 	
 	//render the scene in each viewport
 	m_graphicsDevice->EnableDepthTesting(true);
-	for (rViewportMap::iterator it = m_viewports.begin(); it != end; ++it){
-		rViewport* viewport = it->second;
-		SetActiveViewport(viewport);
+	for (size_t i = 0; i < m_engine.viewports->NumViewports(); i++) {
+		rViewport* viewport = m_engine.viewports->GetViewport(i);
+		m_engine.viewports->SetActiveViewport(viewport);
 
 		m_engine.renderer->SetModelRenderMode(viewport->RenderMode());
 		rRect window = viewport->GetScreenRect();
@@ -51,8 +49,8 @@ void rApplicationBase::Draw(){
 	}
 
 	//render the document for each viewport
-	for (rViewportMap::iterator it = m_viewports.begin(); it != end; ++it){
-		rViewport* viewport = it->second;
+	for (size_t i = 0; i < m_engine.viewports->NumViewports(); i++) {
+		rViewport* viewport = m_engine.viewports->GetViewport(i);
 
 		rMatrix4 matrixOrtho2D, identity;
 		rRect window = viewport->GetScreenRect();
@@ -66,7 +64,7 @@ void rApplicationBase::Draw(){
 	}
 
 	m_graphicsDevice->SwapBuffers();
-	SetActiveViewport(nullptr);
+	m_engine.viewports->SetActiveViewport(nullptr);
 
 	m_frameCount++;
 }

@@ -8,8 +8,6 @@ public:
 
 public:
 	virtual void Init(const rArrayString& args);
-	virtual void LoadScene(const rString& sceneName) override;
-	virtual void DeleteActor(rActor3* actor) override;
 
 private:
 	void CreatePrimitives();

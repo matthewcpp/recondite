@@ -15,7 +15,7 @@ reScaleTool::~reScaleTool() {
 bool reScaleTool::OnMouseDown(wxMouseEvent& event, rwxGLCanvas* canvas) {
 	reToolBase::OnMouseDown(event, canvas);
 
-	m_component->SetActiveViewport(canvas->GetViewport());
+	m_component->GetEngine()->viewports->SetActiveViewport(canvas->GetViewport());
 	m_gizmo->Update();
 
 	rRay3 selectionRay = GetSelectionRay(event, canvas);
@@ -50,7 +50,7 @@ bool reScaleTool::OnMouseDown(wxMouseEvent& event, rwxGLCanvas* canvas) {
 bool reScaleTool::OnMouseMotion(wxMouseEvent& event, rwxGLCanvas* canvas) {
 	reToolBase::OnMouseMotion(event, canvas);
 
-	m_component->SetActiveViewport(canvas->GetViewport());
+	m_component->GetEngine()->viewports->SetActiveViewport(canvas->GetViewport());
 
 	if (m_selectedAxis == reGizmoAxis::NONE) {
 		return false;
@@ -150,7 +150,7 @@ void reScaleTool::SetDragPlane(const rRay3& selectionRay) {
 	rVector3 gizmoPosition = m_gizmo->GetPosition();
 
 	if (m_selectedAxis == reGizmoAxis::ALL){
-		recondite::Camera* camera = m_component->GetEngine()->component->GetActiveViewport()->Camera();
+		recondite::Camera* camera = m_component->GetEngine()->viewports->GetActiveViewport()->Camera();
 		rVector3 direction = camera->GetPosition() - gizmoPosition;
 		direction.Normalize();
 		m_dragPlane.SetFromPointAndNormal(gizmoPosition, direction);

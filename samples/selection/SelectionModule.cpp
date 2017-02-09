@@ -6,13 +6,13 @@
 #include <random>
 
 SelectionModule::SelectionModule(rEngine* engine)
-	:recondite::Module("Selection Example")
+	:recondite::Module(engine, "Selection Example")
 {
 	_engine = engine;
 }
 
 void SelectionModule::Init(const rArrayString& args) {
-	rViewport* viewport = _engine->component->CreateViewport("main");
+	rViewport* viewport = _engine->viewports->CreateViewport("main");
 	Camera* camera = new recondite::Camera();
 	camera->SetPosition(0.0f, 18.0f, 35.0f);
 	camera->SetTarget(rVector3::ZeroVector);
@@ -21,14 +21,6 @@ void SelectionModule::Init(const rArrayString& args) {
 	viewport->SetCamera(camera);
 	
 	CreatePrimitives();
-}
-
-void SelectionModule::LoadScene(const rString& sceneName) {
-
-}
-
-void SelectionModule::DeleteActor(rActor3* actor) {
-	delete actor;
 }
 
 void SelectionModule::CreatePrimitives() {

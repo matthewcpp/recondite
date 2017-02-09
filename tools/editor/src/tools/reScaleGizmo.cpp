@@ -51,7 +51,7 @@ void reScaleGizmoHandle::Draw() {
 void reScaleGizmoHandle::UpdateScale() {
 	rVector3 updatedScale = rVector3::OneVector;
 
-	rViewport* activeViewport = m_engine->component->GetActiveViewport();
+	rViewport* activeViewport = m_engine->viewports->GetActiveViewport();
 
 	if (activeViewport) {
 		float distance = _anchor.Distance(activeViewport->Camera()->GetPosition());

@@ -6,12 +6,6 @@
 
 rComponent::rComponent(){
 	m_isReady = false;
-
-	m_scene = new rScene(&m_engine);
-	m_engine.actors = &m_actorFactory;
-	m_engine.scene = m_scene;
-
-	InitDefaultActorClasses();
 }
 
 bool rComponent::Init(){
@@ -25,16 +19,16 @@ void rComponent::Uninit(){
 }
 
 void rComponent::LoadScene(const rString& name){
-	auto assetStream = m_engine.content->FileSystem()->GetReadFileRef(name + ".assets");
+	auto assetStream = m_engine->content->FileSystem()->GetReadFileRef(name + ".assets");
 	if (assetStream) {
 		recondite::AssetManifest assetManifest;
 		int error = assetManifest.Read(*assetStream);
 		if (!error) {
-			m_engine.content->LoadFromManifest(assetManifest);
+			m_engine->content->LoadFromManifest(assetManifest);
 		}
 	}
 
-	auto levelStream = m_engine.content->FileSystem()->GetReadFileRef(name);
+	auto levelStream = m_engine->content->FileSystem()->GetReadFileRef(name);
 
 	if (levelStream){
 		rXMLDocument doc;
@@ -42,7 +36,7 @@ void rComponent::LoadScene(const rString& name){
 
 		rXMLElement* element = doc.GetRoot();
 		rXMLSerializationSource* source = new rXMLSerializationSource(element);
-		m_scene->Load(source);
+		((rScene*)m_engine->scene)->Load(source);
 		delete source;
 	}
 }
@@ -52,7 +46,7 @@ bool rComponent::SaveScene(const rString& path){
 }
 
 void rComponent::ClearScene(){
-	m_scene->Clear();
+	((rScene*)m_engine->scene)->Clear();
 }
 
 bool rComponent::SaveSceneXML(const rString& path){
@@ -60,7 +54,7 @@ bool rComponent::SaveSceneXML(const rString& path){
 	rXMLElement* element = doc.CreateRoot("level");
 
 	riSerializationTarget* target = new rXMLSerializationTarget(element);
-	m_scene->Save(target);
+	((rScene*)m_engine->scene)->Save(target);
 
 	rOFileStream fileStream(path);
 	doc.WriteToStream(fileStream);
@@ -70,20 +64,9 @@ bool rComponent::SaveSceneXML(const rString& path){
 }
 
 void rComponent::InitEngine(rGraphicsDevice* graphics, rContentManager* content, rInputManager* input, rFileSystem* fileSystem){
+	m_engine = new rEngine(graphics, content, input, fileSystem);
+	InitDefaultActorClasses();
 	m_graphicsDevice = graphics;
-
-	m_uiManager = new ruiManager(&m_engine);
-	input->SetUIManager(m_uiManager);
-	m_engine.ui = m_uiManager;
-
-	m_engine.viewports = new recondite::ViewportManager();
-
-	m_engine.content = content;
-	m_engine.input = input;
-	m_engine.renderer = new rRenderer(graphics, content);
-	m_engine.time.Start(GetTimeMiliseconds());
-
-	m_engine.scene = m_scene;
 
 	m_fileSystem = fileSystem;
 
@@ -94,7 +77,7 @@ bool rComponent::LoadDefaultResources() {
 	m_graphicsDevice->Init();
 
 	rString defaultAssetPath = GetBasePath() + "default/";
-	return m_engine.content->InitDefaultAssets(defaultAssetPath);
+	return m_engine->content->InitDefaultAssets(defaultAssetPath);
 }
 
 bool rComponent::IsReady() const{
@@ -102,15 +85,11 @@ bool rComponent::IsReady() const{
 }
 
 rEngine* rComponent::GetEngine(){
-	return &m_engine;
+	return m_engine;
 }
 
-rScene* rComponent::GetScene(){
-	return m_scene;
-}
-
-void rComponent::AddActorClass(const rString& name, rActorFactory::ActorFunction func){
-	m_actorFactory.AddActorClass(name, func);
+rScene* rComponent::GetScene() {
+	return (rScene*)m_engine->scene;
 }
 
 //TODO: find a better place to put this?
@@ -122,32 +101,32 @@ void rComponent::AddActorClass(const rString& name, rActorFactory::ActorFunction
 #include "rProp.hpp"
 
 void rComponent::InitDefaultActorClasses(){
-	m_actorFactory.AddActorClass("PrimitiveBox",
+	m_engine->actors->AddActorClass("PrimitiveBox",
 		[](rEngine* engine, const rString& id)->rActor3*{
 		return new rPrimitiveBox(id, engine);
 	});
 
-	m_actorFactory.AddActorClass("PrimitiveGrid",
+	m_engine->actors->AddActorClass("PrimitiveGrid",
 		[](rEngine* engine, const rString& id)->rActor3*{
 		return new rPrimitiveGrid(id, engine);
 	});
 
-	m_actorFactory.AddActorClass("PrimitiveCone",
+	m_engine->actors->AddActorClass("PrimitiveCone",
 		[](rEngine* engine, const rString& id)->rActor3*{
 		return new rPrimitiveCone(id, engine);
 	});
 
-	m_actorFactory.AddActorClass("PrimitiveCylinder",
+	m_engine->actors->AddActorClass("PrimitiveCylinder",
 		[](rEngine* engine, const rString& id)->rActor3*{
 		return new rPrimitiveCylinder(id, engine);
 	});
 
-	m_actorFactory.AddActorClass("PrimitiveSphere",
+	m_engine->actors->AddActorClass("PrimitiveSphere",
 		[](rEngine* engine, const rString& id)->rActor3*{
 		return new rPrimitiveSphere(id, engine);
 	});
 
-	m_actorFactory.AddActorClass("Prop",
+	m_engine->actors->AddActorClass("Prop",
 		[](rEngine* engine, const rString& id)->rActor3* {
 		return new rProp(id, engine);
 	});

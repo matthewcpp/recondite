@@ -35,9 +35,6 @@ public:
 
 	virtual rString GetBasePath() = 0;
 
-public:
-	virtual void AddActorClass(const rString& name, rActorFactory::ActorFunction func);
-
 protected:
 	virtual void InitEngine(rGraphicsDevice* graphics, rContentManager* content, rInputManager* input, rFileSystem* fileSystem);
 	virtual void InitDefaultActorClasses();
@@ -45,17 +42,12 @@ protected:
 
 protected:
 
-	rEngine m_engine;
-	rScene* m_scene;
+	rEngine* m_engine;
 
 	rGraphicsDevice* m_graphicsDevice;
-	ruiManager* m_uiManager;
 	rFileSystem* m_fileSystem;
 
 	bool m_isReady;
-
-private:
-	rActorFactory m_actorFactory;
 };
 
 #endif

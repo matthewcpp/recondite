@@ -14,8 +14,12 @@
 #include "interface/riScene.hpp"
 
 class ruiIManager;
+class rInputManager;
 
 class rEngine{
+public:
+	rEngine(rGraphicsDevice* graphicsEngine, rContentManager* contentManager, rInputManager* inputManager, rFileSystem* fileSystem);
+
 public:
 	rContentManager* content;
 	rActorFactory* actors;
@@ -25,6 +29,10 @@ public:
 	riScene* scene;
 	ruiIManager* ui;
 	recondite::ViewportManager* viewports;
+
+private:
+	rGraphicsDevice* _graphicsEngine;
+	rFileSystem* _fileSystem;
 };
 
 #endif

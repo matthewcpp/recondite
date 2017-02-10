@@ -1,13 +1,8 @@
 #include "reComponent.hpp"
 
 reComponent::reComponent(){
-	m_project.reset(new reProject(this));
-	m_resourceManager.reset(new reProjectResourceManager(m_project.get()));
-	SetResourceManager(m_resourceManager.get());
-	m_selectionManager.reset(new reSelectionManager(this));
-	m_viewportManager = nullptr;
-
 	m_config.reset(new wxFileConfig("recondite_editor"));
+	m_viewportManager = nullptr;
 }
 
 reSelectionManager* reComponent::SelectionManager(){
@@ -68,9 +63,15 @@ void reComponent::InitCommandProcessor(wxMenu* editMenu){
 }
 
 bool reComponent::Init(){
-	bool result = rwxComponent::Init();
+	m_project.reset(new reProject(this));
+	m_resourceManager.reset(new reProjectResourceManager(m_project.get()));
+	SetResourceManager(m_resourceManager.get());
 
-	m_project->Assets()->Init();
+	bool result = rwxComponent::Init();
+	if (result) {
+		m_selectionManager.reset(new reSelectionManager(this));
+		m_project->Assets()->Init();
+	}
 
 	return result;
 }

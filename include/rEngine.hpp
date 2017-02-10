@@ -10,6 +10,7 @@
 #include "rInput.hpp"
 #include "rActorFactory.hpp"
 #include "rViewportManager.hpp"
+#include "rBehaviorManager.hpp"
 
 #include "interface/riScene.hpp"
 
@@ -29,6 +30,7 @@ public:
 	riScene* scene;
 	ruiIManager* ui;
 	recondite::ViewportManager* viewports;
+	recondite::BehaviorManager* behaviors;
 
 private:
 	rGraphicsDevice* _graphicsEngine;

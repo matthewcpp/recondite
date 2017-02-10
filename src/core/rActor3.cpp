@@ -176,6 +176,14 @@ bool rActor3::Save(riSerializationTarget* target){
         
 	classTarget->String("class", className);
 	classTarget->String("id", id);
+
+	rString behaviorClass;
+
+	if (m_behavior) {
+		behaviorClass = m_engine->behaviors->GetClassName(m_behavior.get());
+	}
+
+	target->String("behaviorClass", behaviorClass);
 	
 	bool result = DoSerialize(classTarget, rSerializeAction::Save);
 
@@ -187,6 +195,17 @@ bool rActor3::Save(riSerializationTarget* target){
 void rActor3::OnSave(){ }
 
 bool rActor3::Load(riSerializationTarget* target){
+	rString behaviorClass;
+	target->String("behaviorClass", behaviorClass);
+
+	if (!behaviorClass.empty()) {
+		bool created = CreateBehavior(behaviorClass);
+
+		if (!created) {
+			ClearBehavior();
+		}
+	}
+
 	bool result =  DoSerialize(target, rSerializeAction::Load);
 
 	OnLoad();
@@ -255,4 +274,26 @@ bool rActor3::ShouldPersist() const {
 
 void rActor3::SetShouldPersist(bool shouldPersist) {
 	m_persist = shouldPersist;
+}
+
+bool rActor3::CreateBehavior(const rString& className) {
+	recondite::Behavior* behavior = m_engine->behaviors->CreateBehavior(className);
+
+	if (behavior) {
+		behavior->Init(m_engine, Id());
+		m_behavior.reset(behavior);
+		return true;
+	}
+
+	return false;
+}
+
+void rActor3::ClearBehavior() {
+	m_behavior.reset();
+}
+
+void rActor3::Update() {
+	if (m_behavior) {
+		m_behavior->Update();
+	}
 }

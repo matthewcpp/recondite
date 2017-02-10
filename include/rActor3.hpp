@@ -7,6 +7,7 @@
 #include "rVector3.hpp"
 #include "rQuaternion.hpp"
 #include "rObject.hpp"
+#include "rBehavior.hpp"
 
 #include "rEngine.hpp"
 
@@ -25,6 +26,7 @@ public:
 	rActor3(const rString& id, rEngine* engine);
 
 	virtual void Draw();
+	virtual void Update();
 
 	virtual void SetPosition(const rVector3& position);
 	virtual void SetPosition(float x, float y, float z);
@@ -65,6 +67,11 @@ public:
 	virtual bool GetAsset(size_t index, rAssetType& assetType, rString& name) const = 0;
 	virtual bool ShouldPersist() const;
 	virtual void SetShouldPersist(bool shouldPersist);
+
+public:
+	bool CreateBehavior(const rString& className);
+	void ClearBehavior();
+
 public:
 	virtual bool Save(riSerializationTarget* target) final;
 	virtual bool Load(riSerializationTarget* target) final;
@@ -91,6 +98,7 @@ protected:
 	rRenderingOptions m_renderingOptions;
 
 	std::unique_ptr<riBoundingVolume> m_boundingVolume;
+	std::unique_ptr<recondite::Behavior> m_behavior;
 
 private:
 

@@ -16,6 +16,8 @@
 
 #include <wx/clntdata.h>
 
+class reComponent;
+
 //Base -> calculate display names
 
 class rePropertyInterfaceBase : public riSerializationTarget{
@@ -29,7 +31,7 @@ public:
 
 class rePropertyReader : public rePropertyInterfaceBase{
 public:
-	rePropertyReader(wxPropertyGrid* grid);
+	rePropertyReader(reComponent* component, wxPropertyGrid* grid);
 
 public:
 	void Read(rActor3* actor);
@@ -50,6 +52,7 @@ private:
 
 private:
 	wxPropertyGrid* m_grid;
+	reComponent* m_component;
 };
 
 //Updater Updates a property grid

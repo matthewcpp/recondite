@@ -53,7 +53,7 @@ void rePropertyInspector::OnPropertyValueChanged(wxPropertyGridEvent& event){
 		anyVal = c;
 	}
 	else if (propertyType == "int" || propertyType == "float" || propertyType == "string" || propertyType == "bool"){
-		anyVal = property->GetValue();
+		anyVal = property->GetValueAsString();
 	}
 
 	m_component->SubmitCommand(new reSetPropertyCommand(m_actorName, propertyName, anyVal, m_component));
@@ -67,7 +67,7 @@ void rePropertyInspector::Inspect(const wxString& actorName){
 	
 	if (actor){
 		m_actorName = actorName;
-		rePropertyReader reader(this);
+		rePropertyReader reader(m_component, this);
 		reader.Read(actor);
 	}
 

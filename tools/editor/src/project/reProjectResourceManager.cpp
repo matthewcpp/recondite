@@ -1,11 +1,15 @@
 #include "reProjectResourceManager.hpp"
 
-reProjectResourceManager::reProjectResourceManager(reProject* project) {
+reProjectResourceManager::reProjectResourceManager() {
+	_project = nullptr;
+}
+
+void reProjectResourceManager::SetProject(reProject* project) {
 	_project = project;
 }
 
 rIStream* reProjectResourceManager::Open(const rString& handle) {
-	if (!_project->IsOpen()) return nullptr;
+	if (_project == nullptr || !_project->IsOpen()) return nullptr;
 
 	wxFileName resourcePath(_project->Assets()->GetDirectoryPath() + handle.c_str());
 

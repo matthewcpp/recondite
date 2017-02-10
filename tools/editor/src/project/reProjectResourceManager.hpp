@@ -9,7 +9,10 @@
 
 class reProjectResourceManager : public recondite::iResourceManager {
 public:
-	reProjectResourceManager(reProject* project);
+	reProjectResourceManager();
+
+public:
+	void SetProject(reProject* project);
 
 	virtual rIStream* Open(const rString& handle) override;
 	virtual bool Close(rIStream* stream) override;

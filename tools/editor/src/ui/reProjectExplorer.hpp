@@ -28,9 +28,12 @@ private:
 private:
 	enum reProjectExplorerId{
 		reProjectExplorerRenameLevel = 6000,
-		reProjectExplorerDeleteLevel
+		reProjectExplorerDeleteLevel,
+
+		reProjectExplorerNewBehavior
 	};
 
+	void NewBehaviorContextMenu();
 	void LevelContextMenu(wxDataViewItem target);
 	void RenameLevel(wxDataViewItem target);
 	void DeleteLevel(wxDataViewItem target);
@@ -43,6 +46,7 @@ private:
 	wxDataViewItem m_projectRoot;
 	wxDataViewItem m_levelsRoot;
 	wxDataViewItem m_modelsRoot;
+	wxDataViewItem m_behaviorRoot;
 };
 
 #endif

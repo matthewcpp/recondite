@@ -1,5 +1,7 @@
 #include "rePropertyInterface.hpp"
 
+#include "project/reComponent.hpp"
+
 //rePropertyInterfaceBase
 
 riSerializationTarget* rePropertyInterfaceBase::SubObject(const rString& name) {
@@ -85,8 +87,9 @@ rePropertyUpdater::rePropertyUpdater(wxPropertyGrid* grid){
 
 //rePropertyReader
 
-rePropertyReader::rePropertyReader(wxPropertyGrid* grid){
+rePropertyReader::rePropertyReader(reComponent* component, wxPropertyGrid* grid){
 	m_grid = grid;
+	m_component = component;
 }
 
 void rePropertyReader::Read(rActor3* actor){
@@ -141,7 +144,32 @@ bool rePropertyReader::String(const rString& name, rString& val) {
 	wxString wxName = name.c_str();
 	wxString displayName = DisplayName(wxName);
 	wxString wxValString = val.c_str();
-	wxStringProperty* property = new wxStringProperty(displayName, wxName, wxValString);
+
+	wxPGProperty* property;
+	if (name == "behaviorClass") {
+		const wxArrayString& classes = m_component->GetProject()->Code()->GetBehaviorClasses();
+		int index = classes.Index(wxValString);
+
+		wxPGChoices choices;
+		choices.Add("<None>", 0);
+		
+		for (size_t i = 0; i < classes.size(); i++) {
+			choices.Add(classes[i], i + 1);
+		}
+
+		wxEnumProperty* enumProperty = new wxEnumProperty(displayName, wxName, choices);
+		if (index == wxNOT_FOUND) {
+			enumProperty->SetChoiceSelection(0);
+		}
+		else {
+			enumProperty->SetChoiceSelection(index + 1);
+		}
+
+		property = enumProperty;
+	}
+	else {
+		property = new wxStringProperty(displayName, wxName, wxValString);
+	}
 
 	wxString propertyInfo = wxString::Format("string:%s", name.c_str());
 	property->SetClientObject(new wxStringClientData(propertyInfo));
@@ -250,7 +278,16 @@ bool rePropertyWriter::Float(const rString& name, float& val){
 }
 
 bool rePropertyWriter::String(const rString& name, rString& val){
-	return DoGetValue<rString>(name, val);
+	wxString wx_string;
+	bool result = DoGetValue<wxString>(name, wx_string);
+
+	if (result) {
+		val = wx_string.c_str().AsChar();
+		return true;
+	}
+	else {
+		return false;
+	}
 }
 
 bool rePropertyWriter::Vector3(const rString& name, rVector3& val){

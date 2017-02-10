@@ -63,12 +63,16 @@ void reComponent::InitCommandProcessor(wxMenu* editMenu){
 }
 
 bool reComponent::Init(){
-	m_project.reset(new reProject(this));
-	m_resourceManager.reset(new reProjectResourceManager(m_project.get()));
+	m_resourceManager.reset(new reProjectResourceManager());
 	SetResourceManager(m_resourceManager.get());
 
 	bool result = rwxComponent::Init();
+
 	if (result) {
+		m_project.reset(new reProject(this));
+		m_resourceManager->SetProject(m_project.get());
+
+		
 		m_selectionManager.reset(new reSelectionManager(this));
 		m_project->Assets()->Init();
 	}

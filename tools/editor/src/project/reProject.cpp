@@ -11,7 +11,7 @@
 reProject::reProject(rwxComponent* component){
 	m_component = component;
 	m_assets.reset(new reProjectAssets(m_component));
-	m_code.reset(new reProjectCode());
+	m_code.reset(new reProjectCode(m_component->GetEngine()));
 }
 
 void reProject::Create(const wxString& directory, const wxString& name){
@@ -54,7 +54,7 @@ bool reProject::Open(const wxString& path){
 	}
 
 	m_assets->Load(document);
-	m_code->CreateProject(m_name);
+	m_code->Load(document);
 
 	return true;
 }
@@ -79,6 +79,7 @@ void reProject::SaveProjectFile(){
 	root->CreateChild("name", m_name.c_str().AsChar());
 
 	m_assets->Save(document);
+	m_code->Save(document);
 
 	rXMLElement* levels = root->CreateChild("levels");
 	for (auto& levelname : m_levels) {

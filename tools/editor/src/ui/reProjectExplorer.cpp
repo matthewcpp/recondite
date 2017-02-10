@@ -18,6 +18,7 @@ void reProjectExplorer::ShowProject(){
 	m_levelsRoot = AppendContainer(m_projectRoot, "Levels");
 	wxDataViewItem assetContainer = AppendContainer(m_projectRoot, "Assets");
 	m_modelsRoot = AppendContainer(assetContainer, "Models");
+	m_behaviorRoot = AppendContainer(m_projectRoot, "Behaviors");
 
 	Expand(m_projectRoot);
 
@@ -25,6 +26,12 @@ void reProjectExplorer::ShowProject(){
 
 	for (auto& level : levels){
 		AppendItem(m_levelsRoot, level);
+	}
+
+	const wxArrayString& behaviors = m_component->GetProject()->Code()->GetBehaviorClasses();
+
+	for (auto& behavior : behaviors) {
+		AppendItem(m_behaviorRoot, behavior);
 	}
 
 	ShowAssets(rAssetType::Model, m_modelsRoot);
@@ -61,8 +68,34 @@ void reProjectExplorer::OnContext(wxDataViewEvent& event){
 	wxDataViewItem target = event.GetItem();
 	wxDataViewItem parent = GetModel()->GetParent(target);
 
-	if (parent == m_levelsRoot){
+	if (target == m_behaviorRoot) {
+		NewBehaviorContextMenu();
+	}
+	else if (parent == m_levelsRoot){
 		LevelContextMenu(target);
+	}
+}
+
+void reProjectExplorer::NewBehaviorContextMenu() {
+	wxMenu behaviorContextMenu;
+	behaviorContextMenu.Append(reProjectExplorerNewBehavior, "New Behavior...");
+
+	int selection = GetPopupMenuSelectionFromUser(behaviorContextMenu);
+
+	if (selection == reProjectExplorerNewBehavior) {
+		wxTextEntryDialog dialog(nullptr, "New Behavior Name:", "New Behavior", wxEmptyString);
+
+		if (dialog.ShowModal() == wxID_OK) {
+			wxString behaviorName = dialog.GetValue();
+
+			if (!m_component->GetProject()->Code()->CreateBehavior(behaviorName)) {
+				wxMessageBox("A behavior with that name already exists.");
+			}
+			else {
+				AppendItem(m_behaviorRoot, behaviorName);
+				m_component->GetProject()->SaveProjectFile();
+			}
+		}
 	}
 }
 

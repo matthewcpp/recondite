@@ -9,6 +9,8 @@ rPawn::rPawn(recondite::Model* model, const rString& id , rEngine* engine)
 }
 
 void rPawn::Update(){
+	rActor3::Update();
+
 	m_animationController.Update(m_engine->time);
 }
 

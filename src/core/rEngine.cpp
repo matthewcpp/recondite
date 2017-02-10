@@ -17,4 +17,5 @@ rEngine::rEngine(rGraphicsDevice* graphicsEngine, rContentManager* contentManage
 	ui = uiManager;
 	inputManager->SetUIManager(uiManager);
 	viewports = new recondite::ViewportManager();
+	behaviors = new recondite::BehaviorManager();
 }

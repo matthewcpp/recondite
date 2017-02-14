@@ -1,7 +1,12 @@
 #include "reProjectCode.hpp"
 
+#include "reUtils.hpp"
+
 #include <wx/ffile.h>
 #include <wx/filefn.h>
+#include <wx/wfstream.h>
+#include <wx/txtstrm.h>
+#include <wx/sstream.h>
 
 reProjectCode::reProjectCode(rEngine* engine) {
 	_engine = engine;
@@ -22,58 +27,41 @@ void reProjectCode::EnsureAssetDir(const wxString& dirName) {
 	}
 }
 
-void reProjectCode::CopyTemplate(const wxString& templateName, const wxString& dir) {
-	wxFileName dest(m_codeDir);
-
-	if (!dir.empty()) {
-		dest.AppendDir(dir);
-
-		if (!dest.Exists()) {
-			wxMkDir(dest.GetPath(), wxS_DIR_DEFAULT);
-		}
-	}
-
-	dest.SetFullName(templateName);
-	wxCopyFile("templates/" + templateName, dest.GetFullPath());
-}
-
 void reProjectCode::CreateProject(const wxString& projectName) {
-	CopyTemplate("Game.Private.hpp");
-	CopyTemplate("Game.Private.cpp");
-	CopyTemplate("Game.inl");
-	FillTemplate("Application.cpp", "__GAME_NAME__", projectName);
+	bool result = reUtils::RecursiveCopy("assets/project_template", m_codeDir.GetFullPath());
+	_projectName = projectName;
 
-	FillTemplate("CMakeLists.txt", "__GAME_NAME__", projectName);
-	CopyTemplate("Game.inl", "cmake");
+	GenerateGameBaseFile();
+	GenerateBehaviorsCmakeList();
+
+	reUtils::ReplaceInFile(m_codeDir.GetPathWithSep() + "CMakeLists.txt", "__GAME_NAME__", _projectName);
+	reUtils::ReplaceInFile(m_codeDir.GetPathWithSep() + "src/CMakeLists.txt", "__GAME_NAME__", _projectName);
+	reUtils::ReplaceInFile(m_codeDir.GetPathWithSep() + "src/Private/CMakeLists.txt", "__GAME_NAME__", _projectName);
 }
 
-bool reProjectCode::FillTemplate(const wxString& templateName, const wxString& search, const wxString& replace) {
-	wxString templateSrc = "templates/" + templateName;
-	wxFFile templateFile(templateSrc);
-
-	wxString str;
-	templateFile.ReadAll(&str);
-
-	str.Replace(search, replace);
-
-	wxFileName dest(m_codeDir);
-	dest.SetFullName(templateName);
-
-	wxFFile destFile(dest.GetFullPath(), "w");
-	destFile.Write(str);
-
-	return true;
-}
 
 recondite::Behavior* CreateEditorBehavior() {
 	return new recondite::Behavior();
 }
 
-bool reProjectCode::CreateBehavior(const wxString& className) {
+bool reProjectCode::CreateBehavior(const wxString& className, bool regenerateFiles) {
 	bool result = _engine->behaviors->DefineBehavior(className.c_str().AsChar(), &CreateEditorBehavior);
 
 	if (result) {
 		_behaviors.push_back(className);
+
+		wxFileName srcFile("assets/code_templates/Behavior.hpp");
+		wxFileName destFile(m_codeDir.GetPathWithSep() + "src/Behaviors/" + className + ".hpp");
+		reUtils::CopyAndReplaceInFile(srcFile.GetFullPath(), destFile.GetFullPath(), "__NAME__", className);
+
+		srcFile.SetExt("cpp");
+		destFile.SetExt("cpp");
+		reUtils::CopyAndReplaceInFile(srcFile.GetFullPath(), destFile.GetFullPath(), "__NAME__", className);
+
+		if (regenerateFiles) {
+			GenerateGameBaseFile();
+			GenerateBehaviorsCmakeList();
+		}
 	}
 
 	return result;
@@ -98,16 +86,56 @@ void reProjectCode::Load(rXMLDocument& document) {
 	rXMLElement* code = document.GetRoot()->GetFirstChildNamed("code");
 	if (!code) return;
 
+	rString nameStr;
+	rXMLElement* projectNameNode = document.GetRoot()->GetFirstChildNamed("name");
+	projectNameNode->GetText(nameStr);
+	_projectName = nameStr.c_str();
+
 	rXMLElement* behaviors = code->GetFirstChildNamed("behaviors");
 
 	if (behaviors) {
 		for (size_t i = 0; i < behaviors->NumChildren(); i++) {
 			rXMLElement* behavior = behaviors->GetChild(i);
+			behavior->GetText(nameStr);
 
-			rString name;
-			behavior->GetText(name);
-
-			CreateBehavior(name.c_str());
+			CreateBehavior(nameStr.c_str(), false);
 		}
 	}
+}
+
+void reProjectCode::UpdateCodeFiles() {
+	GenerateGameBaseFile();
+}
+
+
+void reProjectCode::GenerateGameBaseFile() {
+	wxStringOutputStream includeData, defineData;
+	wxTextOutputStream includeFileStream(includeData), defineStatementStream(defineData);
+
+	for (size_t i = 0; i < _behaviors.size(); i++) {
+		includeFileStream << "#include \"Behaviors/" << _behaviors[i] << ".hpp\"" <<endl;
+		defineStatementStream << '\t' << "engine->behaviors->DefineBehavior(\"" << _behaviors[i] << "\", &__CreateBehavior<" << _behaviors[i] << ">);" << endl;
+	}
+
+	wxArrayString search, replace;
+	search.push_back("//#<<BEHAVIOR_INCLUDES>>"); replace.push_back(includeData.GetString());
+	search.push_back("//#<<BEHAVIOR_DEFINES>>"); replace.push_back(defineData.GetString());
+
+	reUtils::CopyAndReplaceInFile("assets/code_templates/GameBase.Private.cpp", m_codeDir.GetPathWithSep() + "src/Private/GameBase.Private.cpp", search, replace);
+}
+
+void reProjectCode::GenerateBehaviorsCmakeList() {
+	wxStringOutputStream fileListData;
+	wxTextOutputStream fileListStream(fileListData);
+
+	for (size_t i = 0; i < _behaviors.size(); i++) {
+		fileListStream << "list(APPEND behavior_files ${CMAKE_CURRENT_LIST_DIR}/" << _behaviors[i] << ".hpp)" << endl;
+		fileListStream << "list(APPEND behavior_files ${CMAKE_CURRENT_LIST_DIR}/" << _behaviors[i] << ".cpp)" << endl;
+	}
+
+	wxArrayString search, replace;
+	search.push_back("#<<BEHAVIOR_FILES>>");  replace.push_back(fileListData.GetString());
+	search.push_back("__GAME_NAME__"); replace.push_back(_projectName);
+
+	reUtils::CopyAndReplaceInFile("assets/code_templates/Behaviors.CmakeLists.txt", m_codeDir.GetPathWithSep() + "src/Behaviors/CMakeLists.txt", search, replace);
 }

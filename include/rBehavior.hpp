@@ -13,6 +13,7 @@ namespace recondite {
 	*/
 	class RECONDITE_API Behavior {
 	public:
+		Behavior() :_typeIndex(0) {}
 		virtual ~Behavior() {}
 
 	public:
@@ -38,4 +39,8 @@ namespace recondite {
 
 		uint32_t _typeIndex;
 	};
+
+	inline uint32_t Behavior::GetTypeIndex() const {
+		return _typeIndex;
+	}
 }

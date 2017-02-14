@@ -8,7 +8,6 @@
 
 
 ModelViewerModule::ModelViewerModule(rEngine* engine)
-	:recondite::Module(engine, "Model Viewer")
 {
 	_engine = engine;
 }

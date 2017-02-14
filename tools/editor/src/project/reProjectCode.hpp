@@ -14,8 +14,10 @@ public:
 	void SetBasePath(const wxString& path);
 	void CreateProject(const wxString& projectName);
 
-	bool CreateBehavior(const wxString& className);
+	bool CreateBehavior(const wxString& className, bool regenerateFiles = true);
 	const wxArrayString& GetBehaviorClasses() const;
+
+	void UpdateCodeFiles();
 
 public:
 	void Save(rXMLDocument& document);
@@ -24,10 +26,11 @@ public:
 private:
 	void EnsureAssetDir(const wxString& dirName);
 
-	void CopyTemplate(const wxString& templateName, const wxString& dir = wxEmptyString);
-	bool FillTemplate(const wxString& templateSrc, const wxString& search, const wxString& replace);
+	void GenerateBehaviorsCmakeList();
+	void GenerateGameBaseFile();
 
 private:
+	wxString _projectName;
 	rEngine* _engine;
 	wxFileName m_codeDir;
 

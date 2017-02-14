@@ -54,7 +54,7 @@ bool rApplication::Init(){
 	 LoadDefaultResources();
 	 InitModule();
 
-	 SDL_SetWindowTitle(m_window, m_module->GetModuleName().c_str());
+	 SDL_SetWindowTitle(m_window, "Recondite");
 
 	 return true;
 }

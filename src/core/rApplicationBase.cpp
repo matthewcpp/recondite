@@ -95,6 +95,7 @@ void rApplicationBase::SetTargetFPS(unsigned int targetFPS){
 
 void rApplicationBase::InitModule(){
 	m_module = CreateModule(m_engine);
+	m_module->Register(m_engine);
 	m_module->Init(args);
 }
 

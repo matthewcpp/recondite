@@ -10,7 +10,7 @@ namespace recondite {
 
 		uint32_t typeIndex;
 
-		Impl() : typeIndex(0) {}
+		Impl() : typeIndex(1) {}
 	};
 
 	BehaviorManager::BehaviorManager() {

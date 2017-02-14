@@ -28,6 +28,8 @@ void reProject::Create(const wxString& directory, const wxString& name){
 	wxMkDir(LevelDirPath(), wxS_DIR_DEFAULT);
 
 	SaveProjectFile();
+
+	m_code->CreateProject(m_name);
 }
 
 bool reProject::Open(const wxString& path){

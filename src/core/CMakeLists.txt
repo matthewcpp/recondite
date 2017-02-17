@@ -1,6 +1,7 @@
 set(core_files)
 
 add_rec_src(core_files "rActor3")
+add_rec_src(core_files "rArchive")
 add_rec_src(core_files "rActorFactory")
 add_rec_src(core_files "rAlignedBoxBoundingVolume")
 add_rec_src(core_files "rBehaviorManager")

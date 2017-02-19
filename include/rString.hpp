@@ -17,6 +17,7 @@ public:
 	rString (size_t n, char c): m_str(n,c){}
 	
 	const char* c_str() const;
+	const char* data() const;
 
 	void assign(const char* str, int len);
 	size_t find(const rString& str, size_t pos = 0);

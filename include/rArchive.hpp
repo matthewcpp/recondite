@@ -8,15 +8,21 @@
 
 #include "rFileSystem.hpp"
 
+#include "stream/rArchiveStream.hpp"
+
 namespace recondite {
-	class RECONDITE_API ArchiveWriter {
+	class RECONDITE_API ArchiveData {
 	public:
-		ArchiveWriter();
-		~ArchiveWriter();
+		ArchiveData();
+		~ArchiveData();
 
 	public:
-		bool SetKey(const rString& key, const char* data, size_t dataSize);
-		bool SetKey(const rString& key, const rString& filePath);
+		bool SetKeyFromData(const rString& key, const char* data, size_t dataSize);
+		bool SetKeyFromFilePath(const rString& key, const rString& filePath, size_t fileSize);
+
+		bool HasKey(const rString& key) const;
+
+		size_t GetNumKeys() const;
 
 		void DeleteKey(const rString& key);
 		void Write(rOStream& stream);
@@ -26,44 +32,15 @@ namespace recondite {
 		Impl* _impl;
 	};
 
-	class RECONDITE_API ArchiveEntryStream : public rIStream{
+	class RECONDITE_API Archive {
 	public:
-		ArchiveEntryStream(rIStream* stream, size_t offset, size_t size);
-		~ArchiveEntryStream();
-
-		virtual rIStream& Read(char* buffer, size_t size);
-		virtual size_t ReadCount() const;
-		virtual int Peek();
-		virtual void Seek(size_t pos);
-		virtual void Seek(size_t pos, rSeekMode seekFrom);
-		virtual size_t Pos();
-		virtual bool IsOk() const;
-		virtual rIStream& Get(char& ch);
-
-		virtual rIStream& operator >> (char& c);
-		virtual rIStream& operator >> (unsigned char& c);
-		virtual rIStream& operator >> (short& s);
-		virtual rIStream& operator >> (unsigned short& s);
-		virtual rIStream& operator >> (int& i);
-		virtual rIStream& operator >> (unsigned int& i);
-		virtual rIStream& operator >> (long& l);
-		virtual rIStream& operator >> (unsigned long& l);
-		virtual rIStream& operator >> (float& f);
-
-		virtual operator bool() const;
-
-	private:
-		struct Impl;
-		Impl* _impl;
-	};
-
-	class RECONDITE_API ArchiveReader {
-	public:
-		ArchiveReader(riFileSystem* fileSystem);
-		~ArchiveReader();
+		Archive(riFileSystem* fileSystem);
+		~Archive();
 
 	public:
 		bool LoadFromFilesystem(const rString& path);
+		bool IsOpen() const;
+		void Close();
 
 	public:
 		ArchiveEntryStream* OpenStream(const rString& key);

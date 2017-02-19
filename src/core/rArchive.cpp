@@ -8,6 +8,7 @@
 #include <algorithm>
 
 #include "stream/rIFileStream.hpp"
+#include "stream/rOStringStream.hpp"
 
 namespace recondite {
 	class ArchiveEntry {
@@ -57,34 +58,45 @@ namespace recondite {
 
 #define rARCHIVE_HEADER_MAGIC_NUM 1984
 
-	struct ArchiveWriter::Impl {
+	struct ArchiveData::Impl {
 		std::map < rString, std::unique_ptr<ArchiveEntry>> entries;
 	};
 
-	ArchiveWriter::ArchiveWriter() {
+	ArchiveData::ArchiveData() {
 		_impl = new Impl();
 	}
 
-	ArchiveWriter::~ArchiveWriter() {
+	ArchiveData::~ArchiveData() {
 		delete _impl;
 	}
 
-	bool ArchiveWriter::SetKey(const rString& key, const char* data, size_t dataSize) {
+	bool ArchiveData::SetKeyFromData(const rString& key, const char* data, size_t dataSize) {
 		DataArchiveEntry* entry = new DataArchiveEntry(data, dataSize);
 		_impl->entries.emplace(key, entry);
 
 		return true;
 	}
 
-	bool ArchiveWriter::SetKey(const rString& key, const rString& filePath) {
+	bool ArchiveData::SetKeyFromFilePath(const rString& key, const rString& filePath, size_t fileSize) {
+		FileArchiveEntry* entry = new FileArchiveEntry(filePath, fileSize);
+		_impl->entries.emplace(key, entry);
+
 		return true;
 	}
 
-	void ArchiveWriter::DeleteKey(const rString& key) {
+	void ArchiveData::DeleteKey(const rString& key) {
 		_impl->entries.erase(key);
 	}
 
-	struct ArchiveReader::Impl {
+	bool ArchiveData::HasKey(const rString& key) const {
+		return _impl->entries.count(key) > 0;
+	}
+
+	size_t ArchiveData::GetNumKeys() const {
+		return _impl->entries.size();
+	}
+
+	struct Archive::Impl {
 		std::set<ArchiveEntryStream*> openEntries;
 		riFileSystem* fileSystem;
 		rArchiveHeader header;
@@ -96,20 +108,21 @@ namespace recondite {
 		uint32_t AbsolutePathOffset(uint32_t relativePathOffset);
 	};
 
-	ArchiveReader::ArchiveReader(riFileSystem* fileSystem) {
+	Archive::Archive(riFileSystem* fileSystem) {
 		_impl = new Impl();
 		_impl->fileSystem = fileSystem;
+		_impl->archiveStream = nullptr;
 	}
 
-	ArchiveReader::~ArchiveReader() {
-		_impl->fileSystem->CloseReadFileRef(_impl->archiveStream);
+	Archive::~Archive() {
+		Close();
 		delete _impl;
 	}
 
-	bool ArchiveReader::LoadFromFilesystem(const rString& path) {
+	bool Archive::LoadFromFilesystem(const rString& path) {
 		auto archiveStream =_impl->fileSystem->OpenReadFileRef(path);
 
-		if (archiveStream->IsOk()) {
+		if (archiveStream && archiveStream->IsOk()) {
 			archiveStream->Read((char*)&_impl->header, sizeof(rArchiveHeader));
 
 			if (_impl->header.magicNumber != rARCHIVE_HEADER_MAGIC_NUM) {
@@ -117,25 +130,43 @@ namespace recondite {
 			}
 
 			_impl->fileSystemPath = path;
+			_impl->archiveStream = archiveStream;
 			return true;
 		}
 
 		return false;
 	}
 
-	uint32_t ArchiveReader::Impl::AbsolutePathOffset(uint32_t relativePathOffset) {
+	void Archive::Close() {
+		if (_impl->archiveStream) {
+			_impl->fileSystem->CloseReadFileRef(_impl->archiveStream);
+			_impl->archiveStream = nullptr;
+
+			for (auto openEntry : _impl->openEntries)
+				delete openEntry;
+
+			_impl->openEntries.clear();
+			_impl->fileSystemPath.clear();
+		}
+	}
+
+	bool Archive::IsOpen() const {
+		return _impl->archiveStream != nullptr;
+	}
+
+	uint32_t Archive::Impl::AbsolutePathOffset(uint32_t relativePathOffset) {
 		//header + lookup table + relative offset
 		return sizeof(rArchiveHeader) + (sizeof(PathData) * header.entryCount) + relativePathOffset;
 	}
 
-	void ArchiveReader::Impl::GetEntryInfo(int index, PathData& data) {
+	void Archive::Impl::GetEntryInfo(int index, PathData& data) {
 		uint32_t dataOffset = sizeof(rArchiveHeader) + (index * sizeof(PathData));
 
 		archiveStream->Seek(dataOffset, rSeekMode::Beginning);
 		archiveStream->Read((char*)&data, sizeof(PathData));
 	}
 
-	int ArchiveReader::Impl::BinarySearch(const rString& path, int begin, int end) {
+	int Archive::Impl::BinarySearch(const rString& path, int begin, int end) {
 		int mid = (begin + end) / 2;
 		PathData pathData;
 		GetEntryInfo(mid, pathData);
@@ -146,7 +177,7 @@ namespace recondite {
 
 		rString searchPath(searchPathBuffer.data(), searchPathBuffer.size());
 
-		int result = searchPath.compare(searchPath);
+		int result = path.compare(searchPath);
 
 		if (result == 0)
 			return mid;
@@ -158,23 +189,54 @@ namespace recondite {
 			return BinarySearch(path, mid + 1, end);
 	}
 
-	ArchiveEntryStream* ArchiveReader::OpenStream(const rString& key) {
-		ArchiveEntryStream* result = nullptr;;
-		int index = _impl->BinarySearch(key, 0, _impl->header.entryCount - 1);
+	bool Archive::HasKey(const rString& key) {
+		if (_impl->archiveStream == nullptr)
+			return false;
+		else
+			return _impl->BinarySearch(key, 0, _impl->header.entryCount - 1) != -1;
+	}
 
-		if (index >= 0) {
+	size_t Archive::GetNumKeys() const {
+		return _impl->header.entryCount;
+	}
+
+	bool Archive::GetKeyByIndex(size_t index, rString& key) {
+		if (index >= _impl->header.entryCount) {
+			return false;
+		}
+		else {
 			PathData pathData;
 			_impl->GetEntryInfo(index, pathData);
 
-			rIStream* archiveFile = _impl->fileSystem->OpenReadFileRef(_impl->fileSystemPath);
-			result = new ArchiveEntryStream(archiveFile, pathData.dataOffset, pathData.dataSize);
-			_impl->openEntries.emplace(result);
+			std::vector<char> searchPathBuffer(pathData.pathSize);
+			_impl->archiveStream->Seek(_impl->AbsolutePathOffset(pathData.pathOffset), rSeekMode::Beginning);
+			_impl->archiveStream->Read(searchPathBuffer.data(), pathData.pathSize);
+
+			key.assign(searchPathBuffer.data(), searchPathBuffer.size());
+			return true;
+		}
+	}
+
+	ArchiveEntryStream* Archive::OpenStream(const rString& key) {
+		ArchiveEntryStream* result = nullptr;
+
+		if (IsOpen()) {
+			int index = _impl->BinarySearch(key, 0, _impl->header.entryCount - 1);
+
+			if (index >= 0) {
+				PathData pathData;
+				_impl->GetEntryInfo(index, pathData);
+
+				rIStream* archiveFile = _impl->fileSystem->OpenReadFileRef(_impl->fileSystemPath);
+				result = new ArchiveEntryStream(archiveFile, pathData.dataOffset, pathData.dataSize);
+				_impl->openEntries.emplace(result);
+			}
 		}
 
 		return result;
 	}
 
-	bool ArchiveReader::CloseStream(ArchiveEntryStream* stream) {
+	bool Archive::CloseStream(ArchiveEntryStream* stream) {
 		auto result = _impl->openEntries.find(stream);
 
 		if (result != _impl->openEntries.end()) {
@@ -188,7 +250,7 @@ namespace recondite {
 		}
 	}
 
-	void ArchiveWriter::Write(rOStream& stream) {
+	void ArchiveData::Write(rOStream& stream) {
 		//gather all paths in the archive
 		std::vector<rString> keys;
 		for (auto const& element : _impl->entries)
@@ -216,22 +278,32 @@ namespace recondite {
 		header.entryCount = keys.size();
 		header.keyDataSize = pathOffset;
 
+		rOStringStream& stringstream = (rOStringStream&)stream;
+
 		//write header
 		uint32_t dataCount = keys.size();
 		stream.Write((const char*)&header, sizeof(rArchiveHeader));
 
+		size_t strsize = stringstream.Str().size();
+
 		//write lookup table
 		stream.Write((const char*)pathDataVector.data(), sizeof(PathData) * pathDataVector.size());
+
+		strsize = stringstream.Str().size();
 
 		//write key data
 		for (size_t i = 0; i < keys.size(); i++) {
 			stream.Write(keys[i].c_str(), keys[i].size());
 		}
 
+		strsize = stringstream.Str().size();
+
 		//write archive data
 		for (size_t i = 0; i < keys.size(); i++) {
 			_impl->entries[keys[i]]->WriteData(stream);
 		}
+
+		strsize = stringstream.Str().size();
 	}
 
 	DataArchiveEntry::DataArchiveEntry(const char* data, size_t dataSize) {
@@ -275,138 +347,4 @@ namespace recondite {
 			} while (bytesRead < _size);
 		}
 	}
-
-	struct ArchiveEntryStream::Impl{
-		rIStream* stream;
-		size_t offset;
-		size_t size;
-
-		Impl(rIStream* _stream, size_t _offset, size_t _size) : 
-			stream(_stream), offset(_offset), size(_size) {}
-	};
-
-	ArchiveEntryStream::ArchiveEntryStream(rIStream* stream, size_t offset, size_t size) {
-		_impl = new Impl(stream, offset, size);
-		
-		_impl->stream->Seek(offset, rSeekMode::Beginning);
-	}
-
-	ArchiveEntryStream::~ArchiveEntryStream() {
-		delete _impl->stream;
-		delete _impl;
-	}
-
-	rIStream& ArchiveEntryStream::Read(char* buffer, size_t size) {
-		size_t currentPos = _impl->stream->Pos();
-		size_t numBytes = std::min(size, _impl->offset);
-		
-		size_t newPos = currentPos + numBytes;
-		size_t maxPos = _impl->offset + _impl->size;
-		if (newPos > maxPos)
-			numBytes -= newPos - maxPos;
-
-		_impl->stream->Read(buffer, numBytes);
-
-		return *this;
-	}
-
-	size_t ArchiveEntryStream::ReadCount() const{
-		return _impl->stream->ReadCount();
-	}
-
-	int ArchiveEntryStream::Peek() {
-		return _impl->stream->Peek();
-	}
-
-	void ArchiveEntryStream::Seek(size_t pos) {
-		return Seek(pos, rSeekMode::Beginning);
-	}
-
-	void ArchiveEntryStream::Seek(size_t pos, rSeekMode seekFrom) {
-		switch (seekFrom){
-			case rSeekMode::Beginning:
-				pos = _impl->offset + pos;
-				break;
-
-			case rSeekMode::Current:
-				pos = _impl->stream->Pos() + pos;
-				break;
-
-			case rSeekMode::End:
-				pos = _impl->offset + _impl->size - pos;
-				break;
-		}
-
-		pos = std::max(pos, _impl->offset);
-		pos = std::min(pos, _impl->offset + _impl->size);
-
-		_impl->stream->Seek(pos);
-	}
-
-	size_t ArchiveEntryStream::Pos() {
-		return _impl->stream->Pos() - _impl->offset;
-	}
-
-	bool ArchiveEntryStream::IsOk() const {
-		return _impl->stream->IsOk();
-	}
-
-	rIStream& ArchiveEntryStream::Get(char& ch) {
-		if (_impl->stream->Pos() >= _impl->offset + _impl->size)
-			ch = -1;
-		else
-			_impl->stream->Get(ch);
-
-		return *this;
-	}
-
-	rIStream& ArchiveEntryStream::operator >> (char& c) {
-		*_impl->stream >> c;
-		return *this;
-	}
-
-	rIStream& ArchiveEntryStream::operator >> (unsigned char& c) {
-		*_impl->stream >> c;
-		return *this;
-	}
-
-	rIStream& ArchiveEntryStream::operator >> (short& s) {
-		*_impl->stream >> s;
-		return *this;
-	}
-
-	rIStream& ArchiveEntryStream::operator >> (unsigned short& s) {
-		*_impl->stream >> s;
-		return *this;
-	}
-
-	rIStream& ArchiveEntryStream::operator >> (int& i) {
-		*_impl->stream >> i;
-		return *this;
-	}
-
-	rIStream& ArchiveEntryStream::operator >> (unsigned int& i) {
-		*_impl->stream >> i;
-		return *this;
-	}
-
-	rIStream& ArchiveEntryStream::operator >> (long& l) {
-		*_impl->stream >> l;
-		return *this;
-	}
-
-	rIStream& ArchiveEntryStream::operator >> (unsigned long& l) {
-		*_impl->stream >> l;
-		return *this;
-	}
-
-	rIStream& ArchiveEntryStream::operator >> (float& f) {
-		*_impl->stream >> f;
-		return *this;
-	}
-
-	ArchiveEntryStream::operator bool() const {
-		return _impl->stream->IsOk();
-	}
-
 }

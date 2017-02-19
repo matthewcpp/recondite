@@ -10,6 +10,7 @@ list(APPEND core_test_files ${CMAKE_CURRENT_SOURCE_DIR}/rColor_Test.cpp)
 list(APPEND core_test_files ${CMAKE_CURRENT_SOURCE_DIR}/rPath_Test.cpp)
 list(APPEND core_test_files ${CMAKE_CURRENT_SOURCE_DIR}/rViewport_Test.cpp)
 list(APPEND core_test_files ${CMAKE_CURRENT_SOURCE_DIR}/rOctree_Test.cpp)
+list(APPEND core_test_files ${CMAKE_CURRENT_SOURCE_DIR}/rArchiveData_Test.cpp)
 list(APPEND core_test_files ${CMAKE_CURRENT_SOURCE_DIR}/rArchive_Test.cpp)
 
 set(recondite_tests ${recondite_tests} ${core_test_files} PARENT_SCOPE)

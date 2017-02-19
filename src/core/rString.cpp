@@ -8,6 +8,10 @@ const char* rString::c_str() const{
 	return m_str.c_str();
 }
 
+const char* rString::data() const {
+	return m_str.data();
+}
+
 size_t rString::size() const{
 	return m_str.size();
 }

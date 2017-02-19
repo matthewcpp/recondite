@@ -1,13 +1,13 @@
 #include "stream/rIStringStream.hpp"
 
-rIStringStream::rIStringStream(){
+rIStringStream::rIStringStream()
+{
 
 }
 
 rIStringStream::rIStringStream(const rString& str)
-:m_stream(str.c_str())
+:m_stream(std::string(str.data(), str.size()))
 {
-
 }
 
 rIStream& rIStringStream::Read(char* buffer, size_t size){

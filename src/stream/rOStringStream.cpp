@@ -1,6 +1,7 @@
 #include "stream/rOStringStream.hpp"
 
-rOStringStream::rOStringStream(){
+rOStringStream::rOStringStream()
+{
 }
 
 rOStringStream::rOStringStream(const rString& str){
@@ -9,6 +10,7 @@ rOStringStream::rOStringStream(const rString& str){
 
 rOStream& rOStringStream::Write(const char* buffer, size_t size){
 	m_stream.write(buffer, size);
+
 	return *this;
 }
 
@@ -104,5 +106,6 @@ rOStringStream::operator bool() const{
 
 
 rString rOStringStream::Str() const{
-	return m_stream.str().c_str();
+	std::string data = m_stream.str();
+	return rString(data.data(), data.size());
 }

@@ -16,6 +16,14 @@ set(ui_tests)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/ui)
 source_group (ui FILES ${ui_tests})
 
+set(stream_tests)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/stream)
+source_group (stream FILES ${stream_tests})
+
+set (common_files)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/testcommon)
+source_group (common FILES ${common_files})
+
 add_executable(recondite_test ${recondite_tests})
 set_target_properties(recondite_test PROPERTIES FOLDER Recondite)
 

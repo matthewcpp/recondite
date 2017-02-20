@@ -347,7 +347,7 @@ void reMainFrame::NewLevel(){
 	if (dialog.ShowModal() == wxID_OK){
 		wxString levelName = dialog.GetValue();
 
-		bool created = m_component->GetProject()->CreateLevel(levelName);
+		bool created = m_component->GetProject()->Levels()->CreateLevel(levelName);
 
 		if (created){
 			m_propertyInspector->StopInspecting();
@@ -358,12 +358,13 @@ void reMainFrame::NewLevel(){
 			EnsureViewportDisplayVisible();
 			m_viewportDisplay->SetDefaultViewOrientations();
 			m_viewportDisplay->UpdateAllViewports();
+			m_component->GetProject()->SaveProjectFile();
 		}
 	}
 }
 
 void reMainFrame::SaveActiveLevel(){
-	m_component->GetProject()->SaveActiveLevel();
+	m_component->GetProject()->Levels()->SaveActiveLevel();
 	m_component->MarkSaved();
 }
 
@@ -393,7 +394,7 @@ bool reMainFrame::ActivateLevel(const wxString& levelName) {
 	}
 
 	m_component->ClearCommandList();
-	m_component->GetProject()->ActivateLevel(levelName);
+	m_component->GetProject()->Levels()->ActivateLevel(levelName);
 	EnsureViewportDisplayVisible(levelName);
 	m_palette->Enable();
 	m_viewportDisplay->SetDefaultViewOrientations();

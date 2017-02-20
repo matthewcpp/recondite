@@ -12,6 +12,9 @@ list(APPEND project_files ${CMAKE_CURRENT_SOURCE_DIR}/reProjectAssets.cpp)
 list(APPEND project_files ${CMAKE_CURRENT_SOURCE_DIR}/reProjectCode.hpp)
 list(APPEND project_files ${CMAKE_CURRENT_SOURCE_DIR}/reProjectCode.cpp)
 
+list(APPEND project_files ${CMAKE_CURRENT_SOURCE_DIR}/reProjectLevels.hpp)
+list(APPEND project_files ${CMAKE_CURRENT_SOURCE_DIR}/reProjectLevels.cpp)
+
 list(APPEND project_files ${CMAKE_CURRENT_SOURCE_DIR}/reComponent.hpp)
 list(APPEND project_files ${CMAKE_CURRENT_SOURCE_DIR}/reComponent.cpp)
 

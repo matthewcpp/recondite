@@ -22,7 +22,7 @@ void reProjectExplorer::ShowProject(){
 
 	Expand(m_projectRoot);
 
-	const wxArrayString& levels = m_component->GetProject()->Levels();
+	const wxArrayString& levels = m_component->GetProject()->Levels()->LevelNames();
 
 	for (auto& level : levels){
 		AppendItem(m_levelsRoot, level);
@@ -121,8 +121,9 @@ void reProjectExplorer::RenameLevel(wxDataViewItem target){
 	wxString oldName = GetItemText(target);
 	wxString newName = wxGetTextFromUser("Enter new name:", "Rename " + oldName);
 
-	if (m_component->GetProject()->RenameLevel(oldName, newName)){
+	if (m_component->GetProject()->Levels()->RenameLevel(oldName, newName)){
 		SetItemText(target, newName);
+		m_component->GetProject()->SaveProjectFile();
 	}
 }
 
@@ -132,8 +133,11 @@ void reProjectExplorer::DeleteLevel(wxDataViewItem target){
 	int choice = wxMessageBox("Really delete " + levelName + "?", "Delete " + levelName, wxOK | wxCANCEL | wxICON_QUESTION | wxCENTRE);
 	if (choice != wxOK) return;
 
-	bool result = m_component->GetProject()->DeleteLevel(levelName);
-	if (result) DeleteItem(target);
+	bool result = m_component->GetProject()->Levels()->DeleteLevel(levelName);
+	if (result) {
+		DeleteItem(target);
+		m_component->GetProject()->SaveProjectFile();
+	}
 	
 }
 

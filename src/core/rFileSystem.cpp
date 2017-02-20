@@ -23,12 +23,7 @@ void rFileSystem::CloseReadFileRef(rIStream* stream) {
 }
 
 rOStream* rFileSystem::OpenWriteFileRef(const rString& path) {
-	if (Exists(path)) {
-		return new rOFileStream(path);
-	}
-	else {
-		return nullptr;
-	}
+	return new rOFileStream(path);
 }
 
 void rFileSystem::CloseWriteFileRef(rOStream* stream) {

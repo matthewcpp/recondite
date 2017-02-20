@@ -8,8 +8,11 @@
 #include <wx/wx.h>
 #include <wx/filename.h>
 
+#include "rDefs.hpp"
+
 #include "reProjectAssets.hpp"
 #include "reProjectCode.hpp"
+#include "reProjectLevels.hpp"
 
 class reProject{
 public:
@@ -21,31 +24,18 @@ public:
 
 	void SaveProjectFile();
 
-	bool CreateLevel(const wxString& name);
-	bool RenameLevel(const wxString& oldName, const wxString& newName);
-	bool DeleteLevel(const wxString& name);
-	bool ActivateLevel(const wxString& name);
-	void SaveActiveLevel();
-	wxString GetActiveLevel();
-	void CloseActiveLevel();
-	bool HasLevelNamed(const wxString& name);
-
 	wxString Directory() const;
 	wxString Name() const;
 	wxString ProjectFilePath() const;
-	wxString LevelDirPath() const;
-	wxString LevelFilePath(const wxString& levelName) const;
 
 	bool IsOpen() const;
 
-	const wxArrayString& Levels() const;
-
+	reProjectLevels* Levels() const;
 	reProjectAssets* Assets();
 	reProjectCode* Code();
 
 private:
-	bool CheckForValidNewLevelName(const wxString& name);
-	void CreateDefaultActors();
+	void SetBasePaths();
 
 private:
 	wxFileName m_projectDir;
@@ -53,11 +43,11 @@ private:
 
 	rwxComponent* m_component;
 
-	wxArrayString m_levels;
 	wxString m_activeLevel;
 
 	std::unique_ptr<reProjectAssets> m_assets;
 	std::unique_ptr<reProjectCode> m_code;
+	std::unique_ptr<reProjectLevels> m_levels;
 
 	rNO_COPY_CLASS(reProject);
 };

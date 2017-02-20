@@ -34,7 +34,9 @@ TEST_F(Core_rArchiveData, SetKey_File) {
 	testFileSystem->SetSavedSata(TEST_PATH1, TEST_DATA1);
 
 	recondite::ArchiveData archiveData;
-	archiveData.SetKeyFromFilePath(TEST_PATH1, TEST_PATH1, testFileSystem->GetFileSize(TEST_PATH1));
+	size_t fileSize;
+	testFileSystem->FileSize(TEST_PATH1, fileSize);
+	archiveData.SetKeyFromFilePath(TEST_PATH1, TEST_PATH1, fileSize);
 
 	ASSERT_TRUE(archiveData.HasKey(TEST_PATH1));
 	ASSERT_EQ(archiveData.GetNumKeys(), 1);
@@ -67,12 +69,15 @@ TEST_F(Core_rArchiveData, SetKey_Override_File) {
 	testFileSystem->SetSavedSata(TEST_PATH2, TEST_DATA2);
 
 	recondite::ArchiveData archiveData;
-	archiveData.SetKeyFromFilePath(TEST_PATH1, TEST_PATH1, testFileSystem->GetFileSize(TEST_PATH1));
+	size_t fileSize;
+	testFileSystem->FileSize(TEST_PATH1, fileSize);
+	archiveData.SetKeyFromFilePath(TEST_PATH1, TEST_PATH1, fileSize);
 
 	ASSERT_TRUE(archiveData.HasKey(TEST_PATH1));
 	ASSERT_EQ(archiveData.GetNumKeys(), 1);
 
-	archiveData.SetKeyFromFilePath(TEST_PATH1, TEST_PATH2, testFileSystem->GetFileSize(TEST_PATH2));
+	testFileSystem->FileSize(TEST_PATH1, fileSize);
+	archiveData.SetKeyFromFilePath(TEST_PATH1, TEST_PATH2, fileSize);
 
 	ASSERT_TRUE(archiveData.HasKey(TEST_PATH1));
 	ASSERT_FALSE(archiveData.HasKey(TEST_PATH2));

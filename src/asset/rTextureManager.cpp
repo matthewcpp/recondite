@@ -26,11 +26,13 @@ rTextureManager::~rTextureManager(){
 rTexture* rTextureManager::LoadFromPath(const rString& path, const rString& name){
 	if (Get(name)) return nullptr;
 
-	auto textureFile = _impl->fileSystem->GetReadFileRef(path);
+	auto textureFile = _impl->fileSystem->OpenReadFileRef(path);
 	if (!textureFile) return nullptr;
 
 	rTextureData textureData;
 	int error = textureData.Read(*textureFile);
+
+	_impl->fileSystem->CloseReadFileRef(textureFile);
 
 	if (error) 
 		return nullptr;
@@ -89,10 +91,11 @@ int rTextureManager::LoadAtlasFromPath(const rString& path, const rString& name)
 
 	if (!texture) return 1;
 
-	auto atlasFile = _impl->fileSystem->GetReadFileRef(path);
+	auto atlasFile = _impl->fileSystem->OpenReadFileRef(path);
 
 	rTextureAtlasData textureAtlasData;
 	int error = textureAtlasData.Read(*atlasFile);
+	_impl->fileSystem->CloseReadFileRef(atlasFile);
 
 	if (error) return 1;
 

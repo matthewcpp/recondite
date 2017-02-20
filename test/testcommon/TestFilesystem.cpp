@@ -54,13 +54,18 @@ TestFilesystem::~TestFilesystem() {
 	Clear();
 }
 
-size_t TestFilesystem::GetFileSize(const rString& path) {
+bool TestFilesystem::FileSize(const rString& path, size_t& size) const {
 	auto result = savedData.find(path);
 
 	if (result == savedData.end()) {
-		return 0;
+		return false;
 	}
 	else {
-		return result->second.size();
+		size = result->second.size();
+		return true;
 	}
+}
+
+bool TestFilesystem::Exists(const rString& path) {
+	return savedData.count(path) > 0;
 }

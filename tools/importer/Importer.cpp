@@ -73,8 +73,9 @@ namespace recondite { namespace tools {
 			rString outPath = rPath::Assemble(outDir, outName, "rtex");
 			std::cout << "saving file: " << outPath << std::endl;
 
-			auto outFile = m_fileSystem.GetWriteFileRef(outPath);
+			auto outFile = m_fileSystem.OpenWriteFileRef(outPath);
 			textureData.Write(*outFile);
+			m_fileSystem.CloseWriteFileRef(outFile);
 		}
 
 		return error;
@@ -105,11 +106,13 @@ namespace recondite { namespace tools {
 				rString atlasOutPath = rPath::Assemble(outDir, outName, "ratl");
 				rString textureOutPath = rPath::Assemble(outDir, outName, "rtex");
 
-				rOFileStream atlasFile(atlasOutPath);
-				textureAtlasData.Write(atlasFile);
+				auto atlasFile = m_fileSystem.OpenWriteFileRef(atlasOutPath);
+				textureAtlasData.Write(*atlasFile);
+				m_fileSystem.CloseWriteFileRef(atlasFile);
 
-				auto outFile = m_fileSystem.GetWriteFileRef(textureOutPath);
+				auto outFile = m_fileSystem.OpenWriteFileRef(textureOutPath);
 				textureData.Write(*outFile);
+				m_fileSystem.CloseWriteFileRef(outFile);
 			}
 		}
 
@@ -139,10 +142,9 @@ namespace recondite { namespace tools {
 
 				rString fontOutPath = rPath::Assemble(outDir, outName, "rfnt");
 
-				auto fontOutFile = m_fileSystem.GetWriteFileRef(fontOutPath);
+				auto fontOutFile = m_fileSystem.OpenWriteFileRef(fontOutPath);
 				fontData.Write(*fontOutFile);
-
-				fontData.Write(*fontOutFile);
+				m_fileSystem.CloseWriteFileRef(fontOutFile);
 			}
 		}
 
@@ -221,10 +223,10 @@ namespace recondite { namespace tools {
 		OutputModelStats(modelData);
 
 		rString modelOutPath = rPath::Assemble(dirName, fileName, "rmdl");
-		auto modelOutFile = m_fileSystem.GetWriteFileRef(modelOutPath);
+		auto modelOutFile = m_fileSystem.OpenWriteFileRef(modelOutPath);
 
 		modelData.Write(*modelOutFile);
-
+		m_fileSystem.CloseWriteFileRef(modelOutFile);
 
 		return 0;
 	}
@@ -246,9 +248,11 @@ namespace recondite { namespace tools {
 			rPath::Split(path, &outDir, &outName, nullptr);
 
 			rString modelOutPath = rPath::Assemble(outDir, outName, "rmdl");
-			auto modelOutFile = m_fileSystem.GetWriteFileRef(modelOutPath);
+			auto modelOutFile = m_fileSystem.OpenWriteFileRef(modelOutPath);
 
 			modelData.Write(*modelOutFile);
+
+			m_fileSystem.CloseWriteFileRef(modelOutFile);
 		}
 		else{
 			std::cout << "Model import failed." << std::endl;

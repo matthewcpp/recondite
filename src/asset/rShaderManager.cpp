@@ -30,14 +30,15 @@ rShaderManager::~rShaderManager(){
 }
 
 rShader* rShaderManager::LoadFromPath(const rString& directory, const rString& name){
+	rShader* shader = nullptr;
 	if (Get(name)) return nullptr;
 
 
 	rString vertexShaderPath = rPath::Assemble(directory, name, "vert");
 	rString fragmentShaderPath = rPath::Assemble(directory, name, "frag");
 
-	auto vertexShaderFile = _impl->fileSystem->GetReadFileRef(vertexShaderPath);
-	auto fragmentShaderFile = _impl->fileSystem->GetReadFileRef(fragmentShaderPath);
+	auto vertexShaderFile = _impl->fileSystem->OpenReadFileRef(vertexShaderPath);
+	auto fragmentShaderFile = _impl->fileSystem->OpenReadFileRef(fragmentShaderPath);
 
 	if (vertexShaderFile && fragmentShaderFile){
 		//read the files into strings
@@ -53,11 +54,13 @@ rShader* rShaderManager::LoadFromPath(const rString& directory, const rString& n
 		rString fragmentShaderStr(size, ' ');
 		fragmentShaderFile->Read(&fragmentShaderStr[0], size);
 
-		return _impl->Create(vertexShaderStr, fragmentShaderStr, name);
+		shader =_impl->Create(vertexShaderStr, fragmentShaderStr, name);
 	}
-	else{
-		return nullptr;
-	}
+
+	_impl->fileSystem->CloseReadFileRef(vertexShaderFile);
+	_impl->fileSystem->CloseReadFileRef(fragmentShaderFile);
+
+	return shader;
 }
 
 rShader* rShaderManager::Load(const rString& vertex, const rString& fragment, const rString& name){

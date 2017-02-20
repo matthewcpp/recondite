@@ -50,9 +50,11 @@ void ModelViewerModule::Init(const rArrayString& args) {
 
 	_engine->ui->RegisterControllerClass("ModelViewerController", createControllerFunc, deleteControllerFunc);
 
-	auto fileSystemRed = _engine->content->FileSystem()->GetReadFileRef(args[0]);
+	auto fileSystemRef = _engine->content->FileSystem()->OpenReadFileRef(args[0]);
 	ModelData modelData;
-	modelData.Read(*fileSystemRed);
+	modelData.Read(*fileSystemRef);
+
+	_engine->content->FileSystem()->CloseReadFileRef(fileSystemRef);
 
 	Model* model =_engine->content->Models()->LoadFromData(modelData, "model");
 	

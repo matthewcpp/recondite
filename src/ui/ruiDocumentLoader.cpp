@@ -98,10 +98,12 @@ void ruiDocumentLoader::ParseStylesheetItem(rXMLElement* element){
 	rString dir = rPath::Directory(m_path);
 	rString stylesheetPath = rPath::Combine(dir, pathName);
 
-	auto cssFile = m_engine->content->FileSystem()->GetReadFileRef(stylesheetPath);
+	auto cssFile = m_engine->content->FileSystem()->OpenReadFileRef(stylesheetPath);
 	
 	if (cssFile)
 		m_currentDocument->Styles()->ParseStylesheet(*cssFile);
+
+	m_engine->content->FileSystem()->CloseReadFileRef(cssFile);
 }
 
 void ruiDocumentLoader::ParseAbsoluteLayoutItem(rXMLElement* element){

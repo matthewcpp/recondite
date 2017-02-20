@@ -44,11 +44,13 @@ Font::Family* rFontManager::LoadFromData(recondite::FontData& fontData, const rS
 Font::Family* rFontManager::LoadFromPath(const rString& path, const rString& name){
 	if (Get(name)) return nullptr;
 
-	auto fontFile = _impl->fileSystem->GetReadFileRef(path);
+	auto fontFile = _impl->fileSystem->OpenReadFileRef(path);
 	if (!fontFile) return nullptr;
 
 	recondite::FontData fontData;
 	int error = fontData.Read(*fontFile);
+
+	_impl->fileSystem->CloseReadFileRef(fontFile);
 
 	if (!error) {
 		return LoadFromData(fontData, name);

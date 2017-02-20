@@ -18,7 +18,9 @@ public:
 	virtual void CloseWriteFileRef(rOStream* stream);
 
 	void SetSavedSata(const rString& path, const rString& data);
-	size_t GetFileSize(const rString& path);
+
+	virtual bool Exists(const rString& path);
+	virtual bool FileSize(const rString& path, size_t& size) const ;
 
 	void Clear();
 

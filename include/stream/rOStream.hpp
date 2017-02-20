@@ -9,6 +9,7 @@
 
 class RECONDITE_API rOStream{
 public:
+	virtual ~rOStream() {}
 
 	virtual rOStream& Write(const char* buffer, size_t size) = 0;
 

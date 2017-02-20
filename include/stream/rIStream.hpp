@@ -8,6 +8,7 @@
 
 class RECONDITE_API rIStream{
 public:
+	virtual ~rIStream() {}
 
 	virtual rIStream& Read(char* buffer, size_t size) = 0;
 	virtual size_t ReadCount() const = 0;

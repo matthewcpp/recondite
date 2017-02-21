@@ -122,10 +122,22 @@ bool reProject::BundleAssets() {
 	m_assets->BundleAssets(archiveData);
 	m_levels->BundleAssets(archiveData);
 
-	rFileSystem* fileSystem = m_component->GetEngine()->content->FileSystem();
-	auto archiveFile = fileSystem->OpenWriteFileRef("C:/temp/archive.r");
-	archiveData.Write(*archiveFile);
-	fileSystem->CloseWriteFileRef(archiveFile);
+	rFileSystem* fileSystem = m_component->GetEngine()->filesystem;
+
+	wxFileName archiveFile = m_code->GetCodeDirectory();
+	archiveFile.AppendDir("bin");
+	archiveFile.SetName(m_name);
+	archiveFile.SetExt("r");
+
+	if (!archiveFile.Exists()) {
+		archiveFile.Mkdir();
+	}
+
+	wxString archivePath = archiveFile.GetFullPath();
+
+	auto archiveFileStream = fileSystem->OpenWriteFileRef(archivePath.c_str().AsChar());
+	archiveData.Write(*archiveFileStream);
+	fileSystem->CloseWriteFileRef(archiveFileStream);
 
 	return true;
 }

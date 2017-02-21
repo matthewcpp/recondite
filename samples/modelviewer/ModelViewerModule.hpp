@@ -19,6 +19,7 @@ public:
 
 private:
 	rViewport* CreateView(Model* model, rEngine* engine);
+	bool ParseArgs(const rArrayString& args, rString& file, rString& archive);
 
 private:
 	rEngine* _engine;

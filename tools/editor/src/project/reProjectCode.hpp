@@ -19,6 +19,8 @@ public:
 
 	void UpdateCodeFiles();
 
+	wxString GetCodeDirectory() const;
+
 public:
 	void Save(rXMLDocument& document);
 	void Load(rXMLDocument& document);

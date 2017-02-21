@@ -2,7 +2,6 @@
 
 rContentManager::rContentManager(rGraphicsDevice* graphicsDevice, rFileSystem* fileSystem, iResourceManager* resourceManager){
 	m_graphicsDevice = graphicsDevice;
-	m_fileSystem = fileSystem;
 	m_resourceManager = resourceManager;
 
 	m_textures.reset(new rTextureManager(graphicsDevice, fileSystem));
@@ -16,10 +15,6 @@ void rContentManager::Clear(){
 	m_shaders->Clear();
 	m_fonts->Clear();
 	m_models->Clear();
-}
-
-rFileSystem* rContentManager::FileSystem(){
-	return m_fileSystem;
 }
 
 rTextureManager* rContentManager::Textures(){

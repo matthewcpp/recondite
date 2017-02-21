@@ -73,11 +73,11 @@ void ModelViewerModule::Init(const rArrayString& args) {
 		model = _engine->content->Models()->LoadFromResource(file, "model");
 	}
 	else {
-		auto fileSystemRef = _engine->content->FileSystem()->OpenReadFileRef(file);
+		auto fileSystemRef = _engine->filesystem->OpenReadFileRef(file);
 		ModelData modelData;
 		modelData.Read(*fileSystemRef);
 
-		_engine->content->FileSystem()->CloseReadFileRef(fileSystemRef);
+		_engine->filesystem->CloseReadFileRef(fileSystemRef);
 
 		model = _engine->content->Models()->LoadFromData(modelData, "model");
 	}

@@ -32,8 +32,6 @@ public:
 	virtual ~rContentManager();
 
 public:
-	rFileSystem* FileSystem();
-
 	rTextureManager* Textures();
 	rShaderManager* Shaders();
 	rFontManager* Fonts();
@@ -49,7 +47,6 @@ public:
 private:
 
 	rGraphicsDevice* m_graphicsDevice;
-	rFileSystem* m_fileSystem;
 	iResourceManager* m_resourceManager;
 	rEventHandler m_eventHandler;
 

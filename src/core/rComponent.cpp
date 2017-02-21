@@ -19,8 +19,8 @@ void rComponent::Uninit(){
 }
 
 void rComponent::LoadScene(const rString& name){
-	auto assetStream = m_engine->content->FileSystem()->OpenReadFileRef(name + ".assets");
-	auto levelStream = m_engine->content->FileSystem()->OpenReadFileRef(name);
+	auto assetStream = m_engine->filesystem->OpenReadFileRef(name + ".assets");
+	auto levelStream = m_engine->filesystem->OpenReadFileRef(name);
 
 	if (assetStream) {
 		recondite::AssetManifest assetManifest;
@@ -40,8 +40,8 @@ void rComponent::LoadScene(const rString& name){
 		delete source;
 	}
 
-	m_engine->content->FileSystem()->CloseReadFileRef(assetStream);
-	m_engine->content->FileSystem()->CloseReadFileRef(levelStream);
+	m_engine->filesystem->CloseReadFileRef(assetStream);
+	m_engine->filesystem->CloseReadFileRef(levelStream);
 }
 
 bool rComponent::SaveScene(const rString& path){
@@ -59,9 +59,9 @@ bool rComponent::SaveSceneXML(const rString& path){
 	riSerializationTarget* target = new rXMLSerializationTarget(element);
 	((rScene*)m_engine->scene)->Save(target);
 
-	auto fileStream = m_engine->content->FileSystem()->OpenWriteFileRef(path);
+	auto fileStream = m_engine->filesystem->OpenWriteFileRef(path);
 	doc.WriteToStream(*fileStream);
-	m_engine->content->FileSystem()->CloseWriteFileRef(fileStream);
+	m_engine->filesystem->CloseWriteFileRef(fileStream);
 
 	delete target;
 

@@ -18,6 +18,10 @@ void reProjectCode::SetBasePath(const wxString& path) {
 	m_codeDir.AppendDir("src");
 }
 
+wxString reProjectCode::GetCodeDirectory() const {
+	return m_codeDir.GetPathWithSep();
+}
+
 void reProjectCode::EnsureAssetDir(const wxString& dirName) {
 	wxFileName codeDir(m_codeDir);
 	codeDir.AppendDir(dirName);

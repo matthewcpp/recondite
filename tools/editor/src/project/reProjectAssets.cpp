@@ -174,7 +174,7 @@ void reProjectAssets::Init() {
 }
 
 bool reProjectAssets::BundleAssets(recondite::ArchiveData& archiveData) {
-	riFileSystem* filesystem = _component->GetEngine()->content->FileSystem();
+	riFileSystem* filesystem = _component->GetEngine()->filesystem;
 
 	rString name, assetPath;
 	size_t count, fileSize;

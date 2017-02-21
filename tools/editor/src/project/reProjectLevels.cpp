@@ -144,9 +144,9 @@ void reProjectLevels::SaveActiveLevel() {
 			}
 		});
 
-		auto levelAssetFile = _component->GetEngine()->content->FileSystem()->OpenWriteFileRef(assetFilePath.c_str().AsChar());
+		auto levelAssetFile = _component->GetEngine()->filesystem->OpenWriteFileRef(assetFilePath.c_str().AsChar());
 		assetManifest.Write(*levelAssetFile);
-		_component->GetEngine()->content->FileSystem()->CloseWriteFileRef(levelAssetFile);
+		_component->GetEngine()->filesystem->CloseWriteFileRef(levelAssetFile);
 	}
 }
 
@@ -186,7 +186,7 @@ bool reProjectLevels::HasLevelNamed(const wxString& name) {
 }
 
 void reProjectLevels::BundleAssets(recondite::ArchiveData& archiveData) {
-	rFileSystem* fileSystem = _component->GetEngine()->content->FileSystem();
+	rFileSystem* fileSystem = _component->GetEngine()->filesystem;
 	size_t fileSize;
 
 	for (auto& level : _levels) {

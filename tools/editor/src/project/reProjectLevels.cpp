@@ -184,3 +184,20 @@ const wxArrayString& reProjectLevels::LevelNames() const {
 bool reProjectLevels::HasLevelNamed(const wxString& name) {
 	return _levels.Index(name) != wxNOT_FOUND;
 }
+
+void reProjectLevels::BundleAssets(recondite::ArchiveData& archiveData) {
+	rFileSystem* fileSystem = _component->GetEngine()->content->FileSystem();
+	size_t fileSize;
+
+	for (auto& level : _levels) {
+		rString absolutePath = AbsoluteLevelPath(level).c_str().AsChar();
+		rString relativePath = ("levels/" + level + ".rlvl").c_str().AsChar();
+		fileSystem->FileSize(absolutePath, fileSize);
+		archiveData.SetKeyFromFilePath(relativePath, absolutePath, fileSize);
+
+		absolutePath += ".assets";
+		relativePath += ".assets";
+		fileSystem->FileSize(absolutePath, fileSize);
+		archiveData.SetKeyFromFilePath(relativePath, absolutePath, fileSize);
+	}
+}

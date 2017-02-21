@@ -18,7 +18,6 @@
 #include "rCamera.hpp"
 
 #include "platform/sdl/rSDLMain.hpp"
-#include "rResourceManager.hpp"
 
 class RECONDITE_SDL_API rApplication : public rApplicationBase{
 public:
@@ -39,7 +38,7 @@ protected:
 	rSDLGraphicsDevice* m_graphicsDevice;
 	rOpenGLContentManager* m_contentManager;
 	rSDLInputManager* m_inputManager;
-	recondite::ResourceManager* m_resourceManager;
+	
 
 	rString m_basePath;
 

@@ -11,6 +11,8 @@
 
 #include "rResourceEvent.hpp"
 
+#include "rPath.hpp"
+
 
 reProjectAssets::reProjectAssets(rwxComponent* component) {
 	_component = component;
@@ -169,4 +171,25 @@ void reProjectAssets::CreateSelectionWireframeForModel(recondite::ModelData& mod
 
 void reProjectAssets::Init() {
 	_component->GetEngine()->content->Events()->Bind(rEVT_MODEL_RESOURCE_LOADED, this, &reProjectAssets::OnModelResourceLoaded);
+}
+
+bool reProjectAssets::BundleAssets(recondite::ArchiveData& archiveData) {
+	riFileSystem* filesystem = _component->GetEngine()->content->FileSystem();
+
+	rString name, assetPath;
+	size_t count, fileSize;
+
+	count = _manifest.Count(rAssetType::Model);
+
+	for (size_t i = 0; i < count; i++) {
+		_manifest.Get(rAssetType::Model, i, name, assetPath);
+		rString absolutePath = rPath::Combine(m_assetsDir.GetFullPath().c_str().AsChar(), assetPath);
+
+		if (filesystem->Exists(absolutePath)) {
+			filesystem->FileSize(absolutePath, fileSize);
+			archiveData.SetKeyFromFilePath(assetPath, absolutePath, fileSize);
+		}
+	}
+
+	return true;
 }

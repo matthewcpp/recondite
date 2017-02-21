@@ -10,6 +10,7 @@
 #include "rGraphicsDevice.hpp"
 #include "rInputManager.hpp"
 #include "rScene.hpp"
+#include "rResourceManager.hpp"
 
 class RECONDITE_API rApplicationBase : public rComponent{
 public:
@@ -38,15 +39,18 @@ public:
 	void SetArgs(int argc, char** argv);
 
 protected:
-	virtual void InitEngine(rGraphicsDevice* graphics, rContentManager* content, rInputManager* input, rFileSystem* fileSystem);
+	virtual void InitEngine(rGraphicsDevice* graphics, rContentManager* content, rInputManager* input, rFileSystem* fileSystem, 
+		recondite::ResourceManager* resourceManager);
 	void InitModule();
 
 protected:
 	unsigned int m_targetFPS;
 	size_t m_frameCount;
 	rArrayString args;
+	rString m_applicationName;
 	
 	recondite::Module* m_module;
+	recondite::ResourceManager* m_resourceManager;
 
 	rSize m_displaySize;
 

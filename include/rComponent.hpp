@@ -36,7 +36,8 @@ public:
 	virtual rString GetBasePath() = 0;
 
 protected:
-	virtual void InitEngine(rGraphicsDevice* graphics, rContentManager* content, rInputManager* input, rFileSystem* fileSystem);
+	virtual void InitEngine(rGraphicsDevice* graphics, rContentManager* content, rInputManager* input, 
+		rFileSystem* fileSystem, recondite::ResourceManager* resourceManager);
 	virtual void InitDefaultActorClasses();
 	bool SaveSceneXML(const rString& path);
 

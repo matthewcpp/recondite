@@ -30,6 +30,8 @@ public:
 
 	bool IsOpen() const;
 
+	bool BundleAssets();
+
 	reProjectLevels* Levels() const;
 	reProjectAssets* Assets();
 	reProjectCode* Code();

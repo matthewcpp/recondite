@@ -4,9 +4,11 @@
 #include "rScene.hpp"
 #include "rInputManager.hpp"
 
-rEngine::rEngine(rGraphicsDevice* graphicsEngine, rContentManager* contentManager, rInputManager* inputManager, rFileSystem* fileSystem) {
+rEngine::rEngine(rGraphicsDevice* graphicsEngine, rContentManager* contentManager, rInputManager* inputManager, 
+	rFileSystem* fileSystem, recondite::ResourceManager* resourceManager) {
 	_graphicsEngine = graphicsEngine;
-	_fileSystem = fileSystem;
+	filesystem = fileSystem;
+
 	ruiManager* uiManager = new ruiManager(this);
 
 	content = contentManager;
@@ -18,4 +20,5 @@ rEngine::rEngine(rGraphicsDevice* graphicsEngine, rContentManager* contentManage
 	inputManager->SetUIManager(uiManager);
 	viewports = new recondite::ViewportManager();
 	behaviors = new recondite::BehaviorManager();
+	resources = resourceManager;
 }

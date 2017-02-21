@@ -33,6 +33,8 @@ public:
 	void Save(rXMLDocument& document);
 	void Load(rXMLDocument& document);
 
+	void BundleAssets(recondite::ArchiveData& archiveData);
+
 private:
 	void CreateDefaultActors();
 	wxString AbsoluteLevelPath(const wxString& name);

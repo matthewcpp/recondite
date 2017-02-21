@@ -45,18 +45,18 @@ bool rApplication::Init(){
 	}
 
 	rFileSystem* fileSystem = new rFileSystem();
-	m_resourceManager = new recondite::ResourceManager();
-	 m_graphicsDevice = new rSDLGraphicsDevice(m_window);
-	 m_contentManager = new rOpenGLContentManager(m_graphicsDevice, fileSystem, m_resourceManager);
-	 m_inputManager = new rSDLInputManager();
+	m_resourceManager = new recondite::ResourceManager(fileSystem);
+	m_graphicsDevice = new rSDLGraphicsDevice(m_window);
+	m_contentManager = new rOpenGLContentManager(m_graphicsDevice, fileSystem, m_resourceManager);
+	m_inputManager = new rSDLInputManager();
 
-	 InitEngine(m_graphicsDevice, m_contentManager, m_inputManager, fileSystem);
-	 LoadDefaultResources();
-	 InitModule();
+	InitEngine(m_graphicsDevice, m_contentManager, m_inputManager, fileSystem, m_resourceManager);
+	LoadDefaultResources();
+	InitModule();
 
-	 SDL_SetWindowTitle(m_window, "Recondite");
+	SDL_SetWindowTitle(m_window, "Recondite");
 
-	 return true;
+	return true;
 }
 
 void rApplication::Uninit(){

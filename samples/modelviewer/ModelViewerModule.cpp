@@ -39,6 +39,20 @@ rViewport* ModelViewerModule::CreateView(Model* model, rEngine* engine) {
 	return mainViewport;
 }
 
+bool ModelViewerModule::ParseArgs(const rArrayString& args, rString& file, rString& archive) {
+	for (size_t i = 0; i < args.size(); i++) {
+		if (args[i] == "--file") {
+			file = args[i + 1];
+		}
+
+		else if (args[i] == "--archive") {
+			archive = args[i + 1];
+		}
+	}
+
+	return true;
+}
+
 void ModelViewerModule::Init(const rArrayString& args) {
 	auto createControllerFunc = [&](const rString& name, rEngine* engine, ruiDocument* document) {
 		return new ModelViewerController(_skeletonGeometry.get(), name, engine, document);
@@ -49,15 +63,25 @@ void ModelViewerModule::Init(const rArrayString& args) {
 	};
 
 	_engine->ui->RegisterControllerClass("ModelViewerController", createControllerFunc, deleteControllerFunc);
+	Model* model = nullptr;
 
-	auto fileSystemRef = _engine->content->FileSystem()->OpenReadFileRef(args[0]);
-	ModelData modelData;
-	modelData.Read(*fileSystemRef);
+	rString file, archive;
+	ParseArgs(args, file, archive);
 
-	_engine->content->FileSystem()->CloseReadFileRef(fileSystemRef);
+	if (!archive.empty()) {
+		_engine->resources->OpenArchive(archive);
+		model = _engine->content->Models()->LoadFromResource(file, "model");
+	}
+	else {
+		auto fileSystemRef = _engine->content->FileSystem()->OpenReadFileRef(file);
+		ModelData modelData;
+		modelData.Read(*fileSystemRef);
 
-	Model* model =_engine->content->Models()->LoadFromData(modelData, "model");
-	
+		_engine->content->FileSystem()->CloseReadFileRef(fileSystemRef);
+
+		model = _engine->content->Models()->LoadFromData(modelData, "model");
+	}
+
 	if (model->GetSkeleton()) {
 		rPawn* pawn = new rPawn(model, "model", _engine);
 		_skeletonGeometry.reset(new SkeletonGeometry(_engine, pawn));

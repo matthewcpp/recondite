@@ -11,6 +11,7 @@
 #include "rActorFactory.hpp"
 #include "rViewportManager.hpp"
 #include "rBehaviorManager.hpp"
+#include "rResourceManager.hpp"
 
 #include "interface/riScene.hpp"
 
@@ -19,7 +20,8 @@ class rInputManager;
 
 class rEngine{
 public:
-	rEngine(rGraphicsDevice* graphicsEngine, rContentManager* contentManager, rInputManager* inputManager, rFileSystem* fileSystem);
+	rEngine(rGraphicsDevice* graphicsEngine, rContentManager* contentManager, rInputManager* inputManager, 
+		rFileSystem* fileSystem, recondite::ResourceManager* resourceManager);
 
 public:
 	rContentManager* content;
@@ -31,10 +33,11 @@ public:
 	ruiIManager* ui;
 	recondite::ViewportManager* viewports;
 	recondite::BehaviorManager* behaviors;
+	rFileSystem* filesystem;
+	recondite::ResourceManager* resources;
 
 private:
 	rGraphicsDevice* _graphicsEngine;
-	rFileSystem* _fileSystem;
 };
 
 #endif

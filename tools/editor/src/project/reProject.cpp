@@ -4,6 +4,8 @@
 #include "stream/rOFileStream.hpp"
 #include "stream/rIFileStream.hpp"
 
+#include "rArchive.hpp"
+
 
 reProject::reProject(rwxComponent* component){
 	m_component = component;
@@ -112,4 +114,18 @@ reProjectAssets* reProject::Assets() {
 
 reProjectCode* reProject::Code() {
 	return m_code.get();
+}
+
+bool reProject::BundleAssets() {
+	recondite::ArchiveData archiveData;
+
+	m_assets->BundleAssets(archiveData);
+	m_levels->BundleAssets(archiveData);
+
+	rFileSystem* fileSystem = m_component->GetEngine()->content->FileSystem();
+	auto archiveFile = fileSystem->OpenWriteFileRef("C:/temp/archive.r");
+	archiveData.Write(*archiveFile);
+	fileSystem->CloseWriteFileRef(archiveFile);
+
+	return true;
 }

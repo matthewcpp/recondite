@@ -25,7 +25,7 @@ namespace recondite {
 
 	rIStream& ArchiveEntryStream::Read(char* buffer, size_t size) {
 		size_t currentPos = _impl->stream->Pos();
-		size_t numBytes = std::max(size, _impl->offset);
+		size_t numBytes = size;
 
 		size_t newPos = currentPos + numBytes;
 		size_t maxPos = _impl->offset + _impl->size;

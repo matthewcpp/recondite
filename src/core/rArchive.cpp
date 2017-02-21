@@ -7,8 +7,8 @@
 #include <set>
 #include <algorithm>
 
+#include "stream/rOStream.hpp"
 #include "stream/rIFileStream.hpp"
-#include "stream/rOStringStream.hpp"
 
 namespace recondite {
 	class ArchiveEntry {
@@ -106,6 +106,7 @@ namespace recondite {
 		int BinarySearch(const rString& path, int begin, int end);
 		void GetEntryInfo(int index, PathData& data);
 		uint32_t AbsolutePathOffset(uint32_t relativePathOffset);
+		uint32_t AbsoluteDataOffset(uint32_t relativeDataOffset);
 	};
 
 	Archive::Archive(riFileSystem* fileSystem) {
@@ -157,6 +158,11 @@ namespace recondite {
 	uint32_t Archive::Impl::AbsolutePathOffset(uint32_t relativePathOffset) {
 		//header + lookup table + relative offset
 		return sizeof(rArchiveHeader) + (sizeof(PathData) * header.entryCount) + relativePathOffset;
+	}
+
+	uint32_t Archive::Impl::AbsoluteDataOffset(uint32_t relativeDataOffset) {
+		//header + lookup table + string data + relative offset
+		return sizeof(rArchiveHeader) + (sizeof(PathData) * header.entryCount) + header.keyDataSize + relativeDataOffset;
 	}
 
 	void Archive::Impl::GetEntryInfo(int index, PathData& data) {
@@ -228,7 +234,7 @@ namespace recondite {
 				_impl->GetEntryInfo(index, pathData);
 
 				rIStream* archiveFile = _impl->fileSystem->OpenReadFileRef(_impl->fileSystemPath);
-				result = new ArchiveEntryStream(archiveFile, pathData.dataOffset, pathData.dataSize);
+				result = new ArchiveEntryStream(archiveFile, _impl->AbsoluteDataOffset(pathData.dataOffset), pathData.dataSize);
 				_impl->openEntries.emplace(result);
 			}
 		}
@@ -278,32 +284,22 @@ namespace recondite {
 		header.entryCount = keys.size();
 		header.keyDataSize = pathOffset;
 
-		rOStringStream& stringstream = (rOStringStream&)stream;
-
 		//write header
 		uint32_t dataCount = keys.size();
 		stream.Write((const char*)&header, sizeof(rArchiveHeader));
 
-		size_t strsize = stringstream.Str().size();
-
 		//write lookup table
 		stream.Write((const char*)pathDataVector.data(), sizeof(PathData) * pathDataVector.size());
-
-		strsize = stringstream.Str().size();
 
 		//write key data
 		for (size_t i = 0; i < keys.size(); i++) {
 			stream.Write(keys[i].c_str(), keys[i].size());
 		}
 
-		strsize = stringstream.Str().size();
-
 		//write archive data
 		for (size_t i = 0; i < keys.size(); i++) {
 			_impl->entries[keys[i]]->WriteData(stream);
 		}
-
-		strsize = stringstream.Str().size();
 	}
 
 	DataArchiveEntry::DataArchiveEntry(const char* data, size_t dataSize) {
@@ -343,6 +339,7 @@ namespace recondite {
 				size_t readCount = srcFile.ReadCount();
 
 				stream.Write(buffer, readCount);
+				bytesRead += readCount;
 
 			} while (bytesRead < _size);
 		}

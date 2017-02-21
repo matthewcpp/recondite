@@ -1,4 +1,5 @@
 #include "rApplicationBase.hpp"
+#include "rPath.hpp"
 
 rApplicationBase::rApplicationBase(){
 	m_module = NULL;
@@ -9,6 +10,8 @@ rApplicationBase::rApplicationBase(){
 }
 
 void rApplicationBase::SetArgs(int argc, char** argv) {
+	m_applicationName = argv[0];
+
 	for (int i = 1; i < argc; i++) {
 		args.emplace_back(argv[i]);
 	}
@@ -111,8 +114,17 @@ size_t rApplicationBase::FrameCount() const{
 	return m_frameCount;
 }
 
-void rApplicationBase::InitEngine(rGraphicsDevice* graphics, rContentManager* content, rInputManager* input, rFileSystem* fileSystem){
-	rComponent::InitEngine(graphics, content, input, fileSystem);
+void rApplicationBase::InitEngine(rGraphicsDevice* graphics, rContentManager* content, rInputManager* input, 
+	rFileSystem* fileSystem, recondite::ResourceManager* resourceManager){
+	rComponent::InitEngine(graphics, content, input, fileSystem, resourceManager);
+
+	rString basePath = GetBasePath();
+	rString applicationName;
+
+	rPath::Split(m_applicationName, nullptr, &applicationName, nullptr);
+	rString defaultAssets = rPath::Assemble(basePath, applicationName, "r");
+
+	m_resourceManager->OpenArchive(defaultAssets);
 }
 
 

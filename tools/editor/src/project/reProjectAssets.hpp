@@ -7,6 +7,9 @@
 #include "xml/rXMLDocument.hpp"
 #include "asset/rAssetManifest.hpp"
 
+#include "rArchive.hpp"
+
+
 class reProjectAssets {
 public:
 	reProjectAssets(rwxComponent* component);
@@ -26,6 +29,8 @@ public:
 	void Load(rXMLDocument& document);
 
 	const recondite::AssetManifest* Manifest() const;
+
+	bool BundleAssets(recondite::ArchiveData& archiveData);
 
 	void Init();
 

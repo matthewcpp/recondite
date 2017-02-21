@@ -16,7 +16,7 @@ bool rwxComponent::Init(){
 
 	
 
-	InitEngine(m_rwxGraphicsDevice, m_rglContentManager, m_rInputManager, fileSystem);
+	InitEngine(m_rwxGraphicsDevice, m_rglContentManager, m_rInputManager, fileSystem, (recondite::ResourceManager*)m_resourceManager);
 
 	rComponent::Init();
 

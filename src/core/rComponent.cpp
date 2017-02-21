@@ -68,8 +68,9 @@ bool rComponent::SaveSceneXML(const rString& path){
 	return true;
 }
 
-void rComponent::InitEngine(rGraphicsDevice* graphics, rContentManager* content, rInputManager* input, rFileSystem* fileSystem){
-	m_engine = new rEngine(graphics, content, input, fileSystem);
+void rComponent::InitEngine(rGraphicsDevice* graphics, rContentManager* content, rInputManager* input, 
+	rFileSystem* fileSystem, recondite::ResourceManager* resourceManager){
+	m_engine = new rEngine(graphics, content, input, fileSystem, resourceManager);
 	InitDefaultActorClasses();
 	m_graphicsDevice = graphics;
 

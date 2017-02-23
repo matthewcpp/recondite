@@ -127,3 +127,22 @@ void rPath::Split(const rString& path, rString* directory, rString* filename, rS
 		*ext = rPath::Extension(path);
 }
 
+rString rPath::PopComponent(const rString& path) {
+	size_t pos = findLastSeperator(path);
+
+	if (pos != rString::npos) {
+		if (pos == path.size() - 1) {
+			for (size_t i = pos - 1; pos >= 0; i--) {
+				if (isSeperator(path[i])) {
+					return path.substr(0, i);
+				}
+			}
+		}
+		else {
+			return path.substr(0, pos);
+		}
+	}
+
+
+	return "";
+}

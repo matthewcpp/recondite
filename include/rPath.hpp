@@ -10,6 +10,8 @@ namespace rPath{
 	rString RECONDITE_API FullFilename(const rString& path);
 	rString RECONDITE_API Extension(const rString& path);
 
+	rString RECONDITE_API PopComponent(const rString& path);
+
 	rString RECONDITE_API Combine(const rString& dir, const rString& filename);
 	rString RECONDITE_API Assemble(const rString& dir, const rString& filename, const rString& ext);
 	

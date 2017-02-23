@@ -293,3 +293,20 @@ TEST(Core_rPath, Split) {
 	EXPECT_STREQ(filename.c_str(), "important file.doc");
 	EXPECT_STREQ(ext.c_str(), "docx");
 }
+
+TEST(Core_rPath, PopComponent) {
+	rString path = "/path/to/my/file.txt";
+	rString result = rPath::PopComponent(path);
+
+	EXPECT_STREQ(result.c_str(), "/path/to/my");
+
+	result = rPath::PopComponent("");
+	EXPECT_STREQ(result.c_str(), "");
+
+	path = "/path/to/my";
+	result = rPath::PopComponent(path);
+	EXPECT_STREQ(result.c_str(), "/path/to");
+
+	result = rPath::PopComponent("myfile.txt");
+	EXPECT_STREQ(result.c_str(), "");
+}

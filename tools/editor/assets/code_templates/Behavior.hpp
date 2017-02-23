@@ -3,6 +3,7 @@
 #include "rBehavior.hpp"
 
 class __NAME__ : public recondite::Behavior{
+	public:
 		/**
 		Called when the entity is created before any call to Update is made
 		*/
@@ -17,4 +18,6 @@ class __NAME__ : public recondite::Behavior{
 		Called when the entity will be destroyed
 		*/
 		virtual void Uninit();
+		
+	private:
 };

@@ -20,7 +20,7 @@
 #include "dialogs/reNewProjectDialog.hpp"
 
 #include "reModelViewer.hpp"
-
+#include "project/reProjectBuilder.hpp"
 
 class reMainFrame : public wxFrame, public reUIController {
 public:
@@ -58,7 +58,7 @@ private:
 	void OnProjectAction(wxCommandEvent& event);
 	void OnOpenRecentProject(wxCommandEvent& event);
 
-	void OnBuildAndRun(wxCommandEvent& event);
+	void OnBuildProject(wxCommandEvent& event);
 
 	void OnAssetImportModel(wxCommandEvent& event);
 
@@ -71,7 +71,7 @@ private:
 		reMainFrame_CloseProject,
 		reMainFrame_SaveLevel,
 
-		reMainFrame_BuildAndRun,
+		reMainFrame_BuildProject,
 
 		reMainFrame_NewLevel,
 		reMainFrame_ProjectEnd,
@@ -105,6 +105,7 @@ private:
 	wxPanel* m_splashPanel;
 
 	reModelViewerFrame* m_modelViewer;
+	reProjectBuilder* m_projectBuilder;
 };
 
 #endif

@@ -5,6 +5,7 @@
 #include "stream/rIFileStream.hpp"
 
 #include "rArchive.hpp"
+#include "reProjectBuilder.hpp"
 
 
 reProject::reProject(rwxComponent* component){
@@ -30,6 +31,19 @@ void reProject::Create(const wxString& directory, const wxString& name){
 	m_code->CreateProject(m_name);
 
 	SaveProjectFile();
+}
+
+wxString reProject::ProjectScriptPath() const {
+	wxFileName scriptFile = m_projectDir;
+	scriptFile.SetName("project");
+	
+#ifdef _MSC_VER
+	scriptFile.SetExt("bat");
+#else
+	scriptFile.setExt("sh");
+#endif
+
+	return scriptFile.GetFullPath();
 }
 
 void reProject::SetBasePaths() {
@@ -104,7 +118,7 @@ bool reProject::IsOpen() const{
 	return !m_name.IsEmpty();
 }
 
-reProjectLevels* reProject::Levels() const{
+reProjectLevels* reProject::Levels() {
 	return m_levels.get();
 }
 
@@ -125,13 +139,20 @@ bool reProject::BundleAssets() {
 	rFileSystem* fileSystem = m_component->GetEngine()->filesystem;
 
 	wxFileName archiveFile = m_code->GetCodeDirectory();
-	archiveFile.AppendDir("bin");
-	archiveFile.SetName(m_name);
-	archiveFile.SetExt("r");
+	archiveFile.AppendDir("build");
 
 	if (!archiveFile.Exists()) {
 		archiveFile.Mkdir();
 	}
+
+	archiveFile.AppendDir("bin");
+
+	if (!archiveFile.Exists()) {
+		archiveFile.Mkdir();
+	}
+
+	archiveFile.SetName(m_name);
+	archiveFile.SetExt("r");
 
 	wxString archivePath = archiveFile.GetFullPath();
 

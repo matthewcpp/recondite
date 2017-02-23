@@ -17,7 +17,9 @@ if "%1%"=="configure" (
 )
 if "%1%"=="build" (
 	cd src\build
-	devenv.exe Test01.sln /build Debug
+	devenv.com Test01.sln /build Debug
 )
 
 popd
+
+exit 0

@@ -1,5 +1,7 @@
 #include "sdl/rSDLApplication.hpp"
 
+#include "rPath.hpp"
+
 rApplication::rApplication()
 	:rApplicationBase()
 {
@@ -52,6 +54,18 @@ bool rApplication::Init(){
 
 	InitEngine(m_graphicsDevice, m_contentManager, m_inputManager, fileSystem, m_resourceManager);
 	LoadDefaultResources();
+
+	//try to load asset pack from editor if in debug mode;
+#ifndef NDEBUG
+	rString debugAssetDir = rPath::PopComponent(GetBasePath());
+	rString applicationName;
+	rPath::Split(m_applicationName, nullptr, &applicationName, nullptr);
+
+	rString debugAssetFile = rPath::Assemble(debugAssetDir, applicationName, "r");
+	m_resourceManager->OpenArchive(debugAssetFile);
+#endif 
+
+
 	InitModule();
 
 	SDL_SetWindowTitle(m_window, "Recondite");

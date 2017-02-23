@@ -3,6 +3,9 @@ set(project_files)
 list(APPEND project_files ${CMAKE_CURRENT_SOURCE_DIR}/reProject.hpp)
 list(APPEND project_files ${CMAKE_CURRENT_SOURCE_DIR}/reProject.cpp)
 
+list(APPEND project_files ${CMAKE_CURRENT_SOURCE_DIR}/reProjectBuilder.hpp)
+list(APPEND project_files ${CMAKE_CURRENT_SOURCE_DIR}/reProjectBuilder.cpp)
+
 list(APPEND project_files ${CMAKE_CURRENT_SOURCE_DIR}/reProjectResourceManager.hpp)
 list(APPEND project_files ${CMAKE_CURRENT_SOURCE_DIR}/reProjectResourceManager.cpp)
 

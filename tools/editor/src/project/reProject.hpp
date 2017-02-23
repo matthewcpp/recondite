@@ -27,12 +27,13 @@ public:
 	wxString Directory() const;
 	wxString Name() const;
 	wxString ProjectFilePath() const;
+	wxString ProjectScriptPath() const;
 
 	bool IsOpen() const;
 
 	bool BundleAssets();
 
-	reProjectLevels* Levels() const;
+	reProjectLevels* Levels();
 	reProjectAssets* Assets();
 	reProjectCode* Code();
 
@@ -50,6 +51,7 @@ private:
 	std::unique_ptr<reProjectAssets> m_assets;
 	std::unique_ptr<reProjectCode> m_code;
 	std::unique_ptr<reProjectLevels> m_levels;
+	
 
 	rNO_COPY_CLASS(reProject);
 };

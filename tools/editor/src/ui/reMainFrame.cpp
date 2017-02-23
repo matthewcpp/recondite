@@ -3,6 +3,8 @@
 #include <wx/filedlg.h>
 #include <wx/textdlg.h>
 
+#include "project/reProjectBuilder.hpp"
+
 reMainFrame::reMainFrame(reComponent* component, const wxString& title, const wxPoint& pos, const wxSize& size)
 	:wxFrame(NULL, wxID_ANY, title, pos, size)
 {
@@ -17,6 +19,7 @@ reMainFrame::reMainFrame(reComponent* component, const wxString& title, const wx
 void reMainFrame::CreateUIElements(){
 	m_wxAuiManager.SetManagedWindow(this);
 
+	m_projectBuilder = new reProjectBuilder(m_component);
 	m_modelViewer = new reModelViewerFrame(m_component, this);
 	m_logWindow = new reLogWindow(m_component, this);
 	m_toolManager = new reToolManager(m_component, this, &m_wxAuiManager);
@@ -172,7 +175,7 @@ wxMenuBar* reMainFrame::CreateEditorMenuBar(){
 	fileMenu->Append(reMainFrame_CloseProject, "Close");
 	fileMenu->AppendSeparator();
 
-	fileMenu->Append(reMainFrame_BuildAndRun, "Build And Run\tCtrl+B");
+	fileMenu->Append(reMainFrame_BuildProject, "Build Project\tCtrl+B");
 
 	fileMenu->AppendSeparator();
 	fileMenu->Append(wxID_EXIT, "Exit\tAlt+F4");
@@ -206,7 +209,7 @@ wxMenuBar* reMainFrame::CreateEditorMenuBar(){
 
 	Bind(wxEVT_MENU, &reMainFrame::OnAssetImportModel, this, reMainFrame_Asset_ImportModel);
 
-	Bind(wxEVT_MENU, &reMainFrame::OnBuildAndRun, this, reMainFrame_BuildAndRun);
+	Bind(wxEVT_MENU, &reMainFrame::OnBuildProject, this, reMainFrame_BuildProject);
 
 	Bind(wxEVT_CHAR_HOOK, &reMainFrame::OnCharHook, this);
 
@@ -430,6 +433,6 @@ void reMainFrame::OnAuiPaneClose(wxAuiManagerEvent& event) {
 
 }
 
-void reMainFrame::OnBuildAndRun(wxCommandEvent& event) {
-	m_component->GetProject()->BundleAssets();
+void reMainFrame::OnBuildProject(wxCommandEvent& event) {
+	m_projectBuilder->Build();
 }

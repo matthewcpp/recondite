@@ -175,7 +175,7 @@ wxMenuBar* reMainFrame::CreateEditorMenuBar(){
 	fileMenu->Append(reMainFrame_CloseProject, "Close");
 	fileMenu->AppendSeparator();
 
-	fileMenu->Append(reMainFrame_BuildProject, "Build Project\tCtrl+B");
+	fileMenu->Append(reMainFrame_BuildAndRunProject, "Build and Run Project\tCtrl+B");
 
 	fileMenu->AppendSeparator();
 	fileMenu->Append(wxID_EXIT, "Exit\tAlt+F4");
@@ -209,7 +209,7 @@ wxMenuBar* reMainFrame::CreateEditorMenuBar(){
 
 	Bind(wxEVT_MENU, &reMainFrame::OnAssetImportModel, this, reMainFrame_Asset_ImportModel);
 
-	Bind(wxEVT_MENU, &reMainFrame::OnBuildProject, this, reMainFrame_BuildProject);
+	Bind(wxEVT_MENU, &reMainFrame::OnBuildAndRunProject, this, reMainFrame_BuildAndRunProject);
 
 	Bind(wxEVT_CHAR_HOOK, &reMainFrame::OnCharHook, this);
 
@@ -433,6 +433,6 @@ void reMainFrame::OnAuiPaneClose(wxAuiManagerEvent& event) {
 
 }
 
-void reMainFrame::OnBuildProject(wxCommandEvent& event) {
-	m_projectBuilder->Build();
+void reMainFrame::OnBuildAndRunProject(wxCommandEvent& event) {
+	m_projectBuilder->BuildAndRun();
 }

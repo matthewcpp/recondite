@@ -183,7 +183,7 @@ bool rActor3::Save(riSerializationTarget* target){
 		behaviorClass = m_engine->behaviors->GetClassName(m_behavior.get());
 	}
 
-	target->String("behaviorClass", behaviorClass);
+	classTarget->String("behaviorClass", behaviorClass);
 	
 	bool result = DoSerialize(classTarget, rSerializeAction::Save);
 
@@ -198,6 +198,8 @@ bool rActor3::Load(riSerializationTarget* target){
 	rString behaviorClass;
 	target->String("behaviorClass", behaviorClass);
 
+	bool result =  DoSerialize(target, rSerializeAction::Load);
+
 	if (!behaviorClass.empty()) {
 		bool created = CreateBehavior(behaviorClass);
 
@@ -205,8 +207,6 @@ bool rActor3::Load(riSerializationTarget* target){
 			ClearBehavior();
 		}
 	}
-
-	bool result =  DoSerialize(target, rSerializeAction::Load);
 
 	OnLoad();
 

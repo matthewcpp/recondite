@@ -22,6 +22,8 @@ public:
 
 	virtual void DeleteActor(rActor3* actor) = 0;
 	virtual void RayPick(const rRay3& ray, rPickResult& pickResult) = 0;
+
+	virtual rAlignedBox3 GetBounding() = 0;
 };
 
 #endif

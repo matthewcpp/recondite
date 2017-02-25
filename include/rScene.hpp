@@ -54,7 +54,7 @@ public:
 
 	void Flush();
 
-	rAlignedBox3 GetBounding();
+	virtual rAlignedBox3 GetBounding() override;
 
 private:
 

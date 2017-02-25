@@ -80,7 +80,7 @@ reProjectBuilder::reProjectBuilder(reComponent* component) {
 	_isBuilding = false;
 }
 
-bool reProjectBuilder::Build() {
+bool reProjectBuilder::BuildAndRun() {
 	if (!IsBuilding()) {
 		_isBuilding = true;
 		BundleAssets();
@@ -128,5 +128,8 @@ bool reProjectBuilder::IsBuilding() const {
 }
 
 void reProjectBuilder::DoneBuilding() {
+	wxString buildCommand = _component->GetProject()->ProjectScriptPath() + " debug";
+	wxExecute(buildCommand, wxEXEC_ASYNC);
+
 	_isBuilding = false;
 }

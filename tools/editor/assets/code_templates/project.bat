@@ -19,7 +19,9 @@ if "%1%"=="build" (
 	cd src\build
 	devenv.com Test01.sln /build Debug
 )
+if "%1%"=="debug" (
+	cd src/build
+	Devenv.exe /runexit Test01.sln
+)
 
 popd
-
-exit 0

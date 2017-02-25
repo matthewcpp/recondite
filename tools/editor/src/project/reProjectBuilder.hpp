@@ -10,7 +10,7 @@ public:
 	reProjectBuilder(reComponent* component);
 
 public:
-	bool Build();
+	bool BuildAndRun();
 
 	bool IsBuilding() const;
 	void DoneBuilding();

@@ -19,6 +19,7 @@ void rXMLReader::Parse(rIStream* stream){
     char character = 0;
 
 	while (stream->Get(character)){
+		if (stream->Peek() == EOF) break;
 
         if (character == rXML_CARRIAGE_RETURN)
             character = NormalizeNewline(character, stream);

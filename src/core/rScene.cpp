@@ -217,8 +217,8 @@ bool rScene::ParseActors(riSerializationTarget* target){
 
 			rActor3* actor = m_engine->actors->GetActorClass(className, m_engine, id);
 			if (actor){
-				actor->Load(actorTarget);
 				AddActor(actor);
+				actor->Load(actorTarget);
 			}
 			else{
 				Log::Warning("Unable to load actor with class: " + className);

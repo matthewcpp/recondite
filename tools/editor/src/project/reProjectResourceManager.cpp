@@ -11,14 +11,21 @@ void reProjectResourceManager::SetProject(reProject* project) {
 rIStream* reProjectResourceManager::Open(const rString& handle) {
 	if (_project == nullptr || !_project->IsOpen()) return nullptr;
 
+	rIFileStream* result = nullptr;
 	wxFileName resourcePath(_project->Assets()->GetDirectoryPath() + handle.c_str());
 
 	if (resourcePath.Exists()) {
-		return new rIFileStream(resourcePath.GetFullPath().c_str().AsChar());
+		result = new rIFileStream(resourcePath.GetFullPath().c_str().AsChar());
 	}
 	else {
-		return nullptr;
+		resourcePath = _project->Directory() + '/' + handle.c_str();
+
+		if (resourcePath.Exists()) {
+			result = new rIFileStream(resourcePath.GetFullPath().c_str().AsChar());
+		}
 	}
+
+	return result;
 }
 
 bool reProjectResourceManager::Close(rIStream* stream) {

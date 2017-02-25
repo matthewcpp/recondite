@@ -48,33 +48,6 @@ recondite::Behavior* CreateEditorBehavior() {
 	return new recondite::Behavior();
 }
 
-bool reProjectCode::CreateBehavior(const wxString& className, bool regenerateFiles) {
-	bool result = _engine->behaviors->DefineBehavior(className.c_str().AsChar(), &CreateEditorBehavior);
-
-	if (result) {
-		_behaviors.push_back(className);
-
-		wxFileName srcFile("assets/code_templates/Behavior.hpp");
-		wxFileName destFile(m_codeDir.GetPathWithSep() + "src/Behaviors/" + className + ".hpp");
-		reUtils::CopyAndReplaceInFile(srcFile.GetFullPath(), destFile.GetFullPath(), "__NAME__", className);
-
-		srcFile.SetExt("cpp");
-		destFile.SetExt("cpp");
-		reUtils::CopyAndReplaceInFile(srcFile.GetFullPath(), destFile.GetFullPath(), "__NAME__", className);
-
-		if (regenerateFiles) {
-			GenerateGameBaseFile();
-			GenerateBehaviorsCmakeList();
-		}
-	}
-
-	return result;
-}
-
-const wxArrayString& reProjectCode::GetBehaviorClasses() const {
-	return _behaviors;
-}
-
 void reProjectCode::Save(rXMLDocument& document) {
 	rXMLElement* root = document.GetRoot();
 
@@ -107,10 +80,6 @@ void reProjectCode::Load(rXMLDocument& document) {
 	}
 }
 
-void reProjectCode::UpdateCodeFiles() {
-	GenerateGameBaseFile();
-}
-
 
 void reProjectCode::GenerateGameBaseFile() {
 	wxStringOutputStream includeData, defineData;
@@ -121,11 +90,47 @@ void reProjectCode::GenerateGameBaseFile() {
 		defineStatementStream << '\t' << "engine->behaviors->DefineBehavior(\"" << _behaviors[i] << "\", &__CreateBehavior<" << _behaviors[i] << ">);" << endl;
 	}
 
+	for (size_t i = 0; i < _levels.size(); i++) {
+		includeFileStream << "#include \"Levels/" << _levels[i] << ".hpp\"" << endl;
+		defineStatementStream << '\t' << "engine->behaviors->DefineBehavior(\"" << _levels[i] << "\", &__CreateBehavior<" << _levels[i] << ">);" << endl;
+	}
+
 	wxArrayString search, replace;
 	search.push_back("//#<<BEHAVIOR_INCLUDES>>"); replace.push_back(includeData.GetString());
 	search.push_back("//#<<BEHAVIOR_DEFINES>>"); replace.push_back(defineData.GetString());
 
 	reUtils::CopyAndReplaceInFile("assets/code_templates/GameBase.Private.cpp", m_codeDir.GetPathWithSep() + "src/Private/GameBase.Private.cpp", search, replace);
+}
+
+
+bool reProjectCode::DoCreateBehavior(const wxString& className, const wxString& destDir) {
+	wxFileName srcFile("assets/code_templates/Behavior.hpp");
+	wxFileName destFile(m_codeDir.GetPathWithSep() + "src/"+ destDir + "/" + className + ".hpp");
+	reUtils::CopyAndReplaceInFile(srcFile.GetFullPath(), destFile.GetFullPath(), "__NAME__", className);
+
+	srcFile.SetExt("cpp");
+	destFile.SetExt("cpp");
+	reUtils::CopyAndReplaceInFile(srcFile.GetFullPath(), destFile.GetFullPath(), "__NAME__", className);
+
+	return true;
+}
+
+// Behaviors
+
+bool reProjectCode::CreateBehavior(const wxString& className, bool regenerateFiles) {
+	bool result = _engine->behaviors->DefineBehavior(className.c_str().AsChar(), &CreateEditorBehavior);
+
+	if (result) {
+		_behaviors.push_back(className);
+
+		if (regenerateFiles) {
+			DoCreateBehavior(className, "Behaviors");
+			GenerateGameBaseFile();
+			GenerateBehaviorsCmakeList();
+		}
+	}
+
+	return result;
 }
 
 void reProjectCode::GenerateBehaviorsCmakeList() {
@@ -138,8 +143,59 @@ void reProjectCode::GenerateBehaviorsCmakeList() {
 	}
 
 	wxArrayString search, replace;
-	search.push_back("#<<BEHAVIOR_FILES>>");  replace.push_back(fileListData.GetString());
 	search.push_back("__GAME_NAME__"); replace.push_back(_projectName);
+	search.push_back("#<<BEHAVIOR_FILES>>");  replace.push_back(fileListData.GetString());
 
 	reUtils::CopyAndReplaceInFile("assets/code_templates/Behaviors.CmakeLists.txt", m_codeDir.GetPathWithSep() + "src/Behaviors/CMakeLists.txt", search, replace);
+}
+
+const wxArrayString& reProjectCode::GetBehaviorClasses() const {
+	return _behaviors;
+}
+
+// Levels
+
+void reProjectCode::GenerateLevelsCmakeList() {
+	wxStringOutputStream fileListData;
+	wxTextOutputStream fileListStream(fileListData);
+
+	for (size_t i = 0; i < _levels.size(); i++) {
+		fileListStream << "list(APPEND level_files ${CMAKE_CURRENT_LIST_DIR}/" << _levels[i] << ".hpp)" << endl;
+		fileListStream << "list(APPEND level_files ${CMAKE_CURRENT_LIST_DIR}/" << _levels[i] << ".cpp)" << endl;
+	}
+
+	wxArrayString search, replace;
+	search.push_back("__GAME_NAME__"); replace.push_back(_projectName);
+	search.push_back("#<<LEVEL_FILES>>");  replace.push_back(fileListData.GetString());
+
+	reUtils::CopyAndReplaceInFile("assets/code_templates/Levels.CmakeLists.txt", m_codeDir.GetPathWithSep() + "src/Levels/CMakeLists.txt", search, replace);
+}
+
+bool reProjectCode::CreateLevelBehavior(const wxString& levelName, bool regenerateFiles) {
+	bool result = _engine->behaviors->DefineBehavior(levelName.c_str().AsChar(), &CreateEditorBehavior);
+	
+	if (result) {
+		_levels.push_back(levelName);
+
+		if (regenerateFiles) {
+			DoCreateBehavior(levelName, "Levels");
+			GenerateGameBaseFile();
+			GenerateLevelsCmakeList();
+		}
+	}
+	return result;
+}
+
+bool reProjectCode::DeleteLevelBehavior(const wxString& levelName) {
+	_engine->behaviors->UndefineBehavior(levelName.c_str().AsChar());
+
+	int index = _levels.Index(levelName);
+
+	if (index != wxNOT_FOUND) {
+		_levels.erase(_levels.begin() + index);
+		return true;
+	}
+	else {
+		return false;
+	}
 }

@@ -17,7 +17,8 @@ public:
 	bool CreateBehavior(const wxString& className, bool regenerateFiles = true);
 	const wxArrayString& GetBehaviorClasses() const;
 
-	void UpdateCodeFiles();
+	bool CreateLevelBehavior(const wxString& levelName, bool regenerateFiles = true);
+	bool DeleteLevelBehavior(const wxString& levelName);
 
 	wxString GetCodeDirectory() const;
 
@@ -28,7 +29,10 @@ public:
 private:
 	void EnsureAssetDir(const wxString& dirName);
 
+	bool DoCreateBehavior(const wxString& className, const wxString& destDir);
+
 	void GenerateBehaviorsCmakeList();
+	void GenerateLevelsCmakeList();
 	void GenerateGameBaseFile();
 
 private:
@@ -37,4 +41,5 @@ private:
 	wxFileName m_codeDir;
 
 	wxArrayString _behaviors;
+	wxArrayString _levels;
 };

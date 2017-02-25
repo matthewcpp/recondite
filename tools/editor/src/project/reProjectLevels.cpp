@@ -23,6 +23,7 @@ bool reProjectLevels::CreateLevel(const wxString& name) {
 	if (HasLevelNamed(name)) return false;
 
 	_levels.push_back(name);
+	_projectCode->CreateLevelBehavior(name);
 	_activeLevel = name;
 
 	_component->ClearScene();
@@ -64,19 +65,19 @@ bool reProjectLevels::RenameLevel(const wxString& oldName, const wxString& newNa
 
 bool reProjectLevels::DeleteLevel(const wxString& name) {
 	if (HasLevelNamed(name)) {
-		auto end = _levels.end();
-		for (auto it = _levels.begin(); it != end; ++it) {
-			if (name == *it) {
-				wxString filename = AbsoluteLevelPath(name);
-				bool result = wxRemoveFile(filename);
+		_projectCode->DeleteLevelBehavior(name);
 
-				filename += ".assets";
-				wxRemoveFile(filename);
+		int index = _levels.Index(name);
+		if (index != wxNOT_FOUND) {
+			wxString filename = AbsoluteLevelPath(name);
+			bool result = wxRemoveFile(filename);
 
-				if (result) {
-					_levels.erase(it);
-					return true;
-				}
+			filename += ".assets";
+			wxRemoveFile(filename);
+
+			if (result) {
+				_levels.erase(_levels.begin() + index);
+				return true;
 			}
 		}
 	}
@@ -120,6 +121,7 @@ void reProjectLevels::Load(rXMLDocument& document) {
 	for (size_t i = 0; i < levels->NumChildren(); i++) {
 		levels->GetChild(i)->GetText(textVal);
 		_levels.push_back(textVal.c_str());
+		_projectCode->CreateLevelBehavior(textVal.c_str(), false);
 	}
 }
 
@@ -166,9 +168,8 @@ bool reProjectLevels::ActivateLevel(const wxString& name) {
 		CloseActiveLevel();
 
 		_activeLevel = name;
-		wxString levelPath = AbsoluteLevelPath(_activeLevel);
 
-		_component->LoadScene(levelPath.c_str().AsChar());
+		_component->GetEngine()->LoadLevel(name.c_str().AsChar());
 
 		return true;
 	}

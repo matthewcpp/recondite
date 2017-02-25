@@ -17,11 +17,12 @@ if "%1%"=="configure" (
 )
 if "%1%"=="build" (
 	cd src\build
-	devenv.com Test01.sln /build Debug
+	devenv.com __GAME_NAME__.sln /build Debug
 )
 if "%1%"=="debug" (
 	cd src/build
-	Devenv.exe /runexit Test01.sln
+	set RECONDITE_DEBUG_STARTING_LEVEL=%2%
+	Devenv.exe /runexit __GAME_NAME__.sln
 )
 
 popd

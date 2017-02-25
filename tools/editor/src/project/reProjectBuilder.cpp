@@ -80,9 +80,11 @@ reProjectBuilder::reProjectBuilder(reComponent* component) {
 	_isBuilding = false;
 }
 
-bool reProjectBuilder::BuildAndRun() {
+bool reProjectBuilder::BuildAndRun(const wxString& level) {
 	if (!IsBuilding()) {
 		_isBuilding = true;
+		_level = level;
+
 		BundleAssets();
 		ConfigureProject();
 
@@ -108,8 +110,6 @@ void reProjectBuilder::ConfigureProject() {
 	wxProcess* configureProcess = new reConfigureProcess(this);
 
 	wxExecute(configureCommand, wxEXEC_ASYNC, configureProcess);
-
-	//wxMessageBox("project Configured!");
 }
 
 void reProjectBuilder::AssetBundleComplete() {
@@ -128,7 +128,7 @@ bool reProjectBuilder::IsBuilding() const {
 }
 
 void reProjectBuilder::DoneBuilding() {
-	wxString buildCommand = _component->GetProject()->ProjectScriptPath() + " debug";
+	wxString buildCommand = _component->GetProject()->ProjectScriptPath() + " debug " + _level;
 	wxExecute(buildCommand, wxEXEC_ASYNC);
 
 	_isBuilding = false;

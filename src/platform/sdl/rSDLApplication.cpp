@@ -55,18 +55,27 @@ bool rApplication::Init(){
 	InitEngine(m_graphicsDevice, m_contentManager, m_inputManager, fileSystem, m_resourceManager);
 	LoadDefaultResources();
 
-	//try to load asset pack from editor if in debug mode;
+	
 #ifndef NDEBUG
+	//try to load asset pack from editor if in debug mode;
 	rString debugAssetDir = rPath::PopComponent(GetBasePath());
 	rString applicationName;
 	rPath::Split(m_applicationName, nullptr, &applicationName, nullptr);
 
 	rString debugAssetFile = rPath::Assemble(debugAssetDir, applicationName, "r");
 	m_resourceManager->OpenArchive(debugAssetFile);
-#endif 
-
 
 	InitModule();
+
+	//try to a specific level specified in environment variable
+	const char* defaultLevel = getenv("RECONDITE_DEBUG_STARTING_LEVEL");
+	if (defaultLevel) {
+		m_engine->LoadLevel(defaultLevel);
+	}
+	
+#else
+	InitModule();
+#endif 
 
 	SDL_SetWindowTitle(m_window, "Recondite");
 

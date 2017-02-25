@@ -434,5 +434,18 @@ void reMainFrame::OnAuiPaneClose(wxAuiManagerEvent& event) {
 }
 
 void reMainFrame::OnBuildAndRunProject(wxCommandEvent& event) {
-	m_projectBuilder->BuildAndRun();
+	const wxArrayString& levels = m_component->GetProject()->Levels()->LevelNames();
+	if (levels.size() == 0) return;
+
+	wxString activeLevel = m_component->GetProject()->Levels()->GetActiveLevel();
+
+	if (activeLevel.empty()) {
+		wxSingleChoiceDialog dialog(this, "Choose Level:", "Build And Run", levels);
+
+		if (dialog.ShowModal() == wxID_OK) {
+			activeLevel = dialog.GetStringSelection();
+		}
+	}
+
+	m_projectBuilder->BuildAndRun(activeLevel);
 }

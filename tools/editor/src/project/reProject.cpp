@@ -7,6 +7,7 @@
 #include "rArchive.hpp"
 #include "reProjectBuilder.hpp"
 
+#include "reUtils.hpp"
 
 reProject::reProject(rwxComponent* component){
 	m_component = component;
@@ -29,6 +30,10 @@ void reProject::Create(const wxString& directory, const wxString& name){
 
 	SetBasePaths();
 	m_code->CreateProject(m_name);
+
+#ifdef WIN32
+	reUtils::CopyAndReplaceInFile("assets/code_templates/project.bat", m_projectDir.GetPathWithSep() + "project.bat", "__GAME_NAME__", m_name);
+#endif
 
 	SaveProjectFile();
 }

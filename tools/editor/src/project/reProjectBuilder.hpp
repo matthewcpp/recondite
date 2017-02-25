@@ -10,7 +10,7 @@ public:
 	reProjectBuilder(reComponent* component);
 
 public:
-	bool BuildAndRun();
+	bool BuildAndRun(const wxString& level);
 
 	bool IsBuilding() const;
 	void DoneBuilding();
@@ -28,4 +28,6 @@ private:
 
 	bool _assetsBundled;
 	bool _isBuilding;
+
+	wxString _level;
 };

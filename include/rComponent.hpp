@@ -26,7 +26,6 @@ public:
 
 	bool IsReady() const;
 
-	virtual void LoadScene(const rString& name);
 	virtual bool SaveScene(const rString& path);
 	virtual void ClearScene();
 

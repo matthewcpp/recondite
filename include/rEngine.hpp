@@ -3,6 +3,7 @@
 
 #include "rTypes.hpp"
 #include "rDefs.hpp"
+#include "rBuild.hpp"
 
 #include "rRenderer.hpp"
 #include "rContentManager.hpp"
@@ -18,10 +19,12 @@
 class ruiIManager;
 class rInputManager;
 
-class rEngine{
+class RECONDITE_API rEngine{
 public:
 	rEngine(rGraphicsDevice* graphicsEngine, rContentManager* contentManager, rInputManager* inputManager, 
 		rFileSystem* fileSystem, recondite::ResourceManager* resourceManager);
+
+	bool LoadLevel(const rString& name);
 
 public:
 	rContentManager* content;
@@ -38,6 +41,7 @@ public:
 
 private:
 	rGraphicsDevice* _graphicsEngine;
+	recondite::Behavior* _levelBehavior;
 };
 
 #endif

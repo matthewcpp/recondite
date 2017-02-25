@@ -18,32 +18,6 @@ void rComponent::Uninit(){
 	Log::Shutdown();
 }
 
-void rComponent::LoadScene(const rString& name){
-	auto assetStream = m_engine->filesystem->OpenReadFileRef(name + ".assets");
-	auto levelStream = m_engine->filesystem->OpenReadFileRef(name);
-
-	if (assetStream) {
-		recondite::AssetManifest assetManifest;
-		int error = assetManifest.Read(*assetStream);
-		if (!error) {
-			m_engine->content->LoadFromManifest(assetManifest);
-		}
-	}
-
-	if (levelStream){
-		rXMLDocument doc;
-		doc.LoadFromStream(*levelStream);
-
-		rXMLElement* element = doc.GetRoot();
-		rXMLSerializationSource* source = new rXMLSerializationSource(element);
-		((rScene*)m_engine->scene)->Load(source);
-		delete source;
-	}
-
-	m_engine->filesystem->CloseReadFileRef(assetStream);
-	m_engine->filesystem->CloseReadFileRef(levelStream);
-}
-
 bool rComponent::SaveScene(const rString& path){
 	return SaveSceneXML(path);
 }

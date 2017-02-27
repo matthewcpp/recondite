@@ -14,12 +14,20 @@ rePropertyInspector::rePropertyInspector(reComponent* component, reViewportDispl
 
 	m_component->Bind(reSELECTION_SELECT, this, &rePropertyInspector::OnSelection);
 	m_component->Bind(reSELECTION_SELECT_NONE, this, &rePropertyInspector::OnSelectNone);
+	m_component->Bind(reSELECTION_DESELECT, this, &rePropertyInspector::OnDeselect);
 	m_component->Bind(reExternalPropertyChange, this, &rePropertyInspector::OnExternalPropertyChange);
 }
 
 void rePropertyInspector::OnSelection(rEvent& event){
 	reSelectionEvent& selectionEvent = static_cast<reSelectionEvent&>(event);
 	Inspect(selectionEvent.Item());
+}
+
+void rePropertyInspector::OnDeselect(rEvent& event) {
+	reSelectionEvent& selectionEvent = static_cast<reSelectionEvent&>(event);
+
+	if (selectionEvent.Item() == m_actorName)
+		StopInspecting();
 }
 
 void rePropertyInspector::OnSelectNone(rEvent& event){

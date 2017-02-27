@@ -19,7 +19,6 @@ public:
 
 public:
 	void Inspect(const wxString& actorName);
-	void UpdateGrid();
 
 	void StopInspecting();
 
@@ -30,6 +29,7 @@ private:
 	void OnSelection(rEvent& event);
 	void OnSelectNone(rEvent& event);
 	void OnActorRenamed(rEvent& event);
+	void OnDeselect(rEvent& event);
 
 	void OnExternalPropertyChange(rEvent& event);
 

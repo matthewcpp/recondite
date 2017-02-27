@@ -58,6 +58,7 @@ bool reInsertActorCommand::Do() {
 
 bool reInsertActorCommand::Undo() {
 	rActor3* actor = m_component->GetScene()->GetActor(m_actorId);
+	m_component->SelectionManager()->Deselect(m_actorId.c_str());
 	m_component->GetScene()->DeleteActor(actor);
 	m_component->GetScene()->Flush();
 	return true;

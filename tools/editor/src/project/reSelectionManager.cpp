@@ -43,6 +43,10 @@ bool reSelectionManager::Deselect(const wxString& name){
 	for (size_t i = 0; i < m_selectionList.size(); i++){
 		if (m_selectionList[i] == name){
 			m_selectionList.RemoveAt(i);
+
+			reSelectionEvent event(name, m_selectionList);
+			m_component->Trigger(reSELECTION_DESELECT, event);
+
 			return true;
 		}
 	}

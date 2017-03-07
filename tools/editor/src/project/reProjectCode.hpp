@@ -28,6 +28,7 @@ public:
 
 private:
 	void EnsureAssetDir(const wxString& dirName);
+	void EnsureSrcDir(const wxString& dirname);
 
 	bool DoCreateBehavior(const wxString& className, const wxString& destDir);
 

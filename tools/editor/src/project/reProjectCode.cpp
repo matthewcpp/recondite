@@ -31,9 +31,21 @@ void reProjectCode::EnsureAssetDir(const wxString& dirName) {
 	}
 }
 
+void reProjectCode::EnsureSrcDir(const wxString& dirname) {
+	wxFileName behaviorDir = m_codeDir;
+	behaviorDir.AppendDir("src");
+	behaviorDir.AppendDir(dirname);
+
+	if (!behaviorDir.Exists())
+		behaviorDir.Mkdir();
+}
+
 void reProjectCode::CreateProject(const wxString& projectName) {
 	bool result = reUtils::RecursiveCopy("assets/project_template", m_codeDir.GetFullPath());
 	_projectName = projectName;
+
+	EnsureSrcDir("Behaviors");
+	EnsureSrcDir("Levels");
 
 	GenerateGameBaseFile();
 	GenerateBehaviorsCmakeList();
@@ -106,6 +118,7 @@ void reProjectCode::GenerateGameBaseFile() {
 bool reProjectCode::DoCreateBehavior(const wxString& className, const wxString& destDir) {
 	wxFileName srcFile("assets/code_templates/Behavior.hpp");
 	wxFileName destFile(m_codeDir.GetPathWithSep() + "src/"+ destDir + "/" + className + ".hpp");
+
 	reUtils::CopyAndReplaceInFile(srcFile.GetFullPath(), destFile.GetFullPath(), "__NAME__", className);
 
 	srcFile.SetExt("cpp");

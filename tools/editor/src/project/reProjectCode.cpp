@@ -49,6 +49,7 @@ void reProjectCode::CreateProject(const wxString& projectName) {
 
 	GenerateGameBaseFile();
 	GenerateBehaviorsCmakeList();
+	GenerateLevelsCmakeList();
 
 	reUtils::ReplaceInFile(m_codeDir.GetPathWithSep() + "CMakeLists.txt", "__GAME_NAME__", _projectName);
 	reUtils::ReplaceInFile(m_codeDir.GetPathWithSep() + "src/CMakeLists.txt", "__GAME_NAME__", _projectName);

@@ -175,6 +175,8 @@ wxMenuBar* reMainFrame::CreateEditorMenuBar(){
 	fileMenu->Append(reMainFrame_CloseProject, "Close");
 	fileMenu->AppendSeparator();
 
+	fileMenu->Append(reMainFrame_OpenSolution, "Open Solution");
+	fileMenu->Append(reMainFrame_BuildProject, "Build Project");
 	fileMenu->Append(reMainFrame_BuildAndRunProject, "Build and Run Project\tCtrl+B");
 
 	fileMenu->AppendSeparator();
@@ -210,6 +212,8 @@ wxMenuBar* reMainFrame::CreateEditorMenuBar(){
 	Bind(wxEVT_MENU, &reMainFrame::OnAssetImportModel, this, reMainFrame_Asset_ImportModel);
 
 	Bind(wxEVT_MENU, &reMainFrame::OnBuildAndRunProject, this, reMainFrame_BuildAndRunProject);
+	Bind(wxEVT_MENU, &reMainFrame::OnBuildProject, this, reMainFrame_BuildProject);
+	Bind(wxEVT_MENU, &reMainFrame::OnOpenSolution, this, reMainFrame_OpenSolution);
 
 	Bind(wxEVT_CHAR_HOOK, &reMainFrame::OnCharHook, this);
 
@@ -448,4 +452,12 @@ void reMainFrame::OnBuildAndRunProject(wxCommandEvent& event) {
 	}
 
 	m_projectBuilder->BuildAndRun(activeLevel);
+}
+
+void reMainFrame::OnBuildProject(wxCommandEvent& event) {
+	m_projectBuilder->Build();
+}
+
+void reMainFrame::OnOpenSolution(wxCommandEvent& event) {
+	m_projectBuilder->Open();
 }

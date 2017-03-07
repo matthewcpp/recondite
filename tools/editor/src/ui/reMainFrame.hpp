@@ -59,6 +59,8 @@ private:
 	void OnOpenRecentProject(wxCommandEvent& event);
 
 	void OnBuildAndRunProject(wxCommandEvent& event);
+	void OnBuildProject(wxCommandEvent& event);
+	void OnOpenSolution(wxCommandEvent& event);
 
 	void OnAssetImportModel(wxCommandEvent& event);
 
@@ -72,6 +74,8 @@ private:
 		reMainFrame_SaveLevel,
 
 		reMainFrame_BuildAndRunProject,
+		reMainFrame_BuildProject,
+		reMainFrame_OpenSolution,
 
 		reMainFrame_NewLevel,
 		reMainFrame_ProjectEnd,

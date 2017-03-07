@@ -11,6 +11,10 @@ public:
 
 public:
 	bool BuildAndRun(const wxString& level);
+	bool Build();
+	bool Configure();
+	bool Open();
+	bool IsBuilt();
 
 	bool IsBuilding() const;
 	void DoneBuilding();
@@ -28,6 +32,8 @@ private:
 
 	bool _assetsBundled;
 	bool _isBuilding;
+	bool _run;
+	bool _open;
 
 	wxString _level;
 };

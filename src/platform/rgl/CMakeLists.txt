@@ -42,7 +42,7 @@ add_definitions(-DRECONDITE_GL_BUILD_SHARED)
 target_link_libraries(rgl recondite) 
 target_link_libraries(rgl ${OPENGL_LIBRARIES} ${GLEW_LIBRARY})
 
-#copy thr shaders to the default directory as a post build step
+#copy the shaders to the default directory as a post build step
 add_custom_command(TARGET rgl POST_BUILD
                    COMMAND ${CMAKE_COMMAND} -E copy_directory
 				   ${CMAKE_CURRENT_SOURCE_DIR}/shaders $<TARGET_FILE_DIR:rgl>/default)

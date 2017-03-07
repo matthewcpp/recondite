@@ -78,11 +78,41 @@ reProjectBuilder::reProjectBuilder(reComponent* component) {
 
 	_assetsBundled = false;
 	_isBuilding = false;
+	_run = false;
+	_open = false;
+}
+
+bool reProjectBuilder::Configure() {
+	if (!IsBuilding()) {
+		_open = true;
+		ConfigureProject();
+
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+bool reProjectBuilder::Build() {
+	if (!IsBuilding()) {
+		_isBuilding = true;
+		_run = false;
+
+		BundleAssets();
+		ConfigureProject();
+
+		return true;
+	}
+	else {
+		return false;
+	}
 }
 
 bool reProjectBuilder::BuildAndRun(const wxString& level) {
 	if (!IsBuilding()) {
 		_isBuilding = true;
+		_run = true;
 		_level = level;
 
 		BundleAssets();
@@ -117,10 +147,17 @@ void reProjectBuilder::AssetBundleComplete() {
 }
 
 void reProjectBuilder::ConfigurationComplete() {
-	wxString buildCommand = _component->GetProject()->ProjectScriptPath() + " build";
-	wxProcess* buildProcess = new reBuildProcess(this);
+	if (_open) {
+		_open = false;
+		wxString openCommand = _component->GetProject()->ProjectScriptPath() + " edit";
+		wxExecute(openCommand, wxEXEC_ASYNC);
+	}
+	else {
+		wxString buildCommand = _component->GetProject()->ProjectScriptPath() + " build";
+		wxProcess* buildProcess = new reBuildProcess(this);
 
-	wxExecute(buildCommand, wxEXEC_ASYNC, buildProcess);
+		wxExecute(buildCommand, wxEXEC_ASYNC, buildProcess);
+	}
 }
 
 bool reProjectBuilder::IsBuilding() const {
@@ -128,8 +165,32 @@ bool reProjectBuilder::IsBuilding() const {
 }
 
 void reProjectBuilder::DoneBuilding() {
-	wxString buildCommand = _component->GetProject()->ProjectScriptPath() + " debug " + _level;
-	wxExecute(buildCommand, wxEXEC_ASYNC);
+	if (_run) {
+		wxString buildCommand = _component->GetProject()->ProjectScriptPath() + " debug " + _level;
+		wxExecute(buildCommand, wxEXEC_ASYNC);
+		_run = false;
+	}
 
 	_isBuilding = false;
+}
+
+bool reProjectBuilder::Open() {
+	if (IsBuilt()) {
+		wxString buildCommand = _component->GetProject()->ProjectScriptPath() + " edit";
+		wxExecute(buildCommand, wxEXEC_ASYNC);
+	}
+	else {
+		_open = true;
+		Configure();
+	}
+
+
+	return true;
+}
+
+bool reProjectBuilder::IsBuilt() {
+	wxFileName codeDir = _component->GetProject()->Code()->GetCodeDirectory();
+	codeDir.AppendDir("build");
+
+	return codeDir.Exists();
 }
